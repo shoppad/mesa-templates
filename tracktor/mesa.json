@@ -2,6 +2,8 @@
   "name": "Tracktor Alerts",
   "version": "1.0.0",
   "description": "Send Email and SMS Alerts on Tracktor status changes",
+  "url": "shoppad/mesa-actions/tracktor",
+  "documentation": "https://github.com/shoppad/mesa-actions/blob/master/tracktor/README.md",
   "config": {
     "inputs": [
       {
