@@ -1,0 +1,83 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "custom",
+        "name": "Kitchen Sink",
+        "key": "in-kitchen-sink",
+        "trigger_name": "In: Kitchen Sink",
+        "script": "5c874f2a4dbb8d0021564cb2",
+        "logging": "error"
+      },
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "ftp",
+        "name": "Kitchen Sink FTP",
+        "key": "in-kitchen-sink-ftp",
+        "trigger_name": "In: Kitchen Sink FTP",
+        "script": "in-kitchen-sink-ftp.js",
+        "method": "sftp",
+        "host": "harmony-files.theshoppad.com",
+        "port": "22",
+        "file": "clients/harmonia/kitchen-sink-ftp-*",
+        "username": "harmonia-dev",
+        "password": "ftp-password"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "virtual_output",
+        "name": "Kitchen Sink VO",
+        "key": "out-kitchen-sink-vo",
+        "trigger_name": "Out: Kitchen Sink VO",
+        "logging": "error"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "ftp",
+        "name": "Kitchen Sink FTP",
+        "key": "out-kitchen-sink-ftp",
+        "trigger_name": "Out: Kitchen Sink FTP",
+        "script": "out-output-done.js",
+        "method": "sftp",
+        "host": "harmony-files.theshoppad.com",
+        "port": "22",
+        "file": "clients/harmonia/kitchen-sink-ftp-{date:m_d_Y}.csv",
+        "username": "harmonia-dev",
+        "password": "ftp-password"
+      }
+    ],
+    "storage": [
+      {
+        "name": "kitchen-sink-default.json",
+        "value": "DO NOT DELETE"
+      },
+      {
+        "name": "test",
+        "value": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doc>\n  <hi>bye</hi>\n  <hello>goodbye</hello>\n</doc>\n"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "ftp-password"
+      },
+      {
+        "name": "api-key"
+      }
+    ]
+  },
+  "files": [
+    "in-kitchen-sink.js",
+    "in-kitchen-sink-ftp.js",
+    "out-kitchen-sink-vo.js"
+  ]
+}

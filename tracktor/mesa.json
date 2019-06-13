@@ -1,0 +1,68 @@
+{
+  "name": "Tracktor Alerts",
+  "version": "1.0.0",
+  "description": "Send Email and SMS Alerts on Tracktor status changes",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "json_webhook",
+        "name": "Tracktor Alerts",
+        "key": "in-tracktor-alerts",
+        "trigger_name": "In: Tracktor Alerts",
+        "script": "tracktor/in-tracktor-alerts.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Tracktor Email",
+        "key": "out-tracktor-email",
+        "trigger_name": "Out: Tracktor Email",
+        "script": "tracktor/out-tracktor-email.js"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Tracktor Twilio",
+        "key": "out-tracktor-twilio",
+        "trigger_name": "Out: Tracktor Twilio",
+        "script": "tracktor/out-tracktor-twilio.js"
+      }
+    ],
+    "storage": [
+      {
+        "name": "tracktor-sms-in-transit.liquid",
+        "value": "Your order {order.id} is now in transit."
+      },
+      {
+        "name": "tracktor-email-in-transit.liquid",
+        "value": "Hi {order.first_name},\n\nYour order is now in transit.  We'll keep you updated!\n\nThanks!"
+      },
+      {
+        "name": "tracktor-email-subject-in-transit",
+        "value": "Your order {order.name} is in transit"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "tracktor-twilio-token"
+      },
+      {
+        "name": "tracktor-twilio-phone-number"
+      },
+      {
+        "name": "tracktor-twilio-sid"
+      }
+    ]
+  },
+  "files": [
+    "tracktor/in-tracktor-alerts.js",
+    "tracktor/out-tracktor-email.js",
+    "tracktor/out-tracktor-twilio.js"
+  ]
+}
