@@ -68,10 +68,10 @@
     ],
     "secrets": [
       {
-        "name": "ftp-password"
+        "name": "test-ftp-password"
       },
       {
-        "name": "api-key"
+        "name": "test-api-key"
       }
     ]
   },

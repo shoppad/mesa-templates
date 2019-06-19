@@ -1,7 +1,7 @@
 # Tracktor Alerts
 Send Email and SMS Alerts on Tracktor status changes
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-library/tracktor)
+[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-actions/tracktor)
 
 ## Setup
 
@@ -11,7 +11,7 @@ There is no additional setup beyond customizing templates [see below](#customizi
 
 ### Twilio setup
 
-1. Create a twilio account
+1. Create a Twilio account
 2. Create a Twilio Project
 3. Purchase a Twilio phone number (starting at USD $1/mo)
 4. Copy your production `Account SID` from your [Project's Settings page](https://www.twilio.com/console/project/settings)

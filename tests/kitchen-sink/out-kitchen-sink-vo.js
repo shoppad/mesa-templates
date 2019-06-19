@@ -16,7 +16,7 @@ module.exports = new class {
     // Your code goes here
 
     Mesa.log.info('');
-    Mesa.log.info('Kithen sink VO Payload', payload);
+    Mesa.log.info('Kitchen sink VO Payload', payload);
 
     Mesa.log.info('Calling  Mesa.output.send(\'out-kitchen-sink-ftp\')', payload);
     Mesa.output.send('out-kitchen-sink-ftp', data);

@@ -12,10 +12,9 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    
+
     const baseUrl = 'https://api.getmesa.com/v1/admin/dev-mesa';
     //const baseUrl = 'https://api.getmesa.com/staging/admin/dev-mesa';
-    const apiKey = 'xHzLYbPh4EaGP7WUTNp0FaVcRfbiTi744IdRiC9k';
 
     // Our test payloads
     const data = {
@@ -27,7 +26,7 @@ module.exports = new class {
     Mesa.secret.set('api-key', apiKey);
     const options = {
       headers: {
-        'x-api-key': Mesa.secret.get('api-key'),
+        'x-api-key': Mesa.secret.get('test-api-key'),
       },
       debug: true,
     };
@@ -45,7 +44,7 @@ module.exports = new class {
     Mesa.request.post(`${baseUrl}/storage.json`, payload, options);
     response = Mesa.request.get(`${baseUrl}/storage/test.json`, options);
     Mesa.log.info('request.get response', response);
-    this.assert(JSON.stringify(response).indexOf('<hi>bye') !== -1, 'Testing Mesa.request.post(), Mesa.xml.encode()');
+    this.assert(JSON.stringify(response).indexOf('bye,') !== -1, 'Testing Mesa.request.get()');
 
     Mesa.log.info('', data);
     payload = {
@@ -74,7 +73,7 @@ module.exports = new class {
     Mesa.log.info('');
     Mesa.log.info('Testing Mesa.email.send()');
     Mesa.email.send('jeff@theshoppad.com', 'MESA KITCHEN SINK', JSON.stringify(data));
-    
+
     Mesa.log.info('');
     Mesa.log.info('Testing Mesa.vo.push()');
     Mesa.vo.push('out-kitchen-sink-vo', data);
