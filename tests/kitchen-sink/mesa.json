@@ -11,7 +11,7 @@
         "name": "Kitchen Sink",
         "key": "in-kitchen-sink",
         "trigger_name": "In: Kitchen Sink",
-        "script": "5c874f2a4dbb8d0021564cb2",
+        "script": "tests/kitchen-sink/in-kitchen-sink.js",
         "logging": "error"
       },
       {
@@ -21,7 +21,7 @@
         "name": "Kitchen Sink FTP",
         "key": "in-kitchen-sink-ftp",
         "trigger_name": "In: Kitchen Sink FTP",
-        "script": "in-kitchen-sink-ftp.js",
+        "script": "tests/kitchen-sink/in-kitchen-sink-ftp.js",
         "method": "sftp",
         "host": "harmony-files.theshoppad.com",
         "port": "22",
@@ -47,7 +47,7 @@
         "name": "Kitchen Sink FTP",
         "key": "out-kitchen-sink-ftp",
         "trigger_name": "Out: Kitchen Sink FTP",
-        "script": "out-output-done.js",
+        "script": "tests/kitchen-sink/out-output-done.js",
         "method": "sftp",
         "host": "harmony-files.theshoppad.com",
         "port": "22",

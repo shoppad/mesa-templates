@@ -13,7 +13,7 @@
         "name": "Tracktor Alerts",
         "key": "in-tracktor-alerts",
         "trigger_name": "In: Tracktor Alerts",
-        "script": "tracktor/in-tracktor-alerts.js"
+        "script": "tracktor/alerts/in-tracktor-alerts.js"
       }
     ],
     "outputs": [
@@ -24,7 +24,7 @@
         "name": "Tracktor Email",
         "key": "out-tracktor-email",
         "trigger_name": "Out: Tracktor Email",
-        "script": "tracktor/out-tracktor-email.js"
+        "script": "tracktor/alerts/out-tracktor-email.js"
       },
       {
         "trigger_type": "output",
@@ -33,7 +33,7 @@
         "name": "Tracktor Twilio",
         "key": "out-tracktor-twilio",
         "trigger_name": "Out: Tracktor Twilio",
-        "script": "tracktor/out-tracktor-twilio.js"
+        "script": "tracktor/alerts/out-tracktor-twilio.js"
       }
     ],
     "storage": [
