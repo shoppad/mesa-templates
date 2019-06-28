@@ -7,13 +7,14 @@ Send Email and SMS Alerts on Tracktor status changes
 
 ### Email setup
 
-There is no additional setup beyond customizing templates [see below](#customizing-templates)
+There is no additional setup beyond customizing templates ([see below](#customizing-templates)).
 
 ### Twilio setup
 
 1. Create a Twilio account
 2. Create a Twilio Project
-3. Purchase a Twilio phone number (starting at USD $1/mo)
+3. Purchase a Twilio phone number (starting at USD $1/mo). Paste the phone number, 
+    including country code into the paste it into the `tracktor-twilio-phone-number` [Mesa Secrets](https://getmesa.com/go/secrets) field
 4. Copy your production `Account SID` from your [Project's Settings page](https://www.twilio.com/console/project/settings)
     and paste it into the `tracktor-twilio-sid` [Mesa Secrets](https://getmesa.com/go/secrets) field
 5. Copy your production `Auth Token` from your [Project's Settings page](https://www.twilio.com/console/project/settings)
