@@ -1,7 +1,8 @@
 {
-  "name": "",
+  "name": "Kitchen Sink Tests",
   "version": "1.0.0",
-  "description": "",
+  "description": "Ensure that all Mesa SDK methods, Inputs, and Output types are working.",
+    "documentation": "https://github.com/shoppad/mesa-actions/blob/master/tests/kitchen-sink/README.md",
   "config": {
     "inputs": [
       {
@@ -27,7 +28,7 @@
         "port": "22",
         "file": "clients/harmonia/kitchen-sink-ftp-*",
         "username": "harmonia-dev",
-        "password": "ftp-password"
+        "password": "test-ftp-password"
       }
     ],
     "outputs": [
@@ -53,7 +54,7 @@
         "port": "22",
         "file": "clients/harmonia/kitchen-sink-ftp-{date:m_d_Y}.csv",
         "username": "harmonia-dev",
-        "password": "ftp-password"
+        "password": "test-ftp-password"
       }
     ],
     "storage": [

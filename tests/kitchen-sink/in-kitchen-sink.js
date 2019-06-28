@@ -23,7 +23,10 @@ module.exports = new class {
     };
     const liquid = "hi-{{hi}}";
 
-    Mesa.secret.set('api-key', apiKey);
+    Mesa.secret.set('test-kitchen-sink-test-secret', 'test');
+    this.assert(Mesa.secret.get('test-kitchen-sink-test-secret') === 'test', 'Testing Mesa.secret.set(), Mesa.secret.get()');
+    Mesa.secret.set('test-kitchen-sink-test-secret', '');
+
     const options = {
       headers: {
         'x-api-key': Mesa.secret.get('test-api-key'),
@@ -32,7 +35,7 @@ module.exports = new class {
     };
     let response = Mesa.request.get(`${baseUrl}/storage.json`, options);
     Mesa.log.info('request.get response', response);
-    this.assert(JSON.stringify(response).indexOf('.json') !== -1, 'Testing Mesa.request.get(), Mesa.secret.set(), Mesa.secret.get()');
+    this.assert(JSON.stringify(response).indexOf('.json') !== -1, 'Testing Mesa.request.get()');
 
     Mesa.log.info('');
     payload = {
