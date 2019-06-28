@@ -44,3 +44,15 @@ Common liquid variables include:
 - `data` All of the tracking data
 - `carrier` Details about the carrier
 - `tracking_number`
+
+
+## Developing
+[Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
+```
+mesa initialize \
+    --inputs=in-tracktor-alerts \
+    --outputs=out-tracktor-email,out-tracktor-twilio \
+    --files=tracktor/alerts/in-tracktor-alerts.js,tracktor/alerts/out-tracktor-email.js,tracktor/alerts/out-tracktor-twilio.js \
+
+
+```

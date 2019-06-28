@@ -5,12 +5,12 @@ const Mesa = require('./vendor/Mesa1.js');
  */
 module.exports = new class {
 
-  const methods = [
+  methods = [
     'twilio',
     'email',
   ];
 
-  const statuses = [
+  statuses = [
     'fulfilled',
     'in_transit',
     'out_for_delivery',
@@ -27,27 +27,33 @@ module.exports = new class {
   script = (payload, context) => {
     let method = this.methods.shift();
 
-    if (this.statuses.indexOf(payload.status) === -1) {
-      Mesa.log.warn(`Status alerts for ${status} are disabled in the in-tracktor-alerts.js configuration`); 
+    if (this.statuses.indexOf(payload.tracking.status) === -1) {
+      Mesa.log.warn(`Status alerts for ${payload.tracking.status} are disabled in the in-tracktor-alerts.js configuration`); 
     }
+
+    payload.status = payload.tracking.status.replace(/\_/g, '-');
 
     // Try sending an SMS via Twilio
     if (method === 'twilio') {
+                Mesa.log.info('sid', Mesa.secret.get('tracktor-twilio-sid'));
+
+      let smsBody = Mesa.storage.get(`tracktor-sms-${payload.status}.liquid`, false);
       if (!payload.order.phone) {
         Mesa.log.info(`No phone number set on order, skipping SMS sending`); 
       }
-      let smsBody = Mesa.secret.get(`tracktor-sms-${payload.status}`);
-      if (smsBody) {
-        if (!Mesa.secret.get('tracktor-twilio-sid')) {
+      else if (smsBody) {
+        if (!Mesa.secret.get('tracktor-twilio-sid', false)) {
           Mesa.log.warn(`tracktor-twilio-sid secret not set, skipping SMS sending`);
         }
-        if (!Mesa.secret.get('tracktor-twilio-secret')) {
-          Mesa.log.warn(`tracktor-twilio-secret secret not set, skipping SMS sending`);
+        if (!Mesa.secret.get('tracktor-twilio-token', false)) {
+          Mesa.log.warn(`tracktor-twilio-token secret not set, skipping SMS sending`);
         }
-        if (!Mesa.secret.get('tracktor-twilio-phone-number')) {
+        if (!Mesa.secret.get('tracktor-twilio-phone-number', false)) {
           Mesa.log.warn(`tracktor-twilio-phone-number secret not set, skipping SMS sending`);
         }
-        return Mesa.output.send('out-tracktor-twilio', payload);
+        else {
+          return Mesa.output.send('out-tracktor-twilio', payload);
+        }
       }
       method = this.methods.shift();
     }
