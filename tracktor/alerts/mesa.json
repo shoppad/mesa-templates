@@ -111,8 +111,8 @@
     ]
   },
   "files": [
-    "tracktor/in-tracktor-alerts.js",
-    "tracktor/out-tracktor-email.js",
-    "tracktor/out-tracktor-twilio.js"
+    "tracktor/alerts/in-tracktor-alerts.js",
+    "tracktor/alerts/out-tracktor-email.js",
+    "tracktor/alerts/out-tracktor-twilio.js"
   ]
 }
