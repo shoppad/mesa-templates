@@ -1,0 +1,41 @@
+{
+  "name": "Add Weather to Orders",
+  "version": "1.0.0",
+  "description": "Use OpenWeatherMap to get the weather forecast at the destination address and add it to the Shopify order's Note Attributes",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Weather Forecast",
+        "key": "in-weather-forecast",
+        "trigger_name": "In: Weather Forecast",
+        "script": "in-output-send.js",
+        "logging": "error",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "shopify_api",
+        "name": "Weather Forecast",
+        "key": "out-weather-forecast",
+        "trigger_name": "Out: Weather Forecast",
+        "script": "weather/order/out-weather-forecast.js",
+        "logging": "error",
+        "shopify_api": "PUT admin/orders/{{order_id}}.json"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "openweathermap-key"
+      }
+    ]
+  },
+  "files": [
+    "weather/order/out-weather-forecast.js"
+  ]
+}
