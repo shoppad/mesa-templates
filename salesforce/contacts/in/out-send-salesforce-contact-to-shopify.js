@@ -1,7 +1,7 @@
 const Mesa = require('vendor/Mesa1.js');
 const Shopify = require('vendor/Shopify.js');
-const Mapping = require('./Mapping.js');
-const ShopifySalesforceCustomerMap = require('./salesforce/maps/ShopifySalesforceCustomerMap.js');
+const Mapping = require('./vendor/Mapping.js');
+const ShopifySalesforceCustomerMap = require('./salesforce/maps/shopify-salesforce-customer-map.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
@@ -67,11 +67,11 @@ module.exports = new class {
   }
 
   /**
-   * Wrap customer output for Shopify
+   * Update user's name
    */
-  updateName = (payload, key, input, output, inputValue) => {
-    if (key === 'first_name' && input === 'salesforce' && !inputValue.includes(' H')) {
-      return inputValue + ' H'; 
+  updateName = (fieldKey, inputValue) => {
+    if (fieldKey === 'first_name' && !inputValue.includes('Mr. ')) {
+      return 'Mr. ' + inputValue; 
     } else {
       return inputValue;
     }
