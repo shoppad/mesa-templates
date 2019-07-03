@@ -43,8 +43,8 @@
     ]
   },
   "files": [
-    "salesforce/in/in-send-salesforce-contact-to-shopify.js",
-    "salesforce/in/out-send-salesforce-contact-to-shopify.js",
-    "salesforce/maps/shopify-salesforce-customer-map.js"
+    "salesforce/contacts/in/in-send-salesforce-contact-to-shopify.js",
+    "salesforce/contacts/in/out-send-salesforce-contact-to-shopify.js",
+    "salesforce/contacts/in/shopify-salesforce-customer-map.js"
   ]
 }
