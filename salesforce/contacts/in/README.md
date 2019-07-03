@@ -5,54 +5,36 @@ Sync Salesforce Contacts to Shopify
 
 ## Setup
 
-### Email setup
+Authorizing with Salesforce (password auth):
+- You will need to create a connected app in Salesforce
+- Click on the Setup buutton (gear icon - top right)
+- Navigate to "Apps", then click "New Connnected App"
+- Enable OAuth Settings, add all scopes
+- Add https://dev-www.theshoppad.com/apps/oauth/ as a callback URL @TODO: what is the production URL?
+- Save the application, then get the client ID and client secret
+- Open up Mesa, then navigate to the Secrets tab
+- Save the client ID, with the key being "salesforce_client_id"
+- Save the client secret, with the key being "salesforce_client_secret"
+- Save your Salesforce username, with the key being "salesforce_username"
+- Save your Salesforce password, with the key being "salesforce_password"
 
-There is no additional setup beyond customizing templates ([see below](#customizing-templates)).
+@TODO: document Authorizing with Salesforce (refresh token auth):
 
-### Twilio setup
+Setting up workflows in Salesforce in order to recieve webhooks:
+- Open up your Salesforce instance
+- Click on the Setup buutton (gear icon - top right)
+- Head over to "Process Automation", then to "Workflow Actions"
+- Create an "Outbound Message"
+- Create a "WorkFlow Rule"
+- Tie the "WorkFlow Rule" to the "Outbound Message"
 
-1. Create a Twilio account
-2. Create a Twilio Project
-3. Purchase a Twilio phone number (starting at USD $1/mo). Paste the phone number, 
-    including country code into the paste it into the `tracktor-twilio-phone-number` [Mesa Secrets](https://getmesa.com/go/secrets) field
-4. Copy your production `Account SID` from your [Project's Settings page](https://www.twilio.com/console/project/settings)
-    and paste it into the `tracktor-twilio-sid` [Mesa Secrets](https://getmesa.com/go/secrets) field
-5. Copy your production `Auth Token` from your [Project's Settings page](https://www.twilio.com/console/project/settings)
-    and paste it into the `tracktor-twilio-token` [Mesa Secrets](https://getmesa.com/go/secrets) field
-6. Customize your SMS templates [see below](#customizing-templates)
-
-> Note: Twilio charges a per-SMS fee [starting at USD $0.01](https://www.twilio.com/sms/pricing/us)
-    
-
-## Customizing templates
-
-To edit your email templates, go to the [Mesa Storage](https://getmesa.com/go/storage) tab.
-- For emails: edit the `tracktor-email-*.liquid` and `tracktor-email-subject-*` storage items
-- For SMS messages send via Twilio: edit the `tracktor-sms-*.liquid` storage items
-
-> To disable an email or SMS alert, simply delete the corresponding storage item for that alert. 
-  For example do disable in_transit email alerts delete `tracktor-email-in-transit.liquid`.
-
-All storage fields support liquid and have access to your full store details, order information and tracking information. 
-Common liquid variables include:
-- `shop.name`
-- `order.customer.name`
-- `order.name` The human-readable order number
-- `order.status`
-- `order.line_items`
-- `order.shipping_address`
-- `data` All of the tracking data
-- `carrier` Details about the carrier
-- `tracking_number`
-
-
-## Developing
+## Developing 
 [Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
+
 ```
 mesa initialize \
-    --inputs=in-tracktor-alerts \
-    --outputs=out-tracktor-email,out-tracktor-twilio \
-    --files=tracktor/alerts/in-tracktor-alerts.js,tracktor/alerts/out-tracktor-email.js,tracktor/alerts/out-tracktor-twilio.js \
-
-
+    --inputs=in-send-salesforce-contact-to-shopify \
+    --outputs=out-send-salesforce-contact-to-shopify \
+    --files=salesforce/in/in-send-salesforce-contact-to-shopify.js,salesforce/in/in-send-salesforce-contact-to-shopify.js \
+    --secrets=salesforce_client_id,salesforce_client_secret,salesforce_username,salesforce_password
 ```
