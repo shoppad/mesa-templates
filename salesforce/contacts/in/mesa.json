@@ -1,0 +1,48 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "json_webhook",
+        "name": "Send Salesforce Contact To Shopify",
+        "key": "in-send-salesforce-contact-to-shopify",
+        "trigger_name": "In: Send Salesforce Contact To Shopify",
+        "script": "salesforce/contacts/in/in-send-salesforce-contact-to-shopify.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Send Salesforce Contact To Shopify",
+        "key": "out-send-salesforce-contact-to-shopify",
+        "trigger_name": "Out: Send Salesforce Contact To Shopify",
+        "script": "salesforce/contacts/in/out-send-salesforce-contact-to-shopify.js"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "salesforce_client_id"
+      },
+      {
+        "name": "salesforce_client_secret"
+      },
+      {
+        "name": "salesforce_username"
+      },
+      {
+        "name": "salesforce_password"
+      }
+    ]
+  },
+  "files": [
+    "salesforce/in/in-send-salesforce-contact-to-shopify.js",
+    "salesforce/in/in-send-salesforce-contact-to-shopify.js",
+    "salesforce/maps/shopify-salesforce-customer-map.js"
+  ]
+}
