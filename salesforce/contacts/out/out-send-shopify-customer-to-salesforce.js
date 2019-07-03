@@ -7,10 +7,11 @@ module.exports = new class {
   script = (payload) => {
     // Init Salesforce
     const salesforce = new Salesforce('password', {
-      username: Mesa.secret.get('salesforce_username'),
-      password: Mesa.secret.get('salesforce_password'),
-      client_id: Mesa.secret.get('salesforce_client_id'),
-      client_secret: Mesa.secret.get('salesforce_client_secret')
+      username: 'salesforce_username',
+      password: 'salesforce_password',
+      client_id:'salesforce_client_id',
+      client_secret: 'salesforce_client_secret',
+      access_token: 'salesforce_access_token',
     });
 
     // Convert Shopify payload to SalesForce's contact format
