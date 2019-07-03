@@ -1,7 +1,9 @@
 {
-  "name": "",
+  "name": "Sync Salesforce Contacts to Shopify",
   "version": "1.0.0",
   "description": "",
+  "url": "shoppad/salesforce/contacts/in",
+  "documentation": "https://github.com/shoppad/mesa-actions/blob/master/salesforce/contacts/in/README.md",
   "config": {
     "inputs": [
       {
