@@ -1,4 +1,4 @@
-const Mesa = require('vendor/Mesa.js');
+const Mesa = require('vendor/Mesa1.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
