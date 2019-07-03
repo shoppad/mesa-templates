@@ -1,6 +1,6 @@
-const Mesa = require('./vendor/Mesa1.js');
-const Salesforce = require('./Salesforce.js');
-const Mapping = require('./vendor/Mapping.js');
+const Mesa = require('vendor/Mesa1.js');
+const Salesforce = require('vendor/Salesforce.js');
+const Mapping = require('vendor/Mapping.js');
 const ShopifySalesforceCustomerMap = require('./salesforce/maps/shopify-salesforce-customer-map.js');
 
 module.exports = new class {
