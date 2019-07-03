@@ -1,6 +1,6 @@
 const Mesa = require('vendor/Mesa1.js');
 const Shopify = require('vendor/Shopify.js');
-const Mapping = require('./vendor/Mapping.js');
+const Mapping = require('vendor/Mapping.js');
 const ShopifySalesforceCustomerMap = require('./salesforce/maps/shopify-salesforce-customer-map.js');
 
 /**
