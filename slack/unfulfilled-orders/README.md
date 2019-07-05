@@ -14,11 +14,14 @@ Send Slack alerts for unfulfilled orders after a configurable period of time
 - Save the slack channel name you wish to use (for example "#unfulfilled-orders"), with the key being "slack-unfulfilled-orders-channel"
 
 ### Optional Configuration
-- Navigate to the Outputs tab and expand "Orders Slack Created'
+#### Changing the date range for unfulfilled orders
+- By default, orders only 7 days or older will be sent to Slack if unfulfilled. 
+- To change this, navigate to the Outputs tab and expand "Orders Slack Created'
 - Under advanced, change the parameters to filter when orders should be checked for fulfillment
-- For instance, to check for orders at least 1 week old, type "limit=-1&created_at_max={date:7 days ago}". Further details on date syntax can be found under [Virtual Outputs](https://docs.getmesa.com/article/597-outputs#output4)
+- For instance, to check for orders at least 3 days old, but no older than 1 month, type "limit=-1&created_at_min={date:1 month ago},created_at_max={date:3 days ago}". Further details on date syntax can be found under [Virtual Outputs](https://docs.getmesa.com/article/597-outputs#output4)
+#### Slack message formatting
 - Under Scripts you'll find the file `out-orders-slack-check-fulfilled.js`. By default this script will send a richly formatted Slack notification with buttons and text formatting. 
-- If you prefer a simple Slack message, you can comment out the code in the block "BEGIN Comprehensive Slack request" and uncomment code under "BEGIN Simple slack request (uncomment code below to enable)".
+- If you prefer a simple Slack message, you can comment out the code in the block "BEGIN Comprehensive Slack request" and uncomment code under "BEGIN Simple slack request (uncomment code below to enable)"
 
 ## Developing 
 [Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
