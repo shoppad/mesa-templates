@@ -5,11 +5,23 @@ const Mesa = require('./vendor/Mesa1.js');
  */
 module.exports = new class {
 
+  /**
+   * Enabled notification methods.
+   *
+   * Comment out the line of any of the methods below that you would like to disable.
+   * @type {string[]}
+   */
   methods = [
     'twilio',
     'email',
   ];
 
+  /**
+   * Enabled notification statuses.
+   *
+   * Comment out the line below to disable notifications for that status.
+   * @type {string[]}
+   */
   statuses = [
     'fulfilled',
     'in_transit',
