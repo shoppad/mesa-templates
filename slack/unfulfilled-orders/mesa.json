@@ -2,6 +2,8 @@
   "name": "Send Slack alerts for unfulfilled orders",
   "version": "1.0.0",
   "description": "Checks created orders after a determined period of time, then sends a Slack alert if order is not fulfilled",
+  "url": "shoppad/slack/unfulfilled-orders",
+  "documentation": "https://github.com/shoppad/mesa-actions/blob/master/slack/unfulfilled-orders/README.md",
   "config": {
     "inputs": [
       {
@@ -25,7 +27,8 @@
         "trigger_name": "Out: Orders Slack Created",
         "schedule": "0 9 * * *",
         "script": "slack/unfulfilled-orders/out-orders-slack-created.js",
-        "parameters": "limit=-1&created_at_min={date:3 days ago}"
+        "custom_connection": true,
+        "parameters": "limit=-1&created_at_max={date:7 days ago}"
       },
       {
         "trigger_type": "output",
@@ -40,7 +43,7 @@
     "storage": [
       {
         "name": "slack-unfulfilled-orders-channel",
-        "value": "#jf-slack-test"
+        "value": "#unfulfilled-orders"
       }
     ],
     "secrets": [
