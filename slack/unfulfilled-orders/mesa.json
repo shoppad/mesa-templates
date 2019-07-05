@@ -1,0 +1,57 @@
+{
+  "name": "Send Slack alerts for unfulfilled orders",
+  "version": "1.0.0",
+  "description": "Checks created orders after a determined period of time, then sends a Slack alert if order is not fulfilled",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Orders Slack Created",
+        "key": "in-orders-slack-created",
+        "trigger_name": "In: Orders Slack Created",
+        "script": "slack/unfulfilled-orders/in-orders-slack-created.js",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "virtual_output",
+        "name": "Orders Slack Created",
+        "key": "out-orders-slack-created-vo",
+        "trigger_name": "Out: Orders Slack Created",
+        "schedule": "0 9 * * *",
+        "script": "slack/unfulfilled-orders/out-orders-slack-created.js",
+        "parameters": "limit=-1&created_at_min={date:3 days ago}"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Orders Slack Check Fulfilled",
+        "key": "out-orders-slack-check-fulfilled",
+        "trigger_name": "Out: Orders Slack Check Fulfilled",
+        "script": "slack/unfulfilled-orders/out-orders-slack-check-fulfilled.js"
+      }
+    ],
+    "storage": [
+      {
+        "name": "slack-unfulfilled-orders-channel",
+        "value": "#jf-slack-test"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "slack-webhook-url"
+      }
+    ]
+  },
+  "files": [
+    "slack/unfulfilled-orders/in-orders-slack-created.js",
+    "slack/unfulfilled-orders/out-orders-slack-created.js",
+    "slack/unfulfilled-orders/out-orders-slack-check-fulfilled.js"
+  ]
+}
