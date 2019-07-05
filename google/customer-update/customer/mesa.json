@@ -1,0 +1,71 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Customer Update",
+        "key": "in-customer-update",
+        "trigger_name": "In: Customer Update",
+        "script": "in-customer-update.js",
+        "topic": "customers/update"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Google Sheets Update",
+        "key": "out-google-sheets-update",
+        "trigger_name": "Out: Google Sheets Update",
+        "script": "out-google-sheets-update.js"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Google Sheets Read",
+        "key": "out-google-sheets-read",
+        "trigger_name": "Out: Google Sheets Read",
+        "script": "out-google-sheets-read.js"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Customer Update",
+        "key": "out-customer-update",
+        "trigger_name": "Out: Customer Update",
+        "script": "out-customer-update.js"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "google_refresh_token"
+      },
+      {
+        "name": "google_access_token"
+      },
+      {
+        "name": "google_client_id"
+      },
+      {
+        "name": "google_client_secret"
+      },
+      {
+        "name": "google_expires_at"
+      }
+    ]
+  },
+  "files": [
+    "in-customer-update.js",
+    "out-customer-update.js",
+    "out-google-sheets-read.js",
+    "out-google-sheets-update.js"
+  ]
+}
