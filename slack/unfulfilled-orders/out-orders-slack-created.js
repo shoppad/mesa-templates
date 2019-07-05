@@ -1,4 +1,4 @@
-const Mesa = require('./vendor/Mesa1.js');
+const Mesa = require('vendor/Mesa.js');
 
 /**
  * Processes virtual output for created orders, based on the criteria defined in the virtual output definition

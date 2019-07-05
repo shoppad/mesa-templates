@@ -1,4 +1,4 @@
-const Mesa = require('./vendor/Mesa1.js');
+const Mesa = require('vendor/Mesa.js');
 
 /**
  * This script simply places each incoming payload onto a virtual output of the same name

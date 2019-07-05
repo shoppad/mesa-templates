@@ -1,4 +1,4 @@
-# Salesforce - Contacts - In
+# Slack - Unfulfilled Orders Alerts
 Send Slack alerts for unfulfilled orders after a configurable period of time
 
 [![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-actions/slack/unfulfilled-orders)

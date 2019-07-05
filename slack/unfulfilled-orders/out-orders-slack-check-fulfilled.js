@@ -1,6 +1,6 @@
-const Mesa = require('./vendor/Mesa1.js');
-const Slack = require('./vendor/Slack.js');
-const Shopify = require('./vendor/Shopify.js');
+const Mesa = require('vendor/Mesa.js');
+const Slack = require('vendor/Slack.js');
+const Shopify = require('vendor/Shopify.js');
 
 /**
  * This script processes a custom output containing a created order, doing the following:
@@ -79,7 +79,7 @@ module.exports = new class {
                 'text': `View unfulfilled orders`,
                 'url': `https://${context.output.uuid}.myshopify.com/admin/orders?fulfillment_status=unshipped%2Cpartial`,
               }
-            ],sp
+            ],
           }
         ],
       });
