@@ -1,0 +1,56 @@
+{
+  "name": "Sync Shopify Customers to Salesforce",
+  "version": "1.0.0",
+  "description": "",
+  "url": "shoppad/salesforce/contacts/out",
+  "documentation": "https://github.com/shoppad/mesa-actions/blob/master/salesforce/contacts/out/README.md",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Send Shopify Customer To Salesforce",
+        "key": "in-send-shopify-customer-to-salesforce",
+        "trigger_name": "In: Send Shopify Customer To Salesforce",
+        "script": "salesforce/contacts/out/in-send-shopify-customer-to-salesforce.js",
+        "port": 22,
+        "logging": "error",
+        "topic": "customers/update"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Send Shopify Customer To Salesforce",
+        "key": "out-send-shopify-customer-to-salesforce",
+        "trigger_name": "Out: Send Shopify Customer To Salesforce",
+        "script": "salesforce/contacts/out/out-send-shopify-customer-to-salesforce.js"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "salesforce_client_id"
+      },
+      {
+        "name": "salesforce_client_secret"
+      },
+      {
+        "name": "salesforce_username"
+      },
+      {
+        "name": "salesforce_password"
+      },
+      {
+        "name": "salesforce_access_token"
+      }
+    ]
+  },
+  "files": [
+    "salesforce/out/in-send-shopify-customer-to-salesforce.js",
+    "salesforce/out/out-send-salesforce-contact-to-shopify.js",
+    "salesforce/contacts/out/shopify-salesforce-customer-map.js"
+  ]
+}
