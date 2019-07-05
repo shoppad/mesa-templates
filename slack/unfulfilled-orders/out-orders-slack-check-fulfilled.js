@@ -88,10 +88,10 @@ module.exports = new class {
        * END Comprehensive Slack request
        */ 
 
-      /* 
+      /**
         * BEGIN Simple slack request (uncomment code below to enable)
-        */ 
-      
+        */
+
       //slack.send(`Found old unfulfilled order \`${order.name}\`. Date: \`${Mesa.date.format('D, M j Y', orderCreatedDate.getTime())}\`. <https://${context.output.uuid}.myshopify.com/admin/orders/${order.id}|Manage Order>`, {
       //   channel: '#jf-slack-test',
       //   icon_emoji: ':-1:',
