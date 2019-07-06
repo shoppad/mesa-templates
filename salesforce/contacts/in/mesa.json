@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "url": "shoppad/salesforce/contacts/in",
-  "documentation": "https://github.com/shoppad/mesa-actions/blob/master/salesforce/contacts/in/README.md",
+  "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/salesforce/contacts/in/README.md",
   "config": {
     "inputs": [
       {

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Checks created orders after a determined period of time, then sends a Slack alert if order is not fulfilled",
   "url": "shoppad/slack/unfulfilled-orders",
-  "documentation": "https://github.com/shoppad/mesa-actions/blob/master/slack/unfulfilled-orders/README.md",
+  "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/slack/unfulfilled-orders/README.md",
   "config": {
     "inputs": [
       {
