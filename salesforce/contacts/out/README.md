@@ -1,6 +1,6 @@
 # Salesforce - Create Contacts from Shopify Customers
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this recipe now in Mesa](https://getmesa.com/install/shoppad/mesa-actions/salesforce/contacts/out)
+[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this recipe now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/salesforce/contacts/out)
 
 ## Setup
 
