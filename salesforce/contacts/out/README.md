@@ -26,6 +26,6 @@ Authorizing with Salesforce (password):
 mesa initialize \
     --inputs=in-send-shopify-customer-to-salesforce \
     --outputs=out-send-shopify-customer-to-salesforce \
-    --files=salesforce/out/in-send-shopify-customer-to-salesforce.js,salesforce/out/out-send-salesforce-contact-to-shopify.js,salesforce/contacts/out/shopify-salesforce-customer-map.js \
+    --files=salesforce/out/in-send-shopify-customer-to-salesforce.js,salesforce/contacts/out/in-send-shopify-customer-to-salesforce.js,salesforce/contacts/out/shopify-salesforce-customer-map.js \
     --secrets=salesforce_client_id,salesforce_client_secret,salesforce_username,salesforce_password,salesforce_access_token
 ```
