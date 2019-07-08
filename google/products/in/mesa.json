@@ -1,0 +1,51 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "custom",
+        "name": "products google",
+        "key": "in-products-google",
+        "trigger_name": "In: products google",
+        "schedule": "* * * * *",
+        "script": "in-products-google.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "products google",
+        "key": "out-products-google",
+        "trigger_name": "Out: products google",
+        "script": "out-products-google.js"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "google_refresh_token"
+      },
+      {
+        "name": "google_access_token"
+      },
+      {
+        "name": "google_client_id"
+      },
+      {
+        "name": "google_client_secret"
+      },
+      {
+        "name": "google_expires_at"
+      }
+    ]
+  },
+  "files": [
+    "in-products-google.js",
+    "out-products-google.js"
+  ]
+}
