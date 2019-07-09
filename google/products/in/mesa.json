@@ -1,7 +1,10 @@
 {
-  "name": "",
+  "name": "Sync product title updates Google Sheets to Shopify",
   "version": "1.0.0",
   "description": "",
+  "url": "shoppad/google/products/in",
+  "documentation":
+    "https://github.com/shoppad/mesa-recipes/blob/master/google/products/in/README.md",
   "config": {
     "inputs": [
       {
@@ -12,7 +15,7 @@
         "key": "in-products-google",
         "trigger_name": "In: products google",
         "schedule": "* * * * *",
-        "script": "in-products-google.js"
+        "script": "google/products/in/in-products-google.js"
       }
     ],
     "outputs": [
@@ -23,7 +26,7 @@
         "name": "products google",
         "key": "out-products-google",
         "trigger_name": "Out: products google",
-        "script": "out-products-google.js"
+        "script": "google/products/in/out-products-google.js"
       }
     ],
     "secrets": [
@@ -45,7 +48,7 @@
     ]
   },
   "files": [
-    "in-products-google.js",
-    "out-products-google.js"
+    "google/products/in/in-products-google.js",
+    "google/products/in/out-products-google.js"
   ]
 }
