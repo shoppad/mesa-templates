@@ -1,7 +1,10 @@
 {
-  "name": "",
+  "name": "Sync product title updates Google Sheets to Shopify",
   "version": "1.0.0",
   "description": "",
+  "url": "shoppad/google/customer/out",
+  "documentation":
+    "https://github.com/shoppad/mesa-recipes/blob/master/google/customer/out/README.md",
   "config": {
     "inputs": [
       {
@@ -11,7 +14,7 @@
         "name": "Customer Update",
         "key": "in-customer-update",
         "trigger_name": "In: Customer Update",
-        "script": "in-customer-update.js",
+        "script": "google/customer/out/in-customer-update.js",
         "topic": "customers/update"
       }
     ],
@@ -23,7 +26,7 @@
         "name": "Google Sheets Update",
         "key": "out-google-sheets-update",
         "trigger_name": "Out: Google Sheets Update",
-        "script": "out-google-sheets-update.js"
+        "script": "google/customer/out/out-google-sheets-update.js"
       },
       {
         "trigger_type": "output",
@@ -32,7 +35,7 @@
         "name": "Google Sheets Read",
         "key": "out-google-sheets-read",
         "trigger_name": "Out: Google Sheets Read",
-        "script": "out-google-sheets-read.js"
+        "script": "google/customer/out/out-google-sheets-read.js"
       },
       {
         "trigger_type": "output",
@@ -41,7 +44,7 @@
         "name": "Customer Update",
         "key": "out-customer-update",
         "trigger_name": "Out: Customer Update",
-        "script": "out-customer-update.js"
+        "script": "google/customer/out/out-customer-update.js"
       }
     ],
     "secrets": [
@@ -63,9 +66,9 @@
     ]
   },
   "files": [
-    "in-customer-update.js",
-    "out-customer-update.js",
-    "out-google-sheets-read.js",
-    "out-google-sheets-update.js"
+    "google/customer/out/in-customer-update.js",
+    "google/customer/out/out-customer-update.js",
+    "google/customer/out/out-google-sheets-read.js",
+    "google/customer/out/`out-google-sheets-update.js"
   ]
 }
