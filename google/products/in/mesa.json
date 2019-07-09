@@ -14,7 +14,7 @@
         "name": "products google",
         "key": "in-products-google",
         "trigger_name": "In: products google",
-        "schedule": "* * * * *",
+        "schedule": "0 * * * *",
         "script": "google/products/in/in-products-google.js"
       }
     ],
