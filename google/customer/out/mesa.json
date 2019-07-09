@@ -1,5 +1,5 @@
 {
-  "name": "Sync product title updates Google Sheets to Shopify",
+  "name": "Sync customer updates data from Shopify to Google Sheets.",
   "version": "1.0.0",
   "description": "",
   "url": "shoppad/google/customer/out",
