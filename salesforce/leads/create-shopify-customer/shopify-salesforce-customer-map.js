@@ -15,31 +15,31 @@ module.exports = {
     salesforce: 'LastName',
   },
   address1: {
-    shopify: 'default_address.address1',
+    shopify: 'addresses[0].address1',
     salesforce: 'Street',
   },
   address2: {
-    shopify: 'default_address.address2',
+    shopify: 'addresses[0].address2',
     salesforce: 'Street',
   },
   city: {
-    shopify: 'default_address.city',
+    shopify: 'addresses[0].city',
     salesforce: 'City',
   },
   country: {
-    shopify: 'default_address.country',
+    shopify: 'addresses[0].country',
     salesforce: 'Country',
   },
   phone: {
-    shopify: 'default_address.phone',
+    shopify: 'addresses[0].phone',
     salesforce: 'Phone',
   },
   province: {
-    shopify: 'default_address.province',
+    shopify: 'addresses[0].province',
     salesforce: 'State',
   },
   zip: {
-    shopify: 'default_address.zip',
+    shopify: 'addresses[0].zip',
     salesforce: 'PostalCode',
   },
 }

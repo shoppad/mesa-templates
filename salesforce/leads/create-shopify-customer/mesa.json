@@ -1,0 +1,33 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "json_webhook",
+        "name": "Create Shopify Customer On Salesforce Lead Conversion",
+        "key": "in-create-shopify-customer-on-salesforce-lead-conversion",
+        "trigger_name": "In: Create Shopify Customer On Salesforce Lead Conversion",
+        "script": "salesforce/leads/create-shopify-customer/in-create-shopify-customer-on-salesforce-lead-conversion.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Create Shopify Customer On Salesforce Lead Conversion",
+        "key": "out-create-shopify-customer-on-salesforce-lead-conversion",
+        "trigger_name": "Out: Create Shopify Customer On Salesforce Lead Conversion",
+        "script": "salesforce/leads/create-shopify-customer/out-create-shopify-customer-on-salesforce-lead-conversion.js"
+      }
+    ]
+  },
+  "files": [
+    "salesforce/leads/create-shopify-customer/in-create-shopify-customer-on-salesforce-lead-conversion.js",
+    "salesforce/leads/create-shopify-customer/out-create-shopify-customer-on-salesforce-lead-conversion.js"
+  ]
+}

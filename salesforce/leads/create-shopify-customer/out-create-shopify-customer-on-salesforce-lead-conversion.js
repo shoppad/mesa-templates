@@ -12,7 +12,6 @@ module.exports = new class {
    * Mesa Script
    *
    * @param {object} payload The payload data
-   * @param {object} context Additional context about this task
    */
   script = (payload) => {
     // Decode payload
@@ -31,7 +30,34 @@ module.exports = new class {
     // Convert to Shopify contact
     const shopifyPayload = Mapping.convert(ShopifySalesforceCustomerMap, lead, 'salesforce', 'shopify', processors);
 
-    Mesa.log.info('shopifyPayload', shopifyPayload);
+    // Check if customer with same email address alreadys exists in Shopify
+    const response = Shopify.get(`/admin/api/2019-04/customers/search.json?query=${shopifyPayload['customer']['email']}`);
+    const customers = response['customers'];
+
+    // Update or create the customer in Shopify
+    if (customers.length === 0) {
+      // Add tags to customer
+      shopifyPayload['customer']['tags'] = 'salesforceLeadConverted,salesforceIsNewCustomer';
+
+      // POST
+      Shopify.post('/admin/api/2019-04/customers.json', shopifyPayload, {
+        skipJsonWrap: true,
+      });
+    } else if (customers.length === 1 && customers[0]['email'] === shopifyPayload['customer']['email']) {
+      const customer = customers[0];
+
+      // Add tags to customer
+      shopifyPayload['customer']['tags'] = customer['tags']
+        ? response['customers'][0]['tags'].concat(',salesforceLeadConverted,salesforceIsExistingCustomer')
+        : 'salesforceLeadConverted,salesforceIsExistingCustomer';
+
+      // PUT
+      Shopify.put(`/admin/api/2019-04/customers/${customer['id']}.json`, shopifyPayload, {
+        skipJsonWrap: true,
+      });
+    } else {
+      Mesa.log.warn('Multiple customers found when querying Shopify by email, not updating.');
+    }
   }
 
   //
@@ -65,11 +91,9 @@ module.exports = new class {
   splitAddress = (fieldKey, inputValue) => {
     if (fieldKey === 'address1') {
       const address = inputValue.split("\n");
-      Mesa.log.info('address', address);
       return address[0];
     } else if (fieldKey === 'address2') {
       const address = inputValue.split("\n");
-      Mesa.log.info('address1', address[1]);
       return address[1];
     } else {
       return inputValue;
