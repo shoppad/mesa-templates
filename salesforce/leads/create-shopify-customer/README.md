@@ -1,5 +1,5 @@
 # Salesforce - Leads
-Creates or updates a Shopify Customer when a Salesforce Lead is converted to a Contact
+Create or update a Shopify Customer when a Salesforce Lead is converted to a Contact
 
 [![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/salesforce/leads/create-shopify-customer)
 
