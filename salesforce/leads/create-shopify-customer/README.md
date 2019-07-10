@@ -8,13 +8,14 @@ Create or update a Shopify Customer when a Salesforce Lead is converted to a Con
 Authorizing with Salesforce (password auth):
 - You will need to create a connected app in Salesforce
 - Click on the Setup buutton (gear icon - top right)
-- Navigate to "Apps", then click "New Connnected App"
+- Navigate to "Apps", then "App Manager'
+- In App Manager, click "New Connnected App" in the top right corner
 - Enable OAuth Settings, add all scopes
-- Add https://dev-www.theshoppad.com/apps/oauth/ as a callback URL @TODO: what is the production URL?
-- Save the application, then get the client ID and client secret
+- Add https://www.theshoppad.com/apps/oauth/ as a callback URL
+- Save the application, then get the customer key and customer secret
 - Open up Mesa, then navigate to the "Secrets" tab
-- Save the client ID, with the key being "salesforce_client_id"
-- Save the client secret, with the key being "salesforce_client_secret"
+- Save the customer key, with the key being "salesforce_client_id"
+- Save the customer secret, with the key being "salesforce_client_secret"
 - Save your Salesforce username, with the key being "salesforce_username"
 - Save your Salesforce password, with the key being "salesforce_password"
 
@@ -24,10 +25,11 @@ Setting up workflows in Salesforce in order to recieve webhooks:
 - Open up your Salesforce instance
 - Click on the Setup button (gear icon - top right)
 - Head over to "Process Automation", then to "Workflow Actions"
-- Create an "Outbound Message" for the "Lead" object, and set the "Endpoint URL" to the webhook URL that is seen in the "Create Shopify Customer On Salesforce Lead Conversion" Input
+- Create an "Outbound Message" for the "Lead" object, and set the "Endpoint URL" to the webhook URL that is seen in the "Create Shopify Customer On Salesforce Lead Conversion" Input @TODO add all fields?
 - Create a "Workflow Rule" for "Lead" object
 - Set the "Rule Criteria" to "Lead: Converted EQUALS True"
 - Navigate to the new "Workflow Rule" and click on the "Add Worflow action" > "Select Existing Action", then select the newly created "Outbound Message"
+- Activate the rule by navigating back to "WorkFlow Rules" and clicking "Activate" next to the new rule
 
 ## Developing 
 [Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
