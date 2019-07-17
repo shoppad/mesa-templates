@@ -1,5 +1,5 @@
 const Mesa = require('./vendor/Mesa1.js');
-const OpenWeatherMap = require('./OpenWeatherMap.js');
+const OpenWeatherMap = require('./vendor/OpenWeatherMap.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
