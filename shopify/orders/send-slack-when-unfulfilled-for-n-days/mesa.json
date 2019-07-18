@@ -1,9 +1,12 @@
 {
-  "name": "Send Slack alerts for unfulfilled orders",
+  "name": "Send Slack notification for unfulfilled orders",
   "version": "1.0.0",
-  "description": "Checks created orders after a determined period of time, then sends a Slack alert if order is not fulfilled",
-  "url": "shoppad/slack/unfulfilled-orders",
-  "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/slack/unfulfilled-orders/README.md",
+  "description": "Checks orders and sends a Slack notification if order is not fulfilled after a set period of time.",
+  "url": "shoppad/mesa-templates/shopify/orders/send-slack-when-unfulfilled-for-n-days",
+  "documentation": "README.md",
+  "tags": ["orders", "slack"],
+  "source": "shopify",
+  "destination": "slack",
   "config": {
     "inputs": [
       {
