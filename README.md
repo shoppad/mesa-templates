@@ -25,5 +25,5 @@ Send a 3rd party notification
 `ex. shopify/orders/send-slack-when-paid`  
 `ex. shopify/orders/send-slack-when-unfulfilled-for-n-days`
 
-Send the contents of a spreadsheet to Shopify  
-`ex. google-sheets/products/send-to-shopify-products`
+Update Shopify product with the contents of a spreadsheet  
+`ex. google-sheets/products/update-titles-on-shopify-products`
