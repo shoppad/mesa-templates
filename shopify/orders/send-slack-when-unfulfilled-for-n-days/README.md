@@ -1,7 +1,7 @@
-# Slack - Unfulfilled Orders Alerts
-Send Slack alerts for unfulfilled orders after a configurable period of time
+# Send Slack notification for unfulfilled orders
+Checks orders and sends a Slack notification if order is not fulfilled after a set period of time.
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/slack/unfulfilled-orders)
+[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/shopify/orders/send-slack-when-unfulfilled-for-n-days)
 
 ## Setup
 
