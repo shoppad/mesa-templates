@@ -1,7 +1,8 @@
 {
   "name": "Add Weather to Orders",
   "version": "1.0.0",
-  "description": "Use OpenWeatherMap to get the weather forecast at the destination address and add it to the Shopify order's Note Attributes",
+  "description": "Use OpenWeatherMap to get the weather forecast at the destination address and add it to the Shopify order's note attributes",
+  "tags": ["orders", "openweathermap"],
   "config": {
     "inputs": [
       {
