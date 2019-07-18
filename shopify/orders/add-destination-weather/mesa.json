@@ -2,7 +2,7 @@
   "name": "Add destination weather to new orders",
   "version": "1.0.0",
   "description": "Use OpenWeatherMap to get the weather forecast at the destination address and add it to the Shopify order's note attributes.",
-  "url": "shopify/orders/add-destination-weather",
+  "url": "shoppad/mesa-templates/shopify/orders/add-destination-weather",
   "documentation": "README.md",
   "tags": ["orders", "openweathermap"],
   "source": "shopify",
