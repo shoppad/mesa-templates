@@ -1,7 +1,7 @@
-# Tracktor Alerts
-Send Email and SMS Alerts on Tracktor status changes
+# Tracktor Notifications
+Send Email and SMS Notifications to Customer on Tracktor status changes
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/tracktor/alerts)
+[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/tracktor/send-email-or-sms-notification-on-status-change)
 
 ## Setup
 
