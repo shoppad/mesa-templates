@@ -16,7 +16,7 @@
         "name": "Orders Slack Created",
         "key": "in-orders-slack-created",
         "trigger_name": "In: Orders Slack Created",
-        "script": "slack/unfulfilled-orders/in-orders-slack-created.js",
+        "script": "shopify/orders/send-slack-when-unfulfilled-for-n-days/intput.js",
         "topic": "orders/create"
       }
     ],
@@ -29,7 +29,7 @@
         "key": "out-orders-slack-created-vo",
         "trigger_name": "Out: Orders Slack Created",
         "schedule": "0 9 * * *",
-        "script": "slack/unfulfilled-orders/out-orders-slack-created.js",
+        "script": "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
         "custom_connection": true,
         "parameters": "limit=-1&created_at_max={date:7 days ago}"
       },
@@ -40,7 +40,7 @@
         "name": "Orders Slack Check Fulfilled",
         "key": "out-orders-slack-check-fulfilled",
         "trigger_name": "Out: Orders Slack Check Fulfilled",
-        "script": "slack/unfulfilled-orders/out-orders-slack-check-fulfilled.js"
+        "script": "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
       }
     ],
     "storage": [
@@ -56,8 +56,8 @@
     ]
   },
   "files": [
-    "slack/unfulfilled-orders/in-orders-slack-created.js",
-    "slack/unfulfilled-orders/out-orders-slack-created.js",
-    "slack/unfulfilled-orders/out-orders-slack-check-fulfilled.js"
+    "shopify/orders/send-slack-when-unfulfilled-for-n-days/intput.js",
+    "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
+    "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
   ]
 }
