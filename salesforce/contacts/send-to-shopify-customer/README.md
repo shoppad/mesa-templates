@@ -6,7 +6,7 @@ Sends a Salesforce contact to a Shopify customer record.
 
 ## Setup
 
-###Authorizing with Salesforce (password auth):
+### Authorizing with Salesforce (password auth):
 1. You will need to create a connected app in Salesforce
 2. Click on the Setup button (gear icon - top right)
 3. Navigate to "Apps", then click "New Connnected App"
@@ -19,7 +19,7 @@ Sends a Salesforce contact to a Shopify customer record.
 10. Save your Salesforce username, with the key being "salesforce_username"
 11. Save your Salesforce password, with the key being "salesforce_password"
 
-###Setting up workflows in Salesforce in order to recieve webhooks:
+### Setting up workflows in Salesforce in order to recieve webhooks:
 1. Open up your Salesforce instance
 2. Click on the Setup button (gear icon - top right)
 3. Head over to "Process Automation", then to "Workflow Actions"
