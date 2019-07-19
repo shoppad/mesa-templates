@@ -1,9 +1,12 @@
 {
-  "name": "Create or update a Shopify Customer when a Salesforce Lead is converted to a Contact",
+  "name": "Create Shopify Customer On Salesforce Lead Conversion",
   "version": "1.0.0",
-  "description": "",
-  "url": "shoppad/salesforce/leads/create-shopify-customer",
-  "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/salesforce/leads/create-shopify-customer/README.md",
+  "description": "Create or update a Shopify Customer when a Salesforce Lead is converted to a Contact.",
+  "url": "shoppad/mesa-templates/salesforce/leads/send-to-shopify-customer",
+  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/salesforce/leads/send-to-shopify-customer/README.md",
+  "tags": ["customers", "salesforce"],
+  "source": "salesforce",
+  "destination": "shopify",
   "config": {
     "inputs": [
       {
@@ -13,7 +16,7 @@
         "name": "Create Shopify Customer On Salesforce Lead Conversion",
         "key": "in-create-shopify-customer-on-salesforce-lead-conversion",
         "trigger_name": "In: Create Shopify Customer On Salesforce Lead Conversion",
-        "script": "salesforce/leads/create-shopify-customer/in-create-shopify-customer-on-salesforce-lead-conversion.js"
+        "script": "salesforce/leads/send-to-shopify-customer/input.js"
       }
     ],
     "outputs": [
@@ -24,12 +27,13 @@
         "name": "Create Shopify Customer On Salesforce Lead Conversion",
         "key": "out-create-shopify-customer-on-salesforce-lead-conversion",
         "trigger_name": "Out: Create Shopify Customer On Salesforce Lead Conversion",
-        "script": "salesforce/leads/create-shopify-customer/out-create-shopify-customer-on-salesforce-lead-conversion.js"
+        "script": "salesforce/leads/send-to-shopify-customer/output.js"
       }
     ]
   },
   "files": [
-    "salesforce/leads/create-shopify-customer/in-create-shopify-customer-on-salesforce-lead-conversion.js",
-    "salesforce/leads/create-shopify-customer/out-create-shopify-customer-on-salesforce-lead-conversion.js"
+    "salesforce/leads/send-to-shopify-customer/input.js",
+    "salesforce/leads/send-to-shopify-customer/output.js",
+    "salesforce/leads/send-to-shopify-customer/shopify-salesforce-customer-map.js"
   ]
 }

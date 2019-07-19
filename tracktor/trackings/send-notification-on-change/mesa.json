@@ -1,22 +1,22 @@
 {
-  "name": "Tracktor Notifications",
+  "name": "Send Notification on Tracktor Status Change",
   "version": "1.0.0",
-  "description": "Send Email or SMS Notifications on Tracktor status changes",
+  "description": "Send an Email or SMS Notifications when a tracking changes.",
+  "url": "shoppad/mesa-templates/blob/master/tracktor/trackings/send-notification-on-change",
+  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/tracktor/trackings/send-notification-on-change/README.md",
   "tags": ["tracktor", "buyer_experience"],
   "source": "tracktor",
   "destination": "notification",
-  "url": "shoppad/mesa-templates/tracktor",
-  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/tracktor/send-email-or-sms-notification-on-status-change/README.md",
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
         "enabled": true,
         "type": "json_webhook",
-        "name": "Tracktor Alerts",
+        "name": "Send Notification on Tracktor Status Change",
         "key": "in-tracktor-alerts",
         "trigger_name": "In: Tracktor Alerts",
-        "script": "tracktor/alerts/in-tracktor-alerts.js"
+        "script": "tracktor/trackings/send-notification-on-change/input.js"
       }
     ],
     "outputs": [
@@ -24,19 +24,19 @@
         "trigger_type": "output",
         "enabled": true,
         "type": "custom",
-        "name": "Tracktor Email",
+        "name": "Send Notification on Tracktor Status Change: Email",
         "key": "out-tracktor-email",
         "trigger_name": "Out: Tracktor Email",
-        "script": "tracktor/alerts/out-tracktor-email.js"
+        "script": "tracktor/trackings/send-notification-on-change/output-email.js"
       },
       {
         "trigger_type": "output",
         "enabled": true,
         "type": "custom",
-        "name": "Tracktor Twilio",
+        "name": "Send Notification on Tracktor Status Change: SMS",
         "key": "out-tracktor-twilio",
         "trigger_name": "Out: Tracktor Twilio",
-        "script": "tracktor/alerts/out-tracktor-twilio.js"
+        "script": "tracktor/trackings/send-notification-on-change/output-sms.js"
       }
     ],
     "storage": [
@@ -114,8 +114,8 @@
     ]
   },
   "files": [
-    "tracktor/alerts/in-tracktor-alerts.js",
-    "tracktor/alerts/out-tracktor-email.js",
-    "tracktor/alerts/out-tracktor-twilio.js"
+    "tracktor/trackings/send-notification-on-change/input.js",
+    "tracktor/trackings/send-notification-on-change/output-email.js",
+    "tracktor/trackings/send-notification-on-change/output-sms.js"
   ]
 }

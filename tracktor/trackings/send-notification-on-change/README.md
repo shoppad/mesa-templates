@@ -1,7 +1,8 @@
-# Tracktor Notifications
-Send Email and SMS Notifications to Customer on Tracktor status changes
+# Send Notification on Tracktor Status Change
 
-[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/tracktor/send-email-or-sms-notification-on-status-change)
+Send an Email or SMS Notifications when a tracking changes.
+
+[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/tracktor/trackings/send-notification-on-change)
 
 ## Setup
 
