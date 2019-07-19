@@ -1,20 +1,22 @@
 {
-  "name": "Sync Shopify Customers to Salesforce",
+  "name": "Send Shopify Customer to Salesforce Contact",
   "version": "1.0.0",
-  "description": "",
-  "url": "shoppad/salesforce/contacts/out",
-  "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/salesforce/contacts/out/README.md",
+  "description": "Sends Shopify customers to Salesforce contacts when they're created and updates them if there are edits.",
+  "url": "shoppad/mesa-templates/shopify/customers/send-to-salesforce-contact",
+  "documentation": "https://github.com/shoppad/mesa-templates/shopify/customers/send-to-salesforce-contact/README.md",
+  "tags": ["customers", "salesforce"],
+  "source": "shopify",
+  "destination": "salesforce",
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
         "enabled": true,
         "type": "shopify_webhook",
-        "name": "Send Shopify Customer To Salesforce",
+        "name": "Send Shopify Customer to Salesforce Contact",
         "key": "in-send-shopify-customer-to-salesforce",
         "trigger_name": "In: Send Shopify Customer To Salesforce",
-        "script": "salesforce/contacts/out/in-send-shopify-customer-to-salesforce.js",
-        "port": 22,
+        "script": "shopify/customers/send-to-salesforce-contact/input.js",
         "logging": "error",
         "topic": "customers/update"
       }
@@ -24,10 +26,10 @@
         "trigger_type": "output",
         "enabled": true,
         "type": "custom",
-        "name": "Send Shopify Customer To Salesforce",
+        "name": "Send Shopify Customer To Salesforce Contact",
         "key": "out-send-shopify-customer-to-salesforce",
         "trigger_name": "Out: Send Shopify Customer To Salesforce",
-        "script": "salesforce/contacts/out/out-send-shopify-customer-to-salesforce.js"
+        "script": "shopify/customers/send-to-salesforce-contact/output.js"
       }
     ],
     "secrets": [
@@ -49,8 +51,8 @@
     ]
   },
   "files": [
-    "salesforce/out/in-send-shopify-customer-to-salesforce.js",
-    "salesforce/out/out-send-salesforce-contact-to-shopify.js",
-    "salesforce/contacts/out/shopify-salesforce-customer-map.js"
+    "shopify/customers/send-to-salesforce-contact/input.js",
+    "shopify/customers/send-to-salesforce-contact/output.js",
+    "shopify/customers/send-to-salesforce-contact/shopify-salesforce-customer-map.js"
   ]
 }
