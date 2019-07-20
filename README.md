@@ -1,4 +1,6 @@
-## Naming conventions
+## Mesa Templates
+
+### File naming conventions
 
 File structure: {source}/{entity}/{automation-name}
 
@@ -27,3 +29,14 @@ Send a 3rd party notification
 
 Update Shopify product with the contents of a spreadsheet  
 `ex. google-sheets/products/update-titles-on-shopify-products`
+
+### mesa.json
+
+See [JSON schema definition](https://docs.google.com/document/d/1uXo0gcmSyrI3nq1n8YDWyqTBaffUI1HSSupfWZNI6CU)
+
+### README.md
+
+- Include template name & description (same as in mesa.json)
+- Mesa "Get Template" button
+- Numbered setup instructions
+- Misc. development notes
