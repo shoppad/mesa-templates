@@ -1,7 +1,8 @@
-# Tracktor Alerts
-Send Email and SMS Alerts on Tracktor status changes
+# Automated Testing
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/test/kitchen-sink)
+This template is for internal use only.
+
+[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/tests/kitchen-sink)
 
 ## Setup
 
