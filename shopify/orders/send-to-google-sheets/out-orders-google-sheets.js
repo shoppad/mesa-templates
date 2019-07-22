@@ -26,8 +26,6 @@ module.exports = new class {
       "G5"
     ).values;
 
-    Mesa.log.info("Google Sheets Payload", payload.google.sheets.payload);
-
     // Adding new order.
     payload.google.sheets.payload.push([
       payload.shopify.id,
@@ -38,6 +36,8 @@ module.exports = new class {
       payload.shopify.customer.id,
       payload.shopify.email
     ]);
+
+    // Updating Google Sheets.
     let updateSheets = google.sheets.basicWriting(
       payload.google.sheets.id,
       "Sheet1",
