@@ -45,7 +45,7 @@
     ],
     "storage": [
       {
-        "name": "google_sheets_products_id",
+        "name": "google_sheets_orders_id",
         "value": "2HP0JLmugUgaehkSt9htHC_-B4yk1Mt-AbJtyWRF_iGs"
       }
     ]
