@@ -2,9 +2,12 @@
   "name": "Sync product title updates Google Sheets to Shopify",
   "version": "1.0.0",
   "description": "",
-  "url": "shoppad/google/products/in",
+  "url": "shoppad/google-sheets/products/update-titles-on-shopify-products",
   "documentation":
-    "https://github.com/shoppad/mesa-recipes/blob/master/google/products/in/README.md",
+    "https://github.com/shoppad/mesa-templates/blob/master/google-sheets/products/update-titles-on-shopify-products/README.md",
+  "tags": ["products", "google-sheets"],
+  "source": "google-sheets",
+  "destination": "shopify",
   "config": {
     "inputs": [
       {
@@ -15,7 +18,8 @@
         "key": "in-products-google",
         "trigger_name": "In: products google",
         "schedule": "0 * * * *",
-        "script": "google/products/in/in-products-google.js"
+        "script":
+          "google-sheets/products/update-titles-on-shopify-products/in/in-products-google.js"
       }
     ],
     "outputs": [
@@ -26,7 +30,8 @@
         "name": "products google",
         "key": "out-products-google",
         "trigger_name": "Out: products google",
-        "script": "google/products/in/out-products-google.js"
+        "script":
+          "google-sheets/products/update-titles-on-shopify-products/out-products-google.js"
       }
     ],
     "secrets": [
@@ -54,7 +59,7 @@
     ]
   },
   "files": [
-    "google/products/in/in-products-google.js",
-    "google/products/in/out-products-google.js"
+    "google-sheets/products/update-titles-on-shopify-products/in-products-google.js",
+    "google-sheets/products/update-titles-on-shopify-products/out-products-google.js"
   ]
 }
