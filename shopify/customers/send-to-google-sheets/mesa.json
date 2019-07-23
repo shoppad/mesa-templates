@@ -2,9 +2,12 @@
   "name": "Sync customer updates data from Shopify to Google Sheets.",
   "version": "1.0.0",
   "description": "",
-  "url": "shoppad/google/customer/out",
+  "url": "shoppad/shopify/customers/send-to-google-sheets",
   "documentation":
-    "https://github.com/shoppad/mesa-recipes/blob/master/google/customer/out/README.md",
+    "https://github.com/shoppad/mesa-recipes/blob/master/shopify/customers/send-to-google-sheets/README.md",
+  "tags": ["customers", "google-sheets"],
+  "source": "shopify",
+  "destination": "google-sheets",
   "config": {
     "inputs": [
       {
@@ -14,7 +17,8 @@
         "name": "Customer Update",
         "key": "in-customer-update",
         "trigger_name": "In: Customer Update",
-        "script": "google/customer/out/in-customer-update.js",
+        "script":
+          "shopify/customers/send-to-google-sheets/in-customer-update.js",
         "topic": "customers/update"
       }
     ],
@@ -26,7 +30,8 @@
         "name": "Google Sheets Update",
         "key": "out-google-sheets-update",
         "trigger_name": "Out: Google Sheets Update",
-        "script": "google/customer/out/out-google-sheets-update.js"
+        "script":
+          "shopify/customers/send-to-google-sheets/out-google-sheets-update.js"
       },
       {
         "trigger_type": "output",
@@ -35,7 +40,8 @@
         "name": "Google Sheets Read",
         "key": "out-google-sheets-read",
         "trigger_name": "Out: Google Sheets Read",
-        "script": "google/customer/out/out-google-sheets-read.js"
+        "script":
+          "shopify/customers/send-to-google-sheets/out-google-sheets-read.js"
       },
       {
         "trigger_type": "output",
@@ -44,7 +50,8 @@
         "name": "Customer Update",
         "key": "out-customer-update",
         "trigger_name": "Out: Customer Update",
-        "script": "google/customer/out/out-customer-update.js"
+        "script":
+          "shopify/customers/send-to-google-sheets/out-customer-update.js"
       }
     ],
     "secrets": [
@@ -72,9 +79,9 @@
     ]
   },
   "files": [
-    "google/customer/out/in-customer-update.js",
-    "google/customer/out/out-customer-update.js",
-    "google/customer/out/out-google-sheets-read.js",
-    "google/customer/out/`out-google-sheets-update.js"
+    "shopify/customers/send-to-google-sheets/in-customer-update.js",
+    "shopify/customers/send-to-google-sheets/out-customer-update.js",
+    "shopify/customers/send-to-google-sheets/out-google-sheets-read.js",
+    "shopify/customers/send-to-google-sheets/out-google-sheets-update.js"
   ]
 }
