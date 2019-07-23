@@ -22,7 +22,7 @@ module.exports = new class {
           }
         },
         sheets: {
-          id: "", // Add your spreadsheet id.
+          id: Mesa.storage.get("google_sheets_customers_id"),
           payload: []
         }
       }

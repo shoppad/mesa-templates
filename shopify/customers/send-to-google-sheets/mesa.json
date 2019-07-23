@@ -63,6 +63,12 @@
       {
         "name": "google_expires_at"
       }
+    ],
+    "storage": [
+      {
+        "name": "google_sheets_customers_id",
+        "value": ""
+      }
     ]
   },
   "files": [
