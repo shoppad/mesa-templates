@@ -1,0 +1,54 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Orders Google Sheets",
+        "key": "in-orders-google-sheets",
+        "trigger_name": "In: Orders Google Sheets",
+        "script": "in-orders-google-sheets.js",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Orders Google Sheets",
+        "key": "out-orders-google-sheets",
+        "trigger_name": "Out: Orders Google Sheets",
+        "script": "out-orders-google-sheets.js"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "google_refresh_token"
+      },
+      {
+        "name": "google_access_token"
+      },
+      {
+        "name": "google_client_id"
+      },
+      {
+        "name": "google_client_secret"
+      },
+      {
+        "name": "google_expires_at"
+      }
+    ],
+    "storage": [
+      {
+        "name": "google_sheets_orders_id",
+        "value": ""
+      }
+    ]
+  },
+  "files": ["in-orders-google-sheets.js", "out-orders-google-sheets.js"]
+}
