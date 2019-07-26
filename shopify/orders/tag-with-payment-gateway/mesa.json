@@ -1,0 +1,37 @@
+{
+  "name": "Tag order with payment gateway",
+  "version": "1.0.0",
+  "description": "Tag a new Shopify order with the payment gateway used at checkout.",
+  "tags": ["orders"],
+  "source": "shopify",
+  "destination": "shopify",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Tag orders with payment gateway",
+        "key": "in-tag-orders-with-payment-gateway",
+        "trigger_name": "In: Tag orders with payment gateway",
+        "script": "in-output-send.js",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "shopify_api",
+        "name": "Tag orders with payment gateway",
+        "key": "out-tag-orders-with-payment-gateway",
+        "trigger_name": "Out: Tag orders with payment gateway",
+        "script": "shopify/orders/tag-with-payment-gateway/output.js",
+        "shopify_api": "PUT admin/orders/{{order_id}}.json"
+      }
+    ]
+  },
+  "files": [
+    "shopify/orders/tag-with-payment-gateway/output.js"
+  ]
+}
