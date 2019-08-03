@@ -28,7 +28,7 @@ module.exports = new class {
     const path = `${basePath}/${externalFieldName}/${extenalFieldValue}`;
     const options = { include_headers: true };
 
-    // Create or update a contact in Salesforce based on ShopifyCustomerID__c 
+    // Create a contact in Salesforce based on ShopifyCustomerID__c 
     salesforce.patch(path, postData, options);
 
     // Get updated contact from Salesforce
