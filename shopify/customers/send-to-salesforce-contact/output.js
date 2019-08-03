@@ -29,7 +29,7 @@ module.exports = new class {
     const options = { include_headers: true };
 
     // Create or update a contact in Salesforce based on ShopifyCustomerID__c 
-    salesforce.patch(path, postData, options);
+    const patch = salesforce.patch(path, postData, options);
 
     // Get updated contact from Salesforce
     const salesforceContact = salesforce.get(path, options);
