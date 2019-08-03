@@ -18,7 +18,7 @@
         "trigger_name": "In: Send Shopify Customer To Salesforce",
         "script": "shopify/customers/send-to-salesforce-contact/input.js",
         "logging": "error",
-        "topic": "customers/update"
+        "topic": "customers/create"
       }
     ],
     "outputs": [
