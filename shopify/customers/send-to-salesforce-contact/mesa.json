@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Sends new Shopify customers to Salesforce contacts when they're created.",
   "url": "shoppad/mesa-templates/shopify/customers/send-to-salesforce-contact",
-  "documentation": "https://github.com/shoppad/mesa-templates/shopify/customers/send-to-salesforce-contact/README.md",
+  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/shopify/customers/send-to-salesforce-contact/README.md",
   "tags": ["customers", "salesforce"],
   "source": "shopify",
   "destination": "salesforce",
