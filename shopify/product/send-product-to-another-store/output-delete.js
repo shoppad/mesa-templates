@@ -15,15 +15,14 @@ module.exports = new class {
     script = (payload, context) => {
 
         const connectionObj = {
-            "host": Mesa.storage.get('shopify/products/sync-with-another-store/host'),
-            "username": Mesa.storage.get('shopify/products/sync-with-another-store/key'),
-            "password": Mesa.secret.get('shopify/products/sync-with-another-store/password')
+            "host": Mesa.storage.get('shopify/product/send-product-to-another-store/host'),
+            "username": Mesa.storage.get('shopify/product/send-product-to-another-store/key'),
+            "password": Mesa.secret.get('shopify/product/send-product-to-another-store/password')
         };
 
-        let productMap = Mesa.storage.get('shopify/products/sync-with-another-store/product-map');
-        productMap = JSON.parse(productMap);
+        let productMap = Mesa.storage.get('shopify/product/send-product-to-another-store/product-map.json');
         let foreignProductID = productMap[payload.id];
 
         Shopify.delete('/admin/products/' + foreignProductID + '.json', payload, {debug:false}, connectionObj);
     }
-}
+};
