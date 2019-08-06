@@ -1,6 +1,6 @@
 # Delete Shopify Draft Orders After Thirty Days
 
-Deletes Shopify draft orders after they've been around for 30 days.
+Deletes Shopify draft orders after they've been around for 30 days (runs twice a day).
 
 [![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/shopify/draft-orders/delete-after-thirty-days)
 
