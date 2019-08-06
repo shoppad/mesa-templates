@@ -1,0 +1,37 @@
+{
+  "name": "Auto-fulfill line items",
+  "version": "1.0.0",
+  "description": "Auto-fulfill line items do not require shipping",
+  "tags": ["fulfillments"],
+  "source": "shopify",
+  "destination": "shopify",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "In: Auto-fulfill line items do not require shipping",
+        "key": "in-auto-fulfill-items-that-dont-require-shipping",
+        "trigger_name": "In: Auto-fulfill items that don't require shipping",
+        "script": "in-output-send.js",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "shopify_api",
+        "name": "Out: Auto-fulfill line items do not require shipping",
+        "key": "out-auto-fulfill-items-that-dont-require-shipping",
+        "trigger_name": "Out: Auto-fulfill items that don't require shipping",
+        "script": "shopify/fulfillments/update-fulfillment-line-items-that-dont-require-shipping/output.js",
+        "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json"
+      }
+    ]
+  },
+  "files": [
+    "shopify/fulfillments/update-fulfillment-line-items-that-dont-require-shipping/output.js"
+  ]
+}
