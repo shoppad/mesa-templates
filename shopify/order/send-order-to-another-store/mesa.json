@@ -1,0 +1,88 @@
+{
+  "name": "Send Order To Another Store",
+  "version": "1.0.0",
+  "description": "Send order from Shopify to another store when order is created, updated or deleted.",
+  "tags": ["orders"],
+  "source": "shopify",
+  "destination": "shopify",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Send Order To Another Store: Create",
+        "key": "in-send-created-orders-to-another-store",
+        "script": "in-output-send.js",
+        "topic": "orders/create"
+      },
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Send Order To Another Store: Update",
+        "key": "in-send-updated-orders-to-another-store",
+        "script": "in-output-send.js",
+        "topic": "orders/update"
+      },
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Send Order To Another Store: Remove",
+        "key": "in-send-deleted-orders-to-another-store",
+        "script": "in-output-send.js",
+        "topic": "orders/delete"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Send Order To Another Store: Create",
+        "key": "out-send-created-orders-to-another-store",
+        "script": "shopify/order/send-order-to-another-store/output-create.js"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Send Order To Another Store: Update",
+        "key": "out-send-updated-orders-to-another-store",
+        "script": "shopify/order/send-order-to-another-store/output-update.js"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Send Order To Another Store: Remove",
+        "key": "out-send-deleted-orders-to-another-store",
+        "script": "shopify/order/send-order-to-another-store/output-delete.js"
+      }
+    ]
+  },
+  "secrets": [
+    {
+      "name": "shopify/order/send-order-to-another-store/password"
+    }
+  ],
+  "storage": [
+    {
+      "name": "shopify/order/send-order-to-another-store/host"
+    },
+    {
+      "name": "shopify/order/send-order-to-another-store/key"
+    },
+    {
+      "name": "shopify/order/send-order-to-another-store/order-map.json",
+      "value": "{}"
+    }
+  ],
+  "files": [
+    "shopify/order/send-order-to-another-store/output-create.js",
+    "shopify/order/send-order-to-another-store/output-update.js",
+    "shopify/order/send-order-to-another-store/output-delete.js"
+  ]
+
+}
