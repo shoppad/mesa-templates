@@ -2,7 +2,6 @@
   "name": "Create Shopify Customer On Salesforce Lead Conversion",
   "version": "1.0.0",
   "description": "Create or update a Shopify Customer when a Salesforce Lead is converted to a Contact.",
-  "url": "shoppad/mesa-templates/salesforce/leads/send-to-shopify-customer",
   "documentation": "https://github.com/shoppad/mesa-templates/blob/master/salesforce/leads/send-to-shopify-customer/README.md",
   "tags": ["customers", "salesforce"],
   "source": "salesforce",

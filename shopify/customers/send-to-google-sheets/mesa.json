@@ -2,7 +2,6 @@
   "name": "Sync customer updates data from Shopify to Google Sheets.",
   "version": "1.0.0",
   "description": "",
-  "url": "shoppad/shopify/customers/send-to-google-sheets",
   "documentation":
     "https://github.com/shoppad/mesa-recipes/blob/master/shopify/customers/send-to-google-sheets/README.md",
   "tags": ["customers", "google-sheets"],
