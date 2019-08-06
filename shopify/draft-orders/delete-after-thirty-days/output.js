@@ -11,13 +11,20 @@ module.exports = new class {
    *
    * @param {object} payload The payload data
    */
-  script = (payload) => {
+  script = (payload, context) => {
     payload.forEach(function(order) {
-      const response = Shopify.delete(`/admin/api/2019-07/draft_orders/${order.id}.json`);
-      Mesa.log.warn('response', response);
-      // @todo: figure out a way to get response headers
-      // @todo: clearOne if 200
-      // @todo: clearOne + log if 404 (order was most likely deleted outside of mesa)
+      try {
+        const response = Shopify.delete(`/admin/api/2019-07/draft_orders/${order.id}.json`);
+        console.log('success, clear!', response);
+        Mesa.vo.clearOne(context.output.key, order.mesa_id);
+      } catch (e) {
+        if (e.getCode() === 404) {
+          Mesa.log.info(`404 returned when trying to delete draft order ${order.id}, this draft order was most likely deleted outside of Mesa, clearing from VO`);
+          Mesa.vo.clearOne(context.output.key, order.mesa_id);
+        } else {
+          Mesa.log.error(`${e.getCode()} returned when trying to delete draft order ${order.id}`);
+        }
+      }
     });
   }
 }
