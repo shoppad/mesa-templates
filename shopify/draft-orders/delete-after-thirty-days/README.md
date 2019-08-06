@@ -5,15 +5,14 @@ Deletes Shopify draft orders after they've been around for 30 days (runs twice a
 [![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/shopify/draft-orders/delete-after-thirty-days)
 
 ## Setup
-No setup required.
+1. No setup required.
 
 ## Developing 
 [Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
 
-@TODO
 ```
 mesa initialize \
-    --inputs=in-create-shopify-customer-on-salesforce-lead-conversion \
-    --outputs=out-create-shopify-customer-on-salesforce-lead-conversion \
-    --files=salesforce/leads/create-shopify-customer/in-create-shopify-customer-on-salesforce-lead-conversion.js,salesforce/leads/create-shopify-customer/out-create-shopify-customer-on-salesforce-lead-conversion.js \
+    --inputs=in-delete-draft-order-after-thirty-days \
+    --outputs=out-delete-draft-order-after-thirty-days-vo \
+    --files=shopify/draft-orders/delete-after-thirty-days/input.js,shopify/draft-orders/delete-after-thirty-days/output.js \
 ```
