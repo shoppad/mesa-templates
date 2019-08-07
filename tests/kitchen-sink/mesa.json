@@ -48,7 +48,7 @@
         "name": "Kitchen Sink FTP",
         "key": "out-kitchen-sink-ftp",
         "trigger_name": "Out: Kitchen Sink FTP",
-        "script": "tests/kitchen-sink/out-output-done.js",
+        "script": "out-output-done.js",
         "method": "sftp",
         "host": "harmony-files.theshoppad.com",
         "port": "22",
