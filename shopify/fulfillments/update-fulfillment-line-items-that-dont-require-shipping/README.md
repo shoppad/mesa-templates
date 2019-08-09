@@ -1,7 +1,7 @@
 # Auto-fulfill line items
 Auto-fulfill line items does not require shipping
 
-[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/shopify/orders/tag-with-province)
+[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/shopify/fulfillments/update-fulfillment-line-items-that-dont-require-shipping)
 
 
 ## Developing
