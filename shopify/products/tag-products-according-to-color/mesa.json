@@ -2,7 +2,7 @@
   "name": "Tag products according to color",
   "version": "1.0.0",
   "description": "Tag products according to color on product update and on product creation.",
-  "tags": ["orders"],
+  "tags": ["products"],
   "source": "shopify",
   "destination": "shopify",
   "config": {
