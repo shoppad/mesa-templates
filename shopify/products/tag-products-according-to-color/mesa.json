@@ -1,0 +1,58 @@
+{
+  "name": "Tag products according to color",
+  "version": "1.0.0",
+  "description": "Tag products according to color on product update and on product creation.",
+  "tags": ["products"],
+  "source": "shopify",
+  "destination": "shopify",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Create: Tag products according to color",
+        "key": "in-create-tag-products-according-to-color",
+        "trigger_name": "In: Create Tag products according to color",
+        "script": "in-output-send.js",
+        "topic": "products/create"
+      },
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Update: Tag products according to color",
+        "key": "in-update-tag-products-according-to-color",
+        "trigger_name": "In: Update: Tag products according to color",
+        "script": "in-output-send.js",
+        "topic": "products/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "shopify_api",
+        "name": "Update: Tag products according to color",
+        "key": "out-update-tag-products-according-to-color",
+        "trigger_name": "Out: Update: Tag products according to color",
+        "script": "shopify/products/tag-products-according-to-color/output.js",
+        "shopify_api": "PUT admin/products/{{product_id}}.json"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "shopify_api",
+        "name": "Create: Tag products according to color",
+        "key": "out-create-tag-products-according-to-color",
+        "trigger_name": "Out: Create: Tag products according to color",
+        "script": "shopify/products/tag-products-according-to-color/output.js",
+        "shopify_api": "PUT admin/products/{{product_id}}.json"
+      }
+    ]
+  },
+  "files": [
+    "in-out-send.js",
+    "shopify/products/tag-products-according-to-color/output.js"
+  ]
+}
