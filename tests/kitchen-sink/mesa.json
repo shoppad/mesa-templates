@@ -12,7 +12,7 @@
         "name": "Kitchen Sink",
         "key": "in-kitchen-sink",
         "trigger_name": "In: Kitchen Sink",
-        "script": "tests/kitchen-sink/in-kitchen-sink.js",
+        "script": "in-kitchen-sink.js",
         "logging": "error"
       },
       {
@@ -22,7 +22,7 @@
         "name": "Kitchen Sink FTP",
         "key": "in-kitchen-sink-ftp",
         "trigger_name": "In: Kitchen Sink FTP",
-        "script": "tests/kitchen-sink/in-kitchen-sink-ftp.js",
+        "script": "in-kitchen-sink-ftp.js",
         "method": "sftp",
         "host": "harmony-files.theshoppad.com",
         "port": "22",
