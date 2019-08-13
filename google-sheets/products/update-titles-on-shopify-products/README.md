@@ -12,7 +12,7 @@ Sync product title updates Google Sheets to Shopify.
   - [Enable Google Sheets for your project Google](https://developers.google.com/identity/protocols/OAuth2WebServer#enable-apis)
   - [Create authorization credentials](https://developers.google.com/identity/protocols/OAuth2WebServer#prerequisites)
     - Set authorized redirect URIs to https://www.theshoppad.com/apps/mesa/oauth/
-  - Go to [OAuth 2.0 Authentication Flow page](https://www.theshoppad.com/apps/mesa/oauth/) and fill out the form with with your client id and secret.
+  - Go to [OAuth 2.0 Authentication Flow page](https://www.theshoppad.com/apps/mesa/oauth/google_sheets) and fill out the form with with your client id and secret.
 - [Create a Google Sheets](https://support.google.com/docs/answer/49114?co=GENIE.Platform%3DDesktop&hl=en)
 - Get a spreadsheet id:
   - Every API method requires a spreadsheetId parameter which is used to identify which spreadsheet is to be accessed or altered. This ID is the value between the "/d/" and the "/edit" in the URL of your spreadsheet.
