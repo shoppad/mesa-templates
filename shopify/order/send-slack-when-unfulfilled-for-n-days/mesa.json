@@ -1,35 +1,33 @@
 {
-  "name": "Send Slack notification for unfulfilled orders",
+  "name": "Send Slack Notification for Unfulfilled Orders",
   "version": "1.0.0",
   "description": "Checks orders and sends a Slack notification if order is not fulfilled after a set period of time.",
-  "url": "shoppad/mesa-templates/shopify/order/send-slack-when-unfulfilled-for-n-days",
-  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/send-slack-when-unfulfilled-for-n-days/README.md",
+  "key": "shopify/order/send-slack-when-unfulfilled-for-n-days",
   "tags": ["orders", "slack"],
   "source": "shopify",
   "destination": "slack",
+  "enabled": false,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
-        "enabled": true,
         "type": "shopify_webhook",
-        "name": "Send Slack notification for unfulfilled orders",
-        "key": "in-orders-slack-created",
-        "trigger_name": "In: Orders Slack Created",
-        "script": "shopify/order/send-slack-when-unfulfilled-for-n-days/input.js",
+        "name": "Shopify Order Webhook",
+        "key": "in-shopify-order-webhook",
+        "script": "in-shopify-order-webhook.js",
+        "logging": "error",
         "topic": "orders/create"
       }
     ],
     "outputs": [
       {
         "trigger_type": "output",
-        "enabled": true,
         "type": "virtual_output",
-        "name": "Send Slack notification for unfulfilled orders: Expand Orders",
-        "key": "out-orders-slack-created-vo",
-        "trigger_name": "Out: Orders Slack Created",
+        "name": "Orders Virtual Output",
+        "key": "out-orders-virtual-output",
         "schedule": "0 9 * * *",
-        "script": "shopify/order/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
+        "script": "out-orders-virtual-output.js",
+        "logging": "error",
         "custom_connection": true,
         "parameters": "limit=-1&created_at_max={date:7 days ago}"
       },
@@ -37,27 +35,22 @@
         "trigger_type": "output",
         "enabled": true,
         "type": "custom",
-        "name": "Send Slack notification for unfulfilled orders: Check Fulfillment",
-        "key": "out-orders-slack-check-fulfilled",
-        "trigger_name": "Out: Orders Slack Check Fulfilled",
-        "script": "shopify/order/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
+        "name": "Send Slack Notification",
+        "key": "out-send-slack-notification",
+        "script": "out-send-slack-notification.js",
+        "logging": "error"
       }
     ],
     "storage": [
       {
-        "name": "slack-unfulfilled-orders-channel",
+        "key": "slack-channel",
         "value": "#unfulfilled-orders"
       }
     ],
     "secrets": [
       {
-        "name": "slack-webhook-url"
+        "key": "slack-webhook-url"
       }
     ]
-  },
-  "files": [
-    "shopify/order/send-slack-when-unfulfilled-for-n-days/intput.js",
-    "shopify/order/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
-    "shopify/order/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
-  ]
+  }
 }

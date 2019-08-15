@@ -49,7 +49,7 @@ module.exports = new class {
        * See below for a simple request version instead
        */ 
       slack.send(`Found old unfulfilled order for: https://${context.output.uuid}.myshopify.com`, {
-        channel: Mesa.storage.get('slack-unfulfilled-orders-channel'),
+        channel: Mesa.storage.get('slack-channel'),
         attachments: [
           {
             'fallback': `Found old unfulfilled order \`${order.name}\`. Order created: \`${Mesa.date.format('D, M j Y', orderCreatedDate.getTime())} \`. https://${context.output.uuid}.myshopify.com/admin/orders/${order.id}`,
