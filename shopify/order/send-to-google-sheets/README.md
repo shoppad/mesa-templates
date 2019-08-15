@@ -2,7 +2,7 @@
 
 Sync orders creation data from Shopify to Google Sheets.
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-templates/shopify/orders/send-to-google-sheets)
+[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-templates/shopify/order/send-to-google-sheets)
 
 ## Setup
 

@@ -26,12 +26,12 @@
         "name": "Tag orders with currency",
         "key": "out-tag-orders-with-currency",
         "trigger_name": "Out: Tag orders with currency",
-        "script": "shopify/orders/tag-with-currency/output.js",
+        "script": "shopify/order/tag-with-currency/output.js",
         "shopify_api": "PUT admin/orders/{{order_id}}.json"
       }
     ]
   },
   "files": [
-    "shopify/orders/tag-with-currency/output.js"
+    "shopify/order/tag-with-currency/output.js"
   ]
 }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Ensure that all Mesa SDK methods, Inputs, and Output types are working.",
   "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/tests/kitchen-sink/README.md",
+  "enabled": true,
   "config": {
     "inputs": [
       {
