@@ -1,0 +1,40 @@
+{
+  "name": "Add Destination Forecast To Notes",
+  "version": "1.0.0",
+  "description": "Add destination forecast to Shopify notes when order is created with OpenWeatherMap.",
+  "key": "shoppad/mesa-templates/shopify/order/add-destination-forecast-to-notes",
+  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/add-destination-forecast-to-notes/README.md",
+  "tags": ["orders", "openweathermap"],
+  "source": "shopify",
+  "destination": "shopify",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Webhook",
+        "key": "in-shopify-order-webhook",
+        "script": "in-shopify-order-webhook.js",
+        "logging": "error",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Add Weather Forecast",
+        "key": "out-add-weather-forecast",
+        "script": "out-add-weather-forecast.js",
+        "logging": "error",
+        "shopify_api": "PUT admin/orders/{{order_id}}.json"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "openweathermap-key"
+      }
+    ]
+  }
+}

@@ -2,6 +2,7 @@
   "name": "Auto-fulfill line items",
   "version": "1.0.0",
   "description": "Auto-fulfill line items do not require shipping",
+  "key": "mesa-templates/shopify/fulfillments/update-fulfillment-line-items-that-dont-require-shipping",
   "tags": ["fulfillments"],
   "source": "shopify",
   "destination": "shopify",
@@ -26,12 +27,9 @@
         "name": "Out: Auto-fulfill line items do not require shipping",
         "key": "out-auto-fulfill-items-that-dont-require-shipping",
         "trigger_name": "Out: Auto-fulfill items that don't require shipping",
-        "script": "shopify/fulfillments/update-fulfillment-line-items-that-dont-require-shipping/output.js",
+        "script": "output.js",
         "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json"
       }
     ]
-  },
-  "files": [
-    "shopify/fulfillments/update-fulfillment-line-items-that-dont-require-shipping/output.js"
-  ]
+  }
 }

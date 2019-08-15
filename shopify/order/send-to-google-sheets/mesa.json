@@ -2,9 +2,9 @@
   "name": "Send orders creation data from Shopify to Google Sheets",
   "version": "1.0.0",
   "description": "Send",
-  "url": "shoppad/mesa-templates/shopify/orders/send-to-google-sheets",
+  "url": "shoppad/mesa-templates/shopify/order/send-to-google-sheets",
   "documentation":
-    "https://github.com/shoppad/mesa-templates/blob/master/shopify/orders/send-to-google-sheets/README.md",
+    "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/send-to-google-sheets/README.md",
   "tags": ["orders", "google-sheets"],
   "source": "shopify",
   "destination": "google-sheets",
@@ -18,7 +18,7 @@
         "key": "in-orders-google-sheets",
         "trigger_name": "In: Orders Google Sheets",
         "script":
-          "shopify/orders/send-to-google-sheets/in-orders-google-sheets.js",
+          "shopify/order/send-to-google-sheets/in-orders-google-sheets.js",
         "topic": "orders/create"
       }
     ],
@@ -31,7 +31,7 @@
         "key": "out-orders-google-sheets",
         "trigger_name": "Out: Orders Google Sheets",
         "script":
-          "shopify/orders/send-to-google-sheets/out-orders-google-sheets.js"
+          "shopify/order/send-to-google-sheets/out-orders-google-sheets.js"
       }
     ],
     "secrets": [
@@ -59,7 +59,7 @@
     ]
   },
   "files": [
-    "shopify/orders/send-to-google-sheets/in-orders-google-sheets.js",
-    "shopify/orders/send-to-google-sheets/out-orders-google-sheets.js"
+    "shopify/order/send-to-google-sheets/in-orders-google-sheets.js",
+    "shopify/order/send-to-google-sheets/out-orders-google-sheets.js"
   ]
 }

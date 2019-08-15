@@ -1,3 +1,5 @@
+// Test legacy mesa.js import syntax
+// @todo: can we remove support for this?
 const Mesa = require('./vendor/Mesa1.js');
 
 /**

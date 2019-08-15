@@ -1,4 +1,4 @@
-const Mesa = require('./vendor/Mesa1.js');
+const Mesa = require('vendor/Mesa.js');
 const OpenWeatherMap = require('./vendor/OpenWeatherMap.js');
 
 /**

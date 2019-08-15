@@ -2,8 +2,8 @@
   "name": "Send Slack notification for unfulfilled orders",
   "version": "1.0.0",
   "description": "Checks orders and sends a Slack notification if order is not fulfilled after a set period of time.",
-  "url": "shoppad/mesa-templates/shopify/orders/send-slack-when-unfulfilled-for-n-days",
-  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/shopify/orders/send-slack-when-unfulfilled-for-n-days/README.md",
+  "url": "shoppad/mesa-templates/shopify/order/send-slack-when-unfulfilled-for-n-days",
+  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/send-slack-when-unfulfilled-for-n-days/README.md",
   "tags": ["orders", "slack"],
   "source": "shopify",
   "destination": "slack",
@@ -16,7 +16,7 @@
         "name": "Send Slack notification for unfulfilled orders",
         "key": "in-orders-slack-created",
         "trigger_name": "In: Orders Slack Created",
-        "script": "shopify/orders/send-slack-when-unfulfilled-for-n-days/input.js",
+        "script": "shopify/order/send-slack-when-unfulfilled-for-n-days/input.js",
         "topic": "orders/create"
       }
     ],
@@ -29,7 +29,7 @@
         "key": "out-orders-slack-created-vo",
         "trigger_name": "Out: Orders Slack Created",
         "schedule": "0 9 * * *",
-        "script": "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
+        "script": "shopify/order/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
         "custom_connection": true,
         "parameters": "limit=-1&created_at_max={date:7 days ago}"
       },
@@ -40,7 +40,7 @@
         "name": "Send Slack notification for unfulfilled orders: Check Fulfillment",
         "key": "out-orders-slack-check-fulfilled",
         "trigger_name": "Out: Orders Slack Check Fulfilled",
-        "script": "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
+        "script": "shopify/order/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
       }
     ],
     "storage": [
@@ -56,8 +56,8 @@
     ]
   },
   "files": [
-    "shopify/orders/send-slack-when-unfulfilled-for-n-days/intput.js",
-    "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
-    "shopify/orders/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
+    "shopify/order/send-slack-when-unfulfilled-for-n-days/intput.js",
+    "shopify/order/send-slack-when-unfulfilled-for-n-days/output-exploder.js",
+    "shopify/order/send-slack-when-unfulfilled-for-n-days/output-check-fulfillment.js"
   ]
 }
