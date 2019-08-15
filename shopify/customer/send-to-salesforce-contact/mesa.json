@@ -1,0 +1,49 @@
+{
+  "key": "shoppad/mesa-templates/shopify/customer/send-to-salesforce-contact",
+  "name": "Send Customer To Salesforce Contact",
+  "version": "1.0.0",
+  "description": "Send Customer from Shopify to Salesforce contact when customer is created.",
+  "tags": ["customers", "salesforce"],
+  "source": "shopify",
+  "destination": "salesforce",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Customer Webhook",
+        "key": "in-shopify-customer-webhook",
+        "script": "in-shopify-customer-webhook.js",
+        "logging": "error",
+        "topic": "customers/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Salesforce Contact",
+        "key": "out-create-salesforce-contact",
+        "script": "out-create-salesforce-contact.js"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "salesforce_client_id"
+      },
+      {
+        "key": "salesforce_client_secret"
+      },
+      {
+        "key": "salesforce_username"
+      },
+      {
+        "key": "salesforce_password"
+      },
+      {
+        "key": "salesforce_access_token"
+      }
+    ]
+  }
+}

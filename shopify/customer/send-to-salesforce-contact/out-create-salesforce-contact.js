@@ -1,7 +1,7 @@
 const Mesa = require('vendor/Mesa.js');
 const Salesforce = require('vendor/Salesforce.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifySalesforceCustomerMap = require('./salesforce/contacts/out/shopify-salesforce-customer-map.js');
+const ShopifySalesforceCustomerMap = require('./shopify-salesforce-customer-map.js');
 
 module.exports = new class {
   script = (payload) => {

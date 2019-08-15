@@ -2,7 +2,7 @@
 
 Sync customer updates data from Shopify to Google Sheets.
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/shopify/customers/send-to-google-sheets)
+[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/shoppad/mesa-recipes/shopify/customer/send-to-google-sheets)
 
 ## Setup
 

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "documentation":
-    "https://github.com/shoppad/mesa-recipes/blob/master/shopify/customers/send-to-google-sheets/README.md",
+    "https://github.com/shoppad/mesa-recipes/blob/master/shopify/customer/send-to-google-sheets/README.md",
   "tags": ["customers", "google-sheets"],
   "source": "shopify",
   "destination": "google-sheets",
@@ -17,7 +17,7 @@
         "key": "in-customer-update",
         "trigger_name": "In: Customer Update",
         "script":
-          "shopify/customers/send-to-google-sheets/in-customer-update.js",
+          "shopify/customer/send-to-google-sheets/in-customer-update.js",
         "topic": "customers/update"
       }
     ],
@@ -30,7 +30,7 @@
         "key": "out-google-sheets-update",
         "trigger_name": "Out: Google Sheets Update",
         "script":
-          "shopify/customers/send-to-google-sheets/out-google-sheets-update.js"
+          "shopify/customer/send-to-google-sheets/out-google-sheets-update.js"
       },
       {
         "trigger_type": "output",
@@ -40,7 +40,7 @@
         "key": "out-google-sheets-read",
         "trigger_name": "Out: Google Sheets Read",
         "script":
-          "shopify/customers/send-to-google-sheets/out-google-sheets-read.js"
+          "shopify/customer/send-to-google-sheets/out-google-sheets-read.js"
       },
       {
         "trigger_type": "output",
@@ -50,7 +50,7 @@
         "key": "out-customer-update",
         "trigger_name": "Out: Customer Update",
         "script":
-          "shopify/customers/send-to-google-sheets/out-customer-update.js"
+          "shopify/customer/send-to-google-sheets/out-customer-update.js"
       }
     ],
     "secrets": [
@@ -78,9 +78,9 @@
     ]
   },
   "files": [
-    "shopify/customers/send-to-google-sheets/in-customer-update.js",
-    "shopify/customers/send-to-google-sheets/out-customer-update.js",
-    "shopify/customers/send-to-google-sheets/out-google-sheets-read.js",
-    "shopify/customers/send-to-google-sheets/out-google-sheets-update.js"
+    "shopify/customer/send-to-google-sheets/in-customer-update.js",
+    "shopify/customer/send-to-google-sheets/out-customer-update.js",
+    "shopify/customer/send-to-google-sheets/out-google-sheets-read.js",
+    "shopify/customer/send-to-google-sheets/out-google-sheets-update.js"
   ]
 }
