@@ -12,15 +12,14 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    
-    const tags = payload.tags + ',' + payload.currency;
-    
+    const tags = payload.tags + "," + payload.currency;
+
     const data = {
-      "order": {
-        "tags": tags
+      order: {
+        tags: tags
       }
     };
 
-    Mesa.output.done(data, {'order_id': payload.id});
+    Mesa.output.done(data, { order_id: payload.id });
   }
 };
