@@ -3,7 +3,6 @@
   "name": "Add Shipping Province Tag To Order",
   "version": "1.0.0",
   "description": "Add shipping province tag to Shopify order when order is created.",
-  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/add-shipping-province-tag/README.md",
   "tags": ["orders"],
   "source": "shopify",
   "destination": "shopify",
