@@ -3,7 +3,7 @@ const Mesa = require("vendor/Mesa1.js");
 /**
  * A Mesa Script exports a class with a script() method.
  */
-module.exports = new (class {
+module.exports = new class {
   /**
    * Mesa Script
    *
@@ -13,4 +13,4 @@ module.exports = new (class {
   script = (payload, context) => {
     Mesa.output.send('out-update-shopify-order', payload);
   };
-})();
+};
