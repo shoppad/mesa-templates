@@ -30,19 +30,19 @@
     ],
     "secrets": [
       {
-        "key": "salesforce_client_id"
+        "key": "salesforce-client-id"
       },
       {
-        "key": "salesforce_client_secret"
+        "key": "salesforce-client-secret"
       },
       {
-        "key": "salesforce_username"
+        "key": "salesforce-username"
       },
       {
-        "key": "salesforce_password"
+        "key": "salesforce-password"
       },
       {
-        "key": "salesforce_access_token"
+        "key": "salesforce-access-token"
       }
     ]
   }
