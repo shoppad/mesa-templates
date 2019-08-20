@@ -1,5 +1,5 @@
-const Mesa = require("vendor/Mesa.js");
-const Google = require("vendor/Google.js");
+const Mesa = require('vendor/Mesa.js');
+const Google = require('vendor/Google.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
@@ -14,7 +14,7 @@ module.exports = new class {
   script = (payload, context) => {
     // Initliazing Google Class.
     let google = new Google(
-      payload.google.init.grandType,
+      payload.google.init.grantType,
       payload.google.init.secretKeys
     );
 
@@ -28,11 +28,11 @@ module.exports = new class {
       ],
       payload.google.sheets.payload,
       0,
-      "customer_id",
+      'customer_id',
       payload.shopify.id
     );
 
-    Mesa.log.info("Google Sheets Update", payload);
-    Mesa.output.send("out-customer-update", payload);
+    Mesa.log.info('Updating Google Sheets', payload);
+    Mesa.output.send('out-update-customer-in-google-sheets', payload);
   };
 }();
