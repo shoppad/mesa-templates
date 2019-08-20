@@ -1,4 +1,5 @@
 const Mesa = require('vendor/Mesa.js');
+const Shopify = require('vendor/Shopify.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
@@ -12,14 +13,24 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    const tags = payload.tags + "," + payload.currency;
 
-    const data = {
-      order: {
-        tags: tags
+      let debug = Mesa.storage.get('debug', false);
+      debug = !!debug;
+
+      const order = Shopify.get('/admin/orders/' + payload.id + '.json', {debug: debug});
+
+      if (debug) {
+          Mesa.log.info('Order:', order);
       }
-    };
 
-    Mesa.output.done(data, { order_id: payload.id });
+      const tags = order.tags ? order.tags + "," + payload.currency : payload.currency;
+
+      const data = {
+          order: {
+              tags: tags
+          }
+      };
+
+      Mesa.output.done(data, { order_id: payload.id });
   }
 };
