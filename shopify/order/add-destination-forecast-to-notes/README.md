@@ -1,8 +1,6 @@
 # Add Destination Forecast To Notes
 Add destination forecast to Shopify notes when order is created with OpenWeatherMap.
 
-[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/shopify/order/add-destination-forecast-to-notes)
-
 ---
 
 ## Setup

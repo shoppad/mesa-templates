@@ -28,9 +28,13 @@ module.exports = new class {
 
     // Query the OpenWeatherMap API and retrieve the weather forecast
     const response = client.getForecast(address.latitude, address.longitude);
-    
-    // Log the raw response
-    Mesa.log.info('OpenWeatherMap response', response);
+
+    let debug = !!Mesa.storage.get('debug', false);
+
+    if (debug) {
+      // Log the raw response
+      Mesa.log.info('OpenWeatherMap response', response);
+    }
 
     // Format the data in a name/value pair
     const weather = response.list.map(item => {
@@ -41,22 +45,25 @@ module.exports = new class {
       };
     });
 
-    let noteAttributes = weather;
-    noteAttributes.concat(payload.note_attributes ? payload.note_attributes : []);
+    const order = Shopify.get('/admin/orders/' + payload.id + '.json', {debug: debug});
+
+    const noteAttributes = weather.concat(order.note_attributes ? order.note_attributes : []);
 
     // Format the data to match Shopify's API schema
     const data = {
       "order": {
         "note_attributes": noteAttributes,
       }
+    };
+
+    if (debug) {
+      // Log the formatted object
+      Mesa.log.info('data', data);
     }
-    
-    // Log the formatted object
-    Mesa.log.info('data', data);
 
     // Mark our output as complete and send the updated order data to Shopify
     Mesa.output.done(data, {'order_id': payload.id});
   }
-}
+};
 
 
