@@ -17,7 +17,7 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    const customOutput = 'out-orders-slack-check-fulfilled';
+    const customOutput = 'out-send-slack-notification';
 
     if (payload.length > 0) {
       // Loop through the virtual output and enqueue custom output tasks
