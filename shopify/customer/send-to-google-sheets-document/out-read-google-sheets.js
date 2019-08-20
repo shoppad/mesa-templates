@@ -7,7 +7,7 @@ const Google = require('vendor/Google.js');
  */
 module.exports = new class {
   script = (payload, context) => {
-    // Initliazing Google Class.
+    // Initializing Google Class.
     let google = new Google(
       payload.google.init.grantType,
       payload.google.init.secretKeys
