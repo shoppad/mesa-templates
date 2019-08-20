@@ -1,17 +1,17 @@
 const Mesa = require('vendor/Mesa.js');
 const Salesforce = require('vendor/Salesforce.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifySalesforceCustomerMap = require('./salesforce/contacts/out/shopify-salesforce-customer-map.js');
+const ShopifySalesforceCustomerMap = require('./shopify-salesforce-customer-map.js');
 
 module.exports = new class {
   script = (payload) => {
     // Init Salesforce
     const salesforce = new Salesforce('password', {
-      username: 'salesforce_username',
-      password: 'salesforce_password',
-      client_id: 'salesforce_client_id',
-      client_secret: 'salesforce_client_secret',
-      access_token: 'salesforce_access_token',
+      username: 'salesforce-username',
+      password: 'salesforce-password',
+      client_id: 'salesforce-client-id',
+      client_secret: 'salesforce-client-secret',
+      access_token: 'salesforce-access-token',
     });
 
     // Convert Shopify payload to SalesForce's contact format
