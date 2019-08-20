@@ -2,7 +2,6 @@
 
 Send Customer from Shopify to Salesforce contact when customer is created.
 
-[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/shopify/customer/send-to-salesforce-contact)
 ---
 ## Setup
 
