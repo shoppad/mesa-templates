@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Send fulfillment issue from Shopify order to Slack channel when order has not been fulfilled for N days.",
   "key": "send-fulfillment-issue-to-slack-channel",
-  "tags": ["orders", "slack"],
+  "tags": ["order", "slack"],
   "source": "shopify",
   "destination": "slack",
   "enabled": false,

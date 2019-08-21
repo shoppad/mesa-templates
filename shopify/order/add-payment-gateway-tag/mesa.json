@@ -3,7 +3,7 @@
   "name": "Add Payment Gateway Tag To Order",
   "version": "1.0.0",
   "description": "Add payment gateway tag to Shopify order when order is created.",
-  "tags": ["orders"],
+  "tags": ["order"],
   "source": "shopify",
   "destination": "shopify",
   "enabled": true,
