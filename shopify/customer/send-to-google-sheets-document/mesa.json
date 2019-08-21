@@ -1,5 +1,5 @@
 {
-  "key": "shopify/customer/send-to-google-sheets-document",
+  "key": "shoppad/mesa-templates/shopify/customer/send-to-google-sheets-document",
   "name": "Send Customer To Google Sheets Document",
   "version": "1.0.0",
   "description": "Send customer from Shopify to Google Sheets document when customer is updated.",
