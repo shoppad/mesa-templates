@@ -15,16 +15,16 @@ module.exports = new class {
     script = (payload, context) => {
 
         const connectionObj = {
-            "host": Mesa.storage.get('shopify/product/send-product-to-another-store/host'),
-            "username": Mesa.storage.get('shopify/product/send-product-to-another-store/key'),
-            "password": Mesa.secret.get('shopify/product/send-product-to-another-store/password')
+            "host": Mesa.storage.get('store-host'),
+            "username": Mesa.storage.get('store-key'),
+            "password": Mesa.secret.get('store-password')
         };
 
         let product = Shopify.post('/admin/products.json', payload, {debug:false}, connectionObj);
 
-        let productMap = Mesa.storage.get('shopify/product/send-product-to-another-store/product-map.json');
+        let productMap = JSON.parse(Mesa.storage.get('product-map.json'));
         productMap[payload.id] = product.product.id;
 
-        Mesa.storage.set('shopify/product/send-product-to-another-store/product-map.json', productMap);
+        Mesa.storage.set('product-map.json', JSON.stringify(productMap));
     }
 };
