@@ -1,39 +1,35 @@
 {
+  "key": "shopify/product/send-to-another-store",
   "name": "Send Product To Another Store",
   "version": "1.0.0",
   "description": "Send product from Shopify to another store when product is created, updated or deleted.",
   "tags": ["products"],
   "source": "shopify",
   "destination": "shopify",
+  "enabled": false,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
-        "enabled": true,
         "type": "shopify_webhook",
-        "name": "Send Product To Another Store: Create",
-        "key": "in-send-created-products-to-another-store",
-        "trigger_name": "In: Send Product To Another Store",
-        "script": "in-output-send.js",
+        "name": "Shopify Product Create Webhook",
+        "key": "in-shopify-product-create",
+        "script": "in-shopify-product-create.js",
         "topic": "products/create"
       },
       {
         "trigger_type": "input",
-        "enabled": true,
         "type": "shopify_webhook",
-        "name": "Send Product To Another Store: Update",
-        "key": "in-send-updated-products-to-another-store",
-        "trigger_name": "In: Send Product To Another Store",
-        "script": "in-output-send.js",
+        "name": "Shopify Product Update Webhook",
+        "key": "in-shopify-product-update",
+        "script": "in-shopify-product-update.js",
         "topic": "products/update"
       },
       {
         "trigger_type": "input",
-        "enabled": true,
         "type": "shopify_webhook",
-        "name": "Send Product To Another Store: Remove",
-        "key": "in-send-deleted-products-to-another-store",
-        "trigger_name": "In: Send Product To Another Store",
+        "name": "Shopify Product Delete Webhook",
+        "key": "in-shopify-product-delete",
         "script": "in-output-send.js",
         "topic": "products/delete"
       }
@@ -41,54 +37,42 @@
     "outputs": [
       {
         "trigger_type": "output",
-        "enabled": true,
         "type": "custom",
-        "name": "Send Product To Another Store: Create",
-        "key": "out-send-created-products-to-another-store",
-        "trigger_name": "Out: Send Product To Another Store",
-        "script": "shopify/product/send-product-to-another-store/output-create.js"
+        "name": "Create Shopify Product",
+        "key": "out-create-shopify-product",
+        "script": "out-create-shopify-product.js"
       },
       {
         "trigger_type": "output",
-        "enabled": true,
         "type": "custom",
-        "name": "Send Product To Another Store: Update",
-        "key": "out-send-updated-products-to-another-store",
-        "trigger_name": "Out: Send Product To Another Store",
-        "script": "shopify/product/send-product-to-another-store/output-update.js"
+        "name": "Update Shopify Product",
+        "key": "out-update-shopify-product",
+        "script": "out-update-shopify-product.js"
       },
       {
         "trigger_type": "output",
-        "enabled": true,
         "type": "custom",
-        "name": "Send Product To Another Store: Remove",
-        "key": "out-send-deleted-products-to-another-store",
-        "trigger_name": "Out: Send Product To Another Store",
-        "script": "shopify/product/send-product-to-another-store/output-delete.js"
+        "name": "Remove Shopify Product",
+        "key": "out-delete-shopify-product",
+        "script": "out-delete-shopify-product.js"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "store-password"
+      }
+    ],
+    "storage": [
+      {
+        "key": "store-host"
+      },
+      {
+        "key": "store-key"
+      },
+      {
+        "key": "product-map.json",
+        "value": "{}"
       }
     ]
-  },
-  "secrets": [
-    {
-      "name": "shopify/product/send-product-to-another-store/password"
-    }
-  ],
-  "storage": [
-    {
-      "name": "shopify/product/send-product-to-another-store/host"
-    },
-    {
-      "name": "shopify/product/send-product-to-another-store/key"
-    },
-    {
-      "name": "shopify/product/send-product-to-another-store/product-map.json",
-      "value": "{}"
-    }
-  ],
-  "files": [
-    "shopify/product/send-product-to-another-store/output-create.js",
-    "shopify/product/send-product-to-another-store/output-update.js",
-    "shopify/product/send-product-to-another-store/output-delete.js"
-  ]
-
+  }
 }

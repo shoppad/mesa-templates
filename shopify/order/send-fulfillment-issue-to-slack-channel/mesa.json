@@ -1,8 +1,8 @@
 {
-  "name": "Send Slack Notification for Unfulfilled Orders",
+  "name": "Send Fulfillment Issue To Slack Channel",
   "version": "1.0.0",
-  "description": "Checks orders and sends a Slack notification if order is not fulfilled after a set period of time.",
-  "key": "shopify/order/send-slack-when-unfulfilled-for-n-days",
+  "description": "Send fulfillment issue from Shopify order to Slack channel when order has not been fulfilled for N days.",
+  "key": "send-fulfillment-issue-to-slack-channel",
   "tags": ["orders", "slack"],
   "source": "shopify",
   "destination": "slack",
@@ -33,7 +33,6 @@
       },
       {
         "trigger_type": "output",
-        "enabled": true,
         "type": "custom",
         "name": "Send Slack Notification",
         "key": "out-send-slack-notification",
