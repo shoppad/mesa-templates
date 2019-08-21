@@ -5,7 +5,7 @@
   "url": "shoppad/mesa-templates/shopify/order/send-to-google-sheets",
   "documentation":
     "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/send-to-google-sheets/README.md",
-  "tags": ["orders", "google-sheets"],
+  "tags": ["order", "google-sheets"],
   "source": "shopify",
   "destination": "google-sheets",
   "config": {

@@ -3,7 +3,7 @@
   "name": "Send Customer To Salesforce Contact",
   "version": "1.0.0",
   "description": "Send Customer from Shopify to Salesforce contact when customer is created.",
-  "tags": ["customers", "salesforce"],
+  "tags": ["customer", "salesforce"],
   "source": "shopify",
   "destination": "salesforce",
   "enabled": true,
