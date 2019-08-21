@@ -3,7 +3,7 @@
   "name": "Send Order To SPA FTP File",
   "version": "1.0.0",
   "description": "Send order from Shopify to SPA FTP file when order is created.",
-  "tags": ["order", "ERP"],
+  "tags": ["order", "3PL"],
   "source": "shopify",
   "destination": "spa",
   "enabled": false,
