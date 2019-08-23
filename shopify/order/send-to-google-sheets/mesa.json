@@ -1,65 +1,54 @@
 {
-  "name": "Send orders creation data from Shopify to Google Sheets",
+  "key": "shoppad/mesa-templates/shopify/order/send-to-google-sheets-document",
+  "name": "Send Order To Google Sheets Document",
   "version": "1.0.0",
-  "description": "Send",
-  "url": "shoppad/mesa-templates/shopify/order/send-to-google-sheets",
-  "documentation":
-    "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/send-to-google-sheets/README.md",
+  "description": "Send order from Shopify to Google Sheets document when order is created.",
   "tags": ["order", "google-sheets"],
   "source": "shopify",
   "destination": "google-sheets",
+  "enabled": false,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
-        "enabled": true,
         "type": "shopify_webhook",
-        "name": "Orders Google Sheets",
-        "key": "in-orders-google-sheets",
-        "trigger_name": "In: Orders Google Sheets",
-        "script":
-          "shopify/order/send-to-google-sheets/in-orders-google-sheets.js",
+        "name": "Shopify Order Create",
+        "key": "in-shopify-order-create",
+        "script": "in-shopify-order-create.js",
         "topic": "orders/create"
       }
     ],
     "outputs": [
       {
         "trigger_type": "output",
-        "enabled": true,
         "type": "custom",
-        "name": "Orders Google Sheets",
-        "key": "out-orders-google-sheets",
-        "trigger_name": "Out: Orders Google Sheets",
-        "script":
-          "shopify/order/send-to-google-sheets/out-orders-google-sheets.js"
+        "name": "Send to Google Sheets",
+        "key": "out-send-to-google-sheets",
+        "script": "out-send-to-google-sheets.js"
       }
     ],
     "secrets": [
       {
-        "name": "google_refresh_token"
+        "key": "google_refresh_token"
       },
       {
-        "name": "google_access_token"
+        "key": "google_access_token"
       },
       {
-        "name": "google_client_id"
+        "key": "google_client_id"
       },
       {
-        "name": "google_client_secret"
+        "key": "google_client_secret"
       },
       {
-        "name": "google_expires_at"
+        "key": "google_expires_at"
       }
     ],
     "storage": [
       {
-        "name": "google_sheets_orders_id",
+        "key": "google_sheets_orders_id",
         "value": ""
       }
     ]
-  },
-  "files": [
-    "shopify/order/send-to-google-sheets/in-orders-google-sheets.js",
-    "shopify/order/send-to-google-sheets/out-orders-google-sheets.js"
-  ]
+  }
 }
