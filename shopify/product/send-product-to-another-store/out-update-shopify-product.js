@@ -6,27 +6,27 @@ const Shopify = require('vendor/Shopify.js');
  */
 module.exports = new class {
 
-    /**
-     * Mesa Script
-     *
-     * @param {object} payload The payload data
-     * @param {object} context Additional context about this task
-     */
-    script = (payload, context) => {
+  /**
+   * Mesa Script
+   *
+   * @param {object} payload The payload data
+   * @param {object} context Additional context about this task
+   */
+  script = (payload, context) => {
 
-        const connectionObj = {
-            "host": Mesa.storage.get('store-host'),
-            "username": Mesa.storage.get('store-key'),
-            "password": Mesa.secret.get('store-password')
-        };
+    const connectionObj = {
+      "host": Mesa.storage.get('store-host'),
+      "username": Mesa.storage.get('store-key'),
+      "password": Mesa.secret.get('store-password')
+    };
 
-        let productMap = JSON.parse(Mesa.storage.get('product-map.json'));
-        let foreignProductID = productMap[payload.id];
+    let productMap = JSON.parse(Mesa.storage.get('product-map.json'));
+    let foreignProductID = productMap[payload.id];
 
-        // Delete the variants to avoid a Shopify id mismatch error. In the future we may want to do more with this
-        delete payload.variants;
+    // Delete the variants to avoid a Shopify id mismatch error. In the future we may want to do more with this
+    delete payload.variants;
 
-        Shopify.put('/admin/products/' + foreignProductID + '.json', payload, {debug:true}, connectionObj);
+    Shopify.put('/admin/products/' + foreignProductID + '.json', payload, {}, connectionObj);
 
-    }
+  }
 };

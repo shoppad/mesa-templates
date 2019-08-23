@@ -20,11 +20,10 @@ module.exports = new class {
       "password": Mesa.secret.get('store-password')
     };
 
-    let product = Shopify.post('/admin/products.json', payload, {}, connectionObj);
+    let orderMap = JSON.parse(Mesa.storage.get('order-map.json'));
+    let foreignOrderID = orderMap[payload.id];
 
-    let productMap = JSON.parse(Mesa.storage.get('product-map.json'));
-    productMap[payload.id] = product.product.id;
+    Shopify.put('/admin/orders/' + foreignOrderID + '.json', payload, {}, connectionObj);
 
-    Mesa.storage.set('product-map.json', JSON.stringify(productMap));
   }
 };

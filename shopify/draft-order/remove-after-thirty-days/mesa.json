@@ -1,0 +1,47 @@
+{
+  "key": "shoppad/mesa-templates/shopify/draft-order/remove-after-thirty-days",
+  "name": "Remove Draft Orders After Thirty Days",
+  "version": "1.0.0",
+  "description": "Remove Shopify draft orders older than 30 days.",
+  "tags": [
+    "draft-order"
+  ],
+  "source": "",
+  "destination": "",
+  "enabled": true,
+  "debug": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Draft Order Created",
+        "key": "in-shopify-draft-order-created",
+        "script": "in-shopify-draft-order-created.js",
+        "topic": "draft_orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "virtual_output",
+        "name": "Shopify Draft Order VO",
+        "key": "out-shopify-draft-order-vo",
+        "schedule": "0 */12 * * *",
+        "script": "out-shopify-draft-order-vo.js",
+        "custom_connection": true,
+        "parameters": "created_at_max={date:30 days ago}"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Delete Shopify Order",
+        "key": "out-delete-shopify-order",
+        "script": "out-delete-shopify-order.js",
+        "shopify_api": "DELETE admin/orders/{{order_id}}.json"
+      }
+    ],
+    "secrets": [],
+    "storage": []
+  }
+}

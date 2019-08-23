@@ -15,6 +15,7 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    Mesa.vo.push(`${context.input.key.replace('in-', 'out-')}-vo`, payload);
+
+    Mesa.vo.push('out-shopify-draft-order-vo', payload);
   }
 }
