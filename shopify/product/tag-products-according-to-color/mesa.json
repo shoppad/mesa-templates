@@ -1,0 +1,43 @@
+{
+  "key": "shoppad/mesa-templates/shopify/product/add-color-tag",
+  "name": "Add Color Tag To Product",
+  "version": "1.0.0",
+  "description": "Add color tag to Shopify product when product is created or updated.",
+  "tags": ["product"],
+  "source": "shopify",
+  "destination": "shopify",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Product Create",
+        "key": "in-shopify-product-create",
+        "script": "in-shopify-product-create-update.js",
+        "topic": "products/create"
+      },
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "shopify_webhook",
+        "name": "Shopify Product Update",
+        "key": "in-shopify-product-update",
+        "trigger_name": "In: Update: Tag products according to color",
+        "script": "in-shopify-product-create-update.js",
+        "topic": "products/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "shopify_api",
+        "name": "Add Shopify Product Tag",
+        "key": "out-add-shopify-product-tag",
+        "script": "out-add-shopify-product-tag.js",
+        "shopify_api": "PUT admin/products/{{product_id}}.json"
+      }
+    ]
+  }
+}
