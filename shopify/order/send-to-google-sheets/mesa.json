@@ -29,24 +29,24 @@
     ],
     "secrets": [
       {
-        "key": "google_refresh_token"
+        "key": "google-refresh-token"
       },
       {
-        "key": "google_access_token"
+        "key": "google-access-token"
       },
       {
-        "key": "google_client_id"
+        "key": "google-client-id"
       },
       {
-        "key": "google_client_secret"
+        "key": "google-client-secret"
       },
       {
-        "key": "google_expires_at"
+        "key": "google-expires-at"
       }
     ],
     "storage": [
       {
-        "key": "google_sheets_orders_id",
+        "key": "google-sheets-id",
         "value": ""
       }
     ]

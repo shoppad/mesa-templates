@@ -1,5 +1,5 @@
-const Mesa = require("vendor/Mesa.js");
-const Google = require("vendor/Google.js");
+const Mesa = require('vendor/Mesa.js');
+const Google = require('vendor/Google.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
@@ -21,9 +21,9 @@ module.exports = new class {
     // Reading Google Sheets.
     payload.google.sheets.payload = google.sheets.basicReading(
       payload.google.sheets.id,
-      "Sheet1",
-      "A1",
-      "G5"
+      'Sheet1',
+      'A1',
+      'G5'
     ).values;
 
     // Adding new order.
@@ -31,24 +31,24 @@ module.exports = new class {
       payload.shopify.id,
       payload.shopify.name,
       payload.shopify.total_price,
-      payload.shopify.customer.first_name,
-      payload.shopify.customer.last_name,
-      payload.shopify.customer.id,
+      payload.shopify.customer ? payload.shopify.customer.first_name : null,
+      payload.shopify.customer ? payload.shopify.customer.last_name : null,
+      payload.shopify.customer ? payload.shopify.customer.id : null,
       payload.shopify.email
     ]);
 
     // Updating Google Sheets.
     let updateSheets = google.sheets.basicWriting(
       payload.google.sheets.id,
-      "Sheet1",
-      "A1",
-      "G5",
+      'Sheet1',
+      'A1',
+      'G5',
       {
-        range: "Sheet1!A1:G5",
-        majorDimension: "ROWS",
+        range: 'Sheet1!A1:G5',
+        majorDimension: 'ROWS',
         values: payload.google.sheets.payload
       }
     );
-    Mesa.log.info("Complete Orders Update", payload);
+    Mesa.log.debug('Successfully updated Google Sheets orders spreadsheet', payload.google.sheets.payload);
   };
 }();

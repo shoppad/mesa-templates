@@ -17,21 +17,21 @@ module.exports = new class {
       shopify: payload,
       google: {
         init: {
-          grandType: "refresh_token",
+          grandType: 'refresh_token',
           secretKeys: {
-            access_token: "google_access_token",
-            client_secret: "google_client_secret",
-            client_id: "google_client_id",
-            expired_at: "google_expired_at",
-            refresh_token: "google_refresh_token"
+            access_token: 'google-access-token',
+            client_secret: 'google-client-secret',
+            client_id: 'google-client-id',
+            expired_at: 'google-expired-at',
+            refresh_token: 'google-refresh-token'
           }
         },
         sheets: {
-          id: Mesa.storage.get("google_sheets_orders_id"),
+          id: Mesa.storage.get('google-sheets-id'),
           payload: []
         }
       }
     };
-    Mesa.output.send("out-orders-google-sheets", payload);
+    Mesa.output.send('out-send-to-google-sheets', payload);
   };
 }();
