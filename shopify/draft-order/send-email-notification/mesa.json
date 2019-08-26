@@ -5,7 +5,7 @@
   "description": "Send email notification from Shopify draft order when draft order is created.",
   "tags": ["draft-order"],
   "source": "shopify",
-  "destination": "email",
+  "destination": "notification",
   "enabled": true,
   "config": {
     "inputs": [
