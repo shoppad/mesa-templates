@@ -1,0 +1,33 @@
+{
+  "key": "flow-test",
+  "name": "Flow test",
+  "version": "1.0.0",
+  "description": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "enabled": true,
+  "debug": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "custom",
+        "name": "Flow outgoing",
+        "key": "in-flow-outgoing",
+        "script": "flow-send.js"
+      },
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Flow incoming",
+        "key": "in-flow-incoming",
+        "script": "flow-incoming.js",
+        "topic": "flow/trigger"
+      }
+    ],
+    "outputs": [],
+    "secrets": [],
+    "storage": []
+  }
+}
