@@ -25,19 +25,11 @@
         "type": "virtual_output",
         "name": "Create Fosdick Order",
         "key": "out-create-fosdick-orders-virtual-output",
+        "schedule": "0 * * * *",
         "script": "out-create-fosdick-order.js"
       }
     ],
     "secrets": [
-      {
-        "key": "fosdick-submission-url"
-      }
-    ],
-    "storage": [
-      {
-        "key": "fosdick-submission-test-mode",
-        "value": "true"
-      },
       {
         "key": "fosdick-client-code",
         "value": "TBD"
@@ -49,6 +41,12 @@
       {
         "key": "fosdick-ad-code",
         "value": "TBD"
+      }
+    ],
+    "storage": [
+      {
+        "key": "fosdick-test-mode",
+        "value": "true"
       }
     ]
   }

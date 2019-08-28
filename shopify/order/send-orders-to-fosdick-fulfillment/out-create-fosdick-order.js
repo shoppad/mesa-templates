@@ -24,9 +24,9 @@ module.exports = new class {
       // Loop through the virtual output and enqueue custom output tasks
       let data = {
         // Fosdick Global Parameters
-        'ClientCode': Mesa.storage.get('fosdick-client-code'),
-        'ClientName': Mesa.storage.get('fosdick-client-name'),
-        'Test': Mesa.storage.get('fosdick-submission-test-mode') === 'true' ? 'Y' : 'N',
+        'ClientCode': Mesa.secret.get('fosdick-client-code'),
+        'ClientName': Mesa.secret.get('fosdick-client-name'),
+        'Test': Mesa.storage.get('fosdick-test-mode') === 'true' ? 'Y' : 'N',
         'Order': []
       };
 
@@ -68,7 +68,7 @@ module.exports = new class {
         Mesa.log.info('Fosdick payload ', data);
 
         // Post to fosdick
-        let response = Mesa.request.post(Mesa.secret.get('fosdick-submission-url'), data);
+        let response = Mesa.request.post('https://www.unitycart.com/iPost/', data);
         Mesa.log.info('Fosdick response: ', response);
 
         if (response.UnitycartOrderResponse && response.UnitycartOrderResponse.OrderResponse) {
@@ -189,10 +189,10 @@ module.exports = new class {
     //payload.ExternalID += '_42';
     // Note: Fosdick requires a payment token. The functionality of this would need to be discussed with a Fosdick rep.
     // Using a dummy value for the initial automation
-    payload.PaymentToken = 'ShoppadTest1234567';
+    payload.PaymentToken = 'MesaTest1234567';
     // Note: Fosdick normally requires a payment type. Setting to 1 (Visa) for now
 
-    payload.AdCode = Mesa.storage.get('fosdick-ad-code');
+    payload.AdCode = Mesa.secret.get('fosdick-ad-code');
     return payload;
   }
 
