@@ -1,0 +1,55 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send-orders-to-fosdick-fulfillment",
+  "name": "Send Orders To Fosdick Fulfillment 3PL",
+  "version": "1.0.0",
+  "description": "Send orders from Shopify to Fosdick Fulfillment 3PL every hour.",
+  "tags": ["order", "fosdick", "fulfillment"],
+  "source": "Shopify",
+  "destination": "Fosdick",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Created",
+        "key": "in-shopify-order-webhook",
+        "script": "in-shopify-order-webhook.js",
+        "logging": "error",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "virtual_output",
+        "name": "Create Fosdick Order",
+        "key": "out-create-fosdick-orders-virtual-output",
+        "script": "out-create-fosdick-order.js"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "fosdick-submission-url"
+      }
+    ],
+    "storage": [
+      {
+        "key": "fosdick-submission-test-mode",
+        "value": "true"
+      },
+      {
+        "key": "fosdick-client-code",
+        "value": "TBD"
+      },
+      {
+        "key": "fosdick-client-name",
+        "value": "TBD"
+      },
+      {
+        "key": "fosdick-ad-code",
+        "value": "TBD"
+      }
+    ]
+  }
+}
