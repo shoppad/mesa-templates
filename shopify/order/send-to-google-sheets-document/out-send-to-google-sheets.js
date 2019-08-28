@@ -13,42 +13,41 @@ module.exports = new class {
    */
   script = (payload, context) => {
     // Initliazing Google Class.
-    let google = new Google(
-      payload.google.init.grandType,
-      payload.google.init.secretKeys
-    );
-
+    let google = new Google('google.oauth');
+    let googleSheetsId = Mesa.storage.get('google-sheets-id');
+    
     // Reading Google Sheets.
-    payload.google.sheets.payload = google.sheets.basicReading(
-      payload.google.sheets.id,
+    const response = google.sheets.read(
+      googleSheetsId,
       'Sheet1',
       'A1',
       'G5'
-    ).values;
+    );
+    let data = response.values;
 
     // Adding new order.
-    payload.google.sheets.payload.push([
-      payload.shopify.id,
-      payload.shopify.name,
-      payload.shopify.total_price,
-      payload.shopify.customer ? payload.shopify.customer.first_name : null,
-      payload.shopify.customer ? payload.shopify.customer.last_name : null,
-      payload.shopify.customer ? payload.shopify.customer.id : null,
-      payload.shopify.email
+    data.push([
+      payload.id,
+      payload.name,
+      payload.total_price,
+      payload.customer ? payload.customer.first_name : null,
+      payload.customer ? payload.customer.last_name : null,
+      payload.customer ? payload.customer.id : null,
+      payload.email
     ]);
 
     // Updating Google Sheets.
-    let updateSheets = google.sheets.basicWriting(
-      payload.google.sheets.id,
+    const updateSheets = google.sheets.write(
+      googleSheetsId,
       'Sheet1',
       'A1',
       'G5',
       {
         range: 'Sheet1!A1:G5',
         majorDimension: 'ROWS',
-        values: payload.google.sheets.payload
+        values: data
       }
     );
-    Mesa.log.debug('Successfully updated Google Sheets orders spreadsheet', payload.google.sheets.payload);
+    Mesa.log.debug('Successfully updated Google Sheets orders spreadsheet', data);
   };
 }();

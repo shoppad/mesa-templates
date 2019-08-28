@@ -16,7 +16,7 @@ module.exports = new class {
             access_token: 'google-access-token',
             client_secret: 'google-client-secret',
             client_id: 'google-client-id',
-            expired_at: 'google-expired-at',
+            expires_at: 'google-expires-at',
             refresh_token: 'google-refresh-token'
           }
         },

@@ -6,16 +6,15 @@
   "tags": ["customer", "salesforce"],
   "source": "shopify",
   "destination": "salesforce",
-  "enabled": true,
+  "enabled": false,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
         "type": "shopify_webhook",
-        "name": "Shopify Customer Webhook",
-        "key": "in-shopify-customer-webhook",
-        "script": "in-shopify-customer-webhook.js",
-        "logging": "error",
+        "name": "Shopify Customer Create",
+        "key": "in-shopify-customer-create",
+        "script": "in-shopify-customer-create.js",
         "topic": "customers/create"
       }
     ],
@@ -30,19 +29,9 @@
     ],
     "secrets": [
       {
-        "key": "salesforce-client-id"
-      },
-      {
-        "key": "salesforce-client-secret"
-      },
-      {
-        "key": "salesforce-username"
-      },
-      {
-        "key": "salesforce-password"
-      },
-      {
-        "key": "salesforce-access-token"
+        "key": "salesforce.oauth",
+        "type": "oauth",
+        "service": "salesforce"
       }
     ]
   }
