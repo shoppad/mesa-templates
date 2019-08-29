@@ -29,19 +29,7 @@
     ],
     "secrets": [
       {
-        "key": "dropbox-client-id"
-      },
-      {
-        "key": "dropbox-client-secret"
-      },
-      {
-        "key": "dropbox-authorize-url"
-      },
-      {
-        "key": "dropbox-token-url"
-      },
-      {
-        "key": "dropbox-access-token"
+        "key": "dropbox.oauth"
       }
     ],
     "storage": [

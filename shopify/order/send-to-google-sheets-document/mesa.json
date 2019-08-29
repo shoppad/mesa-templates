@@ -29,19 +29,7 @@
     ],
     "secrets": [
       {
-        "key": "google-refresh-token"
-      },
-      {
-        "key": "google-access-token"
-      },
-      {
-        "key": "google-client-id"
-      },
-      {
-        "key": "google-client-secret"
-      },
-      {
-        "key": "google-expires-at"
+        "key": "google.oauth"
       }
     ],
     "storage": [
