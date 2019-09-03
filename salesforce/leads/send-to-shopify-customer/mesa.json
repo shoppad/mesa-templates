@@ -1,4 +1,5 @@
 {
+  "key": "shoppad/mesa-templates/salesforce/leads/send-to-shopify-customer",
   "name": "Create Shopify Customer On Salesforce Lead Conversion",
   "version": "1.0.0",
   "description": "Create or update a Shopify Customer when a Salesforce Lead is converted to a Contact.",
