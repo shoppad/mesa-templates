@@ -25,7 +25,7 @@ module.exports = new class {
     const response = salesforce.post(path, postData, options);
 
     if (response.headers && response.headers.http_status_code !== "201") {
-      Mesa.log.error('Error posting lead', response);
+      throw new Error('Error creating lead in Salesforce');
     }
   };
 
