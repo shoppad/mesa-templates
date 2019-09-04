@@ -10,7 +10,6 @@
   "source": "shopify",
   "destination": "salesforce",
   "enabled": false,
-  "debug": true,
   "config": {
     "inputs": [
       {
