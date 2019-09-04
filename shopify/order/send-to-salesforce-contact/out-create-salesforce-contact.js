@@ -9,11 +9,6 @@ module.exports = new class {
     // Init Salesforce
     const salesforce = new Salesforce('refresh_token');
 
-    // Define processor for convert()
-    const processors = {
-      process: [ this.setCompany ],
-    };
-
     // Convert Shopify payload to SalesForce's contact format
     const postData = Mapping.convert(ShopifySalesforceCustomerMap, payload, 'shopify', 'salesforce', processors);
 
@@ -28,15 +23,4 @@ module.exports = new class {
       throw new Error('Error creating contact in Salesforce');
     }
   };
-
-  /**
-   * Set company to placeholder value if not set in Shopify
-   */
-  setCompany = (fieldKey, inputValue) => {
-    if (fieldKey === 'company' && inputValue === null) {
-      return 'Shopify Customer';
-    }
-
-    return inputValue;
-  }
 }();
