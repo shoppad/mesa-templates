@@ -1,6 +1,6 @@
-# Send Customer To Salesforce Contact
+# Send Order To Salesforce Lead
 
-Send Customer from Shopify to Salesforce contact when customer is created.
+Send order from Shopify to Salesforce Lead when order is created.
 
 ---
 ## Setup
@@ -12,10 +12,10 @@ Send Customer from Shopify to Salesforce contact when customer is created.
 4. Enable OAuth Settings, add all scopes
 5. Add https://www.theshoppad.com/apps/mesa/oauth/ as a callback URL
 6. Save the application, then get the client key and client secret
-7. Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/shopify/customer/send-to-salesforce-contact.
+7. Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/shopify/order/send-to-salesforce-lead.
 8. Enter your store's URL (e.g. mystore.myshopify.com), and the client ID key and secret key from step #6
 9. Follow the steps, entering your salesforce username and password.
-10. You will be redirect to your new "Send Customer To Salesforce Contact" Automation in the Mesa Dashboard
+10. You will be redirect to your new "Send Order To Salesforce Lead" Automation in the Mesa Dashboard
 11. Verify that your secrets have been properly saved: `salesforce-client-id`, `salesforce-client-secret`, `salesforce-username`, `salesforce-password`
 
 ### Connect to Salesforce with using the username/password method:
@@ -25,7 +25,7 @@ Send Customer from Shopify to Salesforce contact when customer is created.
 4. Enable OAuth Settings, add all scopes
 5. Add https://www.theshoppad.com/apps/mesa/oauth/ as a callback URL
 6. Save the application, then get the client key and client secret
-7. In the Mesa Dashboard, navigate to Automations > "Send Customer To Salesforce Contact"
+7. In the Mesa Dashboard, navigate to Automations > "Send Order To Salesforce Lead"
 8. Under "Secrets", save the client ID as `salesforce_client_id`
 9. Save the client secret as `salesforce_client_secret`
 10. Save your Salesforce username as `salesforce_username`
