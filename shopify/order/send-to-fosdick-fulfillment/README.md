@@ -1,12 +1,12 @@
-# Send Orders To Fosdick Fulfillment 3PL
-Send orders from Shopify to Fosdick Fulfillment 3PL every hour. 
+# Send Orders To Fosdick Fulfillment
+Send orders from Shopify to Fosdick Fulfillment every hour. 
 
 ---
 ## Setup
 1. You'll need the following details from your Fosdick rep, to populate these secrets:  
- a) Fosdick Client Code (`fosdick-client-code`)  
- b) Fosdick Client Name (`fosdick-client-name`)  
- c) Fosdick Ad Code (`fosdick-ad-code`)  
+ a) Fosdick Client Code (`fosdick-client-code`)
+ b) Fosdick Client Name (`fosdick-client-name`)
+ c) Fosdick Ad Code (`fosdick-ad-code`)
 2. By default, this automation runs in test mode (storage item `fosdick-test-mode`. This means that Fosdick will receive the orders, but will not process them.  It is recommended that you send a test order first, to check everything is set up correctly.
 3. You will also need to discuss payment processing with your Fosdick representative. Fosdick provide a few different options for sending payment details. For the purposes of this base script, a test string is sent for `PaymentToken`.
 

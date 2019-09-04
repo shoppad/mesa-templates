@@ -1,8 +1,8 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send-orders-to-fosdick-fulfillment",
-  "name": "Send Orders To Fosdick Fulfillment 3PL",
+  "key": "shoppad/mesa-templates/shopify/order/send-to-fosdick-fulfillment",
+  "name": "Send Orders To Fosdick Fulfillment",
   "version": "1.0.0",
-  "description": "Send orders from Shopify to Fosdick Fulfillment 3PL every hour.",
+  "description": "Send orders from Shopify to Fosdick Fulfillment every hour.",
   "tags": ["order", "fosdick", "fulfillment"],
   "source": "Shopify",
   "destination": "Fosdick",
@@ -32,15 +32,15 @@
     "secrets": [
       {
         "key": "fosdick-client-code",
-        "value": "TBD"
+        "value": ""
       },
       {
         "key": "fosdick-client-name",
-        "value": "TBD"
+        "value": ""
       },
       {
         "key": "fosdick-ad-code",
-        "value": "TBD"
+        "value": ""
       }
     ],
     "storage": [
