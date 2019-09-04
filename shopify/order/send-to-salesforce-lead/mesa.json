@@ -26,13 +26,6 @@
       {
         "trigger_type": "output",
         "type": "custom",
-        "name": "out-create-salesforce-lead",
-        "key": "out-out-create-salesforce-lead",
-        "script": "out-create-salesforce-lead.js"
-      },
-      {
-        "trigger_type": "output",
-        "type": "custom",
         "name": "Create Salesforce Lead",
         "key": "out-create-salesforce-lead",
         "script": "out-create-salesforce-lead.js"
@@ -43,6 +36,11 @@
         "key": "salesforce.oauth"
       }
     ],
-    "storage": []
+    "storage": [
+      {
+        "key": "salesforce-instance",
+        "value": "https://na19.salesforce.com"
+      }
+    ]
   }
 }

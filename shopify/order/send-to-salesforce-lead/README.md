@@ -17,6 +17,7 @@ Send order from Shopify to Salesforce Lead when order is created.
 9. Follow the steps, entering your salesforce username and password.
 10. You will be redirect to your new "Send Order To Salesforce Lead" Automation in the Mesa Dashboard
 11. Verify that your secrets have been properly saved: `salesforce-client-id`, `salesforce-client-secret`, `salesforce-username`, `salesforce-password`
+12. Save your Salesforce instance's URL as the `salesforce-instance` Storage item
 
 ### Connect to Salesforce with using the username/password method:
 1. You will need to create a connected app in Salesforce
@@ -30,3 +31,8 @@ Send order from Shopify to Salesforce Lead when order is created.
 9. Save the client secret as `salesforce_client_secret`
 10. Save your Salesforce username as `salesforce_username`
 11. Save your Salesforce password as `salesforce_password`
+12. Save your Salesforce instance's URL as the `salesforce-instance` Storage item
+
+## Optional Customizations
+
+- Map additional fields by editing the `shopify-salesforce-lead-map.js` script.

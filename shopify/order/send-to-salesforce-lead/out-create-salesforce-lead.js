@@ -18,7 +18,7 @@ module.exports = new class {
     const postData = Mapping.convert(ShopifySalesforceCustomerMap, payload, 'shopify', 'salesforce', processors);
 
     // Construct full API path / define options
-    const path = 'https://na19.salesforce.com/services/data/v20.0/sobjects/Lead';
+    const path = `${Mesa.storage.get('salesforce-instance')}/services/data/v20.0/sobjects/Lead`;
     const options = { include_headers: true };
 
     // Create a lead in Salesforce
