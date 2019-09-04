@@ -1,0 +1,45 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-lead",
+  "name": "Send Order To Salesforce Lead",
+  "version": "1.0.0",
+  "description": "Send order from Shopify to Salesforce Lead when order is created.",
+  "tags": [
+    "order",
+    "salesforce"
+  ],
+  "source": "shopify",
+  "destination": "salesforce",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Create",
+        "key": "in-shopify-order-create",
+        "script": "in-shopify-order-create.js",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Salesforce Lead",
+        "key": "out-create-salesforce-lead",
+        "script": "out-create-salesforce-lead.js"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "salesforce.oauth"
+      }
+    ],
+    "storage": [
+      {
+        "key": "salesforce-instance",
+        "value": "https://na19.salesforce.com"
+      }
+    ]
+  }
+}
