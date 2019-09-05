@@ -21,8 +21,6 @@ module.exports = new class {
     const path = `${Mesa.storage.get('salesforce-instance')}/services/data/v20.0/sobjects/Opportunity`;
     const options = { include_headers: true };
 
-    // @todo: add Description, Name field
-
     // Create a opportunity in Salesforce
     const response = salesforce.post(path, postData, options);
 
