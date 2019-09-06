@@ -1,7 +1,7 @@
 const Mesa = require('vendor/Mesa.js');
 const Salesforce = require('vendor/Salesforce.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifySalesforceCustomerMap = require('./shopify-salesforce-contact-map.js');
+const ShopifySalesforceContactMap = require('./shopify-salesforce-contact-map.js');
 
 module.exports = new class {
   script = (payload) => {
@@ -10,7 +10,7 @@ module.exports = new class {
     const salesforce = new Salesforce('refresh_token');
 
     // Convert Shopify payload to SalesForce's contact format
-    const postData = Mapping.convert(ShopifySalesforceCustomerMap, payload, 'shopify', 'salesforce');
+    const postData = Mapping.convert(ShopifySalesforceContactMap, payload, 'shopify', 'salesforce');
 
     // Construct full API path / define options
     const path = `${Mesa.storage.get('salesforce-instance')}/services/data/v20.0/sobjects/Contact`;
