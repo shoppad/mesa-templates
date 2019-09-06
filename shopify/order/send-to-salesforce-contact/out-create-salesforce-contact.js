@@ -10,7 +10,7 @@ module.exports = new class {
     const salesforce = new Salesforce('refresh_token');
 
     // Convert Shopify payload to SalesForce's contact format
-    const postData = Mapping.convert(ShopifySalesforceCustomerMap, payload, 'shopify', 'salesforce', processors);
+    const postData = Mapping.convert(ShopifySalesforceCustomerMap, payload, 'shopify', 'salesforce');
 
     // Construct full API path / define options
     const path = `${Mesa.storage.get('salesforce-instance')}/services/data/v20.0/sobjects/Contact`;
@@ -20,7 +20,7 @@ module.exports = new class {
     const response = salesforce.post(path, postData, options);
 
     if (response.headers && response.headers.http_status_code !== "201") {
-      throw new Error('Error creating contact in Salesforce');
+      throw new Error('Error creating contact in Salesforce. Possible cause: contact already exists.');
     }
   };
 }();
