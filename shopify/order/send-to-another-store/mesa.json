@@ -3,7 +3,7 @@
   "name": "Send Order To Another Store",
   "version": "1.0.0",
   "description": "Send order from Shopify to another store when order is created, updated or deleted.",
-  "tags": ["order"],
+  "tags": ["Order"],
   "source": "shopify",
   "destination": "shopify",
   "enabled": false,

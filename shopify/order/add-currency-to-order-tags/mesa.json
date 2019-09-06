@@ -3,7 +3,7 @@
   "name": "Add Currency To Order Tags",
   "version": "1.0.0",
   "description": "Add currency to Shopify order tags when order is created.",
-  "tags": ["order"],
+  "tags": ["Order"],
   "source": "shopify",
   "destination": "shopify",
   "enabled": true,

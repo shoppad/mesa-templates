@@ -76,10 +76,5 @@
         "key": "test-api-key"
       }
     ]
-  },
-  "files": [
-    "in-kitchen-sink.js",
-    "in-kitchen-sink-ftp.js",
-    "out-kitchen-sink-vo.js"
-  ]
+  }
 }

@@ -1,9 +1,9 @@
 {
   "key": "shoppad/mesa-templates/spa/fulfillment/send-to-shopify",
-  "name": "Send SPA FTP File To Shopify Fulfillment",
+  "name": "Send SoftPack / SPA Fulfillment to Shopify Fulfillment",
   "version": "1.0.0",
   "description": "Send FTP file containing fulfillments from Softpack/SPA Inc. to Shopify fulfillment every 6 hours.",
-  "tags": ["fulfillment", "3PL"],
+  "tags": ["3PL", "Filfillment"],
   "source": "spa",
   "destination": "shopify",
   "enabled": false,
@@ -38,7 +38,6 @@
     ],
     "secrets": [
       {
-        "uuid": "jeffs-dev",
         "key": "ftp-password"
       }
     ]

@@ -3,7 +3,7 @@
   "name": "Add Color Tag To Product",
   "version": "1.0.0",
   "description": "Add color tag to Shopify product when product is created or updated.",
-  "tags": ["product"],
+  "tags": ["Product"],
   "source": "shopify",
   "destination": "shopify",
   "enabled": true,

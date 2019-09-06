@@ -3,7 +3,7 @@
   "name": "Send Orders To Fosdick Fulfillment",
   "version": "1.0.0",
   "description": "Send orders from Shopify to Fosdick Fulfillment every hour.",
-  "tags": ["order", "fosdick", "fulfillment"],
+  "tags": ["3PL", "Order"],
   "source": "Shopify",
   "destination": "Fosdick",
   "enabled": true,
