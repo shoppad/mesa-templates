@@ -17,8 +17,7 @@
         "type": "json_webhook",
         "name": "Salesforce Product Create",
         "key": "in-salesforce-product-create",
-        "script": "in-salesforce-product-create.js",
-        "topic": "orders/create"
+        "script": "in-salesforce-product-create.js"
       }
     ],
     "outputs": [
