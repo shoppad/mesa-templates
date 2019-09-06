@@ -1,0 +1,44 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-contact",
+  "name": "Send Order To Salesforce Contact",
+  "version": "1.0.0",
+  "description": "Send order from Shopify to Salesforce Contact when order is created.",
+  "tags": [
+    "Order"
+  ],
+  "source": "shopify",
+  "destination": "salesforce",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Create",
+        "key": "in-shopify-order-create",
+        "script": "in-shopify-order-create.js",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Salesforce Contact",
+        "key": "out-create-salesforce-contact",
+        "script": "out-create-salesforce-contact.js"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "salesforce.oauth"
+      }
+    ],
+    "storage": [
+      {
+        "key": "salesforce-instance",
+        "value": "https://na19.salesforce.com"
+      }
+    ]
+  }
+}
