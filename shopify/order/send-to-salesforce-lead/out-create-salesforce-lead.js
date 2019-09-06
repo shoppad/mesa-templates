@@ -1,7 +1,7 @@
 const Mesa = require('vendor/Mesa.js');
 const Salesforce = require('vendor/Salesforce.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifySalesforceCustomerMap = require('./shopify-salesforce-lead-map.js');
+const ShopifySalesforceLeadMap = require('./shopify-salesforce-lead-map.js');
 
 module.exports = new class {
   script = (payload) => {
@@ -15,7 +15,7 @@ module.exports = new class {
     };
 
     // Convert Shopify payload to SalesForce's contact format
-    const postData = Mapping.convert(ShopifySalesforceCustomerMap, payload, 'shopify', 'salesforce', processors);
+    const postData = Mapping.convert(ShopifySalesforceLeadMap, payload, 'shopify', 'salesforce', processors);
 
     // Construct full API path / define options
     const path = `${Mesa.storage.get('salesforce-instance')}/services/data/v20.0/sobjects/Lead`;
