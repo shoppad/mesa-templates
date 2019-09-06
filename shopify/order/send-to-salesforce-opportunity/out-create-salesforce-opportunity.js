@@ -1,7 +1,7 @@
 const Mesa = require('vendor/Mesa.js');
 const Salesforce = require('vendor/Salesforce.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifySalesforceCustomerMap = require('./shopify-salesforce-opportunity-map.js');
+const ShopifySalesforceOpportunityMap = require('./shopify-salesforce-opportunity-map.js');
 
 module.exports = new class {
   script = (payload) => {
@@ -10,7 +10,7 @@ module.exports = new class {
     const salesforce = new Salesforce('refresh_token');
 
     // Convert Shopify payload to SalesForce's opportunity format
-    const postData = Mapping.convert(ShopifySalesforceCustomerMap, payload, 'shopify', 'salesforce');
+    const postData = Mapping.convert(ShopifySalesforceOpportunityMap, payload, 'shopify', 'salesforce');
 
     // Append additional fields
     postData['StageName'] = 'Closed Won';
