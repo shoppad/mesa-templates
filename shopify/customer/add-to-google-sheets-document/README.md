@@ -1,5 +1,5 @@
-# Send Customer To Google Sheets Document
-Send customer from Shopify to Google Sheets document when customer is updated.
+# Add Shopify Customer to Google Sheets Document
+Add customer from Shopify to Google Sheets document when customer is updated.
 
 ---
 
