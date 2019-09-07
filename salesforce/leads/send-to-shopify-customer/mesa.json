@@ -1,11 +1,11 @@
 {
-  "key": "salesforce/contact/send-to-shopify-customer",
+  "key": "shoppad/mesa-templates/salesforce/contact/send-to-shopify-customer",
   "name": "Send Contact To Shopify Customer",
   "version": "1.0.0",
   "description": "Send contact from Salesforce to Shopify customer when lead converts.",
   "tags": [
     "CRM",
-    "Product"
+    "Customer"
   ],
   "source": "salesforce",
   "destination": "shopify",
@@ -15,20 +15,19 @@
       {
         "trigger_type": "input",
         "type": "json_webhook",
-        "name": "Salesforce Product Create",
-        "key": "in-salesforce-product-create",
-        "script": "in-salesforce-product-create.js",
-        "topic": "orders/create"
+        "name": "Salesforce Lead Convert",
+        "key": "in-salesforce-lead-convert",
+        "script": "in-salesforce-lead-convert.js"
       }
     ],
     "outputs": [
       {
         "trigger_type": "output",
         "type": "shopify_api",
-        "name": "Create Shopify Product",
+        "name": "Create Shopify Customer",
         "key": "out-create-shopify-product",
-        "script": "out-create-shopify-product.js",
-        "shopify_api": "POST admin/products.json"
+        "script": "out-create-shopify-customer.js",
+        "shopify_api": "POST admin/customers.json"
       }
     ],
     "secrets": [
