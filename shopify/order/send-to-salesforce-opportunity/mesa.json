@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Send order from Shopify to Salesforce Opportunity when order is created.",
   "tags": [
+    "CRM",
     "Order"
   ],
   "source": "shopify",

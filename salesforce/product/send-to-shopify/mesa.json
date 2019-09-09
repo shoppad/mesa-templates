@@ -1,8 +1,8 @@
 {
   "key": "shoppad/mesa-templates/salesforce/product/send-to-shopify",
-  "name": "Send Product To Shopify Product",
+  "name": "Send Salesforce Product To Shopify Product",
   "version": "1.0.0",
-  "description": "Send product from Salesforce to Shopify Product when product is created.",
+  "description": "Send product from Salesforce to Shopify Product when Salesforce product is created.",
   "tags": [
     "CRM",
     "Product"
