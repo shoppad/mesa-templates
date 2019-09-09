@@ -3,7 +3,7 @@
   "name": "Send SoftPack / SPA Fulfillment to Shopify Fulfillment",
   "version": "1.0.0",
   "description": "Send FTP file containing fulfillments from Softpack/SPA Inc. to Shopify fulfillment every 6 hours.",
-  "tags": ["3PL", "Filfillment"],
+  "tags": ["3PL", "Fulfillment"],
   "source": "spa",
   "destination": "shopify",
   "enabled": false,
