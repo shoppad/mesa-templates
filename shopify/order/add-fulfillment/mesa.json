@@ -3,7 +3,7 @@
   "name": "Add Fulfillment To Order",
   "version": "1.0.0",
   "description": "Add fulfillment to Shopify order when order is created with line-items that do not require shipping.",
-  "tags": ["fulfillment"],
+  "tags": ["Fulfillment"],
   "source": "shopify",
   "destination": "shopify",
   "enabled": true,
