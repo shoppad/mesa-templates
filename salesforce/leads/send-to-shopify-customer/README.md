@@ -1,24 +1,23 @@
-# Create Shopify Customer On Salesforce Lead Conversion
+# Send Contact To Shopify Customer
 
-Create or update a Shopify Customer when a Salesforce Lead is converted to a Contact.
+Send contact from Salesforce to Shopify customer when lead converts.
 
-[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/salesforce/leads/send-to-shopify-customer)
-
-
+---
 ## Setup
 
-### Authorizing with Salesforce (password auth):
+### Connect to Salesforce with an oAuth refresh token (recommended):
 1. You will need to create a connected app in Salesforce
 2. Click on the Setup button (gear icon - top right)
-3. Navigate to "Apps", then click "New Connnected App"
+3. Navigate to "Apps" and "App Manager", then click "New Connnected App". Enter "Connected App Name", "API Name" and "Contact Email"
 4. Enable OAuth Settings, add all scopes
 5. Add https://www.theshoppad.com/apps/mesa/oauth/ as a callback URL
-6. Save the application, then get the client ID and client secret
-7. Open up Mesa, then navigate to the Secrets tab
-8. Save the client ID, with the key being "salesforce_client_id"
-9. Save the client secret, with the key being "salesforce_client_secret"
-10. Save your Salesforce username, with the key being "salesforce_username"
-11. Save your Salesforce password, with the key being "salesforce_password"
+6. Save the application, then get the client key and client secret
+7. Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/salesforce/contact/send-to-shopify-customer.
+8. Enter your store's URL (e.g. mystore.myshopify.com), and the client ID key and secret key from step #6
+9. Follow the steps, entering your salesforce username and password.
+10. You will be redirect to your new "Send Contact To Shopify Customer" Automation in the Mesa Dashboard
+11. Verify that your secrets have been properly saved: `salesforce-client-id`, `salesforce-client-secret`, `salesforce-username`, `salesforce-password`
+12. Save your Salesforce instance's URL as the `salesforce-instance` Storage item
 
 ### Setting up workflows in Salesforce in order to recieve webhooks:
 1. Open up your Salesforce instance
@@ -28,14 +27,6 @@ Create or update a Shopify Customer when a Salesforce Lead is converted to a Con
 5. Create a "WorkFlow Rule"
 6. Tie the "WorkFlow Rule" to the "Outbound Message"
 
-@TODO: document Authorizing with Salesforce (refresh token auth)
+## Optional Customizations
 
-## Developing 
-[Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
-
-```
-mesa initialize \
-    --inputs=in-create-shopify-customer-on-salesforce-lead-conversion \
-    --outputs=out-create-shopify-customer-on-salesforce-lead-conversion \
-    --files=salesforce/leads/create-shopify-customer/in-create-shopify-customer-on-salesforce-lead-conversion.js,salesforce/leads/create-shopify-customer/out-create-shopify-customer-on-salesforce-lead-conversion.js \
-```
+- Map additional fields by editing the `salesforce-shopify-customer-map.js` script.
