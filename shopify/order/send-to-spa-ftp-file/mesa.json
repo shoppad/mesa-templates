@@ -1,9 +1,9 @@
 {
   "key": "shoppad/mesa-templates/shopify/order/send-to-spa-ftp-file",
-  "name": "Send Order To SPA FTP File",
+  "name": "Send Shopify Order to SoftPack / SPA Order",
   "version": "1.0.0",
   "description": "Send order from Shopify to SPA FTP file when order is created.",
-  "tags": ["order", "3PL"],
+  "tags": ["3PL", "Order"],
   "source": "shopify",
   "destination": "spa",
   "enabled": false,

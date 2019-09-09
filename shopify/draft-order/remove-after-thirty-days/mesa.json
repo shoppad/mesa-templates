@@ -3,11 +3,10 @@
   "name": "Remove Draft Orders After Thirty Days",
   "version": "1.0.0",
   "description": "Remove Shopify draft orders older than 30 days.",
-  "tags": ["draft-order"],
+  "tags": ["Draft-Order"],
   "source": "shopify",
   "destination": "shopify",
   "enabled": true,
-  "debug": true,
   "config": {
     "inputs": [
       {

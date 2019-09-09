@@ -3,7 +3,7 @@
   "name": "Send Order To Google Sheets Document",
   "version": "1.0.0",
   "description": "Send order from Shopify to Google Sheets document when order is created.",
-  "tags": ["order", "google-sheets"],
+  "tags": ["Order"],
   "source": "shopify",
   "destination": "google-sheets",
   "enabled": false,

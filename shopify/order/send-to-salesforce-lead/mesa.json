@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "description": "Send order from Shopify to Salesforce Lead when order is created.",
   "tags": [
-    "order",
-    "salesforce"
+    "CRM",
+    "Order"
   ],
   "source": "shopify",
   "destination": "salesforce",

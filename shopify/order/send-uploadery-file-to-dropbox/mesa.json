@@ -1,9 +1,9 @@
 {
   "key": "shoppad/mesa-templates/shopify/order/send-uploadery-file-to-dropbox",
-  "name": "Send Uploadery File To Dropbox",
+  "name": "Send Uploadery File On An Order To Dropbox",
   "version": "1.0.0",
   "description": "Send Uploadery file from Shopify order to Dropbox when order is created.",
-  "tags": ["order", "file", "dropbox"],
+  "tags": ["ShopPad", "Order"],
   "source": "uploadery",
   "destination": "dropbox",
   "enabled": false,
