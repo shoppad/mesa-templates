@@ -3,7 +3,7 @@
   "name": "Send Uploadery File On An Order To Dropbox",
   "version": "1.0.0",
   "description": "Send Uploadery file from Shopify order to Dropbox when order is created.",
-  "tags": ["ShopPad", "Order"],
+  "tags": ["Order"],
   "source": "uploadery",
   "destination": "dropbox",
   "enabled": false,

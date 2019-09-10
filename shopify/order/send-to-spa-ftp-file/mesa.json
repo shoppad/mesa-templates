@@ -3,7 +3,7 @@
   "name": "Send Shopify Order to SoftPack / SPA Order",
   "version": "1.0.0",
   "description": "Send order from Shopify to SPA FTP file when order is created.",
-  "tags": ["3PL", "Order"],
+  "tags": ["Fulfillment", "Order"],
   "source": "shopify",
   "destination": "spa",
   "enabled": false,
