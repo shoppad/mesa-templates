@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "description": "Send orders from Shopify to Fosdick Fulfillment every hour.",
   "tags": ["Fulfillment", "Order"],
-  "source": "Shopify",
-  "destination": "Fosdick",
+  "source": "shopify",
+  "destination": "fosdick",
   "enabled": true,
   "config": {
     "inputs": [
