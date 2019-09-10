@@ -3,9 +3,9 @@
   "name": "Send Uploadery File To Cloudinary Transform",
   "version": "1.0.0",
   "description": "Send Uploadery file from Shopify order to Cloudinary Transform when order is created.",
-  "tags": [],
-  "source": "",
-  "destination": "",
+  "tags": ["Order"],
+  "source": "uploadery",
+  "destination": "cloudinary",
   "enabled": false,
   "config": {
     "inputs": [
