@@ -2,7 +2,8 @@
 
 Send an Email or SMS Notifications when a tracking changes.
 
-[![Automate with Mesa](https://www.getmesa.com/images/integrate.png)<br />Get the Template](https://www.getmesa.com/install/shoppad/mesa-templates/tracktor/trackings/send-notification-on-change)
+---
+
 
 ## Setup
 
