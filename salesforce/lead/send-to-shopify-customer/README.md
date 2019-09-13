@@ -1,4 +1,4 @@
-# Send Contact To Shopify Customer
+# Send Salesforce Lead To Shopify Customer
 
 Send contact from Salesforce to Shopify customer when lead converts.
 
@@ -12,7 +12,7 @@ Send contact from Salesforce to Shopify customer when lead converts.
 4. Enable OAuth Settings, add all scopes
 5. Add https://www.theshoppad.com/apps/mesa/oauth/ as a callback URL
 6. Save the application, then get the client key and client secret
-7. Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/salesforce/contact/send-to-shopify-customer.
+7. Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/salesforce/lead/send-to-shopify-customer.
 8. Enter your store's URL (e.g. mystore.myshopify.com), and the client ID key and secret key from step #6
 9. Follow the steps, entering your salesforce username and password.
 10. You will be redirect to your new "Send Contact To Shopify Customer" Automation in the Mesa Dashboard
