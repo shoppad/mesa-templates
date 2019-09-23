@@ -1,11 +1,11 @@
 {
-  "name": "Add Destination Forecast To Order Notes",
+  "name": "Add Destination Weather Forecast To Order Notes",
   "version": "1.0.0",
-  "description": "Add destination forecast to Shopify Order Notes when order is created with OpenWeatherMap.",
+  "description": "Add destination weather forecast to Shopify Order Notes when order is created with OpenWeatherMap.",
   "key": "shoppad/mesa-templates/shopify/order/add-destination-forecast-to-order-notes",
   "tags": ["Order"],
   "source": "shopify",
-  "destination": "shopify",
+  "destination": "openweather",
   "enabled": false,
   "config": {
     "inputs": [
