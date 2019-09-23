@@ -1,0 +1,41 @@
+{
+  "key": "mesa-templates/mesa/file/send-to-google-cloudprint",
+  "name": "Send File to Google Cloud Print",
+  "version": "1.0.0",
+  "description": "Print a file with a Google Cloud Print connected printer. Triggered from a call in another Automation's script to Mesa.automation.send().",
+  "tags": [],
+  "source": "shopify",
+  "destination": "google-cloud-print",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "custom",
+        "name": "File Sent From Mesa Output",
+        "key": "in-file-sent-from-mesa-output",
+        "script": "in-file-sent-from-mesa-output.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Send File to Google Cloud Print",
+        "key": "out-send-file-to-google-cloud-print",
+        "script": "out-send-file-to-google-cloud-print.js"
+      }
+    ],
+    "secrets": [],
+    "storage": [
+      {
+        "key": "printerid",
+        "value": ""
+      },
+      {
+        "key": "google-cloudprint-ticket.json",
+        "value": "{\n    version: '1.0',\n    print: {},\n}"
+      }
+    ]
+  }
+}
