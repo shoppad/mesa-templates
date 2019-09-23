@@ -1,0 +1,57 @@
+{
+  "key": "shoppad/mesa-templates/shopify/fulfillment/shiphawk-shipping-labels-to-order-notes",
+  "name": "Create Shipping Labels With ShipHawk When Order Is Fulfilled",
+  "version": "1.0.0",
+  "description": "When an order is fulfilled, automatically purchase shipping labels with ShipHawk and add label download links to the Shopify Order Notes.",
+  "tags": [
+    "Fulfillment",
+    "Order"
+  ],
+  "source": "shopify",
+  "destination": "shopify",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Fulfillment Created",
+        "key": "in-shopify-fulfillment-created",
+        "script": "in-shopify-fulfillment-created.js",
+        "topic": "fulfillments/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create ShipHawk Label",
+        "key": "out-create-shiphawk-label",
+        "script": "out-create-shiphawk-label.js"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Update Shopify Order Notes",
+        "key": "out-update-shopify-order-notes",
+        "script": "out-update-shopify-order-notes.js",
+        "shopify_api": "PUT admin/orders/{{order_id}}.json"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "shiphawk-key"
+      }
+    ],
+    "storage": [
+      {
+        "key": "shophawk-environment",
+        "value": "sandbox"
+      },
+      {
+        "key": "callback",
+        "value": ""
+      }
+    ]
+  }
+}
