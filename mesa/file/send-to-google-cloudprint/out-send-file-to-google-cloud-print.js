@@ -14,10 +14,10 @@ module.exports = new class {
    */
   script = (payload, context) => {
 
-    const ticket = payload.ticket ? payload.ticket : Mesa.storage.get('google-cloudprint-ticket.json', {
+    const ticket = payload.ticket ? payload.ticket : JSON.parse(Mesa.storage.get('google-cloudprint-ticket.json', JSON.stringify({
       version: '1.0',
       print: {},
-    });
+    })));
 
     const data = {
       printerid: Mesa.storage.get('printerid'),
