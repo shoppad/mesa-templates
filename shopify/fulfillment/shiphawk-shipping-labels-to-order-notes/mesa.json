@@ -8,8 +8,8 @@
     "Order"
   ],
   "source": "shopify",
-  "destination": "shopify",
-  "enabled": true,
+  "destination": "shiphawk",
+  "enabled": false,
   "config": {
     "inputs": [
       {
