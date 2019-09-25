@@ -27,11 +27,12 @@ module.exports = new class {
       totalValue += parseFloat(lineItem.price);
       origin = shiphawk.sanitizeAddress(lineItem.origin_location);
     });
+    const pounds = grams * 0.00220462;
 
     const items = [
       {
         "type": "parcel",
-        "weight": grams,
+        "weight": pounds,
         // Optionally set the package dimensions
         //"length": "10",
         //"width" : "10",
@@ -62,7 +63,16 @@ module.exports = new class {
       order_number: payload.name,
     });
 
+    if (!shipment.label_url) {
+      throw 'ShipHawk did not return a shipping label';
+    }
+
     Mesa.output.send('out-update-shopify-order-notes', {
+      shipment: shipment,
+      fulfillment: payload,
+    });
+
+    Mesa.output.send('out-update-shopify-fulfillment', {
       shipment: shipment,
       fulfillment: payload,
     });

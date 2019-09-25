@@ -36,6 +36,14 @@
         "key": "out-update-shopify-order-notes",
         "script": "out-update-shopify-order-notes.js",
         "shopify_api": "PUT admin/orders/{{order_id}}.json"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Update Shopify Fulfillment",
+        "key": "out-update-shopify-fulfillment",
+        "script": "out-update-shopify-fulfillment.js",
+        "shopify_api": "PUT admin/orders/{{order_id}}/fulfillments/{{fulfillment_id}}.json"
       }
     ],
     "secrets": [
