@@ -18,7 +18,7 @@ module.exports = new class {
       tracking_company: payload.shipment.carrier,
     }, {
       order_id: payload.fulfillment.order_id,
-      fulfillmen_id: payload.fulfillment.id,
+      fulfillment_id: payload.fulfillment.id,
     })
   }
 }
