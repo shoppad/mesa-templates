@@ -1,6 +1,6 @@
 {
   "key": "shoppad/mesa-templates/shopify/fulfillment/shiphawk-shipping-labels-to-order-notes",
-  "name": "Create Shipping Labels With ShipHawk When Order Is Fulfilled",
+  "name": "Create Shipping Labels With Shiphawk When Order Is Fulfilled",
   "version": "1.0.0",
   "description": "When an order is fulfilled, automatically purchase shipping labels with ShipHawk and add label download links to the Shopify Order Notes.",
   "tags": [
@@ -9,7 +9,7 @@
   ],
   "source": "shopify",
   "destination": "shopify",
-  "enabled": false,
+  "enabled": true,
   "config": {
     "inputs": [
       {
@@ -36,6 +36,14 @@
         "key": "out-update-shopify-order-notes",
         "script": "out-update-shopify-order-notes.js",
         "shopify_api": "PUT admin/orders/{{order_id}}.json"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Update Shopify Fulfillment",
+        "key": "out-update-shopify-fulfillment",
+        "script": "out-update-shopify-fulfillment.js",
+        "shopify_api": "PUT admin/orders/{{order_id}}/fulfillments/{{fulfillment_id}}.json"
       }
     ],
     "secrets": [
@@ -46,11 +54,11 @@
     "storage": [
       {
         "key": "shophawk-environment",
-        "value": "sandbox"
+        "value": "uat"
       },
       {
         "key": "callback",
-        "value": ""
+        "value": "mesa/send-file-to-google-cloud-print"
       }
     ]
   }
