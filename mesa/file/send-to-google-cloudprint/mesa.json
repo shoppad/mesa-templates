@@ -34,7 +34,7 @@
       },
       {
         "key": "google-cloudprint-ticket.json",
-        "value": "{\n    version: '1.0',\n    print: {},\n}"
+        "value": "{\n    \"version\": \"1.0\",\n    \"print\": {}\n}"
       }
     ]
   }
