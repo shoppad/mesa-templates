@@ -1,5 +1,5 @@
 const Mesa = require('vendor/Mesa.js');
-const Cognito = require('vendor/cognito.js');
+const Cognito = require('vendor/Cognito.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
