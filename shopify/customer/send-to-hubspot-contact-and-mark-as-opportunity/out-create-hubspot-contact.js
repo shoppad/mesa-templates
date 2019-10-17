@@ -22,6 +22,12 @@ module.exports = new (class {
       processors
     );
 
+    // Add lifecycle stage to contact - if Storage property is not present, will use "opportunity"
+    postData.properties.push({
+      property: 'lifecyclestage',
+      value: Mesa.storage.get('hubspot.lifecyclestage', 'opportunity')
+    });
+
     // Make request to HubSpot, using the api key defined in Secrets and the prepared post data
     const options = [];
     const apiKey = Mesa.secret.get('hubspot.hapi');
