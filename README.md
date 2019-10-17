@@ -35,7 +35,7 @@ Update Shopify product with the contents of a spreadsheet
 
 - Name: Should generally come from the `key` (see File naming conventions above).
 - Description: A more verbose version of the name. Always ends in a period.
-- Tags: Singular, with Proper Case (`Order`). Only use existing tags (see left sidebar of getmesa.com).
+- Tags: Singular, with Proper Case (`Order`). Only use existing tags (see left sidebar of https://www.getmesa.com/templates).
 - Source and Destination: Be as specific as possible. Lowercase, separated with dashes. Ex: `shopify-flow`, `google-sheets`.
 - Enabled: If Automation does not require any configuration (Add tags to Shopify order, etc), set to `true`. Otherwise set to `false`.
 

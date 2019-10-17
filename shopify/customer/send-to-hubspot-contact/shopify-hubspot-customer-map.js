@@ -1,10 +1,21 @@
 /**
- * Relationship between Shopify values to their Hubspot values
+ * Relationship between Shopify values to their HubSpot values
  */
-// @TODO create mapping, handle embedded fields
 module.exports = {
   email: {
     shopify: 'email',
-    salesforce: 'Email'
+    hubspot: 'email'
+  },
+  firstname: {
+    shopify: 'first_name',
+    hubspot: 'firstname'
+  },
+  lastname: {
+    shopify: 'last_name',
+    hubspot: 'lastname'
+  },
+  phone: {
+    shopify: 'phone',
+    hubspot: 'phone'
   }
 };
