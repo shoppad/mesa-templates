@@ -1,4 +1,5 @@
 const Mesa = require('vendor/Mesa.js');
+const HubSpot = require('vendor/HubSpot.js');
 const Mapping = require('vendor/Mapping.js');
 const ShopifyHubSpotCustomerMap = require('./shopify-hubspot-customer-map.js');
 
@@ -13,8 +14,11 @@ module.exports = new (class {
       postProcess: [this.structureOutgoingHubSpotData]
     };
 
+    // Add lifecyclestage to incoming payload. There is an entry in ShopifyHubSpotCustomerMap to ensure this outputs to HubSpot data
+    payload.lifecyclestage = 'opportunity';
+
     // Map Shopify customer data to HubSpot data
-    const postData = Mapping.convert(
+    let postData = Mapping.convert(
       ShopifyHubSpotCustomerMap,
       payload,
       'shopify',
@@ -22,23 +26,16 @@ module.exports = new (class {
       processors
     );
 
-    // Add lifecycle stage to contact - if Storage property is not present, will use "opportunity"
-    postData.properties.push({
-      property: 'lifecyclestage',
-      value: Mesa.storage.get('hubspot.lifecyclestage', 'opportunity')
-    });
+    const hubspot = new HubSpot(Mesa.secret.get('hubspot.hapi'));
 
-    // Make request to HubSpot, using the api key defined in Secrets and the prepared post data
-    const options = [];
-    const apiKey = Mesa.secret.get('hubspot.hapi');
-    const basePath =
-      'https://api.hubapi.com/contacts/v1/contact/?hapikey=' + apiKey;
-
-    const response = Mesa.request.post(basePath, postData, options, true);
+    const response = hubspot.createContact(postData);
 
     // Optional logging
-    if (response.errors) {
-      Mesa.log.error('Error creating HubSpot contact:', response.errors);
+    if (response.error) {
+      Mesa.log.error('Error creating HubSpot contact:', [
+        response.error,
+        response.errors ? { Errors: response.errors } : []
+      ]);
     } else {
       Mesa.log.info(
         'HubSpot contact created successfully with ID',

@@ -17,5 +17,9 @@ module.exports = {
   phone: {
     shopify: 'phone',
     hubspot: 'phone'
+  },
+  lifecyclestage: {
+    shopify: 'lifecyclestage',
+    hubspot: 'lifecyclestage'
   }
 };

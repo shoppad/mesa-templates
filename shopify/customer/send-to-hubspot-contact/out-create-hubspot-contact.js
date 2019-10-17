@@ -1,4 +1,5 @@
 const Mesa = require('vendor/Mesa.js');
+const HubSpot = require('vendor/HubSpot.js');
 const Mapping = require('vendor/Mapping.js');
 const ShopifyHubSpotCustomerMap = require('./shopify-hubspot-customer-map.js');
 
@@ -22,17 +23,16 @@ module.exports = new (class {
       processors
     );
 
-    // Make request to HubSpot, using the api key defined in Secrets and the prepared post data
-    const options = [];
-    const apiKey = Mesa.secret.get('hubspot.hapi');
-    const basePath =
-      'https://api.hubapi.com/contacts/v1/contact/?hapikey=' + apiKey;
+    const hubspot = new HubSpot(Mesa.secret.get('hubspot.hapi'));
 
-    const response = Mesa.request.post(basePath, postData, options, true);
+    const response = hubspot.createContact(postData);
 
     // Optional logging
-    if (response.errors) {
-      Mesa.log.error('Error creating HubSpot contact:', response.errors);
+    if (response.error) {
+      Mesa.log.error('Error creating HubSpot contact:', [
+        response.error,
+        response.errors ? { Errors: response.errors } : []
+      ]);
     } else {
       Mesa.log.info(
         'HubSpot contact created successfully with ID',
