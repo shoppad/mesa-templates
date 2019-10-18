@@ -7,11 +7,13 @@ module.exports = new (class {
   script = payload => {
     Mesa.log.debug('out-create-hubspot-contact: payload', payload);
 
+    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
+
     // Define processors for convert() - pass this.structureOutgoingHubSpotData method to postProcess to stucture data into HubSpot format
     const processors = {
       preProcess: [],
       process: [],
-      postProcess: [this.structureOutgoingHubSpotData]
+      postProcess: [hubspot.structureOutgoingHubSpotData]
     };
 
     // Add lifecyclestage to incoming payload. There is an entry in ShopifyHubSpotCustomerMap to ensure this outputs to HubSpot data
@@ -26,63 +28,16 @@ module.exports = new (class {
       processors
     );
 
-    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
-
     const response = hubspot.createContact(postData);
 
     // Optional logging
     if (response.error) {
-      Mesa.log.error('Error creating HubSpot contact:', [
-        response.error,
-        response.errors ? { Errors: response.errors } : []
-      ]);
+      hubspot.logError(contactResponse, 'creating', 'Contact');
     } else {
       Mesa.log.info(
         'HubSpot contact created successfully with ID',
         response.vid
       );
     }
-  };
-
-  /**
-   * Stuctures payload to match required schema for posting to HubSpot
-   *
-   * @example
-   * // For this input
-   * {
-   *   'firstname': 'John',
-   *   'lastname': 'Doe',
-   * }
-   *
-   * // Method will return
-   * {
-   *   'properties': [
-   *     {
-   *       'property': 'firstname',
-   *       'value': 'John',
-   *     },
-   *     {
-   *       'property': 'lastname',
-   *       'value': 'Farr',
-   *     },
-   *   ]
-   * }
-   *
-   * @param payload
-   * @returns {*}
-   */
-  structureOutgoingHubSpotData = payload => {
-    let hubSpotProperties = [];
-
-    Object.keys(payload).forEach(key => {
-      hubSpotProperties.push({
-        property: key,
-        value: payload[key]
-      });
-    });
-
-    return {
-      properties: hubSpotProperties
-    };
   };
 })();
