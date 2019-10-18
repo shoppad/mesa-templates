@@ -12,3 +12,8 @@ Send customer from Shopify to HubSpot Contact when customer is created.
 
 ## Optional Customizations
 - This automation covers standard HubSpot contact fields. If your HubSpot contacts are setup with additional properties, you can map these additional fields by editing the `shopify-hubspot-customer-map.js` script.
+- This script will only create a contact. If you wish to also update the contact if it exists (based on the email address), do the following:
+  - Remove the mapping for `email` in `shopify-hubspot-customer-map.js`
+  - Locate the line containing `const response = hubspot.createContact(postData);`
+  - Replace this with `const response = hubspot.createOrUpdateContact(postData, payload.email);`
+  - For accurate logs, you may also wish to update the text which is logged when the response is successful (`'HubSpot contact created successfully with ID'`)
