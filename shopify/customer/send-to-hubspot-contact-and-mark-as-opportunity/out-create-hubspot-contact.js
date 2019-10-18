@@ -1,5 +1,5 @@
 const Mesa = require('vendor/Mesa.js');
-const HubSpot = require('vendor/HubSpot.js');
+const Hubspot = require('vendor/Hubspot.js');
 const Mapping = require('vendor/Mapping.js');
 const ShopifyHubSpotCustomerMap = require('./shopify-hubspot-customer-map.js');
 
@@ -26,7 +26,7 @@ module.exports = new (class {
       processors
     );
 
-    const hubspot = new HubSpot(Mesa.secret.get('hubspot.hapi'));
+    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
 
     const response = hubspot.createContact(postData);
 
