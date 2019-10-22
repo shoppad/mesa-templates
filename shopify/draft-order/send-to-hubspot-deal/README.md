@@ -1,29 +1,29 @@
-# Send Order To Hubspot Deal
+# Send Draft Order To Hubspot Deal
 
-Send order from Shopify to HubSpot Deal when order is created.
+Send draft order from Shopify to HubSpot Deal when draft order is created.
 
 ---
 ## Setup
 1. To allow this automation to create HubSpot data, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. Instructions: https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key
-2. Once you have the API key, go to the Mesa Dashboard, navigate to Automations > "Send Order To HubSpot Deal"
+2. Once you have the API key, go to the Mesa Dashboard, navigate to Automations > "Send Draft Order To HubSpot Deal"
 3. Under "Secrets", save the client ID as `hubspot.hapi`
 4. Enable the Automation by clicking the 'Enabled' switch on the right hand side beneath "Automation Details"
-5. Create an order in your Shopify store, then check the Mesa logs and HubSpot
+5. Create a draft order in your Shopify store, then check the Mesa logs and HubSpot
 
 ## Additional information
-- If the order has an email associated with it, the automation will check if a HubSpot contact exists and associate the contact with the deal being created. 
+- If the draft order has an email associated with it, the automation will check if a HubSpot contact exists and associate the contact with the deal being created. 
 - If no contact is found, and `hubspot_create_deal_without_contact` is set to `true`, the deal will still be created. If `hubspot_create_deal_without_contact`is set to `false`, then the deal will not be created and an error will be logged. By default, the `hubspot_create_deal_without_contact` is set to `true`.
-- If you wish to create a contact for any new customers (based on the order's email address), please install and enable one of the "Send Customer To HubSpot Contact" or "Send Customer To HubSpot Contact and Mark as Opportunity" automations. If the customer is new, Shopify will send the customer data first, then the order data, so when this automation runs, the contact will be created already in HubSpot.
+- If you wish to create a contact for any new customers (based on the draft order's email address), please install and enable one of the "Send Customer To HubSpot Contact" or "Send Customer To HubSpot Contact and Mark as Opportunity" automations. If the customer is new, Shopify will send the customer data first, then the draft order data, so when this automation runs, the contact will be created already in HubSpot.
 
 ## Optional Customizations
-- This automation creates a simple HubSpot deal, using Shopify order data (see `shopify-hubspot-order-deal-map.js`), and data defined in the "Storage" section.
+- This automation creates a simple HubSpot deal, using Shopify draft order data (see `shopify-hubspot-draft-order-deal-map.js`), and data defined in the "Storage" section.
 - The following defaults are used
   - HubSpot deal type (`hubspot_deal_deal_type`): default value = `newbusiness`  
   - HubSpot deal pipeline (`hubspot_deal_pipeline`): default value = `default`  
   - HubSpot deal stage (`hubspot_deal_deal_stage`): default value = `closedwon`  
 - To change these fields, see the sub-sections below
 - You can add additional static data to `dealPostData` variable in the `out-create-hubspot-deal.js` script
-- If you wish to map additional order data to hubspot deal properties, you can add mappings to `shopify-hubspot-order-deal-map.js`
+- If you wish to map additional draft order data to hubspot deal properties, you can add mappings to `shopify-hubspot-draft-order-deal-map.js`
 
 
 ### Changing the HubSpot deal type
