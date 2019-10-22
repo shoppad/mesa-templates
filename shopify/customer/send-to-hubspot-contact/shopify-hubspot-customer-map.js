@@ -6,11 +6,11 @@ module.exports = {
     shopify: 'email',
     hubspot: 'email'
   },
-  firstname: {
+  first_name: {
     shopify: 'first_name',
     hubspot: 'firstname'
   },
-  lastname: {
+  last_name: {
     shopify: 'last_name',
     hubspot: 'lastname'
   },
