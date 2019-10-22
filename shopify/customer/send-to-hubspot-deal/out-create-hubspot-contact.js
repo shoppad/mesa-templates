@@ -6,8 +6,6 @@ const ShopifyHubSpotCustomerContactMap = require('./shopify-hubspot-customer-con
 
 module.exports = new (class {
   script = payload => {
-    Mesa.log.debug('out-create-hubspot-contact: payload', payload);
-
     const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
 
     // First create the contact

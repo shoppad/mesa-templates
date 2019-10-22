@@ -4,9 +4,9 @@ Send customer from Shopify to HubSpot Deal when customer is created.
 
 ---
 ## Setup
-1. To allow this automation to create HubSpot contacts, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. Instructions: https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key
+1. To allow this automation to create HubSpot data, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. Instructions: https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key
 2. Once you have the API key, go to the Mesa Dashboard, navigate to Automations > "Send Customer To HubSpot Deal"
-3. Under "Secrets", save the client ID as `hubspot.api`
+3. Under "Secrets", save the client ID as `hubspot.hapi`
 4. Enable the Automation by clicking the 'Enabled' switch on the right hand side beneath "Automation Details"
 5. Create a customer in your Shopify store, then check the Mesa logs and HubSpot
 
@@ -20,8 +20,8 @@ Send customer from Shopify to HubSpot Deal when customer is created.
 - This automation covers standard HubSpot contact fields. If your HubSpot contacts are setup with additional properties, you can map these additional fields by editing the `shopify-hubspot-customer-map.js` script
 - This automation creates a simple HubSpot deal, using data defined in the "Storage" section. There are defaults as follows:
   - HubSpot deal type (`hubspot_deal_deal_type`): default value = `newbusiness`  
-  - HubSpot deal type (`hubspot_deal_pipeline`): default value = `default`  
-  - HubSpot deal type (`hubspot_deal_deal_stage`): default value = `appointmentscheduled`  
+  - HubSpot deal pipeline (`hubspot_deal_pipeline`): default value = `default`  
+  - HubSpot deal stage (`hubspot_deal_deal_stage`): default value = `appointmentscheduled`  
 - To change these fields, see the sub-sections below
 - You can add additional static data to `dealPostData` variable in the `out-create-hubspot-deal.js` script
 - If you wish to map customer data to hubspot deal properties, you can add mappings to `shopify-hubspot-customer-deal-map.js`

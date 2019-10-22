@@ -11,16 +11,18 @@ module.exports = new (class {
     // Check if hubspot contact exists, pass ID to out-create-hubspot-deal if available
     const contactResponse = hubspot.getContactByEmail(payload.email);
 
-    Mesa.log.debug('HubSpot.getContactByEmail response', contactResponse);
-
+    // Check if a contact was found
     if (contactResponse.error || contactResponse.status === 'error') {
       if (
         !contactResponse.category ||
         contactResponse.category !== 'OBJECT_NOT_FOUND'
       ) {
+        // Error encountered, log error and stop execution
         hubspot.logError(contactResponse, 'finding', 'Contact');
         return;
-      } else if (
+      }
+      // Contact was not found with the provided email address, check deal should still be craeted
+      else if (
         Mesa.storage.get('hubspot_create_deal_without_contact') === 'true'
       ) {
         Mesa.log.info(
@@ -34,7 +36,7 @@ module.exports = new (class {
       }
     }
 
-    // Include additional data
+    // Include additional data in payload
     const additionalData = {
       dealname: `Shopify order ${payload.name}`,
       dealtype: Mesa.storage.get('hubspot_deal_deal_type'),
@@ -83,8 +85,8 @@ module.exports = new (class {
   /**
    * Wraps Hubspot.structureOutgoingHubSpotData() method by passing 'name' as the property value
    *
-   * @param payload
-   * @return
+   * @param {object} payload
+   * @return {object}
    */
   structureOutgoingHubSpotDataWithNameProperty = payload => {
     const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));

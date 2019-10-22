@@ -5,8 +5,6 @@ const Mapping = require('vendor/Mapping.js');
 
 module.exports = new (class {
   script = payload => {
-    Mesa.log.debug('out-create-hubspot-deal: payload', payload);
-
     const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
 
     // Initialize data for the hubspot deal

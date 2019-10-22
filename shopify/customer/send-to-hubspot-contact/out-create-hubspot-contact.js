@@ -5,8 +5,6 @@ const ShopifyHubSpotCustomerMap = require('./shopify-hubspot-customer-map.js');
 
 module.exports = new (class {
   script = payload => {
-    Mesa.log.debug('out-create-hubspot-contact: payload', payload);
-
     const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
 
     // Define processors for convert() - pass this.structureOutgoingHubSpotData method to postProcess to stucture data into HubSpot format

@@ -4,9 +4,9 @@ Send customer from Shopify to HubSpot Contact when customer is created.
 
 ---
 ## Setup
-1. To allow this automation to create HubSpot contacts, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. Instructions: https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key
+1. To allow this automation to create HubSpot data, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. Instructions: https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key
 2. Once you have the API key, go to the Mesa Dashboard, navigate to Automations > "Send Customer To HubSpot Contact"
-3. Under "Secrets", save the client ID as `hubspot.api`
+3. Under "Secrets", save the client ID as `hubspot.hapi`
 4. Enable the Automation by clicking the 'Enabled' switch on the right hand side beneath "Automation Details"
 5. Create a customer in your Shopify store, then check the Mesa logs and HubSpot. 
 
