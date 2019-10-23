@@ -1,1 +1,53 @@
-const Mesa = require('vendor/Mesa.js');const Shopify = require('vendor/Shopify.js');const Cloudinary = require('vendor/Cloudinary.js');/** * A Mesa Script exports a class with a script() method. */module.exports = new class {  /**   * Mesa Script   *   * @param {object} payload The payload data   * @param {object} context Additional context about this task   */  script = (payload, context) => {    let cloudinary = new Cloudinary(        Mesa.storage.get('cloudinary-cloudname'),        Mesa.secret.get('cloudinary-api-key'),        Mesa.secret.get('cloudinary-api-secret')    );    const response = cloudinary.upload(payload.images[0].src, {      colors: true    });    let colorArray = [];    for (let i = 0; i < response.predominant.cloudinary.length; i++) {      colorArray.push(response.predominant.cloudinary[i][0]);    }    const colorString = colorArray.join(',');    const product = Shopify.get('/admin/products/' + payload.id + '.json');    const tags = product.tags ? product.tags + "," + colorString : colorString;    const data = {      "product": {        "tags": tags      }    };    Mesa.output.done(data, { product_id: payload.id });  }}
+const Mesa = require("vendor/Mesa.js");
+const Shopify = require("vendor/Shopify.js");
+const Cloudinary = require("vendor/Cloudinary.js");
+
+/**
+ * A Mesa Script exports a class with a script() method.
+ */
+module.exports = new (class {
+  /**
+   * Mesa Script
+   *
+   * @param {object} payload The payload data
+   * @param {object} context Additional context about this task
+   */
+  script = (payload, context) => {
+    // Intiliazing Cloudinary
+    let cloudinary = new Cloudinary(
+      Mesa.storage.get("cloudinary-cloudname"),
+      Mesa.secret.get("cloudinary-api-key"),
+      Mesa.secret.get("cloudinary-api-secret")
+    );
+
+    // Getting all products tags
+    let tagsArray = payload.tags ? payload.tags.split(",") : [];
+
+    // Getting the most predominant colors.
+    const response = cloudinary.upload(payload.images[0].src, {
+      colors: true
+    });
+
+    // Get any colors
+    let colorArray = [];
+    for (let i = 0; i < response.predominant.cloudinary.length; i++) {
+      let color = response.predominant.cloudinary[i][0];
+      // Adding a new color
+      colorArray.push(color);
+      // Removing any duplicates colors
+      tagsArray.filter(tag => !tag.includes(color));
+    }
+
+    // Building tags strings
+    const tags = tagsArray.concat(colorArray).join(",");
+
+    // Bulding Shopify Payload.
+    const data = {
+      product: {
+        tags: tags
+      }
+    };
+    // Updating product tags.
+    Mesa.output.done(data, { product_id: payload.id });
+  };
+})();
