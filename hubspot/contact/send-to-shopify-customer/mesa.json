@@ -1,0 +1,59 @@
+{
+  "key": "shoppad/mesa-templates/hubspot/contact/send-to-shopify-customer",
+  "name": "Send Contact To Shopify Customer",
+  "version": "1.0.0",
+  "description": "Send contact from HubSpot to Shopify Customer when contact is created.",
+  "tags": [
+    "Customer"
+  ],
+  "source": "hubspot",
+  "destination": "shopify",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "custom",
+        "name": "Install",
+        "key": "install",
+        "script": "install.js"
+      },
+      {
+        "trigger_type": "input",
+        "type": "json_webhook",
+        "name": "HubSpot Contact create",
+        "key": "in-hubspot-contact-create",
+        "script": "in-hubspot-contact-create.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Create Shopify Customer",
+        "key": "out-create-shopify-customer",
+        "script": "out-create-shopify-customer.js",
+        "shopify_api": "POST admin/customers.json"
+      }
+    ],
+    "secrets": [ 
+      {
+        "key": "hubspot_hapi"
+      }
+    ],
+    "storage": [
+      {
+        "key": "hubspot-create-contact-workflow.json",
+        "value": "{\n   \"name\":\"Mesa Contact Created Workflow\",\n   \"type\":\"DRIP_DELAY\",\n   \"onlyEnrollsManually\":false,\n   \"actions\":[\n      {\n         \"type\":\"WEBHOOK\",\n         \"method\":\"POST\",\n         \"url\":\"{webhook_url}\"\n      }\n   ],\n   \"segmentCriteria\":[\n      [\n         {\n            \"filterFamily\":\"PropertyValue\",\n            \"withinTimeMode\":\"PAST\",\n            \"operator\":\"IS_NOT_EMPTY\",\n            \"property\":\"hs_object_id\",\n            \"type\":\"number\"\n         },\n         {\n            \"filterFamily\":\"PropertyValue\",\n            \"withinTimeMode\":\"PAST\",\n            \"operator\":\"NEQ\",\n            \"property\":\"hs_analytics_source_data_1\",\n            \"value\":\"API\",\n            \"type\":\"string\"\n         },\n         {\n            \"filterFamily\":\"PropertyValue\",\n            \"withinTimeMode\":\"PAST\",\n            \"operator\":\"CONTAINS\",\n            \"property\":\"email\",\n            \"value\":\"john_230+1@hotmail.com;john+hubspot\",\n            \"type\":\"string\"\n         }\n      ]\n   ],\n   \"reEnrollmentTriggerSets\":[\n\n   ],\n   \"enabled\":true\n}"
+      },
+      {
+        "key": "hubspot_workflow_created",
+        "value": "false"
+      },
+      {
+        "key": "hubspot-shopify-customer-mapping.json",
+        "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
+      }
+    ]
+  }
+}  

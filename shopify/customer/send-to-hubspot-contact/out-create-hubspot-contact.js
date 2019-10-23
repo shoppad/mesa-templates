@@ -27,7 +27,7 @@ module.exports = new (class {
 
     // Optional logging
     if (response.error) {
-      hubspot.logError(contactResponse, 'creating', 'Contact');
+      hubspot.logError(response, 'creating', 'Contact');
     } else {
       Mesa.log.info(
         'HubSpot contact created successfully with ID',
