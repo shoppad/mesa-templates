@@ -10,7 +10,7 @@ Print a file with a Google Cloud Print connected printer. Triggered from a call 
 - Select the printer, click the `Details` button and copy the Printer ID (it will look something like `71818594-c69f-fec2-3868-3b14d9459835`)
 - Go to the Automation in the Mesa Dashboard
 - Paste the Printer ID value as the value of the `printerid` Storage item.
-- Go to http://www.theshoppad.com/apps/mesa/oauth/google-mesa/mesa-templates/mesa/file/send-to-google-cloudprint?scope=https://www.googleapis.com/auth/cloudprint to obtain a Google oAuth token
+- Go to http://www.theshoppad.com/apps/mesa/oauth/google-mesa/shoppad/mesa-templates/mesa/file/send-to-google-cloudprint?scope=https://www.googleapis.com/auth/cloudprint to obtain a Google oAuth token
 - Optionally edit the `google-cloudprint-ticket.json` Storage item to define paper dimensions and other print settings. See https://developers.google.com/cloud-print/docs/cdd#cjt for more details.
 
 ## How to use this Automation
