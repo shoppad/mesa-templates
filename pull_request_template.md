@@ -23,7 +23,5 @@ QA
 
 
 #### Deploy checklist
-- [ ] 
-
-
-
+- [ ] Squash and merge PR
+- [ ] Add template key to https://homeroom.theshoppad.com/admin/#/mesa-templates
