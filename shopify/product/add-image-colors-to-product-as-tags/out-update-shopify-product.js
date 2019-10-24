@@ -20,8 +20,12 @@ module.exports = new (class {
       Mesa.secret.get("cloudinary-api-secret")
     );
 
+    // Get the most updated tags.
+    const productTags = Shopify.get(`/admin/products/${payload.id}.json`)
+      .product.tags;
+
     // Getting all products tags
-    let tagsArray = payload.tags ? payload.tags.split(",") : [];
+    let tagsArray = productTags ? productTags.split(",") : [];
 
     // Getting the most predominant colors.
     const response = cloudinary.upload(payload.images[0].src, {
