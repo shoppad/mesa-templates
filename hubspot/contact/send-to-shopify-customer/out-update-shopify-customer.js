@@ -1,6 +1,6 @@
 const Mesa = require('vendor/Mesa.js');
 const Mapping = require('vendor/Mapping.js');
-const HubspotShopifyCustomerMap = require('hubspot-shopify-customer-map.js');
+const Hubspot = require('vendor/Hubspot.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
@@ -15,44 +15,44 @@ module.exports = new (class {
     // Decode payload
     Mesa.log.debug('payload', payload);
 
+    const hubspot = new Hubspot('hapi_key');
+
     // Define processors for convert()
     const processors = {
-      preProcess: [this.flattenHubspotProperties],
+      preProcess: [hubspot.flattenHubspotProperties],
       process: [],
       postProcess: [this.wrapCustomerOutput]
     };
 
+    const hubspotShopifyCustomerMap = JSON.parse(
+      Mesa.storage.get('hubspot-shopify-update-customer-mapping.json')
+    );
+
+    Mesa.log.debug(
+      'HubSpot to Shopify Customer mapping',
+      hubspotShopifyCustomerMap
+    );
+
     // Convert to Shopify contact
     const shopifyPayload = Mapping.convert(
-      HubspotShopifyCustomerMap,
+      hubspotShopifyCustomerMap,
       payload,
       'hubspot',
       'shopify',
       processors
     );
 
+    Mesa.log.debug('Shopify update customer payload', shopifyPayload);
+
     // Post
-    Mesa.output.done(shopifyPayload);
+    Mesa.output.done(shopifyPayload, {
+      customer_id: payload.shopify_customer_id
+    });
   };
 
   //
   // Processor functions, these are called from the Mapping utility's convert() method
   //
-  /**
-   * Flatten hubspot data
-   */
-  flattenHubspotProperties = payload => {
-    let data = {};
-
-    if (payload.properties) {
-      Object.keys(payload.properties).forEach(key => {
-        data[key] = payload.properties[key].value;
-      });
-    }
-
-    return data;
-  };
-
   /**
    * Wrap customer output for Shopify
    */

@@ -2,11 +2,10 @@ const Mesa = require('vendor/Mesa.js');
 const Hubspot = require('vendor/Hubspot.js');
 const Mapping = require('vendor/Mapping.js');
 const ShopifyHubSpotCustomerContactMap = require('./shopify-hubspot-customer-contact-map.js');
-// const ShopifyHubSpotCustomerDealMap = require('./shopify-hubspot-customer-deal-map.js');
 
 module.exports = new (class {
   script = payload => {
-    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
+    const hubspot = new Hubspot(Mesa.secret.get('hubspot-hapi'));
 
     // First create the contact
 
@@ -17,16 +16,22 @@ module.exports = new (class {
       postProcess: [hubspot.structureOutgoingHubSpotData]
     };
 
+    const shopifyHubSpotCustomerContactMap = JSON.parse(
+      Mesa.storage.get('shopify-hubspot-customer-contact-mapping.json')
+    );
+
     // Map Shopify customer data to HubSpot data
-    const customerPostData = Mapping.convert(
-      ShopifyHubSpotCustomerContactMap,
+    const postData = Mapping.convert(
+      shopifyHubSpotCustomerContactMap,
       payload,
       'shopify',
       'hubspot',
       processors
     );
 
-    const contactResponse = hubspot.createContact(customerPostData);
+    Mesa.log.debug('HubSpot contact payload', postData);
+
+    const contactResponse = hubspot.createContact(postData);
 
     let contactId = 0;
     // Optional logging

@@ -1,12 +1,10 @@
 const Mesa = require('vendor/Mesa.js');
 const Hubspot = require('vendor/Hubspot.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifyHubSpotDraftOrderDealMap = require('./shopify-hubspot-draft-order-deal-map.js');
-// const ShopifyHubSpotCustomerDealMap = require('./shopify-hubspot-customer-deal-map.js');
 
 module.exports = new (class {
   script = payload => {
-    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
+    const hubspot = new Hubspot(Mesa.secret.get('hubspot-hapi'));
 
     // Check if hubspot contact exists, pass ID to out-create-hubspot-deal if available
     const contactResponse = hubspot.getContactByEmail(payload.email);
@@ -23,14 +21,14 @@ module.exports = new (class {
       }
       // Contact was not found with the provided email address, check deal should still be craeted
       else if (
-        Mesa.storage.get('hubspot_create_deal_without_contact') === 'true'
+        Mesa.storage.get('hubspot-create-deal-without-contact') === 'true'
       ) {
         Mesa.log.info(
-          `No contact found for email ${payload.email}, hubspot_create_deal_without_contact is true, will create deal without contact`
+          `No contact found for email ${payload.email}, hubspot-create-deal-without-contact is true, will create deal without contact`
         );
       } else {
         Mesa.log.error(
-          `No contact found for email ${payload.email}, hubspot_create_deal_without_contact is not true, will not create deal`
+          `No contact found for email ${payload.email}, hubspot-create-deal-without-contact is not true, will not create deal`
         );
         return;
       }
@@ -39,9 +37,9 @@ module.exports = new (class {
     // Include additional data in payload
     const additionalData = {
       dealname: `Shopify draft order ${payload.name}`,
-      dealtype: Mesa.storage.get('hubspot_deal_deal_type'),
-      pipeline: Mesa.storage.get('hubspot_deal_pipeline'),
-      dealstage: Mesa.storage.get('hubspot_deal_deal_stage')
+      dealtype: Mesa.storage.get('hubspot-deal-type'),
+      pipeline: Mesa.storage.get('hubspot-deal-pipeline'),
+      dealstage: Mesa.storage.get('hubspot-deal-stage')
     };
 
     payload = { ...payload, ...additionalData };
@@ -52,9 +50,13 @@ module.exports = new (class {
       postProcess: [this.structureOutgoingHubSpotDataWithNameProperty]
     };
 
+    const shopifyHubSpotDraftOrderDealMap = JSON.parse(
+      Mesa.storage.get('shopify-hubspot-draft-order-mapping.json')
+    );
+
     // Map Shopify order data to HubSpot data
-    const dealPostData = Mapping.convert(
-      ShopifyHubSpotDraftOrderDealMap,
+    const postData = Mapping.convert(
+      shopifyHubSpotDraftOrderDealMap,
       payload,
       'shopify',
       'hubspot',
@@ -63,13 +65,15 @@ module.exports = new (class {
 
     // Add contact ID if available
     if (contactResponse.vid) {
-      dealPostData.associations = {
+      postData.associations = {
         associatedVids: [contactResponse.vid]
       };
     }
 
+    Mesa.log.debug('HubSpot deal payload', postData);
+
     // Now create the deal
-    const dealResponse = hubspot.createDeal(dealPostData);
+    const dealResponse = hubspot.createDeal(postData);
 
     // Optional logging
     if (dealResponse.error) {
@@ -89,7 +93,7 @@ module.exports = new (class {
    * @return {object}
    */
   structureOutgoingHubSpotDataWithNameProperty = payload => {
-    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
+    const hubspot = new Hubspot(Mesa.secret.get('hubspot-hapi'));
     return hubspot.structureOutgoingHubSpotData(payload, 'name');
   };
 })();

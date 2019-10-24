@@ -13,20 +13,35 @@
     "inputs": [
       {
         "trigger_type": "input",
-        "type": "custom",
-        "name": "Install",
-        "key": "install",
-        "script": "install.js"
+        "type": "json_webhook",
+        "name": "HubSpot Contact Create",
+        "key": "in-hubspot-contact-create",
+        "script": "in-hubspot-contact-create.js"
       },
       {
         "trigger_type": "input",
         "type": "json_webhook",
-        "name": "HubSpot Contact create",
-        "key": "in-hubspot-contact-create",
-        "script": "in-hubspot-contact-create.js"
+        "name": "HubSpot Contact Update",
+        "key": "in-hubspot-contact-update",
+        "script": "in-hubspot-contact-update.js"
+      },
+      {
+        "trigger_type": "input",
+        "type": "custom",
+        "name": "Install",
+        "key": "install",
+        "script": "install.js"
       }
     ],
     "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Check for Existing Shopify Customer",
+        "key": "out-check-for-existing-shopify-customer",
+        "script": "out-check-for-existing-shopify-customer.js",
+        "shopify_api": "POST admin/customers.json"
+      },
       {
         "trigger_type": "output",
         "type": "shopify_api",
@@ -34,24 +49,36 @@
         "key": "out-create-shopify-customer",
         "script": "out-create-shopify-customer.js",
         "shopify_api": "POST admin/customers.json"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Update Shopify Customer",
+        "key": "out-update-shopify-customer",
+        "script": "out-update-shopify-customer.js",
+        "shopify_api": "PUT admin/customers/{{customer_id}}.json"
       }
     ],
     "secrets": [ 
       {
-        "key": "hubspot_hapi"
+        "key": "hubspot-hapi"
       }
     ],
     "storage": [
       {
-        "key": "hubspot-create-contact-workflow.json",
-        "value": "{\n   \"name\":\"Mesa Contact Created Workflow\",\n   \"type\":\"DRIP_DELAY\",\n   \"onlyEnrollsManually\":false,\n   \"actions\":[\n      {\n         \"type\":\"WEBHOOK\",\n         \"method\":\"POST\",\n         \"url\":\"{webhook_url}\"\n      }\n   ],\n   \"segmentCriteria\":[\n      [\n         {\n            \"filterFamily\":\"PropertyValue\",\n            \"withinTimeMode\":\"PAST\",\n            \"operator\":\"IS_NOT_EMPTY\",\n            \"property\":\"hs_object_id\",\n            \"type\":\"number\"\n         },\n         {\n            \"filterFamily\":\"PropertyValue\",\n            \"withinTimeMode\":\"PAST\",\n            \"operator\":\"NEQ\",\n            \"property\":\"hs_analytics_source_data_1\",\n            \"value\":\"API\",\n            \"type\":\"string\"\n         },\n         {\n            \"filterFamily\":\"PropertyValue\",\n            \"withinTimeMode\":\"PAST\",\n            \"operator\":\"CONTAINS\",\n            \"property\":\"email\",\n            \"value\":\"john_230+1@hotmail.com;john+hubspot\",\n            \"type\":\"string\"\n         }\n      ]\n   ],\n   \"reEnrollmentTriggerSets\":[\n\n   ],\n   \"enabled\":true\n}"
-      },
-      {
-        "key": "hubspot_workflow_created",
+        "key": "hubspot-create-contact-workflow-created",
         "value": "false"
       },
       {
-        "key": "hubspot-shopify-customer-mapping.json",
+        "key": "hubspot-update-contact-workflow-created",
+        "value": "false"
+      },
+      {
+        "key": "hubspot-shopify-create-customer-mapping.json",
+        "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
+      },
+      {
+        "key": "hubspot-shopify-update-customer-mapping.json",
         "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
       }
     ]

@@ -11,6 +11,6 @@ module.exports = new (class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    Mesa.output.send('out-update-shopify-customer', payload);
+    Mesa.output.send('out-check-for-existing-shopify-customer', payload);
   };
 })();

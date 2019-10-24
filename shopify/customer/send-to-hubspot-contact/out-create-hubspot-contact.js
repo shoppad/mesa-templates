@@ -1,11 +1,10 @@
 const Mesa = require('vendor/Mesa.js');
 const Hubspot = require('vendor/Hubspot.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifyHubSpotCustomerMap = require('./shopify-hubspot-customer-map.js');
 
 module.exports = new (class {
   script = payload => {
-    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
+    const hubspot = new Hubspot(Mesa.secret.get('hubspot-hapi'));
 
     // Define processors for convert() - pass this.structureOutgoingHubSpotData method to postProcess to stucture data into HubSpot format
     const processors = {
@@ -14,14 +13,20 @@ module.exports = new (class {
       postProcess: [hubspot.structureOutgoingHubSpotData]
     };
 
+    const hubspotShopifyCustomerMap = JSON.parse(
+      Mesa.storage.get('hubspot-shopify-create-customer-mapping.json')
+    );
+
     // Map Shopify customer data to HubSpot data
     const postData = Mapping.convert(
-      ShopifyHubSpotCustomerMap,
+      hubspotShopifyCustomerMap,
       payload,
       'shopify',
       'hubspot',
       processors
     );
+
+    Mesa.log.debug('HubSpot contact payload', postData);
 
     const response = hubspot.createContact(postData);
 

@@ -29,25 +29,29 @@
     ],
     "storage": [
       {
-        "key": "hubspot_deal_deal_type",
+        "key": "hubspot-deal-type",
         "value": "newbusiness"
       },
       {
-        "key": "hubspot_deal_pipeline",
+        "key": "hubspot-deal-pipeline",
         "value": "default"
       },
       {
-        "key": "hubspot_deal_deal_stage",
+        "key": "hubspot-deal-stage",
         "value": "closedwon"
       },
       {
-        "key": "hubspot_create_deal_without_contact",
+        "key": "hubspot-create-deal-without-contact",
         "value": "true"
+      }
+      {
+        "key":"shopify-hubspot-order-mapping.json",
+        "value": "{\n  \"dealname\": {\n    \"shopify\": \"dealname\",\n    \"hubspot\": \"dealname\"\n  },\n  \"dealtype\": {\n    \"shopify\": \"dealtype\",\n    \"hubspot\": \"dealtype\"\n  },\n  \"pipeline\": {\n    \"shopify\": \"pipeline,\n    \"hubspot\": \"pipeline\"\n  },\n  \"dealstage\": {\n    \"shopify\": \"dealstage\",\n    \"hubspot\": \"dealstage\"\n  },\n  \"total_price\": {\n    \"shopify\": \"total_price\",\n    \"hubspot\": \"amount\"\n  }, \n  \"created_at\": {\n    \"shopify\": \"created_at\",\n    \"hubspot\": \"closedate\"\n  }\n}"
       }
     ],
     "secrets": [
       {
-        "key": "hubspot.hapi"
+        "key": "hubspot-hapi"
       }
     ]
   }

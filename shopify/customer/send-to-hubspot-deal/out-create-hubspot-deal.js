@@ -3,25 +3,25 @@ const Hubspot = require('vendor/Hubspot.js');
 
 module.exports = new (class {
   script = payload => {
-    const hubspot = new Hubspot(Mesa.secret.get('hubspot.hapi'));
+    const hubspot = new Hubspot(Mesa.secret.get('hubspot-hapi'));
 
     // Initialize data for the hubspot deal
-    let dealPostData = {
+    let postData = {
       dealname: `${payload.first_name} ${payload.last_name}'s deal`,
-      dealtype: Mesa.storage.get('hubspot_deal_deal_type'),
-      pipeline: Mesa.storage.get('hubspot_deal_pipeline'),
-      dealstage: Mesa.storage.get('hubspot_deal_deal_stage')
+      dealtype: Mesa.storage.get('hubspot-deal-type'),
+      pipeline: Mesa.storage.get('hubspot-deal-pipeline'),
+      dealstage: Mesa.storage.get('hubspot-deal-stage')
     };
 
-    dealPostData = hubspot.structureOutgoingHubSpotData(dealPostData, 'name');
+    postData = hubspot.structureOutgoingHubSpotData(postData, 'name');
 
-    dealPostData.associations = {
+    postData.associations = {
       associatedVids: [payload.contact_id]
     };
 
-    Mesa.log.debug('deal params', dealPostData);
+    Mesa.log.debug('HubSpot deal payload', postData);
 
-    const dealResponse = hubspot.createDeal(dealPostData);
+    const dealResponse = hubspot.createDeal(postData);
 
     // Optional logging
     if (dealResponse.error) {

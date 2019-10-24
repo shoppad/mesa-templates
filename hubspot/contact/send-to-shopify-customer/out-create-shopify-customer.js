@@ -25,7 +25,7 @@ module.exports = new (class {
     };
 
     const hubspotShopifyCustomerMap = JSON.parse(
-      Mesa.storage.get('hubspot-shopify-customer-mapping.json')
+      Mesa.storage.get('hubspot-shopify-create-customer-mapping.json')
     );
 
     Mesa.log.debug(
@@ -42,7 +42,7 @@ module.exports = new (class {
       processors
     );
 
-    Mesa.log.debug('Shopify customer payload', shopifyPayload);
+    Mesa.log.debug('Shopify create customer payload', shopifyPayload);
 
     // Post
     Mesa.output.done(shopifyPayload);
