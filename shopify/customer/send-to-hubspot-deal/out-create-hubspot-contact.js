@@ -1,7 +1,6 @@
 const Mesa = require('vendor/Mesa.js');
 const Hubspot = require('vendor/Hubspot.js');
 const Mapping = require('vendor/Mapping.js');
-const ShopifyHubSpotCustomerContactMap = require('./shopify-hubspot-customer-contact-map.js');
 
 module.exports = new (class {
   script = payload => {

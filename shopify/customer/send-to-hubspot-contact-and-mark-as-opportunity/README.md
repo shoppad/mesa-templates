@@ -18,9 +18,9 @@ Send customer from Shopify to HubSpot Contact and mark as opportunity when custo
 - More details on lifecycle stages can be found here: https://knowledge.hubspot.com/contacts/use-lifecycle-stages. API values can be found here, under "Optional Parameters": https://developers.hubspot.com/docs/methods/contacts/update_contact.
 
 ### Additional data
-- This automation covers standard HubSpot contact fields. If your HubSpot contacts are setup with additional properties, you can map these additional fields by editing the `shopify-hubspot-customer-map.js` script.
+- This automation covers standard HubSpot contact fields. If your HubSpot contacts are setup with additional properties, you can map these additional fields by editing the `shopify-hubspot-customer-mapping.json` storage item.
 - This script will only create a contact. If you wish to also update the contact if it exists (based on the email address), do the following:
-  - Remove the mapping for `email` in `shopify-hubspot-customer-map.js`
+  - Remove the mapping for `email` in `shopify-hubspot-customer-mapping.json`
   - Locate the line containing `const response = hubspot.createContact(postData);`
   - Replace this with `const response = hubspot.createOrUpdateContact(postData, payload.email);`
   - For accurate logs, you may also wish to update the text which is logged when the response is successful (`'HubSpot contact created successfully with ID'`)
