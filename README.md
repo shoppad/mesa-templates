@@ -41,8 +41,9 @@ Update Shopify product with the contents of a spreadsheet
 
 ### README.md
 
-- Bulleted setup instructions, including links where possible
-- Use bullets (not numbers)
-- Every bullet should end in a period
-- Links should be proper links (`[description](http://myurl.com)` -- not just a url) where possible
-- Additional Customization/ways to extend the automation
+- `Setup`: Bulleted setup instructions, including links where possible
+  - Use bullets (not numbers)
+  - Every bullet should end in a period
+  - Links should be proper links (`[description](http://myurl.com)` -- not just a url) where possible
+- `Optional Customizations`: ways to edit Scripts/Secrets to extend functionality
+- `Additional Notes`
