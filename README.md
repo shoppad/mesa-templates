@@ -41,7 +41,6 @@ Update Shopify product with the contents of a spreadsheet
 
 ### README.md
 
-- Include template name & description (same as in mesa.json)
-- Mesa "Get Template" button
-- Numbered setup instructions
-- Misc. development notes
+- Bulleted setup instructions, including links where possible
+- Additional Customization/ways to extend the automation
+- Use bullets (not numbers)
