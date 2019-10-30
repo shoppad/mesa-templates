@@ -3,6 +3,7 @@
   "name": "Add Image Colors to Product as Tags",
   "version": "1.0.0",
   "description": "Add the predominant colors from the product image as tags to a product when the product is created or updated.",
+  "video": "b2d2ae0j9w",
   "tags": ["Product"],
   "source": "shopify",
   "destination": "shopify",
