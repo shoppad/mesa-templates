@@ -1,6 +1,6 @@
 {
   "key": "shoppad/mesa-templates/shopify/customer/send-to-hubspot-contact",
-  "name": "Send Customer To HubSpot Contact",
+  "name": "Send Shopify Customer To HubSpot Contact",
   "version": "1.0.0",
   "description": "Send customer from Shopify to HubSpot Contact when customer is created.",
   "tags": ["Customer"],
