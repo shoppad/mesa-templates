@@ -1,6 +1,6 @@
 {
   "key": "shoppad/mesa-templates/shopify/customer/send-to-hubspot-deal",
-  "name": "Send Customer To HubSpot Deal",
+  "name": "Send Shopify Customer To HubSpot Deal",
   "version": "1.0.0",
   "description": "Send Shopify Customer from Shopify to HubSpot Deal when customer is created.",
   "tags": ["Customer"],
@@ -40,7 +40,7 @@
         "value": "newbusiness"
       },
       {
-        "key": "hubspot-deal-pipeline",
+        "key": "hubspot-deal-pipeline", 
         "value": "default"
       },
       {
@@ -48,11 +48,11 @@
         "value": "appointmentscheduled"
       },
       {
-        "key": "shopify-hubspot-customer-contact-mapping.json",
+        "key": "customer-contact-mapping.json",
         "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
       },
       {
-        "key": "shopify-hubspot-customer-deal-mapping.json",
+        "key": "customer-deal-mapping.json",
         "value": "{}"
       }
     ],

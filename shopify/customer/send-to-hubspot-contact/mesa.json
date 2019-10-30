@@ -34,7 +34,7 @@
     ],
     "storage": [
       {
-        "key": "shopify-hubspot-customer-mapping.json",
+        "key": "customer-mapping.json",
         "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
       }
     ]

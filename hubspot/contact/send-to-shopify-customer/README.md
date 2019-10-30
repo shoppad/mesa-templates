@@ -14,7 +14,7 @@ Send contact from HubSpot to Shopify Customer when contact is created or updated
 - Once you create a HubSpot contact, you should start receiving data within a few minutes.  
 
 ## Optional Customizations
-- You may map additional fields from HubSpot to Shopify by editing the `hubspot-shopify-create-customer-mapping.json` and / or `hubspot-shopify-update-customer-mapping.json` data under "Storage".
+- You may map additional fields from HubSpot to Shopify by editing the `create-customer-mapping.json` Storage item.
 
 ## Additional Notes
 - If a HubSpot contact's email is changed, this will create a new customer in Shopify.

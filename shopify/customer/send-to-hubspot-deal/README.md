@@ -3,28 +3,28 @@
 Send customer from Shopify to HubSpot Deal when customer is created.
 
 ---
+
 ## Setup
-- To allow this automation to create HubSpot data, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. Instructions: https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key
-- Once you have the API key, go to the Mesa Dashboard, navigate to Automations > "Send Customer To HubSpot Deal"
+- To allow this automation to access HubSpot, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. [Instructions](https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key).
 - Under "Secrets", save the client ID as `hubspot-hapi`
-- Enable the Automation by clicking the 'Enabled' switch on the right hand side beneath "Automation Details"
+- Enable the Automation in the right sidebar and click Save.
 - Create a customer in your Shopify store, then check the Mesa logs and HubSpot
 
-## Additional information
+## Additional Notes
 1. This automation will attempt to create a contact first
    - If the contact does not exist, contact will be created, and the contact ID will be used  
    - If the contact already exists, the automation will take the ID of the existing contact  
 2. Automation will then create the deal using the contact ID from step 1
 
 ## Optional Customizations
-- This automation covers standard HubSpot contact fields. If your HubSpot contacts are setup with additional properties, you can map these additional fields by editing the `shopify-hubspot-customer-contact-mapping.json` storage item
+- This automation covers standard HubSpot contact fields. If your HubSpot contacts are setup with additional properties, you can map these additional fields by editing the `customer-contact-mapping.json` storage item
 - This automation creates a simple HubSpot deal, using data defined in the "Storage" section. There are defaults as follows:
   - HubSpot deal type (`hubspot-deal-type`): default value = `newbusiness`  
   - HubSpot deal pipeline (`hubspot-deal-pipeline`): default value = `default`  
   - HubSpot deal stage (`hubspot-deal-stage`): default value = `appointmentscheduled`  
 - To change these fields, see the sub-sections below
 - You can add additional static data to `dealPostData` variable in the `out-create-hubspot-deal.js` script
-- If you wish to map customer data to hubspot deal properties, you can add mappings to `shopify-hubspot-customer-deal-mapping.json` storage item
+- If you wish to map customer data to hubspot deal properties, you can add mappings to `customer-deal-mapping.json` storage item
 
 ### Changing the HubSpot deal type
 - To find your available HubSpot deal types, log into HubSpot, navigate to Settings (gear icon in top right corner, you may need admin privileges for this)

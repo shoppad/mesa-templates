@@ -17,7 +17,7 @@ module.exports = new (class {
     payload.lifecyclestage = Mesa.storage.get('hubspot-lifecycle-stage');
 
     const hubspotShopifyCustomerMap = JSON.parse(
-      Mesa.storage.get('shopify-hubspot-customer-mapping.json')
+      Mesa.storage.get('customer-mapping.json')
     );
 
     // Map Shopify customer data to HubSpot data

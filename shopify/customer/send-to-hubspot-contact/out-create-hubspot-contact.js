@@ -14,7 +14,7 @@ module.exports = new (class {
     };
 
     const hubspotShopifyCustomerMap = JSON.parse(
-      Mesa.storage.get('shopify-hubspot-customer-mapping.json')
+      Mesa.storage.get('customer-mapping.json')
     );
 
     // Map Shopify customer data to HubSpot data
