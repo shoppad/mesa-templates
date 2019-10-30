@@ -34,7 +34,7 @@ Update Shopify product with the contents of a spreadsheet
 > See [JSON schema definition](https://docs.google.com/document/d/1uXo0gcmSyrI3nq1n8YDWyqTBaffUI1HSSupfWZNI6CU)
 
 - Name: Should generally come from the `key` (see File naming conventions above).
-- Description: A more verbose version of the name. Always ends in a period.
+- Description: A more verbose version of the name. Always ends in a period. Shopify objects (Order, Customer, etc) should be proper-case.
 - Tags: Singular, with Proper Case (`Order`). Only use existing tags (see left sidebar of getmesa.com).
 - Source and Destination: Be as specific as possible. Lowercase, separated with dashes. Ex: `shopify-flow`, `google-sheets`.
 - Enabled: If Automation does not require any configuration (Add tags to Shopify order, etc), set to `true`. Otherwise set to `false`.
