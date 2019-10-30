@@ -51,7 +51,7 @@ module.exports = new (class {
     };
 
     const shopifyHubSpotDraftOrderDealMap = JSON.parse(
-      Mesa.storage.get('shopify-hubspot-draft-order-mapping.json')
+      Mesa.storage.get('draft-order-mapping.json')
     );
 
     // Map Shopify order data to HubSpot data
