@@ -1,26 +1,19 @@
-# Send Slack notification for unfulfilled orders
-Checks orders and sends a Slack notification if order is not fulfilled after a set period of time.
-
----
-
 ## Setup
+- [Create a connected app in Slack](https://api.slack.com/apps/new).
+- Enable **Incoming Webhooks** from the settings page.
+- Click **Add New Webhook to Workspace**.
+- Select a channel that the app will post to and click Authorize. 
+- Click **Copy** near your Webhook URL and paste the value as a Secret, with the key as "slack-webhook-url."
+- Save the slack channel name you wish to use (for example "#unfulfilled-orders") as a Storage item, with the key as "slack-channel."
+- Enable the automation. 
 
-### Slack Setup
-- Install per the link above
-- If you haven't done so previously, you will need to create a connected app in Slack (follow [these steps](https://developers.getmesa.com/libraries/Slack-1.0.0.html))
-- Open up Mesa, then navigate to the Automations tab and locate this Automation
-- Save the incoming Webhook URL as a secret, with the key being "slack-webhook-url"
-- Save the slack channel name you wish to use (for example "#unfulfilled-orders"), with the key being "slack-channel"
+## Optional Configuration
+Changing the date range for unfulfilled orders
+- By default, orders that are 7 days or older will be sent to Slack if unfulfilled. 
+- To change this, find **Orders Virtual Output** under Outputs.
+- Under **Advanced**, change the parameters to when you woud like the orders to be checked for fulfillment.
+- For example, to check for orders that are more than 3 days old, but no older than 1 month, type "limit=-1&created_at_min={date:1 month ago},created_at_max={date:3 days ago}". Further information on proper date syntax can be found under [Virtual Outputs](https://docs.getmesa.com/article/597-outputs#output4).
 
-### Optional Configuration
-#### Changing the date range for unfulfilled orders
-- By default, orders only 7 days or older will be sent to Slack if unfulfilled. 
-- To change this, find Orders Virtual Output
-- Under advanced, change the parameters to filter when orders should be checked for fulfillment
-- For instance, to check for orders at least 3 days old, but no older than 1 month, type "limit=-1&created_at_min={date:1 month ago},created_at_max={date:3 days ago}". Further details on date syntax can be found under [Virtual Outputs](https://docs.getmesa.com/article/597-outputs#output4)
-#### Slack message formatting
-- Under Scripts you'll find the file `out-send-slack-notification.js`. By default this script will send a richly formatted Slack notification with buttons and text formatting. 
-- If you prefer a simple Slack message, you can comment out the code in the block "BEGIN Comprehensive Slack request" and uncomment code under "BEGIN Simple slack request (uncomment code below to enable)"
-
-## Developing 
-[Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
+## Slack message formatting
+- Under Scripts you'll find the file `out-send-slack-notification.js`. By default this script will send a [richly formatted Slack notification](https://api.slack.com/docs/message-formatting#message_formatting) with buttons and text formatting. 
+- If you prefer a simple Slack message, you can click on the **out-send-slack-notifications.js** file. Comment out the code in the block "BEGIN Comprehensive Slack request" and uncomment the code under "BEGIN Simple slack request (uncomment code below to enable)".
