@@ -1,0 +1,86 @@
+{
+  "key": "shoppad/mesa-templates/hubspot/contact/send-to-shopify-customer",
+  "name": "Send HubSpot Contact To Shopify Customer",
+  "version": "1.0.0",
+  "description": "Send contact from HubSpot to Shopify Customer when contact is created.",
+  "tags": [
+    "Customer"
+  ],
+  "source": "hubspot",
+  "destination": "shopify",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "json_webhook",
+        "name": "HubSpot Contact Create",
+        "key": "in-hubspot-contact-create",
+        "script": "in-hubspot-contact-create.js"
+      },
+      {
+        "trigger_type": "input",
+        "type": "json_webhook",
+        "name": "HubSpot Contact Update",
+        "key": "in-hubspot-contact-update",
+        "script": "in-hubspot-contact-update.js"
+      },
+      {
+        "trigger_type": "input",
+        "type": "custom",
+        "name": "Install",
+        "key": "install",
+        "script": "install.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Check for Existing Shopify Customer",
+        "key": "out-check-for-existing-shopify-customer",
+        "script": "out-check-for-existing-shopify-customer.js",
+        "shopify_api": "POST admin/customers.json"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Create Shopify Customer",
+        "key": "out-create-shopify-customer",
+        "script": "out-create-shopify-customer.js",
+        "shopify_api": "POST admin/customers.json"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Update Shopify Customer",
+        "key": "out-update-shopify-customer",
+        "script": "out-update-shopify-customer.js",
+        "shopify_api": "PUT admin/customers/{{customer_id}}.json"
+      }
+    ],
+    "secrets": [ 
+      {
+        "key": "hubspot-hapi"
+      }
+    ],
+    "storage": [
+      {
+        "key": "hubspot-create-contact-workflow-created",
+        "value": "false"
+      },
+      {
+        "key": "hubspot-update-contact-workflow-created",
+        "value": "false"
+      },
+      {
+        "key": "create-customer-mapping.json",
+        "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
+      },
+      {
+        "key": "update-customer-mapping.json",
+        "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
+      }
+    ]
+  }
+}  

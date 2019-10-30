@@ -1,0 +1,58 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send-to-hubspot-deal",
+  "name": "Send Order To HubSpot Deal",
+  "version": "1.0.0",
+  "description": "Send order from Shopify to HubSpot Deal when order is created.",
+  "tags": ["Order"],
+  "source": "shopify",
+  "destination": "hubspot",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Create",
+        "key": "in-shopify-order-create",
+        "script": "in-shopify-order-create.js",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Hubspot Deal",
+        "key": "out-create-hubspot-deal",
+        "script": "out-create-hubspot-deal.js"
+      }
+    ],
+    "storage": [
+      {
+        "key": "hubspot-deal-type",
+        "value": "newbusiness"
+      },
+      {
+        "key": "hubspot-deal-pipeline",
+        "value": "default"
+      },
+      {
+        "key": "hubspot-deal-stage",
+        "value": "closedwon"
+      },
+      {
+        "key": "hubspot-create-deal-without-contact",
+        "value": "true"
+      },
+      {
+        "key":"shopify-hubspot-order-mapping.json",
+        "value": "{\n  \"dealname\": {\n    \"shopify\": \"dealname\",\n    \"hubspot\": \"dealname\"\n  },\n  \"dealtype\": {\n    \"shopify\": \"dealtype\",\n    \"hubspot\": \"dealtype\"\n  },\n  \"pipeline\": {\n    \"shopify\": \"pipeline\",\n    \"hubspot\": \"pipeline\"\n  },\n  \"dealstage\": {\n    \"shopify\": \"dealstage\",\n    \"hubspot\": \"dealstage\"\n  },\n  \"total_price\": {\n    \"shopify\": \"total_price\",\n    \"hubspot\": \"amount\"\n  }, \n  \"created_at\": {\n    \"shopify\": \"created_at\",\n    \"hubspot\": \"closedate\"\n  }\n}"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "hubspot-hapi"
+      }
+    ]
+  }
+}

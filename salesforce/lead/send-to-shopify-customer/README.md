@@ -3,6 +3,7 @@
 Send contact from Salesforce to Shopify customer when lead converts.
 
 ---
+
 ## Setup
 
 ### Connect to Salesforce with an oAuth refresh token (recommended):

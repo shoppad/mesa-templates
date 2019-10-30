@@ -1,0 +1,65 @@
+{
+  "key": "shoppad/mesa-templates/shopify/customer/send-to-hubspot-deal",
+  "name": "Send Shopify Customer To HubSpot Deal",
+  "version": "1.0.0",
+  "description": "Send Shopify Customer from Shopify to HubSpot Deal when customer is created.",
+  "tags": ["Customer"],
+  "source": "shopify",
+  "destination": "hubspot",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Customer Create",
+        "key": "in-shopify-customer-create",
+        "script": "in-shopify-customer-create.js",
+        "topic": "customers/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Hubspot Contact",
+        "key": "out-create-hubspot-contact",
+        "script": "out-create-hubspot-contact.js"
+      },
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Hubspot Deal",
+        "key": "out-create-hubspot-deal",
+        "script": "out-create-hubspot-deal.js"
+      }
+    ],
+    "storage": [
+      {
+        "key": "hubspot-deal-type",
+        "value": "newbusiness"
+      },
+      {
+        "key": "hubspot-deal-pipeline", 
+        "value": "default"
+      },
+      {
+        "key": "hubspot-deal-stage",
+        "value": "appointmentscheduled"
+      },
+      {
+        "key": "customer-contact-mapping.json",
+        "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
+      },
+      {
+        "key": "customer-deal-mapping.json",
+        "value": "{}"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "hubspot-hapi"
+      }
+    ]
+  }
+}

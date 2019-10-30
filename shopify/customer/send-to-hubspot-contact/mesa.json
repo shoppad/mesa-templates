@@ -1,0 +1,42 @@
+{
+  "key": "shoppad/mesa-templates/shopify/customer/send-to-hubspot-contact",
+  "name": "Send Shopify Customer To HubSpot Contact",
+  "version": "1.0.0",
+  "description": "Send customer from Shopify to HubSpot Contact when customer is created.",
+  "tags": ["Customer"],
+  "source": "shopify",
+  "destination": "hubspot",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Customer Create",
+        "key": "in-shopify-customer-create",
+        "script": "in-shopify-customer-create.js",
+        "topic": "customers/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Hubspot Contact",
+        "key": "out-create-hubspot-contact",
+        "script": "out-create-hubspot-contact.js"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "hubspot-hapi"
+      }
+    ],
+    "storage": [
+      {
+        "key": "customer-mapping.json",
+        "value": "{\n   \"email\":{\n      \"shopify\":\"email\",\n      \"hubspot\":\"email\"\n   },\n   \"first_name\":{\n      \"shopify\":\"first_name\",\n      \"hubspot\":\"firstname\"\n   },\n   \"last_name\":{\n      \"shopify\":\"last_name\",\n      \"hubspot\":\"lastname\"\n   },\n   \"phone\":{\n      \"shopify\":\"phone\",\n      \"hubspot\":\"phone\"\n   }\n}"
+      }
+    ]
+  }
+}
