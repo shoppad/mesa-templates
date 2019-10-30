@@ -45,5 +45,5 @@ Update Shopify product with the contents of a spreadsheet
   - Use bullets (not numbers)
   - Every bullet should end in a period
   - Links should be proper links (`[description](http://myurl.com)` -- not just a url) where possible
+- `Additional Notes`  
 - `Optional Customizations`: ways to edit Scripts/Secrets to extend functionality
-- `Additional Notes`
