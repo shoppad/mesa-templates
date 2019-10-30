@@ -34,14 +34,16 @@ Update Shopify product with the contents of a spreadsheet
 > See [JSON schema definition](https://docs.google.com/document/d/1uXo0gcmSyrI3nq1n8YDWyqTBaffUI1HSSupfWZNI6CU)
 
 - Name: Should generally come from the `key` (see File naming conventions above).
-- Description: A more verbose version of the name. Always ends in a period.
-- Tags: Singular, with Proper Case (`Order`). Only use existing tags (see left sidebar of https://www.getmesa.com/templates).
+- Description: A more verbose version of the name. Always ends in a period. Shopify objects (Order, Customer, etc) should be proper-case.
+- Tags: Singular, with Proper Case (`Order`). Only use existing tags (see left sidebar of https://getmesa.com/templates).
 - Source and Destination: Be as specific as possible. Lowercase, separated with dashes. Ex: `shopify-flow`, `google-sheets`.
 - Enabled: If Automation does not require any configuration (Add tags to Shopify order, etc), set to `true`. Otherwise set to `false`.
 
 ### README.md
 
-- Include template name & description (same as in mesa.json)
-- Mesa "Get Template" button
-- Numbered setup instructions
-- Misc. development notes
+- `Setup`: Bulleted setup instructions, including links where possible
+  - Use bullets (not numbers)
+  - Every bullet should end in a period
+  - Links should be proper links (`[description](http://myurl.com)` -- not just a url) where possible
+- `Additional Notes`  
+- `Optional Customizations`: ways to edit Scripts/Secrets to extend functionality
