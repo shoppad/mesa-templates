@@ -3,7 +3,11 @@
   "name": "Add Color Tag To Product",
   "version": "1.0.0",
   "description": "Add color tag to Shopify product when product is created or updated.",
-  "tags": ["Product"],
+  "video": null,
+  "readme": "\n\n## Setup\n\nThis template will look for any Color variant options and add tag(s) in the format `Color: ${color}` to the product.",
+  "tags": [
+    "Product"
+  ],
   "source": "shopify",
   "destination": "shopify",
   "enabled": true,
@@ -19,25 +23,24 @@
       },
       {
         "trigger_type": "input",
-        "enabled": true,
         "type": "shopify_webhook",
         "name": "Shopify Product Update",
         "key": "in-shopify-product-update",
-        "trigger_name": "In: Update: Tag products according to color",
         "script": "in-shopify-product-create-update.js",
-        "topic": "products/create"
+        "topic": "products/update"
       }
     ],
     "outputs": [
       {
         "trigger_type": "output",
-        "enabled": true,
         "type": "shopify_api",
         "name": "Add Shopify Product Tag",
         "key": "out-add-shopify-product-tag",
         "script": "out-add-shopify-product-tag.js",
         "shopify_api": "PUT admin/products/{{product_id}}.json"
       }
-    ]
+    ],
+    "secrets": [],
+    "storage": []
   }
 }
