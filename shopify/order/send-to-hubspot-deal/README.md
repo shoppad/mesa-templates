@@ -1,9 +1,3 @@
-# Send Order To Hubspot Deal
-
-Send order from Shopify to HubSpot Deal when order is created.
-
----
-
 ## Setup
 - To allow this automation to access HubSpot, get an API key from your HubSpot installation. You will need to be a HubSpot Super Admin to do this. [Instructions](https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key).
 - Under "Secrets", save the client ID as `hubspot-hapi`
