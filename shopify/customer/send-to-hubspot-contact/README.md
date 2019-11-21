@@ -1,7 +1,7 @@
 ## Setup
 - To allow this automation access HubSpot, get an API key from your HubSpot installation. You will need to be a [HubSpot Super Admin to do this](https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key).
-- Copy and paste your API key as the `hubspot-hapi` Secrets value.
-- Enable the automation in the right sidebar and click `Save`.
+- Copy and paste your API key as the `hubspot-hapi` Secret value.
+- Enable the Automation in the right sidebar and click **Save**.
 
 ## Optional Customizations
 - This automation covers standard HubSpot contact fields. If your HubSpot contacts are setup with additional properties, you can map these additional fields by editing the `customer-mapping.json` Storage item.

@@ -1,7 +1,7 @@
 ## Setup
 - To allow this automation access HubSpot, get an API key from your HubSpot installation. You will need to be a [HubSpot Super Admin to do this](https://knowledge.hubspot.com/integrations/how-do-i-get-my-hubspot-api-key).
 - Copy and paste your API key as the `hubspot-hapi` Secrets value.
-- Enable the automation in the right sidebar and click `Save`.
+- Enable the Automation in the right sidebar and click **Save**.
 
 ## Additional information
 - If the order has an email associated with it, the automation will check if a HubSpot contact exists and associate the contact with the deal being created. 
