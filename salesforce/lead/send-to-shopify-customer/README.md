@@ -1,33 +1,28 @@
-# Send Salesforce Lead To Shopify Customer
-
-Send contact from Salesforce to Shopify customer when lead converts.
-
----
-
 ## Setup
+- Enable the Automation in the right sidebar and click **Save**.
 
-### Connect to Salesforce with an oAuth refresh token (recommended):
-1. You will need to create a connected app in Salesforce
-2. Click on the Setup button (gear icon - top right)
-3. Navigate to "Apps" and "App Manager", then click "New Connnected App". Enter "Connected App Name", "API Name" and "Contact Email"
-4. Enable OAuth Settings, add all scopes
-5. Add https://www.theshoppad.com/apps/mesa/oauth/ as a callback URL
-6. Save the application, then get the client key and client secret
-7. Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/salesforce/lead/send-to-shopify-customer.
-8. Enter your store's URL (e.g. mystore.myshopify.com), and the client ID key and secret key from step #6
-9. Follow the steps, entering your salesforce username and password.
-10. You will be redirect to your new "Send Contact To Shopify Customer" Automation in the Mesa Dashboard
-11. Verify that your secrets have been properly saved: `salesforce-client-id`, `salesforce-client-secret`, `salesforce-username`, `salesforce-password`
-12. Save your Salesforce instance's URL as the `salesforce-instance` Storage item
+## Connect to Salesforce with an oAuth refresh token (recommended):
+- You will need to create a connected app in Salesforce.
+    - Click on the Setup button (gear icon located in the top right corner of the Salesforce dashboard).
+    - Navigate to "Apps" and "App Manager." 
+    - Click on "New Connnected App" (located in the top right hand corner within Setup). 
+    - Fill out the following fields: "Connected App Name," "API Name," and "Contact Email."
+- Mark the "Enable OAuth Settings" checkbox and add all oAuth scopes.
+- Add https://www.theshoppad.com/apps/mesa/oauth/ as a Callback URL.
+- Save the application, then obtain the Consumer key and Consumer secret.
+- Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/salesforce/lead/send-to-shopify-customer.
+- Enter your store's URL (e.g. mystore.myshopify.com), and paste the Consumer ID key and secret key. (May take some time for your connected app to establish)
+- You will be redirected to your back to your "Send Salesforce Lead To Shopify Customer" Automation in the Mesa Dashboard.
+- Verify that your Secrets have been properly saved: `salesforce-client-id`, `salesforce-client-secret`, `salesforce-username`, `salesforce-password`.
+- Save your Salesforce instance's URL as the `salesforce-instance` Storage Item.
 
-### Setting up workflows in Salesforce in order to recieve webhooks:
-1. Open up your Salesforce instance
-2. Click on the Setup button (gear icon - top right)
-3. Head over to "Process Automation", then to "Workflow Actions"
-4. Create an "Outbound Message"
-5. Create a "WorkFlow Rule"
-6. Tie the "WorkFlow Rule" to the "Outbound Message"
+## Setting up workflows in Salesforce in order to recieve webhooks:
+- Open up your Salesforce instance.
+- Click on the Setup button (gear icon located in the top right corner of the Salesforce dashboard).
+- Navigate to "Process Automation", click on "Workflow Actions."
+- Click on Outbound Messages.
+- Click on "New Outbound Message."
+- Tie the "WorkFlow Rule" to the "Outbound Message."
 
 ## Optional Customizations
-
 - Map additional fields by editing the `salesforce-shopify-customer-map.js` script.
