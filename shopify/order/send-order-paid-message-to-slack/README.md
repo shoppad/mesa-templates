@@ -1,3 +1,9 @@
+# Send Order Paid Message To Slack Channel
+
+Send message to Slack when Shopify order has been paid.
+
+---
+
 ## Setup
 
 - [Create a connected app in Slack](https://api.slack.com/apps/new).

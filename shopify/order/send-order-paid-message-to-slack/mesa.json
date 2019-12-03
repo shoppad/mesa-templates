@@ -1,7 +1,7 @@
 {
   "name": "Send Order Paid Message To Slack Channel",
   "version": "1.0.0",
-  "description": "Send order paid message from Shopify Order to Slack channel when order has been paid.",
+  "description": "Send message to Slack when Shopify order has been paid.",
   "key": "shoppad/mesa-templates/shopify/order/send-order-paid-message-to-slack",
   "tags": ["Order"],
   "source": "shopify",
