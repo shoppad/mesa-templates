@@ -4,13 +4,12 @@
   "version": "1.0.0",
   "description": "Add destination weather forecast to Shopify Order Notes when order is created with Dark Sky.",
   "video": "",
-  "readme": "## Setup\n- Create a [free OpenWeatherMap Account](https://home.openweathermap.org/users/sign_up) and obtain an [API Key (APPID)](https://openweathermap.org/appid).\n- Paste your API Key (APPID) as the value for the `openweathermap-key` Secret.\n",
   "tags": [
     "Order"
   ],
   "source": "shopify",
-  "destination": "openweather",
-  "enabled": true,
+  "destination": "shopify",
+  "enabled": false,
   "config": {
     "inputs": [
       {
