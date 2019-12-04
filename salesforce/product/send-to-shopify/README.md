@@ -7,9 +7,9 @@
     - Navigate to "Apps" and "App Manager." 
     - Click on "New Connnected App" (located in the top right hand corner within Setup). 
     - Fill out the following fields: "Connected App Name," "API Name," and "Contact Email."
-- Mark the "Enable OAuth Settings" checkbox and add all oAuth scopes.
-- Add https://www.theshoppad.com/apps/mesa/oauth/ as a Callback URL.
-- Save the application, then obtain the Consumer key and Consumer secret.
+    - Mark the "Enable OAuth Settings" checkbox and add all oAuth scopes.
+    - Add https://www.theshoppad.com/apps/mesa/oauth/ as a Callback URL.
+    - Save the application, then obtain the Consumer key and Consumer secret.
 - Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/salesforce/lead/send-to-shopify-customer.
 - Enter your store's URL (e.g. mystore.myshopify.com), and paste the Consumer ID key and secret key. (May take some time for your connected app to establish)
 - You will be redirected to your back to your "Send Salesforce Lead To Shopify Customer" Automation in the Mesa Dashboard.
