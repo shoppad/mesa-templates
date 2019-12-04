@@ -11,13 +11,6 @@ module.exports = new (class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    // Color Prefix.
-    const colorPrefix = "Color:";
-
-    // Removing any colors from the product tags.
-    let tagsWithoutColors = payload.tags
-      .split(",")
-      .filter(tag => !tag.includes(colorPrefix));
 
     // Getting all colors from options.
     let colors = [];
@@ -25,7 +18,7 @@ module.exports = new (class {
       .filter(option => option.name === "Color")
       .forEach(color => {
         color.values.forEach(value => {
-          colors.push(`${colorPrefix} ${value}`);
+          colors.push(value);
         });
       });
 
@@ -34,7 +27,7 @@ module.exports = new (class {
       {
         product: {
           id: payload.id,
-          tags: tagsWithoutColors.concat(colors).join(", ")
+          tags: payload.tags.split(',').concat(colors).join(", ")
         }
       },
       {

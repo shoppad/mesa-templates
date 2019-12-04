@@ -16,14 +16,14 @@ Send order from Shopify to HubSpot Deal when order is created.
 - If you wish to create a contact for any new customers (based on the order's email address), please install and enable one of the "Send Customer To HubSpot Contact" or "Send Customer To HubSpot Contact and Mark as Opportunity" automations. If the customer is new, Shopify will send the customer data first, then the order data, so when this automation runs, the contact will be created already in HubSpot.
 
 ## Optional Customizations
-- This automation creates a simple HubSpot deal, using Shopify order data (see `shopify-hubspot-order-mapping.json` in "Storage"), and data defined in the "Storage" section.
+- This automation creates a simple HubSpot deal, using Shopify order data (see `order-mapping.json` in "Storage"), and data defined in the "Storage" section.
 - The following defaults are used
   - HubSpot deal type (`hubspot-deal-type`): default value = `newbusiness`  
   - HubSpot deal pipeline (`hubspot-deal-pipeline`): default value = `default`  
   - HubSpot deal stage (`hubspot-deal-stage`): default value = `closedwon`  
 - To change these fields, see the sub-sections below
 - You can add additional static data to `dealPostData` variable in the `out-create-hubspot-deal.js` script
-- If you wish to map additional order data to hubspot deal properties, you can add mappings to `shopify-hubspot-order-mapping.json` in "Storage"
+- If you wish to map additional order data to hubspot deal properties, you can add mappings to `order-mapping.json` in "Storage"
 
 
 ### Changing the HubSpot deal type
