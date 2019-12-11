@@ -12,9 +12,9 @@
     - Save the application, then obtain the Consumer key and Consumer secret.
 - Navigate to https://www.theshoppad.com/apps/mesa/oauth/salesforce/shoppad/mesa-templates/salesforce/lead/send-to-shopify-customer.
 - Enter your store's URL (e.g. mystore.myshopify.com), and paste the Consumer ID key and secret key. (May take some time for your connected app to establish)
-- You will be redirected to your back to your "Send Salesforce Lead To Shopify Customer" Automation in the Mesa Dashboard.
+- You will be redirected to your back to your "Send Order To Salesforce Contact" Automation in the Mesa Dashboard.
 - Verify that your Secrets have been properly saved: `salesforce-client-id`, `salesforce-client-secret`, `salesforce-username`, `salesforce-password`.
-- Save your Salesforce instance's URL as the `salesforce-instance` Storage Item.
+- Save your Salesforce instance's URL as the `salesforce-instance` Storage item.
 
 ## Connect to Salesforce with using the username/password method:
 - You will need to create a connected app in Salesforce.
@@ -29,7 +29,7 @@
 - Save the client secret as `salesforce_client_secret`.
 - Save your Salesforce username as `salesforce_username`.
 - Save your Salesforce password as `salesforce_password`.
-- Save your Salesforce instance's URL as the `salesforce-instance` Storage Item.
+- Save your Salesforce instance's URL as the `salesforce-instance` Storage item.
 
 ## Optional Customizations
 - Map additional fields by editing the `shopify-salesforce-contact-map.js` script.
