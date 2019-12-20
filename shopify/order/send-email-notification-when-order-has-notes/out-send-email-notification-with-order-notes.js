@@ -12,35 +12,40 @@ module.exports = new (class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    Mesa.log.debug('Testing 1 2 3');
-    Mesa.log.debug('Payload:', payload);
+    Mesa.log.debug('Payload', payload);
     Mesa.log.debug('Context', context);
 
-    const emailAddress = Mesa.storage.get('email-address');
+    const customEmailAddress = Mesa.storage.get('email-address');
+    const storeEmailAddress = context.shop.email;
+
     Mesa.log.debug(
-      'Email Address',
-      emailAddress ? emailAddress : 'No email specified in storage'
+      'Email address in storage',
+      customEmailAddress
+        ? customEmailAddress
+        : 'No email address specified in storage'
     );
 
-    // if order notes in payload
+    // if order has notes in payload
     if (payload.note != '') {
       // if email not specified in storage, send to store owner
-      // else send to email specified in storage
-      if (!emailAddress) {
-        Mesa.log.debug('Using Store Owner email');
+      // else send to email address specified in storage
+      if (!customEmailAddress) {
+        Mesa.log.debug('Using store email address');
+        Mesa.log.debug('Store email address', storeEmailAddress);
 
         // Send email
         Mesa.email.send(
-          context.shop.email,
+          storeEmailAddress,
           'Order ' + payload.name + ' created with notes',
           'Notes included: ' + payload.note
         );
       } else {
-        Mesa.log.debug('Using email specified in storage');
+        Mesa.log.debug('Using email address specified in storage');
+        Mesa.log.debug('Custom email address', customEmailAddress);
 
         // Send email
         Mesa.email.send(
-          emailAddress,
+          customEmailAddress,
           'Order ' + payload.name + ' created with notes',
           'Notes included: ' + payload.note
         );
