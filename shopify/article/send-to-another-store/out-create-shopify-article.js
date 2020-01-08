@@ -12,6 +12,9 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
+    // Optional snippet to update urls in the blog article. 
+    // payload.body_html = payload.body_html.replace(/<from_url>/g, '<to_url>');
+
     Mesa.output.done({article: payload}, {blog_id: Mesa.storage.get('remote-blog-id')});
   }
 };
