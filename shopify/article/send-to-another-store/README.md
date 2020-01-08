@@ -20,3 +20,9 @@
 3. Click "Manage blogs"
 4. Click on the name of the blog you would like to sync
 5. The blog ID will be the number that's in the end of the URL in your browser. For example, if the URL in your browser is `https://store-name.myshopify.com/admin/blogs/25597182003` the blog ID is `25597182003` 
+
+### Customizations
+1. To update URLs in the blog article, you can uncomment the line of code at line 16 in `out-create-shopify-article.js`. 
+2. You will need to replace the values `<from_url>` and `<to_url>` with actual values. 
+3. For instance if you use `mysite.com` for `<from_url>` and `yoursite.ca` for the `<to_url>`, all content with `mysite.com` will be replaced with `yoursite.ca` in the copied article.
+4. **Note**: do not erase `/g` in the code, this is needed to allow the value to be found.
