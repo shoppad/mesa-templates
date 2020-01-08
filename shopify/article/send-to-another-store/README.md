@@ -24,5 +24,5 @@
 ### Customizations
 1. To update URLs in the blog article, you can uncomment the line of code at line 16 in `out-create-shopify-article.js`. 
 2. You will need to replace the values `<from_url>` and `<to_url>` with actual values. 
-3. *Note*: do not erase `/g` in the code, this is needed to allow the value to be found.
-4. For instance if you use `mysite.com` for `<from_url>` and `yoursite.ca` for the `<to_url>`, all content with `mysite.com` will be replaced with `yoursite.ca` in the copied article.
+3. For instance if you use `mysite.com` for `<from_url>` and `yoursite.ca` for the `<to_url>`, all content with `mysite.com` will be replaced with `yoursite.ca` in the copied article.
+4. **Note**: do not erase `/g` in the code, this is needed to allow the value to be found.
