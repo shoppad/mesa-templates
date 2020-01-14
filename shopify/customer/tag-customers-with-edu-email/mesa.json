@@ -1,0 +1,53 @@
+{
+  "key": "shoppad/mesa-templates/shopify/customer/tag-customers-with-edu-email",
+  "name": "Add Educational Discount Tag To Customer",
+  "version": "1.0.0",
+  "description": "Add Educational Discount Tag to Shopify Customer when customer is created.",
+  "video": "",
+  "readme": "",
+  "tags": ["Customer"],
+  "source": "shopify",
+  "destination": "shopify",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Customer Create",
+        "key": "in-shopify-customer-create",
+        "script": "in-shopify-customer-create.js",
+        "topic": "customers/create"
+      },
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Customer Update",
+        "key": "in-shopify-customer-update",
+        "script": "in-shopify-customer-update.js",
+        "topic": "customers/update"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Shopify Customer Update",
+        "key": "out-shopify-customer-update",
+        "script": "out-shopify-customer-update.js",
+        "shopify_api": "PUT admin/customers/{{customer_id}}.json"
+      }
+    ],
+    "secrets": [],
+    "storage": [
+      {
+        "key": "customer-email-ending",
+        "value": ".edu"
+      },
+      {
+        "key": "customer-discount-tag",
+        "value": "Educational Discount"
+      }
+    ]
+  }
+}
