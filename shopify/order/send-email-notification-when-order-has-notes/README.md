@@ -10,4 +10,4 @@ This will send an email notification to the store's email address for orders tha
 
 The email address can be customized following the step below:
 
-1. Under "storage" change the value for email-address to your desired value.
+- Under "Storage", add the value for key "email-address" to a different email address.

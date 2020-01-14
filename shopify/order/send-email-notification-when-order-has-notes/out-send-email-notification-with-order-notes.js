@@ -12,18 +12,16 @@ module.exports = new (class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    Mesa.log.debug('Payload', payload);
-    Mesa.log.debug('Context', context);
-
+    // Getting order notes.
     const orderNotes = payload.note;
 
-    // if order notes is not empty
+    // Check if order has notes included.
     if (orderNotes != '') {
       let emailAddress = context.shop.email;
       const orderNumber = payload.name;
-      // if email not specified in storage, send to store owner
-      // else send to email address specified in storage
+      Mesa.log.debug('Notes included in order', orderNotes);
 
+      // Check if custom email address is applied.
       if (Mesa.storage.get('email-address')) {
         emailAddress = Mesa.storage.get('email-address');
         Mesa.log.debug('Using custom email address', emailAddress);
@@ -31,27 +29,20 @@ module.exports = new (class {
         Mesa.log.debug('Using store email address', emailAddress);
       }
 
-      // let emailBody = `Hello! ${emailAddress}`;
-
-      // Send email
+      // Send email notification.
       Mesa.email.send(
         emailAddress,
-        'Order ' + orderNumber + ' created with notes',
-        'Hello ' +
-          context.shop.name +
-          ', \n \n' +
-          payload.customer.first_name +
-          ' ' +
-          payload.customer.last_name +
-          ' placed a new order with your store. \n Notes have been included in the order. They are the following: \n \n' +
-          orderNotes +
-          '\n \n View Order ' +
-          orderNumber +
-          ': ' +
-          'https://' +
-          context.shop.domain +
-          '/admin/orders/' +
-          payload.id
+        `Order ${orderNumber} created with notes`,
+        `
+Hello ${context.shop.shop_owner},
+
+${payload.customer.first_name} ${payload.customer.last_name} placed a new order with your store.
+
+Notes have been included in the order. They are the following:
+
+${orderNotes}
+
+View Order ${orderNumber}: https://${context.shop.domain}/admin/orders/${payload.id}`.trim()
       );
     }
   };
