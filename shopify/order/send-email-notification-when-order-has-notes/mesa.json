@@ -1,0 +1,39 @@
+{
+  "name": "Send Email Notification To Store Owner When Shopify Order Has Notes",
+  "version": "1.0.0",
+  "description": "Send email notification when Shopify Order is created and has order notes.",
+  "key": "shoppad/mesa-templates/shopify/order/send-email-notification-when-order-has-notes",
+  "tags": ["Order"],
+  "source": "shopify",
+  "destination": "notification",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Webhook",
+        "key": "in-shopify-order-webhook",
+        "script": "in-shopify-order-webhook.js",
+        "logging": "error",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Send Email Notification with Order Notes",
+        "key": "out-send-email-notification-with-order-notes",
+        "script": "out-send-email-notification-with-order-notes.js",
+        "logging": "error"
+      }
+    ],
+    "storage": [
+      {
+        "key": "email-address",
+        "value": ""
+      }
+    ]
+  }
+}
