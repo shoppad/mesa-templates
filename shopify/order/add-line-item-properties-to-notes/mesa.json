@@ -1,5 +1,5 @@
 {
-  "key": "shopify/order/add-line-item-properties-to-notes",
+  "key": "shoppad/mesa-templates/shopify/order/add-line-item-properties-to-notes",
   "name": "Add Line Item Properties to Order Notes",
   "version": "1.0.0",
   "description": "Add line item properties from Infinite Options or Uploadery to the Order Notes field so they can be easily read by third party services.",
