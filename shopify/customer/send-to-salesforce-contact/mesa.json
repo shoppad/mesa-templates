@@ -2,37 +2,96 @@
   "key": "shoppad/mesa-templates/shopify/customer/send-to-salesforce-contact",
   "name": "Send Customer To Salesforce Contact",
   "version": "1.0.0",
-  "description": "Send Customer from Shopify to Salesforce contact when customer is created.",
-  "tags": ["Customer"],
-  "source": "shopify",
+  "description": "Send Customer from Shopify to Salesforce Contact when customer is created.",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
   "destination": "salesforce",
-  "enabled": false,
+  "enabled": true,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
         "type": "shopify_webhook",
-        "name": "Shopify Customer Create",
-        "key": "in-shopify-customer-create",
-        "script": "in-shopify-customer-create.js",
-        "topic": "customers/create"
+        "entity": "customer",
+        "action": "create",
+        "name": "Shopify: Customer Created",
+        "key": "shopify-customer-created",
+        "metadata": {
+          "topic": "customers/create"
+        }
       }
     ],
     "outputs": [
       {
         "trigger_type": "output",
-        "type": "custom",
-        "name": "Create Salesforce Contact",
-        "key": "out-create-salesforce-contact",
-        "script": "out-create-salesforce-contact.js"
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to Salesforce Create Contact",
+        "key": "mapping-to-salesforce-create-contact",
+        "metadata": {
+          "mapping": [
+            {
+              "source": "{{source.email}}",
+              "destination": "Email"
+            },
+            {
+              "source": "{{source.first_name}}",
+              "destination": "FirstName"
+            },
+            {
+              "source": "{{source.last_name}}",
+              "destination": "LastName"
+            },
+            {
+              "source": "{{source.default_address.address1}}",
+              "destination": "MailingStreet"
+            },
+            {
+              "source": "{{source.default_address.city}}",
+              "destination": "MailingCity"
+            },
+            {
+              "source": "{{source.default_address.country}}",
+              "destination": "MailingCountry"
+            },
+            {
+              "source": "{{source.default_address.phone}}",
+              "destination": "Phone"
+            },
+            {
+              "source": "{{source.default_address.province}}",
+              "destination": "MailingState"
+            },
+            {
+              "source": "{{source.default_address.zip}}",
+              "destination": "MailingPostalCode"
+            }
+          ],
+          "script": "transform.js"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "destination_entity": "contact"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "contact",
+        "action": "create",
+        "name": "Salesforce: Create Contact",
+        "key": "salesforce-create-contact",
+        "metadata": {
+          "entity_name": "Contact",
+          "method": "POST"
+        },
+        "source_entity": "mapping"
       }
     ],
-    "secrets": [
-      {
-        "key": "salesforce.oauth",
-        "type": "oauth",
-        "service": "salesforce"
-      }
-    ]
+    "storage": []
   }
 }
