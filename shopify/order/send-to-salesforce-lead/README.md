@@ -1,6 +1,6 @@
-# Send Order To Salesforce Contact
+# Send Order To Salesforce Lead
 
-Send Order from Shopify to Salesforce Contact when order is created.
+Send Order from Shopify to Salesforce Lead when order is created.
 
 ---
 ## Setup

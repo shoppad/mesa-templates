@@ -1,6 +1,6 @@
-# Send Order To Salesforce Contact
+# Send Order To Salesforce Opportunity
 
-Send Order from Shopify to Salesforce Contact when order is created.
+Send Order from Shopify to Salesforce Opportunity when order is created.
 
 ---
 ## Setup
