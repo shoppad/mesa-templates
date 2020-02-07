@@ -4,10 +4,12 @@
   "version": "1.0.0",
   "description": "Send Customer from Shopify to Salesforce Contact when customer is created.",
   "video": "",
-  "tags": [],
+  "tags": [
+    "Customer"
+  ],
   "source": "shopify_webhook",
   "destination": "salesforce",
-  "enabled": true,
+  "enabled": false,
   "config": {
     "inputs": [
       {
