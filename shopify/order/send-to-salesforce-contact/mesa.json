@@ -28,8 +28,8 @@
         "trigger_type": "output",
         "type": "transform",
         "entity": "mapping",
-        "name": "Mapping to Salesforce Order Contact",
-        "key": "mapping-to-salesforce-order-contact",
+        "name": "Mapping to Salesforce Create Contact",
+        "key": "mapping-to-salesforce-create-contact",
         "metadata": {
           "mapping": [
             {
@@ -53,20 +53,20 @@
               "destination": "MailingCity"
             },
             {
-              "source": "{{source.customer.default_address.country}}",
-              "destination": "MailingCountry"
-            },
-            {
-              "source": "{{source.customer.default_address.phone}}",
-              "destination": "Phone"
-            },
-            {
               "source": "{{source.customer.default_address.province}}",
               "destination": "MailingState"
             },
             {
               "source": "{{source.customer.default_address.zip}}",
               "destination": "MailingPostalCode"
+            },
+            {
+              "source": "{{source.customer.default_address.country}}",
+              "destination": "MailingCountry"
+            },
+            {
+              "source": "{{source.customer.default_address.phone}}",
+              "destination": "Phone"
             }
           ],
           "script": "transform.js"
