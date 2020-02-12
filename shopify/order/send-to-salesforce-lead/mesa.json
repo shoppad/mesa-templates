@@ -6,7 +6,7 @@
   "tags": [
     "Order"
   ],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "salesforce",
   "enabled": false,
   "config": {
