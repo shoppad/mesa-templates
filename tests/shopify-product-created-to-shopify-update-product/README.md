@@ -6,7 +6,7 @@ This template is for internal use only.
 
 ## Running
 
-- Create Product a new product
+- Create new product
 - Ensure that there is a new tag created on the product called "Product Date:"
 
 ## Mesa Testing Coverage
