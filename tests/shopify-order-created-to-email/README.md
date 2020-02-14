@@ -14,6 +14,8 @@ This template is for internal use only.
 
 - Create Shopify order
 - Ensure that there are not failure notices in the [Mesa Logs](https://getmesa.com/go/logs)
+- Ensure that you receive an email
+- Ensure you get a slack notification
 
 ## Mesa Testing Coverage
 
