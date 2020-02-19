@@ -29,7 +29,7 @@
         "script": "out-orders-virtual-output.js",
         "logging": "error",
         "custom_connection": true,
-        "parameters": "limit=-1&created_at_max={date:7 days ago}"
+        "parameters": "limit=-1&created_at_max={{date:7 days ago}}"
       },
       {
         "trigger_type": "output",

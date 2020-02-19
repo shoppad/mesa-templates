@@ -27,7 +27,7 @@
         "schedule": "0 */12 * * *",
         "script": "out-shopify-draft-order-vo.js",
         "custom_connection": true,
-        "parameters": "created_at_max={date:30 days ago}"
+        "parameters": "created_at_max={{date:30 days ago}}"
       },
       {
         "trigger_type": "output",
