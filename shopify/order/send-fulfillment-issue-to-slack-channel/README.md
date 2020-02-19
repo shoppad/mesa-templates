@@ -12,7 +12,7 @@ Changing the date range for unfulfilled orders
 - By default, orders that are 7 days or older will be sent to Slack if unfulfilled. 
 - To change this, find **Orders Virtual Output** under Outputs.
 - Under **Advanced**, change the parameters to when you woud like the orders to be checked for fulfillment.
-- For example, to check for orders that are more than 3 days old, but no older than 1 month, type "limit=-1&created_at_min={date:1 month ago},created_at_max={date:3 days ago}". Further information on proper date syntax can be found under [Virtual Outputs](https://docs.getmesa.com/article/597-outputs#output4).
+- For example, to check for orders that are more than 3 days old, but no older than 1 month, type "limit=-1&created_at_min={{date:1 month ago}},created_at_max={{date:3 days ago}}". Further information on proper date syntax can be found under [Virtual Outputs](https://docs.getmesa.com/article/597-outputs#output4).
 
 ## Slack message formatting
 - Under Scripts you'll find the file `out-send-slack-notification.js`. By default this script will send a [richly formatted Slack notification](https://api.slack.com/docs/message-formatting#message_formatting) with buttons and text formatting. 

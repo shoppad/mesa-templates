@@ -36,7 +36,7 @@
         "method": "ftp",
         "host": "",
         "port": "22",
-        "file": "orders-{date:YmdHis}.txt",
+        "file": "orders-{{date:YmdHis}}.txt",
         "username": "",
         "password": "ftp-password"
       }
