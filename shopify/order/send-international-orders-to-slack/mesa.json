@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/send-international-orders-to-slack",
+  "key": "shoppad/mesa-templates/shopify/order/send-international-orders-to-slack",
   "name": "Send Shopify International Orders to Slack",
   "version": "1.0.0",
   "description": "Send a slack message whenever an international order is created.",
