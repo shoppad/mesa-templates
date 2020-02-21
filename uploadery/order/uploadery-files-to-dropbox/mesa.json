@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/uploadery-files-to-dropbox",
+  "key": "shoppad/mesa-templates/uploadery/order/files-to-dropbox",
   "name": "Uploadery Files to Dropbox",
   "version": "1.0.0",
   "description": "Save every Uploadery file from completed orders to Dropbox.",
