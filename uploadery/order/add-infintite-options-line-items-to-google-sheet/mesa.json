@@ -1,0 +1,137 @@
+{
+  "key": "shoppad/mesa-templates/add-uploadery-line-items-to-google-sheet",
+  "name": "Add Uploadery Line Items to Google Sheet",
+  "version": "1.0.0",
+  "description": "Add Uploadery Line Items to an Existing Google Sheet when an Order is Created.",
+  "video": "",
+  "tags": ["google-sheets"],
+  "source": "uploadery",
+  "destination": "googlesheets",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "uploadery",
+        "entity": "order",
+        "action": "created",
+        "name": "Uploadery: Order Created",
+        "key": "infinite-options-order-created"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{source.line_items}}"
+        },
+        "destination_entity": "mapping"
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to Sheets Row",
+        "key": "mapping-to-sheets-row",
+        "metadata": {
+          "script": "transform.js",
+          "mapping": [
+            {
+              "destination": "A",
+              "source": "https://{{context.shop.domain}}/admin/orders/{{source.order.id}}",
+              "notes": "Link to Shopify admin"
+            },
+            {
+              "destination": "B",
+              "source": "{{source.order.name}}",
+              "notes": ""
+            },
+            {
+              "destination": "C",
+              "source": "{{source.order.email}}",
+              "notes": ""
+            },
+            {
+              "destination": "D",
+              "source": "{{source.order.shipping_address.name}}",
+              "notes": "URL to order in Shopify"
+            },
+            {
+              "destination": "E",
+              "source": "{{source.order.shipping_address.address1}}",
+              "notes": ""
+            },
+            {
+              "destination": "F",
+              "source": "{{source.order.shipping_address.city}}",
+              "notes": ""
+            },
+            {
+              "destination": "G",
+              "source": "{{source.order.shipping_address.province}}",
+              "notes": ""
+            },
+            {
+              "destination": "H",
+              "source": "{{source.order.shipping_address.zip}}",
+              "notes": ""
+            },
+            {
+              "destination": "I",
+              "source": "{{source.order.shipping_address.country}}",
+              "notes": ""
+            },
+            {
+              "destination": "J",
+              "source": "{{current_item.title}}",
+              "notes": ""
+            },
+            {
+              "destination": "K",
+              "source": "{{current_item.sku}}",
+              "notes": ""
+            },
+            {
+              "destination": "L",
+              "source": "{{current_item.price}}",
+              "notes": ""
+            },
+            {
+              "destination": "M",
+              "source": "{{current_item.fields.uploadery_1}}",
+              "notes": ""
+            },
+            {
+              "destination": "N",
+              "source": "{{current_item.fields.uploadery_2}}",
+              "notes": ""
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ]
+      },
+      {
+        "trigger_type": "output",
+        "type": "googlesheets",
+        "entity": "existing",
+        "action": "add_row",
+        "name": "Google Sheets: Add Row to Existing Sheet",
+        "key": "google-sheets-add-row-existing-sheet",
+        "metadata": {
+          "spreadsheet_id": "",
+          "token": ""
+        },
+        "source_entity": "mapping"
+      }
+    ],
+    "storage": []
+  }
+}
