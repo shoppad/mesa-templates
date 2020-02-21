@@ -1,0 +1,48 @@
+{
+  "key": "shoppad/mesa-templates/uploadery-files-to-dropbox",
+  "name": "Uploadery Files to Dropbox",
+  "version": "1.0.0",
+  "description": "Save every Uploadery file from completed orders to Dropbox.",
+  "video": "",
+  "tags": [],
+  "source": "uploadery",
+  "destination": "dropbox",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "uploadery",
+        "entity": "order",
+        "action": "created",
+        "name": "Uploadery: Order Created",
+        "key": "uploadery-order-created"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{source.fields}}"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "dropbox",
+        "entity": "file",
+        "action": "save",
+        "name": "Dropbox: Save File",
+        "key": "dropbox-save-file",
+        "metadata": {
+          "file_path": "/{{filename}}",
+          "token": "",
+          "file_url": "{{current_item.value}}"
+        }
+      }
+    ],
+    "storage": []
+  }
+}
