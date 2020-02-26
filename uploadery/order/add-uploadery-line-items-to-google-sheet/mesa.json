@@ -121,10 +121,10 @@
       {
         "trigger_type": "output",
         "type": "googlesheets",
-        "entity": "existing",
-        "action": "add_row",
-        "name": "Google Sheets: Add Row to Existing Sheet",
-        "key": "google-sheets-add-row-existing-sheet",
+        "entity": "row",
+        "action": "add",
+        "name": "Google Sheets: Add Row to Sheet",
+        "key": "google-sheets-add-row-sheet",
         "metadata": {
           "spreadsheet_id": "",
           "token": ""
