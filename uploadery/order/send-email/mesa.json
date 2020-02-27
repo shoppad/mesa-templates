@@ -27,8 +27,8 @@
         "key": "email",
         "metadata": {
           "to": "",
-          "subject": "New order with file upload created",
-          "message": "A new order was created with Uploadery fields:\n\nOrder {{source.order.name}}\nhttps://{{context.shop.domain}}/admin/orders/{{source.order.id}}\n\nUploadery line items:\n{% for line_item in source.line_items %}\n  {{ line_item.title }} x {{ line_item.quantity }}\n  {% for field in line_item.fields %}\n    {{ forloop.index }}: {{ field }}\n  {% endfor %}\n{% endfor %}\n",
+          "subject": "New order with file upload created {{source.order.name}}",
+          "message": "A new order was created with Uploadery fields:\n\nOrder {{source.order.name}}\nhttps://{{context.shop.domain}}/admin/orders/{{source.order.id}}\n\nUploadery line items:\n{% for line_item in source.line_items %}\n  - {{ line_item.title }} x {{ line_item.quantity }}\n{% for property in line_item.properties %}    - {{ property.name }}: {{ property.value }}\n{% endfor %}{% endfor %}\n",
           "from": ""
         }
       }
