@@ -7,7 +7,7 @@
   "tags": [],
   "source": "uploadery",
   "destination": "dropbox",
-  "enabled": true,
+  "enabled": false,
   "config": {
     "inputs": [
       {
