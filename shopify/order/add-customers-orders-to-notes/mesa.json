@@ -1,5 +1,5 @@
 {
-  "key": "mesa-templates/shopify/order/add-customers-orders-to-notes",
+  "key": "shoppad/mesa-templates/shopify/order/add-customers-orders-to-notes",
   "name": "Add Customer's Orders to Order Notes",
   "version": "1.0.0",
   "description": "When a repeat customer creates an order, add the number of orders the customer has made to the order notes.",
