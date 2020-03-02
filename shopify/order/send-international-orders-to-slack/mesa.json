@@ -1,0 +1,52 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send-international-orders-to-slack",
+  "name": "Send Shopify International Orders to Slack",
+  "version": "1.0.0",
+  "description": "Send a slack message whenever an international order is created.",
+  "video": "",
+  "tags": ["slack"],
+  "source": "shopify",
+  "destination": "slack",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify: Order Created",
+        "key": "shopify-order-created",
+        "metadata": {
+          "topic": "orders/create"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "script": "filter.js",
+          "a": "{{source.shipping_address.country_code}}",
+          "comparison": "does not equal",
+          "b": "US"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "slack",
+        "name": "Slack",
+        "key": "slack",
+        "metadata": {
+          "webhook": "",
+          "message": "New international order created: {{source.name}}\nTotal: {{source.total_price}}\n\n{{source.shipping_address.first_name}} {{source.shipping_address.last_name}}\n{{source.shipping_address.address1}}\n{{source.shipping_address.city}}, {{source.shipping_address.province}}, {{source.shipping_address.zip}}\n{{source.shipping_address.country}}\n\n",
+          "channel": ""
+        }
+      }
+    ],
+    "storage": []
+  }
+}
