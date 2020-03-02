@@ -1,0 +1,49 @@
+{
+  "key": "shoppad/mesa-templates/uploadery/order/files-to-google-drive",
+  "name": "Uploadery Files to Google Drive",
+  "version": "1.0.0",
+  "description": "Save every Uploadery file from completed orders to Google Drive.",
+  "video": "",
+  "tags": ["uploadery"],
+  "source": "uploadery",
+  "destination": "google-drive",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "uploadery",
+        "entity": "order",
+        "action": "created",
+        "name": "Uploadery: Order Created",
+        "key": "uploadery-order-created"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{source.fields}}"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "googledrive",
+        "entity": "file",
+        "action": "save",
+        "name": "Google Drive: Save File",
+        "key": "googledrive-save-file",
+        "metadata": {
+          "file_path": "{{filename}}",
+          "token": "",
+          "file_url": "{{current_item.value}}",
+          "folder": ""
+        }
+      }
+    ],
+    "storage": []
+  }
+}
