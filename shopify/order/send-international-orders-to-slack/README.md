@@ -7,6 +7,5 @@
 - Save the slack channel name you wish to use (for example "#order-paid") as a Storage Item, with the key as `slack-channel`.
 - Enable the Automation in the right sidebar and click **Save**.
 
-## Slack message formatting
-- Under Scripts you'll find the file `out-send-slack-notification.js`. By default this script will send a [richly formatted Slack notification](https://api.slack.com/docs/message-formatting#message_formatting) with buttons and text formatting.
-- If you prefer a simple Slack message, you can click on the **out-send-slack-notifications.js** file. Comment out the code in the block "BEGIN Comprehensive Slack request" and uncomment the code under "BEGIN Simple slack request (uncomment code below to enable)".
+## Optional Customizations
+- Change the country to filter by changing the the two-letter country code in the Filter Step. For example: **US** for the United States, **FR** for France, etc. [View a list of country codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Current_codes).
