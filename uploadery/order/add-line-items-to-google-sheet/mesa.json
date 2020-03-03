@@ -6,7 +6,7 @@
   "video": "",
   "tags": ["google-sheets"],
   "source": "uploadery",
-  "destination": "googlesheets",
+  "destination": "google-sheets",
   "enabled": false,
   "config": {
     "inputs": [
