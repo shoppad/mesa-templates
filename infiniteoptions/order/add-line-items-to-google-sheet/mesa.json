@@ -5,7 +5,7 @@
   "description": "Add Infinite Options Line Items to an Existing Google Sheet when an Order is Created.",
   "video": "",
   "tags": ["google-sheets"],
-  "source": "infiniteoptions",
+  "source": "shopify",
   "destination": "google-sheets",
   "enabled": false,
   "config": {
