@@ -5,8 +5,8 @@
   "description": "When a repeat customer creates an order, add the number of orders the customer has made to the order notes.",
   "video": "",
   "tags": [],
-  "source": "shopify_webhook",
-  "destination": "shopify_api",
+  "source": "shopify",
+  "destination": "shopify",
   "enabled": true,
   "config": {
     "inputs": [
