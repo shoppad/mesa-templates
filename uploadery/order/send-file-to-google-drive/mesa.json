@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/uploadery/order/files-to-google-drive",
+  "key": "shoppad/mesa-templates/uploadery/order/send-file-to-google-drive",
   "name": "Send Uploadery File to Google Drive",
   "version": "1.0.0",
   "description": "Save every Uploadery file from completed orders to Google Drive.",
