@@ -1,12 +1,12 @@
 {
-  "key": "shoppad/mesa-templates/uploadery/order/files-to-google-drive",
-  "name": "Uploadery Files to Google Drive",
+  "key": "shoppad/mesa-templates/uploadery/order/send-file-to-dropbox",
+  "name": "Send Uploadery File to Dropbox",
   "version": "1.0.0",
-  "description": "Save every Uploadery file from completed orders to Google Drive.",
+  "description": "Save every Uploadery file from completed orders to Dropbox.",
   "video": "",
-  "tags": ["uploadery"],
+  "tags": [],
   "source": "uploadery",
-  "destination": "google-drive",
+  "destination": "dropbox",
   "enabled": false,
   "config": {
     "inputs": [
@@ -31,16 +31,15 @@
       },
       {
         "trigger_type": "output",
-        "type": "googledrive",
+        "type": "dropbox",
         "entity": "file",
         "action": "save",
-        "name": "Google Drive: Save File",
-        "key": "googledrive-save-file",
+        "name": "Dropbox: Save File",
+        "key": "dropbox-save-file",
         "metadata": {
-          "file_path": "{{filename}}",
+          "file_path": "/{{filename}}",
           "token": "",
-          "file_url": "{{current_item.value}}",
-          "folder": ""
+          "file_url": "{{current_item.value}}"
         }
       }
     ],
