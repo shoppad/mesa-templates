@@ -69,7 +69,8 @@
         "name": "Shopify: Create Product",
         "key": "shopify-create-product",
         "metadata": {
-          "shopify_api": "POST admin/products.json"
+          "shopify_api": "POST admin/products.json",
+          "site": "current"
         },
         "source_entity": "mapping"
       }
