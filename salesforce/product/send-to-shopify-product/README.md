@@ -5,11 +5,11 @@
 - Enable OAuth Settings, add all scopes.
 - Add https://www.theshoppad.com/apps/mesa/oauth/ as a callback URL.
 - Save the application, then get the client key and client secret.
-- On your Mesa Automation, expand the `Account Credentials` drop-down under the `Salesforce: Lead Converted` Step. 
+- On your Mesa Automation, expand the `Account Credentials` drop-down under the `Salesforce: Product Created` Step. 
 - Click on `Add New Credential`.
 - For `Client ID` and `Client Secret`, paste the client key and secret from Salesforce.
 - For `Authorization URL`, copy and paste "https://login.salesforce.com/services/oauth2/authorize".
 - For `Token URL`, copy and paste "https://login.salesforce.com/services/oauth2/token".
 - Click on `Authenticate with Salesforce`.
-- Verify the following Credential has been created and selected within the `Salesforce: Lead Converted` Step: `salesforce`.
+- Verify the following Credential has been created and selected within the `Salesforce: Product Created` Step: `salesforce`.
 - Enable the Automation in the right sidebar and click **Save**.

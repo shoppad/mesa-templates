@@ -1,44 +1,107 @@
 {
-  "key": "shoppad/mesa-templates/salesforce/lead/send-to-shopify-customer",
+  "key": "shoppad/mesa-templates/salesforce/lead/send-to-shopify",
   "name": "Send Salesforce Lead To Shopify Customer",
   "version": "1.0.0",
-  "description": "Send contact from Salesforce to Shopify customer when Salesforce lead converts.",
+  "description": "Send contact details from Salesforce to Shopify customer when lead converts",
+  "video": "",
   "tags": [
     "Customer"
   ],
   "source": "salesforce",
-  "destination": "shopify",
+  "destination": "shopify_api",
   "enabled": false,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
-        "type": "json_webhook",
-        "name": "Salesforce Lead Convert",
-        "key": "in-salesforce-lead-convert",
-        "script": "in-salesforce-lead-convert.js"
+        "type": "salesforce",
+        "entity": "lead",
+        "action": "list-converted",
+        "name": "Salesforce: Lead Converted",
+        "key": "salesforce-lead-converted",
+        "metadata": {
+          "entity_name": "Lead",
+          "method": "list-converted",
+          "poll": "0 * * * *"
+        }
       }
     ],
     "outputs": [
       {
         "trigger_type": "output",
+        "type": "transform",
+        "name": "Mapping to Shopify: Create Customer",
+        "key": "mapping-to-shopify-create-customer",
+        "metadata": {
+          "script": "transform.js",
+          "mapping": [
+            {
+              "destination": "email",
+              "source": "{{source.Email}}"
+            },
+            {
+              "destination": "phone",
+              "source": "{{source.Phone}}"
+            },
+            {
+              "destination": "first_name",
+              "source": "{{source.FirstName}}"
+            },
+            {
+              "destination": "last_name",
+              "source": "{{source.LastName}}"
+            },
+            {
+              "destination": "addresses.0.address1",
+              "source": "{{source.Street}}"
+            },
+            {
+              "destination": "addresses.0.city",
+              "source": "{{source.City}}"
+            },
+            {
+              "destination": "addresses.0.province",
+              "source": "{{source.State}}"
+            },
+            {
+              "destination": "addresses.0.zip",
+              "source": "{{source.PostalCode}}"
+            },
+            {
+              "destination": "addresses.0.country",
+              "source": "{{source.Country}}"
+            },
+            {
+              "destination": "addresses.0.phone",
+              "source": "{{source.Phone}}"
+            },
+            {
+              "destination": "addresses.0.company",
+              "source": "{{source.Company}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "destination_entity": "customer"
+      },
+      {
+        "trigger_type": "output",
         "type": "shopify_api",
-        "name": "Create Shopify Customer",
-        "key": "out-create-shopify-product",
-        "script": "out-create-shopify-customer.js",
-        "shopify_api": "POST admin/customers.json"
+        "entity": "customer",
+        "action": "create",
+        "name": "Shopify: Create Customer",
+        "key": "shopify-create-customer",
+        "metadata": {
+          "shopify_api": "POST admin/customers.json",
+          "site": "current"
+        }
       }
     ],
-    "secrets": [
-      {
-        "key": "salesforce.oauth"
-      }
-    ],
-    "storage": [
-      {
-        "key": "salesforce-instance",
-        "value": "https://na19.salesforce.com"
-      }
-    ]
+    "storage": []
   }
-} 
+}

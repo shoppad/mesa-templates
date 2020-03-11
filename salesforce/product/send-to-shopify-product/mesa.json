@@ -1,0 +1,80 @@
+{
+  "key": "shoppad/mesa-templates/salesforce/product/send-to-shopify",
+  "name": "Send Salesforce Product To Shopify Product",
+  "version": "1.0.0",
+  "description": "Send product from Salesforce to Shopify Product when Salesforce product is created.",
+  "tags": [
+    "Product"
+  ],
+  "source": "salesforce",
+  "destination": "shopify_api",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "salesforce",
+        "entity": "product",
+        "action": "list-created",
+        "name": "Salesforce: Product Created",
+        "key": "salesforce-product-created",
+        "metadata": {
+          "entity_name": "Product2",
+          "method": "list-created",
+          "poll": "0 * * * *"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to Shopify Create Product",
+        "key": "mapping-to-shopify-create-product",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "title",
+              "source": "{{source.Name}}"
+            },
+            {
+              "destination": "body_html",
+              "source": "{{source.Description}}"
+            },
+            {
+              "destination": "variants.0.sku",
+              "source": "{{source.StockKeepingUnit}}"
+            },
+            {
+              "destination": "variants.0.barcode",
+              "source": "{{source.ProductCode}}"
+            }
+          ],
+          "script": "transform.js"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "destination_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "product",
+        "action": "create",
+        "name": "Shopify: Create Product",
+        "key": "shopify-create-product",
+        "metadata": {
+          "shopify_api": "POST admin/products.json",
+          "site": "current"
+        },
+        "source_entity": "mapping"
+      }
+    ],
+    "storage": []
+  }
+}
