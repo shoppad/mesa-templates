@@ -1,5 +1,5 @@
 {
-  "key": "recharge-order-processed-to-google-analytics-create-transaction",
+  "key": "send-renewal-to-google-analytics",
   "name": "Send Recharge Renewal Data to Google Analytics",
   "version": "1.0.0",
   "description": "",
