@@ -1,0 +1,132 @@
+{
+  "key": "recharge-order-processed-to-google-analytics-create-transaction",
+  "name": "Send Recharge Renewal Data to Google Analytics",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "recharge",
+  "destination": "googleanalytics",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "recharge",
+        "entity": "order",
+        "action": "order/processed",
+        "name": "Recharge: Order Processed",
+        "key": "recharge-order-processed",
+        "metadata": {
+          "topic": "order/processed",
+          "secret": ""
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify: Retrieve Order",
+        "key": "shopify-retrieve-order",
+        "metadata": {
+          "shopify_api": "GET admin/orders/{{order_id}}.json",
+          "order_id": "{{source.shopify_order_id}}",
+          "site": "current"
+        },
+        "destination_entity": "mapping"
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to Google Analytics Create Transaction",
+        "key": "mapping-to-google-analytics-create-transaction",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "ti",
+              "source": "{{name}}"
+            },
+            {
+              "destination": "tr",
+              "source": "{{total_price}}"
+            },
+            {
+              "destination": "tt",
+              "source": "{{total_tax}}"
+            },
+            {
+              "destination": "ts",
+              "source": "{{total_shipping_price_set.shop_money.amount}}"
+            },
+            {
+              "destination": "cu",
+              "source": "{{currency}}"
+            },
+            {
+              "destination": "ta",
+              "source": "{{source_name}}"
+            },
+            {
+              "destination": "items[0].in",
+              "source": "{{line_items.0.name}}"
+            },
+            {
+              "destination": "items[0].ip",
+              "source": "{{line_items.0.price}}"
+            },
+            {
+              "destination": "items[0].iq",
+              "source": "{{line_items.0.quantity}}"
+            },
+            {
+              "destination": "items[0].ic",
+              "source": "{{line_items.0.sku}}"
+            },
+            {
+              "destination": "items[1].in",
+              "source": "{{line_items.1.name}}"
+            },
+            {
+              "destination": "items[1].ip",
+              "source": "{{line_items.1.price}}"
+            },
+            {
+              "destination": "items[1].iq",
+              "source": "{{line_items.1.quantity}}"
+            },
+            {
+              "destination": "items[1].ic",
+              "source": "{{line_items.1.sku}}"
+            }
+          ],
+          "script": "transform.js"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "source_entity": "order",
+        "destination_entity": "transaction"
+      },
+      {
+        "trigger_type": "output",
+        "type": "googleanalytics",
+        "entity": "transaction",
+        "action": "create",
+        "name": "Google Analytics: Create Transaction",
+        "key": "google-analytics-create-transaction",
+        "metadata": {
+          "ga_property_id": ""
+        },
+        "source_entity": "mapping"
+      }
+    ],
+    "storage": []
+  }
+}
