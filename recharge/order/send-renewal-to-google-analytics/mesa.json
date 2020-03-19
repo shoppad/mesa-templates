@@ -71,36 +71,20 @@
               "source": "{{source_name}}"
             },
             {
-              "destination": "items[0].in",
-              "source": "{{line_items.0.name}}"
+              "destination": "items[].in",
+              "source": "{{line_items[].name}}"
             },
             {
-              "destination": "items[0].ip",
-              "source": "{{line_items.0.price}}"
+              "destination": "items[].ip",
+              "source": "{{line_items[].price}}"
             },
             {
-              "destination": "items[0].iq",
-              "source": "{{line_items.0.quantity}}"
+              "destination": "items[].iq",
+              "source": "{{line_items[].quantity}}"
             },
             {
-              "destination": "items[0].ic",
-              "source": "{{line_items.0.sku}}"
-            },
-            {
-              "destination": "items[1].in",
-              "source": "{{line_items.1.name}}"
-            },
-            {
-              "destination": "items[1].ip",
-              "source": "{{line_items.1.price}}"
-            },
-            {
-              "destination": "items[1].iq",
-              "source": "{{line_items.1.quantity}}"
-            },
-            {
-              "destination": "items[1].ic",
-              "source": "{{line_items.1.sku}}"
+              "destination": "items[].ic",
+              "source": "{{line_items[].sku}}"
             }
           ],
           "script": "transform.js"
