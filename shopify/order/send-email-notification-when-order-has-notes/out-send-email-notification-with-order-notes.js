@@ -42,7 +42,8 @@ Notes have been included in the order. They are the following:
 
 ${orderNotes}
 
-View Order ${orderNumber}: https://${context.shop.domain}/admin/orders/${payload.id}`.trim()
+View Order ${orderNumber}: https://${context.shop.domain}/admin/orders/${payload.id}`.trim(),
+        `no-reply@mail.getmesa.com`
       );
     }
   };
