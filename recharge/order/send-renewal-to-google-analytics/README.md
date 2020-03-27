@@ -8,7 +8,7 @@ On Recharge successful order renewal creation, send client ID data to Google Ana
 
 ### Insert snippet for analytics to be added to checkouts in recharge
 
-Add this snippet to cart.json, inside the `<form>` tag, to capture the GA client ID on checkout
+Add this snippet to cart.liquid, inside the `<form>` tag, to capture the GA client ID on checkout
 ```
   <!-- Mesa by ShopPad - BEGIN GA client ID snippet -->
   <input id="cid" type="hidden" name="attributes[cid]" />
