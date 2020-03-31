@@ -26,16 +26,4 @@ Add this snippet to cart.liquid, inside the `<form>` tag, to capture the GA clie
 
 ### Recharge
 
-- Authorize the recharge application
-@TODO
-
-## Developing
-
-[Mesa-CLI](https://developers.getmesa.com/cli) command to export code and configuration to your local filesystem:
-
-```
-mesa initialize \
-    --inputs=recharge-order-processed \
-    --outputs=shopify-retrieve-order \
-    --files=transform.js
-```
+Authorize the recharge application using the credential form
