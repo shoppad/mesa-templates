@@ -6,7 +6,7 @@
   "video": "",
   "tags": [],
   "source": "recharge",
-  "destination": "googleanalytics",
+  "destination": "google-analytics",
   "enabled": true,
   "config": {
     "inputs": [
