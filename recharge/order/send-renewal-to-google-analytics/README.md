@@ -2,8 +2,6 @@
 
 On Recharge successful order renewal creation, send client ID data to Google Analytics.
 
-[![Integrate with Mesa](https://www.getmesa.com/images/integrate.png)<br>Install this library now in Mesa](https://getmesa.com/install/recharge/order/send-renewal-to-google-analytics)
-
 ## Setup
 
 ### Insert snippet for analytics to be added to checkouts in recharge
