@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Sends Page Studio pages from one Shopify store to another Shopify store after a new page is created.",
   "video": "",
-  "tags": ['shopify'],
+  "tags": ["shopify"],
   "source": "pagestudio",
   "destination": "pagestudio",
   "enabled": false,
