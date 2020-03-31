@@ -1,5 +1,5 @@
 {
-  "key": "send-renewal-to-google-analytics",
+  "key": "shoppad/mesa-templates/recharge/order/send-renewal-to-google-analytics",
   "name": "Send Recharge Renewal Data to Google Analytics",
   "version": "1.0.0",
   "description": "On Recharge successful order renewal creation, send client ID data to Google Analytics.",
