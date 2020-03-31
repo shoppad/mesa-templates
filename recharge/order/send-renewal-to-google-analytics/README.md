@@ -1,7 +1,3 @@
-# Recharge - Send renewal to Google Analytics.
-
-On Recharge successful order renewal creation, send client ID data to Google Analytics.
-
 ## Setup
 
 ### Insert snippet for analytics to be added to checkouts in recharge
@@ -21,7 +17,7 @@ Add this snippet to cart.liquid, inside the `<form>` tag, to capture the GA clie
   </script>
   <!-- Mesa by ShopPad - END GA client ID snippet -->
 ```
+### Recharge + Google Analytics
 
-### Recharge
-
-Authorize the recharge application using the credential form
+- Open `Recharge: Order Processed` and follow the Credential steps to authorize with Recharge.
+- Open `Google Analytics: Create Transaction` and paste in your google analytics property ID.
