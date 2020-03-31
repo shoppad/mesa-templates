@@ -1,3 +1,3 @@
-## Setup
+## Optional Customizations
 
-This will create an "Order Risk" entry if an incoming Shopify Order meets the Criteria, total price is less than 0.1.
+- Open `Transform:  Order to Order Risk` and set the "recommendation" line to `investigate` if you would like to reduce the severity of the Order Risk.  See https://shopify.dev/docs/admin-api/rest/reference/orders/order-risk for more information
