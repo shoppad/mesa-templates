@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/pagestudio/send-page-studio-page-to-another-store",
+  "key": "shoppad/mesa-templates/pagestudio/page/send-page-studio-page-to-another-store",
   "name": "Send Page Studio Page to Another Store",
   "version": "1.0.0",
   "description": "Sends Page Studio pages from one Shopify store to another Shopify store after a new page is created.",
