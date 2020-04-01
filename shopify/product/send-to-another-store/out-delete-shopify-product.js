@@ -23,6 +23,8 @@ module.exports = new class {
     let productMap = JSON.parse(Mesa.storage.get('product-map.json'));
     let foreignProductID = productMap[payload.id];
 
-    Shopify.delete('/admin/products/' + foreignProductID + '.json', {}, connectionObj);
+    if (foreignProductID) {
+      Shopify.delete('/admin/products/' + foreignProductID + '.json', {}, connectionObj);
+    }
   }
 };
