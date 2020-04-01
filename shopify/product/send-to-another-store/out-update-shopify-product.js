@@ -23,10 +23,11 @@ module.exports = new class {
     let productMap = JSON.parse(Mesa.storage.get('product-map.json'));
     let foreignProductID = productMap[payload.id];
 
-    // Delete the variants to avoid a Shopify id mismatch error. In the future we may want to do more with this
-    delete payload.variants;
+    if (foreignProductID) {
+      // Delete the variants to avoid a Shopify id mismatch error. In the future we may want to do more with this
+      delete payload.variants;
 
-    Shopify.put('/admin/products/' + foreignProductID + '.json', payload, {}, connectionObj);
-
+      Shopify.put('/admin/products/' + foreignProductID + '.json', payload, {}, connectionObj);
+    }
   }
 };
