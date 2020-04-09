@@ -2,13 +2,13 @@
   "key": "shoppad/mesa-templates/shopify/product/scheduled-product-price-change",
   "name": "Scheduled Product Price Change",
   "version": "1.0.0",
-  "description": "On a given date, set a group of products' prices.  \n\nWARNING: THIS WILL NOT WORK PROPERLY IF YOU HAVE DIFFERENT PRICES PER VARIANT.",
+  "description": "On a given date, set a group of products' prices.",
   "video": "",
   "tags": [],
   "source": "schedule",
   "destination": "shopify",
   "enabled": true,
-  "logging": true,
+  "logging": false,
   "config": {
     "inputs": [
       {
@@ -120,7 +120,7 @@
       {
         "key": "products.json",
         "edit_type": "code",
-        "value": "[\n    {\n        \"id\": 4299488395309,\n        \"price\": \"180.00\"\n    },\n    {\n        \"id\": 4295500005421,\n        \"price\": \"4.99\"\n    }\n]"
+        "value": "[\n    {\n        \"id\": 4299488395309,\n        \"price\": \"180.00\",\n        \"price\": \"199.00\"\n    },\n    {\n        \"id\": 4295500005421,\n        \"price\": \"4.99\",\n        \"price\": \"5.99\"\n    }\n]"
       },
       {
         "key": "reduce_or_reset_price",
