@@ -1,0 +1,135 @@
+{
+  "key": "shoppad/mesa-templates/shopify/product/scheduled-product-price-change",
+  "name": "Scheduled Product Price Change",
+  "version": "1.0.0",
+  "description": "On a given date, set a group of products' prices.  \n\nWARNING: THIS WILL NOT WORK PROPERLY IF YOU HAVE DIFFERENT PRICES PER VARIANT.",
+  "video": "",
+  "tags": [],
+  "source": "schedule",
+  "destination": "shopify",
+  "enabled": true,
+  "logging": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "schedule",
+        "name": "Scheduler",
+        "key": "scheduler",
+        "metadata": {
+          "datetime": "2022-07-20T16:00:00.000Z"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "script",
+        "name": "Get products from products.json",
+        "key": "transform-script",
+        "metadata": {
+          "script": "get-products-json.js",
+          "description": "See the \"products.json\" item in the \"Storage\" area below.\n\nYou must have a \"id\": 12345679, \"price\": \"0.00\" and a \"compare_at_price\": \"0.00\" entry for each item.\n\nSee https://shopify.dev/docs/admin-api/rest/reference/products/product for more info."
+        },
+        "local_fields": [
+          {
+            "key": "description",
+            "type": "textarea",
+            "label": "Description",
+            "description": "Add a description of what this script does for non-technical users"
+          }
+        ],
+        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform)."
+      },
+      {
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterate each product",
+        "key": "iterator",
+        "metadata": {
+          "key": "products"
+        },
+        "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
+        "destination_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "product",
+        "action": "retrieve",
+        "name": "Shopify: Retrieve Product",
+        "key": "shopify-retrieve-product",
+        "metadata": {
+          "shopify_api": "GET admin/products/{{product_id}}.json",
+          "product_id": "{{current_item.id}}",
+          "site": "current"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "name": "Build Product Update data",
+        "key": "shopify-update-product-transform",
+        "metadata": {
+          "script": "update-product-transform.js",
+          "mapping": [
+            {
+              "destination": "id",
+              "source": "{{id}}"
+            },
+            {
+              "destination": "variants[].id",
+              "source": "{{variants[].id}}"
+            },
+            {
+              "destination": "variants[].price",
+              "source": "{{variants[].price}}"
+            },
+            {
+              "destination": "variants[].compare_at_price",
+              "source": "{{variants[].compare_at_price}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+        "source_entity": "product",
+        "destination_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "product",
+        "action": "update",
+        "name": "Shopify: Update Product",
+        "key": "shopify-update-product",
+        "metadata": {
+          "shopify_api": "PUT admin/products/{{product_id}}.json",
+          "product_id": "{{id}}",
+          "site": "current"
+        }
+      }
+    ],
+    "storage": [
+      {
+        "key": "products.json",
+        "edit_type": "code",
+        "value": "[\n    {\n        \"id\": 4299488395309,\n        \"price\": \"180.00\"\n    },\n    {\n        \"id\": 4295500005421,\n        \"price\": \"4.99\"\n    }\n]"
+      },
+      {
+        "key": "reduce_or_reset_price",
+        "value": "reduce"
+      },
+      {
+        "key": "skip_send_to_shopify_true_or_false",
+        "value": "true"
+      }
+    ]
+  }
+}
