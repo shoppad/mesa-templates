@@ -120,7 +120,7 @@
       {
         "key": "products.json",
         "edit_type": "code",
-        "value": "[\n    {\n        \"id\": 4299488395309,\n        \"price\": \"180.00\",\n        \"price\": \"199.00\"\n    },\n    {\n        \"id\": 4295500005421,\n        \"price\": \"4.99\",\n        \"price\": \"5.99\"\n    }\n]"
+        "value": "[\n    {\n        \"id\": 4299488395309,\n        \"price\": \"180.00\",\n        \"compare_at_price\": \"199.00\"\n    }\n]"
       },
       {
         "key": "reduce_or_reset_price",
