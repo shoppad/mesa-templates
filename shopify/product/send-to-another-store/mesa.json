@@ -30,7 +30,7 @@
         "type": "shopify_webhook",
         "name": "Shopify Product Delete Webhook",
         "key": "in-shopify-product-delete",
-        "script": "in-output-send.js",
+        "script": "in-shopify-product-delete.js",
         "topic": "products/delete"
       }
     ],
