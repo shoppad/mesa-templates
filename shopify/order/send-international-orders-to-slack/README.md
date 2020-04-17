@@ -3,7 +3,7 @@
 - Enable **Incoming Webhooks** from the settings page.
 - Click **Add New Webhook to Workspace**.
 - Select a channel that the app will post to and click **Authorize**.
-- Click **Copy** near your Webhook URL and paste the value as a Secret Value, with the key as `slack-webhook-url`.
+- Click **Copy** near your Webhook URL and paste the value in the `slack-webhook-url` Credential (located under the Credentials tab).
 - Save the slack channel name you wish to use (for example "#order-paid") as a Storage Item, with the key as `slack-channel`.
 - Enable the Automation in the right sidebar and click **Save**.
 

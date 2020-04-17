@@ -7,7 +7,7 @@
   "tags": [],
   "source": "schedule",
   "destination": "shopify",
-  "enabled": true,
+  "enabled": false,
   "logging": false,
   "config": {
     "inputs": [
