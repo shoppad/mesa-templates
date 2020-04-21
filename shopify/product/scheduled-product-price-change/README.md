@@ -29,7 +29,7 @@ Ex:
 
 **_WARNING:_** Misconfigured product updates can overwrite your variants! Please make sure that `products.json` is set up properly before exiting test mode!
 
-**To fully enable this automation** change the "Storage" item `skip_send_to_shopify_true_or_false` to false. If it is set to true, everything will run **EXCEPT** the final update.
+**To fully enable this automation** change the Storage Item `skip_send_to_shopify_true_or_false` to false. If it is set to true, everything will run **EXCEPT** the final update.
 
 ### Reset the prices to original levels
 

@@ -6,7 +6,7 @@
   "tags": ["Fulfillment", "Order"],
   "source": "shopify",
   "destination": "fosdick",
-  "enabled": true,
+  "enabled": false,
   "config": {
     "inputs": [
       {

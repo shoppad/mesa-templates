@@ -5,7 +5,7 @@
     - Make sure "Products, variants and collections" have the "Read and write" Admin API permissions.
     - Save your changes. 
     - Stay on the window that includes a green banner that says "Private app created successfully." 
-- Set the `store-host` Storage item to the domain of the Shopify store you want to sync the orders to (typically this will be something like storename.myshopify.com).
-- Set the `store-key` Storage item  to the API key obtained from your private app. 
-- Set the `store-password` Secret to the Password obtained from your private app. 
-- Enable the Automation and press Save. 
+- Set the `store-host` Storage Item to the domain of the Shopify store you want to sync the orders to (typically this will be something like storename.myshopify.com).
+- Set the `store-key` Storage Item  to the API key obtained from your private app. 
+- Set the `store-password` Credential (located under the Credentials tab) to the Password obtained from your private app. 
+- Enable the Automation in the right sidebar and click **Save**.
