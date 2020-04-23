@@ -1,6 +1,6 @@
 {
-  "key": "shopify-product-created-to-shopify-update-product",
-  "name": "Shopify Product Created to Shopify Update Product",
+  "key": "shopify_product_update",
+  "name": "Test: Shopify Product Update",
   "version": "1.0.0",
   "description": "",
   "video": "",
