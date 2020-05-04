@@ -1,0 +1,174 @@
+{
+  "key": "shopify-product-created-or-updated-to-custom",
+  "name": "Shopify Product Created or Updated to Salesforce Product and Pricebook Entry",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "custom",
+  "enabled": true,
+  "logging": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "product",
+        "action": "create-update",
+        "name": "Shopify: Product Created or Updated",
+        "key": "shopify-product-created-or-updated",
+        "metadata": {
+          "topic": "products/create+products/update"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{shopify-product-created-or-updated.variants[]}}"
+        },
+        "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
+        "destination_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "product",
+        "action": "query",
+        "name": "Salesforce: Query Product",
+        "key": "salesforce_query_product",
+        "metadata": {
+          "entity_name": "Product2",
+          "method": "QUERY",
+          "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{iterator.current_item.id}}'",
+          "secret": "5ea9c518aa42a06e8e1eff73"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "name": "Mapping to Salesforce: Create or Update Product",
+        "key": "salesforce_create_or_update_product_transform",
+        "metadata": {
+          "script": "salesforce_create_or_update_product_transform.js",
+          "mapping": [
+            {
+              "destination": "Name",
+              "source": "{{iterator.current_item.combined_title}}"
+            },
+            {
+              "destination": "StockKeepingUnit",
+              "source": "{{iterator.current_item.sku}}"
+            },
+            {
+              "destination": "ProductCode",
+              "source": "{{iterator.current_item.barcode}}"
+            },
+            {
+              "destination": "IsActive",
+              "source": "true"
+            },
+            {
+              "destination": "Description",
+              "source": "{{iterator.complete.body_html}}"
+            },
+            {
+              "destination": "Shopify_Variant_ID__c",
+              "source": "{{iterator.current_item.id}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+        "source_entity": "product",
+        "destination_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "product",
+        "action": "create_or_update",
+        "name": "Salesforce: Create or Update Product",
+        "key": "salesforce_create_or_update_product",
+        "metadata": {
+          "entity_name": "Product2",
+          "method": "POST_OR_PATCH",
+          "secret": "5ea9c518aa42a06e8e1eff73"
+        },
+        "destination_entity": "pricebook_entry"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "pricebook_entry",
+        "action": "query",
+        "name": "Salesforce: Query Pricebook Entry",
+        "key": "salesforce_query_pricebook_entry",
+        "metadata": {
+          "entity_name": "PricebookEntry",
+          "method": "QUERY",
+          "salesforce_query": "SELECT Id FROM PricebookEntry WHERE Product2Id='{{salesforce_create_or_update_product.id}}'",
+          "secret": "5ea9c518aa42a06e8e1eff73"
+        },
+        "source_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "name": "Mapping to Salesforce: Create or Update Pricebook Entry",
+        "key": "salesforce_create_pricebook_entry_transform",
+        "metadata": {
+          "script": "salesforce_create_pricebook_entry_transform.js",
+          "mapping": [
+            {
+              "destination": "Product2Id",
+              "source": "{{salesforce_create_or_update_product.id}}"
+            },
+            {
+              "destination": "IsActive",
+              "source": "true"
+            },
+            {
+              "destination": "UnitPrice",
+              "source": "{{iterator.current_item.price}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+        "source_entity": "pricebook_entry",
+        "destination_entity": "pricebook_entry"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "pricebook_entry",
+        "action": "create_or_update",
+        "name": "Salesforce: Create or Update Pricebook Entry",
+        "key": "salesforce_create_or_update_pricebook_entry",
+        "metadata": {
+          "entity_name": "PricebookEntry",
+          "method": "POST_OR_PATCH",
+          "Pricebook2Id": "01s2E000002pddCQAQ",
+          "secret": "5ea9c518aa42a06e8e1eff73"
+        }
+      }
+    ],
+    "storage": []
+  }
+}

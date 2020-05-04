@@ -1,0 +1,142 @@
+{
+  "key": "shopify-order-created_to_salesforce_create_opportunity",
+  "name": "Shopify Order Created to Salesforce Create Opportunity",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "salesforce",
+  "enabled": false,
+  "logging": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify: Order Created",
+        "key": "shopify-order-created",
+        "metadata": {
+          "topic": "orders/create"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "account",
+        "action": "query",
+        "name": "Salesforce: Query Single Account",
+        "key": "salesforce-query-single-account",
+        "metadata": {
+          "entity_name": "Account",
+          "method": "QUERY",
+          "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c={{shopify-order-created.customer.id}}",
+          "secret": "5ea9c518aa42a06e8e1eff73"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Custom: Get Order Variant Ids",
+        "key": "custom_1",
+        "metadata": {
+          "script": "custom-get-order-variant-ids.js"
+        },
+        "source_entity": "account",
+        "destination_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "product",
+        "action": "query_multiple",
+        "name": "Salesforce: Query Multiple Product",
+        "key": "salesforce-query-multiple-product",
+        "metadata": {
+          "entity_name": "Product2",
+          "method": "QUERY_MULTIPLE",
+          "salesforce_query": "SELECT ID,Shopify_Variant_Id__c  FROM Product2 WHERE Shopify_Variant_Id__c IN {{custom_1.variant_ids}}",
+          "secret": "5ea9c518aa42a06e8e1eff73"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to Salesforce Create Opportunity",
+        "key": "mapping-to-salesforce-create-opportunity",
+        "metadata": {
+          "script": "transform.js",
+          "mapping": null
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+        "source_entity": "product",
+        "destination_entity": "opportunity"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "opportunity",
+        "action": "create",
+        "name": "Salesforce: Create Opportunity",
+        "key": "salesforce-create-opportunity",
+        "metadata": {
+          "entity_name": "Opportunity",
+          "method": "POST"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": ""
+        },
+        "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
+        "source_entity": "opportunity"
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "name": "Mapping to Salesforce: Create Opportunity Product",
+        "key": "salesforce-create-opportunity-product-transform",
+        "metadata": {
+          "script": "salesforce-create-opportunity-product-transform.js",
+          "mapping": null
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+        "destination_entity": "opportunity_product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "opportunity_product",
+        "action": "create",
+        "name": "Salesforce: Create Opportunity Product",
+        "key": "salesforce-create-opportunity-product",
+        "metadata": {
+          "entity_name": "OpportunityLineItem",
+          "method": "POST"
+        }
+      }
+    ],
+    "storage": []
+  }
+}
