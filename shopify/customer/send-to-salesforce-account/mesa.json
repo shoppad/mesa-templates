@@ -7,7 +7,7 @@
   "tags": [],
   "source": "shopify_webhook",
   "destination": "salesforce",
-  "enabled": true,
+  "enabled": false,
   "logging": true,
   "config": {
     "inputs": [
@@ -48,7 +48,7 @@
           "mapping": [
             {
               "destination": "Name",
-              "source": "{{shopify-customer-created-or-updated.first_name shopify-customer-created-or-updated.last_name}}"
+              "source": "{{shopify-customer-created-or-updated.first_name}} {{shopify-customer-created-or-updated.last_name}}"
             },
             {
               "destination": "Phone",

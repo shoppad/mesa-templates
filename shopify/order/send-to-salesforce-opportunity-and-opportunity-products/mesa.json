@@ -1,5 +1,5 @@
 {
-  "key": "shopify-order-created_to_salesforce_create_opportunity",
+  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity",
   "name": "Shopify Order Created to Salesforce Create Opportunity",
   "version": "1.0.0",
   "description": "",
@@ -8,7 +8,7 @@
   "source": "shopify_webhook",
   "destination": "salesforce",
   "enabled": false,
-  "logging": false,
+  "logging": true,
   "config": {
     "inputs": [
       {
@@ -34,7 +34,7 @@
         "metadata": {
           "entity_name": "Account",
           "method": "QUERY",
-          "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c={{shopify-order-created.customer.id}}",
+          "salesforce_query": "SELECT Id,Name FROM Account WHERE Shopify_Customer_ID__c='{{shopify-order-created.customer.id}}'",
           "secret": "5ea9c518aa42a06e8e1eff73"
         }
       },
@@ -42,7 +42,7 @@
         "trigger_type": "output",
         "type": "custom",
         "name": "Custom: Get Order Variant Ids",
-        "key": "custom_1",
+        "key": "custom-get-order-variant-ids",
         "metadata": {
           "script": "custom-get-order-variant-ids.js"
         },
@@ -59,7 +59,7 @@
         "metadata": {
           "entity_name": "Product2",
           "method": "QUERY_MULTIPLE",
-          "salesforce_query": "SELECT ID,Shopify_Variant_Id__c  FROM Product2 WHERE Shopify_Variant_Id__c IN {{custom_1.variant_ids}}",
+          "salesforce_query": "SELECT ID,Shopify_Variant_Id__c FROM Product2 WHERE Shopify_Variant_Id__c IN ({{custom-get-order-variant-ids.variant_ids_csv}})",
           "secret": "5ea9c518aa42a06e8e1eff73"
         }
       },
@@ -70,8 +70,37 @@
         "name": "Mapping to Salesforce Create Opportunity",
         "key": "mapping-to-salesforce-create-opportunity",
         "metadata": {
-          "script": "transform.js",
-          "mapping": null
+          "script": "mapping-to-salesforce-create-opportunity-transform.js",
+          "mapping": [
+            {
+              "destination": "AccountId",
+              "source": "{{salesforce-query-single-account.Id}}"
+            },
+            {
+              "destination": "Amount",
+              "source": "{{shopify-order-created.total_price}}"
+            },
+            {
+              "destination": "CloseDate",
+              "source": "{{shopify-order-created.created_at}}"
+            },
+            {
+              "destination": "Description",
+              "source": "{{shopify-order-created.notes}}"
+            },
+            {
+              "destination": "StageName",
+              "source": "Closed Won"
+            },
+            {
+              "destination": "Pricebook2Id",
+              "source": "01s2E000002pddCQAQ"
+            },
+            {
+              "destination": "Name",
+              "source": "{{salesforce-query-single-account.Name}} - {{shopify-order-created.name}}"
+            }
+          ]
         },
         "local_fields": [
           {
@@ -97,11 +126,20 @@
       },
       {
         "trigger_type": "output",
+        "type": "custom",
+        "name": "Custom: Append Salesforce Product ID to line items",
+        "key": "custom-append-sf-product-ids-to-line-items",
+        "metadata": {
+          "script": "custom-append-sf-product-ids-to-line-items.js"
+        }
+      },
+      {
+        "trigger_type": "output",
         "type": "iterator",
         "name": "Iterator",
         "key": "iterator",
         "metadata": {
-          "key": ""
+          "key": "{{custom-append-sf-product-ids-to-line-items.line_items[]}}"
         },
         "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
         "source_entity": "opportunity"
@@ -113,7 +151,24 @@
         "key": "salesforce-create-opportunity-product-transform",
         "metadata": {
           "script": "salesforce-create-opportunity-product-transform.js",
-          "mapping": null
+          "mapping": [
+            {
+              "destination": "OpportunityId",
+              "source": "{{salesforce-create-opportunity.id}}"
+            },
+            {
+              "destination": "UnitPrice",
+              "source": "{{current_item.price}}"
+            },
+            {
+              "destination": "Quantity",
+              "source": "{{current_item.quantity}}"
+            },
+            {
+              "destination": "Product2Id",
+              "source": "{{current_item.salesforce_product_id}}"
+            }
+          ]
         },
         "local_fields": [
           {

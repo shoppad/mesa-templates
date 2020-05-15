@@ -18,9 +18,7 @@ module.exports = new class {
 
     // Alter the payload data based on our transform rules
     const output = Transform.convert(context, payload);
-
-    // Adjust `output` here to alter data after we transform it.
-
+    
     // We're done, call the next step!
     Mesa.output.next(output);
   }
