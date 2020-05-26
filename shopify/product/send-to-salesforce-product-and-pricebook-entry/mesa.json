@@ -2,13 +2,16 @@
   "key": "shoppad/mesa-templates/shopify/product/send-to-salesforce-product-and-pricebook-entry",
   "name": "Shopify Product Created or Updated to Salesforce Product and Pricebook Entry",
   "version": "1.0.0",
-  "description": "",
+  "description": "Send Product from Shopify to Salesforce Product and pricebook Entry when product is created or updated.",
   "video": "",
-  "tags": [],
+  "tags": [
+    "Product"
+  ],
   "source": "shopify_webhook",
-  "destination": "custom",
+  "destination": "salesforce",
+  "readme": "* Enter a value for `Salesforce Price Book ID` under 'Salesforce: Create or Update Pricebook Entry' below, then save the automation. \n\n* To get the Salesforce Price Book Id, log in to Salesforce, and go to the 'Price Book' page. \n\n* Copy the link for the Price Book you wish to use, then copy the ID in the link, between `r/` and `/view`. \n\n* For example, for `https://ab11.lightning.force.com/lightning/r/01s2E000002pddCQAQ/view`, the code would be `01s2E000002pddCQAQ`",
   "enabled": false,
-  "logging": true,
+  "logging": false,
   "config": {
     "inputs": [
       {
@@ -45,8 +48,7 @@
         "metadata": {
           "entity_name": "Product2",
           "method": "QUERY",
-          "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{iterator.current_item.id}}'",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{iterator.current_item.id}}'"
         }
       },
       {
@@ -102,8 +104,7 @@
         "key": "salesforce_create_or_update_product",
         "metadata": {
           "entity_name": "Product2",
-          "method": "POST_OR_PATCH",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "method": "POST_OR_PATCH"
         },
         "destination_entity": "pricebook_entry"
       },
@@ -117,8 +118,7 @@
         "metadata": {
           "entity_name": "PricebookEntry",
           "method": "QUERY",
-          "salesforce_query": "SELECT Id FROM PricebookEntry WHERE Product2Id='{{salesforce_create_or_update_product.id}}'",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "salesforce_query": "SELECT Id FROM PricebookEntry WHERE Product2Id='{{salesforce_create_or_update_product.id}}'"
         },
         "source_entity": "product"
       },
@@ -163,9 +163,7 @@
         "key": "salesforce_create_or_update_pricebook_entry",
         "metadata": {
           "entity_name": "PricebookEntry",
-          "method": "POST_OR_PATCH",
-          "Pricebook2Id": "01s2E000002pddCQAQ",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "method": "POST_OR_PATCH"
         }
       }
     ],

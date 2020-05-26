@@ -1,14 +1,17 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity",
-  "name": "Shopify Order Created to Salesforce Create Opportunity",
+  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity-and-opportunity-products",
+  "name": "Shopify Order Created to Salesforce Opportunity and Opportunity Products",
   "version": "1.0.0",
-  "description": "",
+  "description": "Send Order from Shopify to Salesforce Opportunity when order is created.",
   "video": "",
-  "tags": [],
+  "tags": [
+    "Order"
+  ],
   "source": "shopify_webhook",
   "destination": "salesforce",
   "enabled": false,
-  "logging": true,
+  "logging": false,
+  "readme": "* Enter a value for `Pricebook2Id` in the `Value` column for 'Mapping to Salesforce Create Opportunity' below, then save the automation. \n\n* To get the Salesforce Price Book Id, log in to Salesforce, and go to the 'Price Book' page. \n\n* Copy the link for the Price Book you wish to use, then copy the ID in the link, between `r/` and `/view`. \n\n* For example, for `https://ab11.lightning.force.com/lightning/r/01s2E000002pddCQAQ/view`, the code would be `01s2E000002pddCQAQ`",
   "config": {
     "inputs": [
       {
@@ -34,8 +37,7 @@
         "metadata": {
           "entity_name": "Account",
           "method": "QUERY",
-          "salesforce_query": "SELECT Id,Name FROM Account WHERE Shopify_Customer_ID__c='{{shopify-order-created.customer.id}}'",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "salesforce_query": "SELECT Id,Name FROM Account WHERE Shopify_Customer_ID__c='{{shopify-order-created.customer.id}}'"
         }
       },
       {
@@ -59,8 +61,7 @@
         "metadata": {
           "entity_name": "Product2",
           "method": "QUERY_MULTIPLE",
-          "salesforce_query": "SELECT ID,Shopify_Variant_Id__c FROM Product2 WHERE Shopify_Variant_Id__c IN ({{custom-get-order-variant-ids.variant_ids_csv}})",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "salesforce_query": "SELECT ID,Shopify_Variant_Id__c FROM Product2 WHERE Shopify_Variant_Id__c IN ({{custom-get-order-variant-ids.variant_ids_csv}})"
         }
       },
       {
@@ -94,7 +95,7 @@
             },
             {
               "destination": "Pricebook2Id",
-              "source": "01s2E000002pddCQAQ"
+              "source": ""
             },
             {
               "destination": "Name",

@@ -2,13 +2,15 @@
   "key": "shoppad/mesa-templates/shopify/customer/send-to-salesforce-account",
   "name": "Shopify Customer Created or Updated to Salesforce Account",
   "version": "1.0.0",
-  "description": "",
+  "description": "Send Customer from Shopify to Salesforce Account when customer is created or updated.",
   "video": "",
-  "tags": [],
+  "tags": [
+    "Account"
+  ],
   "source": "shopify_webhook",
   "destination": "salesforce",
   "enabled": false,
-  "logging": true,
+  "logging": false,
   "config": {
     "inputs": [
       {
@@ -34,8 +36,7 @@
         "metadata": {
           "entity_name": "Account",
           "method": "QUERY",
-          "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c='{{source.id}}'",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c='{{source.id}}'"
         }
       },
       {
@@ -87,8 +88,7 @@
         "key": "salesforce-create-or-update-account",
         "metadata": {
           "entity_name": "Account",
-          "method": "POST_OR_PATCH",
-          "secret": "5ea9c518aa42a06e8e1eff73"
+          "method": "POST_OR_PATCH"
         }
       }
     ],
