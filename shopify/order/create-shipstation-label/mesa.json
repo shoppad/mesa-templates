@@ -1,0 +1,282 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/create-shipstation-label",
+  "name": "Create a ShipStation label when a Shopify Order is Created",
+  "version": "1.0.0",
+  "description": "Automatically fulfill all shippable products in the order, create a Shipping label, and attach it to the Shopify Order Notes field.",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "shipstation",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to ShipStation Create Order",
+        "key": "mapping-shipstation-order",
+        "metadata": {
+          "script": "mapping-shipstation-order.js",
+          "mapping": [
+            {
+              "destination": "orderNumber",
+              "source": "{{shopify_order.order_number}}"
+            },
+            {
+              "destination": "orderDate",
+              "source": "{{shopify_order.created_at}}"
+            },
+            {
+              "destination": "orderStatus",
+              "source": "awaiting_shipment"
+            },
+            {
+              "destination": "billTo.name",
+              "source": "{{shopify_order.billing_address.name}}"
+            },
+            {
+              "destination": "billTo.company",
+              "source": "{{shopify_order.billing_address.company}}"
+            },
+            {
+              "destination": "billTo.street1",
+              "source": "{{shopify_order.billing_address.address1}}"
+            },
+            {
+              "destination": "billTo.street2",
+              "source": "{{shopify_order.billing_address.address2}}"
+            },
+            {
+              "destination": "billTo.city",
+              "source": "{{shopify_order.billing_address.city}}"
+            },
+            {
+              "destination": "billTo.state",
+              "source": "{{shopify_order.billing_address.province_code}}"
+            },
+            {
+              "destination": "billTo.postalCode",
+              "source": "{{shopify_order.billing_address.zip}}"
+            },
+            {
+              "destination": "billTo.country",
+              "source": "{{shopify_order.billing_address.country_code}}"
+            },
+            {
+              "destination": "shipTo.name",
+              "source": "{{shopify_order.shipping_address.name}}"
+            },
+            {
+              "destination": "shipTo.company",
+              "source": "{{shopify_order.shipping_address.company}}"
+            },
+            {
+              "destination": "shipTo.street1",
+              "source": "{{shopify_order.shipping_address.address1}}"
+            },
+            {
+              "destination": "shipTo.street2",
+              "source": "{{shopify_order.shipping_address.address2}}"
+            },
+            {
+              "destination": "shipTo.city",
+              "source": "{{shopify_order.shipping_address.city}}"
+            },
+            {
+              "destination": "shipTo.state",
+              "source": "{{shopify_order.shipping_address.province_code}}"
+            },
+            {
+              "destination": "shipTo.postalCode",
+              "source": "{{shopify_order.shipping_address.zip}}"
+            },
+            {
+              "destination": "shipTo.country",
+              "source": "{{shopify_order.shipping_address.country_code}}"
+            },
+            {
+              "destination": "weight.name",
+              "source": "grams"
+            },
+            {
+              "destination": "weight.value",
+              "source": "{{shopify_order.total_weight}}"
+            },
+            {
+              "destination": "orderKey",
+              "source": "{{shopify_order.id}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets"
+          }
+        ]
+      },
+      {
+        "trigger_type": "output",
+        "type": "shipstation",
+        "entity": "order",
+        "action": "create",
+        "name": "ShipStation Create Order",
+        "key": "shipstation_order",
+        "metadata": {
+          "shipstation_api": "POST /orders/createorder",
+          "key_secret": "5ec7139c039eb23f466f9012"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to ShipStation Label Order",
+        "key": "transformmapping",
+        "metadata": {
+          "script": "mapping-shipstation-label.js",
+          "mapping": [
+            {
+              "destination": "orderId",
+              "source": "{{orderId}}"
+            },
+            {
+              "destination": "carrierCode",
+              "source": "stamps_com"
+            },
+            {
+              "destination": "serviceCode",
+              "source": "usps_parcel_select"
+            },
+            {
+              "destination": "confirmation",
+              "source": "none"
+            },
+            {
+              "destination": "testLabel",
+              "source": "true"
+            },
+            {
+              "destination": "shipDate",
+              "source": "{{ \"now\" | date: \"%Y-%m-%d\" }}"
+            },
+            {
+              "destination": "packageCode",
+              "source": "package"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets"
+          }
+        ]
+      },
+      {
+        "trigger_type": "output",
+        "type": "shipstation",
+        "entity": "order",
+        "action": "create_label",
+        "name": "ShipStation Order Label",
+        "key": "shipstation_order_1",
+        "metadata": {
+          "shipstation_api": "POST /orders/createlabelfororder",
+          "key_secret": "5ec70e7d83ffbb0e2523ddc4"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "name": "Mapping to Shopify Update Order",
+        "key": "mapping-shopify-order",
+        "metadata": {
+          "script": "mapping-shopify-order.js",
+          "mapping": [
+            {
+              "destination": "note_attributes[0].name",
+              "source": "Shipping Label"
+            },
+            {
+              "destination": "note_attributes[0].value",
+              "source": "{{labelData}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets"
+          }
+        ]
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "update",
+        "name": "Shopify Update Order",
+        "key": "shopify_order_1",
+        "metadata": {
+          "shopify_api": "PUT admin/orders/{{order_id}}.json",
+          "order_id": "{{shopify_order.id}}",
+          "site": "current"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to Create Order Fulfillment",
+        "key": "transformmapping_1",
+        "metadata": {
+          "script": "mapping-create-order-fulfillment.js",
+          "mapping": [
+            {
+              "destination": "trackingNumber",
+              "source": "{{shipstation_order_1.trackingNumber}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets"
+          }
+        ]
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order_fulfillment",
+        "action": "create",
+        "name": "Shopify Create Order Fulfillment",
+        "key": "shopify_order_fulfillment",
+        "metadata": {
+          "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json",
+          "order_id": "{{shopify_order.id}}",
+          "site": "current"
+        }
+      }
+    ],
+    "storage": []
+  }
+}
