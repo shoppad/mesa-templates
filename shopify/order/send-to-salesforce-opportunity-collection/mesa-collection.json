@@ -1,0 +1,15 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity-collection",
+  "name": "Shopify opportunity collection",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "shopify_api",
+  "templates": [
+    "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity",
+    "shoppad/mesa-templates/shopify/product/send-to-salesforce-product-and-pricebook-entry",
+    "shoppad/mesa-templates/shopify/customer/send-to-salesforce-account"
+  ]
+}
