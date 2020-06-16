@@ -8,7 +8,7 @@
   "source": "shopify_webhook",
   "destination": "shopify_api",
   "templates": [
-    "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity",
+    "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity-and-opportunity-products",
     "shoppad/mesa-templates/shopify/product/send-to-salesforce-product-and-pricebook-entry",
     "shoppad/mesa-templates/shopify/customer/send-to-salesforce-account"
   ]
