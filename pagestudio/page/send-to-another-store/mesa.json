@@ -1,41 +1,88 @@
 {
-  "key": "shoppad/mesa-templates/pagestudio/page/send-to-another-store",
-  "name": "Send Page Studio Page to Another Store",
-  "version": "1.0.0",
-  "description": "Sends Page Studio pages from one Shopify store to another Shopify store after a new page is created.",
-  "video": "",
-  "tags": ["shopify"],
-  "source": "pagestudio",
-  "destination": "pagestudio",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "pagestudio",
-        "entity": "account",
-        "action": "created",
-        "name": "Page Studio: Page Created",
-        "key": "page-studio-page-created",
-        "metadata": {
-          "poll": "* * * * *",
-          "last_sync_date_time": "2020-03-30T16:53:11-07:00"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "pagestudio",
-        "entity": "account",
-        "action": "create",
-        "name": "Page Studio: Create Page",
-        "key": "page-studio-create-page",
-        "metadata": {
-          "site": "current"
-        }
-      }
-    ],
-    "storage": []
-  }
+    "key": "shoppad/mesa-templates/pagestudio/page/send-to-another-store",
+    "name": "Send Page Studio Page to Another Store",
+    "version": "1.0.0",
+    "description": "Sends Page Studio pages from one Shopify store to another Shopify store after a new page is created.",
+    "video": "",
+    "tags": ["shopify"],
+    "source": "pagestudio",
+    "destination": "pagestudio",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "pagestudio",
+                "entity": "account",
+                "action": "created",
+                "name": "Page Studio Page Created",
+                "key": "page_studio_page",
+                "metadata": {
+                    "last_sync_date_time": "",
+                    "poll": "0 * * * *"
+                },
+                "local_fields": null,
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "action": null,
+                "name": "Mapping to Page Studio Create Page",
+                "key": "mappingtopagestudiocreatepage",
+                "metadata": {
+                    "script": "transform.js",
+                    "mapping": [
+                        {
+                            "destination": "title",
+                            "source": "{{page_studio_page.title}}"
+                        },
+                        {
+                            "destination": "handle",
+                            "source": "{{page_studio_page.handle}}"
+                        },
+                        {
+                            "destination": "body_html",
+                            "source": "{{page_studio_page.body_html}}"
+                        },
+                        {
+                            "destination": "author",
+                            "source": "{{page_studio_page.author}}"
+                        },
+                        {
+                            "destination": "created_at",
+                            "source": "{{page_studio_page.created_at}}"
+                        },
+                        {
+                            "destination": "published_at",
+                            "source": "{{page_studio_page.published_at}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets"
+                    }
+                ],
+                "weight": 0
+            },
+            {
+                "trigger_type": "output",
+                "type": "pagestudio",
+                "entity": "page",
+                "action": "create",
+                "name": "Page Studio Create Page",
+                "key": "page_studio_page_1",
+                "metadata": [],
+                "local_fields": null,
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }
