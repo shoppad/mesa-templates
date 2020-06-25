@@ -19,7 +19,8 @@
                 "key": "blog_studio_article",
                 "metadata": {
                     "last_sync_date_time": "",
-                    "blog": ""
+                    "blog": "",
+                    "poll": "0 * * * *"
                 },
                 "local_fields": null,
                 "weight": 0
