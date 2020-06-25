@@ -1,6 +1,6 @@
 {
   "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity-collection",
-  "name": "Send Shopify Order to Salesforce Opportunity and Opportunity Products",
+  "name": "Send Shopify Order, Customer and Products to Salesforce (Collection of 3 Templates)",
   "version": "1.0.0",
   "description": "A template collection that includes three Automations to sync and send Shopify orders to Salesforce opportunities.",
   "video": "",
