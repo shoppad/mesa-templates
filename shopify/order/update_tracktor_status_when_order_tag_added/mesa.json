@@ -1,0 +1,102 @@
+{
+    "key": "mesa-templates/shopify/order/update_tracktor_status_when_order_tag_added",
+    "name": "Update Tracktor Custom Status when Order Tag is Added in Shopify",
+    "version": "1.0.0",
+    "description": "Changes the Tracktor order status to \"Preparing your order\" when a \"made to order\" tag is added to the Shopify order.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "tracktor",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "order",
+                "action": "updated",
+                "name": "Shopify Order Updated",
+                "key": "shopify_order",
+                "metadata": {
+                    "topic": "orders\/updated"
+                },
+                "local_fields": null,
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "filter",
+                "entity": "",
+                "action": "",
+                "name": "Filter  ",
+                "key": "filter",
+                "metadata": {
+                    "script": "filter.js",
+                    "a": "made to order",
+                    "comparison": "in",
+                    "b": "{{shopify_order.tags}}"
+                },
+                "local_fields": null,
+                "weight": 0
+            },
+            {
+                "trigger_type": "output",
+                "type": "filter",
+                "entity": "",
+                "action": "",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "script": "filter_1.js",
+                    "a": "{{shopify_order.fulfillment_status}}",
+                    "comparison": "equals",
+                    "b": "unfulfilled"
+                },
+                "local_fields": null,
+                "weight": 1
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "",
+                "action": "",
+                "name": "Mapping to Tracktor Status",
+                "key": "tracktor_order_transform",
+                "metadata": {
+                    "script": "transform.js",
+                    "mapping": [
+                        {
+                            "destination": "status",
+                            "source": "Preparing your order"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets"
+                    }
+                ],
+                "weight": 2
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "update",
+                "name": "Tracktor Update Manual Status Order",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}"
+                },
+                "local_fields": null,
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
+}
