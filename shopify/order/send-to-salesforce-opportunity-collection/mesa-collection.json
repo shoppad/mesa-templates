@@ -6,7 +6,7 @@
   "video": "",
   "tags": [],
   "source": "shopify_webhook",
-  "destination": "shopify_api",
+  "destination": "salesforce",
   "templates": [
     "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity-and-opportunity-products",
     "shoppad/mesa-templates/shopify/product/send-to-salesforce-product-and-pricebook-entry",
