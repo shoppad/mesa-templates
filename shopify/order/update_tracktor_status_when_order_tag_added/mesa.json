@@ -1,5 +1,5 @@
 {
-    "key": "mesa-templates/shopify/order/update_tracktor_status_when_order_tag_added",
+    "key": "shoppad/mesa-templates/shopify/order/update_tracktor_status_when_order_tag_added",
     "name": "Update Tracktor Custom Status when Order Tag is Added in Shopify",
     "version": "1.0.0",
     "description": "Changes the Tracktor order status to \"Preparing your order\" when a \"made to order\" tag is added to the Shopify order.",
