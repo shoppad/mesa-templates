@@ -1,6 +1,6 @@
 {
     "key": "shoppad/mesa-templates/tracktor/fulfillment/delay_in_transit_email",
-    "name": "Sent Email if Package is Delayed in Transit",
+    "name": "Send Email if Tracktor Package is Delayed in Transit",
     "version": "1.0.0",
     "description": "Send an email to the store owner when an order is in transit for 60+ hours",
     "video": "",
