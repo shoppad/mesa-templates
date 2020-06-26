@@ -1,46 +1,89 @@
 {
-  "key": "shoppad/mesa-templates/shopify/customer/send-to-hubspot-contact-and-mark-as-opportunity",
-  "name": "Send Customer To HubSpot Contact And Mark As Opportunity",
-  "version": "1.0.0",
-  "description": "Send customer from Shopify to HubSpot Contact and mark as opportunity when customer is created.",
-  "tags": ["Customer"],
-  "source": "shopify",
-  "destination": "hubspot",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Customer Create",
-        "key": "in-shopify-customer-create",
-        "script": "in-shopify-customer-create.js",
-        "topic": "customers/create"
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Create Hubspot Contact",
-        "key": "out-create-hubspot-contact",
-        "script": "out-create-hubspot-contact.js"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "hubspot-hapi"
-      }
-    ],
-    "storage": [
-      {
-        "key": "hubspot-lifecycle-stage",
-        "value": "opportunity"
-      },
-      {
-        "key": "customer-mapping.json",
-        "value": "{\n  \"email\":{\n     \"shopify\":\"email\",\n     \"hubspot\":\"email\"\n  },\n  \"first_name\":{\n     \"shopify\":\"first_name\",\n     \"hubspot\":\"firstname\"\n  },\n  \"last_name\":{\n     \"shopify\":\"last_name\",\n     \"hubspot\":\"lastname\"\n  },\n  \"phone\":{\n     \"shopify\":\"phone\",\n     \"hubspot\":\"phone\"\n  },\n  \"lifecyclestage\": {\n    \"shopify\": \"lifecyclestage\",\n    \"hubspot\": \"lifecyclestage\"\n  }\n}"
-      }
-    ]
-  }
+    "key": "shoppad/mesa-templates/shopify/customer/send-to-hubspot-contact-and-mark-as-opportunity",
+    "name": "Send Customer To HubSpot Contact And Mark As Opportunity",
+    "version": "1.0.0",
+    "description": "Send customer from Shopify to HubSpot Contact and mark as opportunity when customer is created.",
+    "video": "",
+    "readme": "",
+    "tags": ["Customer"],
+    "source": "shopify_webhook",
+    "destination": "hubspot",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "customer",
+                "action": "create",
+                "name": "Shopify Customer Created",
+                "key": "shopify_customer",
+                "metadata": {
+                    "topic": "customers\/create"
+                },
+                "local_fields": null,
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "action": null,
+                "name": "Mapping to Hubspot Create Contact",
+                "key": "mappingtohubspotcreatecontact",
+                "metadata": {
+                    "script": "transform.js",
+                    "mapping": [
+                        {
+                            "destination": "FirstName",
+                            "source": "{{shopify_customer.first_name}}"
+                        },
+                        {
+                            "destination": "LastName",
+                            "source": "{{shopify_customer.last_name}}"
+                        },
+                        {
+                            "destination": "Email",
+                            "source": "{{shopify_customer.email}}"
+                        },
+                        {
+                            "destination": "Phone",
+                            "source": "{{shopify_customer.phone}}"
+                        },
+                        {
+                          "destination": "LifecycleStage",
+                          "source": "opportunity"
+                      }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets"
+                    }
+                ],
+                "weight": 0
+            },
+            {
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "create",
+                "name": "Hubspot Create Contact",
+                "key": "hubspot_contact",
+                "metadata": {
+                    "method": "POST",
+                    "path": "\/contacts\/v1\/contact"
+                },
+                "local_fields": null,
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }
