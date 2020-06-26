@@ -1,6 +1,6 @@
 {
     "key": "shoppad/mesa-templates/tracktor/fulfillment/delay_in_transit_sms",
-    "name": "Sent Text Message if Tracktor Package is Delayed in Transit",
+    "name": "Send Text Message if Tracktor Package is Delayed in Transit",
     "version": "1.0.0",
     "description": "Send an SMS text message via Twilio to the store owner when an order is in transit for 60+ hours",
     "video": "",
