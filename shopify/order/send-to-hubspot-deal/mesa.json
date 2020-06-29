@@ -3,56 +3,91 @@
   "name": "Send Order To HubSpot Deal",
   "version": "1.0.0",
   "description": "Send order from Shopify to HubSpot Deal when order is created.",
+  "video": "",
+  "readme": "",
   "tags": ["Order"],
-  "source": "shopify",
+  "source": "shopify_webhook",
   "destination": "hubspot",
   "enabled": false,
+  "logging": false,
+  "debug": false,
   "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Order Create",
-        "key": "in-shopify-order-create",
-        "script": "in-shopify-order-create.js",
-        "topic": "orders/create"
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Create Hubspot Deal",
-        "key": "out-create-hubspot-deal",
-        "script": "out-create-hubspot-deal.js"
-      }
-    ],
-    "storage": [
-      {
-        "key": "hubspot-deal-type",
-        "value": "newbusiness"
-      },
-      {
-        "key": "hubspot-deal-pipeline",
-        "value": "default"
-      },
-      {
-        "key": "hubspot-deal-stage",
-        "value": "closedwon"
-      },
-      {
-        "key": "hubspot-create-deal-without-contact",
-        "value": "true"
-      },
-      {
-        "key":"order-mapping.json",
-        "value": "{\n  \"dealname\": {\n    \"shopify\": \"dealname\",\n    \"hubspot\": \"dealname\"\n  },\n  \"dealtype\": {\n    \"shopify\": \"dealtype\",\n    \"hubspot\": \"dealtype\"\n  },\n  \"pipeline\": {\n    \"shopify\": \"pipeline\",\n    \"hubspot\": \"pipeline\"\n  },\n  \"dealstage\": {\n    \"shopify\": \"dealstage\",\n    \"hubspot\": \"dealstage\"\n  },\n  \"total_price\": {\n    \"shopify\": \"total_price\",\n    \"hubspot\": \"amount\"\n  }, \n  \"created_at\": {\n    \"shopify\": \"created_at\",\n    \"hubspot\": \"closedate\"\n  }\n}"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "hubspot-hapi"
-      }
-    ]
+      "inputs": [
+          {
+              "trigger_type": "input",
+              "type": "shopify_webhook",
+              "entity": "order",
+              "action": "create",
+              "name": "Shopify Order Created",
+              "key": "shopify_order",
+              "metadata": {
+                  "topic": "orders\/create"
+              },
+              "local_fields": null,
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "trigger_type": "output",
+              "type": "transform",
+              "entity": "mapping",
+              "action": null,
+              "name": "Mapping to Hubspot Create Deal",
+              "key": "mappingtohubspotcreatedeal",
+              "metadata": {
+                  "script": "transform.js",
+                  "mapping": [
+                      {
+                          "destination": "DealName",
+                          "source": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} {{shopify_order.name}} Deal"
+                      },
+                      {
+                          "destination": "DealType",
+                          "source": "New"
+                      },
+                      {
+                          "destination": "Pipeline",
+                          "source": "default"
+                      },
+                      {
+                          "destination": "DealStage",
+                          "source": "appointmentscheduled"
+                      },
+                      {
+                          "destination": "Amount",
+                          "source": "{{shopify_order.total_price}}"
+                      },
+                      {
+                          "destination": "CloseDate",
+                          "source": "{{shopify_order.created_at}}"
+                      }
+                  ]
+              },
+              "local_fields": [
+                  {
+                      "key": "mapping",
+                      "type": "mapping",
+                      "tokens": "brackets"
+                  }
+              ],
+              "weight": 0
+          },
+          {
+              "trigger_type": "output",
+              "type": "hubspot",
+              "entity": "deal",
+              "action": "create",
+              "name": "Hubspot Create Deal",
+              "key": "hubspot_deal",
+              "metadata": {
+                  "method": "POST",
+                  "path": "\/deals\/v1\/deal"
+              },
+              "local_fields": null,
+              "weight": 1
+          }
+      ],
+      "storage": []
   }
 }
