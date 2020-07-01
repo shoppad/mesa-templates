@@ -19,7 +19,7 @@
         "key": "bold_subscription",
         "metadata": {
           "topic": "subscription/product_quantity_changed",
-          "host": "https://shoppad-apps.ngrok.io/apps/mesa/api/webhook/free-range-chicken/trigger-bold/bold_subscription_product_quantity_changed_to_slack/bold_subscription.json?apikey=ZjM2MGNmZjI1ZjJiODM5YjliOTc5YmEz"
+          "host": ""
         }
       }
     ],
