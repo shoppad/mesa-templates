@@ -1,0 +1,59 @@
+{
+  "key": "shoppad/mesa-templates/bold/subscription/send-notification-on-subscription-product-change",
+  "name": "Send Slack Notification on Bold Subscription Products Change",
+  "version": "1.0.0",
+  "description": "Sends a Slack notification message when Bold Subscriptions have their products removed, added or changed.  See the Documentation for setup steps.",
+  "video": "",
+  "tags": ["bold", "slack"],
+  "source": "bold",
+  "destination": "slack",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "bold",
+        "entity": "subscription",
+        "action": "subscription/product_quantity_changed",
+        "name": "Bold Subscription Product Quantity Changed",
+        "key": "bold_subscription",
+        "metadata": {
+          "topic": "subscription/product_quantity_changed",
+          "host": "https://shoppad-apps.ngrok.io/apps/mesa/api/webhook/free-range-chicken/trigger-bold/bold_subscription_product_quantity_changed_to_slack/bold_subscription.json?apikey=ZjM2MGNmZjI1ZjJiODM5YjliOTc5YmEz"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "editor",
+        "action": "",
+        "name": "Notification Message",
+        "key": "transformeditor",
+        "metadata": {
+          "script": "transform.js",
+          "text": "Subscription product quantity update:\n{% assign shop = 'MYSHOP' %}\n{{bold_subscription.subscription.first_name}} {{bold_subscription.subscription.last_name}} - {{bold_subscription.subscription.customer_email}}\nLink: https://{{shop}}.myshopify.com/admin/apps/recurring-orders/s/{{shop}}/customers/edit_customer?customer_id={{bold_subscription.subscription.shopify_customer_id}}&customer_email={{bold_subscription.subscription.customer_email}}\n{% if bold_subscription.products_added.size > 0 %}\n{{bold_subscription.products_added.size}} product(s) added.\n{% endif %}\n{% if bold_subscription.products_removed.size > 0 %}\n{{bold_subscription.products_removed.size}} product(s) removed.\n{% endif %}"
+        },
+        "local_fields": [
+          {
+            "key": "text",
+            "type": "editor"
+          }
+        ]
+      },
+      {
+        "trigger_type": "output",
+        "type": "slack",
+        "entity": null,
+        "action": null,
+        "name": "Slack",
+        "key": "slack",
+        "metadata": {
+          "message": "{{transformeditor.text}}"
+        }
+      }
+    ],
+    "storage": []
+  }
+}

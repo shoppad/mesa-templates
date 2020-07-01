@@ -1,16 +1,13 @@
 {
   "key": "shoppad/mesa-templates/bold/subscription/send-notification-on-new-subscription",
-  "name": "Send SMS Notification when Bold Subscription Created",
+  "name": "Send SMS Notification on Bold Subscription Created",
   "version": "1.0.0",
-  "description": "Sends a SMS notification for all new Bold Subscriptions via the Twillio service.  Replace \"MYSHOP\" with your Shopify store in the subscription link below or enter a new, customized message for the outgoing SMS.",
+  "description": "Sends a SMS notification when new Bold Subscriptions are created via the Twillio service.  See the Documentation for setup steps.",
   "video": "",
-  "readme": "",
-  "tags": [],
+  "tags": ["bold", "twilio"],
   "source": "bold",
   "destination": "twilio",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
+  "enabled": true,
   "config": {
     "inputs": [
       {
@@ -23,9 +20,7 @@
         "metadata": {
           "topic": "subscription/created",
           "host": ""
-        },
-        "local_fields": null,
-        "weight": 0
+        }
       }
     ],
     "outputs": [
@@ -37,10 +32,8 @@
         "name": "Twilio Send SMS",
         "key": "twilio_sms",
         "metadata": {
-          "message": "New subscription: {{bold_subscription.first_name}} {{bold_subscription.last_name}}\nLink: https://MYSHOP.myshopify.com/admin/apps/recurring-orders/s/MYSHOP/customers/edit_customer?customer_id={{bold_subscription.shopify_customer_id}}&customer_email={{bold_subscription.customer_email}}"
-        },
-        "local_fields": null,
-        "weight": 0
+          "message": "New subscription:\n{% assign shop = 'MYSHOP' %}\n{{bold_subscription.first_name}} {{bold_subscription.last_name}} - {{bold_subscription.customer_email}}\nLink: https://{{shop}}.myshopify.com/admin/apps/recurring-orders/s/{{shop}}/customers/edit_customer?customer_id={{bold_subscription.shopify_customer_id}}&customer_email={{bold_subscription.customer_email}}"
+        }
       }
     ],
     "storage": []
