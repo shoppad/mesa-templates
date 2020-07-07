@@ -3,7 +3,8 @@ const Mesa = require('vendor/Mesa.js');
 /**
  * A Mesa Script exports a class with a script() method.
  */
-module.exports = new (class {
+module.exports = new class {
+
   /**
    * Mesa Script
    *
@@ -11,6 +12,11 @@ module.exports = new (class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    Mesa.output.send('out-create-hubspot-deal', payload);
-  };
-})();
+
+    // Add your custom code here
+    Mesa.log.debug('context', context);
+
+    // We're done, call the next step!
+    Mesa.output.next(payload);
+  }
+}
