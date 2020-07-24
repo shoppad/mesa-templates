@@ -1,13 +1,13 @@
 {
   "key": "shoppad/mesa-templates/bold/subscription/send-notification-on-new-subscription",
-  "name": "Send SMS Notification on Bold Subscription Created",
+  "name": "Send SMS Notification when Bold Subscription is Created",
   "version": "1.0.0",
   "description": "Sends a SMS notification when new Bold Subscriptions are created via the Twillio service.  See the Documentation for setup steps.",
   "video": "",
   "tags": ["bold", "twilio"],
   "source": "bold",
   "destination": "twilio",
-  "enabled": true,
+  "enabled": false,
   "config": {
     "inputs": [
       {

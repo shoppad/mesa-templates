@@ -1,13 +1,13 @@
 {
   "key": "shoppad/mesa-templates/bold/subscription/send-notification-on-subscription-product-change",
-  "name": "Send Slack Notification on Bold Subscription Products Change",
+  "name": "Send Slack Notification when Bold Subscription Products Change",
   "version": "1.0.0",
   "description": "Sends a Slack notification message when Bold Subscriptions have their products removed, added or changed.  See the Documentation for setup steps.",
   "video": "",
   "tags": ["bold", "slack"],
   "source": "bold",
   "destination": "slack",
-  "enabled": true,
+  "enabled": false,
   "config": {
     "inputs": [
       {
