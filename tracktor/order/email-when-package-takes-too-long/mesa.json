@@ -28,8 +28,7 @@
         "metadata": {
           "amount": 20,
           "unit": "days"
-        },
-        "description": "A Mesa Delay lets you pause for hours, days, or months before moving on to the next step."
+        }
       },
       {
         "trigger_type": "output",
@@ -37,7 +36,7 @@
         "name": "Iterator",
         "key": "iterator",
         "metadata": {
-          "key": "{{source.fulfillments}}"
+          "key": "{{delay.fulfillments}}"
         },
         "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
         "destination_entity": "fulfillment"
@@ -64,7 +63,6 @@
           "comparison": "does not equal",
           "b": "delivered"
         },
-        "description": "Mesa Filters allow you to stop the automation if one of the incoming values does not match what is expected. [Read more](https://docs.getmesa.com/article/760-mesa-filter).",
         "source_entity": "fulfillment"
       },
       {
