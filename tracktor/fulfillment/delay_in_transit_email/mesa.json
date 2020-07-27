@@ -29,7 +29,7 @@
                 "type": "delay",
                 "entity": null,
                 "action": null,
-                "name": "Delay  ",
+                "name": "Delay",
                 "key": "delay",
                 "metadata": {
                     "amount": 60,
@@ -46,7 +46,7 @@
                 "name": "Tracktor Retrieve Fulfillment",
                 "key": "tracktor_fulfillment",
                 "metadata": {
-                    "fulfillment_id": "{{tracktor_order_status.fulfillments[0].fulfillment_id}}"
+                    "fulfillment_id": "{{delay.fulfillment_id}}"
                 },
                 "local_fields": null,
                 "weight": 1
@@ -60,9 +60,9 @@
                 "key": "filter",
                 "metadata": {
                     "script": "filter.js",
-                    "a": "{{tracktor_fulfillment_status.latest_status.label}}",
+                    "a": "{{tracktor_fulfillment.latest_status.label}}",
                     "comparison": "does not equal",
-                    "b": "{{tracktor_fulfillment_status.status.delivered.label}}"
+                    "b": "{{tracktor_fulfillment.status.delivered.label}}"
                 },
                 "local_fields": null,
                 "weight": 2
@@ -76,8 +76,8 @@
                 "key": "email",
                 "metadata": {
                     "to": "{{context.shop.email}}",
-                    "subject": "Order {{tracktor_fulfillment_status.order_name}} Delayed in Transit",
-                    "message": "Order Number: {{tracktor_fulfillment_status.order_name}} \nCarrier: {{tracktor_fulfillment_status.carrier}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
+                    "subject": "Order {{tracktor_fulfillment.order_name}} Delayed in Transit",
+                    "message": "Order Number: {{tracktor_fulfillment.order_name}} \nCarrier: {{tracktor_fulfillment.carrier}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
                 },
                 "local_fields": null,
                 "weight": 3
