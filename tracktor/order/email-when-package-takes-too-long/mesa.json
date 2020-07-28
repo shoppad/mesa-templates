@@ -1,84 +1,119 @@
 {
-  "key": "shoppad/mesa-templates/tracktor/order/email-when-package-takes-too-long",
-  "name": "Email Customers After 20 days if their Tracktor Package has not been Delivered",
-  "version": "1.0.0",
-  "description": "Email customers after 20 days (this number is configurable) if their package still has not been delivered.",
-  "video": "",
-  "tags": ["tracktor"],
-  "source": "tracktor",
-  "destination": "notification",
-  "enabled": true,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "tracktor",
-        "entity": "order",
-        "action": "order/ordered",
-        "name": "Tracktor: Order Created",
-        "key": "tracktor-order-status-order-created"
-      }
+    "key": "shoppad/mesa-templates/tracktor/order/email-when-package-takes-too-long",
+    "name": "Email Customers After 20 days if their Tracktor Package has not been Delivered",
+    "version": "1.0.0",
+    "description": "Email customers after 20 days (this number is configurable) if their package still has not been delivered.",
+    "video": "",
+    "tags": [
+        "tracktor"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "delay",
-        "name": "Delay",
-        "key": "delay",
-        "metadata": {
-          "amount": 20,
-          "unit": "days"
-        },
-        "description": "A Mesa Delay lets you pause for hours, days, or months before moving on to the next step."
-      },
-      {
-        "trigger_type": "output",
-        "type": "iterator",
-        "name": "Iterator",
-        "key": "iterator",
-        "metadata": {
-          "key": "{{source.fulfillments}}"
-        },
-        "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
-        "destination_entity": "fulfillment"
-      },
-      {
-        "trigger_type": "output",
-        "type": "tracktor",
-        "entity": "fulfillment",
-        "action": "retrieve",
-        "name": "Tracktor: Retrieve Fulfillment",
-        "key": "tracktor-retrieve-fulfillment",
-        "metadata": {
-          "fulfillment_id": "{{current_item.fulfillment_id}}"
-        }
-      },
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "script": "filter.js",
-          "a": "{{latest_status.key}}",
-          "comparison": "does not equal",
-          "b": "delivered"
-        },
-        "description": "Mesa Filters allow you to stop the automation if one of the incoming values does not match what is expected. [Read more](https://docs.getmesa.com/article/760-mesa-filter).",
-        "source_entity": "fulfillment"
-      },
-      {
-        "trigger_type": "output",
-        "type": "email",
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{source.order_email}}",
-          "subject": "Sorry your package is taking so long!",
-          "message": "Hi {{source.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{source.order_name}} are taking so long to arrive:\n\n{% for line_item in line_items %}\n  - {{ line_item.title }} x {{ line_item.quantity }}\n{% endfor %}\n\nYou can find your latest order details on our tracking page:\nhttps://{{context.shop.domain}}/apps/tracktor/track\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}"
-        }
-      }
-    ],
-    "storage": []
-  }
+    "source": "tracktor",
+    "destination": "notification",
+    "enabled": true,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "order\/ordered",
+                "name": "Tracktor: Order Created",
+                "key": "tracktor-order-status-order-created",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "delay",
+                "entity": "",
+                "action": "",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": 20,
+                    "unit": "days",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "trigger_type": "output",
+                "type": "iterator",
+                "entity": "",
+                "action": "",
+                "name": "Iterator",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{delay.fulfillments}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "retrieve",
+                "name": "Tracktor Retrieve Fulfillment",
+                "key": "tracktor_fulfillment",
+                "metadata": {
+                    "fulfillment_id": "{{iterator.current_item.fulfillment_id}}"
+                },
+                "local_fields": null,
+                "weight": 2
+            },
+            {
+                "trigger_type": "output",
+                "type": "filter",
+                "entity": "",
+                "action": "",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "script": "filter.js",
+                    "a": "{{tracktor_fulfillment.latest_status.key}}",
+                    "comparison": "does not equal",
+                    "b": "delivered"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Tracktor Retrieve Order",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                },
+                "local_fields": null,
+                "weight": 4
+            },
+            {
+                "trigger_type": "output",
+                "type": "email",
+                "entity": "",
+                "action": "",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{source.order_email}}",
+                    "subject": "Sorry your package is taking so long!",
+                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in tracktor_fulfillment.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page:\nhttps:\/\/{{context.shop.domain}}\/apps\/tracktor\/track\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}",
+                    "test_email_override": false
+                },
+                "local_fields": [],
+                "weight": 5
+            }
+        ],
+        "storage": []
+    }
 }
