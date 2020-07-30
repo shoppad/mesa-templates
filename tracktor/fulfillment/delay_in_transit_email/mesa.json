@@ -4,8 +4,7 @@
     "version": "1.0.0",
     "description": "Send an email to the store owner when an order is in transit for 60+ hours",
     "video": "",
-    "readme": "",
-    "tags": [],
+    "tags": ["tracktor"],
     "source": "tracktor",
     "destination": "email",
     "enabled": true,
@@ -17,26 +16,19 @@
                 "entity": "fulfillment",
                 "action": "fulfillment\/in_transit",
                 "name": "Tracktor Fulfillment Status In Transit",
-                "key": "tracktor_fulfillment_status",
-                "metadata": [],
-                "local_fields": null,
-                "weight": 0
+                "key": "tracktor_fulfillment_status"
             }
         ],
         "outputs": [
             {
                 "trigger_type": "output",
                 "type": "delay",
-                "entity": null,
-                "action": null,
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
                     "amount": 60,
                     "unit": "hours"
-                },
-                "local_fields": null,
-                "weight": 0
+                }
             },
             {
                 "trigger_type": "output",
@@ -47,40 +39,41 @@
                 "key": "tracktor_fulfillment",
                 "metadata": {
                     "fulfillment_id": "{{delay.fulfillment_id}}"
-                },
-                "local_fields": null,
-                "weight": 1
+                }
             },
             {
                 "trigger_type": "output",
                 "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
+                "name": "Filter",
                 "key": "filter",
                 "metadata": {
                     "script": "filter.js",
                     "a": "{{tracktor_fulfillment.latest_status.label}}",
                     "comparison": "does not equal",
                     "b": "{{tracktor_fulfillment.status.delivered.label}}"
-                },
-                "local_fields": null,
-                "weight": 2
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Tracktor Retrieve Order",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                }
             },
             {
                 "trigger_type": "output",
                 "type": "email",
-                "entity": "",
-                "action": "",
                 "name": "Email",
                 "key": "email",
                 "metadata": {
                     "to": "{{context.shop.email}}",
                     "subject": "Order {{tracktor_fulfillment.order_name}} Delayed in Transit",
                     "message": "Order Number: {{tracktor_fulfillment.order_name}} \nCarrier: {{tracktor_fulfillment.carrier}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
-                },
-                "local_fields": null,
-                "weight": 3
+                }
             }
         ],
         "storage": []

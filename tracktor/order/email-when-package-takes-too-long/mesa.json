@@ -9,7 +9,7 @@
     ],
     "source": "tracktor",
     "destination": "notification",
-    "enabled": true,
+    "enabled": false,
     "logging": false,
     "debug": false,
     "config": {
@@ -27,46 +27,12 @@
             {
                 "trigger_type": "output",
                 "type": "delay",
-                "name": "Delay",  
+                "name": "Delay",
                 "key": "delay",
                 "metadata": {
-                    "amount": 20,
+                    "amount": "20",
                     "unit": "days",
                     "test_bypass": false
-                }
-            },
-            {
-                "trigger_type": "output",
-                "type": "iterator",
-                "name": "Iterator",
-                "key": "iterator",
-                "metadata": {
-                    "key": "{{delay.fulfillments}}"
-                }
-            },
-            {
-                "trigger_type": "output",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "retrieve",
-                "name": "Tracktor Retrieve Fulfillment",
-                "key": "tracktor_fulfillment",
-                "metadata": {
-                    "fulfillment_id": "{{iterator.current_item.fulfillment_id}}"
-                }
-            },
-            {
-                "trigger_type": "output",
-                "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "script": "filter.js",
-                    "a": "{{tracktor_fulfillment.latest_status.key}}",
-                    "comparison": "does not equal",
-                    "b": "delivered"
                 }
             },
             {
@@ -77,20 +43,39 @@
                 "name": "Tracktor Retrieve Order",
                 "key": "tracktor_order",
                 "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                    "order_id": "{{delay.order_id}}"
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{tracktor_order.fulfillments}}"
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "script": "filter.js",
+                    "a": "{{iterator.latest_status.key}}",
+                    "comparison": "does not equal",
+                    "b": "delivered"
                 }
             },
             {
                 "trigger_type": "output",
                 "type": "email",
-                "entity": "",
-                "action": "",
                 "name": "Email",
                 "key": "email",
                 "metadata": {
                     "to": "{{tracktor_order.order_email}}",
                     "subject": "Sorry your package is taking so long!",
-                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in tracktor_fulfillment.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page:\nhttps:\/\/{{context.shop.domain}}\/apps\/tracktor\/track\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}",
+                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in iterator.current_item.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page:\nhttps:\/\/{{context.shop.domain}}\/apps\/tracktor\/track\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}",
                     "test_email_override": false
                 }
             }

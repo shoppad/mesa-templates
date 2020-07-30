@@ -4,8 +4,7 @@
     "version": "1.0.0",
     "description": "Send an SMS text message via Twilio to the store owner when an order is in transit for 60+ hours",
     "video": "",
-    "readme": "",
-    "tags": [],
+    "tags": ["tracktor"],
     "source": "tracktor",
     "destination": "twilio",
     "enabled": false,
@@ -17,10 +16,7 @@
                 "entity": "fulfillment",
                 "action": "fulfillment\/in_transit",
                 "name": "Tracktor Fulfillment Status In Transit",
-                "key": "tracktor_fulfillment_status",
-                "metadata": [],
-                "local_fields": null,
-                "weight": 0
+                "key": "tracktor_fulfillment_status"
             }
         ],
         "outputs": [
@@ -34,9 +30,7 @@
                 "metadata": {
                     "amount": 60,
                     "unit": "hours"
-                },
-                "local_fields": null,
-                "weight": 0
+                }
             },
             {
                 "trigger_type": "output",
@@ -47,15 +41,11 @@
                 "key": "tracktor_fulfillment",
                 "metadata": {
                     "fulfillment_id": "{{delay.fulfillment_id}}"
-                },
-                "local_fields": null,
-                "weight": 1
+                }
             },
             {
                 "trigger_type": "output",
                 "type": "filter",
-                "entity": "",
-                "action": "",
                 "name": "Filter  ",
                 "key": "filter",
                 "metadata": {
@@ -63,9 +53,18 @@
                     "a": "{{tracktor_fulfillment.latest_status.label}}",
                     "comparison": "does not equal",
                     "b": "{{tracktor_fulfillment.status.delivered.label}}"
-                },
-                "local_fields": null,
-                "weight": 2
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Tracktor Retrieve Order",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                }
             },
             {
                 "trigger_type": "output",
@@ -76,9 +75,7 @@
                 "key": "twilio_sms",
                 "metadata": {
                   "message": "Order {{tracktor_fulfillment.order_name}} has been in transit for over 60 hours!"
-                },
-                "local_fields": null,
-                "weight": 3
+                }
             }
         ],
         "storage": []
