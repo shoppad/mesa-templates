@@ -72,7 +72,7 @@
                 "metadata": {
                     "to": "{{context.shop.email}}",
                     "subject": "Order {{tracktor_fulfillment.order_name}} Delayed in Transit",
-                    "message": "Order Number: {{tracktor_fulfillment.order_name}} \nCarrier: {{tracktor_fulfillment.carrier}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
+                    "message": "Order Number: {{tracktor_fulfillment.order_name}} \nCarrier: {{tracktor_fulfillment.carrier.name}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
                 }
             }
         ],
