@@ -36,7 +36,6 @@
         "name": "Filter  ",
         "key": "filter",
         "metadata": {
-          "script": "filter.js",
           "a": "{{shopify_order.customer.last_order_id}}",
           "comparison": "does not equal",
           "b": "null"
@@ -66,7 +65,6 @@
         "name": "Filter  ",
         "key": "filter_1",
         "metadata": {
-          "script": "filter_1.js",
           "a": "{{shopify_order_2.fulfillment_status}}",
           "comparison": "does not equal",
           "b": "fulfilled"
@@ -82,7 +80,6 @@
         "name": "Mapping to Shopify Update Order",
         "key": "shopify_order_2_transform",
         "metadata": {
-          "script": "shopify_order_2_transform.js",
           "mapping": [
             {
               "destination": "tags",
@@ -121,7 +118,6 @@
         "name": "Mapping to Shopify Update Order",
         "key": "shopify_order_3_transform",
         "metadata": {
-          "script": "shopify_order_3_transform.js",
           "mapping": [
             {
               "destination": "tags",
