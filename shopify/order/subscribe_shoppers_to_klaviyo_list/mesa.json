@@ -1,0 +1,56 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/subscribe_shoppers_to_klaviyo_list",
+  "name": "Subscribe Shoppers to Klaviyo List After First Order",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "klaviyo",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "klaviyo",
+        "entity": "list",
+        "action": "subscribe",
+        "name": "Klaviyo Subscribe List",
+        "key": "klaviyo_list",
+        "metadata": {
+          "email": "{{shopify_order.email}}",
+          "mapping": null,
+          "list_id": ""
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
+}

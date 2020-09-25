@@ -1,0 +1,91 @@
+{
+  "key": "shoppad/mesa-templates/shopify/product/send_email_when_product_goes_out_of_stock",
+  "name": "Send an Email when Product Goes Out of Stock",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "email",
+  "enabled": true,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "iterator",
+        "entity": "",
+        "action": "",
+        "name": "Iterator  ",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{shopify_order.line_items[]}}"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "variant",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Variant",
+        "key": "shopify_variant",
+        "metadata": {
+          "shopify_api": "GET admin/variants/{{variant_id}}.json",
+          "variant_id": "{{iterator.variant_id}}"
+        },
+        "local_fields": null,
+        "weight": 1
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_variant.inventory_quantity}}",
+          "comparison": "equals",
+          "b": "0"
+        },
+        "local_fields": null,
+        "weight": 2
+      },
+      {
+        "trigger_type": "output",
+        "type": "email",
+        "entity": null,
+        "action": null,
+        "name": "Email  ",
+        "key": "email",
+        "metadata": {
+          "to": "{{context.shop.email}}",
+          "subject": "Item out of stock: {{shopify_variant.sku}}",
+          "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify_variant. product_id}}"
+        },
+        "local_fields": null,
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send_tax_receipt_for_charitable_donations",
+  "name": "Send Tax Deduction Receipt for Charitable Donations",
+  "version": "1.0.0",
+  "description": "Send shoppers an email receipt when they make a tax deductible charitable donation at checkout.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "email",
+  "enabled": true,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_order.total_tip_received}}",
+          "comparison": "greater than",
+          "b": "0"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "email",
+        "entity": null,
+        "action": null,
+        "name": "Email",
+        "key": "email",
+        "metadata": {
+          "to": "{{shopify_order.email}}",
+          "subject": "Thank you for your donation!",
+          "message": "Dear {{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}, \n\nThank you for your gift of ${{shopify_order.total_tip_received}}, received on {{shopify_order.created_at}}.\n\nYour donation is to a tax-exempt nonprofit organization under Section 501(c)3 of the Internal Revenue Code. You can deduct the full amount of your gift as a charitable contribution for federal income tax purposes. No goods or services were provided in exchange for your contribution.\n\nSincerely,\n{{context.shop.name}}"
+        },
+        "local_fields": null,
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
+}
