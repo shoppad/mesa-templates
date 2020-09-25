@@ -1,5 +1,5 @@
 {
-  "key": "add_loyaltylion_points",
+  "key": "shoppad/mesa-templates/shopify/order/add_loyaltylion_points",
   "name": "Add bonus loyalty points when customer completes an order",
   "version": "1.0.0",
   "description": "Add 100 bonus points to customer's profile on LoyaltyLion every time they complete a purchase.",
