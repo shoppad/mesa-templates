@@ -1,5 +1,5 @@
 {
-  "key": "send_sms_when_order_delivered",
+  "key": "shoppad/mesa-templates/tracktor/order/send_sms_when_order_delivered",
   "name": "Send an SMS to your customer when their order arrives",
   "version": "1.0.0",
   "description": "",
