@@ -9,7 +9,7 @@
   "tags": [],
   "source": "shopify_webhook",
   "destination": "email",
-  "enabled": true,
+  "enabled": false,
   "logging": false,
   "debug": false,
   "config": {
