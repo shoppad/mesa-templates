@@ -1,5 +1,5 @@
 {
-  "key": "send_tax_receipt_for_charitable_donations",
+  "key": "shoppad/mesa-templates/shopify/order/send_tax_receipt_for_charitable_donations",
   "name": "Send tax deduction receipt for charitable donations",
   "version": "1.0.0",
   "description": "Send shoppers an email receipt when they make a tax deductible charitable donation at checkout.",
