@@ -1,8 +1,8 @@
 {
-  "key": "send_expedited_shipping_alert_to_logistics",
+  "key": "shoppad/mesa-templates/shopify/order/send_expedited_shipping_alert_to_logistics",
   "name": "Send expedited shipping alerts to logistics team",
   "version": "1.0.0",
-  "description": "Tag order with \"expedited shipping\" and send an internal email notification if shipping is \"2 day\" or \"next day\"",
+  "description": "Tag order with \"expedited shipping\" and send an internal email notification if shipping is \"2 day\" or \"next day\".",
   "video": "",
   "readme": "",
   "tags": [],
