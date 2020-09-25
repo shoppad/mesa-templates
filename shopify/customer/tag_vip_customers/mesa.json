@@ -1,0 +1,90 @@
+{
+  "key": "tag_vip_customers",
+  "name": "Tag Customers with \"VIP\" after they spend $500 or more",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "shopify_api",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "customer",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Customer",
+        "key": "shopify_customer_1",
+        "metadata": {
+          "shopify_api": "GET admin/customers/{{customer_id}}.json",
+          "customer_id": "{{shopify_order.customer.id}}"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_customer_1.total_spent}}",
+          "comparison": "greater than",
+          "b": "499.99"
+        },
+        "local_fields": null,
+        "weight": 1
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "customer",
+        "action": "update",
+        "name": "Shopify Update Customer",
+        "key": "shopify_customer",
+        "metadata": {
+          "shopify_api": "PUT admin/customers/{{customer_id}}.json",
+          "mapping": [
+            {
+              "destination": "tags",
+              "source": "{{shopify_customer_1.tags}}, VIP"
+            }
+          ],
+          "customer_id": "{{shopify_order.customer.id}}"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "key": "send_expedited_shipping_alert_to_logistics",
+  "name": "Send expedited shipping alerts to logistics team",
+  "version": "1.0.0",
+  "description": "Tag order with \"expedited shipping\" and send an internal email notification if shipping is \"2 day\" or \"next day\"",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "shopify_api",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_order.shipping_lines[0].title}}",
+          "comparison": "in",
+          "b": "2 day, next day",
+          "script": "filter.js"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "email",
+        "entity": "",
+        "action": "",
+        "name": "Email  ",
+        "key": "email",
+        "metadata": {
+          "to": "{{context.shop.email}}",
+          "subject": "New {{shopify_order.shipping_lines[0].title}} order received: {{shopify_order.name}}",
+          "message": "Order {{shopify_order.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify_order.shipping_address.city}}, {{shopify_order.shipping_address.province}} {{shopify_order.shipping_address.country}}.\n\nView the order: https://{{context.shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
+        },
+        "local_fields": null,
+        "weight": 1
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "update",
+        "name": "Shopify Update Order",
+        "key": "shopify_order_1",
+        "metadata": {
+          "shopify_api": "PUT admin/orders/{{order_id}}.json",
+          "mapping": [
+            {
+              "destination": "tags",
+              "source": "{{shopify_order.tags}}, Expedited shipping"
+            }
+          ],
+          "order_id": "{{shopify_order.id}}"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "key": "tag_multiple_unfulfilled_orders_from_same_customer",
+  "name": "Tag multiple unfulfilled orders from the same customer",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "filter",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": null,
+        "action": null,
+        "name": "Filter  ",
+        "key": "filter",
+        "metadata": {
+          "script": "filter.js",
+          "a": "{{shopify_order.customer.last_order_id}}",
+          "comparison": "does not equal",
+          "b": "null"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Order",
+        "key": "shopify_order_1",
+        "metadata": {
+          "shopify_api": "GET admin/orders/{{order_id}}.json",
+          "order_id": "{{shopify_order.customer.last_order_id}}"
+        },
+        "local_fields": null,
+        "weight": 1
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter_1",
+        "metadata": {
+          "script": "filter_1.js",
+          "a": "{{shopify_order_2.fulfillment_status}}",
+          "comparison": "does not equal",
+          "b": "fulfilled"
+        },
+        "local_fields": null,
+        "weight": 2
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "",
+        "action": "",
+        "name": "Mapping to Shopify Update Order",
+        "key": "shopify_order_2_transform",
+        "metadata": {
+          "script": "shopify_order_2_transform.js",
+          "mapping": [
+            {
+              "destination": "tags",
+              "source": "{{shopify_order.tags}}, multiple orders unfulfilled"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets"
+          }
+        ],
+        "weight": 3
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "update",
+        "name": "Shopify Update Order",
+        "key": "shopify_order_2",
+        "metadata": {
+          "shopify_api": "PUT admin/orders/{{order_id}}.json",
+          "order_id": "{{shopify_order.id}}"
+        },
+        "local_fields": null,
+        "weight": 4
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "",
+        "action": "",
+        "name": "Mapping to Shopify Update Order",
+        "key": "shopify_order_3_transform",
+        "metadata": {
+          "script": "shopify_order_3_transform.js",
+          "mapping": [
+            {
+              "destination": "tags",
+              "source": "{{shopify_order.tags}}, multiple orders unfulfilled"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets"
+          }
+        ],
+        "weight": 5
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "update",
+        "name": "Shopify Update Order",
+        "key": "shopify_order_3",
+        "metadata": {
+          "shopify_api": "PUT admin/orders/{{order_id}}.json",
+          "order_id": "{{shopify_order_2.id}}"
+        },
+        "local_fields": null,
+        "weight": 6
+      }
+    ],
+    "storage": []
+  }
+}

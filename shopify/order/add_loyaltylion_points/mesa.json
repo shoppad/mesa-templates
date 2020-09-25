@@ -1,0 +1,79 @@
+{
+  "key": "add_loyaltylion_points",
+  "name": "Add bonus loyalty points when customer completes an order",
+  "version": "1.0.0",
+  "description": "Add 100 bonus points to customer's profile on LoyaltyLion every time they complete a purchase.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "loyaltylion",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "create",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "loyaltylion",
+        "entity": "customer",
+        "action": "list",
+        "name": "LoyaltyLion List Customer",
+        "key": "loyaltylion_customer_1",
+        "metadata": {
+          "loyaltylion_api": "GET /v2/customers",
+          "parameters": "email={{shopify_order.email}}&limit=1"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "loyaltylion",
+        "entity": "customer",
+        "action": "add_points",
+        "name": "LoyaltyLion Add Points Customer",
+        "key": "loyaltylion_customer",
+        "metadata": {
+          "loyaltylion_api": "POST /v2/customers/{{merchant_id}}/points",
+          "mapping": [
+            {
+              "destination": "points",
+              "source": "100"
+            },
+            {
+              "destination": "reason",
+              "source": "Bonus points for online order"
+            }
+          ],
+          "merchant_id": "{{loyaltylion_customer_1.0.merchant_id}}"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
+}
