@@ -48,7 +48,7 @@
         "type": "email",
         "entity": null,
         "action": null,
-        "name": "Email  ",
+        "name": "Email",
         "key": "email",
         "metadata": {
           "to": "{{shopify_order.email}}",
