@@ -7,7 +7,7 @@
     "readme": "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/edit_add_product/README.md",
     "tags": [],
     "source": "shopify_webhook",
-    "destination": "custom",
+    "destination": "shopify",
     "enabled": false,
     "logging": false,
     "debug": false,
