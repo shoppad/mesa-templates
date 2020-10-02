@@ -1,5 +1,5 @@
 {
-    "key": "shopify_order_created_to_custom_1",
+    "key": "shoppad/mesa-templates/shopify/order/shopify_order_created_to_custom_1",
     "name": "Add a Free Product to Orders Over $100",
     "version": "1.0.0",
     "description": "Delight your loyal customers with a free gift when their order meets qualifying criteria.",
