@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Delight your loyal customers with a free gift when their order meets qualifying criteria.",
     "video": "",
-    "readme": "https://github.com/shoppad/mesa-templates/blob/master/shopify/order/edit_add_product/README.md",
+    "readme": "",
     "tags": [],
     "source": "shopify_webhook",
     "destination": "shopify",

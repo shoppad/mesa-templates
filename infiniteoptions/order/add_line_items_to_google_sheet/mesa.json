@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/infiniteoptions/order/add-line-items-to-google-sheet",
+  "key": "shoppad/mesa-templates/infiniteoptions/order/add_line_items_to_google_sheet",
   "name": "Add Infinite Options Line Items to Google Sheet",
   "version": "1.0.0",
   "description": "Add Infinite Options Line Items to an Existing Google Sheet when an Order is Created.",
@@ -16,7 +16,7 @@
         "entity": "order",
         "action": "created",
         "name": "Infinite Options: Order Created",
-        "key": "infinite-options-order-created"
+        "key": "infinite_options_order_created"
       }
     ],
     "outputs": [
@@ -35,7 +35,7 @@
         "type": "transform",
         "entity": "mapping",
         "name": "Mapping to Sheets Row",
-        "key": "mapping-to-sheets-row",
+        "key": "mapping_to_sheets_row",
         "metadata": {
           "script": "transform.js",
           "mapping": [
@@ -124,7 +124,7 @@
         "entity": "row",
         "action": "add",
         "name": "Google Sheets: Add Row to Sheet",
-        "key": "google-sheets-add-row-sheet",
+        "key": "google_sheets_add_row_sheet",
         "metadata": {
           "spreadsheet_id": "",
           "token": ""
