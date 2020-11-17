@@ -37,7 +37,6 @@
         "name": "Mapping to Sheets Row",
         "key": "mapping_to_sheets_row",
         "metadata": {
-          "script": "transform.js",
           "mapping": [
             {
               "destination": "A",

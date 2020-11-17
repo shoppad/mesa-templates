@@ -18,7 +18,6 @@
         "type": "shopify_webhook",
         "name": "Shopify Product Create",
         "key": "in_shopify_product_create",
-        "script": "in_shopify_product_create.js",
         "topic": "products/create"
       },
       {
@@ -26,7 +25,6 @@
         "type": "shopify_webhook",
         "name": "Shopify Product Update",
         "key": "in_shopify_product_update",
-        "script": "in_shopify_product_update.js",
         "topic": "products/update"
       }
     ],

@@ -33,7 +33,6 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "script": "filter.js",
                     "a": "made to order",
                     "comparison": "in",
                     "b": "{{shopify_order.tags}}"
@@ -48,7 +47,6 @@
                 "name": "Filter",
                 "key": "filter_1",
                 "metadata": {
-                    "script": "filter_1.js",
                     "a": "{{shopify_order.fulfillment_status}}",
                     "comparison": "equals",
                     "b": "null"
