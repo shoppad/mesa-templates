@@ -1,6 +1,6 @@
 {
     "key": "shoppad/mesa-templates/shopify/order/update_tracktor_status_when_order_tag_added",
-    "name": "Update Tracktor Custom Status when Order Tag is Added in Shopify",
+    "name": "Update Tracktor status when an order tag is added in Shopify",
     "version": "1.0.0",
     "description": "Changes the Tracktor order status to \"Preparing your order\" when a \"made to order\" tag is added to the Shopify order.",
     "video": "",
@@ -9,29 +9,28 @@
     "source": "shopify",
     "destination": "tracktor",
     "enabled": false,
+    "logging": false,
+    "debug": false,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify_webhook",
                 "entity": "order",
                 "action": "updated",
                 "name": "Shopify Order Updated",
                 "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders\/updated"
-                },
-                "local_fields": null,
+                "metadata": [],
                 "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
+                "name": "Filter",
                 "key": "filter",
                 "metadata": {
                     "script": "filter.js",
@@ -39,62 +38,42 @@
                     "comparison": "in",
                     "b": "{{shopify_order.tags}}"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 0
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "filter",
-                "entity": "",
-                "action": "",
                 "name": "Filter",
                 "key": "filter_1",
                 "metadata": {
                     "script": "filter_1.js",
                     "a": "{{shopify_order.fulfillment_status}}",
                     "comparison": "equals",
-                    "b": "unfulfilled"
+                    "b": "null"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 1
             },
             {
-                "trigger_type": "output",
-                "type": "transform",
-                "entity": "",
-                "action": "",
-                "name": "Mapping to Tracktor Status",
-                "key": "tracktor_order_transform",
-                "metadata": {
-                    "script": "transform.js",
-                    "mapping": [
-                        {
-                            "destination": "status",
-                            "source": "Preparing your order"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets"
-                    }
-                ],
-                "weight": 2
-            },
-            {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "tracktor",
                 "entity": "order",
                 "action": "update",
                 "name": "Tracktor Update Manual Status Order",
-                "key": "tracktor_order",
+                "key": "tracktor_order_1",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}"
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "automatic_carrier_updates": "false",
+                        "force": true,
+                        "status": "Preparing your order"
+                    }
                 },
-                "local_fields": null,
-                "weight": 3
+                "local_fields": [],
+                "weight": 2
             }
         ],
         "storage": []

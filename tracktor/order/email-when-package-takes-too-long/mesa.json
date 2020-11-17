@@ -1,5 +1,5 @@
 {
-    "key": "shoppad/mesa-templates/tracktor/order/email-when-package-takes-too-long",
+    "key": "shoppad/mesa-templates/tracktor/order/email_when_package_takes_too_long",
     "name": "Email Customers After 20 days if their Tracktor Package has not been Delivered",
     "version": "1.0.0",
     "description": "Email customers after 20 days (this number is configurable) if their package still has not been delivered.",
