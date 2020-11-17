@@ -49,7 +49,6 @@
                 "name": "Filter  ",
                 "key": "filter",
                 "metadata": {
-                    "script": "filter.js",
                     "a": "{{tracktor_fulfillment.latest_status.label}}",
                     "comparison": "does not equal",
                     "b": "{{tracktor_fulfillment.status.delivered.label}}"

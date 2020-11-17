@@ -61,7 +61,6 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "script": "filter.js",
                     "a": "{{iterator.latest_status.key}}",
                     "comparison": "does not equal",
                     "b": "delivered"
