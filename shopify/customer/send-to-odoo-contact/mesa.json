@@ -1,0 +1,145 @@
+{
+    "key": "shoppad/mesa-templates/shopify/customer/send-to-odoo-contact",
+    "name": "Send Shopify Customer to Odoo Contact",
+    "version": "1.0.0",
+    "description": "Send Shopify Customer from Shopify to Odoo Contact when customer is created.",
+    "video": "",
+    "readme": "",
+    "tags": ["customer", "odoo", "shopify"],
+    "source": "shopify_webhook",
+    "destination": "odoo",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "customer",
+                "action": "create",
+                "name": "Shopify Customer Created",
+                "key": "shopify_customer",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "custom",
+                "action": "search_read",
+                "name": "Odoo List Custom Model - Country",
+                "key": "odoo_custom",
+                "metadata": {
+                    "method": "search_read",
+                    "entity_name_custom": "res.country",
+                    "secret": "",
+                    "query": [
+                        {
+                            "property": "code",
+                            "operator": "=",
+                            "value": "{{shopify_customer.default_address.country_code}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "code"
+                        },
+                        {
+                            "property": "name"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "custom",
+                "action": "search_read",
+                "name": "Odoo List Custom Model - State",
+                "key": "odoo_custom_1",
+                "metadata": {
+                    "method": "search_read",
+                    "entity_name_custom": "res.country.state",
+                    "secret": "",
+                    "query": [
+                        {
+                            "property": "country_id",
+                            "operator": "=",
+                            "value": "{{odoo_custom[0].id}}"
+                        },
+                        {
+                            "property": "code",
+                            "operator": "=",
+                            "value": "{{shopify_customer.default_address.province_code}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "code"
+                        },
+                        {
+                            "property": "name"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "res.partner",
+                "action": "create",
+                "name": "Odoo Create Customer",
+                "key": "odoo_res_partner_1",
+                "metadata": {
+                    "entity_name": "res.partner",
+                    "method": "create",
+                    "body": {
+                        "name": "{{shopify_customer.default_address.name}}",
+                        "display_name": "{{shopify_customer.default_address.name}}",
+                        "active": "TRUE",
+                        "customer": "TRUE",
+                        "supplier": "FALSE",
+                        "employee": "FALSE",
+                        "is_company": "FALSE",
+                        "type": "delivery",
+                        "phone": "{{shopify_customer.phone}}",
+                        "email": "{{shopify_customer.email}}",
+                        "street": "{{shopify_customer.default_address.address1}}",
+                        "street2": "{{shopify_customer.default_address.address2}}",
+                        "city": "{{shopify_customer.default_address.city}}",
+                        "state_id": "{{odoo_custom_1[0].id}}",
+                        "zip": "{{shopify_customer.default_address.zip}}",
+                        "country_id": "{{odoo_custom[0].id}}"
+                    },
+                    "secret": ""
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
