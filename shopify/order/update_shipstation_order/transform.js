@@ -21,12 +21,38 @@ module.exports = new class {
     // Alter the payload data based on our transform rules
     const output = Transform.convert(context, payload);
 
+    let refundLineItemsHash = {};
+    payload.refunds.forEach(function(refund){
+      refund.refund_line_items.forEach(function(refundLineItem) {
+        if (refundLineItemsHash[refundLineItem.id]) {
+          refundLineItemsHash[refundLineItem.line_item.id] = refundLineItemsHash[refundLineItem.line_item.id] + refundLineItem.quantity;
+        } else {
+          refundLineItemsHash[refundLineItem.line_item.id] = refundLineItem.quantity;
+        }
+      });
+    });
+
     if (payload.line_items) {
-      const items = payload.line_items.map(function(item) {
-        let productImages = Shopify.get(`/admin/api/2020-04/products/${item.product_id}/images.json`);
+      const items = payload.line_items.filter(function(item) {
+
+        // In the case there is not items lets return false
+        if (!refundLineItemsHash[item.id.toString()]) return true;
+        let remainQuantity = item.quantity - refundLineItemsHash[item.id.toString()];
+
+        if (remainQuantity === 0) {
+            return false;
+        }
+        
+        return true;
+      }).map(function(item) {
+        let productImages = Shopify.get(`/admin/api/2020-10/products/${item.product_id}/images.json`);
         // Checking we have an image.
         let imageUrl = productImages && productImages.images && productImages.images[0] && productImages.images[0].src ? productImages.images[0].src : '';
-        const {name, sku, quantity, notes} = item;
+        let {name, sku, quantity, notes} = item;
+
+        if (refundLineItemsHash[item.id.toString()]) {
+          quantity = quantity - refundLineItemsHash[item.id.toString()];
+        }
 
         let taxAmount = 0.00;
         item.tax_lines.forEach(tax => {
