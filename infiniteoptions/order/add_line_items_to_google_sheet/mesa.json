@@ -4,133 +4,123 @@
   "version": "1.0.0",
   "description": "Add Infinite Options Line Items to an Existing Google Sheet when an Order is Created.",
   "video": "",
-  "tags": ["google-sheets"],
+  "readme": "## Setup\n\n- In the `Google Sheets: Add Row to Sheet` connector, create a Credential and Authenticate with Google.\n- [View this Google Sheet with column headers](https:\/\/docs.google.com\/spreadsheets\/d\/1uPFMnqU4miEtO-k85zmZXjTcnBtDMp6vg_tUdzMu49A\/edit)\n- Click on **File** in the top left corner and click **Make a copy** to make a copy.\n  - Optionally, rename your Google Sheet and Folder.\n  - Then, click on **OK**.\n- In the `Google Sheets: Add Row to Sheet` connector, add your spreadsheet.\n- View the `M` and `N` values in the `Transform: Mapping to Sheets Row` Step. Add your actual field name (found in the Infinite Options dashboard) after `fields.`. Example: `{{current_item.fields.infinite_options_1}}`.\n- Enable the Automation in the right sidebar and click **Save**.\n",
+  "tags": [
+      "google-sheets"
+  ],
   "source": "shopify",
   "destination": "google-sheets",
   "enabled": false,
+  "logging": false,
+  "debug": false,
   "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "infiniteoptions",
-        "entity": "order",
-        "action": "created",
-        "name": "Infinite Options: Order Created",
-        "key": "infinite_options_order_created"
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "iterator",
-        "name": "Iterator",
-        "key": "iterator",
-        "metadata": {
-          "key": "{{source.line_items}}"
-        },
-        "destination_entity": "mapping"
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to Sheets Row",
-        "key": "mapping_to_sheets_row",
-        "metadata": {
-          "mapping": [
-            {
-              "destination": "A",
-              "source": "https://{{context.shop.domain}}/admin/orders/{{source.order.id}}",
-              "notes": "Link to Shopify admin"
-            },
-            {
-              "destination": "B",
-              "source": "{{source.order.name}}",
-              "notes": ""
-            },
-            {
-              "destination": "C",
-              "source": "{{source.order.email}}",
-              "notes": ""
-            },
-            {
-              "destination": "D",
-              "source": "{{source.order.shipping_address.name}}",
-              "notes": "URL to order in Shopify"
-            },
-            {
-              "destination": "E",
-              "source": "{{source.order.shipping_address.address1}}",
-              "notes": ""
-            },
-            {
-              "destination": "F",
-              "source": "{{source.order.shipping_address.city}}",
-              "notes": ""
-            },
-            {
-              "destination": "G",
-              "source": "{{source.order.shipping_address.province}}",
-              "notes": ""
-            },
-            {
-              "destination": "H",
-              "source": "{{source.order.shipping_address.zip}}",
-              "notes": ""
-            },
-            {
-              "destination": "I",
-              "source": "{{source.order.shipping_address.country}}",
-              "notes": ""
-            },
-            {
-              "destination": "J",
-              "source": "{{current_item.title}}",
-              "notes": ""
-            },
-            {
-              "destination": "K",
-              "source": "{{current_item.sku}}",
-              "notes": ""
-            },
-            {
-              "destination": "L",
-              "source": "{{current_item.price}}",
-              "notes": ""
-            },
-            {
-              "destination": "M",
-              "source": "{{current_item.fields.infinite_options_1}}",
-              "notes": ""
-            },
-            {
-              "destination": "N",
-              "source": "{{current_item.fields.infinite_options_2}}",
-              "notes": ""
-            }
-          ]
-        },
-        "local_fields": [
+      "inputs": [
           {
-            "key": "mapping",
-            "type": "mapping"
+              "schema": 2,
+              "trigger_type": "input",
+              "type": "infiniteoptions",
+              "entity": "order",
+              "action": "created",
+              "name": "Infinite Options: Order Created",
+              "key": "infinite_options_order_created",
+              "metadata": [],
+              "local_fields": [],
+              "weight": 0
           }
-        ]
-      },
-      {
-        "trigger_type": "output",
-        "type": "googlesheets",
-        "entity": "row",
-        "action": "add",
-        "name": "Google Sheets: Add Row to Sheet",
-        "key": "google_sheets_add_row_sheet",
-        "metadata": {
-          "spreadsheet_id": "",
-          "token": ""
-        },
-        "source_entity": "mapping"
-      }
-    ],
-    "storage": []
+      ],
+      "outputs": [
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "iterator",
+              "name": "Iterator",
+              "key": "iterator",
+              "metadata": {
+                  "key": "{{infinite_options_order_created.line_items[]}}"
+              },
+              "local_fields": [],
+              "weight": 0
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "googlesheets",
+              "entity": "row",
+              "action": "add",
+              "name": "Google Sheets Add Row",
+              "key": "googlesheets_row",
+              "metadata": {
+                  "mapping": [
+                      {
+                          "destination": "A",
+                          "source": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{infinite_options_order_created.order.id}}"
+                      },
+                      {
+                          "destination": "B",
+                          "source": "{{infinite_options_order_created.order.name}}"
+                      },
+                      {
+                          "destination": "C",
+                          "source": "{{infinite_options_order_created.order.email}}"
+                      },
+                      {
+                          "destination": "D",
+                          "source": "{{infinite_options_order_created.order.name}}"
+                      },
+                      {
+                          "destination": "E",
+                          "source": "{{infinite_options_order_created.order.shipping_address.address1}}"
+                      },
+                      {
+                          "destination": "F",
+                          "source": "{{infinite_options_order_created.order.shipping_address.city}}"
+                      },
+                      {
+                          "destination": "G",
+                          "source": "{{infinite_options_order_created.order.shipping_address.province}}"
+                      },
+                      {
+                          "destination": "H",
+                          "source": "{{infinite_options_order_created.order.shipping_address.zip}}"
+                      },
+                      {
+                          "destination": "I",
+                          "source": "{{infinite_options_order_created.order.shipping_address.country}}"
+                      },
+                      {
+                          "destination": "J",
+                          "source": "{{iterator.title}}"
+                      },
+                      {
+                          "destination": "K",
+                          "source": "{{iterator.sku}}"
+                      },
+                      {
+                          "destination": "L",
+                          "source": "{{iterator.price}}"
+                      },
+                      {
+                          "destination": "M",
+                          "source": "{{iterator.fields.infinite_options_1}}"
+                      },
+                      {
+                          "destination": "N",
+                          "source": "{{iterator.fields.infinite_options_2}}"
+                      }
+                  ],
+                  "spreadsheet_id": ""
+              },
+              "local_fields": [
+                  {
+                      "key": "mapping",
+                      "type": "mapping",
+                      "tokens": "brackets",
+                      "location": "mapping"
+                  }
+              ],
+              "weight": 1
+          }
+      ],
+      "storage": []
   }
 }
