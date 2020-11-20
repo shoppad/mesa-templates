@@ -52,7 +52,6 @@
         "name": "Mapping to Shopify: Update Product",
         "key": "shopify-update-product-transform",
         "metadata": {
-          "script": "shopify-update-product-transform.js",
           "mapping": [
             {
               "destination": "tags[]",
