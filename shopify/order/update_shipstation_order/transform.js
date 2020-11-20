@@ -24,7 +24,7 @@ module.exports = new class {
     let refundLineItemsHash = {};
     payload.refunds.forEach(function(refund){
       refund.refund_line_items.forEach(function(refundLineItem) {
-        if (refundLineItemsHash[refundLineItem.id]) {
+        if (refundLineItemsHash[refundLineItem.line_item.id]) {
           refundLineItemsHash[refundLineItem.line_item.id] = refundLineItemsHash[refundLineItem.line_item.id] + refundLineItem.quantity;
         } else {
           refundLineItemsHash[refundLineItem.line_item.id] = refundLineItem.quantity;
