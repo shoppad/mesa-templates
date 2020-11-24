@@ -7,7 +7,7 @@
   "readme": "",
   "tags": ["order"],
   "source": "shopify_webhook",
-  "destination": "googlesheets",
+  "destination": "google-sheets",
   "enabled": false,
   "logging": false,
   "debug": false,
