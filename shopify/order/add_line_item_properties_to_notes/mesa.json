@@ -49,7 +49,7 @@
               "metadata": {
                   "order_id": "{{shopify_order.id}}",
                   "body": {
-                      "note": "{{custom.line_item_properties}}"
+                      "note": "{{shopify_order.notes}}\n\n{{custom.line_item_properties}}"
                   },
                   "site": "current"
               },
