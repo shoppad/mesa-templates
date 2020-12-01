@@ -1,92 +1,91 @@
 {
-  "key": "shoppad/mesa-templates/shopify/product/add-image-colors-to-products-as-tags",
-  "name": "Add Image Colors to Products as Tags",
-  "version": "1.0.0",
-  "description": "Add the predominant colors from the product images as tags to a product when the product is created or updated.",
-  "video": "",
-  "tags": ["Product"],
-  "source": "shopify_webhook",
-  "destination": "shopify",
-  "enabled": true,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "entity": "product",
-        "action": "create-update",
-        "name": "Shopify: Product Created or Updated",
-        "key": "shopify-product-created-or-updated",
-        "metadata": {
-          "topic": "products/create+products/update"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "iterator",
-        "name": "Iterator",
-        "key": "iterator",
-        "metadata": {
-          "key": "{{source.images}}"
-        },
-        "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
-        "destination_entity": "colors"
-      },
-      {
-        "trigger_type": "output",
-        "type": "image",
-        "entity": "colors",
-        "action": "identify",
-        "name": "Image: Identify Colors",
-        "key": "image-identify-colors",
-        "metadata": {
-          "image_url": "{{current_item.src}}"
-        },
-        "description": "Mesa Image allows you to maniplulate and process images. [Read more](https://docs.getmesa.com/article/767-mesa-image)."
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "name": "Mapping to Shopify: Update Product",
-        "key": "shopify-update-product-transform",
-        "metadata": {
-          "mapping": [
-            {
-              "destination": "tags[]",
-              "source": "{{colors[]}}"
-            },
-            {
-              "destination": "id",
-              "source": "{{source.id}}"
-            }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping"
-          }
-        ],
-        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-        "source_entity": "colors",
-        "destination_entity": "product"
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "product",
-        "action": "update",
-        "name": "Shopify: Update Product",
-        "key": "shopify-update-product",
-        "metadata": {
-          "shopify_api": "PUT admin/products/{{product_id}}.json",
-          "product_id": "{{source.id}}",
-          "site": "current"
-        }
-      }
-    ],
-    "storage": []
-  }
+	"key": "shoppad/mesa-templates/shopify/product/add_image_colors_to_products_as_tags",
+	"name": "Add Image Colors to Products as Tags",
+	"version": "1.0.0",
+	"description": "Add the predominant colors from the product images as tags to a product when the product is created or updated.",
+	"video": "",
+	"readme": null,
+	"tags": [
+		"Product"
+	],
+	"source": "shopify_webhook",
+	"destination": "shopify",
+	"enabled": false,
+	"logging": false,
+	"debug": false,
+	"config": {
+		"inputs": [{
+			"schema": 2,
+			"trigger_type": "input",
+			"type": "shopify_webhook",
+			"entity": "product",
+			"action": "create-update",
+			"name": "Shopify: Product Created or Updated",
+			"key": "shopify-product-created-or-updated",
+			"metadata": [],
+			"local_fields": [],
+			"weight": 0
+		}],
+		"outputs": [{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "iterator",
+				"name": "Iterator",
+				"key": "iterator",
+				"metadata": {
+					"key": "{{shopify-product-created-or-updated.images[]}}"
+				},
+				"local_fields": [],
+				"weight": 0
+			},
+			{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "image",
+				"entity": "colors",
+				"action": "identify",
+				"name": "Image: Identify Colors",
+				"key": "image-identify-colors",
+				"metadata": {
+					"image_url": "{{current_item.src}}"
+				},
+				"local_fields": [],
+				"weight": 1
+			},
+			{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "transform",
+				"name": "Mapping to Shopify: Update Product",
+				"key": "shopify-update-product-transform",
+				"metadata": {
+					"mapping": [{
+						"destination": "tags[]",
+						"source": "{{colors[]}}"
+					}]
+				},
+				"local_fields": [{
+					"key": "mapping",
+					"type": "mapping"
+				}],
+				"weight": 2
+			},
+			{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "shopify_api",
+				"entity": "product",
+				"action": "update",
+				"name": "Shopify: Update Product",
+				"key": "shopify-update-product",
+				"metadata": {
+					"product_id": "{{shopify-product-created-or-updated.id}}",
+					"site": "current"
+				},
+				"local_fields": [],
+				"weight": 3
+			}
+		],
+		"storage": []
+	}
 }
