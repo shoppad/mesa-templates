@@ -1,8 +1,8 @@
 {
   "key": "shoppad/mesa-templates/shopify/order/add_shipping_province_tag",
-  "name": "Shopify Order Created to Shopify Update Order",
+  "name": "Add Shipping Province Tag To Order",
   "version": "1.0.0",
-  "description": "",
+  "description": "Add shipping province/state tag to Shopify order when order is created.",
   "video": "",
   "readme": "",
   "tags": [],
