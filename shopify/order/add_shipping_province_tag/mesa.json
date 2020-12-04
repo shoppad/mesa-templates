@@ -1,32 +1,50 @@
 {
   "key": "shoppad/mesa-templates/shopify/order/add_shipping_province_tag",
-  "name": "Add Shipping Province Tag To Order",
+  "name": "Shopify Order Created to Shopify Update Order",
   "version": "1.0.0",
-  "description": "Add shipping province/state tag to Shopify order when order is created.",
-  "tags": ["Order"],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": true,
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "shopify_api",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
   "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Order Webhook",
-        "key": "in-shopify-order-webhook",
-        "script": "in-shopify-order-webhook.js",
-        "topic": "orders/create"
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "name": "Update Shopify Order",
-        "key": "out-update-shopify-order",
-        "script": "out-update-shopify-order.js",
-        "shopify_api": "PUT admin/orders/{{order_id}}.json"
-      }
-    ]
+      "inputs": [
+          {
+              "schema": 2,
+              "trigger_type": "input",
+              "type": "shopify_webhook",
+              "entity": "order",
+              "action": "create",
+              "name": "Shopify Order Created",
+              "key": "shopify_order",
+              "metadata": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 3,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "order",
+              "action": "update",
+              "name": "Shopify Update Order",
+              "key": "shopify_order_1",
+              "metadata": {
+                  "order_id": "{{shopify_order.id}}",
+                  "body": {
+                      "email": "{{shopify_order.tags}}, {{shopify_order.shipping_address.province_code}}"
+                  },
+                  "site": "current"
+              },
+              "local_fields": [],
+              "weight": 0
+          }
+      ],
+      "storage": []
   }
 }
