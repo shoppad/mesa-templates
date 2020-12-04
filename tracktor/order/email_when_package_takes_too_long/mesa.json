@@ -1,0 +1,84 @@
+{
+    "key": "shoppad/mesa-templates/tracktor/order/email_when_package_takes_too_long",
+    "name": "Email Customers After 20 Days If Package Has Not Been Delivered",
+    "version": "1.0.0",
+    "description": "Email customers after 20 days (this number is configurable) if their package still has not been delivered.",
+    "video": "",
+    "tags": [
+        "tracktor"
+    ],
+    "source": "tracktor",
+    "destination": "notification",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "order\/ordered",
+                "name": "Tracktor: Order Created",
+                "key": "tracktor_order_created"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": "20",
+                    "unit": "days",
+                    "test_bypass": false
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Tracktor Retrieve Order",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{delay.order_id}}"
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{tracktor_order.fulfillments}}"
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{iterator.latest_status.key}}",
+                    "comparison": "does not equal",
+                    "b": "delivered"
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{tracktor_order.order_email}}",
+                    "subject": "Sorry your package is taking so long!",
+                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in iterator.current_item.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page:\nhttps:\/\/{{context.shop.domain}}\/apps\/tracktor\/track\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}",
+                    "test_email_override": false
+                }
+            }
+        ],
+        "storage": []
+    }
+}

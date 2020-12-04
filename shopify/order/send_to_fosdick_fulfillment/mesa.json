@@ -1,0 +1,53 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send_to_fosdick_fulfillment",
+  "name": "Send Orders To Fosdick Fulfillment",
+  "version": "1.0.0",
+  "description": "Send orders from Shopify to Fosdick Fulfillment every hour.",
+  "tags": ["Fulfillment", "Order"],
+  "source": "shopify",
+  "destination": "fosdick",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Created",
+        "key": "in-shopify-order-webhook",
+        "script": "in-shopify-order-webhook.js",
+        "logging": "error",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "virtual_output",
+        "name": "Create Fosdick Order",
+        "key": "out-create-fosdick-orders-virtual-output",
+        "schedule": "0 * * * *",
+        "script": "out-create-fosdick-order.js"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "fosdick-client-code",
+        "value": ""
+      },
+      {
+        "key": "fosdick-client-name",
+        "value": ""
+      },
+      {
+        "key": "fosdick-ad-code",
+        "value": ""
+      }
+    ],
+    "storage": [
+      {
+        "key": "fosdick-test-mode",
+        "value": "true"
+      }
+    ]
+  }
+}
