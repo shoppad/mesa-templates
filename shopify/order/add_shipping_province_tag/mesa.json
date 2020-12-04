@@ -37,7 +37,7 @@
               "metadata": {
                   "order_id": "{{shopify_order.id}}",
                   "body": {
-                      "email": "{{shopify_order.tags}}, {{shopify_order.shipping_address.province_code}}"
+                      "tags": "{{shopify_order.tags}}, {{shopify_order.shipping_address.province_code}}"
                   },
                   "site": "current"
               },
