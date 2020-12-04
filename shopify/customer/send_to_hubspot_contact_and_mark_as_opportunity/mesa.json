@@ -39,7 +39,7 @@
                 "metadata": {
                     "method": "POST",
                     "path": "\/contacts\/v1\/contact",
-                    "token": "5fadc6fcd92b9900a4280f38",
+                    "token": "",
                     "mapping": [
                         {
                             "destination": "FirstName",
