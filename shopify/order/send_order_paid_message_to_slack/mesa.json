@@ -1,0 +1,45 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/send_order_paid_message_to_slack",
+  "name": "Send Order Paid Message To Slack Channel",
+  "version": "1.0.0",
+  "description": "Send message to Slack when Shopify order has been paid.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "slack",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+      "inputs": [
+          {
+              "schema": 2,
+              "trigger_type": "input",
+              "type": "shopify_webhook",
+              "entity": "order",
+              "action": "paid",
+              "name": "Shopify Order Paid",
+              "key": "shopify_order",
+              "metadata": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "slack",
+              "name": "Slack",
+              "key": "slack",
+              "metadata": {
+                  "webhook": "",
+                  "message": "Order paid for: {{shopify_order.name}}  :thumbsup:"
+              },
+              "local_fields": [],
+              "weight": 0
+          }
+      ],
+      "storage": []
+  }
+}

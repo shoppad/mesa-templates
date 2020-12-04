@@ -14,7 +14,6 @@
         "type": "shopify_webhook",
         "name": "Shopify Draft Order Created",
         "key": "in-shopify-draft-order-created",
-        "script": "in-shopify-draft-order-created.js",
         "topic": "draft_orders/create"
       }
     ],
@@ -34,7 +33,6 @@
         "type": "shopify_api",
         "name": "Delete Shopify Order",
         "key": "out-delete-shopify-order",
-        "script": "out-delete-shopify-order.js",
         "shopify_api": "DELETE admin/orders/{{order_id}}.json"
       }
     ],

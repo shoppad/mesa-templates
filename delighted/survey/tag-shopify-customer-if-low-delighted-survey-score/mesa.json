@@ -78,11 +78,11 @@
         "key": "shopify_customer",
         "metadata": {
           "shopify_api": "PUT admin/customers/{{customer_id}}.json",
-          "customer_id": "{{shopify_customer_search[0].id}}",
+          "customer_id": "{{shopify_customer_search.customers[0].id}}",
           "mapping": [
             {
               "destination": "tags",
-              "source": "Unhappy Survey,{{shopify_customer_search[0].tags}}"
+              "source": "Unhappy Survey,{{shopify_customer_search.customers[0].tags}}"
             }
           ]
         },
