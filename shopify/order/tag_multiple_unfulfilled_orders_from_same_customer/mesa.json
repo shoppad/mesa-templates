@@ -8,147 +8,99 @@
   "tags": [],
   "source": "shopify_webhook",
   "destination": "filter",
-  "enabled": true,
+  "enabled": false,
   "logging": false,
   "debug": false,
   "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "entity": "order",
-        "action": "create",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": {
-          "topic": "orders/create"
-        },
-        "local_fields": null,
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "entity": null,
-        "action": null,
-        "name": "Filter  ",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_order.customer.last_order_id}}",
-          "comparison": "does not equal",
-          "b": "null"
-        },
-        "local_fields": null,
-        "weight": 0
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Order",
-        "key": "shopify_order_1",
-        "metadata": {
-          "shopify_api": "GET admin/orders/{{order_id}}.json",
-          "order_id": "{{shopify_order.customer.last_order_id}}"
-        },
-        "local_fields": null,
-        "weight": 1
-      },
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "entity": "",
-        "action": "",
-        "name": "Filter  ",
-        "key": "filter_1",
-        "metadata": {
-          "a": "{{shopify_order_2.fulfillment_status}}",
-          "comparison": "does not equal",
-          "b": "fulfilled"
-        },
-        "local_fields": null,
-        "weight": 2
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "",
-        "action": "",
-        "name": "Mapping to Shopify Update Order",
-        "key": "shopify_order_2_transform",
-        "metadata": {
-          "mapping": [
-            {
-              "destination": "tags",
-              "source": "{{shopify_order.tags}}, multiple orders unfulfilled"
-            }
-          ]
-        },
-        "local_fields": [
+      "inputs": [
           {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets"
+              "schema": 2,
+              "trigger_type": "input",
+              "type": "shopify_webhook",
+              "entity": "order",
+              "action": "create",
+              "name": "Shopify Order Created",
+              "key": "shopify_order",
+              "metadata": [],
+              "weight": 0
           }
-        ],
-        "weight": 3
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "order",
-        "action": "update",
-        "name": "Shopify Update Order",
-        "key": "shopify_order_2",
-        "metadata": {
-          "shopify_api": "PUT admin/orders/{{order_id}}.json",
-          "order_id": "{{shopify_order.id}}"
-        },
-        "local_fields": null,
-        "weight": 4
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "",
-        "action": "",
-        "name": "Mapping to Shopify Update Order",
-        "key": "shopify_order_3_transform",
-        "metadata": {
-          "mapping": [
-            {
-              "destination": "tags",
-              "source": "{{shopify_order.tags}}, multiple orders unfulfilled"
-            }
-          ]
-        },
-        "local_fields": [
+      ],
+      "outputs": [
           {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets"
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "filter",
+              "name": "Filter",
+              "key": "filter",
+              "metadata": {
+                  "a": "{{shopify_order.customer.last_order_id}}",
+                  "comparison": "does not equal",
+                  "b": "null"
+              },
+              "local_fields": [],
+              "weight": 0
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "order",
+              "action": "retrieve",
+              "name": "Shopify Retrieve Order",
+              "key": "shopify_order_1",
+              "metadata": {
+                  "order_id": "{{shopify_order.customer.last_order_id}}",
+                  "site": "current"
+              },
+              "local_fields": [],
+              "weight": 1
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "filter",
+              "name": "Filter",
+              "key": "filter_1",
+              "metadata": {
+                  "a": "{{shopify_order_2.fulfillment_status}}",
+                  "comparison": "does not equal",
+                  "b": "fulfilled"
+              },
+              "local_fields": [],
+              "weight": 2
+          },
+          {
+              "schema": 3,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "order",
+              "action": "update",
+              "name": "Shopify Update Order",
+              "key": "shopify_order_4",
+              "metadata": {
+                  "order_id": "{{shopify_order.id}}",
+                  "body": {
+                      "tags": "{{shopify_order.tags}}, multiple orders unfulfilled"
+                  },
+                  "site": "current"
+              },
+              "local_fields": [],
+              "weight": 3
+          },
+          {
+              "schema": 3,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "order",
+              "action": "update",
+              "name": "Shopify Update Order",
+              "key": "shopify_order_2",
+              "metadata": {
+                  "site": "current"
+              },
+              "weight": 4
           }
-        ],
-        "weight": 5
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "order",
-        "action": "update",
-        "name": "Shopify Update Order",
-        "key": "shopify_order_3",
-        "metadata": {
-          "shopify_api": "PUT admin/orders/{{order_id}}.json",
-          "order_id": "{{shopify_order_2.id}}"
-        },
-        "local_fields": null,
-        "weight": 6
-      }
-    ],
-    "storage": []
+      ],
+      "storage": []
   }
 }
