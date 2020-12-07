@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/add-fulfillment",
+  "key": "shoppad/mesa-templates/shopify/order/add_fulfillment",
   "name": "Add Fulfillment To Order",
   "version": "1.0.0",
   "description": "Add fulfillment to Shopify order when order is created with line-items that do not require shipping.",
@@ -14,7 +14,6 @@
         "type": "shopify_webhook",
         "name": "Shopify Order Created",
         "key": "in-shopify-order-created",
-        "script": "in-shopify-order-created.js",
         "topic": "orders/create"
       }
     ],
