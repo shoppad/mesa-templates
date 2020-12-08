@@ -1,11 +1,13 @@
 {
-    "key": "shopify/customer/send-to-hubspot-deal",
+    "key": "shopify/customer/send_to_hubspot_deal",
     "name": "Send Shopify Customer to HubSpot Contact and Deal",
     "version": "1.0.0",
     "description": "Send Shopify Customer from Shopify to HubSpot Contact and Deal when customer is created.",
     "video": "",
     "readme": "",
-    "tags": ["Customer"],
+    "tags": [
+        "Customer"
+    ],
     "source": "shopify_webhook",
     "destination": "hubspot",
     "enabled": false,
@@ -21,7 +23,7 @@
                 "name": "Shopify Customer Created",
                 "key": "shopify_customer",
                 "metadata": {
-                    "topic": "customers\/create"
+                    "topic": "customers/create"
                 },
                 "local_fields": null,
                 "weight": 0
@@ -74,7 +76,7 @@
                 "key": "hubspot_contact",
                 "metadata": {
                     "method": "POST",
-                    "path": "\/contacts\/v1\/contact"
+                    "path": "/contacts/v1/contact"
                 },
                 "local_fields": null,
                 "weight": 1
@@ -125,7 +127,7 @@
                 "key": "hubspot_deal",
                 "metadata": {
                     "method": "POST",
-                    "path": "\/deals\/v1\/deal"
+                    "path": "/deals/v1/deal"
                 },
                 "local_fields": null,
                 "weight": 3
@@ -139,7 +141,7 @@
                 "key": "hubspot_contact_1",
                 "metadata": {
                     "method": "PUT",
-                    "path": "\/crm-associations\/v1\/associations",
+                    "path": "/crm-associations/v1/associations",
                     "association_definition_id": 4,
                     "association_from_id": "{{hubspot_contact.vid}}",
                     "association_to_id": "{{hubspot_deal.dealId}}"

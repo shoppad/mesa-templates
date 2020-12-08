@@ -1,97 +1,97 @@
 {
-  "key": "shopify/customer/send-to-salesforce-account",
-  "name": "Shopify Customer Created or Updated to Salesforce Account",
-  "version": "1.0.0",
-  "description": "Send Customer from Shopify to Salesforce Account when customer is created or updated.",
-  "video": "",
-  "tags": [
-    "Account"
-  ],
-  "source": "shopify_webhook",
-  "destination": "salesforce",
-  "enabled": false,
-  "logging": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "entity": "customer",
-        "action": "create-update",
-        "name": "Shopify: Customer Created or Updated",
-        "key": "shopify-customer-created-or-updated",
-        "metadata": {
-          "topic": "customers/create+customers/update"
-        }
-      }
+    "key": "shopify/customer/send_to_salesforce_account",
+    "name": "Shopify Customer Created or Updated to Salesforce Account",
+    "version": "1.0.0",
+    "description": "Send Customer from Shopify to Salesforce Account when customer is created or updated.",
+    "video": "",
+    "tags": [
+        "Account"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "salesforce",
-        "entity": "account",
-        "action": "query",
-        "name": "Salesforce: Query Single Account",
-        "key": "salesforce-query-single-account",
-        "metadata": {
-          "entity_name": "Account",
-          "method": "QUERY",
-          "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c='{{source.id}}'"
-        }
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "name": "Mapping to Salesforce: Create or Update Account",
-        "key": "salesforce-create-or-update-account-transform",
-        "metadata": {
-          "script": "salesforce-create-or-update-account-transform.js",
-          "mapping": [
+    "source": "shopify_webhook",
+    "destination": "salesforce",
+    "enabled": false,
+    "logging": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "Name",
-              "source": "{{shopify-customer-created-or-updated.first_name}} {{shopify-customer-created-or-updated.last_name}}"
-            },
-            {
-              "destination": "Phone",
-              "source": "{{shopify-customer-created-or-updated.phone}}"
-            },
-            {
-              "destination": "Shopify_Customer_ID__c",
-              "source": "{{shopify-customer-created-or-updated.id}}"
-            },
-            {
-              "destination": "Email__c",
-              "source": "{{shopify-customer-created-or-updated.email}}"
-            },
-            {
-              "destination": "Description",
-              "source": "{{shopify-customer-created-or-updated.note}}"
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "customer",
+                "action": "create-update",
+                "name": "Shopify: Customer Created or Updated",
+                "key": "shopify-customer-created-or-updated",
+                "metadata": {
+                    "topic": "customers/create+customers/update"
+                }
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping"
-          }
         ],
-        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-        "source_entity": "account",
-        "destination_entity": "account"
-      },
-      {
-        "trigger_type": "output",
-        "type": "salesforce",
-        "entity": "account",
-        "action": "create_or_update",
-        "name": "Salesforce: Create or Update Account",
-        "key": "salesforce-create-or-update-account",
-        "metadata": {
-          "entity_name": "Account",
-          "method": "POST_OR_PATCH"
-        }
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "account",
+                "action": "query",
+                "name": "Salesforce: Query Single Account",
+                "key": "salesforce-query-single-account",
+                "metadata": {
+                    "entity_name": "Account",
+                    "method": "QUERY",
+                    "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c='{{source.id}}'"
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "name": "Mapping to Salesforce: Create or Update Account",
+                "key": "salesforce-create-or-update-account-transform",
+                "metadata": {
+                    "script": "salesforce-create-or-update-account-transform.js",
+                    "mapping": [
+                        {
+                            "destination": "Name",
+                            "source": "{{shopify-customer-created-or-updated.first_name}} {{shopify-customer-created-or-updated.last_name}}"
+                        },
+                        {
+                            "destination": "Phone",
+                            "source": "{{shopify-customer-created-or-updated.phone}}"
+                        },
+                        {
+                            "destination": "Shopify_Customer_ID__c",
+                            "source": "{{shopify-customer-created-or-updated.id}}"
+                        },
+                        {
+                            "destination": "Email__c",
+                            "source": "{{shopify-customer-created-or-updated.email}}"
+                        },
+                        {
+                            "destination": "Description",
+                            "source": "{{shopify-customer-created-or-updated.note}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping"
+                    }
+                ],
+                "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+                "source_entity": "account",
+                "destination_entity": "account"
+            },
+            {
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "account",
+                "action": "create_or_update",
+                "name": "Salesforce: Create or Update Account",
+                "key": "salesforce-create-or-update-account",
+                "metadata": {
+                    "entity_name": "Account",
+                    "method": "POST_OR_PATCH"
+                }
+            }
+        ],
+        "storage": []
+    }
 }

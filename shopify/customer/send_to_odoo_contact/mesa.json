@@ -1,11 +1,15 @@
 {
-    "key": "shopify/customer/send-to-odoo-contact",
+    "key": "shopify/customer/send_to_odoo_contact",
     "name": "Send Shopify Customer to Odoo Contact",
     "version": "1.0.0",
     "description": "Send Shopify Customer from Shopify to Odoo Contact when customer is created.",
     "video": "",
     "readme": "",
-    "tags": ["customer", "odoo", "shopify"],
+    "tags": [
+        "customer",
+        "odoo",
+        "shopify"
+    ],
     "source": "shopify_webhook",
     "destination": "odoo",
     "enabled": false,

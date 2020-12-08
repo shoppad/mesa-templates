@@ -1,41 +1,41 @@
 {
-  "key": "shopify/order/add-destination-forecast-to-order-notes",
-  "name": "Add Destination Weather Forecast To Order Notes",
-  "version": "1.0.0",
-  "description": "Add destination weather forecast to Shopify Order Notes when order is created with Dark Sky.",
-  "video": "",
-  "tags": [
-    "Order"
-  ],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Order Webhook",
-        "key": "in-shopify-order-webhook",
-        "script": "in-shopify-order-webhook.js",
-        "topic": "orders/create"
-      }
+    "key": "shopify/order/add_destination_forecast_to_order_notes",
+    "name": "Add Destination Weather Forecast To Order Notes",
+    "version": "1.0.0",
+    "description": "Add destination weather forecast to Shopify Order Notes when order is created with Dark Sky.",
+    "video": "",
+    "tags": [
+        "Order"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "name": "Add Weather Forecast",
-        "key": "out-add-weather-forecast",
-        "script": "out-add-weather-forecast.js",
-        "shopify_api": "PUT admin/orders/{{order_id}}.json"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "darksky-key"
-      }
-    ],
-    "storage": []
-  }
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "name": "Shopify Order Webhook",
+                "key": "in-shopify-order-webhook",
+                "script": "in-shopify-order-webhook.js",
+                "topic": "orders/create"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "name": "Add Weather Forecast",
+                "key": "out-add-weather-forecast",
+                "script": "out-add-weather-forecast.js",
+                "shopify_api": "PUT admin/orders/{{order_id}}.json"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "darksky-key"
+            }
+        ],
+        "storage": []
+    }
 }

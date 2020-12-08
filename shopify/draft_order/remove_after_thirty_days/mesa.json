@@ -1,42 +1,44 @@
 {
-  "key": "shopify/draft-order/remove_after_thirty_days",
-  "name": "Remove Draft Orders After Thirty Days",
-  "version": "1.0.0",
-  "description": "Remove Shopify draft orders older than 30 days.",
-  "tags": ["Draft-Order"],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": true,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Draft Order Created",
-        "key": "in-shopify-draft-order-created",
-        "topic": "draft_orders/create"
-      }
+    "key": "shopify/draft_order/remove_after_thirty_days",
+    "name": "Remove Draft Orders After Thirty Days",
+    "version": "1.0.0",
+    "description": "Remove Shopify draft orders older than 30 days.",
+    "tags": [
+        "Draft-Order"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "virtual_output",
-        "name": "Shopify Draft Order VO",
-        "key": "out-shopify-draft-order-vo",
-        "schedule": "0 */12 * * *",
-        "script": "out-shopify-draft-order-vo.js",
-        "custom_connection": true,
-        "parameters": "created_at_max={{date:30 days ago}}"
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "name": "Delete Shopify Order",
-        "key": "out-delete-shopify-order",
-        "shopify_api": "DELETE admin/orders/{{order_id}}.json"
-      }
-    ],
-    "secrets": [],
-    "storage": []
-  }
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": true,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "name": "Shopify Draft Order Created",
+                "key": "in-shopify-draft-order-created",
+                "topic": "draft_orders/create"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "virtual_output",
+                "name": "Shopify Draft Order VO",
+                "key": "out-shopify-draft-order-vo",
+                "schedule": "0 */12 * * *",
+                "script": "out-shopify-draft-order-vo.js",
+                "custom_connection": true,
+                "parameters": "created_at_max={{date:30 days ago}}"
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "name": "Delete Shopify Order",
+                "key": "out-delete-shopify-order",
+                "shopify_api": "DELETE admin/orders/{{order_id}}.json"
+            }
+        ],
+        "secrets": [],
+        "storage": []
+    }
 }

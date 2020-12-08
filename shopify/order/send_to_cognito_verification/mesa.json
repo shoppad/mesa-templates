@@ -1,60 +1,62 @@
 {
-  "key": "shopify/order/send-to-cognito-verification",
-  "name": "Send Shopify Order To Blockscore Cognito Verification",
-  "version": "1.0.0",
-  "description": "Send order from Shopify to Blockscore Cognito verification and add Order Notes Attributes.",
-  "tags": ["Order"],
-  "source": "shopify",
-  "destination": "cognito",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Order Create",
-        "key": "in-shopify-order-create",
-        "script": "in-shopify-order-create.js",
-        "topic": "orders/create"
-      }
+    "key": "shopify/order/send_to_cognito_verification",
+    "name": "Send Shopify Order To Blockscore Cognito Verification",
+    "version": "1.0.0",
+    "description": "Send order from Shopify to Blockscore Cognito verification and add Order Notes Attributes.",
+    "tags": [
+        "Order"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Cognito Verification",
-        "key": "out-cognito-verification",
-        "script": "out-cognito-verification.js"
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "name": "Update Shopify Order Notes",
-        "key": "out-update-shopify-order-notes",
-        "script": "out-update-shopify-order-notes.js",
-        "shopify_api": "PUT admin/orders/{{order_id}}.json"
-      },
-      {
-        "trigger_type": "output",
-        "type": "virtual_output",
-        "name": "Cognito Virtual Output",
-        "key": "out-cognito-virtual-output",
-        "script": "out-cognito-virtual-output.js"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "cognito-key"
-      },
-      {
-        "key": "cognito-secret"
-      }
-    ],
-    "storage": [
-      {
-        "key": "cognito-environment",
-        "value": "sandbox"
-      }
-    ]
-  }
+    "source": "shopify",
+    "destination": "cognito",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "name": "Shopify Order Create",
+                "key": "in-shopify-order-create",
+                "script": "in-shopify-order-create.js",
+                "topic": "orders/create"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Cognito Verification",
+                "key": "out-cognito-verification",
+                "script": "out-cognito-verification.js"
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "name": "Update Shopify Order Notes",
+                "key": "out-update-shopify-order-notes",
+                "script": "out-update-shopify-order-notes.js",
+                "shopify_api": "PUT admin/orders/{{order_id}}.json"
+            },
+            {
+                "trigger_type": "output",
+                "type": "virtual_output",
+                "name": "Cognito Virtual Output",
+                "key": "out-cognito-virtual-output",
+                "script": "out-cognito-virtual-output.js"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "cognito-key"
+            },
+            {
+                "key": "cognito-secret"
+            }
+        ],
+        "storage": [
+            {
+                "key": "cognito-environment",
+                "value": "sandbox"
+            }
+        ]
+    }
 }

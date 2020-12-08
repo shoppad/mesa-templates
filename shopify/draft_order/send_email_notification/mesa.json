@@ -1,60 +1,60 @@
 {
-  "key": "shopify/draft-order/send_email_notification",
-  "name": "Send Email Notification When Draft Order Is Created",
-  "version": "1.0.0",
-  "description": "Send email notification from Shopify draft order when draft order is created.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify_webhook",
-  "destination": "email",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify_webhook",
-              "entity": "draft_order",
-              "action": "create",
-              "name": "Shopify Draft Order Created",
-              "key": "shopify_draft_order",
-              "metadata": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "shopify_api",
-              "entity": "shop",
-              "action": "list",
-              "name": "Shopify Get List Shop",
-              "key": "shopify_shop",
-              "metadata": {
-                  "site": "current"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "email",
-              "name": "Email",
-              "key": "email",
-              "metadata": {
-                  "subject": "{{shopify_shop.name}} New draft order has been created.",
-                  "message": "New draft order has been created. See: https:\/\/{{shopify_shop.myshopify_domain}}\/admin\/draft_orders\/{{shopify_draft_order.id}}",
-                  "to": "{{shopify_shop.email}}"
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
-  }
+    "key": "shopify/draft_order/send_email_notification",
+    "name": "Send Email Notification When Draft Order Is Created",
+    "version": "1.0.0",
+    "description": "Send email notification from Shopify draft order when draft order is created.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify_webhook",
+    "destination": "email",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "draft_order",
+                "action": "create",
+                "name": "Shopify Draft Order Created",
+                "key": "shopify_draft_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "shop",
+                "action": "list",
+                "name": "Shopify Get List Shop",
+                "key": "shopify_shop",
+                "metadata": {
+                    "site": "current"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "subject": "{{shopify_shop.name}} New draft order has been created.",
+                    "message": "New draft order has been created. See: https://{{shopify_shop.myshopify_domain}}/admin/draft_orders/{{shopify_draft_order.id}}",
+                    "to": "{{shopify_shop.email}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

@@ -1,86 +1,86 @@
 {
-  "key": "shopify/order/remove-background-from-uploadery-images",
-  "name": "Remove the Background from Images Uploaded with Uploadery",
-  "version": "1.0.0",
-  "description": "Remove the background from images uploaded with Uploadery when an order is created. The new image assets are attached to the order as note attributes.",
-  "video": "",
-  "tags": [
-    "Order"
-  ],
-  "source": "uploadery",
-  "destination": "shopify",
-  "enabled": true,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "uploadery",
-        "entity": "order",
-        "action": "created",
-        "name": "Uploadery: Order Created",
-        "key": "uploadery-order-created"
-      }
+    "key": "shopify/order/remove_background_from_uploadery_images",
+    "name": "Remove the Background from Images Uploaded with Uploadery",
+    "version": "1.0.0",
+    "description": "Remove the background from images uploaded with Uploadery when an order is created. The new image assets are attached to the order as note attributes.",
+    "video": "",
+    "tags": [
+        "Order"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "iterator",
-        "name": "Iterator",
-        "key": "iterator",
-        "metadata": {
-          "key": "{{fields}}"
-        },
-        "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
-        "destination_entity": "background"
-      },
-      {
-        "trigger_type": "output",
-        "type": "image",
-        "entity": "background",
-        "action": "remove",
-        "name": "Image: Remove Background",
-        "key": "image-remove-background",
-        "metadata": {
-          "image_url": "{{current_item.value}}"
-        },
-        "description": "Mesa Image allows you to maniplulate and process images. [Read more](https://docs.getmesa.com/article/767-mesa-image)."
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "script",
-        "name": "Transform:  Script",
-        "key": "transform-script",
-        "metadata": {
-          "script": "transform.js",
-          "description": "Formats the transformed image as order note attributes so we can update the Shopify order."
-        },
-        "local_fields": [
-          {
-            "key": "description",
-            "type": "textarea",
-            "label": "Description",
-            "description": "Add a description of what this script does for non-technical users"
-          }
+    "source": "uploadery",
+    "destination": "shopify",
+    "enabled": true,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "uploadery",
+                "entity": "order",
+                "action": "created",
+                "name": "Uploadery: Order Created",
+                "key": "uploadery-order-created"
+            }
         ],
-        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-        "source_entity": "background",
-        "destination_entity": "order"
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "order",
-        "action": "update",
-        "name": "Shopify: Update Order",
-        "key": "shopify-update-order",
-        "metadata": {
-          "shopify_api": "PUT admin/orders/{{order_id}}.json",
-          "order_id": "{{source.order.id}}",
-          "site": "current"
-        }
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{fields}}"
+                },
+                "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
+                "destination_entity": "background"
+            },
+            {
+                "trigger_type": "output",
+                "type": "image",
+                "entity": "background",
+                "action": "remove",
+                "name": "Image: Remove Background",
+                "key": "image-remove-background",
+                "metadata": {
+                    "image_url": "{{current_item.value}}"
+                },
+                "description": "Mesa Image allows you to maniplulate and process images. [Read more](https://docs.getmesa.com/article/767-mesa-image)."
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "script",
+                "name": "Transform:  Script",
+                "key": "transform-script",
+                "metadata": {
+                    "script": "transform.js",
+                    "description": "Formats the transformed image as order note attributes so we can update the Shopify order."
+                },
+                "local_fields": [
+                    {
+                        "key": "description",
+                        "type": "textarea",
+                        "label": "Description",
+                        "description": "Add a description of what this script does for non-technical users"
+                    }
+                ],
+                "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+                "source_entity": "background",
+                "destination_entity": "order"
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "update",
+                "name": "Shopify: Update Order",
+                "key": "shopify-update-order",
+                "metadata": {
+                    "shopify_api": "PUT admin/orders/{{order_id}}.json",
+                    "order_id": "{{source.order.id}}",
+                    "site": "current"
+                }
+            }
+        ],
+        "storage": []
+    }
 }

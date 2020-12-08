@@ -1,5 +1,5 @@
 {
-    "key": "shopify/draft-order/send_to_hubspot_deal",
+    "key": "shopify/draft_order/send_to_hubspot_deal",
     "name": "Send Draft Order To Hubspot Deal",
     "version": "1.0.0",
     "description": "Send draft order from Shopify to HubSpot Deal when draft order is created.",
@@ -38,7 +38,7 @@
                 "key": "hubspot_deal_1",
                 "metadata": {
                     "method": "POST",
-                    "path": "\/deals\/v1\/deal",
+                    "path": "/deals/v1/deal",
                     "mapping": [
                         {
                             "destination": "DealName",

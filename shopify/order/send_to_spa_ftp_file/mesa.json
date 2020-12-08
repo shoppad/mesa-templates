@@ -1,51 +1,54 @@
 {
-  "key": "shopify/order/send-to-spa-ftp-file",
-  "name": "Send Shopify Order to SoftPack / SPA Order",
-  "version": "1.0.0",
-  "description": "Send order from Shopify to SPA FTP file when order is created.",
-  "tags": ["Fulfillment", "Order"],
-  "source": "shopify",
-  "destination": "spa",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Order Webhook",
-        "key": "in-shopify-order-webhook",
-        "script": "in-shopify-order-webhook.js",
-        "topic": "orders/create"
-      }
+    "key": "shopify/order/send_to_spa_ftp_file",
+    "name": "Send Shopify Order to SoftPack / SPA Order",
+    "version": "1.0.0",
+    "description": "Send order from Shopify to SPA FTP file when order is created.",
+    "tags": [
+        "Fulfillment",
+        "Order"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "virtual_output",
-        "name": "Orders VO",
-        "key": "out-orders-vo",
-        "schedule": "0 * * * *",
-        "script": "out-orders-vo.js"
-      },
-      {
-        "trigger_type": "output",
-        "type": "ftp",
-        "name": "Save Orders to FTP",
-        "key": "out-save-orders-to-ftp",
-        "script": "out-save-orders-to-ftp.js",
-        "method": "ftp",
-        "host": "",
-        "port": "22",
-        "file": "orders-{{date:YmdHis}}.txt",
-        "username": "",
-        "password": "ftp-password"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "ftp-password"
-      }
-    ],
-    "storage": []
-  }
+    "source": "shopify",
+    "destination": "spa",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "name": "Shopify Order Webhook",
+                "key": "in-shopify-order-webhook",
+                "script": "in-shopify-order-webhook.js",
+                "topic": "orders/create"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "virtual_output",
+                "name": "Orders VO",
+                "key": "out-orders-vo",
+                "schedule": "0 * * * *",
+                "script": "out-orders-vo.js"
+            },
+            {
+                "trigger_type": "output",
+                "type": "ftp",
+                "name": "Save Orders to FTP",
+                "key": "out-save-orders-to-ftp",
+                "script": "out-save-orders-to-ftp.js",
+                "method": "ftp",
+                "host": "",
+                "port": "22",
+                "file": "orders-{{date:YmdHis}}.txt",
+                "username": "",
+                "password": "ftp-password"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "ftp-password"
+            }
+        ],
+        "storage": []
+    }
 }

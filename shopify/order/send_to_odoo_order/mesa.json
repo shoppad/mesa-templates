@@ -1,11 +1,15 @@
 {
-    "key": "shopify/order/send-to-odoo-order",
+    "key": "shopify/order/send_to_odoo_order",
     "name": "Send Shopify Order to Odoo Order",
     "version": "1.0.0",
     "description": "Send Shopify Order from Shopify to Odoo Order and Order Lines when order is created.",
     "video": "",
     "readme": "",
-    "tags": ["order", "odoo", "shopify"],
+    "tags": [
+        "order",
+        "odoo",
+        "shopify"
+    ],
     "source": "shopify_webhook",
     "destination": "odoo",
     "enabled": false,
