@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/flow/send-to-cognito-verification",
+  "key": "shopify/flow/send-to-cognito-verification",
   "name": "Send Order from Shopify Flow To Blockscore Cognito Verification",
   "version": "1.0.0",
   "description": "Send order from Shopify to Blockscore Cognito verification when order is passed from Shopify Flow.",

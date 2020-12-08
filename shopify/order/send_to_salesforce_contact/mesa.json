@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send_to_salesforce_contact",
+  "key": "shopify/order/send_to_salesforce_contact",
   "name": "Send Order To Salesforce Contact",
   "version": "1.0.0",
   "description": "Send Order from Shopify to Salesforce Contact when order is created.",

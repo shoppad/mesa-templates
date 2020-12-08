@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send_to_fosdick_fulfillment",
+  "key": "shopify/order/send_to_fosdick_fulfillment",
   "name": "Send Orders To Fosdick Fulfillment",
   "version": "1.0.0",
   "description": "Send orders from Shopify to Fosdick Fulfillment every hour.",

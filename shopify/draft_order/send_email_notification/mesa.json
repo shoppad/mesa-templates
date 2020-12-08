@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/draft-order/send_email_notification",
+  "key": "shopify/draft-order/send_email_notification",
   "name": "Send Email Notification When Draft Order Is Created",
   "version": "1.0.0",
   "description": "Send email notification from Shopify draft order when draft order is created.",

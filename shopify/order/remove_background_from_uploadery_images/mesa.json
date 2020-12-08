@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/remove-background-from-uploadery-images",
+  "key": "shopify/order/remove-background-from-uploadery-images",
   "name": "Remove the Background from Images Uploaded with Uploadery",
   "version": "1.0.0",
   "description": "Remove the background from images uploaded with Uploadery when an order is created. The new image assets are attached to the order as note attributes.",

@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/product/send-to-another-store",
+  "key": "shopify/product/send-to-another-store",
   "name": "Send Product To Another Store",
   "version": "1.0.0",
   "description": "Send product from Shopify to another store when product is created, updated or deleted.",

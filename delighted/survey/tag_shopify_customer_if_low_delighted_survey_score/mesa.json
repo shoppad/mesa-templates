@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
+  "key": "delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
   "name": "Tag Shopify Customer if Low Delighted Survey Score",
   "version": "1.0.0",
   "description": "Tag a Shopify customer if they give a low score on their Delighted survey.",

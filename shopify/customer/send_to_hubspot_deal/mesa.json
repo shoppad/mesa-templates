@@ -1,5 +1,5 @@
 {
-    "key": "shoppad/mesa-templates/shopify/customer/send-to-hubspot-deal",
+    "key": "shopify/customer/send-to-hubspot-deal",
     "name": "Send Shopify Customer to HubSpot Contact and Deal",
     "version": "1.0.0",
     "description": "Send Shopify Customer from Shopify to HubSpot Contact and Deal when customer is created.",

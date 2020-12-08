@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/mesa/file/send-to-google-cloudprint",
+  "key": "mesa/file/send-to-google-cloudprint",
   "name": "Send File to Google Cloud Print",
   "version": "1.0.0",
   "description": "Print a file with a Google Cloud Print connected printer. Triggered from a call in another Automation's script to Mesa.automation.send().",

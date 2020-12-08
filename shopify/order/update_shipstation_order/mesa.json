@@ -1,5 +1,5 @@
 {
-    "key": "shoppad/mesa-templates/shopify/order/update_shipstation_order",
+    "key": "shopify/order/update_shipstation_order",
     "name": "Update ShipStation when Shopify Order is Updated",
     "version": "1.0.0",
     "description": "Update a ShipStation Order when a Shopify Order is Updated",

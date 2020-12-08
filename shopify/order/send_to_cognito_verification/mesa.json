@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send-to-cognito-verification",
+  "key": "shopify/order/send-to-cognito-verification",
   "name": "Send Shopify Order To Blockscore Cognito Verification",
   "version": "1.0.0",
   "description": "Send order from Shopify to Blockscore Cognito verification and add Order Notes Attributes.",

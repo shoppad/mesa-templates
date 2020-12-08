@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-opportunity-and-opportunity-products",
+  "key": "shopify/order/send-to-salesforce-opportunity-and-opportunity-products",
   "name": "Shopify Order Created to Salesforce Opportunity and Opportunity Products",
   "version": "1.0.0",
   "description": "Send Order from Shopify to Salesforce Opportunity and Opportunity Products when order is created.",

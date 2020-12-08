@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/customer/tag_customers_with_edu_email",
+  "key": "shopify/customer/tag_customers_with_edu_email",
   "name": "Add Educational Discount Tag To Customer",
   "version": "1.0.0",
   "description": "Add Educational Discount Tag to Shopify Customer when customer is created.",

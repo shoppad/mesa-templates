@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/product/send-to-salesforce-product-and-pricebook-entry",
+  "key": "shopify/product/send-to-salesforce-product-and-pricebook-entry",
   "name": "Shopify Product Created or Updated to Salesforce Product and Pricebook Entry",
   "version": "1.0.0",
   "description": "Send Product from Shopify to Salesforce Product and pricebook Entry when product is created or updated.",

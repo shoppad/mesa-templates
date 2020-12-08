@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/draft-order/remove_after_thirty_days",
+  "key": "shopify/draft-order/remove_after_thirty_days",
   "name": "Remove Draft Orders After Thirty Days",
   "version": "1.0.0",
   "description": "Remove Shopify draft orders older than 30 days.",

@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/product/scheduled-product-price-change",
+  "key": "shopify/product/scheduled-product-price-change",
   "name": "Scheduled Product Price Change",
   "version": "1.0.0",
   "description": "On a given date, set a group of products' prices.",

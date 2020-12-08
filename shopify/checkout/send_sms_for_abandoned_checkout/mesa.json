@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/checkout/send_sms_for_abandoned_checkout",
+  "key": "shopify/checkout/send_sms_for_abandoned_checkout",
   "name": "Send an SMS Message if a Shopper Abandons their Checkout",
   "version": "1.0.0",
   "description": "",

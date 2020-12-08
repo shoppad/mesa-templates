@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/tests/shopify_tokens",
+  "key": "tests/shopify_tokens",
   "name": "Test: Shopify: Legacy and new tokens",
   "version": "1.0.0",
   "description": "",

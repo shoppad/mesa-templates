@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send-email-to-loyaltylion-customer-if-rewards-not-used",
+  "key": "shopify/order/send-email-to-loyaltylion-customer-if-rewards-not-used",
   "name": "Send Email to LoyaltyLion Customer if Rewards not Used",
   "version": "1.0.0",
   "description": "Sends an email notification to a LoyaltyLion user if they make an order and don't use any loyalty points.  See the Documentation for setup steps.",

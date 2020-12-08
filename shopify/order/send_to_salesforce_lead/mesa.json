@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send-to-salesforce-lead",
+  "key": "shopify/order/send-to-salesforce-lead",
   "name": "Send Order To Salesforce Lead",
   "version": "1.0.0",
   "description": "Send Order from Shopify to Salesforce Lead when order is created.",

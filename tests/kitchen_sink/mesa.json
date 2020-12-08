@@ -1,7 +1,7 @@
 {
   "name": "Test: Kitchen Sink",
   "version": "1.0.0",
-  "key": "shoppad/mesa-templates/tests/kitchen_sink",
+  "key": "tests/kitchen_sink",
   "description": "Ensure that all Mesa SDK methods, Inputs, and Output types are working.",
   "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/tests/kitchen-sink/README.md",
   "enabled": true,

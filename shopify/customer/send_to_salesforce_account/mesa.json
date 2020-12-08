@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/customer/send-to-salesforce-account",
+  "key": "shopify/customer/send-to-salesforce-account",
   "name": "Shopify Customer Created or Updated to Salesforce Account",
   "version": "1.0.0",
   "description": "Send Customer from Shopify to Salesforce Account when customer is created or updated.",

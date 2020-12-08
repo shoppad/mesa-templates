@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/add_currency_to_order_tags",
+  "key": "shopify/order/add_currency_to_order_tags",
   "name": "Add Currency To Order Tags",
   "version": "1.0.0",
   "description": "Add currency tag to Shopify order when order is created.",

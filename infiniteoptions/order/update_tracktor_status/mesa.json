@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/infiniteoptions/order/update-tracktor-status",
+  "key": "infiniteoptions/order/update-tracktor-status",
   "name": "Update Tracktor status when an order has been customized with Infinite Options",
   "version": "1.0.0",
   "description": "Update the status of an order in Tracktor when it has been customized with Infinite Options.",

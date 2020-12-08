@@ -1,5 +1,5 @@
 {
-    "key": "shoppad/mesa-templates/shopify/customer/send_to_hubspot_contact_and_mark_as_opportunity",
+    "key": "shopify/customer/send_to_hubspot_contact_and_mark_as_opportunity",
     "name": "Send Customer To HubSpot Contact And Mark As Opportunity",
     "version": "1.0.0",
     "description": "Send customer from Shopify to HubSpot Contact and mark as opportunity when customer is created.",

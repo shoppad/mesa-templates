@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/create_shipstation_label",
+  "key": "shopify/order/create_shipstation_label",
   "name": "Create a ShipStation label when a Shopify Order is Created",
   "version": "1.0.0",
   "description": "Automatically fulfill all shippable products in the order, create a Shipping label, and attach it to the Shopify Order Notes field.",

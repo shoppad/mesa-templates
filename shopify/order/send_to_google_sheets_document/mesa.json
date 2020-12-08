@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send_to_google_sheets_document",
+  "key": "shopify/order/send_to_google_sheets_document",
   "name": "Send Order To Google Sheets Document",
   "version": "1.0.0",
   "description": "Send order from Shopify to Google Sheets document when order is created.",

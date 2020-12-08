@@ -1,5 +1,5 @@
 {
-    "key": "shoppad/mesa-templates/shopify/order/send-to-odoo-order",
+    "key": "shopify/order/send-to-odoo-order",
     "name": "Send Shopify Order to Odoo Order",
     "version": "1.0.0",
     "description": "Send Shopify Order from Shopify to Odoo Order and Order Lines when order is created.",

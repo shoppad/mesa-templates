@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/fulfillment/shiphawk-shipping-labels-to-order-notes",
+  "key": "shopify/fulfillment/shiphawk-shipping-labels-to-order-notes",
   "name": "Create Shipping Labels With ShipHawk When Order Is Fulfilled",
   "version": "1.0.0",
   "description": "When an order is fulfilled, automatically purchase shipping labels with ShipHawk and add label download links to the Shopify Order Notes.",

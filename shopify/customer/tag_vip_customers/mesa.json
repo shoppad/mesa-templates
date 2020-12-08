@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/customer/tag_vip_customers",
+  "key": "shopify/customer/tag_vip_customers",
   "name": "Tag Customers With \"VIP\" After They Spend $500 or More",
   "version": "1.0.0",
   "description": "",
