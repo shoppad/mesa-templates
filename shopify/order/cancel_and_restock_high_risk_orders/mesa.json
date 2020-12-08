@@ -1,0 +1,163 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/cancel_and_restock_high_risk_orders",
+  "name": "Cancel and Restock High-Risk Orders",
+  "version": "1.0.0",
+  "description": "Cancel orders that are determined to be \"high-risk\" by Shopify's fraud algorithm. Restock the items in the order. Notify the customer their order has been canceled. And send an email notification to the store owner about the risky transaction.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "email",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+      "inputs": [
+          {
+              "schema": 2,
+              "trigger_type": "input",
+              "type": "shopify_webhook",
+              "entity": "order",
+              "action": "create",
+              "name": "Shopify Order Created",
+              "key": "shopify_order",
+              "metadata": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "order_risk",
+              "action": "list",
+              "name": "Shopify Get Order Risks",
+              "key": "shopify_order_risk",
+              "metadata": {
+                  "order_id": "{{shopify_order.id}}",
+                  "site": "current"
+              },
+              "local_fields": [],
+              "weight": 0
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "iterator",
+              "name": "Iterator",
+              "key": "iterator",
+              "metadata": {
+                  "key": "{{shopify_order_risk.risks}}"
+              },
+              "local_fields": [],
+              "weight": 1
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "filter",
+              "name": "Filter",
+              "key": "filter",
+              "metadata": {
+                  "comparison": "equals",
+                  "a": "{{iterator.message}}",
+                  "b": "Shopify recommendation"
+              },
+              "local_fields": [],
+              "weight": 2
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "filter",
+              "name": "Filter",
+              "key": "filter_1",
+              "metadata": {
+                  "a": "{{iterator.recommendation}}",
+                  "comparison": "equals",
+                  "b": "cancel"
+              },
+              "local_fields": [],
+              "weight": 3
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "transform",
+              "entity": "mapping",
+              "name": "Transform  Mapping",
+              "key": "transformmapping",
+              "metadata": {
+                  "mapping": [
+                      {
+                          "destination": "reason",
+                          "source": "fraud"
+                      },
+                      {
+                          "destination": "email",
+                          "source": "true"
+                      },
+                      {
+                          "destination": "restock",
+                          "source": "true"
+                      }
+                  ]
+              },
+              "local_fields": [
+                  {
+                      "key": "mapping",
+                      "type": "mapping",
+                      "tokens": "brackets",
+                      "location": "mapping"
+                  }
+              ],
+              "weight": 4
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "order",
+              "action": "cancel",
+              "name": "Shopify Cancel Order",
+              "key": "shopify_order_1",
+              "metadata": {
+                  "order_id": "{{shopify_order.id}}",
+                  "site": "current"
+              },
+              "local_fields": [],
+              "weight": 5
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "shop",
+              "action": "list",
+              "name": "Shopify Get List Shop",
+              "key": "shopify_shop",
+              "metadata": {
+                  "site": "current"
+              },
+              "local_fields": [],
+              "weight": 6
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "email",
+              "name": "Email",
+              "key": "email",
+              "metadata": {
+                  "to": "{{shopify_shop.email}}",
+                  "subject": "Order {{shopify_order.name}} was canceled due to high risk",
+                  "message": "Order {{shopify_order.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/{{shopify_shop.myshopify_domain}}\/admin\/orders\/{{shopify_order.id}}"
+              },
+              "local_fields": [],
+              "weight": 7
+          }
+      ],
+      "storage": []
+  }
+}

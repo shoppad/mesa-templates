@@ -1,0 +1,120 @@
+{
+  "name": "Send Notification on Tracktor Status Change",
+  "version": "1.0.0",
+  "description": "Send an Email or SMS Notifications when a tracking changes.",
+  "documentation": "https://github.com/shoppad/mesa-templates/blob/master/tracktor/trackings/send-notification-on-change/README.md",
+  "tags": ["tracktor", "buyer_experience"],
+  "source": "tracktor",
+  "destination": "notification",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": true,
+        "type": "json_webhook",
+        "name": "Send Notification on Tracktor Status Change",
+        "key": "in-tracktor-alerts",
+        "trigger_name": "In: Tracktor Alerts",
+        "script": "tracktor/trackings/send-notification-on-change/input.js"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Send Notification on Tracktor Status Change: Email",
+        "key": "out-tracktor-email",
+        "trigger_name": "Out: Tracktor Email",
+        "script": "tracktor/trackings/send-notification-on-change/output-email.js"
+      },
+      {
+        "trigger_type": "output",
+        "enabled": true,
+        "type": "custom",
+        "name": "Send Notification on Tracktor Status Change: SMS",
+        "key": "out-tracktor-twilio",
+        "trigger_name": "Out: Tracktor Twilio",
+        "script": "tracktor/trackings/send-notification-on-change/output-sms.js"
+      }
+    ],
+    "storage": [
+      {
+        "name": "tracktor-sms-fulfilled.liquid",
+        "value": "Your order {{order.name}} from {{shop.name}} has been shipped and is on its way!"
+      },
+      {
+        "name": "tracktor-email-fulfilled.liquid",
+        "value": "Hi {{customer.first_name}},\n\nYour order {{order.name}} from {{shop.name}} has been shipped.  We'll keep you updated!\n\nThanks!"
+      },
+      {
+        "name": "tracktor-email-subject-fulfilled",
+        "value": "Your order {{order.name}} is on its way!"
+      },
+      {
+        "name": "tracktor-sms-in-transit.liquid",
+        "value": "Your order {order.id} from {{shop.name}} is now in transit."
+      },
+      {
+        "name": "tracktor-email-in-transit.liquid",
+        "value": "Hi {{customer.first_name}},\n\nYour order {{order.name}} from {{shop.name}} is now in transit.  We'll keep you updated!\n\nThanks!"
+      },
+      {
+        "name": "tracktor-email-subject-in-transit",
+        "value": "Your order {{order.name}} is in transit"
+      },
+      {
+        "name": "tracktor-sms-out-for-delivery.liquid",
+        "value": "Your order {order.id} from {{shop.name}} is out for delivery."
+      },
+      {
+        "name": "tracktor-email-out-for-delivery.liquid",
+        "value": "Hi {{customer.first_name}},\n\nYour order {{order.name}} from {{shop.name}} is out for delivery.\n\nThanks!"
+      },
+      {
+        "name": "tracktor-email-subject-out-for-delivery",
+        "value": "Your order {{order.name}} is out for delivery"
+      },
+      {
+        "name": "tracktor-sms-delivered.liquid",
+        "value": "Your order {order.id} from {{shop.name}} has been delivered."
+      },
+      {
+        "name": "tracktor-email-delivered.liquid",
+        "value": "Hi {{customer.first_name}},\n\nYour order {{order.name}} from {{shop.name}} has been delivered. We hope you enjoy it!\n\nThanks!"
+      },
+      {
+        "name": "tracktor-email-subject-delivered",
+        "value": "Your order {{order.name}} has been delivered"
+      },
+      {
+        "name": "tracktor-sms-failed.liquid",
+        "value": "There is a problem with your order {order.id} from {{shop.name}}."
+      },
+      {
+        "name": "tracktor-email-failed.liquid",
+        "value": "Hi {{customer.first_name}},\n\nYour order {{order.name}} from {{shop.name}} has failed during shipment or delivery."
+      },
+      {
+        "name": "tracktor-email-subject-failed",
+        "value": "There been an issue with your order {{order.name}}"
+      }
+    ],
+    "secrets": [
+      {
+        "name": "tracktor-twilio-token"
+      },
+      {
+        "name": "tracktor-twilio-phone-number"
+      },
+      {
+        "name": "tracktor-twilio-sid"
+      }
+    ]
+  },
+  "files": [
+    "tracktor/trackings/send-notification-on-change/input.js",
+    "tracktor/trackings/send-notification-on-change/output-email.js",
+    "tracktor/trackings/send-notification-on-change/output-sms.js"
+  ]
+}

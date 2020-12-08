@@ -1,0 +1,91 @@
+{
+	"key": "shoppad/mesa-templates/shopify/product/add_image_colors_to_products_as_tags",
+	"name": "Add Image Colors to Products as Tags",
+	"version": "1.0.0",
+	"description": "Add the predominant colors from the product images as tags to a product when the product is created or updated.",
+	"video": "",
+	"readme": null,
+	"tags": [
+		"Product"
+	],
+	"source": "shopify_webhook",
+	"destination": "shopify",
+	"enabled": false,
+	"logging": false,
+	"debug": false,
+	"config": {
+		"inputs": [{
+			"schema": 2,
+			"trigger_type": "input",
+			"type": "shopify_webhook",
+			"entity": "product",
+			"action": "create-update",
+			"name": "Shopify: Product Created or Updated",
+			"key": "shopify-product-created-or-updated",
+			"metadata": [],
+			"local_fields": [],
+			"weight": 0
+		}],
+		"outputs": [{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "iterator",
+				"name": "Iterator",
+				"key": "iterator",
+				"metadata": {
+					"key": "{{shopify-product-created-or-updated.images[]}}"
+				},
+				"local_fields": [],
+				"weight": 0
+			},
+			{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "image",
+				"entity": "colors",
+				"action": "identify",
+				"name": "Image: Identify Colors",
+				"key": "image-identify-colors",
+				"metadata": {
+					"image_url": "{{current_item.src}}"
+				},
+				"local_fields": [],
+				"weight": 1
+			},
+			{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "transform",
+				"name": "Mapping to Shopify: Update Product",
+				"key": "shopify-update-product-transform",
+				"metadata": {
+					"mapping": [{
+						"destination": "tags[]",
+						"source": "{{colors[]}}"
+					}]
+				},
+				"local_fields": [{
+					"key": "mapping",
+					"type": "mapping"
+				}],
+				"weight": 2
+			},
+			{
+				"schema": 2,
+				"trigger_type": "output",
+				"type": "shopify_api",
+				"entity": "product",
+				"action": "update",
+				"name": "Shopify: Update Product",
+				"key": "shopify-update-product",
+				"metadata": {
+					"product_id": "{{shopify-product-created-or-updated.id}}",
+					"site": "current"
+				},
+				"local_fields": [],
+				"weight": 3
+			}
+		],
+		"storage": []
+	}
+}

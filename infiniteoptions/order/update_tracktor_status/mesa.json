@@ -1,0 +1,49 @@
+{
+  "key": "shoppad/mesa-templates/infiniteoptions/order/update-tracktor-status",
+  "name": "Update Tracktor status when an order has been customized with Infinite Options",
+  "version": "1.0.0",
+  "description": "Update the status of an order in Tracktor when it has been customized with Infinite Options.",
+  "video": "",
+  "tags": ["infiniteoptions"],
+  "source": "infiniteoptions",
+  "destination": "tracktor",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "infiniteoptions",
+        "entity": "order",
+        "action": "created",
+        "name": "Infinite Options Order Created",
+        "key": "infiniteoptions_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "update",
+        "name": "Tracktor Update Manual Status Order",
+        "key": "tracktor_order",
+        "metadata": {
+          "order_id": "{{infiniteoptions_order.order.id}}",
+          "body": {
+            "status": ""
+          }
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
+}

@@ -1,0 +1,75 @@
+{
+    "key": "shoppad/mesa-templates/shopify/customer/send_to_hubspot_contact",
+    "name": "Send Shopify Customer To HubSpot Contact",
+    "version": "1.0.0",
+    "description": "Send customer from Shopify to HubSpot Contact when customer is created.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "Customer"
+    ],
+    "source": "shopify_webhook",
+    "destination": "hubspot",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "customer",
+                "action": "create",
+                "name": "Shopify Customer Created",
+                "key": "shopify_customer",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "create",
+                "name": "Hubspot Create Contact",
+                "key": "hubspot_contact_1",
+                "metadata": {
+                    "method": "POST",
+                    "path": "\/contacts\/v1\/contact",
+                    "mapping": [
+                        {
+                            "destination": "FirstName",
+                            "source": "{{shopify_customer.first_name}}"
+                        },
+                        {
+                            "destination": "LastName",
+                            "source": "{{shopify_customer.last_name}}"
+                        },
+                        {
+                            "destination": "Email",
+                            "source": "{{shopify_customer.email}}"
+                        },
+                        {
+                            "destination": "Phone",
+                            "source": "{{shopify_customer.phone}}"
+                        }
+                    ],
+                    "token": ""
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}

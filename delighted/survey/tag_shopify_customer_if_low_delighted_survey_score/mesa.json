@@ -1,0 +1,102 @@
+{
+  "key": "shoppad/mesa-templates/delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
+  "name": "Tag Shopify Customer if Low Delighted Survey Score",
+  "version": "1.0.0",
+  "description": "Tag a Shopify customer if they give a low score on their Delighted survey.",
+  "video": "",
+  "tags": ["delighted", "customer"],
+  "source": "delighted",
+  "destination": "shopify_api",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "delighted",
+        "entity": "survey",
+        "action": "survey/created",
+        "name": "Delighted Survey Response Created",
+        "key": "delighted_survey",
+        "metadata": {
+          "topic": "survey_response.created||survey_response.updated"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter",
+        "metadata": {
+          "a": "{{delighted_survey.score}}",
+          "comparison": "less than",
+          "b": "5"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "customer_search",
+        "action": "list",
+        "name": "Shopify Get List Customer Search",
+        "key": "shopify_customer_search",
+        "metadata": {
+          "shopify_api": "GET admin/customers/search.json",
+          "parameters": "query=email:{{delighted_survey.person.email}}"
+        },
+        "local_fields": null,
+        "weight": 1
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter_1",
+        "metadata": {
+          "a": "{{shopify_customer_search[0].email}}",
+          "comparison": "equals",
+          "b": "{{delighted_survey.person.email}}"
+        },
+        "local_fields": null,
+        "weight": 2
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "customer",
+        "action": "update",
+        "name": "Shopify Update Customer",
+        "key": "shopify_customer",
+        "metadata": {
+          "shopify_api": "PUT admin/customers/{{customer_id}}.json",
+          "customer_id": "{{shopify_customer_search.customers[0].id}}",
+          "mapping": [
+            {
+              "destination": "tags",
+              "source": "Unhappy Survey,{{shopify_customer_search.customers[0].tags}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
+}

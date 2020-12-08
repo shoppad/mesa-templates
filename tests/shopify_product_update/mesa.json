@@ -1,0 +1,65 @@
+{
+  "key": "shopify_product_update",
+  "name": "Test: Shopify Product Update",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "shopify_api",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "product",
+        "action": "create",
+        "name": "Shopify: Product Created",
+        "key": "shopify-product-created",
+        "metadata": {
+          "topic": "products/create"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Mapping to Shopify Update Product",
+        "key": "mapping-to-shopify-update-product",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "tags",
+              "source": "Product Date: {{ \"now\" | date: \"%Y-%m\" }}"
+            }
+          ],
+          "script": "transform.js"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
+        ],
+        "destination_entity": "product"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "product",
+        "action": "update",
+        "name": "Shopify: Update Product",
+        "key": "shopify-update-product",
+        "metadata": {
+          "shopify_api": "PUT admin/products/{{product_id}}.json",
+          "product_id": "{{source.id}}"
+        },
+        "source_entity": "mapping"
+      }
+    ],
+    "storage": []
+  }
+}

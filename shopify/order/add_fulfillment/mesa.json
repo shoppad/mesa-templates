@@ -1,0 +1,31 @@
+{
+  "key": "shoppad/mesa-templates/shopify/order/add_fulfillment",
+  "name": "Add Fulfillment To Order",
+  "version": "1.0.0",
+  "description": "Add fulfillment to Shopify order when order is created with line-items that do not require shipping.",
+  "tags": ["Fulfillment"],
+  "source": "shopify",
+  "destination": "shopify",
+  "enabled": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "name": "Shopify Order Created",
+        "key": "in-shopify-order-created",
+        "topic": "orders/create"
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "name": "Create Shopify Fulfillment",
+        "key": "out-create-shopify-fulfillment",
+        "script": "out-create-shopify-fulfillment.js",
+        "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json"
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+[Follow the steps](https://help.shipstation.com/hc/en-us/articles/360025856212-ShipStation-API) under "Accessing the ShipStation API" to obtain your ShipStation API Key and Password. This requires ShipStation admin access. 

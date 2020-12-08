@@ -1,0 +1,151 @@
+{
+  "key": "shoppad/mesa-templates/uploadery/order/add_line_items_to_google_sheet",
+  "name": "Add Uploadery Line Items to Google Sheet",
+  "version": "1.0.0",
+  "description": "Add Uploadery Line Items to an Existing Google Sheet when an Order is Created.",
+    "video": "",
+  "readme": "## Setup\n-  In the `Google Sheets: Add Row to Sheet` Action, create a Credential and Authenticate with Google. Enter `https:\/\/www.googleapis.com\/auth\/spreadsheets` as the Scope.\n- [View this Google Sheet with column headers](https:\/\/docs.google.com\/spreadsheets\/d\/1XRoD2jjGq7xqYU1NpfOCqYh_w6QBnBaxo_tna11ssek\/edit#gid=0)\n- Click on **File** in the top left corner and click **Make a copy** to make a copy.\n    - Optionally, rename your Google Sheet and Folder. \n    - Then, click on **OK**.\n- In the `Google Sheets: Add Row to Sheet` Action, add your `Spreadsheet ID` (and optionally `Sheet Name`).\n- View the `M` and `N` values in the `Transform: Mapping to Sheets Row` Step. Add your actual field name (found in the Uploadery dashboard) after `fields.`. Example: `{{current_item.fields.uploadery_1}}`.\n- Enable the Automation in the right sidebar and click **Save**.\n",
+  "tags": [
+      "google-sheets"
+  ],
+  "source": "uploadery",
+  "destination": "google-sheets",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+      "inputs": [
+          {
+              "schema": 2,
+              "trigger_type": "input",
+              "type": "uploadery",
+              "entity": "order",
+              "action": "created",
+              "name": "Uploadery: Order Created",
+              "key": "uploadery-order-created",
+              "metadata": [],
+              "local_fields": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "iterator",
+              "name": "Iterator",
+              "key": "iterator",
+              "metadata": {
+                  "key": "{{uploadery-order-created.line_items[]}}"
+              },
+              "local_fields": [],
+              "weight": 0
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "shop",
+              "action": "list",
+              "name": "Shopify Get List Shop",
+              "key": "shopify_shop",
+              "metadata": {
+                  "site": "current"
+              },
+              "local_fields": [],
+              "weight": 1
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "transform",
+              "entity": "mapping",
+              "name": "Mapping to Sheets Row",
+              "key": "mapping-to-sheets-row",
+              "metadata": {
+                  "mapping": [
+                      {
+                          "destination": "A",
+                          "source": "https:\/\/{{shopify_shop.domain}}\/admin\/orders\/{{source.order.id}}{{.order.id}}"
+                      },
+                      {
+                          "destination": "B",
+                          "source": "{{uploadery-order-created.order.name}}"
+                      },
+                      {
+                          "destination": "C",
+                          "source": "{{uploadery-order-created.order.email}}"
+                      },
+                      {
+                          "destination": "D",
+                          "source": "{{uploadery-order-created.order.shipping_address.name}}"
+                      },
+                      {
+                          "destination": "E",
+                          "source": "{{uploadery-order-created.order.shipping_address.address1}}"
+                      },
+                      {
+                          "destination": "F",
+                          "source": "{{uploadery-order-created.order.shipping_address.city}}"
+                      },
+                      {
+                          "destination": "G",
+                          "source": "{{uploadery-order-created.order.shipping_address.province}}"
+                      },
+                      {
+                          "destination": "H",
+                          "source": "{{uploadery-order-created.order.shipping_address.zip}}"
+                      },
+                      {
+                          "destination": "I",
+                          "source": "{{uploadery-order-created.order.shipping_address.country}}"
+                      },
+                      {
+                          "destination": "J",
+                          "source": "{{iterator.title}}"
+                      },
+                      {
+                          "destination": "K",
+                          "source": "{{iterator.sku}}"
+                      },
+                      {
+                          "destination": "L",
+                          "source": "{{iterator.price}}"
+                      },
+                      {
+                          "destination": "M",
+                          "source": "{{iterator.fields.uploadery_1}}"
+                      },
+                      {
+                          "destination": "N",
+                          "source": "{{iterator.fields.uploadery_2}}"
+                      }
+                  ]
+              },
+              "local_fields": [
+                  {
+                      "key": "mapping",
+                      "type": "mapping"
+                  }
+              ],
+              "weight": 2
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "googlesheets",
+              "entity": "row",
+              "action": "add",
+              "name": "Google Sheets: Add Row to Sheet",
+              "key": "google-sheets-add-row-sheet",
+              "metadata": {
+                  "token": "",
+                  "spreadsheet_id": "-vw"
+              },
+              "local_fields": [],
+              "weight": 3
+          }
+      ],
+      "storage": []
+  }
+}
