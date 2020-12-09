@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/send_to_another_store",
+  "key": "shopify/order/send_to_another_store",
   "name": "Send Order To Another Store",
   "version": "1.0.0",
   "description": "Send order from one Shopify store to another store when order is created, updated or deleted.",

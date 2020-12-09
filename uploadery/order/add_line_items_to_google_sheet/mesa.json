@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/uploadery/order/add_line_items_to_google_sheet",
+  "key": "uploadery/order/add_line_items_to_google_sheet",
   "name": "Add Uploadery Line Items to Google Sheet",
   "version": "1.0.0",
   "description": "Add Uploadery Line Items to an Existing Google Sheet when an Order is Created.",

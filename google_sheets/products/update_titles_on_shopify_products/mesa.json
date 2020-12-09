@@ -2,7 +2,7 @@
     "name": "Sync product title updates Google Sheets to Shopify",
     "version": "1.0.0",
     "description": "",
-    "documentation": "https://github.com/shoppad/mesa-templates/blob/master/google-sheets/products/update-titles-on-shopify-products/README.md",
+    "documentation": "https://github.com/blob/master/google-sheets/products/update-titles-on-shopify-products/README.md",
     "tags": [
         "products",
         "google-sheets"

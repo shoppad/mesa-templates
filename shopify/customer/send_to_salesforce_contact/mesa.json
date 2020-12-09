@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/customer/send_to_salesforce_contact",
+  "key": "shopify/customer/send_to_salesforce_contact",
   "name": "Send Customer To Salesforce Contact",
   "version": "1.0.0",
   "description": "Send Customer from Shopify to Salesforce Contact when customer is created.",

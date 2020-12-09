@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/tag_multiple_unfulfilled_orders_from_same_customer",
+  "key": "shopify/order/tag_multiple_unfulfilled_orders_from_same_customer",
   "name": "Tag Multiple Unfulfilled Orders from the Same Customer",
   "version": "1.0.0",
   "description": "",

@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/subscribe_shoppers_to_klaviyo_list",
+  "key": "shopify/order/subscribe_shoppers_to_klaviyo_list",
   "name": "Subscribe Shoppers to Klaviyo List After First Order",
   "version": "1.0.0",
   "description": "",
