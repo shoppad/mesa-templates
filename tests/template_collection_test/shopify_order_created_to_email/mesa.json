@@ -1,0 +1,107 @@
+{
+    "key": "tests/template_collection_test/shopify_order_created_to_email",
+    "name": "Shopify Order Created to Email",
+    "version": "1.0.0",
+    "description": "kitchen-sink-2",
+    "video": "",
+    "tags": [],
+    "source": "shopify_webhook",
+    "destination": "email",
+    "enabled": true,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "order",
+                "action": "create",
+                "name": "Shopify: Order Created",
+                "key": "shopify-order-created",
+                "metadata": {
+                    "topic": "orders/create"
+                }
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "script",
+                "name": "Transform:  Script",
+                "key": "transform-script",
+                "metadata": {
+                    "script": "transform_1.js",
+                    "description": ""
+                },
+                "local_fields": [
+                    {
+                        "key": "description",
+                        "type": "textarea",
+                        "label": "Description",
+                        "description": "Add a description of what this script does for non-technical users"
+                    }
+                ]
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "name": "To Shopify: Update Order",
+                "key": "shopify-update-order-transform",
+                "metadata": {
+                    "script": "shopify_update_order_transform.js",
+                    "mapping": [
+                        {
+                            "destination": "tags",
+                            "source": "Currency: {{source.currency}} , State: {{source.customer.province}}",
+                            "notes": "Currency and States"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping"
+                    }
+                ],
+                "destination_entity": "order"
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "update",
+                "name": "Shopify: Update Order",
+                "key": "shopify-update-order",
+                "metadata": {
+                    "shopify_api": "PUT admin/orders/{{order_id}}.json",
+                    "order_id": "{{source.id}}"
+                }
+            },
+            {
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Slack",
+                "key": "slack",
+                "metadata": {
+                    "webhook": "5e2a3f76cd392305fb74364b",
+                    "message": "Last Message\n\n{% if tags contains \"Currency\" %}\n    Tags contains currency\n{% endif %}\n\n",
+                    "channel": "test-mesa"
+                },
+                "source_entity": "order"
+            },
+            {
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{source.email}}",
+                    "message": "{% for line_item in source.line_items %}\nProduct Name:   {{ line_item.name }}\n{% endfor %}\n\n",
+                    "subject": "Hey  {{source.customer.first_name}}  {{source.customer.last_name}}",
+                    "from": "{{source.email}}"
+                }
+            }
+        ],
+        "storage": []
+    }
+}

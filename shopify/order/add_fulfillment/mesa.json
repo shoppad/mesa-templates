@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/add_fulfillment",
+  "key": "shopify/order/add_fulfillment",
   "name": "Add Fulfillment To Order",
   "version": "1.0.0",
   "description": "Add fulfillment to Shopify order when order is created with line-items that do not require shipping.",
@@ -23,7 +23,7 @@
         "type": "shopify_api",
         "name": "Create Shopify Fulfillment",
         "key": "out-create-shopify-fulfillment",
-        "script": "out-create-shopify-fulfillment.js",
+        "script": "out_create_shopify_fulfillment.js",
         "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json"
       }
     ]

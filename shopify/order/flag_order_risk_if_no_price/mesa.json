@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/flag_order_risk_if_no_price",
+  "key": "shopify/order/flag_order_risk_if_no_price",
   "name": "Flag Order as Risky if Total Price is 0",
   "version": "1.0.0",
   "description": "If a new Order has a total price of 0, create a new \"Order Risk\"",

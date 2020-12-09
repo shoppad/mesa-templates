@@ -1,5 +1,5 @@
 {
-    "key": "shoppad/mesa-templates/shopify/order/send_thanks_io_postcard",
+    "key": "shopify/order/send_thanks_io_postcard",
     "name": "Send a Postcard with Thanks.io 10 Days After Order is Created",
     "version": "1.0.0",
     "description": "Give a personal touch by mailing your customers a handwritten postcard without lifting a finger.",

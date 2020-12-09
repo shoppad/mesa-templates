@@ -1,0 +1,74 @@
+{
+    "key": "shopify/draft_order/send_to_hubspot_deal",
+    "name": "Send Draft Order To Hubspot Deal",
+    "version": "1.0.0",
+    "description": "Send draft order from Shopify to HubSpot Deal when draft order is created.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "Draft-Order"
+    ],
+    "source": "shopify",
+    "destination": "hubspot",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "draft_orders",
+                "action": "create",
+                "name": "Shopify Draft Order Created",
+                "key": "shopify_draft_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "deal",
+                "action": "create",
+                "name": "Hubspot Create Deal",
+                "key": "hubspot_deal_1",
+                "metadata": {
+                    "method": "POST",
+                    "path": "/deals/v1/deal",
+                    "mapping": [
+                        {
+                            "destination": "DealName",
+                            "source": "{{shopify_draft_order.customer.first_name}} {{shopify_draft_order.customer.last_name}} {{shopify_draft_order.name}} Deal"
+                        },
+                        {
+                            "destination": "Pipeline",
+                            "source": "default"
+                        },
+                        {
+                            "destination": "DealStage",
+                            "source": "appointmentscheduled"
+                        },
+                        {
+                            "destination": "Amount",
+                            "source": "{{shopify_draft_order.total_price}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}

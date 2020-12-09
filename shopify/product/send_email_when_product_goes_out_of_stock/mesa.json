@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/product/send_email_when_product_goes_out_of_stock",
+  "key": "shopify/product/send_email_when_product_goes_out_of_stock",
   "name": "Send an Email when Product Goes Out of Stock",
   "version": "1.0.0",
   "description": "",

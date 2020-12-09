@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/order/add-payment-gateway-tag",
+  "key": "shopify/order/add-payment-gateway-tag",
   "name": "Add Payment Gateway Tag To Order",
   "version": "1.0.0",
   "description": "Add payment gateway tag to Shopify order when order is created.",

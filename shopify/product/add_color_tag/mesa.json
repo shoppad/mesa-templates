@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/shopify/product/add_color_tag",
+  "key": "shopify/product/add_color_tag",
   "name": "Add Color Tag To Product",
   "version": "1.0.0",
   "description": "Add a tag of each color variant to the product when the product is created or updated.",

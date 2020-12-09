@@ -1,5 +1,5 @@
 {
-  "key": "shoppad/mesa-templates/uploadery/order/send-email",
+  "key": "uploadery/order/send-email",
   "name": "Send Email When Uploadery Order is Created",
   "version": "1.0.0",
   "description": "Send your designer an email with Uploadery files when a new Uploadery order is created.",

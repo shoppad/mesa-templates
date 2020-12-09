@@ -1,5 +1,5 @@
 {
-	"key": "shoppad/mesa-templates/shopify/product/add_image_colors_to_products_as_tags",
+	"key": "shopify/product/add_image_colors_to_products_as_tags",
 	"name": "Add Image Colors to Products as Tags",
 	"version": "1.0.0",
 	"description": "Add the predominant colors from the product images as tags to a product when the product is created or updated.",
