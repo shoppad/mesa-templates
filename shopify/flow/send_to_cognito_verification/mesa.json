@@ -1,0 +1,61 @@
+{
+    "key": "shopify/flow/send_to_cognito_verification",
+    "name": "Send Order from Shopify Flow To Blockscore Cognito Verification",
+    "version": "1.0.0",
+    "description": "Send order from Shopify to Blockscore Cognito verification when order is passed from Shopify Flow.",
+    "tags": [
+        "Order"
+    ],
+    "source": "shopify-flow",
+    "destination": "cognito",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify_flow",
+                "name": "Shopify Flow Order",
+                "key": "in-shopify-flow-order",
+                "script": "in_shopify_flow_order.js"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Cognito Verification",
+                "key": "out-cognito-verification",
+                "script": "out_cognito_verification.js"
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "name": "Update Shopify Order Notes",
+                "key": "out-update-shopify-order-notes",
+                "script": "out_update_shopify_order_notes.js",
+                "shopify_api": "PUT admin/orders/{{order_id}}.json"
+            },
+            {
+                "trigger_type": "output",
+                "type": "virtual_output",
+                "name": "Cognito Virtual Output",
+                "key": "out-cognito-virtual-output",
+                "script": "out_cognito_virtual_output.js"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "cognito-key"
+            },
+            {
+                "key": "cognito-secret"
+            }
+        ],
+        "storage": [
+            {
+                "key": "cognito-environment",
+                "value": "sandbox"
+            }
+        ]
+    }
+}

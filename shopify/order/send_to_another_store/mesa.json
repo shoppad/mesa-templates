@@ -14,7 +14,7 @@
         "type": "shopify_webhook",
         "name": "Shopify Order Create",
         "key": "in-shopify-order-create",
-        "script": "in-shopify-order-create.js",
+        "script": "in_shopify_order_create.js",
         "topic": "orders/create"
       },
       {
@@ -22,7 +22,7 @@
         "type": "shopify_webhook",
         "name": "Shopify Order Update",
         "key": "in-shopify-order-update",
-        "script": "in-shopify-order-update.js",
+        "script": "in_shopify_order_update.js",
         "topic": "orders/updated"
       },
       {
@@ -30,7 +30,7 @@
         "type": "shopify_webhook",
         "name": "Shopify Order Delete",
         "key": "in-shopify-order-delete",
-        "script": "in-shopify-order-delete.js",
+        "script": "in_shopify_order_delete.js",
         "topic": "orders/delete"
       }
     ],
@@ -40,21 +40,21 @@
         "type": "custom",
         "name": "Create Shopify Order",
         "key": "out-create-shopify-order",
-        "script": "out-create-shopify-order.js"
+        "script": "out_create_shopify_order.js"
       },
       {
         "trigger_type": "output",
         "type": "custom",
         "name": "Update Shopify Order",
         "key": "out-update-shopify-order",
-        "script": "out-update-shopify-order.js"
+        "script": "out_update_shopify_order.js"
       },
       {
         "trigger_type": "output",
         "type": "custom",
         "name": "Remove Shopify Order",
         "key": "out-delete-shopify-order",
-        "script": "out-delete-shopify-order.js"
+        "script": "out_delete_shopify_order.js"
       }
     ],
     "secrets": [

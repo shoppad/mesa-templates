@@ -14,7 +14,7 @@
         "type": "shopify_webhook",
         "name": "Shopify Order Created",
         "key": "in-shopify-order-webhook",
-        "script": "in-shopify-order-webhook.js",
+        "script": "in_shopify_order_webhook.js",
         "logging": "error",
         "topic": "orders/create"
       }
@@ -26,7 +26,7 @@
         "name": "Create Fosdick Order",
         "key": "out-create-fosdick-orders-virtual-output",
         "schedule": "0 * * * *",
-        "script": "out-create-fosdick-order.js"
+        "script": "out_create_fosdick_order.js"
       }
     ],
     "secrets": [

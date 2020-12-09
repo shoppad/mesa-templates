@@ -23,7 +23,7 @@
         "type": "shopify_api",
         "name": "Create Shopify Fulfillment",
         "key": "out-create-shopify-fulfillment",
-        "script": "out-create-shopify-fulfillment.js",
+        "script": "out_create_shopify_fulfillment.js",
         "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json"
       }
     ]

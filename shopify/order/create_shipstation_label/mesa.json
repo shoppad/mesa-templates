@@ -205,7 +205,7 @@
         "name": "Mapping to Shopify Update Order",
         "key": "mapping-shopify-order",
         "metadata": {
-          "script": "mapping-shopify-order.js",
+          "script": "mapping_shopify_order.js",
           "mapping": [
             {
               "destination": "note_attributes[0].name",
@@ -245,7 +245,7 @@
         "name": "Mapping to Create Order Fulfillment",
         "key": "transformmapping_1",
         "metadata": {
-          "script": "mapping-create-order-fulfillment.js",
+          "script": "mapping_create_order_fulfillment.js",
           "mapping": [
             {
               "destination": "trackingNumber",
