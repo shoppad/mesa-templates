@@ -36,7 +36,6 @@
               "name": "Mapping to Hubspot Create Deal",
               "key": "mappingtohubspotcreatedeal",
               "metadata": {
-                  "script": "transform.js",
                   "mapping": [
                       {
                           "destination": "DealName",
