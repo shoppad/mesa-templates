@@ -1,5 +1,5 @@
 {
-  "key": "shopify/order/send-to-odoo-order-collection",
+  "key": "shopify/order/send_to_odoo_order_collection",
   "name": "Send Shopify Order, Customer to Odoo (Collection of 2 Templates)",
   "version": "1.0.0",
   "description": "A template collection that includes two Automations to sync and send Shopify orders to Odoo orders.",
@@ -8,7 +8,7 @@
   "source": "shopify_webhook",
   "destination": "odoo",
   "templates": [
-    "shopify/order/send-to-odoo-order",
-    "shopify/customer/send-to-odoo-contact"
+    "shopify/order/send_to_odoo_order",
+    "shopify/customer/send_to_odoo_contact"
   ]
 }

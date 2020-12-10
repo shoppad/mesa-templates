@@ -1,5 +1,5 @@
 {
-  "key": "tests/template-collection-test",
+  "key": "tests/template_collection_test",
   "name": "Test: Shopify: Legacy and new tokens",
   "version": "1.0.0",
   "description": "",
@@ -9,6 +9,6 @@
   "destination": "shopify_api",
   "templates": [
     "shopify_tokens",
-    "shopify-order-created-to-email"
+    "shopify_order_created_to_email"
   ]
 }
