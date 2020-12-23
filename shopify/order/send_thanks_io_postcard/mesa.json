@@ -47,7 +47,7 @@
                 "trigger_type": "output",
                 "type": "thanks",
                 "entity": "postcard",
-                "action": "send",
+                "action": "create",
                 "name": "Thanks.io Send Postcard",
                 "key": "thanks_postcard",
                 "metadata": {
