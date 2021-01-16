@@ -13,7 +13,7 @@
     "config": {
       "inputs": [
         {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "pagestudio",
                 "entity": "account",
