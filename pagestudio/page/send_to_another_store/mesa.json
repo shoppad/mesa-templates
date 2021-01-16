@@ -11,78 +11,41 @@
     "destination": "pagestudio",
     "enabled": false,
     "config": {
-        "inputs": [
-            {
+      "inputs": [
+        {
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "pagestudio",
                 "entity": "account",
                 "action": "created",
                 "name": "Page Studio Page Created",
-                "key": "page_studio_page",
-                "metadata": {
-                    "last_sync_date_time": "",
-                    "poll": "0 * * * *"
-                },
-                "local_fields": null,
+                "key": "pagestudio_page",
+                "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "trigger_type": "output",
-                "type": "transform",
-                "entity": "mapping",
-                "action": null,
-                "name": "Mapping to Page Studio Create Page",
-                "key": "mappingtopagestudiocreatepage",
-                "metadata": {
-                    "script": "transform.js",
-                    "mapping": [
-                        {
-                            "destination": "title",
-                            "source": "{{page_studio_page.title}}"
-                        },
-                        {
-                            "destination": "handle",
-                            "source": "{{page_studio_page.handle}}"
-                        },
-                        {
-                            "destination": "body_html",
-                            "source": "{{page_studio_page.body_html}}"
-                        },
-                        {
-                            "destination": "author",
-                            "source": "{{page_studio_page.author}}"
-                        },
-                        {
-                            "destination": "created_at",
-                            "source": "{{page_studio_page.created_at}}"
-                        },
-                        {
-                            "destination": "published_at",
-                            "source": "{{page_studio_page.published_at}}"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets"
-                    }
-                ],
-                "weight": 0
-            },
-            {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "pagestudio",
                 "entity": "page",
                 "action": "create",
                 "name": "Page Studio Create Page",
-                "key": "page_studio_page_1",
-                "metadata": [],
-                "local_fields": null,
-                "weight": 1
+                "key": "pagestudio_page",
+                "metadata": {
+                    "body": {
+                        "title": "{{pagestudio_page.title}}",
+                        "handle": "{{pagestudio_page.handle}}",
+                        "body_html": "{{pagestudio_page.body_html}}",
+                        "author": "{{pagestudio_page.author}}",
+                        "created_at": "{{pagestudio_page.created_at}}",
+                        "published_at": "{{pagestudio_page.published_at}}"
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
             }
         ],
         "storage": []
