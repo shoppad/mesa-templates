@@ -50,7 +50,7 @@
               "metadata": {
                   "file_path": "\/{{filename}}",
                   "token": "",
-                  "file_url": "{{current_item.value}}"
+                  "file_url": "{{iterator.value}}"
               },
               "local_fields": [],
               "weight": 1
