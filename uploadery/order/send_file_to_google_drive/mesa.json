@@ -51,7 +51,7 @@
               "key": "googledrive-save-file",
               "metadata": {
                   "token": "",
-                  "file_url": "{{current_item.value}}",
+                  "file_url": "{{iterator.value}}",
                   "file_name": "{{filename}}"
               },
               "local_fields": [],
