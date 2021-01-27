@@ -7,7 +7,7 @@
   "readme": "",
   "tags": ["shopify"],
   "source": "shopify_webhook",
-  "destination": "custom",
+  "destination": "shopify_api",
   "enabled": false,
   "logging": false,
   "debug": false,
