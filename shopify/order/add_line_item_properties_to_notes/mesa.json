@@ -7,56 +7,55 @@
   "readme": "",
   "tags": ["shopify"],
   "source": "shopify_webhook",
-  "destination": "shopify_api",
+  "destination": "custom",
   "enabled": false,
   "logging": false,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify_webhook",
-              "entity": "order",
-              "action": "create",
-              "name": "Shopify Order Created",
-              "key": "shopify_order",
-              "metadata": [],
-              "weight": 0
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Converting Line Items Properties Into A String",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "update",
+        "name": "Shopify Update Order",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "note": "{{shopify_order.notes}}{{custom.line_item_properties}}"
           }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "custom",
-              "name": "Converting Line Items Properties Into A String",
-              "key": "custom",
-              "metadata": {
-                  "script": "custom.js"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 3,
-              "trigger_type": "output",
-              "type": "shopify_api",
-              "entity": "order",
-              "action": "update",
-              "name": "Shopify Update Order",
-              "key": "shopify_order_1",
-              "metadata": {
-                  "order_id": "{{shopify_order.id}}",
-                  "body": {
-                      "note": "{{shopify_order.notes}}\n\n{{custom.line_item_properties}}"
-                  },
-                  "site": "current"
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
   }
 }
