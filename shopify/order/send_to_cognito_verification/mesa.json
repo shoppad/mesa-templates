@@ -17,7 +17,8 @@
                 "name": "Shopify Order Create",
                 "key": "in-shopify-order-create",
                 "script": "in_shopify_order_create.js",
-                "topic": "orders/create"
+                "entity": "order",
+                "action": "created"
             }
         ],
         "outputs": [

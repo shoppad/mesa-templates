@@ -16,7 +16,8 @@
                 "type": "shopify_webhook",
                 "name": "Shopify Draft Order Created",
                 "key": "in-shopify-draft-order-created",
-                "topic": "draft_orders/create"
+                "entity": "draft_order",
+                "action": "created"
             }
         ],
         "outputs": [

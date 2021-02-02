@@ -22,7 +22,7 @@
                 "trigger_type": "input",
                 "type": "shopify_webhook",
                 "entity": "customer",
-                "action": "create",
+                "action": "created",
                 "name": "Shopify Customer Created",
                 "key": "shopify_customer",
                 "metadata": [],

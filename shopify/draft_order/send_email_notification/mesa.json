@@ -18,7 +18,7 @@
                 "trigger_type": "input",
                 "type": "shopify_webhook",
                 "entity": "draft_order",
-                "action": "create",
+                "action": "created",
                 "name": "Shopify Draft Order Created",
                 "key": "shopify_draft_order",
                 "metadata": [],

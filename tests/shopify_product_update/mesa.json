@@ -14,7 +14,7 @@
         "trigger_type": "input",
         "type": "shopify_webhook",
         "entity": "product",
-        "action": "create",
+        "action": "created",
         "name": "Shopify: Product Created",
         "key": "shopify-product-created",
         "metadata": {
