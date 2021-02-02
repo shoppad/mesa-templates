@@ -18,14 +18,16 @@
         "type": "shopify_webhook",
         "name": "Shopify Product Create",
         "key": "in_shopify_product_create",
-        "topic": "products/create"
+        "entity": "product",
+        "action": "created"
       },
       {
         "trigger_type": "input",
         "type": "shopify_webhook",
         "name": "Shopify Product Update",
         "key": "in_shopify_product_update",
-        "topic": "products/update"
+        "entity": "product",
+        "action": "updated"
       }
     ],
     "outputs": [

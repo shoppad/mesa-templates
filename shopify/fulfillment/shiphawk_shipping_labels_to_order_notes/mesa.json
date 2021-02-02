@@ -18,7 +18,8 @@
                 "name": "Shopify Fulfillment Created",
                 "key": "in-shopify-fulfillment-created",
                 "script": "in_shopify_fulfillment_created.js",
-                "topic": "fulfillments/create"
+                "entity": "fulfillment",
+                "action": "created"
             }
         ],
         "outputs": [

@@ -17,7 +17,7 @@
                 "trigger_type": "input",
                 "type": "shopify_webhook",
                 "entity": "order",
-                "action": "create",
+                "action": "created",
                 "name": "Shopify Order Created",
                 "key": "shopify_order",
                 "metadata": {

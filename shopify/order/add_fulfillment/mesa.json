@@ -14,7 +14,8 @@
         "type": "shopify_webhook",
         "name": "Shopify Order Created",
         "key": "in-shopify-order-created",
-        "topic": "orders/create"
+        "entity": "order",
+        "action": "created"
       }
     ],
     "outputs": [
