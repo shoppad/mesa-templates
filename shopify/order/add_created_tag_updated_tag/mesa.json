@@ -1,0 +1,94 @@
+{
+    "key": "shopify_order_created_add_tag_to_shopify_update_order_update_tag",
+    "name": "Add 'Order Can Be Edited' when Shopify order is created, then alter tag 24 hours later",
+    "version": "1.0.0",
+    "description": "When Shopify order is created, adds 'Order Can Be Edited' tag, then 24 hours later updates this tag to 'Order Cannot Be Edited'. Useful for store admin.\nYou can customize the tag names by editing their values in the two Shopify Update Order outputs below. You can also adjust the delay",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify_webhook",
+    "destination": "shopify_api",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "update",
+                "name": "Shopify Update Order - Apply initial tag",
+                "key": "shopify_order_1",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "tags": "{{shopify_order.tags}}{{ if shopify_order.tags }},{{ endif }}Order Can Be Edited"
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "hours",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Order - Get latest order data",
+                "key": "shopify_order_2",
+                "metadata": {
+                    "order_id": "{{delay.id}}"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "update",
+                "name": "Shopify Update Order - Apply new tag",
+                "key": "shopify_order_3",
+                "metadata": {
+                    "order_id": "{{shopify_order_2.id}}",
+                    "body": {
+                        "tags": "{{ shopify_order_2.tags | replace: 'Order Can Be Edited', 'Order Cannot Be Edited' }}"
+                    }
+                },
+                "local_fields": [],
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
+}
