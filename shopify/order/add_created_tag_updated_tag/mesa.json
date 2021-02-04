@@ -1,8 +1,8 @@
 {
     "key": "shopify_order_created_add_tag_to_shopify_update_order_update_tag",
-    "name": "Add 'Order Can Be Edited' when Shopify order is created, then alter tag 24 hours later",
+    "name": "Add 'Order Can Be Edited' tag when Shopify Order is created, then change to 'Order Cannot be Edited' 24 hours later",
     "version": "1.0.0",
-    "description": "When Shopify order is created, adds 'Order Can Be Edited' tag, then 24 hours later updates this tag to 'Order Cannot Be Edited'. Useful for store admin.\nYou can customize the tag names by editing their values in the two Shopify Update Order outputs below. You can also adjust the delay",
+    "description": "When Shopify order is created, adds 'Order Can Be Edited' tag, then 24 hours later updates this tag to 'Order Cannot Be Edited'. Useful for store admin.\nYou can customize the tag names by editing their values in the two Shopify Update Order outputs below. You can also adjust the delay to suit your needs.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -37,7 +37,7 @@
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "tags": "{{shopify_order.tags}}{{ if shopify_order.tags }},{{ endif }}Order Can Be Edited"
+                        "tags": "{{shopify_order.tags}},{{ endif }}Order Can Be Edited"
                     }
                 },
                 "local_fields": [],
@@ -51,7 +51,7 @@
                 "key": "delay",
                 "metadata": {
                     "amount": "1",
-                    "unit": "hours",
+                    "unit": "days",
                     "test_bypass": false
                 },
                 "local_fields": [],
