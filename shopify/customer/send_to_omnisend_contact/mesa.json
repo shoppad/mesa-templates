@@ -1,0 +1,57 @@
+{
+    "key": "shopify_customer_created_to_omnisend_create_contact",
+    "name": "Send Shopify Customer to Omnisend Contact",
+    "version": "1.0.0",
+    "description": "Create Contact in Omnisend when Shopify Customer is created",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify_webhook",
+    "destination": "omnisend",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "customer",
+                "action": "created",
+                "name": "Shopify Customer Created",
+                "key": "shopify_customer",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "omnisend",
+                "entity": "contact",
+                "action": "create",
+                "name": "Omnisend Create Contact",
+                "key": "omnisend_contact",
+                "metadata": {
+                    "body": {
+                        "email": "{{shopify_customer.email}}",
+                        "smsPhoneNumber": "{{shopify_customer.phone}}",
+                        "firstName": "{{shopify_customer.first_name}}",
+                        "lastName": "{{shopify_customer.last_name}}",
+                        "country": "{{shopify_customer.default_address.country}}",
+                        "countryCode": "{{shopify_customer.default_address.country_code}}",
+                        "state": "{{shopify_customer.default_address.province}}",
+                        "city": "{{shopify_customer.default_address.city}}",
+                        "address": "{{shopify_customer.default_address.address1}}",
+                        "postalCode": "{{shopify_customer.default_address.zip}}"
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
