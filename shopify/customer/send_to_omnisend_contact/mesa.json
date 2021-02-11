@@ -1,5 +1,5 @@
 {
-    "key": "shopify_customer_created_to_omnisend_create_contact",
+    "key": "shopify/customer/send_to_omnisend_contact",
     "name": "Send Shopify Customer to Omnisend Contact",
     "version": "1.0.0",
     "description": "Create Contact in Omnisend when Shopify Customer is created",
