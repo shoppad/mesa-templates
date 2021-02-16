@@ -1,6 +1,6 @@
 {
-  "key": "returnly/send_authorized_return_to_slack_channel",
-  "name": "Send Authorized Return To Slack Channel",
+  "key": "returnly/send_returnly_authorized_return_to_slack_channel",
+  "name": "Send Returnly Authorized Return To Slack Channel",
   "version": "1.0.0",
   "description": "",
   "video": "",
