@@ -1,0 +1,45 @@
+{
+  "key": "returnly/send_authorized_return_to_slack_channel",
+  "name": "Send Authorized Return To Slack Channel",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "returnly_webhook",
+  "destination": "slack",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "returnly_webhook",
+        "entity": "return",
+        "action": "authorized",
+        "name": "Returnly Return Authorized",
+        "key": "returnly_return",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "slack",
+        "name": "Slack",
+        "key": "slack",
+        "metadata": {
+          "message": "Authorized return. Return ID: {{returnly_return.payload.data.id}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
+}
