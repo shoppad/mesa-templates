@@ -1,6 +1,6 @@
 {
   "key": "returnly/send_returnly_authorized_return_to_slack_channel",
-  "name": " Send a slack message to channel when Returnly return has been authorized",
+  "name": " Send slack message to channel when Returnly return has been authorized",
   "version": "1.0.0",
   "description": "",
   "video": "",
