@@ -1,0 +1,84 @@
+{
+  "key": "shopify_product_inventory_updated_to_slack",
+  "name": "Send slack message to channel when inventory runs low",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "slack",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "product",
+        "action": "updated",
+        "name": "Shopify Product Updated",
+        "key": "shopify_product",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "product",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Product",
+        "key": "shopify_product_1",
+        "metadata": {
+          "product_id": "4547099623522"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{shopify_product_1.variants[]}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{iterator.inventory_quantity}}",
+          "comparison": "less than equal",
+          "b": "5"
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "slack",
+        "name": "Slack",
+        "key": "slack",
+        "metadata": {
+          "message": "{{shopify_product_1.title}} is running low on inventory. \nIts current inventory quantity is: {{filter.inventory_quantity}}."
+        },
+        "local_fields": [],
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
+}
