@@ -1,0 +1,52 @@
+{
+    "key": "shopify_product_created_to_etsy_create_listing_1",
+    "name": "Add listing on Etsy when new product in Shopify is created",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify_webhook",
+    "destination": "etsy",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "product",
+                "action": "created",
+                "name": "Shopify Product Created",
+                "key": "shopify_product",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "listing",
+                "action": "create",
+                "name": "Etsy Create Listing",
+                "key": "etsy_listing",
+                "metadata": {
+                    "body": {
+                        "quantity": "{{shopify_product.variants[0].inventory_quantity}}",
+                        "title": "{{shopify_product.title}}",
+                        "description": "{{shopify_product.body_html}}",
+                        "price": "{{shopify_product.variants[0].price}}",
+                        "state": "draft"
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
