@@ -1,6 +1,6 @@
 {
-  "key": "shopify_product_inventory_updated_to_slack",
-  "name": "Send a Slack message when a Shopify product's inventory runs low",
+  "key": "send_slack_message_when_inventory_is_low",
+  "name": "Send Slack message to channel when inventory runs low",
   "version": "1.0.0",
   "description": "",
   "video": "",
@@ -17,10 +17,10 @@
         "schema": 3,
         "trigger_type": "input",
         "type": "shopify_webhook",
-        "entity": "product",
+        "entity": "inventory_level",
         "action": "updated",
-        "name": "Shopify Product Updated",
-        "key": "shopify_product",
+        "name": "Shopify Inventory Level Updated",
+        "key": "shopify_inventory_level",
         "metadata": [],
         "weight": 0
       }
@@ -29,11 +29,13 @@
       {
         "schema": 2,
         "trigger_type": "output",
-        "type": "iterator",
-        "name": "Iterator",
-        "key": "iterator",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
         "metadata": {
-          "key": "{{shopify_product.variants[]}}"
+          "a": "{{shopify_inventory_level.available}}",
+          "comparison": "less than equal",
+          "b": "3"
         },
         "local_fields": [],
         "weight": 0
@@ -41,13 +43,11 @@
       {
         "schema": 2,
         "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
+        "type": "custom",
+        "name": "Custom",
+        "key": "custom",
         "metadata": {
-          "comparison": "less than equal",
-          "b": "3",
-          "a": "{{iterator.inventory_quantity}}"
+          "script": "custom.js"
         },
         "local_fields": [],
         "weight": 1
@@ -59,7 +59,7 @@
         "name": "Slack",
         "key": "slack",
         "metadata": {
-          "message": "{{shopify_product.title}} is running low on inventory. \nCurrent inventory quantity: {{filter.inventory_quantity}}."
+          "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \nCurrent inventory quantity: {{shopify_inventory_level.available}}."
         },
         "local_fields": [],
         "weight": 2
