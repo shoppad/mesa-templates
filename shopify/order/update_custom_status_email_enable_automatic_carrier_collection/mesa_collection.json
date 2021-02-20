@@ -1,0 +1,14 @@
+{
+  "key": "update_custom_status_email_enable_automatic_carrier_collection",
+  "name": "Email your customer about a custom order status update two days after an order is placed & Enable Automatic Carrier Updates (Collection of 2 Templates)",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "tracktor",
+  "templates": [
+    "shopify/order/update_order_custom_status_with_delay_send_email",
+    "shopify/order/enable_tracktor_automatic_carrier_updates_order_fulfilled"
+  ]
+}

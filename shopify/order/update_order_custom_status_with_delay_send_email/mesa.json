@@ -1,6 +1,6 @@
 {
-  "key": "order_created_delay_to_tracktor_update_manual_status_order_send_email",
-  "name": "Email your customer while updating their order with a custom order status two days after an order is placed",
+  "key": "update_order_custom_status_with_delay_send_email",
+  "name": "Part 1: Email customer when custom order status update based on delay",
   "version": "1.0.0",
   "description": "",
   "video": "",
@@ -80,7 +80,7 @@
           "order_id": "{{shopify_order_1.id}}",
           "body": {
             "status": "custom_status_1",
-            "automatic_carrier_updates": "true",
+            "automatic_carrier_updates": "false",
             "force": "true"
           }
         },
