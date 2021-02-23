@@ -1,0 +1,63 @@
+{
+  "key": "add-tags-of-tracktor-latest-delivery-status",
+  "name": "Tag Tracktor orders with current delivery status",
+  "version": "1.0.0",
+  "description": "Will not remove past Tracktor delivery status tags. ",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "tracktor",
+  "destination": "shopify_api",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "order/all",
+        "name": "Tracktor Order Any Update",
+        "key": "tracktor_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Order",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{tracktor_order.order_id}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "update",
+        "name": "Shopify Update Order",
+        "key": "shopify_order",
+        "metadata": {
+          "body": {
+            "tags": "{{shopify_order_1.tags}}, {{tracktor_order.fulfillments[0].latest_status.label}}"
+          },
+          "order_id": "{{shopify_order_1.id}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
+}
