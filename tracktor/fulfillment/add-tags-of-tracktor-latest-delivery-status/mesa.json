@@ -1,5 +1,5 @@
 {
-  "key": "add-tags-of-tracktor-latest-delivery-status",
+  "key": "add_tags_of_tracktor_latest_delivery_status",
   "name": "Tag Tracktor orders with current delivery status",
   "version": "1.0.0",
   "description": "Will not remove past Tracktor delivery status tags. ",
