@@ -22,7 +22,7 @@
         "name": "Infinite Options Order Created",
         "key": "infiniteoptions_order",
         "metadata": {
-          "field_name": "Date, Time"
+          "field_name": "Date"
         },
         "local_fields": [],
         "weight": 0
