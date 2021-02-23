@@ -1,0 +1,45 @@
+{
+    "key": "schedule_theme_change",
+    "name": "Schedule Shopify theme change on a specific date and time",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "schedule",
+    "destination": "shopify_api",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Scheduler",
+                "key": "schedule",
+                "metadata": {
+                    "datetime": "2021-02-18T08:00:00.000Z"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "theme",
+                "action": "publish",
+                "name": "Shopify Publish Theme",
+                "key": "shopify_theme",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
