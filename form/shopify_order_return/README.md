@@ -14,3 +14,5 @@
 * Submit the form.
 
 ## Exending
+* Use ShipStation to automatically generate a return label download URL that can be included in the customer email.
+* Sync Add submissions to Airtable to easily centralize your returns process.
