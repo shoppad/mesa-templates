@@ -4,7 +4,7 @@
   * Find your theme's `account.liquid` file. In Debut, this file is `customers/account.liquid`.
   * Add a column to your order `<table>`: 
     ```
-    <td data-label="Start Return"><a href="/apps/mesa/forms/form_to_shopify_retrieve_order?shopify_order_id={{ order.id }}">Return</a></td>
+    <td data-label="Start Return"><a href="/apps/mesa/forms/form_shopify_order_return?shopify_order_id={{ order.id }}">Return</a></td>
     ```
 * Alternatively, send the link in your Order Confirmation email template, or send it in support communications.
 
