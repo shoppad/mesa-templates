@@ -1,5 +1,5 @@
 {
-  "key": "update_order_custom_status_with_delay_send_email",
+  "key": "shopify/order/update_order_custom_status_with_delay_send_email",
   "name": "Part 1: Email customer when custom order status update based on delay",
   "version": "1.0.0",
   "description": "",

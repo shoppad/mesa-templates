@@ -1,5 +1,5 @@
 {
-  "key": "enable_tracktor_automatic_carrier_updates_order_fulfilled",
+  "key": "shopify/order/enable_tracktor_automatic_carrier_updates_order_fulfilled",
   "name": "Part 2: Enabling Automatic Carrier Updates on Tracktor orders",
   "version": "1.0.0",
   "description": "",
