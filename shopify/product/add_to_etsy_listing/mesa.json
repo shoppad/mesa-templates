@@ -1,8 +1,8 @@
 {
-    "key": "shopify_product_created_to_etsy_create_listing_1",
-    "name": "Add listing on Etsy when new product in Shopify is created",
+    "key": "add_to_etsy_listing",
+    "name": "Add Listing on Etsy When New Product in Shopify Is Created",
     "version": "1.0.0",
-    "description": "",
+    "description": "When you create a new product on Shopify, Mesa will also turn it into a listing on Etsy without doing it yourself manually. You’ll save time, boost your product’s customer reach, and sell more stocks of the item.",
     "video": "",
     "readme": "",
     "tags": [],
