@@ -1,8 +1,8 @@
 {
-    "key": "shopify_high_risk_order_send_to_slack",
-    "name": "Forward high-risk orders to Slack channel for manual review",
+    "key": "send_high_risk_orders_to_slack",
+    "name": "Forward High-Risk Orders to Slack for Manual Review",
     "version": "1.0.0",
-    "description": "Review high-risk orders to avoid potential chargebacks. This template sends a message to a Slack channel when an order that is determined as \"high-risk\" by Shopify's fraud algorithm. Your team can manually review the fraud analysis on the order and determine if the order is fraudulent.",
+    "description": "Protecting yourself from fraud is critical for not only the safety of your eCommerce store but for your customers as well. Automatically identify high-risk orders and forward them to your team on Slack so you can investigate them yourself. It’s an extra layer of protection that could save plenty of headaches in the future.",
     "video": "",
     "readme": "",
     "tags": [],
