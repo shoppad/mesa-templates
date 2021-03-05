@@ -1,6 +1,6 @@
 {
-  "key": "send_slack_message_when_inventory_is_low",
-  "name": "Send Slack message to channel when inventory runs low",
+  "key": "send_slack_message_inventory_low",
+  "name": "Send Slack Message to Channel When Inventory Runs Low",
   "version": "1.0.0",
   "description": "",
   "video": "",
