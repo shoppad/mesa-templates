@@ -1,6 +1,6 @@
 {
-  "key": "add_customer_email_to_klaviyo_list",
-  "name": "Add a customer's email address to a Klaviyo list when a customer has been created in Shopify",
+  "key": "add_email_to_klaviyo_list",
+  "name": "Add a Customer's Email Address to a Klaviyo List When a Customer Has Been Created in Shopify",
   "version": "1.0.0",
   "description": "",
   "video": "",
