@@ -1,0 +1,102 @@
+{
+  "key": "send_email_to_staff_when_order_not_delivered",
+  "name": "Send email to store owner/support team when a fulfilled order has not been delivered after 7 days",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "tracktor",
+  "destination": "email",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "order/pre_transit",
+        "name": "Tracktor Order Ready (Fulfillment Created)",
+        "key": "tracktor_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delay",
+        "name": "Delay",
+        "key": "delay",
+        "metadata": {
+          "amount": "7",
+          "unit": "days",
+          "test_bypass": true
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "fulfillment",
+        "action": "retrieve",
+        "name": "Tracktor Retrieve Fulfillment",
+        "key": "tracktor_fulfillment",
+        "metadata": {
+          "fulfillment_id": "{{delay.fulfillments[0].fulfillment_id}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{tracktor_fulfillment.latest_status.label}}",
+          "comparison": "does not equal",
+          "b": "delivered"
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Tracktor Retrieve Order",
+        "key": "tracktor_order_1",
+        "metadata": {
+          "order_id": "{{tracktor_fulfillment.order_id}}"
+        },
+        "local_fields": [],
+        "weight": 3
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "email",
+        "name": "Email",
+        "key": "email",
+        "metadata": {
+          "to": "{{context.shop.email}}",
+          "subject": "Order {{tracktor_order_1.order_name}} has not been delivered to the customer",
+          "message": "Order Number: {{tracktor_order_1.order_name}}\nCarrier: {{tracktor_fulfillment.carrier.name}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
+        },
+        "local_fields": [],
+        "weight": 4
+      }
+    ],
+    "storage": []
+  }
+}
