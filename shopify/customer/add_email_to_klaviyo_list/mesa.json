@@ -1,0 +1,88 @@
+{
+  "key": "add_email_to_klaviyo_list",
+  "name": "Add a Customer's Email Address to a Klaviyo List When a Customer Has Been Created in Shopify",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "klaviyo",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "customer",
+        "action": "created",
+        "name": "Shopify Customer Created",
+        "key": "shopify_customer",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "klaviyo",
+        "entity": "list",
+        "action": "subscribe",
+        "name": "Klaviyo Subscribe List",
+        "key": "klaviyo_list",
+        "metadata": {
+          "email": "{{shopify_customer.email}}",
+          "mapping": [
+            {
+              "destination": "id",
+              "source": "{{shopify_customer.id}}"
+            },
+            {
+              "destination": "email",
+              "source": "{{shopify_customer.email}}"
+            },
+            {
+              "destination": "phone",
+              "source": "{{shopify_customer.phone}}"
+            },
+            {
+              "destination": "first_name",
+              "source": "{{shopify_customer.first_name}}"
+            },
+            {
+              "destination": "last_name",
+              "source": "{{shopify_customer.last_name}}"
+            },
+            {
+              "destination": "phone",
+              "source": "{{shopify_customer.phone}}"
+            },
+            {
+              "destination": "tags",
+              "source": "{{shopify_customer.tags}}"
+            },
+            {
+              "destination": "notes",
+              "source": "{{shopify_customer.note}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
+}
