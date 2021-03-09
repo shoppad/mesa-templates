@@ -1,0 +1,93 @@
+{
+  "key": "add_tag_to_shopify_customer_with_recharge_subscription",
+  "name": "Add a tag to Shopify customer when customer purchases specific ReCharge subscription",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "recharge",
+  "destination": "shopify_api",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "recharge",
+        "entity": "subscription",
+        "action": "subscription/created",
+        "name": "Recharge Subscription Created",
+        "key": "recharge_subscription",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "recharge",
+        "entity": "customer",
+        "action": "retrieve",
+        "name": "Recharge Retrieve Customer",
+        "key": "recharge_customer",
+        "metadata": {
+          "recharge_api": "GET /customers/{{customer_id}}",
+          "customer_id": "{{recharge_subscription.customer_id}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{recharge_subscription.product_title}}",
+          "comparison": "equals",
+          "b": "Testing Recharge Auto renew"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "customer",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Customer",
+        "key": "shopify_customer_1",
+        "metadata": {
+          "customer_id": "{{recharge_customer.shopify_customer_id}}"
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "customer",
+        "action": "update",
+        "name": "Shopify Update Customer",
+        "key": "shopify_customer",
+        "metadata": {
+          "body": {
+            "tags": "{{shopify_customer_1.tags}}, Recharge Tag"
+          },
+          "customer_id": "{{shopify_customer_1.id}}"
+        },
+        "local_fields": [],
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
+}
