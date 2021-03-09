@@ -1,0 +1,70 @@
+{
+  "key": "send_slack_message_inventory_low",
+  "name": "Send Slack Message to Channel When Inventory Runs Low",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "slack",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "inventory_level",
+        "action": "updated",
+        "name": "Shopify Inventory Level Updated",
+        "key": "shopify_inventory_level",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_inventory_level.available}}",
+          "comparison": "less than equal",
+          "b": "3"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Custom",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "slack",
+        "name": "Slack",
+        "key": "slack",
+        "metadata": {
+          "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \nCurrent inventory quantity: {{shopify_inventory_level.available}}."
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}
