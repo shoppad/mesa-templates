@@ -91,7 +91,7 @@
         "metadata": {
           "to": "{{context.shop.email}}",
           "subject": "Order {{tracktor_order_1.order_name}} has not been delivered to the customer",
-          "message": "Order Number: {{tracktor_order_1.order_name}}\nCarrier: {{tracktor_fulfillment.carrier.name}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
+          "message": "Order Number: {{tracktor_order_1.order_name}}\nCarrier: {{tracktor_order_1.fulfillments[0].carrier.name}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
         },
         "local_fields": [],
         "weight": 4
