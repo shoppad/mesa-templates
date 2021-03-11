@@ -2,7 +2,7 @@
   "key": "add_email_to_klaviyo_list",
   "name": "Add a Customer's Email Address to a Klaviyo List When a Customer Has Been Created in Shopify",
   "version": "1.0.0",
-  "description": "",
+  "description": "Growing your email list on Klaviyo needs to be one of your priorities to maximize sales. Each time a customer is created on Shopify, Mesa can then instantly add their email address to your Klaviyo list, without doing everything manually yourself.",
   "video": "",
   "readme": "",
   "tags": [],
