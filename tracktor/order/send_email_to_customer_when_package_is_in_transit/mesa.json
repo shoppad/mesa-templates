@@ -8,7 +8,7 @@
   "tags": [],
   "source": "tracktor",
   "destination": "email",
-  "enabled": true,
+  "enabled": false,
   "logging": false,
   "debug": false,
   "config": {
