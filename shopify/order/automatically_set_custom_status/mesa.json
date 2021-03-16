@@ -1,8 +1,8 @@
 {
-  "key": "shopify/order/update_order_custom_status_with_delay_send_email",
-  "name": "Part 1: Email customer when custom order status update based on delay",
+  "key": "shopify/order/automatically_set_custom_status",
+  "name": "Automatically Delay Tracktor Custom Order Status Updates and Send an Email Notifying the Customer of Status Changes",
   "version": "1.0.0",
-  "description": "",
+  "description": "As a merchant, there may be custom steps (such as purchasing materials, painting, dying, etc) that you go through before you can fulfill an order. It’s why Mesa makes it possible to automatically delay Tracktor customer order status and send an email to the customer whenever the status changes. That way, the customer only receives their tracking number when the order is ready for shipping.",
   "video": "",
   "readme": "",
   "tags": [],
