@@ -1,8 +1,8 @@
 {
-  "key": "add_line_item_tag_to_order_after_order_creation",
-  "name": "Add order tag when order has Date from Infinite Options' datepicker",
+  "key": "date_field_add_tag",
+  "name": "Add a Tag to Orders Containing Infinite Options Line Items With Date Field",
   "version": "1.0.0",
-  "description": "",
+  "description": "Infinite Options is a Shopify app that allows you to create custom options for any product. With Mesa, you can add a tag to orders containing Infinite Options Line Items that include a date field. This will help organize your list of orders with dates.",
   "video": "",
   "readme": "",
   "tags": [],
