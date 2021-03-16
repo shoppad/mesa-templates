@@ -1,14 +1,14 @@
 {
-  "key": "copy_product_tag_to_order_tag_when_order_created",
-  "name": "Copy product tag to order tag when product is purchased",
+  "key": "add_product_tag",
+  "name": "Copy Product Tags to the Order When a New Order is Created",
   "version": "1.0.0",
-  "description": "",
+  "description": "To fulfill an order correctly, it’s helpful to note the product tags to make sure you’re shipping the correct item. Instead of manually copying each product tag by yourself, Mesa does everything for you each time by doing the time-consuming task when a new order is created. That’s extra time you’ll save to focus on more critical tasks.",
   "video": "",
   "readme": "",
   "tags": [],
   "source": "shopify_webhook",
   "destination": "shopify_api",
-  "enabled": false,
+  "enabled": true,
   "logging": false,
   "debug": false,
   "config": {
