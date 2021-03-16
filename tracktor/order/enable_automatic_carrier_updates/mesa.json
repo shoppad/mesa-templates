@@ -1,5 +1,5 @@
 {
-  "key": "shopify/order/enable_automatic_carrier_updates",
+  "key": "tracktor/order/enable_automatic_carrier_updates",
   "name": "Re-enable Tracktor Carrier Updates to Update Order Status Automatically",
   "version": "1.0.0",
   "description": "Automatically change Tracktor to update an order based on the carrier details. This is helpful when an order is no longer in a custom status and can be shipped.",
@@ -8,7 +8,7 @@
   "tags": [],
   "source": "shopify_webhook",
   "destination": "tracktor",
-  "enabled": false,
+  "enabled": true,
   "logging": false,
   "debug": false,
   "config": {
