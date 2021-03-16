@@ -2,7 +2,7 @@
     "key": "shopify/customer/send_to_omnisend_contact",
     "name": "Send Shopify Customer to Omnisend Contact",
     "version": "1.0.0",
-    "description": "Create Contact in Omnisend when Shopify Customer is created",
+    "description": "This template sends your customers contact details from Shopify to a Omnisend Contact as soon as the customer is created in Shopify. This happens automatically so your Omnisend lists are always up to date.",
     "video": "",
     "readme": "",
     "tags": [],
