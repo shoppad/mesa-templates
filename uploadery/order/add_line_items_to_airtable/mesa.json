@@ -1,0 +1,194 @@
+{
+    "key": "uploadery_order_add_line_items_to_airtable",
+    "name": "Add Uploadery Images and Line Items to Airtable",
+    "version": "1.0.0",
+    "description": "Airtable is great because it gives you all of the power and flexibility of Google Sheets, and lets you store files directly in your spreadsheet.  Use this template to easily manage every order with an Uploadery file upload and store the files and line item details in a spreadsheet to keep track of their progress. When each order is created, Mesa will add Uploadery Line Items to an Airtable table.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "uploadery",
+    "destination": "airtable",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "uploadery",
+                "entity": "order",
+                "action": "created",
+                "name": "Uploadery Order Created",
+                "key": "uploadery_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{uploadery_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "airtable",
+                "entity": "record",
+                "action": "create",
+                "name": "Airtable Add Record",
+                "key": "airtable_record",
+                "metadata": {
+                    "path": {
+                        "table": "Line Items"
+                    },
+                    "body": {
+                        "fields": {
+                            "Email": "{{uploadery_order.order.email}}",
+                            "Shipping Name": "{{uploadery_order.order.shipping_address.first_name}}{{uploadery_order.order.shipping_address.last_name}}",
+                            "Address": "{{uploadery_order.order.shipping_address.address1}}",
+                            "City": "{{uploadery_order.order.shipping_address.city}}",
+                            "Province": "{{uploadery_order.order.shipping_address.province}}",
+                            "Zip": "{{uploadery_order.order.shipping_address.zip}}",
+                            "Country": "{{uploadery_order.order.shipping_address.country}}",
+                            "Product Name": "{{iterator.title}}",
+                            "Product SKU": "{{iterator.sku}}",
+                            "Product Price": "{{iterator.price}}",
+                            "Order Name": "{{uploadery_order.order.name}}",
+                            "Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{uploadery_order.order.id}}",
+                            "File": [
+                                {
+                                    "url": "{{iterator.fields.uploadery_1}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Email",
+                                        "label": "Email",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Shipping Name",
+                                        "label": "Shipping Name",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Address",
+                                        "label": "Address",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "City",
+                                        "label": "City",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Province",
+                                        "label": "Province",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Zip",
+                                        "label": "Zip",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Country",
+                                        "label": "Country",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product Name",
+                                        "label": "Product Name",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product SKU",
+                                        "label": "Product SKU",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product Price",
+                                        "label": "Product Price",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "Order Name",
+                                        "label": "Order Name",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Order URL",
+                                        "label": "Order URL",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "File",
+                                        "label": "File",
+                                        "type": "array",
+                                        "source": "airtable",
+                                        "description": "This field is a list of attachments. To create a new attachment add an attachment URL.  Airtable will download the file at the given URL and keep its own copy of it.",
+                                        "fields": [
+                                            {
+                                                "key": "url",
+                                                "label": "Attachment URL",
+                                                "type": "text",
+                                                "required": true
+                                            },
+                                            {
+                                                "key": "filename",
+                                                "label": "File Name",
+                                                "type": "text"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "key": "Status",
+                                        "label": "Status",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
