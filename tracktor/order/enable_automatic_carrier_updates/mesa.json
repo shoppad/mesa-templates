@@ -1,0 +1,50 @@
+{
+  "key": "tracktor/order/enable_automatic_carrier_updates",
+  "name": "Re-enable Tracktor Carrier Updates to Update Order Status Automatically",
+  "version": "1.0.0",
+  "description": "Automatically change Tracktor to update an order based on the carrier details. This is helpful when an order is no longer in a custom status and can be shipped.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "tracktor",
+  "enabled": true,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "fulfilled",
+        "name": "Shopify Order Fulfilled",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "update",
+        "name": "Tracktor Update Manual Status Order",
+        "key": "tracktor_order",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "automatic_carrier_updates": "true",
+            "force": "true"
+          }
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
+}

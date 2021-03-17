@@ -1,0 +1,14 @@
+{
+  "key": "tracktor/order/automatically_set_custom_status_and_enable_automatic_carrier_updates",
+  "name": "Send an Email to Customers When Their Order Status Changes and Toggle the Automatic Carrier Updates Setting in Tracktor",
+  "version": "1.0.0",
+  "description": "As a merchant, there may be custom steps (such as purchasing materials, painting, dying, etc) that you go through before you can fulfill an order. It’s why Mesa makes it possible to automatically delay Tracktor customer order statuses and send an email to the customer whenever the status changes. That way, the customer only receives their tracking number when the order is ready for shipping. You can also automatically change Tracktor to update an order based on the carrier details. This is helpful when an order is no longer in a custom status and can be shipped.",
+  "video": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "tracktor",
+  "templates": [
+    "tracktor/order/automatically_set_custom_status",
+    "tracktor/order/enable_automatic_carrier_updates"
+  ]
+}
