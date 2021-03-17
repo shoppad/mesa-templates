@@ -22,7 +22,7 @@
               "entity": "order",
               "action": "created",
               "name": "Uploadery: Order Created",
-              "key": "uploadery-order-created",
+              "key": "uploadery_order_created",
               "metadata": [],
               "local_fields": [],
               "weight": 0
@@ -36,7 +36,7 @@
               "name": "Iterator",
               "key": "iterator",
               "metadata": {
-                  "key": "{{uploadery-order-created.line_items[]}}"
+                  "key": "{{uploadery_order_created.line_items[]}}"
               },
               "local_fields": [],
               "weight": 0
@@ -66,39 +66,39 @@
                   "mapping": [
                       {
                           "destination": "A",
-                          "source": "https:\/\/{{shopify_shop.domain}}\/admin\/orders\/{{source.order.id}}{{.order.id}}"
+                          "source": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{uploadery_order_created.order.id}}"
                       },
                       {
                           "destination": "B",
-                          "source": "{{uploadery-order-created.order.name}}"
+                          "source": "{{uploadery_order_created.order.name}}"
                       },
                       {
                           "destination": "C",
-                          "source": "{{uploadery-order-created.order.email}}"
+                          "source": "{{uploadery_order_created.order.email}}"
                       },
                       {
                           "destination": "D",
-                          "source": "{{uploadery-order-created.order.shipping_address.name}}"
+                          "source": "{{uploadery_order_created.order.shipping_address.name}}"
                       },
                       {
                           "destination": "E",
-                          "source": "{{uploadery-order-created.order.shipping_address.address1}}"
+                          "source": "{{uploadery_order_created.order.shipping_address.address1}}"
                       },
                       {
                           "destination": "F",
-                          "source": "{{uploadery-order-created.order.shipping_address.city}}"
+                          "source": "{{uploadery_order_created.order.shipping_address.city}}"
                       },
                       {
                           "destination": "G",
-                          "source": "{{uploadery-order-created.order.shipping_address.province}}"
+                          "source": "{{uploadery_order_created.order.shipping_address.province}}"
                       },
                       {
                           "destination": "H",
-                          "source": "{{uploadery-order-created.order.shipping_address.zip}}"
+                          "source": "{{uploadery_order_created.order.shipping_address.zip}}"
                       },
                       {
                           "destination": "I",
-                          "source": "{{uploadery-order-created.order.shipping_address.country}}"
+                          "source": "{{uploadery_order_created.order.shipping_address.country}}"
                       },
                       {
                           "destination": "J",
