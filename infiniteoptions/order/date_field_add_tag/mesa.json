@@ -1,0 +1,78 @@
+{
+  "key": "date_field_add_tag",
+  "name": "Add a Tag to Orders Containing Infinite Options Line Items With Date Field",
+  "version": "1.0.0",
+  "description": "Infinite Options is a Shopify app that allows you to create custom options for any product. With Mesa, you can add a tag to orders containing Infinite Options Line Items that include a date field. This will help organize your list of orders with dates.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "infiniteoptions",
+  "destination": "shopify_api",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "infiniteoptions",
+        "entity": "order",
+        "action": "created",
+        "name": "Infinite Options Order Created",
+        "key": "infiniteoptions_order",
+        "metadata": {
+          "field_name": "Date"
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{infiniteoptions_order.fields[]}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Order",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{infiniteoptions_order.order.id}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "update",
+        "name": "Shopify Update Order",
+        "key": "shopify_order",
+        "metadata": {
+          "body": {
+            "tags": "{{shopify_order_1.tags}}, {{iterator.name}}: {{iterator.value}}"
+          },
+          "order_id": "{{infiniteoptions_order.order.id}}"
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}
