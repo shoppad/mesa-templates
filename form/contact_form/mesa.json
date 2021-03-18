@@ -8,7 +8,7 @@
     "tags": [],
     "source": "form",
     "destination": "email",
-    "enabled": false,
+    "enabled": true,
     "logging": false,
     "debug": false,
     "config": {
@@ -26,7 +26,7 @@
                             "required": true,
                             "label": "Company Name",
                             "className": "form-control",
-                            "name": "comapny",
+                            "name": "company",
                             "subtype": "text"
                         },
                         {
@@ -68,9 +68,9 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{context.store.email}}",
+                    "to": "{{context.shop.email}}",
                     "subject": "New Contact Form Submission",
-                    "message": "Name: {{form.name}}\nCompany: {{form.comapny}}\nMessage:\n{{form.message}}"
+                    "message": "Name: {{form.name}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -82,7 +82,7 @@
                 "name": "Slack",
                 "key": "slack",
                 "metadata": {
-                    "message": "**New Contact Form Submission**\nName: {{form.name}}\nCompany: {{form.comapny}}\nMessage:\n{{form.message}}"
+                    "message": "**New Contact Form Submission**\nName: {{form.name}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}"
                 },
                 "local_fields": [],
                 "weight": 1

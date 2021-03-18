@@ -130,9 +130,9 @@
                 "name": "Customer Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{shopify_customer.email}}",
+                    "to": "{{shopify_order.email}}",
                     "subject": "Your return for order {{shopify_order.name}}",
-                    "message": "Hello {{shopify_customer.first_name}},\n\nWe're sorry that you had an issue with your order. We are working on initiating a return for the following products and will reach out shortly with next steps.\n\nThank you,\nThe {{context.store.name}} Team"
+                    "message": "Hello {{shopify_order.customer.first_name}},\n\nWe're sorry that you had an issue with your order. We are working on initiating a return for the following products and will reach out shortly with next steps.\n\nThank you,\nThe {{context.shop.name}} Team"
                 },
                 "local_fields": [],
                 "weight": 2
