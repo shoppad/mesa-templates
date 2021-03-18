@@ -1,93 +1,94 @@
 {
-    "key": "form_contact_form",
-    "name": "Send Contact Form Submissions to Email and Slack",
-    "version": "1.0.0",
-    "description": "Create a contact form to embed on your website that sends an email and Slack message for each submission.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "form",
-    "destination": "email",
-    "enabled": true,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "form",
-                "name": "Form",
-                "key": "form",
-                "metadata": {
-                    "form_data": [
-                        {
-                            "type": "text",
-                            "required": true,
-                            "label": "Company Name",
-                            "className": "form-control",
-                            "name": "company",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "text",
-                            "required": true,
-                            "label": "Full Name",
-                            "className": "form-control",
-                            "name": "name",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "text",
-                            "subtype": "email",
-                            "required": true,
-                            "label": "Email Address",
-                            "className": "form-control",
-                            "name": "email"
-                        },
-                        {
-                            "type": "textarea",
-                            "required": true,
-                            "label": "Message",
-                            "className": "form-control",
-                            "name": "message",
-                            "subtype": "textarea"
-                        }
-                    ],
-                    "captcha": "hCaptcha-checkbox"
-                },
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "email",
-                "name": "Email",
-                "key": "email",
-                "metadata": {
-                    "to": "{{context.shop.email}}",
-                    "subject": "New Contact Form Submission",
-                    "message": "Name: {{form.name}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "slack",
-                "name": "Slack",
-                "key": "slack",
-                "metadata": {
-                    "message": "**New Contact Form Submission**\nName: {{form.name}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}"
-                },
-                "local_fields": [],
-                "weight": 1
-            }
-        ],
-        "storage": []
-    }
+  "key": "form_contact_form",
+  "name": "Send Contact Form Submissions to Email and Slack",
+  "version": "1.0.0",
+  "description": "Create a contact form to embed on your website that sends an email and Slack message for each submission.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "form",
+  "destination": "email",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+      "inputs": [
+          {
+              "schema": 2,
+              "trigger_type": "input",
+              "type": "form",
+              "name": "Form",
+              "key": "form",
+              "metadata": {
+                  "form_data": [
+                      {
+                          "type": "text",
+                          "required": true,
+                          "label": "Company Name",
+                          "className": "form-control",
+                          "name": "company",
+                          "subtype": "text"
+                      },
+                      {
+                          "type": "text",
+                          "required": true,
+                          "label": "Full Name",
+                          "className": "form-control",
+                          "name": "name",
+                          "subtype": "text"
+                      },
+                      {
+                          "type": "text",
+                          "subtype": "email",
+                          "required": true,
+                          "label": "Email Address",
+                          "className": "form-control",
+                          "name": "email"
+                      },
+                      {
+                          "type": "textarea",
+                          "required": true,
+                          "label": "Message",
+                          "className": "form-control",
+                          "name": "message",
+                          "subtype": "textarea"
+                      }
+                  ],
+                  "captcha": "hCaptcha-checkbox"
+              },
+              "local_fields": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "email",
+              "name": "Email",
+              "key": "email",
+              "metadata": {
+                  "to": "{{context.shop.email}}",
+                  "subject": "New Contact Form Submission",
+                  "message": "Name: {{form.name}}\nEmail: {{form.email}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}",
+                  "from": "{{form.email}}"
+              },
+              "local_fields": [],
+              "weight": 0
+          },
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "slack",
+              "name": "Slack",
+              "key": "slack",
+              "metadata": {
+                  "message": "**New Contact Form Submission**\nName: {{form.name}}\nEmail: {{form.email}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}"
+              },
+              "local_fields": [],
+              "weight": 1
+          }
+      ],
+      "storage": []
+  }
 }
