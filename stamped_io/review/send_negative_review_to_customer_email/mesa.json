@@ -1,0 +1,76 @@
+{
+    "key": "stamped_io/review/send_negative_review_to_customer_email",
+    "name": "Send reach out email to customer when negative Stamped.io Review is received ",
+    "version": "1.0.0",
+    "description": "TBD",
+    "video": "",
+    "readme": "## Customizations\n- In the `Filter` step, you can alter the review score which is considered a negative review.\n\n- In the `Delay` step, you can alter the delay that occurs between the review being received and the email being sent.",
+    "tags": [],
+    "source": "stamped-io",
+    "destination": "custom",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "stamped-io",
+                "entity": "review",
+                "action": "created",
+                "name": "Stamped.io Review Created",
+                "key": "stamped-io_review",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{stamped-io_review.reviewRating}}",
+                    "comparison": "less than equal",
+                    "b": "3"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "hours",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{delay.customerEmail}}",
+                    "subject": "Hi {{delay.author}} - is there something we can do better?",
+                    "message": "Hi {{delay.author}}\n\nWe noticed you left us a review recently - thank you! Is there anything we can do to make things better?\n\nThanks!",
+                    "test_email_override": "john+mesa-email-test@theshoppad.com"
+                },
+                "local_fields": [],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
