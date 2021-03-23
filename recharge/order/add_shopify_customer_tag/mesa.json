@@ -1,8 +1,8 @@
 {
-  "key": "add_tag_to_shopify_customer_with_recharge_subscription",
-  "name": "Add a tag to Shopify customer when customer purchases specific ReCharge subscription",
+  "key": "add_shopify_customer_tag",
+  "name": "Add a Tag to a Shopify Customer When They Purchase a Subscription Product Through Recharge",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mesa makes it easy to track and manage customers that buy a subscription product purchased through Recharge. Whenever a customer purchases a subscription product, Mesa instantly adds a tag to the Shopify customer and includes their data as part of your Recharge list. It’s going to help you identify new subscriptions and use this information to fulfill orders.",
   "video": "",
   "readme": "",
   "tags": [],

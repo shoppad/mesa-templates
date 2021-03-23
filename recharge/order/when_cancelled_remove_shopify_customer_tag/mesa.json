@@ -1,8 +1,8 @@
 {
-  "key": "remove_tag_from_shopify_customer_with_recharge_subscription",
-  "name": "Remove tag from Shopify customer when customer cancels ReCharge subscription",
+  "key": "when_cancelled_remove_shopify_customer_tag",
+  "name": "Remove a Tag From a Shopify Customer When They Cancel a Subscription Product Through Recharge",
   "version": "1.0.0",
-  "description": "",
+  "description": "Whenever a customer decides to cancel one of their subscription products, you’ll need to update the information on Shopify. With just a simple automation workflow, Mesa can save you time by removing a tag during a Recharge cancellation. The customer’s data won’t show up on your list of ReCharge orders anymore.",
   "video": "",
   "readme": "",
   "tags": [],
