@@ -1,6 +1,6 @@
 {
-  "key": "schedule_theme_change",
-  "name": "Schedule Shopify theme change on a specific date and time",
+  "key": "schedule_change",
+  "name": "Schedule Shopify Theme Change on a Specific Date and Time",
   "version": "1.0.0",
   "description": "Mesa can schedule theme changes at different times, so your store design can, for example, fit better to specific dates and events (such as Thanksgiving, Christmas, Black Friday, New Year's Eve, more). Schedule automatic launches for product releases, store-wide promotions and sales and have everything revert back when your events end.",
   "video": "",
