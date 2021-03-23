@@ -1,8 +1,8 @@
 {
-  "key": "add_email_to_klaviyo_list_with_tag",
-  "name": "Add Shopify Customer to Klaviyo list when tagged with \"backorder\"",
+  "key": "add_to_klaviyo_list_if_tagged",
+  "name": "Add Shopify Customer to Klaviyo list when tagged with \"Backorder\"",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sometimes, a customer may make an order in your store for a product that’s temporarily out of stock. When this issue arises, Mesa can add a Shopify Customer to a “backorder” Klaviyo email list, so you can notify them once you restock the item they’re looking for.",
   "video": "",
   "readme": "",
   "tags": [],
