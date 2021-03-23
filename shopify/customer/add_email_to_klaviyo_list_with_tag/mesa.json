@@ -1,8 +1,8 @@
 {
-  "key": "add_email_to_klaviyo_list",
-  "name": "Add a Customer's Email Address to a Klaviyo List When a Customer Has Been Created in Shopify",
+  "key": "add_to_klaviyo_list_if_tagged",
+  "name": "Add Shopify Customer to Klaviyo list when tagged with \"Backorder\"",
   "version": "1.0.0",
-  "description": "Growing your email list on Klaviyo needs to be one of your priorities to maximize sales. Each time a customer is created on Shopify, Mesa can then instantly add their email address to your Klaviyo list, without doing everything manually yourself.",
+  "description": "Sometimes, a customer may make an order in your store for a product that’s temporarily out of stock. When this issue arises, Mesa can add a Shopify Customer to a “backorder” Klaviyo email list, so you can notify them once you restock the item they’re looking for.",
   "video": "",
   "readme": "",
   "tags": [],
@@ -18,15 +18,28 @@
         "trigger_type": "input",
         "type": "shopify_webhook",
         "entity": "customer",
-        "action": "created",
-        "name": "Shopify Customer Created",
+        "action": "updated",
+        "name": "Shopify Customer Updated",
         "key": "shopify_customer",
         "metadata": [],
-        "local_fields": [],
         "weight": 0
       }
     ],
     "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "backorder",
+          "comparison": "in",
+          "b": "{{shopify_customer.tags}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
       {
         "schema": 2,
         "trigger_type": "output",
@@ -36,6 +49,7 @@
         "name": "Klaviyo Subscribe List",
         "key": "klaviyo_list",
         "metadata": {
+          "list_id": "RxxCDE",
           "email": "{{shopify_customer.email}}",
           "mapping": [
             {
@@ -47,16 +61,16 @@
               "source": "{{shopify_customer.email}}"
             },
             {
+              "destination": "phone",
+              "source": "{{shopify_customer.phone}}"
+            },
+            {
               "destination": "first_name",
               "source": "{{shopify_customer.first_name}}"
             },
             {
               "destination": "last_name",
               "source": "{{shopify_customer.last_name}}"
-            },
-            {
-              "destination": "phone",
-              "source": "{{shopify_customer.phone}}"
             },
             {
               "destination": "tags",
@@ -76,7 +90,7 @@
             "location": "mapping"
           }
         ],
-        "weight": 0
+        "weight": 1
       }
     ],
     "storage": []
