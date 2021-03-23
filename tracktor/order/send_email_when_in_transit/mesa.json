@@ -1,8 +1,8 @@
 {
-  "key": "send_email_to_customer_when_package_is_in_transit",
-  "name": "Send Email to customers when their package is \"In Transit\"",
+  "key": "send_email_when_in_transit",
+  "name": "Send an Email to Customers When Their Tracktor Package is \"In Transit\"",
   "version": "1.0.0",
-  "description": "",
+  "description": "Keeping customers up to date on their order is key to avoiding the dreaded “where is my package?” question. When you combine Mesa with Tracktor, you can set up a workflow that automatically sends an email to customers when their package is in transit. It’s going to give them peace of mind as they continue to wait for their order.",
   "video": "",
   "readme": "",
   "tags": [],
