@@ -47,10 +47,6 @@
               "source": "{{shopify_customer.email}}"
             },
             {
-              "destination": "phone",
-              "source": "{{shopify_customer.phone}}"
-            },
-            {
               "destination": "first_name",
               "source": "{{shopify_customer.first_name}}"
             },
