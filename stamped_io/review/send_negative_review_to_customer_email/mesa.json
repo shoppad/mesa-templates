@@ -6,7 +6,7 @@
     "video": "",
     "readme": "## Customizations\n- In the `Filter` step, you can alter the review score which is considered a negative review.\n\n- In the `Delay` step, you can alter the delay that occurs between the review being received and the email being sent.",
     "tags": [],
-    "source": "stamped-io",
+    "source": "stampedio",
     "destination": "custom",
     "enabled": false,
     "logging": false,
@@ -16,11 +16,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "stamped-io",
+                "type": "stampedio",
                 "entity": "review",
                 "action": "created",
                 "name": "Stamped.io Review Created",
-                "key": "stamped-io_review",
+                "key": "stampedio_review",
                 "metadata": [],
                 "weight": 0
             }
@@ -33,7 +33,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{stamped-io_review.reviewRating}}",
+                    "a": "{{stampedio_review.reviewRating}}",
                     "comparison": "less than equal",
                     "b": "3"
                 },
