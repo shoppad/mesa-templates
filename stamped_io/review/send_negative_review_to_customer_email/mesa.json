@@ -1,10 +1,10 @@
 {
     "key": "stamped_io/review/send_negative_review_to_customer_email",
-    "name": "Send reach out email to customer when negative Stamped.io Review is received ",
+    "name": "Send an Email to a Customer When a Negative Stamped.io Review is Received",
     "version": "1.0.0",
-    "description": "TBD",
+    "description": "When a customer drops a negative review, it’s essential to follow up with them quickly and connect with them to understand why. With Mesa, when a customer sends a negative review via Stamped.io, send a follow-up email after the fact to understand what went wrong. Not only will it help you solve more customer issues, but you’ll save time from manually sending an email to each unhappy customer you get.",
     "video": "",
-    "readme": "## Customizations\n- In the `Filter` step, you can alter the review score which is considered a negative review.\n\n- In the `Delay` step, you can alter the delay that occurs between the review being received and the email being sent.",
+    "readme": "## Customizations available: Merchant can customize the review rating which constitutes a negative review, (defaults to 3 out of 5 stars) and merchant can configure a delay (or remove) between the review being received and the email being sent, so customer doesn't get the email immediately (defaults to 1 hour).",
     "tags": [],
     "source": "stampedio",
     "destination": "custom",
