@@ -1,0 +1,51 @@
+{
+  "key": "automatic_custom_status",
+  "name": "Automatically update package tracking to a custom order status in Tracktor when an order is placed",
+  "version": "1.0.0",
+  "description": "Custom orders take more time to ship than standard orders since they have to go through specific procedures such as painting or special packaging before they’re sent to the customer. To make your life easier, Mesa can automatically update the order status to a custom status in Tracktor when a shopper places an order.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "update",
+        "name": "Tracktor Update Manual Status Order",
+        "key": "tracktor_order",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "automatic_carrier_updates": "false",
+            "force": "true"
+          }
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
+}
