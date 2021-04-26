@@ -23,5 +23,6 @@ module.exports = new class {
      payload.total_refund_amount = refundAmount;
     
     // We're done, call the next step!
+    Mesa.output.next(payload);
   }
 }
