@@ -1,0 +1,113 @@
+{
+    "key": "shopify/order/send_order_report_card_email",
+    "name": "Daily Order Report Card",
+    "version": "1.0.0",
+    "description": "Sends daily status \"report card\" email containing information on your Shopify orders for the past 24 hours.",
+    "video": "",
+    "readme": "",
+    "tags": ["Order"],
+    "source": "shopify",
+    "destination": "email",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "custom",
+                "name": "Run Order Report",
+                "key": "custom",
+                "metadata": {
+                    "schedule": "@daily:0 8 * * *"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "list",
+                "name": "Shopify List Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "parameters": "status=any&limit=250&created_at_min={{date:24 hours ago}}&created_at_max={{date:now}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Compile Order Data",
+                "key": "transform_mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "orders_total",
+                            "source": "{{CALCULATED_IN_CODE}}"
+                        },
+                        {
+                            "destination": "orders_over_100",
+                            "source": "{{CALCULATED_IN_CODE}}"
+                        },
+                        {
+                            "destination": "orders_paid",
+                            "source": "{{CALCULATED_IN_CODE}}"
+                        },
+                        {
+                            "destination": "orders_pending",
+                            "source": "{{CALCULATED_IN_CODE}}"
+                        },
+                        {
+                            "destination": "orders_fulfilled",
+                            "source": "{{CALCULATED_IN_CODE}}"
+                        },
+                        {
+                            "destination": "most_popular_product",
+                            "source": "{{CALCULATED_IN_CODE}}"
+                        },
+                        {
+                            "destination": "workflow_id",
+                            "source": "{{CALCULATED_IN_CODE}}"
+                        }
+                    ],
+                    "script": "compile_order_data.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email Report",
+                "key": "email",
+                "metadata": {
+                    "to": "{{context.shop.email}}",
+                    "subject": "Order Report Card for {{date:M j}}",
+                    "message": "Mesa has generated your Order Report Card for {{'24 hours ago' | date: '%b %d %I:%M%P'}} - {{'now' | date: '%b %d %I:%M%P'}}\n\n---\n\nTotal Orders: {{transform_mapping.orders_total}}{% unless transform_mapping.orders_total %}0{% endunless %}\nTotal Orders Over $100: {{transform_mapping.orders_over_100}}{% unless transform_mapping.orders_over_100 %}0{% endunless %}\nTotal Orders Paid: {{transform_mapping.orders_paid}}{% unless transform_mapping.orders_paid %}0{% endunless %}\nTotal Orders Pending Payment: {{transform_mapping.orders_pending}}{% unless transform_mapping.orders_pending %}0{% endunless %}\nTotal Orders Fulfilled: {{transform_mapping.orders_fulfilled}}{% unless transform_mapping.orders_fulfilled %}0{% endunless %}\nMost Popular Product(s) Sold: {{transform_mapping.most_popular_product}}{% unless transform_mapping.most_popular_product %}None{% endunless %}\n\n---\n\nTry some other popular workflows from the Mesa Template Library:\n\nSchedule Shopify Theme Change on a Specific Date and Time\nhttps:\/\/www.getmesa.com\/connect\/schedule\/integrate\/shopify\/schedule-shopify-theme-change-on-a-specific-date-and-time\n\nForward High-Risk Orders to Slack for Manual Review\nhttps:\/\/www.getmesa.com\/connect\/shopify\/integrate\/slack\/forward-high-risk-orders-to-slack-for-manual-review\n\nSave a Customer's Date of Birth to Notes\nhttps:\/\/www.getmesa.com\/connect\/form\/integrate\/shopify\/save-a-customers-date-of-birth-to-notes\n\n---\n\nWant to customize this Order Report Card or disable it?\nhttps:\/\/{{context.shop.domain}}\/admin\/apps\/mesa\/apps\/mesa\/admin\/shopify\/automations\/{{transform_mapping.workflow_id}}\n",
+                    "from": "contact@theshoppad.com"
+                },
+                "local_fields": [],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
