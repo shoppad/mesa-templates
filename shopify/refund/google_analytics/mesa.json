@@ -86,8 +86,7 @@
                             "destination": "ti",
                             "source": "{{transform_mapping.ti}}"
                         }
-                    ],
-                    "ga_property_id": "UA-195292059-1"
+                    ]
                 },
                 "local_fields": [
                     {
