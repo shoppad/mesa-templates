@@ -72,6 +72,7 @@ module.exports = new (class {
             return 0;
           });
 
+        // All products that match the most popular count
         const mostSold = orderedProducts[0].count;
         output.most_popular_product = orderedProducts
           .filter((product) => product.count == mostSold)
