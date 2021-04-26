@@ -4,8 +4,7 @@ const Transform = require('vendor/Transform.js');
 /**
  * A Mesa Script exports a class with a script() method.
  */
-module.exports = new class {
-
+module.exports = new (class {
   /**
    * Mesa Script
    *
@@ -13,7 +12,6 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-
     // Adjust `payload` here to alter data before we transform it.
 
     // Alter the payload data based on our transform rules
@@ -25,7 +23,7 @@ module.exports = new class {
     if (payload && payload.length) {
       const productsCount = {};
 
-      payload.forEach(order => {
+      payload.forEach((order) => {
         // Orders Total
         output.orders_total = (output.orders_total || 0) + 1;
 
@@ -50,8 +48,9 @@ module.exports = new class {
         }
 
         // Count popular products
-        order.line_items.forEach(lineItem => {
-          productsCount[lineItem.title] = (productsCount[lineItem.title] || 0) + 1;
+        order.line_items.forEach((lineItem) => {
+          productsCount[lineItem.title] =
+            (productsCount[lineItem.title] || 0) + 1;
         });
       });
 
@@ -59,9 +58,9 @@ module.exports = new class {
       const productTitles = Object.keys(productsCount);
       if (productTitles.length) {
         const orderedProducts = productTitles
-          .map(key => ({
+          .map((key) => ({
             title: key,
-            count: productsCount[key]
+            count: productsCount[key],
           }))
           .sort((a, b) => {
             if (b.count < a.count) {
@@ -72,7 +71,12 @@ module.exports = new class {
             }
             return 0;
           });
-        output.most_popular_product = orderedProducts[0].title;
+
+        const mostSold = orderedProducts[0].count;
+        output.most_popular_product = orderedProducts
+          .filter((product) => product.count == mostSold)
+          .map((product) => product.title)
+          .join(', ');
       }
     }
 
@@ -81,5 +85,5 @@ module.exports = new class {
 
     // We're done, call the next step!
     Mesa.output.next(output);
-  }
-}
+  };
+})();
