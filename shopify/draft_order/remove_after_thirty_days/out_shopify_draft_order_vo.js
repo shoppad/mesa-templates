@@ -12,9 +12,9 @@ module.exports = new class {
    */
   script = (payload, context) => {
 
-    payload.forEach(function(order) {
+    payload.forEach(function(draft_order) {
 
-      Mesa.output.send('out-delete-shopify-order', {order_id: order.id});
+      Mesa.output.send('out-delete-shopify-draft-order', {draft_order_id: draft_order.id});
 
       // try {
       //   const response = Shopify.delete(`/admin/api/2019-07/draft_orders/${order.id}.json`);

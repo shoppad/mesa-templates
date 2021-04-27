@@ -44,9 +44,9 @@
             {
                 "trigger_type": "output",
                 "type": "shopify_api",
-                "name": "Delete Shopify Order",
-                "key": "out-delete-shopify-order",
-                "shopify_api": "DELETE admin/orders/{{order_id}}.json"
+                "name": "Delete Shopify Draft Order",
+                "key": "out-delete-shopify-draft-order",
+                "shopify_api": "DELETE admin/draft_orders/{{draft_order_id}}.json"
             }
         ],
         "secrets": [],
