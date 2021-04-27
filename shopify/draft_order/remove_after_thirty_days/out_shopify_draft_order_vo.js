@@ -15,7 +15,6 @@ module.exports = new class {
     payload.forEach(function(order) {
 
       Mesa.output.send('out-delete-shopify-order', {order_id: order.id});
-      Mesa.vo.clearOne(context.output.key, order.mesa_id);
 
       // try {
       //   const response = Shopify.delete(`/admin/api/2019-07/draft_orders/${order.id}.json`);

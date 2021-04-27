@@ -27,9 +27,19 @@
                 "name": "Shopify Draft Order VO",
                 "key": "out-shopify-draft-order-vo",
                 "schedule": "0 */12 * * *",
-                "script": "out_shopify_draft_order_vo.js",
                 "custom_connection": true,
                 "parameters": "created_at_max={{date:30 days ago}}"
+            },
+            {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "custom",
+              "name": "Process virtual output",
+              "key": "out-process-virtual-output",
+              "metadata": {
+                  "script": "out_shopify_draft_order_vo.js"
+              },
+              "local_fields": []
             },
             {
                 "trigger_type": "output",

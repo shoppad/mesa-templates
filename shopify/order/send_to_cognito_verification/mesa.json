@@ -41,8 +41,18 @@
                 "trigger_type": "output",
                 "type": "virtual_output",
                 "name": "Cognito Virtual Output",
-                "key": "out-cognito-virtual-output",
-                "script": "out_cognito_virtual_output.js"
+                "key": "out-cognito-virtual-output"
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Process virtual output",
+                "key": "out-process-virtual-output",
+                "metadata": {
+                    "script": "out_cognito_virtual_output.js"
+                },
+                "local_fields": []
             }
         ],
         "secrets": [

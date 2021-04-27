@@ -26,8 +26,18 @@
         "type": "virtual_output",
         "name": "Create Fosdick Order",
         "key": "out-create-fosdick-orders-virtual-output",
-        "schedule": "0 * * * *",
-        "script": "out_create_fosdick_order.js"
+        "schedule": "0 * * * *"
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Process virtual output",
+        "key": "out-process-virtual-output",
+        "metadata": {
+            "script": "out_create_fosdick_order.js"
+        },
+        "local_fields": []
       }
     ],
     "secrets": [

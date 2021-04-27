@@ -29,10 +29,20 @@
                 "name": "Orders Virtual Output",
                 "key": "out-orders-virtual-output",
                 "schedule": "0 9 * * *",
-                "script": "out_orders_virtual_output.js",
                 "logging": "error",
                 "custom_connection": true,
                 "parameters": "limit=-1&created_at_max={{date:7 days ago}}"
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Process virtual output",
+                "key": "out-process-virtual-output",
+                "metadata": {
+                    "script": "out_orders_virtual_output.js"
+                },
+                "local_fields": []
             },
             {
                 "trigger_type": "output",

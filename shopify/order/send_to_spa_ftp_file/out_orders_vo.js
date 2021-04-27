@@ -70,6 +70,5 @@ module.exports = new class {
    */
   send = (payload) => {
     Mesa.output.send('out-save-orders-to-ftp', payload);
-    Mesa.vo.clear('out-orders-vo');
   }
 }

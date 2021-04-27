@@ -28,8 +28,18 @@
                 "type": "virtual_output",
                 "name": "Orders VO",
                 "key": "out-orders-vo",
-                "schedule": "0 * * * *",
-                "script": "out_orders_vo.js"
+                "schedule": "0 * * * *"
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Process virtual output",
+                "key": "out-process-virtual-output",
+                "metadata": {
+                    "script": "out_orders_vo.js"
+                },
+                "local_fields": []
             },
             {
                 "trigger_type": "output",

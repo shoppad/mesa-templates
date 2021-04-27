@@ -25,12 +25,8 @@ module.exports = new class {
         Mesa.output.send(customOutput, element);
       });
           
-      // Clear the virtual output as we have pushed each of these orders to their own custom output
-      Mesa.vo.clear(context.output.key);
     }
 
     Mesa.log.info(`Enqueued ${payload.length} orders to custom output ${customOutput}`);
-
-    return `Processed ${payload.length} orders from virtual output ${context.output.key}`;
   }
 }
