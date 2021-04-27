@@ -1,0 +1,115 @@
+{
+  "key": "send_postcard_to_customer_if_first_order",
+  "name": "Send a Postcard When a Customer Places Their First Order",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "## Setup \n\n By default, this template is set up to use one of the free \"Thank You\" postcard designs from PostcardMania. Before enabled this workflow, ensure you've completed the following steps:<br /> - Ensure you've added one of the free \"Thank You\" postcard designs to your PostcardMania account. You can do this [here](https://www.mypostcardmania.com/integrations/designs/add).<br />- In Mesa, set the Design ID field to the Design ID of the postcard you've selected.<br />- Add a URL pointing to your store's logo to the \"logo\" design variable field seen in the Builder.<br />- Go over the other design variables in the Builder and confirm they match the variables seen in your PostcardMania account.",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+      "inputs": [
+          {
+              "schema": 3,
+              "trigger_type": "input",
+              "type": "shopify_webhook",
+              "entity": "order",
+              "action": "created",
+              "name": "Shopify Order Created",
+              "key": "shopify_order",
+              "metadata": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 2,
+              "trigger_type": "output",
+              "type": "filter",
+              "name": "Filter",
+              "key": "filter",
+              "metadata": {
+                  "comparison": "equals",
+                  "a": "{{shopify_order.customer.orders_count}}",
+                  "b": "1"
+              },
+              "local_fields": [],
+              "weight": 0
+          },
+          {
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "postcardmania",
+              "entity": "order",
+              "action": "create",
+              "name": "PostcardMania Create Order",
+              "key": "postcardmania_order",
+              "metadata": {
+                  "body": {
+                      "recipientList": [
+                          {
+                              "firstName": "{{shopify_order.customer.first_name}}",
+                              "lastName": "{{shopify_order.customer.last_name}}",
+                              "address": "{{shopify_order.customer.default_address.address1}}",
+                              "address2": "{{shopify_order.customer.default_address.address2}}",
+                              "city": "{{shopify_order.customer.default_address.city}}",
+                              "state": "{{shopify_order.customer.default_address.province}}",
+                              "zipCode": "{{shopify_order.customer.default_address.zip}}"
+                          }
+                      ],
+                      "orderConfig": {
+                          "designID": "",
+                          "mailClass": "Standard",
+                          "globalDesignVariables": [
+                              {
+                                 "key": "logo",
+                                 "value": ""
+                              },
+                              {
+                                  "key": "companyaddress",
+                                  "value": "{{context.shop.email}}"
+                              },
+                              {
+                                  "key": "companycity",
+                                  "value": "{{ context.shop.city }}"
+                              },
+                              {
+                                  "key": "companyname",
+                                  "value": "{{context.shop.name}}"
+                              },
+                              {
+                                  "key": "companystate",
+                                  "value": "{{context.shop.province}}"
+                              },
+                              {
+                                  "key": "companyurl",
+                                  "value": "{{context.shop.domain}}"
+                              },
+                              {
+                                  "key": "companyzipcode",
+                                  "value": "{{context.shop.zip}}"
+                              },
+                              {
+                                  "key": "phone",
+                                  "value": "{{context.shop.phone}}"
+                              },
+                              {
+                                "key": "productname",
+                                "value": "{{shopify_order.line_items[0].title}}"
+                              }
+                          ]
+                      }
+                  }
+              },
+              "local_fields": [],
+              "weight": 1
+          }
+      ],
+      "storage": []
+  }
+}
