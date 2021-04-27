@@ -88,10 +88,6 @@ module.exports = new class {
           Mesa.log.error('Invalid response returned from Fosdick, response: ', response);
         }
       });
-
-      // Clear virtual output now we have processed everything
-      Mesa.vo.clear(context.output.key);
-
     }
     return `Processed ${payload.length} orders`;
   }
