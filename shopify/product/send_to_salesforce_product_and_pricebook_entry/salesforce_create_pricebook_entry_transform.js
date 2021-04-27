@@ -20,8 +20,7 @@ module.exports = new class {
     const output = Transform.convert(context, payload);
 
     // Adjust `output` here to alter data after we transform it.
-    // If the 'Salesforce: Query Pricebook Entry' Output found an existing pricebook entry ID, pass this to the next output so the pricebook entry is updated
-    // Remove fields which cannot be updated on an existing pricebook entry
+    // Remove Product2Id field - this cannot be updated on an existing pricebook entry
     if (payload && payload.Id) {
       output.id = payload.Id;
       delete output.Product2Id;
