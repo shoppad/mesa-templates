@@ -49,7 +49,6 @@
         "name": "Klaviyo Subscribe List",
         "key": "klaviyo_list",
         "metadata": {
-          "list_id": "RxxCDE",
           "email": "{{shopify_customer.email}}",
           "mapping": [
             {

@@ -79,7 +79,6 @@
         "metadata": {
           "order_id": "{{shopify_order_1.id}}",
           "body": {
-            "status": "custom_status_1",
             "automatic_carrier_updates": "false",
             "force": "true"
           }
