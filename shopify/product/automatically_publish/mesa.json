@@ -66,6 +66,7 @@
                 "metadata": {
                     "product_id": "{{shopify_product.id}}",
                     "body": {
+                        "published_at": "{{shopify_product.created_at}}",
                         "published_scope": "web",
                         "status": "active"
                     }
@@ -74,6 +75,11 @@
                     {
                         "key": "body",
                         "fields": [
+                            {
+                                "key": "published_at",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            },
                             {
                                 "key": "published_scope",
                                 "type": "custom",
