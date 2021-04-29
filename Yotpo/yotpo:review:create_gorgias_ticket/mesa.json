@@ -1,0 +1,91 @@
+{
+    "key": "yotpo/review/create_gorgias_ticket",
+    "name": "Create a Gorgias Support Ticket When a Customer Leaves a Negative Yotpo Review",
+    "version": "1.0.0",
+    "description": "Gorgias is a customer service platform that tracks all of your customer feedback in one place. To get the most out of the software, you can automatically create a Gorgias Support Ticket With Mesa when a customer leaves a negative Yotpo review. It\u2019s going to make it easier to follow up with them and understand the reasoning behind their dissatisfaction.\u00a0",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": true,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "yotpo",
+                "entity": "review",
+                "action": "created",
+                "name": "Yotpo Review Created",
+                "key": "yotpo_review",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{yotpo_review.score}}",
+                    "comparison": "less than equal",
+                    "b": "3"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gorgias",
+                "entity": "ticket",
+                "action": "create",
+                "name": "Gorgias Create Ticket",
+                "key": "gorgias_ticket",
+                "metadata": {
+                    "entity_wrapper": "body",
+                    "body": {
+                        "channel": "api",
+                        "messages": [
+                            {
+                                "body_html": "Review for {{yotpo_review.title}} with a score of {{yotpo_review.score}}",
+                                "body_text": "Review for {{yotpo_review.title}} given a rating of {{yotpo_review.score}}",
+                                "channel": "email",
+                                "from_agent": "false",
+                                "subject": "Sorry for Your Poor Experience",
+                                "via": "email",
+                                "sender": {
+                                    "email": "{{yotpo_review.customer_email}}"
+                                },
+                                "source": {
+                                    "to": [
+                                        {
+                                            "address": "{{yotpo_review.customer_email}}"
+                                        }
+                                    ],
+                                    "from": {
+                                        "address": "{{yotpo_review.customer_email}}"
+                                    }
+                                }
+                            }
+                        ],
+                        "customer": {
+                            "email": "{{yotpo_review.customer_email}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
