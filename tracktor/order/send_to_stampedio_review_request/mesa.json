@@ -1,0 +1,120 @@
+{
+  "key": "send_to_stampedio_review_request",
+  "name": "Send a Stamped.io Review Request After an Order Has Been Delivered",
+  "version": "1.0.0",
+  "description": "When a customer receives an order, it is beneficial to understand if their experience matched their expectation. Get an accurate review by requesting feedback when the experience is fresh in the customer's mind. With Mesa, you can automatically send a Stamped.io review request immediately after an order has been delivered.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "order/delivered",
+        "name": "Tracktor Order Delivered",
+        "key": "tracktor_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Order",
+        "key": "shopify_order",
+        "metadata": {
+          "order_id": "{{tracktor_order.order_id}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delay",
+        "name": "Delay",
+        "key": "delay",
+        "metadata": {
+          "amount": "1",
+          "unit": "days",
+          "test_bypass": true
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "stampedio",
+        "entity": "review_request",
+        "action": "list",
+        "name": "Stamped.io List Review Request",
+        "key": "stampedio_review_request",
+        "metadata": {
+          "query": {
+            "search": "{{delay.id}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Iterator",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{stampedio_review_request.results[]}}"
+        },
+        "local_fields": [],
+        "weight": 3
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "comparison": "equals",
+          "a": "{{iterator.orderIdShopify}}",
+          "b": "{{delay.id}}"
+        },
+        "local_fields": [],
+        "weight": 4
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "stampedio",
+        "entity": "review_request",
+        "action": "send",
+        "name": "Stamped.io Send Review Request",
+        "key": "stampedio_review_request_1",
+        "metadata": {
+          "path": {
+            "id": "{{iterator.id}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 5
+      }
+    ],
+    "storage": []
+  }
+}
