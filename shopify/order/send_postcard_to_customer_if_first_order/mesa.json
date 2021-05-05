@@ -2,7 +2,7 @@
   "key": "shopify/order/send_postcard_to_customer_if_first_order",
   "name": "Send a Postcard When a Customer Places Their First Order",
   "version": "1.0.0",
-  "description": "",
+  "description": "First impressions count. When a customer makes their first purchase, you can send them a postcard to thank them and start the customer relationship on a good foot.",
   "video": "",
   "readme": "## Setup \n\n By default, this template is set up to use one of the free \"Thank You\" postcard designs from PostcardMania. Before enabled this workflow, ensure you've completed the following steps:<br /> - Ensure you've added one of the free \"Thank You\" postcard designs to your PostcardMania account. You can do this [here](https://www.mypostcardmania.com/integrations/designs/add).<br />- In Mesa, set the Design ID field to the Design ID of the postcard you've selected.<br />- Add a URL pointing to your store's logo to the \"logo\" design variable field seen in the Builder.<br />- Go over the other design variables in the Builder and confirm they match the variables seen in your PostcardMania account.",
   "tags": [],
