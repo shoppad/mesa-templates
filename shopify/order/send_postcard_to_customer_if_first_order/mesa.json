@@ -1,5 +1,5 @@
 {
-  "key": "send_postcard_to_customer_if_first_order",
+  "key": "shopify/order/send_postcard_to_customer_if_first_order",
   "name": "Send a Postcard When a Customer Places Their First Order",
   "version": "1.0.0",
   "description": "",
