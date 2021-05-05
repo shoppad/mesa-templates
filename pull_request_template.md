@@ -5,7 +5,7 @@ Readme
 - [ ] Do all of the links work
 
 mesa.json
-- [ ] Key: does it include `shoppad/mesa-templates`, are the subfolders correct?
+- [ ] Key: does it reflect the folder structure? For instance, if the folder for the template is `shopify/order/send_to_another_system`, the key should be the same. 
 - [ ] Name: is it logical, proper-cased?
 - [ ] Description: is it logical, end in period?
 - [ ] Tags: Do they exist on getmesa.com/templates, proper-cased, logical?
