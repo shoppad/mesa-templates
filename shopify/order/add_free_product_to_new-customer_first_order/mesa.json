@@ -1,0 +1,99 @@
+{
+  "key": "add_free_product_to_new-customer_first_order",
+  "name": "Add a Free Product to First Time Customer's Order",
+  "version": "1.0.0",
+  "description": "For eCommerce success, it’s not enough to just acquire new customers: you must find ways to retain those customers and get them to make purchases. One of the best ways to boost loyalty is to offer first-time customers a free product with their purchase. Create a moment they’ll remember or even share with friends and family!",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify_webhook",
+  "destination": "shopify",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_order.customer.orders_count}}",
+          "comparison": "equals",
+          "b": "1"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Configuration",
+        "key": "transformmapping",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "order_id",
+              "source": "{{shopify_order.id}}"
+            },
+            {
+              "destination": "product_variant_id"
+            },
+            {
+              "destination": "quantity",
+              "source": "1"
+            },
+            {
+              "destination": "notify_customer",
+              "source": "false"
+            },
+            {
+              "destination": "order_note",
+              "source": "Added free product"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Add Line Item to Shopify Order",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}
