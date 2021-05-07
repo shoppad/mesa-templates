@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "First impressions count. When a customer makes their first purchase, you can send them a postcard to thank them and start the customer relationship on a good foot.",
   "video": "",
-  "readme": "## Setup \n\n By default, this template is set up to use one of the free \"Thank You\" postcard designs from PostcardMania. Before enabled this workflow, ensure you've completed the following steps:<br /> - Ensure you've added one of the free \"Thank You\" postcard designs to your PostcardMania account. You can do this [here](https://www.mypostcardmania.com/integrations/designs/add).<br />- In Mesa, set the Design ID field to the Design ID of the postcard you've selected.<br />- Add a URL pointing to your store's logo to the \"logo\" design variable field seen in the Builder.<br />- Go over the other design variables in the Builder and confirm they match the variables seen in your PostcardMania account.",
+  "readme": "<br /> By default, this template is set up to use one of the free \"Thank You\" postcard designs from PostcardMania. <br /><br /> - In the **PostcardMania Create Order** action, create a PostCardMania [Credential](https://docs.getmesa.com/article/596-credentials) if you have not done so already. [Click here](https://docs.getmesa.com/article/1237-postcardmania) for more information on connecting PostcardMania with Mesa.<br />- [Input the Design ID, Mail Class, and Logo information](https://docs.getmesa.com/article/1237-postcardmania#configuring) in the action as well.<br />- Go over the other variables in the action and confirm that they match the variables seen in your PostcardMania account.<br />- Enable the workflow and hit Save.",
   "tags": [],
   "source": "",
   "destination": "",
