@@ -1,8 +1,8 @@
 {
     "key": "yotpoloyalty/customer_points/send_to_omnisend_contact",
-    "name": "Save Customer Points Balance to Omnisend Contact when Yotpo Points Changed (TBD)",
+    "name": "Save a Customer's Points Balance to an Omnisend Contact when Yotpo Points Change",
     "version": "1.0.0",
-    "description": "TBD",
+    "description": "You’re likely using tools such as Omnisend to manage the customer experience through email marketing as well. To save yourself time from frequent back-and-forths, Mesa automatically saves customer points balance to your Omnisend contacts when Yotpo Points are changed.",
     "video": "",
     "readme": "You can change the name of the custom field set on the Omnisend contact: Open the **Omnisend Update Contact** action, then under the **Configuration** section, change the value for **Key** under **Custom Properties** (spaces are not allowed)",
     "tags": [],
