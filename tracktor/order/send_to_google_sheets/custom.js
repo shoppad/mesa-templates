@@ -22,9 +22,9 @@ module.exports = new class {
     payload.line_items.forEach((item)=> {
         // Checking if fulfillment is fulfilled and requires shipping
         Mesa.log.info('item', item)
-        if (item.fulfillment_status && item.fulfilllment_status != 'fullfiled' && item.requires_shipping == false) {
+        if (item.fulfillment_status == null && item.requires_shipping == true) {
             // If so, set variable to false
-               Mesa.log.info('false')
+            Mesa.log.info('false')
             isReadyToSendOrder = false;
         }
     })
