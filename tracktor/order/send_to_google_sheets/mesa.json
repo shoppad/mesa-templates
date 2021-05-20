@@ -142,6 +142,12 @@
                                         "label": "Tracking URL",
                                         "type": "text",
                                         "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Days since Ordered",
+                                        "label": "Days since Ordered",
+                                        "type": "text",
+                                        "source": "googlesheets"
                                     }
                                 ]
                             }
