@@ -11,7 +11,7 @@
     "destination": "salesforce",
     "enabled": false,
     "logging": false,
-    "readme": "* Enter a value for `Pricebook2Id` in the `Value` column for 'Mapping to Salesforce Create Opportunity' below, then save the automation. \n\n* To get the Salesforce Price Book Id, log in to Salesforce, and go to the 'Price Book' page. \n\n* Copy the link for the Price Book you wish to use, then copy the ID in the link, between `r/` and `/view`. \n\n* For example, for `https://ab11.lightning.force.com/lightning/r/01s2E000002pddCQAQ/view`, the code would be `01s2E000002pddCQAQ`",
+    "readme": "##Price Book ID\n\nYou must enter a valid Price Book ID for \"Pricebook2Id\" under the **Mapping to Salesforce Create Opportunity** action, then save the automation. \n\n- To get the Salesforce Price Book ID, log in to Salesforce, and go to the **Price Book** page. \n\n- Copy the link for the Price Book you wish to use, then copy the ID in the link, between `r/` and `/view`. \n\n- Example: for `https://ab11.force.com/lightning/r/01s2E000002pddCQAQ/view`, the ID would be `01s2E000002pddCQAQ`",
     "config": {
         "inputs": [
             {
