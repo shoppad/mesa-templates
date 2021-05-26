@@ -2,8 +2,9 @@
     "key": "shopify/customer/send_to_salesforce_account",
     "name": "Shopify Customer Created or Updated to Salesforce Account",
     "version": "1.0.0",
-    "description": "Send Customer from Shopify to Salesforce Account when customer is created or updated.",
+    "description": "Send Customer from Shopify to Salesforce Account when a customer is created or updated.",
     "video": "",
+    "readme": "##Salesforce Customizations\n\nThis workflow requires some customization of your Salesforce account in order to function. Please complete all of the following steps:\n\n- Log in to your Salesforce account, then click on the gear icon in the top right corner to go to Setup\n\n- From the left hand menu, click on **Objects and Fields**, then **Object Manager**\n\n- Click on **Account**, then click **Fields & Relationships**\n\n- Click the **New** button, and select **Text** for the field type, then hit **Next**\n\n- Enter \"Email\" for **Field Label** and **Field Name**, and a length (ex: 100)\n\n- Hit **Next** again, and ensure your field is visible to the profile that the credential account belongs to (the account used when creating the Salesforce credential)\n\n- Hit **Next** again, then hit **Save**\n\n- Repeat these steps to add the \"Shopify Customer ID\" field to **Account**, using \"Shopify Customer ID\" as the label, `Shopify_Customer_ID` as the field name, and \"Text\" as the field type",
     "tags": [
         "Account"
     ],
@@ -88,7 +89,8 @@
                 "key": "salesforce-create-or-update-account",
                 "metadata": {
                     "entity_name": "Account",
-                    "method": "POST_OR_PATCH"
+                    "method": "POST_OR_PATCH",
+                    "id": "{{salesforce-query-single-account.Id}}"
                 }
             }
         ],
