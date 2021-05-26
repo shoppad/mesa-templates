@@ -27,8 +27,10 @@ module.exports = new class {
       totalDiscounts = payload.current_item.discount_allocations.reduce((a, {amount}) => a + parseFloat(amount), 0);
     }
 
-    // Get total price for line item (quantity * unit price, then divide by discount to get percentage)
-    output.Discount = parseFloat(totalDiscounts / (output.UnitPrice * output.Quantity) * 100);
+    if (totalDiscounts && totalDiscounts > 0) {
+      // Get total price for line item (quantity * unit price, then divide by discount to get percentage)
+      output['Discount'] = parseFloat(totalDiscounts / (output.UnitPrice * output.Quantity) * 100);
+    }
 
     // We're done, call the next step!
     Mesa.output.next(output);
