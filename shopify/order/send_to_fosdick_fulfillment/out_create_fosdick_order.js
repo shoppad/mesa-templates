@@ -56,7 +56,7 @@ module.exports = new class {
       let orders = [];
 
       // Loop through each order and map data
-      payload.forEach(function (order) {
+      payload.forEach((order) => {
         let orderPayload = Mapping.convert(OutCreateFosdickOrder, order, 'shopify', 'fosdick', processors);
 
          // Check if payment_type is missing
