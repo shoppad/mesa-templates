@@ -1,7 +1,7 @@
 const Mesa = require('vendor/Mesa.js');
 const Mapping = require('vendor/Mapping.js');
-const OutCreateFosdickOrder = require('./shopify-fosdick-order-map.js');
-const ShopifyFosdickOrderLineItemMap = require('./shopify-fosdick-order-item-map.js');
+const OutCreateFosdickOrder = require('./shopify_fosdick_order_map.js');
+const ShopifyFosdickOrderLineItemMap = require('./shopify_fosdick_order_item_map.js');
 
 /**
  * Processes virtual output for created orders, based on the criteria defined in the virtual output definition
@@ -12,6 +12,18 @@ const ShopifyFosdickOrderLineItemMap = require('./shopify-fosdick-order-item-map
  * @type {{script}}
  */
 module.exports = new class {
+
+  // Fosdick payment type mapping
+  supportedPaymentTypes = {
+    'VISA': 1,
+    'BOGUS': 1,
+    'MASTERCARD': 2,
+    'AMERICAN EXPRESS': 3,
+    'DISCOVER': 4,
+    'PREPAID': 5,
+    'PAYPAL': 8,
+    'AMAZON PAYMENTS': 9,
+  };
 
   /**
    * Mesa Script
@@ -46,6 +58,18 @@ module.exports = new class {
       // Loop through each order and map data
       payload.forEach(function (order) {
         let orderPayload = Mapping.convert(OutCreateFosdickOrder, order, 'shopify', 'fosdick', processors);
+
+         // Check if payment_type is missing
+         if (!orderPayload.PaymentType) {
+          // Try converting gateway instead of 'payment_details.credit_card_company'
+          orderPayload.PaymentType = this.processPaymentType('payment_type', order.gateway);
+        }
+
+        // Type paypal, some implementations require this field
+        if (orderPayload.PaymentType === this.supportedPaymentTypes['PAYPAL']) {
+          // Paypal entry, set PPPayerID to Shopify customer ID
+          orderPayload.PPPayerID = order.customer.id;
+        }
 
         orderPayload.Items = {};
 
@@ -153,19 +177,8 @@ module.exports = new class {
       // Note: Fosdick require a payment type. For this demo script, the 'BOGUS' gateway defaults to Visa
       let paymentType = null;
 
-      let supportedPaymentTypes = {
-        'VISA': 1,
-        'BOGUS': 1,
-        'MASTERCARD': 2,
-        'AMERICAN EXPRESS': 3,
-        'DISCOVER': 4,
-        'PREPAID': 5,
-        'PAYPAL': 8,
-        'AMAZON PAYMENTS': 9,
-      };
-
-      if (supportedPaymentTypes[inputValue] != undefined) {
-        paymentType = supportedPaymentTypes[inputValue.toUpperCase()];
+      if (this.supportedPaymentTypes[inputValue] != undefined) {
+        paymentType = this.supportedPaymentTypes[inputValue.toUpperCase()];
       }
 
       return paymentType;
