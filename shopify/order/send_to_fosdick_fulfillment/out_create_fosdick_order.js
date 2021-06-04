@@ -21,6 +21,7 @@ module.exports = new class {
     'AMERICAN EXPRESS': 3,
     'DISCOVER': 4,
     'PREPAID': 5,
+    'MANUAL': 5, // this might not be the right value
     'PAYPAL': 8,
     'AMAZON PAYMENTS': 9,
   };
