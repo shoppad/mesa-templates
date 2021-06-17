@@ -58,20 +58,6 @@
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
-                "key": "filter_1",
-                "metadata": {
-                    "a": "{{iterator.message}}",
-                    "comparison": "equals",
-                    "b": "Shopify recommendation"
-                },
-                "local_fields": [],
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
                 "key": "filter",
                 "metadata": {
                     "a": "{{iterator.recommendation}}",
