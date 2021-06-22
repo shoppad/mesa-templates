@@ -9,7 +9,7 @@
   "source": "",
   "destination": "",
   "seconds": 0,
-  "enabled": false,
+  "enabled": true,
   "logging": false,
   "debug": false,
   "config": {
@@ -115,56 +115,10 @@
         "local_fields": [
           {
             "key": "body",
-            "fields": [
-              {
-                "key": "published_scope",
-                "type": "custom",
-                "allow_custom_fields": false
-              }
-            ]
+            "fields": []
           }
         ],
         "weight": 5
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "iterator",
-        "name": "Iterator",
-        "key": "iterator_1",
-        "metadata": {
-          "key": "{{shopify_product.variants[]}}"
-        },
-        "local_fields": [],
-        "weight": 6
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "product_variant",
-        "action": "update_id",
-        "name": "Shopify Update By Variant ID Product Variant",
-        "key": "shopify_product_variant_1",
-        "metadata": {
-          "body": {
-            "option1": "{{iterator_1.option1}} - OUT OF STOCK"
-          },
-          "variant_id": "{{iterator_1.id}}"
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "fields": [
-              {
-                "key": "option1",
-                "type": "custom",
-                "allow_custom_fields": false
-              }
-            ]
-          }
-        ],
-        "weight": 7
       }
     ],
     "storage": []

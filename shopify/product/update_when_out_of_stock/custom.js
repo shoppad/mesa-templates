@@ -26,8 +26,7 @@ module.exports = new class {
       // We're done, call the next step!
       Mesa.output.next(payload);
     } else {
-      Mesa.log.error();
-      throw new Error('Variants have inventory. Unable to continue with next step.');
+      Mesa.log.info("Variants have inventory. Unable to continue with next step.");
     }
   }
 }
