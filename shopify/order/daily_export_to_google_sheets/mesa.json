@@ -1,0 +1,112 @@
+{
+    "key": "daily_export_to_google_sheets",
+    "name": "Schedule a Daily Export of All Orders into a Google Spreadsheet",
+    "version": "1.0.0",
+    "description": "Manually tracking all of your daily exports is a time-consuming process, and there are probably better things you\u2019d rather focus on in your schedule. Thanks to automation, Mesa can schedule a daily export of all orders into a Google Spreadsheet without you doing anything. It\u2019s going to save you so much time from having to update your Google Spreadsheet manually.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform_mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "Order Number",
+                            "source": "{{shopify_order.name}}"
+                        },
+                        {
+                            "destination": "Customer Email",
+                            "source": "{{shopify_order.customer.email}}"
+                        },
+                        {
+                            "destination": "Total Price",
+                            "source": "{{shopify_order.total_price}}"
+                        },
+                        {
+                            "destination": "Total Weight",
+                            "source": "{{shopify_order.total_weight}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "virtual_output",
+                "name": "Virtual Output",
+                "key": "virtual_output",
+                "metadata": {
+                    "schedule": "@daily:0 0 * * *"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "googledrive",
+                "entity": "spreadsheet",
+                "action": "create",
+                "name": "Google Drive Create Spreadsheet",
+                "key": "googledrive_spreadsheet",
+                "metadata": {
+                    "file_name": "Order Export for {{date:now}}"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "sheet",
+                "action": "write",
+                "name": "Google Sheets Write Sheet",
+                "key": "googlesheets_sheet",
+                "metadata": {
+                    "make_labels": true,
+                    "append": false,
+                    "rows": "{{virtual_output}}"
+                },
+                "local_fields": [],
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
+}
