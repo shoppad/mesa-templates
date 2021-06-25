@@ -162,18 +162,6 @@
                     }
                 ],
                 "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify_api",
-                "entity": "order",
-                "action": "create",
-                "name": "Shopify Create Order",
-                "key": "shopify_order_1",
-                "metadata": [],
-                "local_fields": [],
-                "weight": 2
             }
         ],
         "storage": []
