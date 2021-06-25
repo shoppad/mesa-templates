@@ -1,0 +1,181 @@
+{
+    "key": "tracktor/order/send_track_to_segment",
+    "name": "Send a Tracktor Order Status Update to Segment",
+    "version": "1.0.0",
+    "description": "A great way to boost the customer experience is to offer order tracking through Tracktor. Using Mesa, Tracktor can connect to Segment and track the fulfillment status of each order as part of your database.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "tracktor",
+    "destination": "segment",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "order\/all",
+                "name": "Tracktor Order Any Update",
+                "key": "tracktor_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{tracktor_order.order_id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "segment",
+                "entity": "track",
+                "action": "send",
+                "name": "Segment Send Track",
+                "key": "segment_track",
+                "metadata": {
+                    "body": {
+                        "userId": "{{shopify_order.customer.id}}",
+                        "event": "Order Status Update",
+                        "timestamp": "{{tracktor_order.fulfillments[0].latest_status.datetime}}",
+                        "properties": {
+                            "order_id": "{{tracktor_order.order_id}}",
+                            "order_number": "{{tracktor_order.order_name}}",
+                            "order_tags": "{{shopify_order.tags}}",
+                            "order_processed_at": "{{shopify_order.processed_at}}",
+                            "days_since_ordered": "{{tracktor_order.days_since_ordered}}",
+                            "carrier": "{{tracktor_order.fulfillments[0].carrier}}",
+                            "shopify_carrier": "{{tracktor_order.fulfillments[0].shopify_carrier}}",
+                            "shipping_state": "{{shopify_order.shipping_address.province}}",
+                            "shipping_zip": "{{shopify_order.shipping_address.zip}}",
+                            "email": "{{shopify_order.email}}",
+                            "phone": "{{shopify_order.phone}}",
+                            "tracking_number": "{{tracktor_order.fulfillments[0].tracking_number}}"
+                        },
+                        "context": {
+                            "app": {
+                                "name": "Mesa"
+                            },
+                            "traits": {
+                                "email": "{{shopify_order.email}}",
+                                "firstName": "{{shopify_order.customer.first_name}}",
+                                "id": "{{shopify_order.customer.id}}",
+                                "lastName": "{{shopify_order.customer.last_name}}",
+                                "phone": "{{tracktor_order.order_phone}}",
+                                "address": {
+                                    "street": "{{shopify_order.billing_address.address1}}",
+                                    "city": "{{shopify_order.billing_address.city}}",
+                                    "state": "{{shopify_order.billing_address.province}}",
+                                    "postalCode": "{{shopify_order.billing_address.zip}}",
+                                    "country": "{{shopify_order.billing_address.country}}"
+                                }
+                            }
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "properties",
+                                "fields": [
+                                    {
+                                        "key": "order_id",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "order_number",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "order_tags",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "order_processed_at",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "days_since_ordered",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "carrier",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "shopify_carrier",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "shipping_state",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "shipping_zip",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "email",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "phone",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "tracking_number",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "create",
+                "name": "Shopify Create Order",
+                "key": "shopify_order_1",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
