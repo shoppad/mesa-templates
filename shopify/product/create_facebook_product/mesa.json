@@ -51,8 +51,8 @@
                 "key": "facebook_product",
                 "metadata": {
                     "path": {
-                        "business": "788048811365724",
-                        "catalog": "499101931417357"
+                        "business": "",
+                        "catalog": ""
                     },
                     "body": {
                         "name": "{{shopify_product.title}}",
