@@ -1,0 +1,144 @@
+{
+    "key": "send_daily_tiktok_ad_group_report_to_google_sheets",
+    "name": "Send daily TikTok Ad Group summary report to Google Sheets",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "custom",
+                "name": "Scheduled Trigger",
+                "key": "custom",
+                "metadata": {
+                    "schedule": "@daily:0 8 * * *"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "tiktok",
+                "entity": "reports",
+                "action": "ad_group_summary_report",
+                "name": "TikTok Marketing Ad Group Summary Reports",
+                "key": "tiktokmarketing_reports",
+                "metadata": {
+                    "query": {
+                        "service_type": "AUCTION",
+                        "report_type": "BASIC",
+                        "data_level": "AUCTION_ADGROUP",
+                        "dimensions": "adgroup_id",
+                        "metrics": "spend,impressions,reach,clicks,conversion,cpm",
+                        "start_date": "{{ \"yesterday\" | date: \"%Y-%m-%d\" }}",
+                        "end_date": "{{ \"yesterday\" | date: \"%Y-%m-%d\" }}",
+                        "order_type": "ASC",
+                        "page": "1",
+                        "page_size": "1000",
+                        "advertiser_id": "6971456971320918018"
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Google Sheets Create Row",
+                "key": "googlesheets_row_1",
+                "metadata": {
+                    "header_row": "first_row",
+                    "path": {
+                        "spreadsheet_id": "1VsqebeUD2yyOls6Xq-tZojZ2vnhnikcK2-_KVLKo-y4",
+                        "sheet_name": "Sheet3"
+                    },
+                    "body": {
+                        "fields": {
+                            "adgroup_id": "{{tiktokmarketing_reports.list[0].dimensions.adgroup_id}}",
+                            "spend": "{{tiktokmarketing_reports.list[0].metrics.spend}}",
+                            "impressions": "{{tiktokmarketing_reports.list[0].metrics.impressions}}",
+                            "reach": "{{tiktokmarketing_reports.list[0].metrics.reach}}",
+                            "clicks": "{{tiktokmarketing_reports.list[0].metrics.clicks}}",
+                            "conversion": "{{tiktokmarketing_reports.list[0].metrics.conversion}}",
+                            "cpm": "{{tiktokmarketing_reports.list[0].metrics.cpm}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "adgroup_id",
+                                        "label": "adgroup_id",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "spend",
+                                        "label": "spend",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "impressions",
+                                        "label": "impressions",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "reach",
+                                        "label": "reach",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "clicks",
+                                        "label": "clicks",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "conversion",
+                                        "label": "conversion",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "cpm",
+                                        "label": "cpm",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
