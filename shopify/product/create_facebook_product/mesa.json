@@ -58,7 +58,7 @@
                         "name": "{{shopify_product.title}}",
                         "currency": "USD",
                         "price": "{{shopify_product.variants[0].price}}",
-                        "image_url": "https:{{shopify_product.images[0].src}}",
+                        "image_url": "{{shopify_product.images[0].src}}",
                         "category": "{{shopify_product.product_type}}",
                         "retailer_id": "{{shopify_product.variants[0].sku}}",
                         "url": "https:\/\/{{context.shop.domain}}\/products\/{{shopify_product.handle}}",
