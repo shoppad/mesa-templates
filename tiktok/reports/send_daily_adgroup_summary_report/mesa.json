@@ -33,7 +33,7 @@
                 "type": "tiktok",
                 "entity": "reports",
                 "action": "ad_group_summary_report",
-                "name": "TikTok Marketing Ad Group Summary Reports",
+                "name": "TikTok Ad Group Summary Reports",
                 "key": "tiktokmarketing_reports",
                 "metadata": {
                     "query": {
