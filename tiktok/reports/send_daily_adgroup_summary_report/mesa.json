@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "",
     "video": "",
-    "readme": "",
+    "readme": "##Google Sheets\n\nTo set up your Google Sheet, add or use an existing credential, then create a sheet with the following columns. These should match the dimensions and metrics in the Ad Group Summary Reports step:\n\n- adgroup_id\n\n- spend\n\n- impressions\n\n- reach\n\n- clicks\n\n- conversion\n\n- cpm",
     "tags": [],
     "source": "",
     "destination": "",
@@ -19,7 +19,7 @@
                 "trigger_type": "input",
                 "type": "custom",
                 "name": "Scheduled Trigger",
-                "key": "custom",
+                "key": "scheduled_trigger",
                 "metadata": {
                     "schedule": "@daily:0 8 * * *"
                 },
@@ -64,10 +64,6 @@
                 "key": "googlesheets_row_1",
                 "metadata": {
                     "header_row": "first_row",
-                    "path": {
-                        "spreadsheet_id": "1VsqebeUD2yyOls6Xq-tZojZ2vnhnikcK2-_KVLKo-y4",
-                        "sheet_name": "Sheet3"
-                    },
                     "body": {
                         "fields": {
                             "adgroup_id": "{{tiktokmarketing_reports.list[0].dimensions.adgroup_id}}",
