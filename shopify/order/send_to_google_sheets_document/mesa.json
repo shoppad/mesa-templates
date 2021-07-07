@@ -1,82 +1,337 @@
 {
-  "key": "shopify/order/send_to_google_sheets_document",
-  "name": "Send Order To Google Sheets Document",
-  "version": "1.0.0",
-  "description": "Send order from Shopify to Google Sheets document when order is created.",
-  "video": "",
-  "readme": "",
-  "tags": ["order"],
-  "source": "shopify_webhook",
-  "destination": "google-sheets",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify_webhook",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify Order Created",
-              "key": "shopify_order",
-              "metadata": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "googlesheets",
-              "entity": "row",
-              "action": "add",
-              "name": "Google Sheets Add Row",
-              "key": "googlesheets_row",
-              "metadata": {
-                  "mapping": [
-                      {
-                          "destination": "Id",
-                          "source": "{{shopify_order.id}}"
-                      },
-                      {
-                          "destination": "Email",
-                          "source": "{{shopify_order.email}}"
-                      },
-                      {
-                          "destination": "Order Name",
-                          "source": "{{shopify_order.name}}"
-                      },
-                      {
-                          "destination": "Total Price",
-                          "source": "{{shopify_order.total_price}}"
-                      },
-                      {
-                          "destination": "First Name",
-                          "source": "{{shopify_order.customer.first_name}}"
-                      },
-                      {
-                          "destination": "Last Name",
-                          "source": "{{shopify_order.customer.last_name}}"
-                      },
-                      {
-                          "destination": "Customer Id",
-                          "source": "{{shopify_order.customer.id}}"
-                      }
-                  ]
-              },
-              "local_fields": [
-                  {
-                      "key": "mapping",
-                      "type": "mapping",
-                      "tokens": "brackets",
-                      "location": "mapping"
-                  }
-              ],
-              "weight": 0
-          }
-      ],
-      "storage": []
-  }
+    "key": "send_to_google_sheets_document",
+    "name": "Send Order To Google Sheets Document",
+    "version": "1.0.0",
+    "description": "Grabbing information from each order is very time-consuming while running a successful store. This template sends order details with line-item properties from Shopify to Google Sheets when an order is created. You can now keep track of your orders and line-item properties with charts\/reporting on one of the most popular collaborative hubs.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator: Iterate over each Line Items",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Google Sheets - Order: Full Details Information",
+                "key": "googlesheets_row_1",
+                "metadata": {
+                    "header_row": "first_row",
+                    "path": {
+                        "spreadsheet_id": "1_G-HKv-cX_mI9uyt-0EvuTW4NUEQCrT7f5v2JyG-yxw",
+                        "sheet_name": "Orders-Full Details"
+                    },
+                    "body": {
+                        "fields": {
+                            "Order ID": "{{shopify_order.id}}",
+                            "Order Name (number)": "{{shopify_order.name}}",
+                            "Order Email": "{{shopify_order.email}}",
+                            "Customer First Name": "{{shopify_order.customer.first_name}}",
+                            "Customer Last Name": "{{shopify_order.customer.last_name}}",
+                            "Customer Email": "{{shopify_order.customer.email}}",
+                            "Total Price": "{{shopify_order.total_price}}",
+                            "Shipping Address 1": "{{shopify_order.shipping_address.address1}}",
+                            "Shipping Address 2": "{{shopify_order.shipping_address.address2}}",
+                            "Shipping City": "{{shopify_order.shipping_address.city}}",
+                            "Shipping Zip": "{{shopify_order.shipping_address.zip}}",
+                            "Shipping Province": "{{shopify_order.shipping_address.province}}",
+                            "Shipping Country": "{{shopify_order.shipping_address.country}}",
+                            "Order Tags": "{{shopify_order.tags}}",
+                            "Order Notes": "{{shopify_order.note}}",
+                            "Product Title": "{{iterator.title}}",
+                            "Product Variant": "{{iterator.variant_title}}",
+                            "Product SKU": "{{iterator.sku}}",
+                            "Product Price": "{{iterator.price}}",
+                            "Line Item ID": "{{iterator.id}}",
+                            "Created At": "{{shopify_order.created_at}}",
+                            "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Order ID",
+                                        "label": "Order ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Name (number)",
+                                        "label": "Order Name (number)",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Email",
+                                        "label": "Order Email",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Customer First Name",
+                                        "label": "Customer First Name",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Customer Last Name",
+                                        "label": "Customer Last Name",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Customer Email",
+                                        "label": "Customer Email",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Total Price",
+                                        "label": "Total Price",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Address 1",
+                                        "label": "Shipping Address 1",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Address 2",
+                                        "label": "Shipping Address 2",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping City",
+                                        "label": "Shipping City",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Zip",
+                                        "label": "Shipping Zip",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Province",
+                                        "label": "Shipping Province",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Country",
+                                        "label": "Shipping Country",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Tags",
+                                        "label": "Order Tags",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Notes",
+                                        "label": "Order Notes",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Title",
+                                        "label": "Product Title",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Variant",
+                                        "label": "Product Variant",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product SKU",
+                                        "label": "Product SKU",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Price",
+                                        "label": "Product Price",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Line Item ID",
+                                        "label": "Line Item ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Admin Order URL",
+                                        "label": "Admin Order URL",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator: Iterate over Line Item Properties in each Line Item",
+                "key": "iterator_1",
+                "metadata": {
+                    "key": "{{iterator.properties}}"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter out blank line item properties",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "does not equal",
+                    "a": "{{iterator_1.value}}"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Google Sheets - Order: Line Item Properties Information",
+                "key": "googlesheets_row",
+                "metadata": {
+                    "header_row": "first_row",
+                    "path": {
+                        "spreadsheet_id": "1_G-HKv-cX_mI9uyt-0EvuTW4NUEQCrT7f5v2JyG-yxw",
+                        "sheet_name": "Orders-Line Item Properties"
+                    },
+                    "body": {
+                        "fields": {
+                            "Order ID": "{{shopify_order.id}}",
+                            "Order Name (number)": "{{shopify_order.name}}",
+                            "Property Name": "{{iterator_1.name}}",
+                            "Property Value": "{{iterator_1.value}}",
+                            "Line Item ID": "{{iterator.id}}",
+                            "Created At": "{{shopify_order.created_at}}"
+                        }
+                    },
+                    "script": "custom.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Order ID",
+                                        "label": "Order ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Name (number)",
+                                        "label": "Order Name (number)",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Property Name",
+                                        "label": "Property Name",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Property Value",
+                                        "label": "Property Value",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Line Item ID",
+                                        "label": "Line Item ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 4
+            }
+        ],
+        "storage": []
+    }
 }
