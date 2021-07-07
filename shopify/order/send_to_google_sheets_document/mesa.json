@@ -49,10 +49,6 @@
                 "key": "googlesheets_row_1",
                 "metadata": {
                     "header_row": "first_row",
-                    "path": {
-                        "spreadsheet_id": "1_G-HKv-cX_mI9uyt-0EvuTW4NUEQCrT7f5v2JyG-yxw",
-                        "sheet_name": "Orders-Full Details"
-                    },
                     "body": {
                         "fields": {
                             "Order ID": "{{shopify_order.id}}",
@@ -263,10 +259,6 @@
                 "key": "googlesheets_row",
                 "metadata": {
                     "header_row": "first_row",
-                    "path": {
-                        "spreadsheet_id": "1_G-HKv-cX_mI9uyt-0EvuTW4NUEQCrT7f5v2JyG-yxw",
-                        "sheet_name": "Orders-Line Item Properties"
-                    },
                     "body": {
                         "fields": {
                             "Order ID": "{{shopify_order.id}}",
