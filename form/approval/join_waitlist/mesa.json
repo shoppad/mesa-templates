@@ -68,7 +68,7 @@
         "name": "Shopify Product Retrieve",
         "key": "shopify_product",
         "metadata": {
-          "product_id": "4431604613155"
+          "product_id": ""
         },
         "local_fields": [],
         "weight": 1
