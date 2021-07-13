@@ -29,7 +29,6 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "script": "filter.js",
                     "a": "{{source.customer.orders_count}}",
                     "comparison": "greater than",
                     "b": "0"
@@ -48,8 +47,7 @@
                             "destination": "note",
                             "source": "Customer's {{source.customer.orders_count}} order"
                         }
-                    ],
-                    "script": "transform.js"
+                    ]
                 },
                 "local_fields": [
                     {
