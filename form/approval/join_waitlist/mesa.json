@@ -54,7 +54,7 @@
           "label_accept": "Accept",
           "label_reject": "Reject",
           "message": "**Email:** {{form.email}}",
-          "alert_emails": "darryl@theshoppad.com"
+          "alert_emails": ""
         },
         "local_fields": [],
         "weight": 0
