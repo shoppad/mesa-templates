@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/send_to_google_sheets_document",
-  "name": "Send Slack Notification When Infinite Options Tagged Product is Purchase",
+  "name": "SSend a Slack Notification When an Infinite Options Tagged Product is Purchased",
   "version": "1.0.0",
-  "description": "",
+  "description": "Send a Slack message when an Infinite Options product with the tag \"special\" is purchased. This template is handy for company's using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
   "video": "",
   "readme": "",
   "tags": [],
@@ -15,7 +15,7 @@
   "config": {
     "inputs": [
       {
-        "schema": 4,
+        "schema": 5,
         "trigger_type": "input",
         "type": "infiniteoptions",
         "entity": "order",
