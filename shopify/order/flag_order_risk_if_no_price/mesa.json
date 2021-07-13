@@ -34,7 +34,6 @@
               "name": "Filter",
               "key": "filter",
               "metadata": {
-                  "script": "filter.js",
                   "comparison": "less than",
                   "a": "{{shopify-order-created.total_price}}",
                   "b": "0.01"
