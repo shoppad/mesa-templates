@@ -1,38 +1,40 @@
 {
     "key": "tracktor/fulfillment/delay_in_transit_sms",
-    "name": "Send Text Message if Tracktor Package is Delayed in Transit",
+    "name": "Send a text message if a Tracktor Package is delayed In Transit",
     "version": "1.0.0",
-    "description": "Send an SMS text message via Twilio to the store owner when an order is in transit for 60+ hours",
-    "video": "",
-    "tags": ["tracktor"],
-    "source": "tracktor",
-    "destination": "twilio",
-    "enabled": false,
+    "enabled": true,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
                 "action": "fulfillment\/in_transit",
                 "name": "Tracktor Fulfillment Status In Transit",
-                "key": "tracktor_fulfillment_status"
+                "key": "tracktor_fulfillment_status",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "entity": null,
-                "action": null,
-                "name": "Delay  ",
+                "name": "Delay",
                 "key": "delay",
                 "metadata": {
-                    "amount": 60,
-                    "unit": "hours"
-                }
+                    "amount": "60",
+                    "unit": "hours",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "weight": 0
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "tracktor",
                 "entity": "fulfillment",
@@ -41,40 +43,38 @@
                 "key": "tracktor_fulfillment",
                 "metadata": {
                     "fulfillment_id": "{{delay.fulfillment_id}}"
-                }
+                },
+                "local_fields": [],
+                "weight": 1
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter  ",
+                "name": "Filter",
                 "key": "filter",
                 "metadata": {
                     "a": "{{tracktor_fulfillment.latest_status.label}}",
                     "comparison": "does not equal",
                     "b": "{{tracktor_fulfillment.status.delivered.label}}"
-                }
+                },
+                "local_fields": [],
+                "weight": 2
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
-                "type": "tracktor",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Tracktor Retrieve Order",
-                "key": "tracktor_order",
-                "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
-                }
-            },
-            {
-                "trigger_type": "output",
-                "type": "twilio",
-                "entity": "sms",
+                "type": "sms",
+                "entity": "message",
                 "action": "send",
-                "name": "Twilio Send SMS",
-                "key": "twilio_sms",
+                "name": "SMS Message Send",
+                "key": "sms_message",
                 "metadata": {
-                  "message": "Order {{tracktor_fulfillment.order_name}} has been in transit for over 60 hours!"
-                }
+                    "to": "{{context.shop.phone}}",
+                    "message": "Order {{tracktor_fulfillment.order_name}} has been in transit for over 60 hours!"
+                },
+                "local_fields": [],
+                "weight": 3
             }
         ],
         "storage": []
