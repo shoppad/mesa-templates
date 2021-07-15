@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/send_discord_message",
-  "name": "Send Discord Message When Infinite Options Tagged Product is Purchase",
+  "name": "Send Discord Message When an Infinite Options an option \"Special Notes\" is Purchased.",
   "version": "1.0.0",
-  "description": "Send a Discord message when an Infinite Options product with the tag \"special\" is purchased. This template is handy for company's using Discord; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
+  "description": "Send a Discord message when an Infinite Options product with the tag \"Special Notes\" is purchased. This template is handy for company's using Discord; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
   "video": "",
   "readme": "## Setup\n\n- In the `Infinite Options Order Created Action`, specify the field name of the Infinite Options field that should trigger slack notification. By default we use the Label cart \"Special\". For information on how to locate the field name in Infinite Options, [check out our documentation](https://docs.theshoppad.com/article/122-why-are-option-selections-labeled-infiniteoptions1).\n",
   "tags": [],
@@ -23,7 +23,7 @@
         "name": "Infinite Options Order Created",
         "key": "infiniteoptions_order",
         "metadata": {
-          "field_name": "Special"
+          "field_name": "Special_Notes"
         },
         "local_fields": [],
         "weight": 0
