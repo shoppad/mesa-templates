@@ -1,8 +1,8 @@
 {
   "key": "form/approval_join_waitlist",
-  "name": "Join waitlist for product",
+  "name": "Notify customers on a product waitlist",
   "version": "1.0.0",
-  "description": "",
+  "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. This template allows you to manually approve or reject users on a product waitlist and notify them via email using Forms by Mesa.",
   "video": "",
   "readme": "",
   "tags": [],
