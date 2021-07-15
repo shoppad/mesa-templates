@@ -15,7 +15,7 @@
   "config": {
     "inputs": [
       {
-        "schema": 5,
+        "schema": 4.1,
         "trigger_type": "input",
         "type": "infiniteoptions",
         "entity": "order",
