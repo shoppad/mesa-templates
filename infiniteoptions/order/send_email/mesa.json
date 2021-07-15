@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/send_email",
-  "name": "Send an Email When an Infinite Options an option \"Special Notes\" is Purchased.",
+  "name": "Send an Email When an Infinite Options Product Is Purchased",
   "version": "1.0.0",
-  "description": "Send an email when an Infinite Options product with the tag \"Special Notes\" is purchased. This template is compatible with any marketing platform and handy for notifying your team when a product requires special handling (ex. gift wrapping, professional install, etc.)",
+  "description": "Send an email when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is compatible with any marketing platform and handy for notifying your team when a product requires special handling (ex. gift wrapping, professional install, etc.)",
   "video": "",
   "readme": "",
   "tags": [],

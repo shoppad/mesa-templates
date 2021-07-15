@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/send_slack_notification",
-  "name": "Send a Slack Notification When an Infinite Options an option \"Special Notes\" is Purchased.",
+  "name": "Send a Slack Notification When an Infinite Options Product is Purchased",
   "version": "1.0.0",
-  "description": "Send a Slack message when an Infinite Options product with the tag \"Special Notes\" is purchased. This template is handy for company's using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
+  "description": "Send a Slack message when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is handy for company's using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
   "video": "",
   "readme": "",
   "tags": [],
