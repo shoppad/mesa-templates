@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/send_email",
-  "name": "Send an Email When an Infinite Options Tagged Product Is Purchased",
+  "name": "Send an Email When an Infinite Options an option \"Special Notes\" is Purchased.",
   "version": "1.0.0",
-  "description": "Send an email when an Infinite Options product with the tag \"special\" is purchased. This template is compatible with any marketing platform and handy for notifying your team when a product requires special handling (ex. gift wrapping, professional install, etc.)\u00a0",
+  "description": "Send an email when an Infinite Options product with the tag \"Special Notes\" is purchased. This template is compatible with any marketing platform and handy for notifying your team when a product requires special handling (ex. gift wrapping, professional install, etc.)",
   "video": "",
   "readme": "",
   "tags": [],
@@ -23,7 +23,7 @@
         "name": "Infinite Options Order Created",
         "key": "infiniteoptions_order",
         "metadata": {
-          "field_name": "Special"
+          "field_name": "Special_Notes"
         },
         "local_fields": [],
         "weight": 0
@@ -37,7 +37,7 @@
         "name": "Email",
         "key": "email",
         "metadata": {
-          "to": "",
+          "to": "{{context.shop.email}}",
           "subject": "New Infinite Options Order {{infiniteoptions_order.order.order_number}}",
           "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
         },
