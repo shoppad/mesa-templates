@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/send_slack_notification",
-  "name": "Send a Slack Notification When an Infinite Options Tagged Product is Purchased",
+  "name": "Send a Slack Notification When an Infinite Options an option \"Special Notes\" is Purchased.",
   "version": "1.0.0",
-  "description": "Send a Slack message when an Infinite Options product with the tag \"special\" is purchased. This template is handy for company's using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
+  "description": "Send a Slack message when an Infinite Options product with the tag \"Special Notes\" is purchased. This template is handy for company's using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
   "video": "",
   "readme": "",
   "tags": [],
@@ -23,7 +23,7 @@
         "name": "Infinite Options Order Created",
         "key": "infiniteoptions_order",
         "metadata": {
-          "field_name": "Special"
+          "field_name": "Special_Notes"
         },
         "local_fields": [],
         "weight": 0
@@ -37,7 +37,7 @@
         "name": "Slack",
         "key": "slack",
         "metadata": {
-          "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.order_number}}"
+          "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
         },
         "local_fields": [],
         "weight": 0
