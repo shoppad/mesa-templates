@@ -1,0 +1,87 @@
+{
+    "key": "send_quote",
+    "name": "Send a Product or Service Quote to Staff Email Address",
+    "version": "1.0.0",
+    "description": "Customize your sales experience by using quote forms for your customers anywhere on your Shopify store. Forms by Mesa is an easy way to collect data with a simple interface and powerful editor. Close more deals with inbound quote requests emailed directly to you and your teams.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "form",
+                "name": "Form",
+                "key": "form",
+                "metadata": {
+                    "captcha": "hCaptcha-checkbox",
+                    "form_data": [
+                        {
+                            "type": "header",
+                            "subtype": "h1",
+                            "label": "Product or Service Quote"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Name",
+                            "className": "form-control",
+                            "name": "name",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Email Address",
+                            "className": "form-control",
+                            "name": "email",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Phone",
+                            "className": "form-control",
+                            "name": "phone",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "textarea",
+                            "required": false,
+                            "label": "Message",
+                            "className": "form-control",
+                            "name": "message",
+                            "subtype": "textarea"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{context.shop.email}}",
+                    "subject": "New Product or Service Quote",
+                    "message": "Name: {{form.name}}\nEmail Address: {{form.email}}\nPhone: {{form.phone}}\nMessage: {{form.message}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
