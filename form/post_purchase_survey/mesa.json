@@ -1,0 +1,124 @@
+{
+    "key": "post_purchase_survey",
+    "name": "Add a Post-Purchase Survey Form and Send Results to Google Sheets",
+    "version": "1.0.0",
+    "description": "Gain customer insights that will optimize your store's shopping experience and increase conversion rates. Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Customize your survey questions using Forms by Mesa and it's easy to use builder.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "form",
+                "name": "Form",
+                "key": "form",
+                "metadata": {
+                    "form_data": [
+                        {
+                            "type": "header",
+                            "subtype": "h1",
+                            "label": "Post-Purchase Survey"
+                        },
+                        {
+                            "type": "radio-group",
+                            "required": false,
+                            "label": "<p data-pm-slice=\"1 1 [\" list\",{},\"list_item\",{\"indent\":1,\"type\":\"bulleted\"}]\"=\"\">How did you hear about us?<\/p>",
+                            "inline": false,
+                            "name": "how-did-you-hear-about-us",
+                            "other": true,
+                            "values": [
+                                {
+                                    "label": "Podcast",
+                                    "value": "Podcast"
+                                },
+                                {
+                                    "label": "Facebook",
+                                    "value": "Facebook"
+                                },
+                                {
+                                    "label": "Search Engine",
+                                    "value": "Search Engine"
+                                },
+                                {
+                                    "label": "Instagram",
+                                    "value": "Instagram"
+                                },
+                                {
+                                    "label": "YouTube",
+                                    "value": "YouTube"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "textarea",
+                            "required": false,
+                            "label": "Other Feedback",
+                            "className": "form-control",
+                            "name": "other-feedback",
+                            "subtype": "textarea"
+                        }
+                    ],
+                    "captcha": "hCaptcha-checkbox"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Google Sheets Row Create",
+                "key": "googlesheets_row",
+                "metadata": {
+                    "header_row": "first_row",
+                    "body": {
+                        "fields": {
+                            "How did you hear about us?": "{{form.how-did-you-hear-about-us}}",
+                            "Other Feedback": "{{form.other-feedback}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "How did you hear about us?",
+                                        "label": "How did you hear about us?",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Other Feedback",
+                                        "label": "Other Feedback",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
