@@ -1,5 +1,5 @@
 {
-    "key": "form/instagram_brand_ambassador",
+    "key": "instagram_brand_ambassador",
     "name": "Collect Brand Ambassador Instagram Handles and Tag Customers with \"Influencer\"",
     "version": "1.0.0",
     "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Grow your influencer and ambassador programs by asking for Instagram handles at checkout.  You can then reach out to customers with large followings and make sure their experience is top-notch.",
@@ -67,19 +67,32 @@
                 "trigger_type": "output",
                 "type": "shopify_api",
                 "entity": "customer",
+                "action": "retrieve",
+                "name": "Shopify Customer Retrieve",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{form.customer-id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "customer",
                 "action": "update",
                 "name": "Shopify Customer Update",
                 "key": "shopify_customer_2",
                 "metadata": {
                     "body": {
-                        "email": "{{form.email-address}}",
-                        "tags": "Influencer",
-                        "note": "Brand Ambassador submission:\n\nIG handle: {{form.instagram-handle}}"
+                        "tags": "{{shopify_customer.tags}},Influencer",
+                        "note": "{{shopify_customer.note}}\nBrand Ambassador submission:\n\nEmail: {{form.email-address}}\nIG handle: {{form.instagram-handle}}"
                     },
-                    "customer_id": "{{form.customer-id}}"
+                    "customer_id": "{{shopify_customer.id}}"
                 },
                 "local_fields": [],
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []
