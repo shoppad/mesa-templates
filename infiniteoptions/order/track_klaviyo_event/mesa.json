@@ -38,12 +38,8 @@
         "key": "klaviyo_track",
         "metadata": {
           "event": "Infinite Options Order",
-          "email": "{{shopify_order.email}}",
+          "email": "{{infiniteoptions_order.order.email}}",
           "mapping": [
-            {
-              "destination": "$id",
-              "source": "{{infiniteoptions_order.order.customer.id}}"
-            },
             {
               "destination": "$first_name",
               "source": "{{infiniteoptions_order.order.customer.first_name}}"
