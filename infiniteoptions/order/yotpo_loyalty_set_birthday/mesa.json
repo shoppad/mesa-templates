@@ -1,0 +1,69 @@
+{
+  "key": "infiniteoptions/order/yotpo_loyalty_set_birthday",
+  "name": "Set Birthday in Yotpo Loyalty, when customers place an Infinite Option order",
+  "version": "1.0.0",
+  "description": "When an infinite option order has the line item property \"Birthday\", we automatically parse the date and set the Birthday in Yotpo Loyalty.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4.1,
+        "trigger_type": "input",
+        "type": "infiniteoptions",
+        "entity": "order",
+        "action": "created",
+        "name": "Infinite Options Order Created",
+        "key": "infiniteoptions_order",
+        "metadata": {
+          "field_name": "Birthday"
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Getting Birthday Data",
+        "key": "custom",
+        "metadata": {
+          "description": "We are converting the date string into an object with date values.",
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "yotpoloyalty",
+        "entity": "birthday",
+        "action": "set",
+        "name": "Yotpo Loyalty & Referrals Birthday Set",
+        "key": "yotpoloyalty_birthday",
+        "metadata": {
+          "body": {
+            "customer_email": "{{infiniteoptions_order.order.email}}",
+            "customer_id": "{{infiniteoptions_order.order.customer.id}}",
+            "day": "{{ custom.birthday_payload.day }}",
+            "month": "{{ custom.birthday_payload.month }}",
+            "year": "{{ custom.birthday_payload.year }}"
+          }
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
+}
