@@ -1,4 +1,5 @@
 ## Testing
+* Get the code for this form, and add this code via your theme editor to your Shopify customer account page
 * Test this form by logging into a Customer account on your Shopify online store.
 * Go to this form's [embedded Shopify URL](https://docs.getmesa.com/article/1174-mesa-forms#shopify): https://mystore.myshopify.com/apps/mesa/forms/form_customer_dob and submit your birthday.
 

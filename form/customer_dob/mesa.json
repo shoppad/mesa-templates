@@ -37,7 +37,12 @@
                             "label": "Date of Birth",
                             "className": "form-control",
                             "name": "dob"
-                        }
+                        },
+                        {
+                          "type": "hidden",
+                          "name": "customer-id",
+                          "value": "{{customer.id}}"
+                      }
                     ]
                 },
                 "local_fields": [],
@@ -54,7 +59,7 @@
                 "name": "Shopify Update Customer",
                 "key": "shopify_customer",
                 "metadata": {
-                    "customer_id": "{{form.shopify_customer_id}}",
+                    "customer_id": "{{form.customer-id}}",
                     "body": {
                         "note": "{{form.dob}}"
                     }
