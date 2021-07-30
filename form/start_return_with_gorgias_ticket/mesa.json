@@ -28,10 +28,6 @@
                             "label": "Return Your Order"
                         },
                         {
-                            "type": "hidden",
-                            "name": "shopify_order_id"
-                        },
-                        {
                             "type": "text",
                             "required": true,
                             "label": "Associated Email&nbsp;",
@@ -102,12 +98,21 @@
                                 "from_agent": "false",
                                 "subject": "Return ",
                                 "via": "email",
+                                "receiver": {
+                                    "email": ""
+                                },
+                                "sender": {
+                                    "email": ""
+                                },
                                 "source": {
                                     "to": [
                                         {
                                             "address": "{{form.email}}"
                                         }
-                                    ]
+                                    ],
+                                    "from": {
+                                        "address": ""
+                                    }
                                 }
                             }
                         ],
