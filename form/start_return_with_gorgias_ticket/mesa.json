@@ -1,5 +1,5 @@
 {
-    "key": "form/start_return_with_gorgias_ticket",
+    "key": "start_return_with_gorgias_ticket",
     "name": "Start a Return with Forms by Mesa and Open a New Gorgias Ticket",
     "version": "1.0.0",
     "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Add a form on a customer's order history page that easily allows them to initiate a return. Gorgias will then open a new ticket with the full order details and reason for return.",
