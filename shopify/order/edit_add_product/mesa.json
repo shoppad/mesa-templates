@@ -2,12 +2,9 @@
     "key": "shopify/order/edit_add_product",
     "name": "Add a Free Product to Orders Over $100",
     "version": "1.0.0",
-    "description": "Delight your loyal customers with a free gift when their order meets qualifying criteria.",
     "video": "",
-    "readme": "",
     "tags": [],
-    "source": "shopify_webhook",
-    "destination": "shopify",
+    "seconds": 0,
     "enabled": false,
     "logging": false,
     "debug": false,
@@ -21,9 +18,7 @@
                 "action": "created",
                 "name": "Shopify Order Created",
                 "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders\/create"
-                },
+                "metadata": [],
                 "local_fields": [],
                 "weight": 0
             }
@@ -44,57 +39,25 @@
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
-                "type": "transform",
-                "entity": "mapping",
-                "name": "Configuration",
-                "key": "transformmapping",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "line_item_add",
+                "name": "Shopify Order Line Item Add",
+                "key": "shopify_order_1",
                 "metadata": {
-                    "mapping": [
-                        {
-                            "destination": "order_id",
-                            "source": "{{shopify_order.id}}"
-                        },
-                        {
-                            "destination": "product_variant_id",
-                            "source": ""
-                        },
-                        {
-                            "destination": "quantity",
-                            "source": "1"
-                        },
-                        {
-                            "destination": "notify_customer",
-                            "source": "false"
-                        },
-                        {
-                            "destination": "order_note",
-                            "source": "Added free product"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "product_id": "",
+                        "variant_id": "",
+                        "quantity": "1",
+                        "notify_customer": "false",
+                        "order_note": "Add free product"
                     }
-                ],
-                "weight": 1
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Add Line Item to Shopify Order",
-                "key": "custom",
-                "metadata": {
-                    "script": "custom.js"
                 },
                 "local_fields": [],
-                "weight": 2
+                "weight": 1
             }
         ],
         "storage": []
