@@ -1,0 +1,102 @@
+{
+  "key": "infiniteoptions/order/track_klaviyo_event",
+  "name": "Add a Klaviyo event to an Infinite Options order",
+  "version": "1.0.0",
+  "description": "Improve your Klaviyo workflow by triggering an event anytime an Infinite Options order is placed. As part of this event, Infinite Options will send the following data to Klaviyo: Customer First/Last Name, Email, Customer ID, Shipping Address, Organization (Company), and Source (Shopify).",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4.1,
+        "trigger_type": "input",
+        "type": "infiniteoptions",
+        "entity": "order",
+        "action": "created",
+        "name": "Infinite Options Order Created",
+        "key": "infiniteoptions_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "klaviyo",
+        "entity": "track",
+        "action": "create",
+        "name": "Klaviyo Track event Create",
+        "key": "klaviyo_track",
+        "metadata": {
+          "event": "Infinite Options Order",
+          "email": "{{infiniteoptions_order.order.email}}",
+          "mapping": [
+            {
+              "destination": "$first_name",
+              "source": "{{infiniteoptions_order.order.customer.first_name}}"
+            },
+            {
+              "destination": "$last_name",
+              "source": "{{infiniteoptions_order.order.customer.last_name}}"
+            },
+            {
+              "destination": "$phone_number",
+              "source": "{{infiniteoptions_order.order.customer.phone}}"
+            },
+            {
+              "destination": "$organization",
+              "source": "{{infiniteoptions_order.order.customer.default_address.company}}"
+            },
+            {
+              "destination": "$address1",
+              "source": "{{infiniteoptions_order.order.shipping_address.address1}}"
+            },
+            {
+              "destination": "$address2",
+              "source": "{{infiniteoptions_order.order.shipping_address.address2}}"
+            },
+            {
+              "destination": "$city",
+              "source": "{{infiniteoptions_order.order.shipping_address.city}}"
+            },
+            {
+              "destination": "$region",
+              "source": "{{infiniteoptions_order.order.customer.state}}"
+            },
+            {
+              "destination": "$country",
+              "source": "{{infiniteoptions_order.order.shipping_address.country}}"
+            },
+            {
+              "destination": "$zip",
+              "source": "{{infiniteoptions_order.order.shipping_address.zip}}"
+            },
+            {
+              "destination": "$source",
+              "source": "shopify"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
+}
