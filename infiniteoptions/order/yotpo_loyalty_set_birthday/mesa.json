@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/yotpo_loyalty_set_birthday",
-  "name": "Set Birthday in Yotpo Loyalty, when customers place an Infinite Option order",
+  "name": "Save customer's birthday to Yotpo Loyalty when an Infinite Options order occurs",
   "version": "1.0.0",
-  "description": "When an infinite option order has the line item property \"Birthday\", we automatically parse the date and set the Birthday in Yotpo Loyalty.",
+  "description": "Engaging customers on their birthday is the best way to keep them coming back for more. Add a line item property \"Birthday\" in an Infinite Options order and have it automatically saved in Yotpo Loyalty.",
   "video": "",
   "readme": "",
   "tags": [],
