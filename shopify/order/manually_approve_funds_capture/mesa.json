@@ -1,0 +1,130 @@
+{
+  "key": "shopify/order/manually_approve_funds_capture",
+  "name": "Manually capture funds for risky orders",
+  "version": "1.0.0",
+  "description": "Protecting your customers and stopping fraud before it happens is essential for any online store. With this template, merchants can capture funds or cancel and void an order based on specific fraud characteristics. Now you can easily avoid the cost of refunds and chargebacks.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order_risk",
+        "action": "list",
+        "name": "Shopify Order Risk List",
+        "key": "shopify_order_risk",
+        "metadata": {
+          "order_id": "3854437220429"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Filter by order risks",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "approval",
+        "name": "Approval",
+        "key": "approval",
+        "metadata": {
+          "message": "A possible fraudulent order was created. \n\n**Order Details:**\n\n- Order Number: {{shopify_order.order_number}}\n- Email: {{shopify_order.email}}\n\n**Fraudulent Details:**\n \n- Message: {{shopify_order_risk.risks[0].message}}\n- Score: {{shopify_order_risk.risks[0].score}}\n- Recommendation: {{shopify_order_risk.risks[0].recommendation}}\n- [More fraudulent details](https://{{context.shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}?showRiskAnalysis=true)",
+          "field": true,
+          "label_accept": "Submit",
+          "label_reject": "Ignore",
+          "field_options": [
+            {
+              "label": "Void",
+              "value": "void"
+            },
+            {
+              "label": "Capture Payment",
+              "value": "capture"
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order_transaction",
+        "action": "create",
+        "name": "Shopify Order Transaction Create",
+        "key": "shopify_order_transaction",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "kind": "{{approval.field}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 3
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{approval.field}}",
+          "comparison": "equals",
+          "b": "void"
+        },
+        "local_fields": [],
+        "weight": 4
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "cancel",
+        "name": "Shopify Order Cancel",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}"
+        },
+        "local_fields": [],
+        "weight": 5
+      }
+    ],
+    "storage": []
+  }
+}
