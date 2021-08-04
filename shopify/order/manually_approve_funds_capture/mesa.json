@@ -1,8 +1,8 @@
 {
   "key": "shopify/order/manually_approve_funds_capture",
-  "name": "Manually capture funds for an order based on its fraud score",
+  "name": "Manually capture funds for risky orders",
   "version": "1.0.0",
-  "description": "Protecting your customers and stopping fraud before it happens is essential for any online store. With this template, merchants can capture funds or cancel an order based on specific fraud characteristics. Now you can easily avoid the cost of refunds and chargebacks. ",
+  "description": "Protecting your customers and stopping fraud before it happens is essential for any online store. With this template, merchants can capture funds or cancel and void an order based on specific fraud characteristics. Now you can easily avoid the cost of refunds and chargebacks.",
   "video": "",
   "readme": "",
   "tags": [],
