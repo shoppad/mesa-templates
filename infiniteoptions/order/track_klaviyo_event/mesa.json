@@ -1,8 +1,8 @@
 {
   "key": "infiniteoptions/order/track_klaviyo_event",
-  "name": "Add Klaviyo event when customer place an Infinite Options order",
+  "name": "Add a Klaviyo event to an Infinite Options order",
   "version": "1.0.0",
-  "description": "We are firing a Klaviyo event called \"Infinite Options Order\" whenever an Infinite Option order has been placed. This would allow customers to use this event as a trigger in their Klaviyo flows. As part of this event, we send the following order data:\n- Customer First Name\n- Customer Last Name\n- Email\n- Customer ID\n- Shipping Address\n- Organization (company)\n- Source (shopify)",
+  "description": "Improve your Klaviyo workflow by triggering an event anytime an Infinite Options order is placed. As part of this event, Infinite Options will send the following data to Klaviyo: Customer First/Last Name, Email, Customer ID, Shipping Address, Organization (Company), and Source (Shopify).",
   "video": "",
   "readme": "",
   "tags": [],
