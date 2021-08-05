@@ -34,10 +34,10 @@
         "name": "Approval",
         "key": "approval",
         "metadata": {
-          "message": "Thank you email for a new order.\n\n**Order Details:**\n\n- Order Number: {{shopify_order.order_number}}\n- Email: {{shopify_order.email}}\n- Total Price: ${{shopify_order.total_price}}",
+          "message": "Thank you email for a new order:\n\n**Order Details:**\n\n- Order Number: {{shopify_order.name}}\n- Email: {{shopify_order.email}}\n- Total Price: ${{shopify_order.total_price}}",
           "field": true,
           "label_accept": "Send Email",
-          "label_reject": "Ignore"
+          "label_reject": "Reject"
         },
         "local_fields": [],
         "weight": 0
@@ -50,8 +50,8 @@
         "key": "email",
         "metadata": {
           "to": "{{shopify_order.email}}",
-          "subject": "Thank you for purchase | ",
-          "message": "Hi {{shopify_order.customer.first_name}},\n\nWe're getting your order ready to be shipped. We will notify you when it has been sent.\n\n{% if approval.field != \"\" %}\nNotes: {{approval.field}}\n{% endif %}\n\n"
+          "subject": "Order {{shopify_order.name}} confirmation",
+          "message": "Hi {{shopify_order.customer.first_name}},\n\nThanks for your purchase! We're getting your order {{shopify_order.name}} ready to be shipped. We will notify you when it has been sent.\n\n{% if approval.field != \"\" %}Additional notes: {{approval.field}}\n\n{% endif %}Thanks,\n\nThe {{context.shop.name}} Team"
         },
         "local_fields": [],
         "weight": 1
