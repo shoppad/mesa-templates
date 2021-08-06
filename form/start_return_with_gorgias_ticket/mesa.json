@@ -128,18 +128,12 @@
                                 "receiver": {
                                     "email": "{{form.email}}"
                                 },
-                                "sender": {
-                                    "email": ""
-                                },
                                 "source": {
                                     "to": [
                                         {
                                             "address": "{{form.email}}"
                                         }
-                                    ],
-                                    "from": {
-                                        "address": ""
-                                    }
+                                    ]
                                 }
                             }
                         ],
