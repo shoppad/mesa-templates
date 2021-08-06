@@ -29,8 +29,16 @@
                         },
                         {
                             "type": "text",
-                            "required": true,
-                            "label": "Associated Email&nbsp;",
+                            "required": false,
+                            "label": "Name&nbsp;",
+                            "className": "form-control",
+                            "name": "Name",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Email",
                             "className": "form-control",
                             "name": "email",
                             "subtype": "text"
@@ -69,6 +77,11 @@
                                     "value": "Wrong Product or Size"
                                 }
                             ]
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "order-id",
+                            "value": "{{order.id}}"
                         }
                     ]
                 },
@@ -77,6 +90,20 @@
             }
         ],
         "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Order Retrieve",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{form.order-id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
             {
                 "schema": 4,
                 "trigger_type": "output",
@@ -96,10 +123,10 @@
                                 "body_text": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{form.return_reason}}",
                                 "channel": "email",
                                 "from_agent": "false",
-                                "subject": "Return ",
+                                "subject": "Return",
                                 "via": "email",
                                 "receiver": {
-                                    "email": ""
+                                    "email": "{{form.email}}"
                                 },
                                 "sender": {
                                     "email": ""
@@ -122,7 +149,7 @@
                     }
                 },
                 "local_fields": [],
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []
