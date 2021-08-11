@@ -33,7 +33,8 @@
                         },
                         {
                             "type": "hidden",
-                            "name": "shopify_order_id"
+                            "name": "shopify_order_id",
+                            "value": "{{ order.id }}"
                         },
                         {
                             "type": "radio-group",
