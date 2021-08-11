@@ -24,7 +24,7 @@
                     "form_data": [
                         {
                             "type": "header",
-                            "subtype": "h1",
+                            "subtype": "h3",
                             "label": "Submit your birthday to receive surprises!"
                         },
                         {
