@@ -2,18 +2,7 @@
   "key": "infiniteoptions_order_add_line_items_to_google_sheet_1",
   "name": "Add Infinite Options Line Items to Google Sheet",
   "version": "1.0.0",
-  "description": "Exporting order details along with details from third party applications can be extremely helpful for your logistics and accounting teams.  This template adds Infinite Options line items to an existing Google Sheet when an order is created. You can now keep track of all options from Infinite Options selected by your customers on one of the most popular collaborative hubs.",
-  "video": "",
-  "readme": "## Setup\n\n- In the `Google Sheets: Add Row to Sheet` connector, create a Credential and Authenticate with Google.\n- [View this Google Sheet with column headers](https:\/\/docs.google.com\/spreadsheets\/d\/1uPFMnqU4miEtO-k85zmZXjTcnBtDMp6vg_tUdzMu49A\/edit)\n- Click on **File** in the top left corner and click **Make a copy** to make a copy.\n  - Optionally, rename your Google Sheet and Folder.\n  - Then, click on **OK**.\n- In the `Google Sheets: Add Row to Sheet` connector, add your spreadsheet.\n- View the `M` and `N` values in the `Transform: Mapping to Sheets Row` Step. Add your actual field name (found in the Infinite Options dashboard) after `fields.`. Example: `{{current_item.fields.infinite_options_1}}`.\n- Enable the Automation in the right sidebar and click **Save**.\n",
-  "tags": [
-      "google-sheets"
-  ],
-  "source": "infinite-options",
-  "destination": "google-sheets",
-  "seconds": 0,
   "enabled": false,
-  "logging": false,
-  "debug": false,
   "config": {
       "inputs": [
           {
