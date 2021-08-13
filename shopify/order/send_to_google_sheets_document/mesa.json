@@ -1,17 +1,7 @@
 {
     "key": "send_to_google_sheets_document",
     "name": "Send Order To Google Sheets Document",
-    "version": "1.0.0",
-    "description": "Grabbing information from each order is very time-consuming while running a successful store. This template sends order details with line-item properties from Shopify to Google Sheets when an order is created. You can now keep track of your orders and line-item properties with charts\/reporting on one of the most popular collaborative hubs.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
     "config": {
         "inputs": [
             {
@@ -31,7 +21,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator: Iterate over each Line Items",
+                "name": "Iterator: Loop over each Line Item",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
@@ -45,7 +35,7 @@
                 "type": "googlesheets",
                 "entity": "row",
                 "action": "create",
-                "name": "Google Sheets - Order: Full Details Information",
+                "name": "Google Sheets Add Row",
                 "key": "googlesheets_row_1",
                 "metadata": {
                     "header_row": "first_row",
@@ -268,8 +258,7 @@
                             "Line Item ID": "{{iterator.id}}",
                             "Created At": "{{shopify_order.created_at}}"
                         }
-                    },
-                    "script": "custom.js"
+                    }
                 },
                 "local_fields": [
                     {

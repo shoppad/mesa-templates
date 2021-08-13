@@ -1,18 +1,7 @@
 {
-  "key": "uploadery/order/add_line_items_to_google_sheet",
+  "key": "uploadery_order_add_line_items_to_google_sheet",
   "name": "Add Uploadery Line Items to Google Sheet",
-  "version": "1.0.0",
-  "description": "Add Uploadery Line Items to an Existing Google Sheet when an Order is Created.",
-    "video": "",
-  "readme": "## Setup\n-  In the `Google Sheets: Add Row to Sheet` Action, create a Credential and Authenticate with Google. Enter `https:\/\/www.googleapis.com\/auth\/spreadsheets` as the Scope.\n- [View this Google Sheet with column headers](https:\/\/docs.google.com\/spreadsheets\/d\/1XRoD2jjGq7xqYU1NpfOCqYh_w6QBnBaxo_tna11ssek\/edit#gid=0)\n- Click on **File** in the top left corner and click **Make a copy** to make a copy.\n    - Optionally, rename your Google Sheet and Folder. \n    - Then, click on **OK**.\n- In the `Google Sheets: Add Row to Sheet` Action, add your `Spreadsheet ID` (and optionally `Sheet Name`).\n- View the `M` and `N` values in the `Transform: Mapping to Sheets Row` Step. Add your actual field name (found in the Uploadery dashboard) after `fields.`. Example: `{{current_item.fields.uploadery_1}}`.\n- Enable the Automation in the right sidebar and click **Save**.\n",
-  "tags": [
-      "google-sheets"
-  ],
-  "source": "uploadery",
-  "destination": "google-sheets",
   "enabled": false,
-  "logging": false,
-  "debug": false,
   "config": {
       "inputs": [
           {
@@ -42,108 +31,133 @@
               "weight": 0
           },
           {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "shopify_api",
-              "entity": "shop",
-              "action": "list",
-              "name": "Shopify Get List Shop",
-              "key": "shopify_shop",
-              "metadata": {
-                  "site": "current"
-              },
-              "local_fields": [],
-              "weight": 1
-          },
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "transform",
-              "entity": "mapping",
-              "name": "Mapping to Sheets Row",
-              "key": "mapping-to-sheets-row",
-              "metadata": {
-                  "mapping": [
-                      {
-                          "destination": "A",
-                          "source": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{uploadery_order_created.order.id}}"
-                      },
-                      {
-                          "destination": "B",
-                          "source": "{{uploadery_order_created.order.name}}"
-                      },
-                      {
-                          "destination": "C",
-                          "source": "{{uploadery_order_created.order.email}}"
-                      },
-                      {
-                          "destination": "D",
-                          "source": "{{uploadery_order_created.order.shipping_address.name}}"
-                      },
-                      {
-                          "destination": "E",
-                          "source": "{{uploadery_order_created.order.shipping_address.address1}}"
-                      },
-                      {
-                          "destination": "F",
-                          "source": "{{uploadery_order_created.order.shipping_address.city}}"
-                      },
-                      {
-                          "destination": "G",
-                          "source": "{{uploadery_order_created.order.shipping_address.province}}"
-                      },
-                      {
-                          "destination": "H",
-                          "source": "{{uploadery_order_created.order.shipping_address.zip}}"
-                      },
-                      {
-                          "destination": "I",
-                          "source": "{{uploadery_order_created.order.shipping_address.country}}"
-                      },
-                      {
-                          "destination": "J",
-                          "source": "{{iterator.title}}"
-                      },
-                      {
-                          "destination": "K",
-                          "source": "{{iterator.sku}}"
-                      },
-                      {
-                          "destination": "L",
-                          "source": "{{iterator.price}}"
-                      },
-                      {
-                          "destination": "M",
-                          "source": "{{iterator.fields.uploadery_1}}"
-                      },
-                      {
-                          "destination": "N",
-                          "source": "{{iterator.fields.uploadery_2}}"
-                      }
-                  ]
-              },
-              "local_fields": [
-                  {
-                      "key": "mapping",
-                      "type": "mapping"
-                  }
-              ],
-              "weight": 2
-          },
-          {
-              "schema": 2,
+              "schema": 4,
               "trigger_type": "output",
               "type": "googlesheets",
               "entity": "row",
-              "action": "add",
-              "name": "Google Sheets: Add Row to Sheet",
-              "key": "google-sheets-add-row-sheet",
+              "action": "create",
+              "name": "Google Sheets Add Row",
+              "key": "googlesheets_row",
               "metadata": {
-                  "token": "",
-                  "spreadsheet_id": "-vw"
+                  "header_row": "first_row",
+                  "body": {
+                      "fields": {
+                          "Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{uploadery_order_created.order.id}}",
+                          "Order Name": "{{uploadery_order_created.order.name}}",
+                          "Email": "{{uploadery_order_created.order.email}}",
+                          "Shipping Name": "{{uploadery_order_created.order.shipping_address.name}}",
+                          "Address": "{{uploadery_order_created.order.shipping_address.address1}}",
+                          "City": "{{uploadery_order_created.order.shipping_address.city}}",
+                          "Province": "{{uploadery_order_created.order.shipping_address.province}}",
+                          "Zip": "{{uploadery_order_created.order.shipping_address.zip}}",
+                          "Country": "{{uploadery_order_created.order.shipping_address.country}}",
+                          "Product Name": "{{iterator.title}}",
+                          "Product SKU": "{{iterator.sku}}",
+                          "Product Price": "{{iterator.price}}",
+                          "uploadery_1": "{{iterator.fields.uploadery_1}}",
+                          "uploadery_2": "{{iterator.fields.uploadery_2}}"
+                      }
+                  }
               },
-              "local_fields": [],
-              "weight": 3
+              "local_fields": [
+                  {
+                      "key": "body",
+                      "type": "object",
+                      "fields": [
+                          {
+                              "key": "fields",
+                              "type": "object",
+                              "fields": [
+                                  {
+                                      "key": "Order URL",
+                                      "label": "Order URL",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Order Name",
+                                      "label": "Order Name",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Email",
+                                      "label": "Email",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Shipping Name",
+                                      "label": "Shipping Name",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Address",
+                                      "label": "Address",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "City",
+                                      "label": "City",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Province",
+                                      "label": "Province",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Zip",
+                                      "label": "Zip",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Country",
+                                      "label": "Country",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Product Name",
+                                      "label": "Product Name",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Product SKU",
+                                      "label": "Product SKU",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Product Price",
+                                      "label": "Product Price",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "uploadery_1",
+                                      "label": "uploadery_1",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "uploadery_2",
+                                      "label": "uploadery_2",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ],
+              "weight": 1
           }
       ],
       "storage": []

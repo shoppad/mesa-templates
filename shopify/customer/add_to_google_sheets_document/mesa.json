@@ -1,13 +1,6 @@
 {
-  "key": "shopify/customer/add_to_google_sheets_document",
+  "key": "shopify_customer_add_to_google_sheets_document",
   "name": "Add Shopify Customer to Google Sheets Document",
-  "version": "1.0.0",
-  "description": "Send customer from Shopify to Google Sheets document when customer is updated.",
-  "video": "",
-  "readme": "",
-  "tags": ["customer"],	
-  "source": "shopify_webhook",
-  "destination": "google-sheets",
   "enabled": false,
   "logging": false,
   "debug": false,
@@ -22,56 +15,87 @@
               "name": "Shopify Customer Created",
               "key": "shopify_customer",
               "metadata": [],
+              "local_fields": [],
               "weight": 0
           }
       ],
       "outputs": [
           {
-              "schema": 2,
+              "schema": 4,
               "trigger_type": "output",
               "type": "googlesheets",
               "entity": "row",
-              "action": "add",
+              "action": "create",
               "name": "Google Sheets Add Row",
-              "key": "googlesheets_row",
+              "key": "googlesheets_row_1",
               "metadata": {
-                  "mapping": [
-                      {
-                          "destination": "id",
-                          "source": "{{shopify_customer.id}}"
-                      },
-                      {
-                          "destination": "email",
-                          "source": "{{shopify_customer.email}}"
-                      },
-                      {
-                          "destination": "First Name",
-                          "source": "{{shopify_customer.first_name}}"
-                      },
-                      {
-                          "destination": "Last Name",
-                          "source": "{{shopify_customer.last_name}}"
-                      },
-                      {
-                          "destination": "Phone",
-                          "source": "{{shopify_customer.phone}}"
-                      },
-                      {
-                          "destination": "Tags",
-                          "source": "{{shopify_customer.tags}}"
-                      },
-                      {
-                          "destination": "Note",
-                          "source": "{{shopify_customer.note}}"
+                  "header_row": "first_row",
+                  "body": {
+                      "fields": {
+                          "Customer ID": "{{shopify_customer.id}}",
+                          "Email": "{{shopify_customer.email}}",
+                          "First Name": "{{shopify_customer.first_name}}",
+                          "Last Name": "{{shopify_customer.last_name}}",
+                          "Phone": "{{shopify_customer.phone}}",
+                          "Tags": "{{shopify_customer.tags}}",
+                          "Note": "{{shopify_customer.note}}"
                       }
-                  ]
+                  }
               },
               "local_fields": [
                   {
-                      "key": "mapping",
-                      "type": "mapping",
-                      "tokens": "brackets",
-                      "location": "mapping"
+                      "key": "body",
+                      "type": "object",
+                      "fields": [
+                          {
+                              "key": "fields",
+                              "type": "object",
+                              "fields": [
+                                  {
+                                      "key": "Customer ID",
+                                      "label": "Customer ID",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Email",
+                                      "label": "Email",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "First Name",
+                                      "label": "First Name",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Last Name",
+                                      "label": "Last Name",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Phone",
+                                      "label": "Phone",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Tags",
+                                      "label": "Tags",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  },
+                                  {
+                                      "key": "Note",
+                                      "label": "Note",
+                                      "type": "text",
+                                      "source": "googlesheets"
+                                  }
+                              ]
+                          }
+                      ]
                   }
               ],
               "weight": 0
