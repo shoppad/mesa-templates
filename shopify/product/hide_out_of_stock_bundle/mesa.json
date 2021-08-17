@@ -1,0 +1,120 @@
+{
+  "key": "shopify/product/hide_out_of_stock_bundle",
+  "name": "Manage customer expectations when an add-on product is out of stock",
+  "version": "1.0.0",
+  "description": "Don't confuse customers during checkout by offering out-of-stock add-on products. This template allows you to hide or show bundling on the product page based on availability.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "product",
+        "action": "updated",
+        "name": "Shopify Product Updated",
+        "key": "shopify_product",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_product.id}}",
+          "comparison": "equals",
+          "b": ""
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "product",
+        "action": "retrieve",
+        "name": "Shopify Product Retrieve",
+        "key": "shopify_product_2",
+        "metadata": {
+          "product_id": ""
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Transform Mapping",
+        "key": "transform_mapping",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "main_product_tags",
+              "source": "{{shopify_product_2.tags}}"
+            },
+            {
+              "destination": "upsell_product_id",
+              "source": "{{shopify_product.id}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Check if it requires an update or not",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js",
+          "description": "Custom code checks for the inventory and the tags and decides if it needs to update or not."
+        },
+        "local_fields": [],
+        "weight": 3
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "product",
+        "action": "update",
+        "name": "Shopify Product Update",
+        "key": "shopify_product_1",
+        "metadata": {
+          "product_id": "{{shopify_product_2.id}}",
+          "body": {
+            "tags": "{{ custom.tags }}"
+          }
+        },
+        "local_fields": [],
+        "weight": 4
+      }
+    ],
+    "storage": []
+  }
+}
