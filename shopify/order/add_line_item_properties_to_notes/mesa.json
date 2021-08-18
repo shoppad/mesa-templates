@@ -5,7 +5,9 @@
   "description": "Add line item properties from Infinite Options or Uploadery to the Order Notes field so they can be easily read by third party services.",
   "video": "",
   "readme": "",
-  "tags": ["shopify"],
+  "tags": [
+    "shopify"
+  ],
   "source": "shopify_webhook",
   "destination": "shopify_api",
   "enabled": false,
@@ -49,7 +51,7 @@
         "metadata": {
           "order_id": "{{shopify_order.id}}",
           "body": {
-            "note": "{{shopify_order.notes}}{{custom.line_item_properties}}"
+            "note": "{{shopify_order.note}}{{custom.line_item_properties}}"
           }
         },
         "local_fields": [],
