@@ -1,49 +1,61 @@
 {
-  "key": "shopify/checkout/send_sms_for_abandoned_checkout",
-  "name": "Send an SMS Message if a Shopper Abandons their Checkout",
-  "version": "1.0.0",
-  "description": "",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify_webhook",
-  "destination": "twilio",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "entity": "checkout",
-        "action": "created",
-        "name": "New Abandoned Cart",
-        "key": "shopify_checkout",
-        "metadata": {
-          "topic": "checkouts/create"
-        },
-        "local_fields": null,
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "twilio",
-        "entity": "sms",
-        "action": "send",
-        "name": "Twilio Send SMS",
-        "key": "twilio_sms",
-        "metadata": {
-          "from": "+15105551234",
-          "to": "{{shopify_checkout.phone}}",
-          "message": "Hi {{shopify_checkout.customer.first_name}}! We noticed that you left a few items in your cart, so we saved them for you. Click here to complete your purchase: {{shopify_checkout.abandoned_checkout_url}}"
-        },
-        "local_fields": null,
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify_checkout_send_sms_for_abandoned_checkout",
+    "name": "Send an SMS Message if a Shopper Abandons their Checkout",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "twilio",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "checkout",
+                "action": "created",
+                "name": "New Abandoned Cart",
+                "key": "shopify_checkout",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter - Checkout has a phone number",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_checkout.phone}}",
+                    "comparison": "does not equal"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "sms",
+                "entity": "message",
+                "action": "send",
+                "name": "SMS Send Message",
+                "key": "sms_message",
+                "metadata": {
+                    "to": "{{shopify_checkout.phone}}",
+                    "message": "Hi {{shopify_checkout.customer.first_name}}! We noticed that you left a few items in your cart, so we saved them for you. Click here to complete your purchase: {{shopify_checkout.abandoned_checkout_url}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }
