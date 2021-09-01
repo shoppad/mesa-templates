@@ -1,6 +1,7 @@
 {
     "key": "form/send_to_gatsby",
     "name": "Capture an influencer's Instagram handle and send it to Gatsby",
+    "description": "Gatsby allows you to gather Instagram handles and insights from your most influential customers. With Forms by Mesa, you can now extend its functionality and fully customize forms that send the data.",
     "version": "1.0.0",
     "enabled": false,
     "config": {
