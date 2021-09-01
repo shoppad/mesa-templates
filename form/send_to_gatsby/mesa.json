@@ -1,0 +1,78 @@
+{
+    "key": "form/send_to_gatsby",
+    "name": "Capture an influencer's Instagram handle and send it to Gatsby",
+    "version": "1.0.0",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "form",
+                "name": "Form",
+                "key": "form",
+                "metadata": {
+                    "form_data": [
+                        {
+                            "type": "text",
+                            "required": true,
+                            "label": "First Name",
+                            "className": "form-control",
+                            "name": "first_name",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "required": true,
+                            "label": "Last Name",
+                            "className": "form-control",
+                            "name": "last_name",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "subtype": "email",
+                            "required": true,
+                            "label": "Email",
+                            "className": "form-control",
+                            "name": "email"
+                        },
+                        {
+                            "type": "text",
+                            "required": true,
+                            "label": "Instagram Handle",
+                            "className": "form-control",
+                            "name": "handle",
+                            "subtype": "text"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gatsby",
+                "entity": "contact",
+                "action": "create",
+                "name": "Gatsby Create Contact",
+                "key": "gatsby_contact",
+                "metadata": {
+                    "webhook_url": "",
+                    "body": {
+                        "email": "{{form.email}}",
+                        "handle": "{{form.handle}}",
+                        "fname": "{{form.first_name}}",
+                        "lname": "{{form.last_name}}"
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
