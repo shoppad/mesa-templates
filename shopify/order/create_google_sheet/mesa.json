@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/create_google_sheet",
-    "name": "Create a New Google Sheet for Every Largee Order",
+    "name": "Create a New Google Sheet for Every Large Order",
     "version": "1.0.0",
     "description": "Large orders can be challenging to manage without the right tools. With this template, you can create a new Google Sheet for every Shopify Order with more than 15 line items. This is a great way to view larger orders in a single spreadsheet view rather than within the Shopify Admin.",
     "video": "",
