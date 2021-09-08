@@ -1,8 +1,8 @@
 {
-    "key": "shopify/order/create_google_sheet",
-    "name": "Create a New Google Sheet for Every Large Order",
+    "key": "shopify/customer/tag_customer_vip",
+    "name": "Automatically Tag Customers After They Hit a Lifetime Spending Threshold",
     "version": "1.0.0",
-    "description": "Large orders can be challenging to manage without the right tools. With this template, you can create a new Google Sheet for every Shopify Order with more than 15 line items. This is a great way to view larger orders in a single spreadsheet view rather than within the Shopify Admin.",
+    "description": "Automatically tag your customers as VIPs once they hit a lifetime spending milestone. Then you can be extra attentive to your top buyers by offering them exclusive merchandise, sending them personalized thank you emails, or even providing special discounts.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -28,15 +28,15 @@
         ],
         "outputs": [
             {
-                "schema": 4,
+                "schema": 3,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
+                "type": "shopify_api",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Customer",
+                "key": "shopify_customer",
                 "metadata": {
-                    "a": "{{shopify_order.line_items.size}}",
-                    "comparison": "greater than",
-                    "b": "15"
+                    "customer_id": "{{shopify_order.customer.id}}"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -44,18 +44,33 @@
             {
                 "schema": 4,
                 "trigger_type": "output",
-                "type": "googlesheets",
-                "entity": "sheet",
-                "action": "write",
-                "name": "Google Sheets Sheet Write",
-                "key": "googlesheets_sheet",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
                 "metadata": {
-                    "make_labels": true,
-                    "append": true,
-                    "rows": "{{shopify_order.line_items[]}}"
+                    "a": "{{shopify_customer.total_spent}}",
+                    "comparison": "greater than",
+                    "b": "1500"
                 },
                 "local_fields": [],
                 "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Shopify Customer Add Tag",
+                "key": "shopify_customer_2",
+                "metadata": {
+                    "customer_id": "{{shopify_order.customer.id}}",
+                    "body": {
+                        "tag": "VIP"
+                    }
+                },
+                "local_fields": [],
+                "weight": 2
             }
         ],
         "storage": []
