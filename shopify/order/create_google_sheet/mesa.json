@@ -51,7 +51,8 @@
                 "key": "googlesheets_sheet",
                 "metadata": {
                     "make_labels": true,
-                    "append": true
+                    "append": true,
+                    "rows": "{{shopify_order.line_items[]}}"
                 },
                 "local_fields": [],
                 "weight": 1
