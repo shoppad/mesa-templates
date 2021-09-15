@@ -10,8 +10,8 @@
   ],
   "source": "shopify_webhook",
   "destination": "shopify_api",
-  "enabled": false,
-  "logging": false,
+  "enabled": true,
+  "logging": true,
   "debug": false,
   "config": {
     "inputs": [
