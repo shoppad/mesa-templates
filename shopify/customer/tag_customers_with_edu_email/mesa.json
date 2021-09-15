@@ -6,59 +6,60 @@
   "video": "",
   "readme": "",
   "tags": [],
-  "source": "shopify_webhook",
-  "destination": "shopify_api",
-  "enabled": false,
-  "logging": false,
+  "source": "shopify",
+  "destination": "shopify",
+  "seconds": 0,
+  "enabled": true,
+  "logging": true,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify_webhook",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify Order Created",
-              "key": "shopify_order",
-              "metadata": [],
-              "weight": 0
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": ".edu",
+          "comparison": "in",
+          "b": "{{shopify_order.email}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "customer",
+        "action": "tag_add",
+        "name": "Shopify Customer Add Tag",
+        "key": "shopify_customer",
+        "metadata": {
+          "customer_id": "{{shopify_order.customer.id}}",
+          "body": {
+            "tag": "Educational Discount"
           }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "filter",
-              "name": "Filter",
-              "key": "filter",
-              "metadata": {
-                  "a": ".edu",
-                  "comparison": "in",
-                  "b": "{{shopify_order.email}}"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 3,
-              "trigger_type": "output",
-              "type": "shopify_api",
-              "entity": "order",
-              "action": "update",
-              "name": "Shopify Update Order",
-              "key": "shopify_order_1",
-              "metadata": {
-                  "order_id": "{{shopify_order.id}}",
-                  "body": {
-                      "tags": "{{shopify_order.tags}}, Educational Discount"
-                  },
-                  "site": "current"
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
   }
 }
