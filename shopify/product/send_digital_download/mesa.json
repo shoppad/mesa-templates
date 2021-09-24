@@ -1,0 +1,107 @@
+{
+    "key": "send_digital_download",
+    "name": "Start selling digital downloads without another Shopify app",
+    "version": "1.0.0",
+    "description": "Quickly sell downloadable products from your Shopify store without using another app. Offering downloadable products is a great way to grow your business or complement your physical products.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "equals",
+                    "a": "{{shopify_order.line_items[0].fulfillment_service}}",
+                    "b": "digital-download"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order_fulfillment",
+                "action": "create",
+                "name": "Shopify Create Order Fulfillment",
+                "key": "shopify_order_fulfillment",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "line_items ": "{{iterator.id}}",
+                        "notify_customer": "false"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "line_items ",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            },
+                            {
+                                "key": "notify_customer",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            }
+                        ]
+                    }
+                ],
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{shopify_order.email}}",
+                    "subject": "Link to your Digital Download ",
+                    "message": "Hello {{shopify_order.customer.first_name}}! \n\nThank you for placing your order: {{shopify_order.name}}. \n\nYour order is ready for download at this link: "
+                },
+                "local_fields": [],
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
+}
