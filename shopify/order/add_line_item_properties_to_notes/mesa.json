@@ -1,63 +1,36 @@
 {
   "key": "shopify/order/add_line_item_properties_to_notes",
   "name": "Add Line Item Properties to Order Notes",
-  "version": "1.0.0",
-  "description": "Add line item properties from Infinite Options or Uploadery to the Order Notes field so they can be easily read by third party services.",
-  "video": "",
-  "readme": "",
-  "tags": [
-    "shopify"
-  ],
-  "source": "shopify_webhook",
-  "destination": "shopify_api",
+  "version": "2.0.0",
   "enabled": true,
-  "logging": true,
-  "debug": false,
   "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Converting Line Items Properties Into A String",
-        "key": "custom",
-        "metadata": {
-          "script": "custom.js"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "order",
-        "action": "update",
-        "name": "Shopify Update Order",
-        "key": "shopify_order_1",
-        "metadata": {
-          "order_id": "{{shopify_order.id}}",
-          "body": {
-            "note": "{{shopify_order.note}}{{custom.line_item_properties}}"
+      "inputs": [
+          {
+              "schema": 3,
+              "trigger_type": "input",
+              "type": "shopify_webhook",
+              "entity": "order",
+              "action": "created",
+              "name": "Shopify Order Created",
+              "key": "shopify_order",
+              "metadata": [],
+              "weight": 0
           }
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
+      ],
+      "outputs": [
+          {
+              "schema": 3,
+              "trigger_type": "output",
+              "type": "shopify_api",
+              "entity": "order",
+              "action": "note_update",
+              "name": "Shopify Update Order Note",
+              "key": "shopify_order_note_update",
+              "metadata": [],
+              "local_fields": [],
+              "weight": 0
+          }
+      ],
+      "storage": []
   }
 }
