@@ -4,33 +4,37 @@
   "version": "2.0.0",
   "enabled": true,
   "config": {
-      "inputs": [
-          {
-              "schema": 3,
-              "trigger_type": "input",
-              "type": "shopify_webhook",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify Order Created",
-              "key": "shopify_order",
-              "metadata": [],
-              "weight": 0
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "order",
+        "action": "note_update",
+        "name": "Shopify Order Note Update",
+        "key": "shopify_order_2",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "note": "{% for line_item in shopify_order.line_items %}\nProduct Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}{% endfor %}"
           }
-      ],
-      "outputs": [
-          {
-              "schema": 3,
-              "trigger_type": "output",
-              "type": "shopify_api",
-              "entity": "order",
-              "action": "note_update",
-              "name": "Shopify Update Order Note",
-              "key": "shopify_order_note_update",
-              "metadata": [],
-              "local_fields": [],
-              "weight": 0
-          }
-      ],
-      "storage": []
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ]
   }
 }
