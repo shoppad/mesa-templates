@@ -1,0 +1,199 @@
+{
+    "key": "infiniteoptions_order_add_product_bundle_to_google_sheet",
+    "name": "Add Infinite Options Product Bundles to Google Sheet",
+    "version": "1.0.0",
+    "description": "TBD",
+    "video": "",
+    "readme": "",
+    "tags": [""],
+    "source": "infiniteoptions",
+    "destination": "googlesheets",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Infinite Options: Order Created",
+                "key": "infinite_options_order_created",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator: Line items",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{infinite_options_order_created.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check if line item is a product bundle",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{iterator.fields._io_parent_order_group | size}}",
+                    "comparison": "greater than",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom: Find the bundled product's parent product",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js",
+                    "description": "Locates the parent product associated with the bundled line item"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Google Sheets Row Create",
+                "key": "googlesheets_row",
+                "metadata": {
+                    "header_row": "first_row",
+                    "body": {
+                        "fields": {
+                            "Product Bundle Name": "{{iterator.name}}",
+                            "Product Bundle SKU": "{{iterator.sku}}",
+                            "Product Bundle Variant ID": "{{iterator.variant_id}}",
+                            "Product Bundle Line Item ID": "{{iterator.id}}",
+                            "Product Bundle Total Price": "{{iterator.price}}",
+                            "Parent Product Name": "{% if custom.parent_product_name %}{{custom.parent_product_name}}{% else %}Not available{% endif %}",
+                            "Parent Product SKU": "{% if custom.parent_product_sku %}{{custom.parent_product_sku}}{% else %}Not found{% endif %}",
+                            "Parent Product Variant ID": "{% if custom.parent_product_variant_id %}{{custom.parent_product_variant_id}}{% else %}Not found{% endif %}",
+                            "Parent Product Line Item ID": "{% if custom.parent_product_line_item_id %}{{custom.parent_product_line_item_id}}{% else %}Not found{% endif %}",
+                            "Order ID": "{{infinite_options_order_created.order.id}}",
+                            "Order Name (number)": "{{infinite_options_order_created.order.name}}",
+                            "Created At": "{{infinite_options_order_created.order.created_at}}",
+                            "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{infinite_options_order_created.order.id}}"
+                        }
+                    },
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet_name": "Product Bundle Details"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Product Bundle Name",
+                                        "label": "Product Bundle Name",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Bundle SKU",
+                                        "label": "Product Bundle SKU",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Bundle Variant ID",
+                                        "label": "Product Bundle Variant ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Bundle Line Item ID",
+                                        "label": "Product Bundle Line Item ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Bundle Total Price",
+                                        "label": "Product Bundle Total Price",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Parent Product Name",
+                                        "label": "Parent Product Name",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Parent Product SKU",
+                                        "label": "Parent Product SKU",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Parent Product Variant ID",
+                                        "label": "Parent Product Variant ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Parent Product Line Item ID",
+                                        "label": "Parent Product Line Item ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order ID",
+                                        "label": "Order ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Name (number)",
+                                        "label": "Order Name (number)",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Admin Order URL",
+                                        "label": "Admin Order URL",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
+}
