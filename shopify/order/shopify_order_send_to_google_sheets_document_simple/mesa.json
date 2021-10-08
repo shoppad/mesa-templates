@@ -1,0 +1,234 @@
+{
+    "key": "shopify_order_send_to_google_sheets_document_simple",
+    "name": "Send Order To Google Sheets Document (Simple Version)",
+    "version": 1,
+    "description": "",
+    "video": "",
+    "readme": "<h2>Setup<\/h2><ul><li>Create a <a href=\"https:\/\/docs.getmesa.com\/article\/596-credentials\">Credential<\/a> and authenticate with Google on the <strong>Google Sheets Add Row<\/strong> step and <strong>Google Sheets - Order: Line Item Properties Information<\/strong> step.<\/li><li><a href=\"https:\/\/docs.google.com\/spreadsheets\/d\/1FLreQqoIBvmDpim5O1u15c7OmIHKwkkSev5LXFoZC5o\/copy\">View this Google Sheet<\/a> and click <strong>Make a Copy<\/strong>.<\/li><li>Select the copied spreadsheet on the Spreadsheet field in the <strong>Google Sheets Add Row<\/strong> step and <strong>Google Sheets - Order: Line Item Properties Information<\/strong> step.<\/li><li>Select <strong>Orders-Full Details<\/strong> on the Sheet Name field in the Google Sheets Add Row step. <\/li><li>Select <strong>Orders-Line Item Properties<\/strong> on the Sheet Name field in the Google Sheets - Order: Line Item Properties Information step.<\/li><li>Keep the B field empty in the <strong>Filter out blank line item properties<\/strong> step. This needs to be empty.<\/li><li>Click the <strong>Save <\/strong>and <strong>Enable<\/strong> buttons to save and enable the workflow.<\/li><\/ul><h2>Tips &amp; Information<\/h2><ul><li>View the Help Tab in the copied Google Sheet. The Help Tab provides tips and helpful information.<\/li><\/ul>",
+    "tags": [],
+    "source": "shopify",
+    "destination": "google-sheets",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "iterator",
+                "name": "Iterator: Loop over each product in the order",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Google Sheets Add Row",
+                "key": "googlesheets_row_1",
+                "metadata": {
+                    "header_row": "first_row",
+                    "body": {
+                        "fields": {
+                            "Order ID": "{{shopify_order.id}}",
+                            "Order Name (number)": "{{shopify_order.name}}",
+                            "Order Email": "{{shopify_order.email}}",
+                            "Customer First Name": "{{shopify_order.customer.first_name}}",
+                            "Customer Last Name": "{{shopify_order.customer.last_name}}",
+                            "Customer Email": "{{shopify_order.customer.email}}",
+                            "Total Price": "{{shopify_order.total_price}}",
+                            "Shipping Address 1": "{{shopify_order.shipping_address.address1}}",
+                            "Shipping Address 2": "{{shopify_order.shipping_address.address2}}",
+                            "Shipping City": "{{shopify_order.shipping_address.city}}",
+                            "Shipping Zip": "{{shopify_order.shipping_address.zip}}",
+                            "Shipping Province": "{{shopify_order.shipping_address.province}}",
+                            "Shipping Country": "{{shopify_order.shipping_address.country}}",
+                            "Order Tags": "{{shopify_order.tags}}",
+                            "Order Notes": "{{shopify_order.note}}",
+                            "Product Title": "{{iterator.title}}",
+                            "Product Variant": "{{iterator.variant_title}}",
+                            "Product SKU": "{{iterator.sku}}",
+                            "Product Price": "{{iterator.price}}",
+                            "Line Item ID": "{{iterator.id}}",
+                            "Created At": "{{shopify_order.created_at}}",
+                            "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
+                        }
+                    },
+                    "path": {
+                        "sheet_name": "Orders"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Order ID",
+                                        "label": "Order ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Name (number)",
+                                        "label": "Order Name (number)",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Email",
+                                        "label": "Order Email",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Customer First Name",
+                                        "label": "Customer First Name",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Customer Last Name",
+                                        "label": "Customer Last Name",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Customer Email",
+                                        "label": "Customer Email",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Total Price",
+                                        "label": "Total Price",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Address 1",
+                                        "label": "Shipping Address 1",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Address 2",
+                                        "label": "Shipping Address 2",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping City",
+                                        "label": "Shipping City",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Zip",
+                                        "label": "Shipping Zip",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Province",
+                                        "label": "Shipping Province",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Shipping Country",
+                                        "label": "Shipping Country",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Tags",
+                                        "label": "Order Tags",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Order Notes",
+                                        "label": "Order Notes",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Title",
+                                        "label": "Product Title",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Variant",
+                                        "label": "Product Variant",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product SKU",
+                                        "label": "Product SKU",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Price",
+                                        "label": "Product Price",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Line Item ID",
+                                        "label": "Line Item ID",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Admin Order URL",
+                                        "label": "Admin Order URL",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
