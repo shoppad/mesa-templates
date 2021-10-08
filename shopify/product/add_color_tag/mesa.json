@@ -1,46 +1,68 @@
 {
-  "key": "shopify/product/add_color_tag",
-  "name": "Add Color Tag To Product",
-  "version": "1.0.0",
-  "description": "Add a tag of each color variant to the product when the product is created or updated.",
-  "video": null,
-  "readme": "\n\n## Setup\n\nThis template will look for any Color variant options and add tag(s) in the format `Color: ${color}` to the product.",
-  "tags": [
-    "Product"
-  ],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": true,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Product Create",
-        "key": "in_shopify_product_create",
-        "entity": "product",
-        "action": "created"
-      },
-      {
-        "trigger_type": "input",
-        "type": "shopify_webhook",
-        "name": "Shopify Product Update",
-        "key": "in_shopify_product_update",
-        "entity": "product",
-        "action": "updated"
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "name": "Add Shopify Product Tag",
-        "key": "out_add_shopify_product_tag",
-        "script": "out_add_shopify_product_tag.js",
-        "shopify_api": "PUT admin/products/{{product_id}}.json"
-      }
-    ],
-    "secrets": [],
-    "storage": []
-  }
+    "key": "shopify/product/add_color_tag",
+    "name": "Add Color Tag To Product",
+    "version": "2.0.0",
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify_webhook",
+                "entity": "product",
+                "action": "updated",
+                "name": "Shopify Product Updated",
+                "key": "shopify_product",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Does not have Color tag",
+                "key": "filter_1",
+                "metadata": {
+                    "comparison": "not in",
+                    "b": "{{shopify_product.tags}}",
+                    "a": "Color:"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "image",
+                "entity": "colors",
+                "action": "identify",
+                "name": "Image Identify Colors",
+                "key": "image_colors",
+                "metadata": {
+                    "image_url": "{{shopify_product.images[0].src}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "product",
+                "action": "tag_add",
+                "name": "Shopify Product Add Tag",
+                "key": "shopify_product_1",
+                "metadata": {
+                    "product_id": "{{shopify_product.id}}",
+                    "body": {
+                        "tag": "Color: {{ image_colors.colors | join: \", Color: \" }}\n"
+                    }
+                },
+                "local_fields": [],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
 }
