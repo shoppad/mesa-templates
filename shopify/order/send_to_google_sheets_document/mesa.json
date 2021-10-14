@@ -1,7 +1,16 @@
 {
     "key": "send_to_google_sheets_document",
     "name": "Send Order To Google Sheets Document",
+    "version": 1,
+    "description": "Grabbing information from each order is very time-consuming while running a successful store. This template sends order details with line-item properties from Shopify to Google Sheets when an order is created. You can now keep track of your orders and line-item properties with charts\/reporting on one of the most popular collaborative hubs.",
+    "video": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "google-sheets",
+    "seconds": 0,
     "enabled": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {
@@ -13,6 +22,7 @@
                 "name": "Shopify Order Created",
                 "key": "shopify_order",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -21,7 +31,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator: Loop over each Line Item",
+                "name": "Iterator: Loop over each product in the order",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
@@ -64,6 +74,9 @@
                             "Created At": "{{shopify_order.created_at}}",
                             "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
                         }
+                    },
+                    "path": {
+                        "sheet_name": "Orders"
                     }
                 },
                 "local_fields": [
@@ -213,104 +226,6 @@
                     }
                 ],
                 "weight": 1
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "iterator",
-                "name": "Iterator: Iterate over Line Item Properties in each Line Item",
-                "key": "iterator_1",
-                "metadata": {
-                    "key": "{{iterator.properties}}"
-                },
-                "local_fields": [],
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter out blank line item properties",
-                "key": "filter",
-                "metadata": {
-                    "comparison": "does not equal",
-                    "a": "{{iterator_1.value}}"
-                },
-                "local_fields": [],
-                "weight": 3
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "googlesheets",
-                "entity": "row",
-                "action": "create",
-                "name": "Google Sheets - Order: Line Item Properties Information",
-                "key": "googlesheets_row",
-                "metadata": {
-                    "header_row": "first_row",
-                    "body": {
-                        "fields": {
-                            "Order ID": "{{shopify_order.id}}",
-                            "Order Name (number)": "{{shopify_order.name}}",
-                            "Property Name": "{{iterator_1.name}}",
-                            "Property Value": "{{iterator_1.value}}",
-                            "Line Item ID": "{{iterator.id}}",
-                            "Created At": "{{shopify_order.created_at}}"
-                        }
-                    }
-                },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "fields",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "Order ID",
-                                        "label": "Order ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
-                                    },
-                                    {
-                                        "key": "Order Name (number)",
-                                        "label": "Order Name (number)",
-                                        "type": "text",
-                                        "source": "googlesheets"
-                                    },
-                                    {
-                                        "key": "Property Name",
-                                        "label": "Property Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
-                                    },
-                                    {
-                                        "key": "Property Value",
-                                        "label": "Property Value",
-                                        "type": "text",
-                                        "source": "googlesheets"
-                                    },
-                                    {
-                                        "key": "Line Item ID",
-                                        "label": "Line Item ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
-                                    },
-                                    {
-                                        "key": "Created At",
-                                        "label": "Created At",
-                                        "type": "text",
-                                        "source": "googlesheets"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "weight": 4
             }
         ],
         "storage": []
