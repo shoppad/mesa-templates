@@ -1,7 +1,7 @@
 {
     "key": "shopify/order/send_order_report_card_email",
     "name": "Daily Order Report Card",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Sends daily status \"report card\" email containing information on your Shopify orders for the past 24 hours.",
     "video": "",
     "readme": "",
@@ -37,7 +37,7 @@
                 "name": "Shopify List Order",
                 "key": "shopify_order",
                 "metadata": {
-                    "parameters": "status=any&limit=250&created_at_min={{date:24 hours ago}}&created_at_max={{date:0 hours ago}}"
+                    "parameters": "status=any&limit=250&created_at_min={{date:24 hours ago}}&created_at_max={{date:now}}"
                 },
                 "local_fields": [],
                 "weight": 0
