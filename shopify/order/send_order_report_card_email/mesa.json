@@ -37,7 +37,7 @@
                 "name": "Shopify List Order",
                 "key": "shopify_order",
                 "metadata": {
-                    "parameters": "status=any&limit=250&created_at_min={{date:24 hours ago}}&created_at_max={{date:now}}"
+                    "parameters": "status=any&limit=250&created_at_min={{date:24 hours ago}}&created_at_max={{date:0 hours ago}}"
                 },
                 "local_fields": [],
                 "weight": 0
