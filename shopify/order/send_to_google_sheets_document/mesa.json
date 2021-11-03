@@ -2,8 +2,9 @@
     "key": "send_to_google_sheets_document",
     "name": "Send Order To Google Sheets Document",
     "version": 1,
-    "description": "Grabbing information from each order is very time-consuming while running a successful store. This template sends order details with line-item properties from Shopify to Google Sheets when an order is created. You can now keep track of your orders and line-item properties with charts\/reporting on one of the most popular collaborative hubs.",
+    "description": "Grabbing order details is very time-consuming while running a successful store. But what if you could quickly send order data from Shopify to Google Sheets every time an order is created? This simple template does just that! Rest easy knowing that you can now track your orders and options on one of the most popular collaborative hubs.",
     "video": "",
+    "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "google-sheets",
@@ -70,6 +71,7 @@
                             "Product Variant": "{{iterator.variant_title}}",
                             "Product SKU": "{{iterator.sku}}",
                             "Product Price": "{{iterator.price}}",
+                            "Product Quantity": "{{iterator.quantity}}",
                             "Line Item ID": "{{iterator.id}}",
                             "Created At": "{{shopify_order.created_at}}",
                             "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
@@ -199,6 +201,12 @@
                                     {
                                         "key": "Product Price",
                                         "label": "Product Price",
+                                        "type": "text",
+                                        "source": "googlesheets"
+                                    },
+                                    {
+                                        "key": "Product Quantity",
+                                        "label": "Product Quantity",
                                         "type": "text",
                                         "source": "googlesheets"
                                     },
