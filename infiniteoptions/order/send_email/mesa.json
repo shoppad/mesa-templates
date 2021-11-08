@@ -2,7 +2,7 @@
   "key": "infiniteoptions/order/send_email",
   "name": "Send an Email When an Infinite Options Product Is Purchased",
   "version": "1.0.0",
-  "description": "Send an email when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is compatible with any marketing platform and handy for notifying your team when a product requires special handling (ex. gift wrapping, professional install, etc.)",
+  "description": "Avoid surprises and ensure both you and your team are prepared for when an order is placed containing a product that requires special handling. MESA will automatically send an email to your store’s registered email address when an order with Infinite Options products is purchased",
   "video": "",
   "readme": "",
   "tags": [],
