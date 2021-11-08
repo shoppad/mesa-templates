@@ -9,7 +9,7 @@
   "source": "",
   "destination": "",
   "seconds": 0,
-  "enabled": false,
+  "enabled": true,
   "logging": false,
   "debug": false,
   "config": {
@@ -23,7 +23,6 @@
         "name": "Infinite Options Order Created",
         "key": "infiniteoptions_order",
         "metadata": {
-          "field_name": "Special_Notes"
         },
         "local_fields": [],
         "weight": 0
