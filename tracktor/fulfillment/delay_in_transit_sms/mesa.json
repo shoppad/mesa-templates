@@ -65,6 +65,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "sms",
+                "is_premium": true,
                 "entity": "message",
                 "action": "send",
                 "name": "SMS Message Send",

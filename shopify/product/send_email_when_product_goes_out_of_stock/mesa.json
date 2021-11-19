@@ -73,6 +73,7 @@
       {
         "trigger_type": "output",
         "type": "email",
+                "is_premium": true,
         "entity": null,
         "action": null,
         "name": "Email  ",

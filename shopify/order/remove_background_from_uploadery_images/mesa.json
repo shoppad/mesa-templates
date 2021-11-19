@@ -36,6 +36,7 @@
             {
                 "trigger_type": "output",
                 "type": "image",
+                "is_premium": true,
                 "entity": "background",
                 "action": "remove",
                 "name": "Image: Remove Background",

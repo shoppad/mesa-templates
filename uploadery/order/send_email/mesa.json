@@ -23,6 +23,7 @@
       {
         "trigger_type": "output",
         "type": "email",
+                "is_premium": true,
         "name": "Email",
         "key": "email",
         "metadata": {

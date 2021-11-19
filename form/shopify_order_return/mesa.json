@@ -128,6 +128,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
+                "is_premium": true,
                 "name": "Customer Email",
                 "key": "email",
                 "metadata": {
