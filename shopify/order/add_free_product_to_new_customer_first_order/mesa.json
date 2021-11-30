@@ -48,7 +48,9 @@
                     "body": {
                         "quantity": "1",
                         "notify_customer": true,
-                        "order_note": "Add free product"
+                        "order_note": "Add free product",
+                        "discount_type": "Percentage",
+                        "discount_amount": "100"
                     }
                 },
                 "local_fields": [],
