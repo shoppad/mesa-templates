@@ -52,6 +52,8 @@
                         "product_id": "",
                         "variant_id": "",
                         "quantity": "1",
+                        "discount_type": "Percentage",
+                        "discount_amount": "100",
                         "notify_customer": "false",
                         "order_note": "Add free product"
                     }
