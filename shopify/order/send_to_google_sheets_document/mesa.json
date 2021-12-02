@@ -1,8 +1,8 @@
 {
     "key": "send_to_google_sheets_document",
-    "name": "Send Order To Google Sheets Document",
+    "name": "Send orders to Google Sheets ",
+    "description": "",
     "version": 1,
-    "description": "Grabbing order details is very time-consuming while running a successful store. But what if you could quickly send order data from Shopify to Google Sheets every time an order is created? This simple template does just that! Rest easy knowing that you can now track your orders and options on one of the most popular collaborative hubs.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -78,7 +78,8 @@
                         }
                     },
                     "path": {
-                        "sheet_name": "Orders"
+                        "spreadsheet_id": "Create new Google Sheet",
+                        "sheet_name": "Sheet1"
                     }
                 },
                 "local_fields": [
@@ -94,139 +95,139 @@
                                         "key": "Order ID",
                                         "label": "Order ID",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Order Name (number)",
                                         "label": "Order Name (number)",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Order Email",
                                         "label": "Order Email",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Customer First Name",
                                         "label": "Customer First Name",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Customer Last Name",
                                         "label": "Customer Last Name",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Customer Email",
                                         "label": "Customer Email",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Total Price",
                                         "label": "Total Price",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Shipping Address 1",
                                         "label": "Shipping Address 1",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Shipping Address 2",
                                         "label": "Shipping Address 2",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Shipping City",
                                         "label": "Shipping City",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Shipping Zip",
                                         "label": "Shipping Zip",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Shipping Province",
                                         "label": "Shipping Province",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Shipping Country",
                                         "label": "Shipping Country",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Order Tags",
                                         "label": "Order Tags",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Order Notes",
                                         "label": "Order Notes",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Product Title",
                                         "label": "Product Title",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Product Variant",
                                         "label": "Product Variant",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Product SKU",
                                         "label": "Product SKU",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Product Price",
                                         "label": "Product Price",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Product Quantity",
                                         "label": "Product Quantity",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Line Item ID",
                                         "label": "Line Item ID",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Created At",
                                         "label": "Created At",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     },
                                     {
                                         "key": "Admin Order URL",
                                         "label": "Admin Order URL",
                                         "type": "text",
-                                        "source": "googlesheets"
+                                        "source": ""
                                     }
                                 ]
                             }
