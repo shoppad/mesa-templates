@@ -1,8 +1,8 @@
 {
     "key": "send_to_google_sheets_document",
-    "name": "Send Order To Google Sheets Document",
+    "name": "Send orders to Google Sheets ",
+    "description": "",
     "version": 1,
-    "description": "Grabbing order details is very time-consuming while running a successful store. But what if you could quickly send order data from Shopify to Google Sheets every time an order is created? This simple template does just that! Rest easy knowing that you can now track your orders and options on one of the most popular collaborative hubs.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -78,7 +78,8 @@
                         }
                     },
                     "path": {
-                        "sheet_name": "Orders"
+                        "spreadsheet_id": "Create new Google Sheet",
+                        "sheet_name": "Sheet1"
                     }
                 },
                 "local_fields": [
