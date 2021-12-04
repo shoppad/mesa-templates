@@ -38,7 +38,7 @@
               "entity": "row",
               "action": "create",
               "name": "Google Sheets Row Create",
-              "key": "_row_1",
+              "key": "googlesheets_row_1",
               "metadata": {
                   "header_row": "first_row",
                   "path": {
