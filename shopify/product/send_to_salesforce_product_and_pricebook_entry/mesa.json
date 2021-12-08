@@ -30,12 +30,11 @@
             {
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator",
+                "name": "Loop",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{shopify-product-created-or-updated.variants[]}}"
                 },
-                "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
                 "destination_entity": "product"
             },
             {

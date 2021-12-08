@@ -33,7 +33,7 @@
         "type": "iterator",
         "entity": "",
         "action": "",
-        "name": "Iterator  ",
+        "name": "Loop",
         "key": "iterator",
         "metadata": {
           "key": "{{shopify_order.line_items[]}}"

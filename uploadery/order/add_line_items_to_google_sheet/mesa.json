@@ -22,7 +22,7 @@
               "schema": 2,
               "trigger_type": "output",
               "type": "iterator",
-              "name": "Iterator",
+              "name": "Loop",
               "key": "iterator",
               "metadata": {
                   "key": "{{uploadery_order_created.line_items[]}}"

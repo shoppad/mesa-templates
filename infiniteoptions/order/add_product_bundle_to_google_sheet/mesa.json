@@ -32,7 +32,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator: Line items",
+                "name": "Loop: Line items",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{infinite_options_order_created.line_items[]}}"

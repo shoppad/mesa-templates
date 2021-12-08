@@ -86,7 +86,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator for Order Fulfillments",
+                "name": "Loop Over Order Fulfillments",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{tracktor_order_1.fulfillments[]}}"
@@ -196,7 +196,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator for Order Transactions",
+                "name": "Loop Over Order Transactions",
                 "key": "iterator_1",
                 "metadata": {
                     "key": "{{shopify_order_transaction.transactions[]}}"
