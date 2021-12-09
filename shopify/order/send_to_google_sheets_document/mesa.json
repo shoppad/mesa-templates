@@ -78,7 +78,7 @@
                         }
                     },
                     "path": {
-                        "spreadsheet_id": "Create new Google Sheets spreadsheet",
+                        "spreadsheet_id": "Create new spreadsheet",
                         "sheet_name": "Sheet1"
                     }
                 },
