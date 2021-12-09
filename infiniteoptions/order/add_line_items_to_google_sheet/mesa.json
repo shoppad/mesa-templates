@@ -42,7 +42,7 @@
               "metadata": {
                   "header_row": "first_row",
                   "path": {
-                    "spreadsheet_id": "Create new Google Sheets spreadsheet",
+                    "spreadsheet_id": "Create new spreadsheet",
                     "sheet_name": "Sheet1"
                   },
                   "body": {
