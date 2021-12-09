@@ -31,7 +31,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator: Loop over each product in the order",
+                "name": "Loop Over order products",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"

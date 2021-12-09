@@ -45,12 +45,12 @@
             {
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterate each product",
+                "name": "Loop Over each product",
                 "key": "iterator",
                 "metadata": {
                     "key": "products"
                 },
-                "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
+                "description": "Mesa Loops let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
                 "destination_entity": "product"
             },
             {

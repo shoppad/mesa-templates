@@ -49,7 +49,7 @@
             {
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator",
+                "name": "Loop",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{tracktor_order.fulfillments}}"

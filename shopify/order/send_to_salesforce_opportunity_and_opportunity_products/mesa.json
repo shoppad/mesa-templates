@@ -137,12 +137,11 @@
             {
                 "trigger_type": "output",
                 "type": "iterator",
-                "name": "Iterator",
+                "name": "Loop",
                 "key": "iterator",
                 "metadata": {
                     "key": "{{custom-append-sf-product-ids-to-line-items.line_items[]}}"
                 },
-                "description": "Mesa Iterators let you continue to the next step in your automated workflow. [Read more](https://docs.getmesa.com/article/761-mesa-iterator).",
                 "source_entity": "opportunity"
             },
             {
