@@ -23,7 +23,7 @@
               "trigger_type": "output",
               "type": "iterator",
               "name": "Loop",
-              "key": "iterator",
+              "key": "loop",
               "metadata": {
                   "key": "{{uploadery_order_created.line_items[]}}"
               },
@@ -55,11 +55,10 @@
                           "Province": "{{uploadery_order_created.order.shipping_address.province}}",
                           "Zip": "{{uploadery_order_created.order.shipping_address.zip}}",
                           "Country": "{{uploadery_order_created.order.shipping_address.country}}",
-                          "Product Name": "{{iterator.title}}",
-                          "Product SKU": "{{iterator.sku}}",
-                          "Product Price": "{{iterator.price}}",
-                          "uploadery_1": "{{iterator.fields.uploadery_1}}",
-                          "uploadery_2": "{{iterator.fields.uploadery_2}}"
+                          "Product Name": "{{loop.title}}",
+                          "Product SKU": "{{loop.sku}}",
+                          "Product Price": "{{loop.price}}",
+                          "uploadery_1": "{{loop.fields.uploadery_1}}"
                       }
                   }
               },
@@ -147,12 +146,6 @@
                                   {
                                       "key": "uploadery_1",
                                       "label": "uploadery_1",
-                                      "type": "text",
-                                      "source": ""
-                                  },
-                                  {
-                                      "key": "uploadery_2",
-                                      "label": "uploadery_2",
                                       "type": "text",
                                       "source": ""
                                   }

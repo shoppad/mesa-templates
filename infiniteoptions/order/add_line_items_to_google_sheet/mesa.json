@@ -24,7 +24,7 @@
               "trigger_type": "output",
               "type": "iterator",
               "name": "Loop",
-              "key": "iterator",
+              "key": "loop",
               "metadata": {
                   "key": "{{infinite_options_order_created.line_items[]}}"
               },
@@ -56,11 +56,10 @@
                           "Province": "{{infinite_options_order_created.order.shipping_address.province}}",
                           "Zip": "{{infinite_options_order_created.order.shipping_address.zip}}",
                           "Country": "{{infinite_options_order_created.order.shipping_address.country}}",
-                          "Product Name": "{{iterator.title}}",
-                          "Product SKU": "{{iterator.sku}}",
-                          "Product Price": "{{iterator.price}}",
-                          "infinite_options_1": "{{iterator.fields.infinite_options_1}}",
-                          "infinite_options_2": "{{iterator.fields.infinite_options_2}}"
+                          "Product Name": "{{loop.title}}",
+                          "Product SKU": "{{loop.sku}}",
+                          "Product Price": "{{loop.price}}",
+                          "infinite_options_1": "{{loop.fields.infinite_options_1}}"
                       }
                   }
               },
@@ -142,18 +141,6 @@
                                   {
                                       "key": "Product Price",
                                       "label": "Product Price",
-                                      "type": "text",
-                                      "source": ""
-                                  },
-                                  {
-                                      "key": "infinite_options_1",
-                                      "label": "infinite_options_1",
-                                      "type": "text",
-                                      "source": ""
-                                  },
-                                  {
-                                      "key": "infinite_options_2",
-                                      "label": "infinite_options_2",
                                       "type": "text",
                                       "source": ""
                                   }
