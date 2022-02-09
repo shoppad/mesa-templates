@@ -37,7 +37,7 @@
         "name": "Shopify Order Risk List",
         "key": "shopify_order_risk",
         "metadata": {
-          "order_id": "3854437220429"
+          "order_id": "{{shopify_order.id}}"
         },
         "local_fields": [],
         "weight": 0
