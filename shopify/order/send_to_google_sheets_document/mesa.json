@@ -78,7 +78,8 @@
                         }
                     },
                     "path": {
-                        "spreadsheet_id": "Create new spreadsheet",
+                        "mode": "create",
+                        "spreadsheet_id": "",
                         "sheet_name": "Sheet1"
                     }
                 },
