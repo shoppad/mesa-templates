@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/add_fulfillment",
-    "name": "Add fulfillment to order",
+    "name": "Add fulfillment to line items that don't require shipping",
     "version": "1.0.0",
     "description": "Consolidate fulfillment information and reduce clutter for your fulfillment service. This template instantly adds fulfillment to Shopify orders when an order is created with line-items that do not require shipping. With this workflow, you reduce the risk of fulfillment errors for your store.",
     "video": "",
