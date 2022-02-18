@@ -1,55 +1,63 @@
 {
     "key": "shopify/draft_order/remove_after_thirty_days",
-    "name": "Remove Draft Orders After Thirty Days",
+    "name": "Remove draft orders after thirty days",
     "version": "1.0.0",
-    "description": "Remove Shopify draft orders older than 30 days.",
-    "tags": [
-        "Draft-Order"
-    ],
-    "source": "shopify",
-    "destination": "shopify",
+    "description": "Keep the draft orders on your online store tidy and current with the help of MESA. This template removes draft orders that have been sitting on your Shopify store for more than 30 days. Now you can keep draft order clutter at bay automatically!",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify_webhook",
+    "destination": "shopify_api",
+    "seconds": 60,
     "enabled": true,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify_webhook",
-                "name": "Shopify Draft Order Created",
-                "key": "in-shopify-draft-order-created",
                 "entity": "draft_order",
-                "action": "created"
+                "action": "created",
+                "name": "Shopify Draft Order Created",
+                "key": "shopify_draft_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
-                "type": "virtual_output",
-                "name": "Shopify Draft Order VO",
-                "key": "out-shopify-draft-order-vo",
-                "schedule": "0 */12 * * *",
-                "custom_connection": true,
-                "parameters": "created_at_max={{date:30 days ago}}"
+                "type": "delay",
+                "name": "Delay for 30 days",
+                "key": "delay",
+                "metadata": {
+                    "amount": "30",
+                    "unit": "days",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "weight": 0
             },
             {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "custom",
-              "name": "Process virtual output",
-              "key": "out-process-virtual-output",
-              "metadata": {
-                  "script": "out_shopify_draft_order_vo.js"
-              },
-              "local_fields": []
-            },
-            {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify_api",
-                "name": "Delete Shopify Draft Order",
-                "key": "out-delete-shopify-draft-order",
-                "shopify_api": "DELETE admin/draft_orders/{{draft_order_id}}.json"
+                "entity": "draft_order",
+                "action": "delete",
+                "name": "Shopify Delete Draft Order",
+                "key": "shopify_draft_order_1",
+                "metadata": {
+                    "draft_order_id": "{{delay.id}}"
+                },
+                "local_fields": [],
+                "on_error": "ignore",
+                "weight": 1
             }
         ],
-        "secrets": [],
         "storage": []
     }
 }
