@@ -23,6 +23,7 @@
                 "name": "Shopify Draft Order Created",
                 "key": "shopify_draft_order",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -53,6 +54,7 @@
                     "draft_order_id": "{{delay.id}}"
                 },
                 "local_fields": [],
+                "on_error": "ignore",
                 "weight": 1
             }
         ],
