@@ -1,124 +1,116 @@
 {
-  "key": "recharge/order/send_renewal_to_google_analytics",
-  "name": "Send Recharge Renewal Data to Google Analytics",
-  "version": "1.0.0",
-  "description": "Google Analytics allows you to keep track of your store's traffic and advertisement return of investment. This template sends client ID data to Google Analytics when a ReCharge successful order renewal is created. Your Google Analytics will now have crucial information pertaining to your ReCharge orders.",
-  "video": "",
-  "readme": "<h2>Setup</h2><ul><li>Insert&nbsp;this snippet&nbsp;for&nbsp;Analytics to&nbsp;capture&nbsp;the&nbsp;GA&nbsp;client&nbsp;ID&nbsp;on&nbsp;checkout, in the <strong>cart.liquid </strong>file,&nbsp;inside&nbsp;the&nbsp;<strong>&lt;form&gt;</strong> tag:<br />\n&lt;!--&nbsp;Mesa&nbsp;by&nbsp;ShopPad&nbsp;-&nbsp;BEGIN&nbsp;GA&nbsp;client&nbsp;ID&nbsp;snippet&nbsp;--&gt;<br />\n&nbsp;&nbsp;&lt;input&nbsp;id=\"cid\"&nbsp;type=\"hidden\"&nbsp;name=\"attributes[cid]\"&nbsp;/&gt;&nbsp;&nbsp;&lt;script&gt;<br />\n&nbsp;&nbsp;&nbsp;&nbsp;ga(function(tracker)&nbsp;{<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var&nbsp;clientId&nbsp;=&nbsp;tracker.get('clientId');<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(clientId)&nbsp;{<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$('#cid').val(clientId);&nbsp;<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />\n&nbsp;&nbsp;&nbsp;&nbsp;});<br />\n&nbsp;&nbsp;&lt;/script&gt;<br />\n&nbsp;&nbsp;&lt;!--&nbsp;Mesa&nbsp;by&nbsp;ShopPad&nbsp;-&nbsp;END&nbsp;GA&nbsp;client&nbsp;ID&nbsp;snippet&nbsp;--&gt;</li><li>Open&nbsp;the <strong>Recharge:&nbsp;Order&nbsp;Processed </strong>Step&nbsp;and&nbsp;follow&nbsp;the&nbsp;<a href=\"https://docs.getmesa.com/article/1278-recharge#connect\">Credential&nbsp;steps&nbsp;to&nbsp;authorize&nbsp;with&nbsp;Recharge</a>.</li><li>Open&nbsp;<strong>Google&nbsp;Analytics:&nbsp;Create&nbsp;Transaction</strong> Step&nbsp;and&nbsp;paste&nbsp;in&nbsp;your&nbsp;Google&nbsp;Analytics&nbsp;property&nbsp;ID.</li><li>Enable the workflow and click <strong>Save</strong>.</li></ul>",
-  "tags": [],
-  "source": "recharge",
-  "destination": "google-analytics",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "recharge",
-        "entity": "order",
-        "action": "order/processed",
-        "name": "Recharge: Order Processed",
-        "key": "recharge-order-processed",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "shopify_api",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Shopify: Retrieve Order",
-        "key": "shopify-retrieve-order",
-        "metadata": {
-          "order_id": "{{recharge-order-processed.external_order_id.ecommerce}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Get CUID from note attributes",
-        "key": "custom",
-        "metadata": {
-          "script": "custom.js"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 1
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "googleanalytics",
-        "entity": "transaction",
-        "action": "create",
-        "name": "Google Analytics Create Transaction",
-        "key": "googleanalytics_transaction",
-        "metadata": {
-          "mapping": [
+    "key": "recharge/order/send_renewal_to_google_analytics",
+    "name": "Send Recharge Renewal Data to Google Analytics",
+    "version": "1.0.0",
+    "description": "On Recharge successful order renewal creation, send client ID data to Google Analytics.",
+    "video": "",
+    "tags": [],
+    "source": "recharge",
+    "destination": "google-analytics",
+    "enabled": true,
+    "config": {
+        "inputs": [
             {
-              "destination": "ti",
-              "source": "{{shopify-retrieve-order.name}}"
-            },
-            {
-              "destination": "tr",
-              "source": "{{shopify-retrieve-order.total_price}}"
-            },
-            {
-              "destination": "tt",
-              "source": "{{shopify-retrieve-order.total_tax}}"
-            },
-            {
-              "destination": "ts",
-              "source": "{{shopify-retrieve-order.total_shipping_price_set.shop_money.amount}}"
-            },
-            {
-              "destination": "cu",
-              "source": "{{shopify-retrieve-order.currency}}"
-            },
-            {
-              "destination": "ta",
-              "source": "{{shopify-retrieve-order.source_name}}"
-            },
-            {
-              "destination": "items[].in",
-              "source": "{{shopify-retrieve-order.line_items[0].name}}"
-            },
-            {
-              "destination": "items[].ip",
-              "source": "{{shopify-retrieve-order.line_items[0].price}}"
-            },
-            {
-              "destination": "items[].iq",
-              "source": "{{shopify-retrieve-order.line_items[0].quantity}}"
-            },
-            {
-              "destination": "items[].ic",
-              "source": "{{shopify-retrieve-order.line_items[0].sku}}"
+                "trigger_type": "input",
+                "type": "recharge",
+                "entity": "order",
+                "action": "order/processed",
+                "name": "Recharge: Order Processed",
+                "key": "recharge-order-processed",
+                "metadata": {
+                    "topic": "order/processed",
+                    "secret": ""
+                }
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets",
-            "location": "mapping"
-          }
         ],
-        "on_error": "default",
-        "weight": 2
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "shopify_api",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify: Retrieve Order",
+                "key": "shopify-retrieve-order",
+                "metadata": {
+                    "shopify_api": "GET admin/orders/{{order_id}}.json",
+                    "order_id": "{{source.shopify_order_id}}",
+                    "site": "current"
+                },
+                "destination_entity": "mapping"
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Mapping to Google Analytics Create Transaction",
+                "key": "mapping-to-google-analytics-create-transaction",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "ti",
+                            "source": "{{name}}"
+                        },
+                        {
+                            "destination": "tr",
+                            "source": "{{total_price}}"
+                        },
+                        {
+                            "destination": "tt",
+                            "source": "{{total_tax}}"
+                        },
+                        {
+                            "destination": "ts",
+                            "source": "{{total_shipping_price_set.shop_money.amount}}"
+                        },
+                        {
+                            "destination": "cu",
+                            "source": "{{currency}}"
+                        },
+                        {
+                            "destination": "ta",
+                            "source": "{{source_name}}"
+                        },
+                        {
+                            "destination": "items[].in",
+                            "source": "{{line_items[].name}}"
+                        },
+                        {
+                            "destination": "items[].ip",
+                            "source": "{{line_items[].price}}"
+                        },
+                        {
+                            "destination": "items[].iq",
+                            "source": "{{line_items[].quantity}}"
+                        },
+                        {
+                            "destination": "items[].ic",
+                            "source": "{{line_items[].sku}}"
+                        }
+                    ],
+                    "script": "transform.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping"
+                    }
+                ],
+                "source_entity": "order",
+                "destination_entity": "transaction"
+            },
+            {
+                "trigger_type": "output",
+                "type": "googleanalytics",
+                "entity": "transaction",
+                "action": "create",
+                "name": "Google Analytics: Create Transaction",
+                "key": "google-analytics-create-transaction",
+                "metadata": {
+                    "ga_property_id": ""
+                },
+                "source_entity": "mapping"
+            }
+        ],
+        "storage": []
+    }
 }
