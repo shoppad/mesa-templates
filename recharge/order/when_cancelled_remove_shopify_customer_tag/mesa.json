@@ -51,7 +51,7 @@
         "name": "Shopify Retrieve Customer",
         "key": "shopify_customer_1",
         "metadata": {
-          "customer_id": "{{recharge_customer.shopify_customer_id}}"
+          "customer_id": "{{recharge_subscription.customer_id}}"
         },
         "local_fields": [],
         "weight": 1
