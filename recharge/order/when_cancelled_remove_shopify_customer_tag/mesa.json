@@ -81,7 +81,7 @@
         "metadata": {
           "customer_id": "{{shopify_customer_1.id}}",
           "body": {
-            "tags": "{{shopify_customer_1.tags  | replace: 'Recharge Tag', ''}}"
+            "tags": "Recharge Tag"
           }
         },
         "local_fields": [],
