@@ -43,20 +43,6 @@
         "weight": 0
       },
       {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{recharge_subscription.product_title}}",
-          "comparison": "equals",
-          "b": "Recharge Subscription"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
         "schema": 3,
         "trigger_type": "output",
         "type": "shopify_api",
