@@ -51,7 +51,7 @@
         "metadata": {
           "a": "{{recharge_subscription.product_title}}",
           "comparison": "equals",
-          "b": "Testing Recharge Auto renew"
+          "b": "Recharge Subscription"
         },
         "local_fields": [],
         "weight": 1
@@ -75,16 +75,17 @@
         "trigger_type": "output",
         "type": "shopify_api",
         "entity": "customer",
-        "action": "update",
-        "name": "Shopify Update Customer",
+        "action": "tag_add",
+        "name": "Shopify Customer Add Tag",
         "key": "shopify_customer",
         "metadata": {
+          "customer_id": "{{shopify_customer_1.id}}",
           "body": {
-            "tags": "{{shopify_customer_1.tags}}, Recharge Tag"
-          },
-          "customer_id": "{{shopify_customer_1.id}}"
+            "tag": "{{shopify_customer_1.tags}}, Recharge Tag"
+          }
         },
         "local_fields": [],
+        "on_error": "default",
         "weight": 3
       }
     ],
