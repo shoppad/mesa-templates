@@ -10,7 +10,7 @@
   "destination": "recharge",
   "seconds": 0,
   "enabled": false,
-  "logging": false,
+  "logging": true,
   "debug": false,
   "config": {
     "inputs": [
@@ -52,7 +52,7 @@
         "name": "Shopify Retrieve Customer",
         "key": "shopify_customer",
         "metadata": {
-          "customer_id": "{{recharge_customer.shopify_customer_id}}"
+          "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
         },
         "local_fields": [],
         "weight": 1
@@ -97,6 +97,7 @@
         "metadata": {
           "body": {
             "address_id": "{{recharge_subscription.address_id}}",
+            "price": "0",
             "next_charge_scheduled_at": "{{recharge_subscription.next_charge_scheduled_at}}",
             "quantity": "1"
           }
