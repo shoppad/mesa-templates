@@ -43,20 +43,6 @@
         "weight": 0
       },
       {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{recharge_subscription.product_title}}",
-          "comparison": "equals",
-          "b": "Testing Recharge Auto renew"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
         "schema": 3,
         "trigger_type": "output",
         "type": "shopify_api",
@@ -65,7 +51,7 @@
         "name": "Shopify Retrieve Customer",
         "key": "shopify_customer_1",
         "metadata": {
-          "customer_id": "{{recharge_customer.shopify_customer_id}}"
+          "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
         },
         "local_fields": [],
         "weight": 2
@@ -75,16 +61,17 @@
         "trigger_type": "output",
         "type": "shopify_api",
         "entity": "customer",
-        "action": "update",
-        "name": "Shopify Update Customer",
+        "action": "tag_add",
+        "name": "Shopify Customer Add Tag",
         "key": "shopify_customer",
         "metadata": {
+          "customer_id": "{{shopify_customer_1.id}}",
           "body": {
-            "tags": "{{shopify_customer_1.tags}}, Recharge Tag"
-          },
-          "customer_id": "{{shopify_customer_1.id}}"
+            "tag": "Recharge Tag"
+          }
         },
         "local_fields": [],
+        "on_error": "default",
         "weight": 3
       }
     ],

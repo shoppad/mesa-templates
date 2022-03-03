@@ -51,7 +51,7 @@
         "name": "Shopify Retrieve Customer",
         "key": "shopify_customer_1",
         "metadata": {
-          "customer_id": "{{recharge_customer.shopify_customer_id}}"
+          "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
         },
         "local_fields": [],
         "weight": 1
@@ -75,16 +75,17 @@
         "trigger_type": "output",
         "type": "shopify_api",
         "entity": "customer",
-        "action": "update",
-        "name": "Shopify Update Customer",
-        "key": "shopify_customer",
+        "action": "tag_remove",
+        "name": "Shopify Customer Remove Tag",
+        "key": "shopify_customer_2",
         "metadata": {
+          "customer_id": "{{shopify_customer_1.id}}",
           "body": {
-            "tags": "{{shopify_customer_1.tags  | replace: 'Recharge Tag', ''}}"
-          },
-          "customer_id": "{{shopify_customer_1.id}}"
+            "tag": "Recharge Tag"
+          }
         },
         "local_fields": [],
+        "on_error": "default",
         "weight": 3
       }
     ],
