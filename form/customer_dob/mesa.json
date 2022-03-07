@@ -9,7 +9,7 @@
     "source": "form",
     "destination": "shopify_api",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
