@@ -1,6 +1,6 @@
 {
     "key": "form_customer_dob",
-    "name": "Save a Customer's Date of Birth to Notes",
+    "name": "Save a customer's birthday to notes",
     "version": "1.0.0",
     "description": "Create a form hosted within a Shopify customer's profile page that saves their date of birth to the Customer Notes field.",
     "video": "",
@@ -8,7 +8,7 @@
     "tags": [],
     "source": "form",
     "destination": "shopify_api",
-    "enabled": true,
+    "enabled": false,
     "logging": false,
     "debug": false,
     "config": {
