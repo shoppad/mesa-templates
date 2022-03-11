@@ -76,7 +76,12 @@
                 "name": "Google Sheets Row Create",
                 "key": "googlesheets_row",
                 "metadata": {
-                    "header_row": "first_row",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Product Bundle Details",
+                        "header_row": "first_row"
+                    },
                     "body": {
                         "fields": {
                             "Product Bundle Name": "{{iterator.name}}",
@@ -93,10 +98,6 @@
                             "Created At": "{{infinite_options_order_created.order.created_at}}",
                             "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{infinite_options_order_created.order.id}}"
                         }
-                    },
-                    "path": {
-                        "spreadsheet_id": "",
-                        "sheet_name": "Product Bundle Details"
                     }
                 },
                 "local_fields": [
@@ -111,80 +112,67 @@
                                     {
                                         "key": "Product Bundle Name",
                                         "label": "Product Bundle Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Product Bundle SKU",
                                         "label": "Product Bundle SKU",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Product Bundle Variant ID",
                                         "label": "Product Bundle Variant ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Product Bundle Line Item ID",
                                         "label": "Product Bundle Line Item ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Product Bundle Total Price",
                                         "label": "Product Bundle Total Price",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Parent Product Name",
                                         "label": "Parent Product Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Parent Product SKU",
                                         "label": "Parent Product SKU",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Parent Product Variant ID",
                                         "label": "Parent Product Variant ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Parent Product Line Item ID",
                                         "label": "Parent Product Line Item ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Order ID",
                                         "label": "Order ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Order Name (number)",
                                         "label": "Order Name (number)",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Created At",
                                         "label": "Created At",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Admin Order URL",
                                         "label": "Admin Order URL",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     }
                                 ]
                             }
