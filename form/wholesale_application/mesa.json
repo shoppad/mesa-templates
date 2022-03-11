@@ -92,7 +92,12 @@
                 "name": "Google Sheets Row Create",
                 "key": "googlesheets_row",
                 "metadata": {
-                    "header_row": "first_row",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
                     "body": {
                         "fields": {
                             "Business Name": "{{form.business_name}}",
@@ -116,38 +121,32 @@
                                     {
                                         "key": "Business Name",
                                         "label": "Business Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Business Contact Name",
                                         "label": "Business Contact Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Business Contact Phone",
                                         "label": "Business Contact Phone",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Business Contact Email",
                                         "label": "Business Contact Email",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Business Website URL",
                                         "label": "Business Website URL",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Additional Details",
                                         "label": "Additional Details",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     }
                                 ]
                             }

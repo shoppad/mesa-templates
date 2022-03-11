@@ -74,7 +74,12 @@
                 "name": "Google Sheets Create Row",
                 "key": "googlesheets_row_1",
                 "metadata": {
-                    "header_row": "first_row",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
                     "body": {
                         "fields": {
                             "adgroup_id": "{{iterator.dimensions.adgroup_id}}",
@@ -85,10 +90,6 @@
                             "conversion": "{{iterator.metrics.conversion}}",
                             "cpm": "{{iterator.metrics.cpm}}"
                         }
-                    },
-                    "path": {
-                        "spreadsheet_id": "",
-                        "sheet_name": ""
                     }
                 },
                 "local_fields": [
@@ -103,44 +104,37 @@
                                     {
                                         "key": "adgroup_id",
                                         "label": "adgroup_id",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "spend",
                                         "label": "spend",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "impressions",
                                         "label": "impressions",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "reach",
                                         "label": "reach",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "clicks",
                                         "label": "clicks",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "conversion",
                                         "label": "conversion",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "cpm",
                                         "label": "cpm",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     }
                                 ]
                             }

@@ -82,7 +82,12 @@
                 "name": "Google Sheets Row Create",
                 "key": "googlesheets_row",
                 "metadata": {
-                    "header_row": "first_row",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
                     "body": {
                         "fields": {
                             "How did you hear about us?": "{{form.how-did-you-hear-about-us}}",
@@ -102,14 +107,12 @@
                                     {
                                         "key": "How did you hear about us?",
                                         "label": "How did you hear about us?",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Other Feedback",
                                         "label": "Other Feedback",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     }
                                 ]
                             }

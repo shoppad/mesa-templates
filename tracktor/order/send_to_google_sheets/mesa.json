@@ -51,7 +51,12 @@
                 "name": "Google Sheets Create Row - Fulfillments",
                 "key": "googlesheets_row_1",
                 "metadata": {
-                    "header_row": "first_row",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
                     "body": {
                         "fields": {
                             "Order ID": "{{shopify_order.id}}",
@@ -80,74 +85,62 @@
                                     {
                                         "key": "Order ID",
                                         "label": "Order ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Order Name (number)",
                                         "label": "Order Name (number)",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Order Email",
                                         "label": "Order Email",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Order Phone",
                                         "label": "Order Phone",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Tracking Number",
                                         "label": "Tracking Number",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Tracking Company",
                                         "label": "Tracking Company",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipping Country",
                                         "label": "Shipping Country",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipment Status",
                                         "label": "Shipment Status",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Created At (date and time)",
                                         "label": "Created At (date and time)",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Delivery Date (and time)",
                                         "label": "Delivery Date (and time)",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Tracking URL",
                                         "label": "Tracking URL",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Days since Ordered",
                                         "label": "Days since Ordered",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     }
                                 ]
                             }
@@ -191,7 +184,12 @@
                 "name": "Google Sheets Create Row - Orders",
                 "key": "googlesheets_row",
                 "metadata": {
-                    "header_row": "first_row",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
                     "body": {
                         "fields": {
                             "Order ID": "{{shopify_order.id}}",
@@ -225,98 +223,82 @@
                                     {
                                         "key": "Order ID",
                                         "label": "Order ID",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Order Name (number)",
                                         "label": "Order Name (number)",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Order Email",
                                         "label": "Order Email",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Customer First Name",
                                         "label": "Customer First Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Customer Last Name",
                                         "label": "Customer Last Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Customer Full Name",
                                         "label": "Customer Full Name",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Customer Email",
                                         "label": "Customer Email",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Total Price",
                                         "label": "Total Price",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipping Address 1",
                                         "label": "Shipping Address 1",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipping Address 2",
                                         "label": "Shipping Address 2",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipping City",
                                         "label": "Shipping City",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipping Zip",
                                         "label": "Shipping Zip",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipping Province",
                                         "label": "Shipping Province",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Shipping Country",
                                         "label": "Shipping Country",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Created At (date and time)",
                                         "label": "Created At (date and time)",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     },
                                     {
                                         "key": "Tracking URL",
                                         "label": "Tracking URL",
-                                        "type": "text",
-                                        "source": "googlesheets"
+                                        "type": "text"
                                     }
                                 ]
                             }

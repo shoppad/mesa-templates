@@ -46,10 +46,15 @@
                 "type": "googlesheets",
                 "entity": "row",
                 "action": "create",
-                "name": "Google Sheets Add Row",
+                "name": "Google Sheets Create Row",
                 "key": "googlesheets_row_1",
                 "metadata": {
-                    "header_row": "first_row",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
                     "body": {
                         "fields": {
                             "Order ID": "{{shopify_order.id}}",

@@ -29,7 +29,12 @@
               "name": "Google Sheets Add Row",
               "key": "googlesheets_row_1",
               "metadata": {
-                  "header_row": "first_row",
+                "path": {
+                    "mode": "create",
+                    "spreadsheet_id": "",
+                    "sheet_name": "Sheet1",
+                    "header_row": "first_row"
+                },
                   "body": {
                       "fields": {
                           "Customer ID": "{{shopify_customer.id}}",
@@ -54,44 +59,37 @@
                                   {
                                       "key": "Customer ID",
                                       "label": "Customer ID",
-                                      "type": "text",
-                                      "source": "googlesheets"
+                                      "type": "text"
                                   },
                                   {
                                       "key": "Email",
                                       "label": "Email",
-                                      "type": "text",
-                                      "source": "googlesheets"
+                                      "type": "text"
                                   },
                                   {
                                       "key": "First Name",
                                       "label": "First Name",
-                                      "type": "text",
-                                      "source": "googlesheets"
+                                      "type": "text"
                                   },
                                   {
                                       "key": "Last Name",
                                       "label": "Last Name",
-                                      "type": "text",
-                                      "source": "googlesheets"
+                                      "type": "text"
                                   },
                                   {
                                       "key": "Phone",
                                       "label": "Phone",
-                                      "type": "text",
-                                      "source": "googlesheets"
+                                      "type": "text"
                                   },
                                   {
                                       "key": "Tags",
                                       "label": "Tags",
-                                      "type": "text",
-                                      "source": "googlesheets"
+                                      "type": "text"
                                   },
                                   {
                                       "key": "Note",
                                       "label": "Note",
-                                      "type": "text",
-                                      "source": "googlesheets"
+                                      "type": "text"
                                   }
                               ]
                           }
