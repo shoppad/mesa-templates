@@ -16,7 +16,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "pagestudio",
-                "entity": "account",
+                "entity": "page",
                 "action": "created",
                 "name": "Page Studio Page Created",
                 "key": "pagestudio_page",
