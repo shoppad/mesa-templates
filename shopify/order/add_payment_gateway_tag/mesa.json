@@ -8,7 +8,7 @@
   "tags": [],
   "source": "shopify_webhook",
   "destination": "shopify_api",
-  "enabled": false,
+  "enabled": true,
   "logging": false,
   "debug": false,
   "config": {
