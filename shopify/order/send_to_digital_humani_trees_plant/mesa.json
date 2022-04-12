@@ -61,7 +61,7 @@
                         "enterpriseId": "",
                         "projectId": "",
                         "user": "{{shopify_order.email}}",
-                        "treeCount": "1"
+                        "treeCount": 1
                     }
                 },
                 "local_fields": [],
