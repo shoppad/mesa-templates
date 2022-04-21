@@ -18,7 +18,7 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "schedule",
-                "name": "Scheduler",
+                "name": "Schedule",
                 "key": "scheduler",
                 "metadata": {
                     "datetime": "2022-07-20T16:00:00.000Z",
