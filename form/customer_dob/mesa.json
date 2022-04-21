@@ -7,7 +7,7 @@
     "readme": "",
     "tags": [],
     "source": "form",
-    "destination": "shopify_api",
+    "destination": "shopify",
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -53,7 +53,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "update",
                 "name": "Shopify Update Customer",

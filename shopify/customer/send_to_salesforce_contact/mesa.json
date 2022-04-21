@@ -14,7 +14,7 @@
     "inputs": [
       {
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "customer",
         "action": "created",
         "name": "Shopify: Customer Created",

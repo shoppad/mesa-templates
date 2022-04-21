@@ -13,7 +13,7 @@
         "inputs": [
             {
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "name": "Shopify Order Create",
                 "key": "in-shopify-order-create",
                 "script": "in_shopify_order_create.js",
@@ -31,11 +31,11 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "name": "Update Shopify Order Notes",
                 "key": "out-update-shopify-order-notes",
                 "script": "out_update_shopify_order_notes.js",
-                "shopify_api": "PUT admin/orders/{{order_id}}.json"
+                "api_endpoint": "PUT admin/orders/{{order_id}}.json"
             },
             {
                 "trigger_type": "output",

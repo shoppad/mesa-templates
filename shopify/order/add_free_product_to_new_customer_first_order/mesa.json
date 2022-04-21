@@ -10,7 +10,7 @@
             {
                 "schema": 2,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify Order Created",
@@ -38,7 +38,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "line_item_add",
                 "name": "Shopify Order Line Item Add",

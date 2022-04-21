@@ -6,8 +6,8 @@
   "video": "",
   "readme": "",
   "tags": [],
-  "source": "shopify_webhook",
-  "destination": "shopify_api",
+  "source": "shopify",
+  "destination": "shopify",
   "enabled": true,
   "logging": false,
   "debug": false,
@@ -16,7 +16,7 @@
           {
               "schema": 2,
               "trigger_type": "input",
-              "type": "shopify_webhook",
+              "type": "shopify",
               "entity": "order",
               "action": "created",
               "name": "Shopify Order Created",
@@ -29,7 +29,7 @@
           {
               "schema": 2,
               "trigger_type": "output",
-              "type": "shopify_api",
+              "type": "shopify",
               "entity": "order",
               "action": "retrieve",
               "name": "Shopify Retrieve Order",
@@ -44,7 +44,7 @@
           {
               "schema": 3,
               "trigger_type": "output",
-              "type": "shopify_api",
+              "type": "shopify",
               "entity": "order",
               "action": "update",
               "name": "Shopify Update Order",

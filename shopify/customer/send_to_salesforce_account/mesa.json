@@ -8,7 +8,7 @@
     "tags": [
         "Account"
     ],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "salesforce",
     "enabled": false,
     "logging": false,
@@ -16,7 +16,7 @@
         "inputs": [
             {
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "create-update",
                 "name": "Shopify: Customer Created or Updated",

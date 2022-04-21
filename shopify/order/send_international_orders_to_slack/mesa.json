@@ -18,7 +18,7 @@
           {
               "schema": 2,
               "trigger_type": "input",
-              "type": "shopify_webhook",
+              "type": "shopify",
               "entity": "order",
               "action": "created",
               "name": "Shopify: Order Created",

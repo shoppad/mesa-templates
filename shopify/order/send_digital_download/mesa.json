@@ -17,7 +17,7 @@
             {
                 "schema": 3,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify Order Created",
@@ -30,9 +30,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
                 },
@@ -56,7 +56,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order_fulfillment",
                 "action": "create",
                 "name": "Shopify Create Order Fulfillment",
@@ -64,7 +64,7 @@
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "line_items ": "{{iterator.id}}",
+                        "line_items ": "{{loop.id}}",
                         "notify_customer": "false"
                     }
                 },

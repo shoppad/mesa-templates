@@ -10,7 +10,7 @@
         "odoo",
         "shopify"
     ],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "odoo",
     "enabled": false,
     "logging": false,
@@ -20,7 +20,7 @@
             {
                 "schema": 2,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "paid",
                 "name": "Shopify Order Paid",
@@ -193,9 +193,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
                 },
@@ -240,16 +240,16 @@
                     "entity_name": "sale.order.line",
                     "method": "create",
                     "body": {
-                        "name": "{{iterator.name}}",
+                        "name": "{{loop.name}}",
                         "order_id": "{{odoo_sale_order.id}}",
-                        "price_unit": "{{iterator.price}}",
-                        "price_subtotal": "{{iterator.price | times: iterator.quantity}}",
-                        "price_total": "{{iterator.price | times: iterator.quantity}}",
+                        "price_unit": "{{loop.price}}",
+                        "price_subtotal": "{{loop.price | times: loop.quantity}}",
+                        "price_total": "{{loop.price | times: loop.quantity}}",
                         "product_id": "{{transformmapping.product_id}}",
-                        "notes": "{{iterator.notes}}",
-                        "gift_notes": "{{iterator.gift_notes}}",
-                        "product_uom_qty": "{{iterator.quantity}}",
-                        "product_qty": "{{iterator.quantity}}"
+                        "notes": "{{loop.notes}}",
+                        "gift_notes": "{{loop.gift_notes}}",
+                        "product_uom_qty": "{{loop.quantity}}",
+                        "product_qty": "{{loop.quantity}}"
                     },
                     "secret": ""
                 },

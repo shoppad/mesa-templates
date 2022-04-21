@@ -5,8 +5,8 @@
   "description": "",
   "video": "",
   "tags": [],
-  "source": "shopify_webhook",
-  "destination": "shopify_api",
+  "source": "shopify",
+  "destination": "shopify",
   "templates": [
     "shopify_tokens",
     "shopify_order_created_to_email"

@@ -7,7 +7,7 @@
     "tags": [
         "Product"
     ],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "salesforce",
     "readme": "##Salesforce Customizations\n\nThis workflow requires some customization of your Salesforce account in order to function. Please complete all of the following steps:\n\n- Log in to your Salesforce account, then click on the gear icon in the top right corner to go to Setup\n\n- From the left hand menu, click on **Objects and Fields**, then **Object Manager**\n\n- Click on **Account**, then click **Fields & Relationships**\n\n- Click the **New** button, and select **Text** for the field type, then hit **Next**\n\n- Enter \"Shopify Variant ID\" for **Field Label** and `Shopify_Variant_ID` for **Field Name**, and a length (ex: 100)\n\n- Check the box for **External ID**\n\n- Hit **Next** again, and ensure your field is visible to the profile that the credential account belongs to (the account used when creating the Salesforce credential)\n\n- Hit **Next** again, then hit **Save**\n\n##Price Book ID\n\nYou must also enter a valid Price Book ID for \"Pricebook2Id\" under the **Mapping to Salesforce: Create or Update Pricebook Entry** action, then save the workflow. \n\n- To get the Salesforce Price Book ID, log in to Salesforce, and go to the **Price Books** page. \n\n- Copy the link for the Price Book you wish to use, then copy the ID in the link, between `r/` and `/view`. \n\n- Example: for `https://ab11.force.com/lightning/r/01s2E000002pddCQAQ/view`, the ID would be `01s2E000002pddCQAQ`",
     "enabled": false,
@@ -16,7 +16,7 @@
         "inputs": [
             {
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "product",
                 "action": "create-update",
                 "name": "Shopify: Product Created or Updated",
@@ -29,9 +29,9 @@
         "outputs": [
             {
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{shopify-product-created-or-updated.variants[]}}"
                 },
@@ -47,7 +47,7 @@
                 "metadata": {
                     "entity_name": "Product2",
                     "method": "QUERY",
-                    "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{iterator.current_item.id}}'"
+                    "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{loop.current_item.id}}'"
                 }
             },
             {
@@ -60,15 +60,15 @@
                     "mapping": [
                         {
                             "destination": "Name",
-                            "source": "{{iterator.current_item.combined_title}}"
+                            "source": "{{loop.current_item.combined_title}}"
                         },
                         {
                             "destination": "StockKeepingUnit",
-                            "source": "{{iterator.current_item.sku}}"
+                            "source": "{{loop.current_item.sku}}"
                         },
                         {
                             "destination": "ProductCode",
-                            "source": "{{iterator.current_item.barcode}}"
+                            "source": "{{loop.current_item.barcode}}"
                         },
                         {
                             "destination": "IsActive",
@@ -76,11 +76,11 @@
                         },
                         {
                             "destination": "Description",
-                            "source": "{{iterator.complete.body_html}}"
+                            "source": "{{loop.complete.body_html}}"
                         },
                         {
                             "destination": "Shopify_Variant_ID__c",
-                            "source": "{{iterator.current_item.id}}"
+                            "source": "{{loop.current_item.id}}"
                         }
                     ]
                 },
@@ -140,7 +140,7 @@
                         },
                         {
                             "destination": "UnitPrice",
-                            "source": "{{iterator.current_item.price}}"
+                            "source": "{{loop.current_item.price}}"
                         },
                         {
                           "destination": "Pricebook2Id",

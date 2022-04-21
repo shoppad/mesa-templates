@@ -6,7 +6,7 @@
   "video": "",
   "readme": "",
   "tags": ["Order"],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "hubspot",
   "enabled": false,
   "logging": false,
@@ -15,7 +15,7 @@
       "inputs": [
           {
               "trigger_type": "input",
-              "type": "shopify_webhook",
+              "type": "shopify",
               "entity": "order",
               "action": "created",
               "name": "Shopify Order Created",

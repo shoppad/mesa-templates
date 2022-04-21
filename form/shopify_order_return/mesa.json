@@ -7,7 +7,7 @@
     "readme": "",
     "tags": [],
     "source": "forms",
-    "destination": "shopify_api",
+    "destination": "shopify",
     "enabled": false,
     "logging": false,
     "debug": false,
@@ -74,7 +74,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Order",

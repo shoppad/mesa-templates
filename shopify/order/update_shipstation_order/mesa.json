@@ -6,7 +6,7 @@
     "video": "",
     "readme": "[Follow the steps](https:\/\/help.shipstation.com\/hc\/en-us\/articles\/360025856212-ShipStation-API) under \"Accessing the ShipStation API\" to obtain your ShipStation API Key and Password. This requires ShipStation admin access. \n",
     "tags": [],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "shipstation",
     "enabled": false,
     "logging": false,
@@ -16,7 +16,7 @@
             {
                 "schema": 2,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "updated",
                 "name": "Shopify Order Updated",
@@ -145,7 +145,7 @@
                 "name": "ShipStation Update Order",
                 "key": "shipstation_order",
                 "metadata": {
-                    "shipstation_api": "POST \/orders\/createorder",
+                    "api_endpoint": "POST \/orders\/createorder",
                     "key_secret": ""
                 },
                 "local_fields": [],

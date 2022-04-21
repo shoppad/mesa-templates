@@ -6,7 +6,7 @@
   "video": "",
   "readme": "",
   "tags": [],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "email",
   "enabled": true,
   "logging": false,
@@ -15,7 +15,7 @@
     "inputs": [
       {
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "order",
         "action": "created",
         "name": "Shopify Order Created",
@@ -30,11 +30,11 @@
     "outputs": [
       {
         "trigger_type": "output",
-        "type": "iterator",
+        "type": "loop",
         "entity": "",
         "action": "",
         "name": "Loop",
-        "key": "iterator",
+        "key": "loop",
         "metadata": {
           "key": "{{shopify_order.line_items[]}}"
         },
@@ -43,14 +43,14 @@
       },
       {
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "variant",
         "action": "retrieve",
         "name": "Shopify Retrieve Variant",
         "key": "shopify_variant",
         "metadata": {
-          "shopify_api": "GET admin/variants/{{variant_id}}.json",
-          "variant_id": "{{iterator.variant_id}}"
+          "api_endpoint": "GET admin/variants/{{variant_id}}.json",
+          "variant_id": "{{loop.variant_id}}"
         },
         "local_fields": null,
         "weight": 1

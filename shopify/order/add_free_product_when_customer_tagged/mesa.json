@@ -37,7 +37,7 @@
         "name": "Recharge Retrieve Customer",
         "key": "recharge_customer",
         "metadata": {
-          "recharge_api": "GET /customers/{{customer_id}}",
+          "api_endpoint": "GET /customers/{{customer_id}}",
           "customer_id": "{{recharge_subscription.customer_id}}"
         },
         "local_fields": [],
@@ -46,7 +46,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
         "name": "Shopify Retrieve Customer",
@@ -80,7 +80,7 @@
         "name": "Recharge List Subscription",
         "key": "recharge_subscription_1",
         "metadata": {
-          "recharge_api": "GET /subscriptions",
+          "api_endpoint": "GET /subscriptions",
           "parameters": "shopify_customer_id={{shopify_customer.id}}"
         },
         "local_fields": [],

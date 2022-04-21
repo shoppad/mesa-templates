@@ -8,7 +8,7 @@
     "tags": [
         "Customer"
     ],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "hubspot",
     "enabled": false,
     "logging": false,
@@ -18,7 +18,7 @@
             {
                 "schema": 2,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "created",
                 "name": "Shopify Customer Created",

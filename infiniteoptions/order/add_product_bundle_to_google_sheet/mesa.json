@@ -31,9 +31,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop: Line items",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{infinite_options_order_created.line_items[]}}"
                 },
@@ -47,7 +47,7 @@
                 "name": "Filter: Check if line item is a product bundle",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{iterator.fields._io_parent_order_group | size}}",
+                    "a": "{{loop.fields._io_parent_order_group | size}}",
                     "comparison": "greater than",
                     "b": "0"
                 },
@@ -84,11 +84,11 @@
                     },
                     "body": {
                         "fields": {
-                            "Product Bundle Name": "{{iterator.name}}",
-                            "Product Bundle SKU": "{{iterator.sku}}",
-                            "Product Bundle Variant ID": "{{iterator.variant_id}}",
-                            "Product Bundle Line Item ID": "{{iterator.id}}",
-                            "Product Bundle Total Price": "{{iterator.price}}",
+                            "Product Bundle Name": "{{loop.name}}",
+                            "Product Bundle SKU": "{{loop.sku}}",
+                            "Product Bundle Variant ID": "{{loop.variant_id}}",
+                            "Product Bundle Line Item ID": "{{loop.id}}",
+                            "Product Bundle Total Price": "{{loop.price}}",
                             "Parent Product Name": "{% if custom.parent_product_name %}{{custom.parent_product_name}}{% else %}Not available{% endif %}",
                             "Parent Product SKU": "{% if custom.parent_product_sku %}{{custom.parent_product_sku}}{% else %}Not found{% endif %}",
                             "Parent Product Variant ID": "{% if custom.parent_product_variant_id %}{{custom.parent_product_variant_id}}{% else %}Not found{% endif %}",

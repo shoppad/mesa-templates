@@ -5,14 +5,14 @@
   "description": "",
   "video": "",
   "tags": [],
-  "source": "shopify_webhook",
-  "destination": "shopify_api",
+  "source": "shopify",
+  "destination": "shopify",
   "enabled": true,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "product",
         "action": "created",
         "name": "Shopify: Product Created",
@@ -48,13 +48,13 @@
       },
       {
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "product",
         "action": "update",
         "name": "Shopify: Update Product",
         "key": "shopify-update-product",
         "metadata": {
-          "shopify_api": "PUT admin/products/{{product_id}}.json",
+          "api_endpoint": "PUT admin/products/{{product_id}}.json",
           "product_id": "{{source.id}}"
         },
         "source_entity": "mapping"

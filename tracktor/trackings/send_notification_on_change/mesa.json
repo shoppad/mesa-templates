@@ -14,7 +14,7 @@
             {
                 "trigger_type": "input",
                 "enabled": true,
-                "type": "json_webhook",
+                "type": "webhook",
                 "name": "Send Notification on Tracktor Status Change",
                 "key": "in-tracktor-alerts",
                 "trigger_name": "In: Tracktor Alerts",

@@ -6,7 +6,7 @@
   "video": "",
   "readme": "",
   "tags": [],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "loyaltylion",
   "enabled": false,
   "logging": false,
@@ -15,7 +15,7 @@
     "inputs": [
       {
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "order",
         "action": "created",
         "name": "Shopify Order Created",
@@ -36,7 +36,7 @@
         "name": "LoyaltyLion List Customer",
         "key": "loyaltylion_customer_1",
         "metadata": {
-          "loyaltylion_api": "GET /v2/customers",
+          "api_endpoint": "GET /v2/customers",
           "parameters": "email={{shopify_order.email}}&limit=1"
         },
         "local_fields": null,
@@ -50,7 +50,7 @@
         "name": "LoyaltyLion Add Points Customer",
         "key": "loyaltylion_customer",
         "metadata": {
-          "loyaltylion_api": "POST /v2/customers/{{merchant_id}}/points",
+          "api_endpoint": "POST /v2/customers/{{merchant_id}}/points",
           "mapping": [
             {
               "destination": "points",

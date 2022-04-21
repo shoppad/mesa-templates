@@ -8,7 +8,7 @@
     "Customer"
   ],
   "source": "salesforce",
-  "destination": "shopify_api",
+  "destination": "shopify",
   "enabled": false,
   "config": {
     "inputs": [
@@ -91,13 +91,13 @@
       },
       {
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "customer",
         "action": "create",
         "name": "Shopify: Create Customer",
         "key": "shopify-create-customer",
         "metadata": {
-          "shopify_api": "POST admin/customers.json",
+          "api_endpoint": "POST admin/customers.json",
           "site": "current"
         }
       }

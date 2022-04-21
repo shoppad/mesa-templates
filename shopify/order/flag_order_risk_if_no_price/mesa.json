@@ -6,7 +6,7 @@
   "video": "",
   "readme": "## Optional Customizations\n\n- Open `Transform: Order to Order Risk` Step and set the \"recommendation\" line to `investigate` if you would like to reduce the severity of the Order Risk.  See https:\/\/shopify.dev\/docs\/admin-api\/rest\/reference\/orders\/order-risk for more information\n",
   "tags": [],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "filter",
   "enabled": false,
   "logging": false,
@@ -16,7 +16,7 @@
           {
               "schema": 2,
               "trigger_type": "input",
-              "type": "shopify_webhook",
+              "type": "shopify",
               "entity": "order",
               "action": "created",
               "name": "Shopify: Order Created",
@@ -44,7 +44,7 @@
           {
               "schema": 2,
               "trigger_type": "output",
-              "type": "shopify_api",
+              "type": "shopify",
               "entity": "order_risk",
               "action": "create",
               "name": "Shopify Create Order Risk",

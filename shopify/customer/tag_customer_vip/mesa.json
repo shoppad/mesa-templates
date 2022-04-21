@@ -17,7 +17,7 @@
             {
                 "schema": 3,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify Order Created",
@@ -30,7 +30,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Customer",
@@ -58,7 +58,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "tag_add",
                 "name": "Shopify Customer Add Tag",

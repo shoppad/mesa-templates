@@ -7,7 +7,7 @@
   "readme": "",
   "tags": [],
   "source": "infiniteoptions",
-  "destination": "shopify_api",
+  "destination": "shopify",
   "enabled": false,
   "logging": false,
   "debug": false,
@@ -32,9 +32,9 @@
       {
         "schema": 2,
         "trigger_type": "output",
-        "type": "iterator",
+        "type": "loop",
         "name": "Loop",
-        "key": "iterator",
+        "key": "loop",
         "metadata": {
           "key": "{{infiniteoptions_order.fields[]}}"
         },
@@ -44,7 +44,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order",
         "action": "retrieve",
         "name": "Shopify Retrieve Order",
@@ -58,14 +58,14 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order",
         "action": "update",
         "name": "Shopify Update Order",
         "key": "shopify_order",
         "metadata": {
           "body": {
-            "tags": "{{shopify_order_1.tags}}, {{iterator.name}}: {{iterator.value}}"
+            "tags": "{{shopify_order_1.tags}}, {{loop.name}}: {{loop.value}}"
           },
           "order_id": "{{infiniteoptions_order.order.id}}"
         },
