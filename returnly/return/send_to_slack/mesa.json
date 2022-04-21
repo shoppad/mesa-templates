@@ -6,7 +6,7 @@
   "video": "",
   "readme": "",
   "tags": [],
-  "source": "returnly_webhook",
+  "source": "returnly",
   "destination": "slack",
   "enabled": false,
   "logging": false,
@@ -16,7 +16,7 @@
       {
         "schema": 3,
         "trigger_type": "input",
-        "type": "returnly_webhook",
+        "type": "returnly",
         "entity": "return",
         "action": "authorized",
         "name": "Returnly Return Authorized",

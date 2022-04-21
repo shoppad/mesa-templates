@@ -7,7 +7,7 @@
         "Product"
     ],
     "source": "salesforce",
-    "destination": "shopify_api",
+    "destination": "shopify",
     "enabled": false,
     "config": {
         "inputs": [
@@ -63,13 +63,13 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "product",
                 "action": "create",
                 "name": "Shopify: Create Product",
                 "key": "shopify-create-product",
                 "metadata": {
-                    "shopify_api": "POST admin/products.json",
+                    "api_endpoint": "POST admin/products.json",
                     "site": "current"
                 },
                 "source_entity": "mapping"

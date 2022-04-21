@@ -24,9 +24,9 @@
         "outputs": [
             {
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{fields}}"
                 },
@@ -69,13 +69,13 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "update",
                 "name": "Shopify: Update Order",
                 "key": "shopify-update-order",
                 "metadata": {
-                    "shopify_api": "PUT admin/orders/{{order_id}}.json",
+                    "api_endpoint": "PUT admin/orders/{{order_id}}.json",
                     "order_id": "{{source.order.id}}",
                     "site": "current"
                 }

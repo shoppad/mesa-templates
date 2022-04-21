@@ -17,11 +17,11 @@ module.exports = new class {
     // Adjust `payload` here to alter data before we transform it.
 
     // Set the title for the Salesforce Product
-    context.steps.iterator.current_item.combined_title = context.steps.iterator.complete.title;
+    context.steps.loop.current_item.combined_title = context.steps.loop.complete.title;
 
     // If product variant has a title other than 'Default Title', append to the Salesforce Product Name
-    if (context.steps.iterator.current_item.title !== 'Default Title') {
-      context.steps.iterator.current_item.combined_title += ' - ' + context.steps.iterator.current_item.title;
+    if (context.steps.loop.current_item.title !== 'Default Title') {
+      context.steps.loop.current_item.combined_title += ' - ' + context.steps.loop.current_item.title;
     }
 
     // Alter the payload data based on our transform rules

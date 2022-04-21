@@ -30,7 +30,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Order",
@@ -85,9 +85,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop Over Order Fulfillments",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{tracktor_order_1.fulfillments[]}}"
                 },
@@ -101,7 +101,7 @@
                 "name": "Filter for Fulfillments Latest Status (not delivered)",
                 "key": "filter_1",
                 "metadata": {
-                    "a": "{{iterator.latest_status.key}}",
+                    "a": "{{loop.latest_status.key}}",
                     "comparison": "does not equal",
                     "b": "delivered"
                 },
@@ -111,7 +111,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Order",
@@ -168,7 +168,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Order",
@@ -182,7 +182,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order_transaction",
                 "action": "list",
                 "name": "Shopify List Order Transaction",
@@ -196,9 +196,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop Over Order Transactions",
-                "key": "iterator_1",
+                "key": "loop_1",
                 "metadata": {
                     "key": "{{shopify_order_transaction.transactions[]}}"
                 },
@@ -212,7 +212,7 @@
                 "name": "Filter for Shipping Cost (paid)",
                 "key": "filter_4",
                 "metadata": {
-                    "a": "{{iterator_1.kind}}",
+                    "a": "{{loop_1.kind}}",
                     "comparison": "equals",
                     "b": "sale"
                 },
@@ -222,7 +222,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order_refund",
                 "action": "create",
                 "name": "Shopify Create Order Refund",
@@ -233,10 +233,10 @@
                         "notify": "true",
                         "transactions": [
                             {
-                                "parent_id": "{{iterator_1.id}}",
+                                "parent_id": "{{loop_1.id}}",
                                 "amount": "{{shopify_order_2.total_shipping_price_set.shop_money.amount}}",
                                 "kind": "refund",
-                                "gateway": "{{iterator_1.gateway}}"
+                                "gateway": "{{loop_1.gateway}}"
                             }
                         ],
                         "shipping": {

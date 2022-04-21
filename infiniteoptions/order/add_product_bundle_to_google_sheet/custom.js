@@ -14,7 +14,7 @@ module.exports = new class {
   script = (payload, context) => {
 
     // Get current line item
-    const lineItem = context.steps['iterator'];
+    const lineItem = context.steps['loop'];
     // Get IO parent order group ID
     const ioParentOrderGroupId = lineItem.fields['_io_parent_order_group'];
 

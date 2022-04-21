@@ -93,7 +93,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Shopify Order Retrieve",

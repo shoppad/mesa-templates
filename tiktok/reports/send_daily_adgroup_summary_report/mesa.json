@@ -56,9 +56,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{tiktokmarketing_reports.list[]}}"
                 },
@@ -82,13 +82,13 @@
                     },
                     "body": {
                         "fields": {
-                            "adgroup_id": "{{iterator.dimensions.adgroup_id}}",
-                            "spend": "{{iterator.metrics.spend}}",
-                            "impressions": "{{iterator.metrics.impressions}}",
-                            "reach": "{{iterator.metrics.reach}}",
-                            "clicks": "{{iterator.metrics.clicks}}",
-                            "conversion": "{{iterator.metrics.conversion}}",
-                            "cpm": "{{iterator.metrics.cpm}}"
+                            "adgroup_id": "{{loop.dimensions.adgroup_id}}",
+                            "spend": "{{loop.metrics.spend}}",
+                            "impressions": "{{loop.metrics.impressions}}",
+                            "reach": "{{loop.metrics.reach}}",
+                            "clicks": "{{loop.metrics.clicks}}",
+                            "conversion": "{{loop.metrics.conversion}}",
+                            "cpm": "{{loop.metrics.cpm}}"
                         }
                     }
                 },

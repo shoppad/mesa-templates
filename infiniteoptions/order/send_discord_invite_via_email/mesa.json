@@ -33,7 +33,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
         "name": "Shopify Retrieve Customer",
@@ -77,7 +77,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "shop",
         "action": "list",
         "name": "Shopify List Shop",
@@ -103,7 +103,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "customer",
         "action": "update",
         "name": "Shopify Update Customer",

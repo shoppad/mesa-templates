@@ -6,7 +6,7 @@
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "airtable",
     "seconds": 0,
     "enabled": false,
@@ -17,7 +17,7 @@
             {
                 "schema": 3,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify Order Created",
@@ -30,9 +30,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop Over order products",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
                 },
@@ -68,12 +68,12 @@
                             "Shipping Country": "{{shopify_order.shipping_address.country}}",
                             "Order Tags": "{{shopify_order.tags}}",
                             "Order Notes": "{{shopify_order.note}}",
-                            "Product Title": "{{iterator.title}}",
-                            "Product Variant": "{{iterator.variant_title}}",
-                            "Product SKU": "{{iterator.sku}}",
-                            "Product Price": "{{iterator.price}}",
-                            "Product Quantity": "{{iterator.quantity}}",
-                            "Line Item ID": "{{iterator.id}}",
+                            "Product Title": "{{loop.title}}",
+                            "Product Variant": "{{loop.variant_title}}",
+                            "Product SKU": "{{loop.sku}}",
+                            "Product Price": "{{loop.price}}",
+                            "Product Quantity": "{{loop.quantity}}",
+                            "Line Item ID": "{{loop.id}}",
                             "Created At": "{{shopify_order.created_at}}",
                             "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
                         }

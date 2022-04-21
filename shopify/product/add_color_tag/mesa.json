@@ -8,7 +8,7 @@
             {
                 "schema": 3,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "product",
                 "action": "updated",
                 "name": "Shopify Product Updated",
@@ -50,7 +50,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "product",
                 "action": "tag_add",
                 "name": "Shopify Product Add Tag",

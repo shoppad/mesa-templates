@@ -7,7 +7,7 @@
   "readme": "",
   "tags": [],
   "source": "schedule",
-  "destination": "shopify_api",
+  "destination": "shopify",
   "enabled": false,
   "logging": false,
   "debug": false,
@@ -30,7 +30,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "theme",
         "action": "publish",
         "name": "Shopify Publish Theme",

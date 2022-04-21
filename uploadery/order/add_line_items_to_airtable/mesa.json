@@ -30,9 +30,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{uploadery_order.line_items[]}}"
                 },
@@ -60,14 +60,14 @@
                             "Province": "{{uploadery_order.order.shipping_address.province}}",
                             "Zip": "{{uploadery_order.order.shipping_address.zip}}",
                             "Country": "{{uploadery_order.order.shipping_address.country}}",
-                            "Product Name": "{{iterator.title}}",
-                            "Product SKU": "{{iterator.sku}}",
-                            "Product Price": "{{iterator.price}}",
+                            "Product Name": "{{loop.title}}",
+                            "Product SKU": "{{loop.sku}}",
+                            "Product Price": "{{loop.price}}",
                             "Order Name": "{{uploadery_order.order.name}}",
                             "Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{uploadery_order.order.id}}",
                             "File": [
                                 {
-                                    "url": "{{iterator.fields.uploadery_1}}"
+                                    "url": "{{loop.fields.uploadery_1}}"
                                 }
                             ]
                         }

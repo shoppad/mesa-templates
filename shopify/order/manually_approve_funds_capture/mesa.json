@@ -17,7 +17,7 @@
       {
         "schema": 3,
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "order",
         "action": "created",
         "name": "Shopify Order Created",
@@ -31,7 +31,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order_risk",
         "action": "list",
         "name": "Shopify Order Risk List",
@@ -82,7 +82,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order_transaction",
         "action": "create",
         "name": "Shopify Order Transaction Create",
@@ -113,7 +113,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order",
         "action": "cancel",
         "name": "Shopify Order Cancel",

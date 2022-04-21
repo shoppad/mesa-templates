@@ -7,7 +7,7 @@
     "tags": [
         "Order"
     ],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "salesforce",
     "enabled": false,
     "logging": false,
@@ -16,7 +16,7 @@
         "inputs": [
             {
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify: Order Created",
@@ -136,9 +136,9 @@
             },
             {
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{custom-append-sf-product-ids-to-line-items.line_items[]}}"
                 },

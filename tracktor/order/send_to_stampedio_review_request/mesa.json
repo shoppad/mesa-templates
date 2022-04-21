@@ -31,7 +31,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order",
         "action": "retrieve",
         "name": "Shopify Retrieve Order",
@@ -75,9 +75,9 @@
       {
         "schema": 2,
         "trigger_type": "output",
-        "type": "iterator",
+        "type": "loop",
         "name": "Loop",
-        "key": "iterator",
+        "key": "loop",
         "metadata": {
           "key": "{{stampedio_review_request.results[]}}"
         },
@@ -92,7 +92,7 @@
         "key": "filter",
         "metadata": {
           "comparison": "equals",
-          "a": "{{iterator.orderIdShopify}}",
+          "a": "{{loop.orderIdShopify}}",
           "b": "{{delay.id}}"
         },
         "local_fields": [],
@@ -108,7 +108,7 @@
         "key": "stampedio_review_request_1",
         "metadata": {
           "path": {
-            "id": "{{iterator.id}}"
+            "id": "{{loop.id}}"
           }
         },
         "local_fields": [],

@@ -5,14 +5,14 @@
   "description": "Automatically fulfill all shippable products in the order, create a Shipping label, and attach it to the Shopify Order Notes field.",
   "video": "",
   "tags": [],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "shipstation",
   "enabled": false,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "order",
         "action": "created",
         "name": "Shopify Order Created",
@@ -137,7 +137,7 @@
         "name": "ShipStation Create Order",
         "key": "shipstation_order",
         "metadata": {
-          "shipstation_api": "POST /orders/createorder",
+          "api_endpoint": "POST /orders/createorder",
           "key_secret": "5ec7139c039eb23f466f9012"
         }
       },
@@ -195,7 +195,7 @@
         "name": "ShipStation Order Label",
         "key": "shipstation_order_1",
         "metadata": {
-          "shipstation_api": "POST /orders/createlabelfororder",
+          "api_endpoint": "POST /orders/createlabelfororder",
           "key_secret": "5ec70e7d83ffbb0e2523ddc4"
         }
       },
@@ -227,13 +227,13 @@
       },
       {
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order",
         "action": "update",
         "name": "Shopify Update Order",
         "key": "shopify_order_1",
         "metadata": {
-          "shopify_api": "PUT admin/orders/{{order_id}}.json",
+          "api_endpoint": "PUT admin/orders/{{order_id}}.json",
           "order_id": "{{shopify_order.id}}",
           "site": "current"
         }
@@ -263,13 +263,13 @@
       },
       {
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "order_fulfillment",
         "action": "create",
         "name": "Shopify Create Order Fulfillment",
         "key": "shopify_order_fulfillment",
         "metadata": {
-          "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json",
+          "api_endpoint": "POST admin/orders/{{order_id}}/fulfillments.json",
           "order_id": "{{shopify_order.id}}",
           "site": "current"
         }

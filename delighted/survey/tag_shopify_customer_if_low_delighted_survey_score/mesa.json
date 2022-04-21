@@ -6,7 +6,7 @@
   "video": "",
   "tags": ["delighted", "customer"],
   "source": "delighted",
-  "destination": "shopify_api",
+  "destination": "shopify",
   "enabled": false,
   "config": {
     "inputs": [
@@ -42,13 +42,13 @@
       },
       {
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "customer_search",
         "action": "list",
         "name": "Shopify Get List Customer Search",
         "key": "shopify_customer_search",
         "metadata": {
-          "shopify_api": "GET admin/customers/search.json",
+          "api_endpoint": "GET admin/customers/search.json",
           "parameters": "query=email:{{delighted_survey.person.email}}"
         },
         "local_fields": null,
@@ -71,13 +71,13 @@
       },
       {
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "customer",
         "action": "update",
         "name": "Shopify Update Customer",
         "key": "shopify_customer",
         "metadata": {
-          "shopify_api": "PUT admin/customers/{{customer_id}}.json",
+          "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
           "customer_id": "{{shopify_customer_search.customers[0].id}}",
           "mapping": [
             {

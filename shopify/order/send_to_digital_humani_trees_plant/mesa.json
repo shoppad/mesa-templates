@@ -9,7 +9,7 @@
         "order",
         "shopify"
     ],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "digitalhumani",
     "seconds": 60,
     "enabled": false,
@@ -20,7 +20,7 @@
             {
                 "schema": 3,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify Order Created",
@@ -71,7 +71,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "note_update",
                 "name": "Shopify Update Order Notes",

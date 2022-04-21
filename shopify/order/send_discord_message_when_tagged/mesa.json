@@ -17,7 +17,7 @@
             {
                 "schema": 3,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify Order Created",
@@ -30,9 +30,9 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
                 },
@@ -42,13 +42,13 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Product",
                 "key": "shopify_product",
                 "metadata": {
-                    "product_id": "{{iterator.product_id}}"
+                    "product_id": "{{loop.product_id}}"
                 },
                 "local_fields": [],
                 "weight": 1

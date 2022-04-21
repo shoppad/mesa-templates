@@ -5,7 +5,7 @@
   "description": "A template collection that includes three Automations to sync and send Shopify orders to Salesforce opportunities.",
   "video": "",
   "tags": [],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "salesforce",
   "templates": [
     "shopify/order/send_to_salesforce_opportunity_and_opportunity_products",

@@ -5,15 +5,15 @@
     "description": "",
     "video": "",
     "tags": [],
-    "source": "shopify_webhook",
-    "destination": "shopify_api",
+    "source": "shopify",
+    "destination": "shopify",
     "enabled": true,
     "logging": true,
     "config": {
         "inputs": [
             {
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify: Order Created",
@@ -26,13 +26,13 @@
         "outputs": [
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Shopify: Retrieve Customer",
                 "key": "shopify_retrieve_customer",
                 "metadata": {
-                    "shopify_api": "GET admin/customers/{{customer_id}}.json",
+                    "api_endpoint": "GET admin/customers/{{customer_id}}.json",
                     "customer_id": "{{source.customer.id}}",
                     "site": "current"
                 }
@@ -63,13 +63,13 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "update",
                 "name": "Shopify: Update Customer",
                 "key": "shopify_update_customer",
                 "metadata": {
-                    "shopify_api": "PUT admin/customers/{{customer_id}}.json",
+                    "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
                     "customer_id": "{{shopify_retrieve_customer.id}}",
                     "site": "current"
                 }

@@ -31,11 +31,11 @@
             {
                 "trigger_type": "output",
                 "enabled": true,
-                "type": "shopify_api",
+                "type": "shopify",
                 "name": "Create Shopify Fulfillment",
                 "key": "out-create-shopify-fulfillment",
                 "script": "out_create_shopify_fulfillment.js",
-                "shopify_api": "POST admin/orders/{{order_id}}/fulfillments.json"
+                "api_endpoint": "POST admin/orders/{{order_id}}/fulfillments.json"
             }
         ],
         "secrets": [

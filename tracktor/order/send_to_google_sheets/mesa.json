@@ -31,7 +31,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Order",
@@ -152,7 +152,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Shopify Retrieve Order",

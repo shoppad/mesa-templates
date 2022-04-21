@@ -17,7 +17,7 @@
       {
         "schema": 3,
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "order",
         "action": "created",
         "name": "Shopify Order Created",
@@ -31,9 +31,9 @@
       {
         "schema": 2,
         "trigger_type": "output",
-        "type": "iterator",
+        "type": "loop",
         "name": "Loop",
-        "key": "iterator",
+        "key": "loop",
         "metadata": {
           "key": "{{shopify_order.line_items[]}}"
         },
@@ -43,13 +43,13 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "product_variant",
         "action": "retrieve_id",
         "name": "Shopify Retrieve By Variant ID Product Variant",
         "key": "shopify_product_variant",
         "metadata": {
-          "variant_id": "{{iterator.variant_id}}"
+          "variant_id": "{{loop.variant_id}}"
         },
         "local_fields": [],
         "weight": 1
@@ -71,13 +71,13 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "product",
         "action": "retrieve",
         "name": "Shopify Retrieve Product",
         "key": "shopify_product_1",
         "metadata": {
-          "product_id": "{{iterator.product_id}}"
+          "product_id": "{{loop.product_id}}"
         },
         "local_fields": [],
         "weight": 3
@@ -97,7 +97,7 @@
       {
         "schema": 3,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "product",
         "action": "update",
         "name": "Shopify Update Product",

@@ -65,7 +65,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Shopify Customer Retrieve",
@@ -79,7 +79,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "update",
                 "name": "Shopify Customer Update",

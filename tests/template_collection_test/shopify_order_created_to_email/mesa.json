@@ -5,14 +5,14 @@
     "description": "kitchen-sink-2",
     "video": "",
     "tags": [],
-    "source": "shopify_webhook",
+    "source": "shopify",
     "destination": "email",
     "enabled": true,
     "config": {
         "inputs": [
             {
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Shopify: Order Created",
@@ -67,13 +67,13 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "update",
                 "name": "Shopify: Update Order",
                 "key": "shopify-update-order",
                 "metadata": {
-                    "shopify_api": "PUT admin/orders/{{order_id}}.json",
+                    "api_endpoint": "PUT admin/orders/{{order_id}}.json",
                     "order_id": "{{source.id}}"
                 }
             },

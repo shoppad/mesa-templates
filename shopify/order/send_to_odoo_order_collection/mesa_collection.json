@@ -5,7 +5,7 @@
   "description": "A template collection that includes two Automations to sync and send Shopify orders to Odoo orders.",
   "video": "",
   "tags": ["customer", "order", "odoo", "shopify"],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "odoo",
   "templates": [
     "shopify/order/send_to_odoo_order",

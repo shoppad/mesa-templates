@@ -48,9 +48,9 @@
             },
             {
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
+                "key": "loop",
                 "metadata": {
                     "key": "{{tracktor_order.fulfillments}}"
                 }
@@ -61,7 +61,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{iterator.latest_status.key}}",
+                    "a": "{{loop.latest_status.key}}",
                     "comparison": "does not equal",
                     "b": "delivered"
                 }
@@ -75,7 +75,7 @@
                 "metadata": {
                     "to": "{{tracktor_order.order_email}}",
                     "subject": "Sorry your package is taking so long!",
-                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in iterator.current_item.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page:\nhttps:\/\/{{context.shop.domain}}\/apps\/tracktor\/track\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}",
+                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in loop.current_item.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page:\nhttps:\/\/{{context.shop.domain}}\/apps\/tracktor\/track\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}",
                     "test_email_override": false
                 }
             }

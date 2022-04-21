@@ -37,13 +37,13 @@
         "outputs": [
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer_search",
                 "action": "list",
                 "name": "Shopify Get List Customer Search",
                 "key": "shopify_api_customer_search",
                 "metadata": {
-                    "shopify_api": "GET admin/customers/search.json",
+                    "api_endpoint": "GET admin/customers/search.json",
                     "parameters": "query=email:{{hubspot_contact.email | url_encode}}&fields=id,email"
                 },
                 "local_fields": null,
@@ -93,13 +93,13 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "create",
                 "name": "Shopify Create Customer",
                 "key": "shopify_api_customer",
                 "metadata": {
-                    "shopify_api": "POST admin/customers.json"
+                    "api_endpoint": "POST admin/customers.json"
                 },
                 "local_fields": null,
                 "weight": 3
@@ -141,13 +141,13 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "customer",
                 "action": "update",
                 "name": "Shopify Update Customer",
                 "key": "shopify_api_customer_1",
                 "metadata": {
-                    "shopify_api": "PUT admin/customers/{{customer_id}}.json",
+                    "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
                     "customer_id": "{{id}}"
                 },
                 "local_fields": null,

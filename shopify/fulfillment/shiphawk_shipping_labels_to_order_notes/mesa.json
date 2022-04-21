@@ -14,7 +14,7 @@
         "inputs": [
             {
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "name": "Shopify Fulfillment Created",
                 "key": "in-shopify-fulfillment-created",
                 "script": "in_shopify_fulfillment_created.js",
@@ -32,19 +32,19 @@
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "name": "Update Shopify Order Notes",
                 "key": "out-update-shopify-order-notes",
                 "script": "out_update_shopify_order_notes.js",
-                "shopify_api": "PUT admin/orders/{{order_id}}.json"
+                "api_endpoint": "PUT admin/orders/{{order_id}}.json"
             },
             {
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "name": "Update Shopify Fulfillment",
                 "key": "out-update-shopify-fulfillment",
                 "script": "out_update_shopify_fulfillment.js",
-                "shopify_api": "PUT admin/orders/{{order_id}}/fulfillments/{{fulfillment_id}}.json"
+                "api_endpoint": "PUT admin/orders/{{order_id}}/fulfillments/{{fulfillment_id}}.json"
             }
         ],
         "secrets": [

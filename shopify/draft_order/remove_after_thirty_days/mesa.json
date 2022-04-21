@@ -6,8 +6,8 @@
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "shopify_webhook",
-    "destination": "shopify_api",
+    "source": "shopify",
+    "destination": "shopify",
     "seconds": 60,
     "enabled": true,
     "logging": true,
@@ -17,7 +17,7 @@
             {
                 "schema": 3,
                 "trigger_type": "input",
-                "type": "shopify_webhook",
+                "type": "shopify",
                 "entity": "draft_order",
                 "action": "created",
                 "name": "Shopify Draft Order Created",
@@ -45,7 +45,7 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "draft_order",
                 "action": "delete",
                 "name": "Shopify Delete Draft Order",

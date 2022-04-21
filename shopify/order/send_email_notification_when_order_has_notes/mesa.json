@@ -6,7 +6,7 @@
   "video": "",
   "readme": "",
   "tags": [],
-  "source": "shopify_webhook",
+  "source": "shopify",
   "destination": "email",
   "enabled": true,
   "logging": false,
@@ -16,7 +16,7 @@
       {
         "schema": 2,
         "trigger_type": "input",
-        "type": "shopify_webhook",
+        "type": "shopify",
         "entity": "order",
         "action": "created",
         "name": "Shopify Order Created",
@@ -43,7 +43,7 @@
       {
         "schema": 2,
         "trigger_type": "output",
-        "type": "shopify_api",
+        "type": "shopify",
         "entity": "shop",
         "action": "list",
         "name": "Shopify Get List Shop",
