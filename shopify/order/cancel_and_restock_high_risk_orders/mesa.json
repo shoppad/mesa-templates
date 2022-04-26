@@ -1,20 +1,21 @@
 {
-    "key": "shopify/order/cancel_and_restock_high_risk_orders",
-    "name": "Cancel and Restock High-Risk Orders",
+    "key": "cancel_and_restock_high_risk_orders",
+    "name": "Cancel high-risk orders",
     "version": "1.0.0",
-    "description": "Cancel orders that are determined to be \"high-risk\" by Shopify's fraud algorithm. Restock the items in the order. Notify the customer their order has been canceled. And send an email notification to the store owner about the risky transaction.",
+    "description": "Stop fraud in its tracks with the help of Shopify's fraud algorithm. This template will cancel the order automatically if detected as high-risk and send an email to the customer notifying them of the cancellation. In addition, this template will send an email to the store owner to make them aware of the risky transaction; and so the inventory can be updated appropriately.",
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "email",
-    "enabled": true,
-    "logging": false,
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
@@ -22,46 +23,48 @@
                 "name": "Shopify Order Created",
                 "key": "shopify_order",
                 "metadata": [],
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
                 "action": "list",
-                "name": "Shopify Get Order Risks",
+                "name": "Shopify Get List of Order Risks",
                 "key": "shopify_order_risk",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
-                    "key": "{{shopify_order_risk.risks}}"
+                    "key": "{{shopify_order_risk}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "comparison": "equals",
                     "a": "{{loop.message}}",
+                    "comparison": "equals",
                     "b": "Shopify recommendation",
                     "additional": [
                         {
@@ -73,43 +76,11 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "transform",
-                "entity": "mapping",
-                "name": "Transform Mapping",
-                "key": "transformmapping",
-                "metadata": {
-                    "mapping": [
-                        {
-                            "destination": "reason",
-                            "source": "fraud"
-                        },
-                        {
-                            "destination": "email",
-                            "source": "true"
-                        },
-                        {
-                            "destination": "restock",
-                            "source": "true"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
-                    }
-                ],
-                "weight": 3
-            },
-            {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
@@ -117,16 +88,20 @@
                 "name": "Shopify Cancel Order",
                 "key": "shopify_order_1",
                 "metadata": {
-                  "order_id": "{{shopify_order.id}}"
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "reason": "fraud",
+                        "email": "true"
+                    }
                 },
                 "local_fields": [],
-                "weight": 4
+                "on_error": "default",
+                "weight": 3
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
-                "is_premium": true,
                 "name": "Email",
                 "key": "email",
                 "metadata": {
@@ -135,7 +110,8 @@
                     "message": "Order {{shopify_order.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/{{context.shop.myshopify_domain}}\/admin\/orders\/{{shopify_order.id}}"
                 },
                 "local_fields": [],
-                "weight": 5
+                "on_error": "default",
+                "weight": 4
             }
         ],
         "storage": []
