@@ -1,5 +1,5 @@
 {
-    "key": "tag_first_time_recharge_subscription_orders",
+    "key": "recharge/order/tag_first_time_recharge_subscription_orders",
     "name": "Tag first time Recharge subscription orders",
     "version": "1.0.0",
     "description": "Keep track of your first-time Recharge subscription orders with automatic tagging. Whenever a customer places their first Recharge subscription order, MESA instantly adds a 'Subscription First Order' tag to the Shopify Order.",
