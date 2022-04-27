@@ -1,5 +1,5 @@
 {
-    "key": "cancel_high_risk_orders",
+    "key": "shopify/order/cancel_high_risk_orders",
     "name": "Cancel high-risk orders",
     "version": "1.0.0",
     "description": "Stop fraud in its tracks with the help of Shopify's fraud algorithm. This template will cancel the order automatically if detected as high-risk and send an email to the customer notifying them of the cancellation. In addition, this template will send an email to the store owner to make them aware of the risky transaction; and so the inventory can be updated appropriately.",
