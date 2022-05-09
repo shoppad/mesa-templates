@@ -1,6 +1,6 @@
 {
     "key": "shopify/draft_order/send_to_hubspot_deal",
-    "name": "Send Draft Order To Hubspot Deal",
+    "name": "Send Draft Order To HubSpot Deal",
     "version": "1.0.0",
     "description": "Send draft order from Shopify to HubSpot Deal when draft order is created.",
     "video": "",
@@ -16,7 +16,7 @@
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "draft_order",
@@ -29,43 +29,23 @@
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "hubspot",
                 "entity": "deal",
                 "action": "create",
                 "name": "Hubspot Create Deal",
-                "key": "hubspot_deal_1",
+                "key": "hubspot_deal",
                 "metadata": {
-                    "method": "POST",
-                    "path": "/deals/v1/deal",
-                    "mapping": [
-                        {
-                            "destination": "DealName",
-                            "source": "{{shopify_draft_order.customer.first_name}} {{shopify_draft_order.customer.last_name}} {{shopify_draft_order.name}} Deal"
-                        },
-                        {
-                            "destination": "Pipeline",
-                            "source": "default"
-                        },
-                        {
-                            "destination": "DealStage",
-                            "source": "appointmentscheduled"
-                        },
-                        {
-                            "destination": "Amount",
-                            "source": "{{shopify_draft_order.total_price}}"
+                    "body": {
+                        "properties": {
+                            "amount": "{{shopify_draft_order.total_price}}",
+                            "dealname": "{{shopify_draft_order.customer.first_name}} {{shopify_draft_order.customer.last_name}} {{shopify_draft_order.name}} Deal"
                         }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
                     }
-                ],
+                },
+                "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
