@@ -1,79 +1,72 @@
 {
-    "key": "shopify/customer/send_to_hubspot_contact_and_mark_as_opportunity",
-    "name": "Send Customer To HubSpot Contact And Mark As Opportunity",
-    "version": "1.0.0",
-    "description": "Send customer from Shopify to HubSpot Contact and mark as opportunity when customer is created.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Customer"
-    ],
-    "source": "shopify",
-    "destination": "hubspot",
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "created",
-                "name": "Shopify Customer Created",
-                "key": "shopify_customer",
-                "metadata": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "hubspot",
-                "entity": "contact",
-                "action": "create",
-                "name": "Hubspot Create Contact",
-                "key": "hubspot_contact_1",
-                "metadata": {
-                    "method": "POST",
-                    "path": "\/contacts\/v1\/contact",
-                    "token": "",
-                    "mapping": [
-                        {
-                            "destination": "FirstName",
-                            "source": "{{shopify_customer.first_name}}"
-                        },
-                        {
-                            "destination": "LastName",
-                            "source": "{{shopify_customer.last_name}}"
-                        },
-                        {
-                            "destination": "Email",
-                            "source": "{{shopify_customer.email}}"
-                        },
-                        {
-                            "destination": "Phone",
-                            "source": "{{shopify_customer.phone}}"
-                        },
-                        {
-                            "destination": "LifecycleStage",
-                            "source": "opportunity"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
-                    }
-                ],
-                "weight": 0
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify_customer_send_to_hubspot_contact_and_mark_as_opportunity",
+  "name": "Send Shopify Customer To HubSpot Contact And Mark As Opportunity",
+  "version": "1.0.0",
+  "description": "HubSpot provides an extensive overview so you can take a look at your store's analytics. This template sends a customer from Shopify to HubSpot contact and marks them as an opportunity whenever customer is created. This allows your sales team to always be in sync with your Shopify store and act on an opportunity in a timely manner.",
+  "video": "",
+  "readme": "",
+  "tags": [
+    "Customer"
+  ],
+  "source": "shopify",
+  "destination": "hubspot",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+      "inputs": [
+          {
+              "schema": 3,
+              "trigger_type": "input",
+              "type": "shopify",
+              "entity": "customer",
+              "action": "created",
+              "name": "Shopify Customer Created",
+              "key": "shopify_customer",
+              "metadata": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "hubspot",
+              "entity": "contact",
+              "action": "create",
+              "name": "Hubspot Create Contact",
+              "key": "hubspot_contact",
+              "metadata": {
+                  "body": {
+                      "properties": {
+                          "email": "{{shopify_customer.email}}",
+                          "firstname": "{{shopify_customer.first_name}}",
+                          "lastname": "{{shopify_customer.last_name}}",
+                          "phone": "{{shopify_customer.phone}}",
+                          "lifecyclestage": "opportunity"
+                      }
+                  }
+              },
+              "local_fields": [
+                  {
+                      "key": "body",
+                      "fields": [
+                          {
+                              "key": "properties",
+                              "fields": [
+                                  {
+                                      "key": "lifecyclestage",
+                                      "type": "custom",
+                                      "allow_custom_fields": false
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ],
+              "weight": 0
+          }
+      ],
+      "storage": []
+  }
 }
