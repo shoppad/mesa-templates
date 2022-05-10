@@ -16,7 +16,7 @@ module.exports = new class {
     // - When filtering by email, Shopify's customer search (in previous step) returns customers matching anything before the + symbol
     // - For example, searching johndoe@gmail.com will return customers johndoe+1@gmail.com, johndoe+2@gmail.com)
     // This step loops through all of these customers and retains only the record with the exact matching email
-    const hubspotEmail = context.steps['hubspot_contact'].email;
+    const hubspotEmail = context.steps['hubspot_contact']['properties'].email;
     
     if (payload && payload.length > 0) {
       Mesa.log.debug(
@@ -32,11 +32,11 @@ module.exports = new class {
         // Have an existing customer in Shopify, call update customer mapping
         const existingCustomer = filtered[0];
         Mesa.log.debug(`Found a customer matching email ${hubspotEmail} sending to update customer`, existingCustomer);
-        Mesa.output.send('shopify_api_customer_1_transform', existingCustomer);
+        Mesa.output.send('shopify_customer_update', existingCustomer);
       } else {
         // No existing customers in Shopify, call create customer mapping
         Mesa.log.debug(`Did not find a customer matching email ${hubspotEmail} sending to create customer`, existingCustomer);
-        Mesa.output.send('shopify_api_customer_transform', payload);
+        Mesa.output.send('shopify_customer_create', payload);
       }
     } 
     // No customers found by the Shopify customer search, proceed straight to creating customer
@@ -46,7 +46,7 @@ module.exports = new class {
         hubspotEmail
       );
 
-      Mesa.output.send('shopify_api_customer_transform', payload);
+      Mesa.output.send('shopify_customer_create', payload);
     }
   }
 }

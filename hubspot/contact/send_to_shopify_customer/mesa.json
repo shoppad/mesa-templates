@@ -1,8 +1,10 @@
 {
-    "key": "hubspot/contact/send_to_shopify_customer",
+    "key": "hubspot_contact_send_to_shopify_customer",
     "name": "Send HubSpot Contact To Shopify Customer",
     "version": "1.0.0",
-    "description": "Send contact from HubSpot to Shopify Customer when contact is created or updated.",
+    "description": "Keeping track of orders in multiple systems requires accuracy and time. This template sends a contact from HubSpot to Shopify customer whenever a contact is created. This reduces the effort to ensure that all information across your systems are the same.",
+    "video": "",
+    "readme": "",
     "tags": [
         "Customer"
     ],
@@ -14,6 +16,7 @@
     "config": {
         "inputs": [
             {
+                "schema": 4,
                 "trigger_type": "input",
                 "type": "hubspot",
                 "entity": "contact",
@@ -21,35 +24,29 @@
                 "name": "Hubspot Contact Updated",
                 "key": "hubspot_contact",
                 "metadata": {
-                    "path": "/contacts/v1/lists/recently_updated/contacts/recent",
-                    "id_field_key": "vid",
-                    "get_path": "/contacts/v1/contact/vid/{{id}}/profile",
-                    "offset_field_key": "time-offset",
-                    "offset_query_parameter": "timeOffset",
-                    "has_more_field_key": "has-more",
-                    "date_field_key": "lastmodifieddate",
-                    "poll": "0 * * * *"
+                  "poll": "0 * * * *"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer_search",
                 "action": "list",
                 "name": "Shopify Get List Customer Search",
-                "key": "shopify_api_customer_search",
+                "key": "shopify_customer_search",
                 "metadata": {
-                    "api_endpoint": "GET admin/customers/search.json",
-                    "parameters": "query=email:{{hubspot_contact.email | url_encode}}&fields=id,email"
+                    "parameters": "query=email:{{hubspot_contact.properties.email}}&fields=id,email"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 0
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
                 "name": "Custom: Filter Shopify Customer by Exact Email Match",
@@ -57,101 +54,58 @@
                 "metadata": {
                     "script": "custom_filter.js"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 1
             },
             {
-                "trigger_type": "output",
-                "type": "transform",
-                "name": "Mapping to Shopify Create Customer",
-                "key": "shopify_api_customer_transform",
-                "metadata": {
-                    "script": "shopify_api_customer_transform_js.js",
-                    "mapping": [
-                        {
-                            "destination": "email",
-                            "source": "{{hubspot_contact.email}}"
-                        },
-                        {
-                            "destination": "first_name",
-                            "source": "{{hubspot_contact.firstname}}"
-                        },
-                        {
-                            "destination": "last_name",
-                            "source": "{{hubspot_contact.lastname}}"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets"
-                    }
-                ],
-                "weight": 2
-            },
-            {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
                 "action": "create",
                 "name": "Shopify Create Customer",
-                "key": "shopify_api_customer",
+                "key": "shopify_customer_create",
                 "metadata": {
-                    "api_endpoint": "POST admin/customers.json"
+                    "body": {
+                        "email": "{{hubspot_contact.properties.email}}",
+                        "first_name": "{{hubspot_contact.properties.firstname}}",
+                        "last_name": "{{hubspot_contact.properties.lastname}}"
+                    }
                 },
-                "local_fields": null,
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom: Terminate flow after Shopify Create Customer",
+                "key": "custom_terminate",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             },
             {
-                "trigger_type": "output",
-                "type": "transform",
-                "name": "Mapping to Shopify Update Customer",
-                "key": "shopify_api_customer_1_transform",
-                "metadata": {
-                    "script": "shopify_api_customer_1_transform_js.js",
-                    "mapping": [
-                        {
-                            "destination": "email",
-                            "source": "{{hubspot_contact.email}}"
-                        },
-                        {
-                            "destination": "first_name",
-                            "source": "{{hubspot_contact.firstname}}"
-                        },
-                        {
-                            "destination": "last_name",
-                            "source": "{{hubspot_contact.lastname}}"
-                        },
-                        {
-                            "destination": "id",
-                            "source": "{{id}}"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets"
-                    }
-                ],
-                "weight": 4
-            },
-            {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
                 "action": "update",
                 "name": "Shopify Update Customer",
-                "key": "shopify_api_customer_1",
+                "key": "shopify_customer_update",
                 "metadata": {
-                    "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{id}}"
+                    "customer_id": "{{custom_filter.id}}",
+                    "body": {
+                        "email": "{{hubspot_contact.properties.email}}",
+                        "first_name": "{{hubspot_contact.properties.firstname}}",
+                        "last_name": "{{hubspot_contact.properties.lastname}}"
+                    }
                 },
-                "local_fields": null,
-                "weight": 5
+                "local_fields": [],
+                "weight": 4
             }
         ],
         "storage": []
