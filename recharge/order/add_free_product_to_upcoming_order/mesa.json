@@ -1,0 +1,140 @@
+{
+    "key": "recharge/order/add_free_product_to_upcoming_order",
+    "name": "Add a free product to your customer's upcoming order",
+    "version": "1.0.0",
+    "description": "Thank customers for their continued business and build brand loyalty by rewarding your customers with a free gift in their next order. This template will add a free one-time product to a customer's next queued order if the Shopify Order has a \"free_gift_needed\" tag. It's a small token of appreciation that can leave a big impression.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "recharge",
+                "entity": "charge",
+                "action": "charge\/created",
+                "name": "Recharge Charge Created",
+                "key": "recharge_charge",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter - Checks if Recharge charge's type is a checkout",
+                "key": "filter",
+                "metadata": {
+                    "a": "checkout",
+                    "comparison": "in",
+                    "b": "{{recharge_charge.type}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Recharge Retrieve Customer",
+                "key": "recharge_customer",
+                "metadata": {
+                    "recharge_api": "GET \/customers\/{{customer_id}}",
+                    "customer_id": "{{recharge_charge.customer.id}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Customer",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{recharge_charge.external_order_id.ecommerce}}"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter - Checks if \"free_gift_needed\" tag is in Shopify order",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "free_gift_needed",
+                    "comparison": "in",
+                    "b": "{{shopify_order.tags}}"
+                },
+                "local_fields": [],
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "subscription",
+                "action": "list",
+                "name": "Recharge List subscription",
+                "key": "recharge_subscription",
+                "metadata": {
+                    "recharge_api": "GET \/subscriptions",
+                    "parameters": "shopify_customer_id={{shopify_customer.id}}"
+                },
+                "local_fields": [],
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "onetime",
+                "action": "create",
+                "name": "Recharge Create Onetime Product",
+                "key": "recharge_onetime_1",
+                "metadata": {
+                    "body": {
+                        "address_id": "{{recharge_subscription.0.address_id}}",
+                        "price": "0",
+                        "next_charge_scheduled_at": "{{recharge_subscription.0.next_charge_scheduled_at}}",
+                        "quantity": "1"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ],
+        "storage": []
+    }
+}
