@@ -125,6 +125,7 @@
                 "metadata": {
                     "body": {
                         "address_id": "{{recharge_subscription.0.address_id}}",
+                        "price": "0",
                         "next_charge_scheduled_at": "{{recharge_subscription.0.next_charge_scheduled_at}}",
                         "quantity": "1"
                     }
