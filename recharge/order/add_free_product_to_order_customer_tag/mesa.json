@@ -32,6 +32,21 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
+                "name": "Filter: Check if workflow ran already based on \"recharge-workflow\" tag",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "recharge-workflow",
+                    "comparison": "not in",
+                    "b": "{{shopify_customer.tags}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
                 "name": "Filter: Checks for \"add-free-product\" in customer tags",
                 "key": "filter",
                 "metadata": {
@@ -41,7 +56,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -56,7 +71,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -76,7 +91,25 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Shopify Customer Add \"recharge-workflow\" Tag",
+                "key": "shopify_customer_1",
+                "metadata": {
+                    "customer_id": "{{shopify_customer.id}}",
+                    "body": {
+                        "tag": "recharge-workflow"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
             }
         ],
         "storage": []
