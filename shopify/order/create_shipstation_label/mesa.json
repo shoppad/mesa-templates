@@ -8,273 +8,137 @@
   "source": "shopify",
   "destination": "shipstation",
   "enabled": false,
+  "logging": false,
+  "debug": false,
   "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": {
-          "topic": "orders/create"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to ShipStation Create Order",
-        "key": "mapping-shipstation-order",
-        "metadata": {
-          "mapping": [
-            {
-              "destination": "orderNumber",
-              "source": "{{shopify_order.order_number}}"
-            },
-            {
-              "destination": "orderDate",
-              "source": "{{shopify_order.created_at}}"
-            },
-            {
-              "destination": "orderStatus",
-              "source": "awaiting_shipment"
-            },
-            {
-              "destination": "billTo.name",
-              "source": "{{shopify_order.billing_address.name}}"
-            },
-            {
-              "destination": "billTo.company",
-              "source": "{{shopify_order.billing_address.company}}"
-            },
-            {
-              "destination": "billTo.street1",
-              "source": "{{shopify_order.billing_address.address1}}"
-            },
-            {
-              "destination": "billTo.street2",
-              "source": "{{shopify_order.billing_address.address2}}"
-            },
-            {
-              "destination": "billTo.city",
-              "source": "{{shopify_order.billing_address.city}}"
-            },
-            {
-              "destination": "billTo.state",
-              "source": "{{shopify_order.billing_address.province_code}}"
-            },
-            {
-              "destination": "billTo.postalCode",
-              "source": "{{shopify_order.billing_address.zip}}"
-            },
-            {
-              "destination": "billTo.country",
-              "source": "{{shopify_order.billing_address.country_code}}"
-            },
-            {
-              "destination": "shipTo.name",
-              "source": "{{shopify_order.shipping_address.name}}"
-            },
-            {
-              "destination": "shipTo.company",
-              "source": "{{shopify_order.shipping_address.company}}"
-            },
-            {
-              "destination": "shipTo.street1",
-              "source": "{{shopify_order.shipping_address.address1}}"
-            },
-            {
-              "destination": "shipTo.street2",
-              "source": "{{shopify_order.shipping_address.address2}}"
-            },
-            {
-              "destination": "shipTo.city",
-              "source": "{{shopify_order.shipping_address.city}}"
-            },
-            {
-              "destination": "shipTo.state",
-              "source": "{{shopify_order.shipping_address.province_code}}"
-            },
-            {
-              "destination": "shipTo.postalCode",
-              "source": "{{shopify_order.shipping_address.zip}}"
-            },
-            {
-              "destination": "shipTo.country",
-              "source": "{{shopify_order.shipping_address.country_code}}"
-            },
-            {
-              "destination": "weight.name",
-              "source": "grams"
-            },
-            {
-              "destination": "weight.value",
-              "source": "{{shopify_order.total_weight}}"
-            },
-            {
-              "destination": "orderKey",
-              "source": "{{shopify_order.id}}"
-            }
-          ]
-        },
-        "local_fields": [
+      "inputs": [
           {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets"
+              "schema": 3,
+              "trigger_type": "input",
+              "type": "shopify",
+              "entity": "order",
+              "action": "created",
+              "name": "Shopify Order Created",
+              "key": "shopify_order",
+              "metadata": [],
+              "weight": 0
           }
-        ]
-      },
-      {
-        "trigger_type": "output",
-        "type": "shipstation",
-        "entity": "order",
-        "action": "create",
-        "name": "ShipStation Create Order",
-        "key": "shipstation_order",
-        "metadata": {
-          "api_endpoint": "POST /orders/createorder",
-          "key_secret": "5ec7139c039eb23f466f9012"
-        }
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to ShipStation Label Order",
-        "key": "transformmapping",
-        "metadata": {
-          "mapping": [
-            {
-              "destination": "orderId",
-              "source": "{{orderId}}"
-            },
-            {
-              "destination": "carrierCode",
-              "source": "stamps_com"
-            },
-            {
-              "destination": "serviceCode",
-              "source": "usps_parcel_select"
-            },
-            {
-              "destination": "confirmation",
-              "source": "none"
-            },
-            {
-              "destination": "testLabel",
-              "source": "true"
-            },
-            {
-              "destination": "shipDate",
-              "source": "{{ \"now\" | date: \"%Y-%m-%d\" }}"
-            },
-            {
-              "destination": "packageCode",
-              "source": "package"
-            }
-          ]
-        },
-        "local_fields": [
+      ],
+      "outputs": [
           {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets"
-          }
-        ]
-      },
-      {
-        "trigger_type": "output",
-        "type": "shipstation",
-        "entity": "order",
-        "action": "create_label",
-        "name": "ShipStation Order Label",
-        "key": "shipstation_order_1",
-        "metadata": {
-          "api_endpoint": "POST /orders/createlabelfororder",
-          "key_secret": "5ec70e7d83ffbb0e2523ddc4"
-        }
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "name": "Mapping to Shopify Update Order",
-        "key": "mapping-shopify-order",
-        "metadata": {
-          "script": "mapping_shopify_order.js",
-          "mapping": [
-            {
-              "destination": "note_attributes[0].name",
-              "source": "Shipping Label"
-            },
-            {
-              "destination": "note_attributes[0].value",
-              "source": "{{labelData}}"
-            }
-          ]
-        },
-        "local_fields": [
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "shipstation",
+              "entity": "order_createorder",
+              "action": "create_order",
+              "name": "ShipStation Create\/Update Order",
+              "key": "shipstation_order_createorder",
+              "metadata": {
+                  "body": {
+                      "orderNumber": "{{shopify_order.order_number}}",
+                      "orderKey": "{{shopify_order.id}}",
+                      "orderStatus": "awaiting_shipment",
+                      "customerEmail": "{{shopify_order.email}}",
+                      "shipDate": "{{ \"now\" | date: \"%Y-%m-%d\" }}",
+                      "orderDate": "{{shopify_order.created_at}}",
+                      "billTo": {
+                          "name": "{{shopify_order.billing_address.name}}",
+                          "company": "{{shopify_order.billing_address.company}}",
+                          "street1": "{{shopify_order.billing_address.address1}}",
+                          "street2": "{{shopify_order.billing_address.address2}}",
+                          "city": "{{shopify_order.billing_address.city}}",
+                          "state": "{{shopify_order.billing_address.province_code}}",
+                          "postalCode": "{{shopify_order.billing_address.zip}}",
+                          "country": "{{shopify_order.billing_address.country_code}}",
+                          "phone": "{{shopify_order.billing_address.phone}}"
+                      },
+                      "shipTo": {
+                          "name": "{{shopify_order.shipping_address.name}}",
+                          "company": "{{shopify_order.shipping_address.company}}",
+                          "street1": "{{shopify_order.shipping_address.address1}}",
+                          "street2": "{{shopify_order.shipping_address.address2}}",
+                          "city": "{{shopify_order.shipping_address.city}}",
+                          "state": "{{shopify_order.shipping_address.province_code}}",
+                          "postalCode": "{{shopify_order.shipping_address.zip}}",
+                          "country": "{{shopify_order.shipping_address.country_code}}",
+                          "phone": "{{shopify_order.shipping_address.phone}}"
+                      },
+                      "weight": {
+                          "value": "{{shopify_order.total_weight}}",
+                          "units": "grams"
+                      }
+                  }
+              },
+              "local_fields": [],
+              "weight": 0
+          },
           {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets"
-          }
-        ]
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "update",
-        "name": "Shopify Update Order",
-        "key": "shopify_order_1",
-        "metadata": {
-          "api_endpoint": "PUT admin/orders/{{order_id}}.json",
-          "order_id": "{{shopify_order.id}}",
-          "site": "current"
-        }
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to Create Order Fulfillment",
-        "key": "transformmapping_1",
-        "metadata": {
-          "script": "mapping_create_order_fulfillment.js",
-          "mapping": [
-            {
-              "destination": "trackingNumber",
-              "source": "{{shipstation_order_1.trackingNumber}}"
-            }
-          ]
-        },
-        "local_fields": [
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "shipstation",
+              "entity": "order_createlabelfororder",
+              "action": "create",
+              "name": "ShipStation Create Label for Order",
+              "key": "shipstation_order_createlabelfororder",
+              "metadata": {
+                  "body": {
+                      "orderId": "{{shipstation_order_createorder.orderId}}",
+                      "carrierCode": "stamps_com",
+                      "serviceCode": "usps_parcel_select",
+                      "packageCode": "package",
+                      "confirmation": "none",
+                      "testLabel": "true",
+                      "shipDate": "{{ \"now\" | date: \"%Y-%m-%d\" }}",
+                      "weight": {
+                          "value": "{{shopify_order.total_weight}}",
+                          "units": "grams"
+                      }
+                  }
+              },
+              "local_fields": [],
+              "weight": 1
+          },
           {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets"
+              "schema": 3,
+              "trigger_type": "output",
+              "type": "shopify",
+              "entity": "order",
+              "action": "update",
+              "name": "Shopify Update Order",
+              "key": "shopify_order_1",
+              "metadata": {
+                  "body": {
+                      "note_attributes": [
+                          {
+                              "name": "Shipping Label",
+                              "value": "{{shipstation_order_createlabelfororder.labelData}}"
+                          }
+                      ]
+                  },
+                  "order_id": "{{shopify_order.id}}"
+              },
+              "local_fields": [],
+              "on_error": "default",
+              "weight": 2
+          },
+          {
+              "schema": 3,
+              "trigger_type": "output",
+              "type": "shopify",
+              "entity": "order_fulfillment",
+              "action": "create",
+              "name": "Shopify Create Order Fulfillment",
+              "key": "shopify_order_fulfillment",
+              "metadata": {
+                  "body": {
+                      "tracking_number": "{{shipstation_order_createlabelfororder.trackingNumber}}"
+                  },
+                  "order_id": "{{shopify_order.id}}"
+              },
+              "local_fields": [],
+              "weight": 3
           }
-        ]
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order_fulfillment",
-        "action": "create",
-        "name": "Shopify Create Order Fulfillment",
-        "key": "shopify_order_fulfillment",
-        "metadata": {
-          "api_endpoint": "POST admin/orders/{{order_id}}/fulfillments.json",
-          "order_id": "{{shopify_order.id}}",
-          "site": "current"
-        }
-      }
-    ],
-    "storage": []
+      ],
+      "storage": []
   }
 }
