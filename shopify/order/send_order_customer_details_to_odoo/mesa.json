@@ -1,5 +1,5 @@
 {
-    "key": "shopify\/order\/send_order_customer_details_to_odoo_original",
+    "key": "shopify\/order\/send_order_customer_details_to_odoo",
     "name": "Send Shopify order and customer details to Odoo",
     "version": "1.0.0",
     "description": "You're a busy merchant, and the last thing you want to do is manually synchronize the multiple systems you use each day. Let MESA do the heavy lifting for you! When a Shopify order is created, this template will send both the Shopify order details and customer information to Odoo. You'll save valuable time and gain peace of mind knowing both of your systems are in sync.",
