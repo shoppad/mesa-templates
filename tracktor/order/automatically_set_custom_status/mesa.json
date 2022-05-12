@@ -1,107 +1,109 @@
 {
-  "key": "tracktor/order/automatically_set_custom_status",
-  "name": "Automatically Delay Tracktor Custom Order Status Updates and Send an Email Notifying the Customer of Status Changes",
-  "version": "1.0.0",
-  "description": "As a merchant, there may be custom steps (such as purchasing materials, painting, dying, etc) that you go through before you can fulfill an order. It’s why Mesa makes it possible to automatically delay Tracktor customer order status and send an email to the customer whenever the status changes. That way, the customer only receives their tracking number when the order is ready for shipping.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "tracktor",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "delay",
-        "name": "Delay",
-        "key": "delay",
-        "metadata": {
-          "amount": "2",
-          "unit": "days",
-          "test_bypass": true
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Order",
-        "key": "shopify_order_1",
-        "metadata": {
-          "order_id": "{{delay.id}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_order_1.fulfillment_status}}",
-          "comparison": "equals",
-          "b": "null"
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "tracktor",
-        "entity": "order",
-        "action": "update",
-        "name": "Tracktor Update Manual Status Order",
-        "key": "tracktor_order",
-        "metadata": {
-          "order_id": "{{shopify_order_1.id}}",
-          "body": {
-            "automatic_carrier_updates": "false",
-            "force": "true"
-          }
-        },
-        "local_fields": [],
-        "weight": 3
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{shopify_order_1.email}}",
-          "subject": "Your order is being prepared for shipment.",
-          "message": "Hello {{shopify_order_1.customer.first_name}}!\n\nThanks for your patience as our team is getting your order ready for shipment. You will receive a Shipping Confirmation once the order is shipped.\n\nIf you wanted to check on your order's details, you can click here: {{shopify_order_1.order_status_url}}\n\nThanks!\n-Team ShopPad"
-        },
-        "local_fields": [],
-        "weight": 4
-      }
-    ],
-    "storage": []
-  }
+    "key": "tracktor/order/automatically_set_custom_status",
+    "name": "Delay custom order status updates",
+    "version": "1.0.0",
+    "description": "As a merchant, there may be custom steps, such as purchasing materials, painting, dying, etc., that you go through before fulfilling an order. MESA makes it possible to automatically delay Tracktor custom order status updates and send an email to the customer whenever the status changes. That way, the customer only receives their tracking number when the order is ready to be shipped.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": "2",
+                    "unit": "days",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Order",
+                "key": "shopify_order_1",
+                "metadata": {
+                    "order_id": "{{delay.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_order_1.fulfillment_status}}",
+                    "comparison": "equals",
+                    "b": "null"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "update",
+                "name": "Tracktor Update Order's Manual Status",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{shopify_order_1.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{shopify_order_1.email}}",
+                    "subject": "Your order is being prepared for shipment.",
+                    "message": "Hello {{shopify_order_1.customer.first_name}}!\n\nThanks for your patience as our team is getting your order ready for shipment. You will receive a Shipping Confirmation once the order is shipped.\n\nIf you wanted to check on your order's status, you can click here: {{tracktor_order.tracking_url}}\n\nThanks!\n- {{context.shop.name}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ],
+        "storage": []
+    }
 }
