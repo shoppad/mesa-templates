@@ -1,0 +1,520 @@
+{
+    "key": "shopify\/order\/send_order_customer_details_to_odoo",
+    "name": "Send Shopify order and customer details to Odoo",
+    "version": "1.0.0",
+    "description": "You're a busy merchant, and the last thing you want to do is manually synchronize the multiple systems you use each day. Let MESA do the heavy lifting for you! When a Shopify order is created, this template will send both the Shopify order details and customer information to Odoo. You'll save valuable time and gain peace of mind knowing both of your systems are in sync.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "order",
+        "odoo",
+        "shopify"
+    ],
+    "source": "shopify",
+    "destination": "odoo",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "product.product",
+                "action": "search_read",
+                "name": "Odoo List Product Variant",
+                "key": "odoo_product_product",
+                "metadata": {
+                    "entity_name": "product.product",
+                    "method": "search_read",
+                    "query": [
+                        {
+                            "property": "default_code",
+                            "operator": "in",
+                            "value": "{{shopify_order.line_items | map:'sku' | join:','}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "name"
+                        },
+                        {
+                            "property": "default_code"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_order.line_items | map:'sku' | join:','}}",
+                    "comparison": "equals",
+                    "b": "{{odoo_product_product | map:'default_code' | join:','}}",
+                    "script": "filter.js"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "res.partner",
+                "action": "search_read",
+                "name": "Odoo List Customer",
+                "key": "odoo_res_partner",
+                "metadata": {
+                    "entity_name": "res.partner",
+                    "method": "search_read",
+                    "query": [
+                        {
+                            "property": "email",
+                            "operator": "=",
+                            "value": "{{shopify_order.email}}"
+                        },
+                        {
+                            "property": "customer_rank",
+                            "operator": "=",
+                            "value": "TRUE"
+                        },
+                        {
+                            "property": "active",
+                            "operator": "=",
+                            "value": "TRUE"
+                        },
+                        {
+                            "property": "street",
+                            "operator": "=",
+                            "value": "{{shopify_order.shipping_address.address1}}"
+                        },
+                        {
+                            "property": "zip",
+                            "operator": "=",
+                            "value": "{{shopify_order.shipping_address.zip}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "parent_id"
+                        },
+                        {
+                            "property": "name"
+                        },
+                        {
+                            "property": "email"
+                        },
+                        {
+                            "property": "street"
+                        },
+                        {
+                            "property": "zip"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Validate Customer: Skip Create IF Exists",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{odoo_res_partner.0.id}}",
+                    "comparison": "greater than",
+                    "b": "1",
+                    "script": "filter_1.js"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "custom",
+                "action": "search_read",
+                "name": "Odoo List Custom Model - Country",
+                "key": "odoo_custom",
+                "metadata": {
+                    "method": "search_read",
+                    "entity_name_custom": "res.country",
+                    "query": [
+                        {
+                            "property": "code",
+                            "operator": "=",
+                            "value": "{{transform_mapping_1.country_code}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "code"
+                        },
+                        {
+                            "property": "name"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "custom",
+                "action": "search_read",
+                "name": "Odoo List Custom Model - State",
+                "key": "odoo_custom_1",
+                "metadata": {
+                    "method": "search_read",
+                    "query": [
+                        {
+                            "property": "country_id",
+                            "operator": "=",
+                            "value": "{{odoo_custom[0].id}}"
+                        },
+                        {
+                            "property": "code",
+                            "operator": "=",
+                            "value": "{{transform_mapping_1.province_code}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "code"
+                        },
+                        {
+                            "property": "name"
+                        },
+                        {
+                            "property": "Tag"
+                        }
+                    ],
+                    "entity_name_custom": "res.country.state"
+                },
+                "local_fields": [],
+                "weight": 5
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "res.partner",
+                "action": "create",
+                "name": "Odoo Customer Create",
+                "key": "odoo_res_partner_1",
+                "metadata": {
+                    "entity_name": "res.partner",
+                    "method": "create",
+                    "body": {
+                        "name": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}",
+                        "display_name": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}",
+                        "active": "TRUE",
+                        "customer": "TRUE",
+                        "supplier": "FALSE",
+                        "employee": "FALSE",
+                        "is_company": "FALSE",
+                        "type": "delivery",
+                        "phone": "{{shopify_order.phone}}",
+                        "email": "{{shopify_order.email}}",
+                        "street": "{{shopify_order.shipping_address.address1}}",
+                        "street2": "{{shopify_order.shipping_address.address2}}",
+                        "city": "{{shopify_order.shipping_address.city}}",
+                        "state_id": "{{odoo_custom_1[0].id}}",
+                        "zip": "{{shopify_order.shipping_address.zip}}",
+                        "country_id": "{{odoo_custom[0].id}}",
+                        "team_id": "8"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "weight": 6
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Partner ID from List OR Create",
+                "key": "transform_mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "partner_id",
+                            "source": "{{odoo_res_partner.0.id}}{{odoo_res_partner_1.id}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 7
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "sale.order",
+                "action": "create",
+                "name": "Odoo Create Order",
+                "key": "odoo_sale_order",
+                "metadata": {
+                    "entity_name": "sale.order",
+                    "method": "create",
+                    "body": {
+                        "name": "{{shopify_order.order_number}}",
+                        "state": "draft",
+                        "partner_id": "{{transform_mapping.partner_id}}",
+                        "partner_invoice_id": "{{transform_mapping.partner_id}}",
+                        "partner_shipping_id": "{{transform_mapping.partner_id}}",
+                        "amount_untaxed": "{{shopify_order.subtotal_price}}",
+                        "amount_tax": "{{shopify_order.total_tax}}",
+                        "amount_total": "{{shopify_order.total_price}}",
+                        "type_name": "Quotation",
+                        "display_name": "{{shopify_order.name}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "weight": 8
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Order Lines",
+                "key": "transform_mapping_2",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "discount.name",
+                            "source": "Discounts"
+                        },
+                        {
+                            "destination": "discount.price",
+                            "source": "-{{shopify_order.total_discounts}}"
+                        },
+                        {
+                            "destination": "discount.quantity",
+                            "source": "1"
+                        },
+                        {
+                            "destination": "discount.product_id",
+                            "source": "{{FILL THIS IN}}"
+                        },
+                        {
+                            "destination": "shipping.name",
+                            "source": "Shipping"
+                        },
+                        {
+                            "destination": "shipping.price",
+                            "source": "{{shopify_order.shipping_lines.0.price}}"
+                        },
+                        {
+                            "destination": "shipping.quantity",
+                            "source": "1"
+                        },
+                        {
+                            "destination": "shipping.product_id",
+                            "source": "{{FILL THIS IN}}"
+                        },
+                        {
+                            "destination": "taxes.name",
+                            "source": "Taxes"
+                        },
+                        {
+                            "destination": "taxes.price",
+                            "source": "{{shopify_order.total_tax}}"
+                        },
+                        {
+                            "destination": "taxes.quantity",
+                            "source": "1"
+                        },
+                        {
+                            "destination": "taxes.product_id",
+                            "source": "{{FILL THIS IN}}"
+                        },
+                        {
+                            "destination": "order_lines",
+                            "source": "[]"
+                        },
+                        {
+                            "destination": "order_lines[].name",
+                            "source": "{{shopify_order.line_items[].name}}"
+                        },
+                        {
+                            "destination": "order_lines[].title",
+                            "source": "{{shopify_order.line_items[].title}}"
+                        },
+                        {
+                            "destination": "order_lines[].sku",
+                            "source": "{{shopify_order.line_items[].sku}}"
+                        },
+                        {
+                            "destination": "order_lines[].price",
+                            "source": "{{shopify_order.line_items[].price}}"
+                        },
+                        {
+                            "destination": "order_lines[].notes",
+                            "source": "{{shopify_order.line_items[].notes}}"
+                        },
+                        {
+                            "destination": "order_lines[].gift_notes",
+                            "source": "{{shopify_order.line_items[].gift_notes}}"
+                        },
+                        {
+                            "destination": "order_lines[].quantity",
+                            "source": "{{shopify_order.line_items[].quantity}}"
+                        },
+                        {
+                            "destination": "order_lines[].tax_id",
+                            "source": "{{shopify_order.line_items[].SEE_SCRIPT}}"
+                        }
+                    ],
+                    "script": "transform_mapping_2.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 9
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Iterator",
+                "key": "iterator",
+                "metadata": {
+                    "key": "{{transform_mapping_2.order_lines[]}}"
+                },
+                "local_fields": [],
+                "weight": 10
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Get Order Line Product Id",
+                "key": "transformmapping",
+                "metadata": {
+                    "script": "transformmapping.js",
+                    "mapping": [
+                        {
+                            "destination": "product_id",
+                            "source": "{{SEE_SCRIPT}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 11
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "sale.order.line",
+                "action": "create",
+                "name": "Odoo Create Order Line",
+                "key": "odoo_sale_order_line",
+                "metadata": {
+                    "entity_name": "sale.order.line",
+                    "method": "create",
+                    "body": {
+                        "name": "{{iterator.name}}",
+                        "order_id": "{{odoo_sale_order.id}}",
+                        "price_unit": "{{iterator.price}}",
+                        "price_subtotal": "{{iterator.price | times: iterator.quantity}}",
+                        "price_total": "{{iterator.price | times: iterator.quantity}}",
+                        "product_id": "{{transformmapping.product_id}}",
+                        "product_uom_qty": "{{iterator.quantity}}",
+                        "product_qty": "{{iterator.quantity}}",
+                        "price_tax": "0",
+                        "tax_id": "{{iterator.tax_id}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "price_tax",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            },
+                            {
+                                "key": "tax_id",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            }
+                        ]
+                    }
+                ],
+                "weight": 12
+            }
+        ],
+        "storage": []
+    }
+}
