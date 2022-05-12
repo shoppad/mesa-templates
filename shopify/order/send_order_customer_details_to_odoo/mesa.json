@@ -283,7 +283,8 @@
                             "destination": "partner_id",
                             "source": "{{odoo_res_partner.0.id}}{{odoo_res_partner_1.id}}"
                         }
-                    ]
+                    ],
+                    "script": "transform_mapping.js"
                 },
                 "local_fields": [
                     {
@@ -434,15 +435,16 @@
                 "weight": 9
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "loop",
-                "name": "Iterator",
-                "key": "iterator",
+                "name": "Loop",
+                "key": "loop",
                 "metadata": {
                     "key": "{{transform_mapping_2.order_lines[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 10
             },
             {
@@ -483,16 +485,16 @@
                     "entity_name": "sale.order.line",
                     "method": "create",
                     "body": {
-                        "name": "{{iterator.name}}",
+                        "name": "{{loop.name}}",
                         "order_id": "{{odoo_sale_order.id}}",
-                        "price_unit": "{{iterator.price}}",
-                        "price_subtotal": "{{iterator.price | times: iterator.quantity}}",
-                        "price_total": "{{iterator.price | times: iterator.quantity}}",
+                        "price_unit": "{{loop.price}}",
+                        "price_subtotal": "{{loop.price | times: loop.quantity}}",
+                        "price_total": "{{loop.price | times: loop.quantity}}",
                         "product_id": "{{transformmapping.product_id}}",
-                        "product_uom_qty": "{{iterator.quantity}}",
-                        "product_qty": "{{iterator.quantity}}",
+                        "product_uom_qty": "{{loop.quantity}}",
+                        "product_qty": "{{loop.quantity}}",
                         "price_tax": "0",
-                        "tax_id": "{{iterator.tax_id}}"
+                        "tax_id": "{{loop.tax_id}}"
                     }
                 },
                 "local_fields": [
