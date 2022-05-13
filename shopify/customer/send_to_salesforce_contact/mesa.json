@@ -43,7 +43,7 @@
                         "FirstName": "{{shopify_customer.first_name}}",
                         "LastName": "{{shopify_customer.last_name}}",
                         "Email": "{{shopify_customer.email}}",
-                        "MailingStreet": "{{shopify_customer.default_address.address1}}",
+                        "MailingStreet": "{{shopify_customer.default_address.address1}} {{shopify_customer.default_address.address2}}",
                         "MailingCity": "{{shopify_customer.default_address.city}}",
                         "MailingState": "{{shopify_customer.default_address.province}}",
                         "MailingPostalCode": "{{shopify_customer.default_address.zip}}",

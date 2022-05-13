@@ -43,7 +43,7 @@
                         "LastName": "{{shopify_order.customer.last_name}}",
                         "FirstName": "{{shopify_order.customer.first_name}}",
                         "Company": "{% if shopify_order.customer.default_address.company %}{{shopify_order.customer.default_address.company}}{% else %}Shopify Customer{% endif %}",
-                        "Street": "{{shopify_order.customer.default_address.address1}}",
+                        "Street": "{{shopify_order.customer.default_address.address1}} {{shopify_order.customer.default_address.address2}}",
                         "City": "{{shopify_order.customer.default_address.city}}",
                         "State": "{{shopify_order.customer.default_address.province}}",
                         "PostalCode": "{{shopify_order.customer.default_address.zip}}",
