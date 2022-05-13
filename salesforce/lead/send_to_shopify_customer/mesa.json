@@ -1,5 +1,5 @@
 {
-    "key": "salesforce\/lead\/send_to_shopify_customer",
+    "key": "salesforce/lead/send_to_shopify_customer",
     "name": "Send Salesforce Lead To Shopify Customer",
     "version": "1.0.0",
     "description": "Retain customer loyalty by connecting your converted lead from Salesforce to Shopify.  This template sends contact details from Salesforce to Shopify customer when a lead converts. Keep the momentum going by bridging the gap between these two major platforms.",

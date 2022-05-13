@@ -1,5 +1,5 @@
 {
-    "key": "shopify\/order\/send_to_salesforce_lead",
+    "key": "shopify/order/send_to_salesforce_lead",
     "name": "Send Order To Salesforce Lead",
     "version": "1.0.0",
     "description": "Seize the moment and secure your customer\u2019s loyalty by linking your Shopify customers to the Salesforce lead system.  This template sends orders from Shopify to Salesforce Lead as soon as the order is created on Shopify. Keep the momentum going by bridging the gap between these two major platforms.",

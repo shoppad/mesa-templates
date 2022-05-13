@@ -1,5 +1,5 @@
 {
-    "key": "salesforce\/product\/send_to_shopify_product",
+    "key": "salesforce/product/send_to_shopify_product",
     "name": "Send Salesforce Product To Shopify Product",
     "version": "1.0.0",
     "description": "Effectively maintain consistent product information between Shopify and Salesforce. This template sends the product details from Salesforce to Shopify Product as soon as the Salesforce product is created. Save yourself time and let both platforms team up to share key information.",

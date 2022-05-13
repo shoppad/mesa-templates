@@ -1,5 +1,5 @@
 {
-    "key": "shopify\/customer\/send_to_salesforce_contact",
+    "key": "shopify/customer/send_to_salesforce_contact",
     "name": "Send Customer to Salesforce Contact",
     "version": "1.0.0",
     "description": "Minimize the need for manual memorization by instantly connecting Shopify to Salesforce Contact. This template sends your customers from Shopify to Salesforce Contact as soon as the customer is created. This allows you to stay on top of your business by keeping track of your customers.",
