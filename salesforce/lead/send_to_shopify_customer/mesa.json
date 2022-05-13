@@ -1,107 +1,73 @@
 {
-  "key": "salesforce/lead/send_to_shopify_customer",
-  "name": "Send Salesforce Lead To Shopify Customer",
-  "version": "1.0.0",
-  "description": "Send contact details from Salesforce to Shopify customer when lead converts",
-  "video": "",
-  "tags": [
-    "Customer"
-  ],
-  "source": "salesforce",
-  "destination": "shopify",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "salesforce",
-        "entity": "lead",
-        "action": "list-converted",
-        "name": "Salesforce: Lead Converted",
-        "key": "salesforce-lead-converted",
-        "metadata": {
-          "entity_name": "Lead",
-          "method": "list-converted",
-          "poll": "0 * * * *"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "name": "Mapping to Shopify: Create Customer",
-        "key": "mapping-to-shopify-create-customer",
-        "metadata": {
-          "script": "transform.js",
-          "mapping": [
+    "key": "salesforce\/lead\/send_to_shopify_customer",
+    "name": "Send Salesforce Lead To Shopify Customer",
+    "version": "1.0.0",
+    "description": "Retain customer loyalty by connecting your converted lead from Salesforce to Shopify.  This template sends contact details from Salesforce to Shopify customer when a lead converts. Keep the momentum going by bridging the gap between these two major platforms.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "email",
-              "source": "{{source.Email}}"
-            },
-            {
-              "destination": "phone",
-              "source": "{{source.Phone}}"
-            },
-            {
-              "destination": "first_name",
-              "source": "{{source.FirstName}}"
-            },
-            {
-              "destination": "last_name",
-              "source": "{{source.LastName}}"
-            },
-            {
-              "destination": "addresses.0.address1",
-              "source": "{{source.Street}}"
-            },
-            {
-              "destination": "addresses.0.city",
-              "source": "{{source.City}}"
-            },
-            {
-              "destination": "addresses.0.province",
-              "source": "{{source.State}}"
-            },
-            {
-              "destination": "addresses.0.zip",
-              "source": "{{source.PostalCode}}"
-            },
-            {
-              "destination": "addresses.0.country",
-              "source": "{{source.Country}}"
-            },
-            {
-              "destination": "addresses.0.phone",
-              "source": "{{source.Phone}}"
-            },
-            {
-              "destination": "addresses.0.company",
-              "source": "{{source.Company}}"
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "salesforce",
+                "entity": "lead",
+                "action": "list-converted",
+                "name": "Salesforce Lead Converted",
+                "key": "salesforce_lead",
+                "metadata": {
+                    "entity_name": "Lead",
+                    "method": "list-converted",
+                    "poll": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2022-05-13T11:00:00-07:00"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping"
-          }
         ],
-        "destination_entity": "customer"
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "create",
-        "name": "Shopify: Create Customer",
-        "key": "shopify-create-customer",
-        "metadata": {
-          "api_endpoint": "POST admin/customers.json",
-          "site": "current"
-        }
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "create",
+                "name": "Shopify Create Customer",
+                "key": "shopify_customer",
+                "metadata": {
+                    "body": {
+                        "email": "{{salesforce_lead.Email}}",
+                        "phone": "{{salesforce_lead.Phone}}",
+                        "first_name": "{{salesforce_lead.FirstName}}",
+                        "last_name": "{{salesforce_lead.LastName}}",
+                        "default_address": {
+                            "address1": "{{salesforce_lead.Street}}",
+                            "phone": "{{salesforce_lead.Phone}}",
+                            "city": "{{salesforce_lead.City}}",
+                            "province": "{{salesforce_lead.State}}",
+                            "zip": "{{salesforce_lead.PostalCode}}",
+                            "country": "{{salesforce_lead.Country}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

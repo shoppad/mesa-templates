@@ -1,100 +1,611 @@
 {
-    "key": "shopify/order/send_to_salesforce_lead",
+    "key": "shopify\/order\/send_to_salesforce_lead",
     "name": "Send Order To Salesforce Lead",
     "version": "1.0.0",
-    "description": "Send Order from Shopify to Salesforce Lead when order is created.",
-    "tags": [
-        "Order"
-    ],
-    "source": "shopify",
-    "destination": "salesforce",
+    "description": "Seize the moment and secure your customer\u2019s loyalty by linking your Shopify customers to the Salesforce lead system.  This template sends orders from Shopify to Salesforce Lead as soon as the order is created on Shopify. Keep the momentum going by bridging the gap between these two major platforms.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify: Order Created",
-                "key": "shopify-order-created",
-                "metadata": {
-                    "topic": "orders/create"
-                }
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "outputs": [
             {
-                "trigger_type": "output",
-                "type": "transform",
-                "entity": "mapping",
-                "name": "Mapping to Salesforce Create Lead",
-                "key": "mapping-to-salesforce-create-lead",
-                "metadata": {
-                    "mapping": [
-                        {
-                            "source": "{{source.email}}",
-                            "destination": "Email"
-                        },
-                        {
-                            "source": "{{source.customer.first_name}}",
-                            "destination": "FirstName"
-                        },
-                        {
-                            "source": "{{source.customer.last_name}}",
-                            "destination": "LastName"
-                        },
-                        {
-                            "source": "{{source.customer.default_address.address1}}",
-                            "destination": "Street"
-                        },
-                        {
-                            "source": "{{source.customer.default_address.city}}",
-                            "destination": "City"
-                        },
-                        {
-                            "source": "{{source.customer.default_address.province}}",
-                            "destination": "State"
-                        },
-                        {
-                            "source": "{{source.customer.default_address.zip}}",
-                            "destination": "PostalCode"
-                        },
-                        {
-                            "source": "{{source.customer.default_address.country}}",
-                            "destination": "Country"
-                        },
-                        {
-                            "source": "{% if source.customer.default_address.company %}{{source.customer.default_address.company}}{% else %}Shopify Customer{% endif %}",
-                            "destination": "Company"
-                        },
-                        {
-                            "source": "{{source.customer.default_address.phone}}",
-                            "destination": "Phone"
-                        }
-                    ],
-                    "script": "transform.js"
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping"
-                    }
-                ],
-                "destination_entity": "lead"
-            },
-            {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "lead",
                 "action": "create",
-                "name": "Salesforce: Create Lead",
-                "key": "salesforce-create-lead",
+                "name": "Salesforce Create Lead",
+                "key": "salesforce_lead",
                 "metadata": {
                     "entity_name": "Lead",
-                    "method": "POST"
+                    "method": "POST",
+                    "body": {
+                        "LastName": "{{shopify_order.customer.last_name}}",
+                        "FirstName": "{{shopify_order.customer.first_name}}",
+                        "Company": "{% if shopify_order.customer.default_address.company %}{{shopify_order.customer.default_address.company}}{% else %}Shopify Customer{% endif %}",
+                        "Street": "{{shopify_order.customer.default_address.address1}}",
+                        "City": "{{shopify_order.customer.default_address.city}}",
+                        "State": "{{shopify_order.customer.default_address.province}}",
+                        "PostalCode": "{{shopify_order.customer.default_address.zip}}",
+                        "Country": "{{shopify_order.customer.default_address.country}}",
+                        "Phone": "{{shopify_order.customer.default_address.phone}}",
+                        "Email": "{{shopify_order.email}}"
+                    }
                 },
-                "source_entity": "mapping"
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "LastName",
+                                "label": "Last Name",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "FirstName",
+                                "label": "First Name",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Salutation",
+                                "label": "Salutation",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Mr.",
+                                        "value": "Mr."
+                                    },
+                                    {
+                                        "label": "Ms.",
+                                        "value": "Ms."
+                                    },
+                                    {
+                                        "label": "Mrs.",
+                                        "value": "Mrs."
+                                    },
+                                    {
+                                        "label": "Dr.",
+                                        "value": "Dr."
+                                    },
+                                    {
+                                        "label": "Prof.",
+                                        "value": "Prof."
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Title",
+                                "label": "Title",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Company",
+                                "label": "Company",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Street",
+                                "label": "Street",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "City",
+                                "label": "City",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "State",
+                                "label": "State\/Province",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "PostalCode",
+                                "label": "Zip\/Postal Code",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Country",
+                                "label": "Country",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Latitude",
+                                "label": "Latitude",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Longitude",
+                                "label": "Longitude",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "GeocodeAccuracy",
+                                "label": "Geocode Accuracy",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Address",
+                                        "value": "Address"
+                                    },
+                                    {
+                                        "label": "NearAddress",
+                                        "value": "NearAddress"
+                                    },
+                                    {
+                                        "label": "Block",
+                                        "value": "Block"
+                                    },
+                                    {
+                                        "label": "Street",
+                                        "value": "Street"
+                                    },
+                                    {
+                                        "label": "ExtendedZip",
+                                        "value": "ExtendedZip"
+                                    },
+                                    {
+                                        "label": "Zip",
+                                        "value": "Zip"
+                                    },
+                                    {
+                                        "label": "Neighborhood",
+                                        "value": "Neighborhood"
+                                    },
+                                    {
+                                        "label": "City",
+                                        "value": "City"
+                                    },
+                                    {
+                                        "label": "County",
+                                        "value": "County"
+                                    },
+                                    {
+                                        "label": "State",
+                                        "value": "State"
+                                    },
+                                    {
+                                        "label": "Unknown",
+                                        "value": "Unknown"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Phone",
+                                "label": "Phone",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MobilePhone",
+                                "label": "Mobile Phone",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Fax",
+                                "label": "Fax",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Email",
+                                "label": "Email",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Website",
+                                "label": "Website",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Description",
+                                "label": "Description",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "LeadSource",
+                                "label": "Lead Source",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Web",
+                                        "value": "Web"
+                                    },
+                                    {
+                                        "label": "Phone Inquiry",
+                                        "value": "Phone Inquiry"
+                                    },
+                                    {
+                                        "label": "Partner Referral",
+                                        "value": "Partner Referral"
+                                    },
+                                    {
+                                        "label": "Purchased List",
+                                        "value": "Purchased List"
+                                    },
+                                    {
+                                        "label": "Other",
+                                        "value": "Other"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Status",
+                                "label": "Status",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Open - Not Contacted",
+                                        "value": "Open - Not Contacted"
+                                    },
+                                    {
+                                        "label": "Working - Contacted",
+                                        "value": "Working - Contacted"
+                                    },
+                                    {
+                                        "label": "Closed - Converted",
+                                        "value": "Closed - Converted"
+                                    },
+                                    {
+                                        "label": "Closed - Not Converted",
+                                        "value": "Closed - Not Converted"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Industry",
+                                "label": "Industry",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Agriculture",
+                                        "value": "Agriculture"
+                                    },
+                                    {
+                                        "label": "Apparel",
+                                        "value": "Apparel"
+                                    },
+                                    {
+                                        "label": "Banking",
+                                        "value": "Banking"
+                                    },
+                                    {
+                                        "label": "Biotechnology",
+                                        "value": "Biotechnology"
+                                    },
+                                    {
+                                        "label": "Chemicals",
+                                        "value": "Chemicals"
+                                    },
+                                    {
+                                        "label": "Communications",
+                                        "value": "Communications"
+                                    },
+                                    {
+                                        "label": "Construction",
+                                        "value": "Construction"
+                                    },
+                                    {
+                                        "label": "Consulting",
+                                        "value": "Consulting"
+                                    },
+                                    {
+                                        "label": "Education",
+                                        "value": "Education"
+                                    },
+                                    {
+                                        "label": "Electronics",
+                                        "value": "Electronics"
+                                    },
+                                    {
+                                        "label": "Energy",
+                                        "value": "Energy"
+                                    },
+                                    {
+                                        "label": "Engineering",
+                                        "value": "Engineering"
+                                    },
+                                    {
+                                        "label": "Entertainment",
+                                        "value": "Entertainment"
+                                    },
+                                    {
+                                        "label": "Environmental",
+                                        "value": "Environmental"
+                                    },
+                                    {
+                                        "label": "Finance",
+                                        "value": "Finance"
+                                    },
+                                    {
+                                        "label": "Food & Beverage",
+                                        "value": "Food & Beverage"
+                                    },
+                                    {
+                                        "label": "Government",
+                                        "value": "Government"
+                                    },
+                                    {
+                                        "label": "Healthcare",
+                                        "value": "Healthcare"
+                                    },
+                                    {
+                                        "label": "Hospitality",
+                                        "value": "Hospitality"
+                                    },
+                                    {
+                                        "label": "Insurance",
+                                        "value": "Insurance"
+                                    },
+                                    {
+                                        "label": "Machinery",
+                                        "value": "Machinery"
+                                    },
+                                    {
+                                        "label": "Manufacturing",
+                                        "value": "Manufacturing"
+                                    },
+                                    {
+                                        "label": "Media",
+                                        "value": "Media"
+                                    },
+                                    {
+                                        "label": "Not For Profit",
+                                        "value": "Not For Profit"
+                                    },
+                                    {
+                                        "label": "Recreation",
+                                        "value": "Recreation"
+                                    },
+                                    {
+                                        "label": "Retail",
+                                        "value": "Retail"
+                                    },
+                                    {
+                                        "label": "Shipping",
+                                        "value": "Shipping"
+                                    },
+                                    {
+                                        "label": "Technology",
+                                        "value": "Technology"
+                                    },
+                                    {
+                                        "label": "Telecommunications",
+                                        "value": "Telecommunications"
+                                    },
+                                    {
+                                        "label": "Transportation",
+                                        "value": "Transportation"
+                                    },
+                                    {
+                                        "label": "Utilities",
+                                        "value": "Utilities"
+                                    },
+                                    {
+                                        "label": "Other",
+                                        "value": "Other"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Rating",
+                                "label": "Rating",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Hot",
+                                        "value": "Hot"
+                                    },
+                                    {
+                                        "label": "Warm",
+                                        "value": "Warm"
+                                    },
+                                    {
+                                        "label": "Cold",
+                                        "value": "Cold"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "AnnualRevenue",
+                                "label": "Annual Revenue",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "NumberOfEmployees",
+                                "label": "Employees",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OwnerId",
+                                "label": "Owner ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IsConverted",
+                                "label": "Converted",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IsUnreadByOwner",
+                                "label": "Unread By Owner",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Jigsaw",
+                                "label": "Data.com Key",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "CleanStatus",
+                                "label": "Clean Status",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "In Sync",
+                                        "value": "Matched"
+                                    },
+                                    {
+                                        "label": "Different",
+                                        "value": "Different"
+                                    },
+                                    {
+                                        "label": "Reviewed",
+                                        "value": "Acknowledged"
+                                    },
+                                    {
+                                        "label": "Not Found",
+                                        "value": "NotFound"
+                                    },
+                                    {
+                                        "label": "Inactive",
+                                        "value": "Inactive"
+                                    },
+                                    {
+                                        "label": "Not Compared",
+                                        "value": "Pending"
+                                    },
+                                    {
+                                        "label": "Select Match",
+                                        "value": "SelectMatch"
+                                    },
+                                    {
+                                        "label": "Skipped",
+                                        "value": "Skipped"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "CompanyDunsNumber",
+                                "label": "Company D-U-N-S Number",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "DandbCompanyId",
+                                "label": "D&B Company ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IndividualId",
+                                "label": "Individual ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "SICCode__c",
+                                "label": "SIC Code",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "ProductInterest__c",
+                                "label": "Product Interest",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "GC1000 series",
+                                        "value": "GC1000 series"
+                                    },
+                                    {
+                                        "label": "GC5000 series",
+                                        "value": "GC5000 series"
+                                    },
+                                    {
+                                        "label": "GC3000 series",
+                                        "value": "GC3000 series"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Primary__c",
+                                "label": "Primary",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "No",
+                                        "value": "No"
+                                    },
+                                    {
+                                        "label": "Yes",
+                                        "value": "Yes"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "CurrentGenerators__c",
+                                "label": "Current Generator(s)",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "NumberofLocations__c",
+                                "label": "Number of Locations",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IsBooleanTestField__c",
+                                "label": "IsBooleanTestField",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "storage": []

@@ -1,98 +1,66 @@
 {
-  "key": "shopify/customer/send_to_salesforce_contact",
-  "name": "Send Customer To Salesforce Contact",
-  "version": "1.0.0",
-  "description": "Send Customer from Shopify to Salesforce Contact when customer is created.",
-  "video": "",
-  "tags": [
-    "Customer"
-  ],
-  "source": "shopify",
-  "destination": "salesforce",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "created",
-        "name": "Shopify: Customer Created",
-        "key": "shopify-customer-created",
-        "metadata": {
-          "topic": "customers/create"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to Salesforce Create Contact",
-        "key": "mapping-to-salesforce-create-contact",
-        "metadata": {
-          "mapping": [
+    "key": "shopify\/customer\/send_to_salesforce_contact",
+    "name": "Send Customer to Salesforce Contact",
+    "version": "1.0.0",
+    "description": "Minimize the need for manual memorization by instantly connecting Shopify to Salesforce Contact. This template sends your customers from Shopify to Salesforce Contact as soon as the customer is created. This allows you to stay on top of your business by keeping track of your customers.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "source": "{{source.email}}",
-              "destination": "Email"
-            },
-            {
-              "source": "{{source.first_name}}",
-              "destination": "FirstName"
-            },
-            {
-              "source": "{{source.last_name}}",
-              "destination": "LastName"
-            },
-            {
-              "source": "{{source.default_address.address1}}",
-              "destination": "MailingStreet"
-            },
-            {
-              "source": "{{source.default_address.city}}",
-              "destination": "MailingCity"
-            },
-            {
-              "source": "{{source.default_address.country}}",
-              "destination": "MailingCountry"
-            },
-            {
-              "source": "{{source.default_address.phone}}",
-              "destination": "Phone"
-            },
-            {
-              "source": "{{source.default_address.province}}",
-              "destination": "MailingState"
-            },
-            {
-              "source": "{{source.default_address.zip}}",
-              "destination": "MailingPostalCode"
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Shopify Customer Created",
+                "key": "shopify_customer",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping"
-          }
         ],
-        "destination_entity": "contact"
-      },
-      {
-        "trigger_type": "output",
-        "type": "salesforce",
-        "entity": "contact",
-        "action": "create",
-        "name": "Salesforce: Create Contact",
-        "key": "salesforce-create-contact",
-        "metadata": {
-          "entity_name": "Contact",
-          "method": "POST"
-        },
-        "source_entity": "mapping"
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "contact",
+                "action": "create",
+                "name": "Salesforce Create Contact",
+                "key": "salesforce_contact",
+                "metadata": {
+                    "entity_name": "Contact",
+                    "method": "POST",
+                    "body": {
+                        "FirstName": "{{shopify_customer.first_name}}",
+                        "LastName": "{{shopify_customer.last_name}}",
+                        "Email": "{{shopify_customer.email}}",
+                        "MailingStreet": "{{shopify_customer.default_address.address1}}",
+                        "MailingCity": "{{shopify_customer.default_address.city}}",
+                        "MailingState": "{{shopify_customer.default_address.province}}",
+                        "MailingPostalCode": "{{shopify_customer.default_address.zip}}",
+                        "MailingCountry": "{{shopify_customer.default_address.country}}",
+                        "Phone": "{{shopify_customer.default_address.phone}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }
