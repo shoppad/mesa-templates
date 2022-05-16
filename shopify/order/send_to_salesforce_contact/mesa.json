@@ -1,98 +1,516 @@
 {
-  "key": "shopify/order/send_to_salesforce_contact",
-  "name": "Send Order To Salesforce Contact",
-  "version": "1.0.0",
-  "description": "Send Order from Shopify to Salesforce Contact when order is created.",
-  "tags": [
-    "Order"
-  ],
-  "source": "shopify",
-  "destination": "salesforce",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify: Order Created",
-        "key": "shopify-order-created",
-        "metadata": {
-          "topic": "orders/create"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to Salesforce Create Contact",
-        "key": "mapping-to-salesforce-create-contact",
-        "metadata": {
-          "mapping": [
+    "key": "shopify/order/send_to_salesforce_contact",
+    "name": "Send Order To Salesforce Contact",
+    "version": "1.0.0",
+    "description": "Minimize the need to manually memorize customer contact information by simply connecting Shopify to Salesforce Contact. This template sends orders from Shopify to Salesforce Contact as soon as the order is created. This allows you to stay on top of critical information to keep track of your customers.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "source": "{{source.email}}",
-              "destination": "Email"
-            },
-            {
-              "source": "{{source.customer.first_name}}",
-              "destination": "FirstName"
-            },
-            {
-              "source": "{{source.customer.last_name}}",
-              "destination": "LastName"
-            },
-            {
-              "source": "{{source.customer.default_address.address1}}",
-              "destination": "MailingStreet"
-            },
-            {
-              "source": "{{source.customer.default_address.city}}",
-              "destination": "MailingCity"
-            },
-            {
-              "source": "{{source.customer.default_address.province}}",
-              "destination": "MailingState"
-            },
-            {
-              "source": "{{source.customer.default_address.zip}}",
-              "destination": "MailingPostalCode"
-            },
-            {
-              "source": "{{source.customer.default_address.country}}",
-              "destination": "MailingCountry"
-            },
-            {
-              "source": "{{source.customer.default_address.phone}}",
-              "destination": "Phone"
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
             }
-          ],
-          "script": "transform.js"
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping"
-          }
         ],
-        "destination_entity": "contact"
-      },
-      {
-        "trigger_type": "output",
-        "type": "salesforce",
-        "entity": "contact",
-        "action": "create",
-        "name": "Salesforce: Create Contact",
-        "key": "salesforce-create-contact",
-        "metadata": {
-          "entity_name": "Contact",
-          "method": "POST"
-        },
-        "source_entity": "mapping"
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "contact",
+                "action": "create",
+                "name": "Salesforce Create Contact",
+                "key": "salesforce_contact",
+                "metadata": {
+                    "entity_name": "Contact",
+                    "method": "POST",
+                    "body": {
+                        "FirstName": "{{shopify_order.customer.first_name}}",
+                        "LastName": "{{shopify_order.customer.last_name}}",
+                        "Email": "{{shopify_order.email}}",
+                        "MailingStreet": "{{shopify_order.customer.default_address.address1}} {{shopify_order.customer.default_address.address2}}",
+                        "MailingCity": "{{shopify_order.customer.default_address.city}}",
+                        "MailingState": "{{shopify_order.customer.default_address.province}}",
+                        "MailingPostalCode": "{{shopify_order.customer.default_address.zip}}",
+                        "MailingCountry": "{{shopify_order.customer.default_address.country}}",
+                        "Phone": "{{shopify_order.customer.default_address.phone}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "AccountId",
+                                "label": "Account ID",
+                                "type": "typeahead",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "LastName",
+                                "label": "Last Name",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "FirstName",
+                                "label": "First Name",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Salutation",
+                                "label": "Salutation",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Mr.",
+                                        "value": "Mr."
+                                    },
+                                    {
+                                        "label": "Ms.",
+                                        "value": "Ms."
+                                    },
+                                    {
+                                        "label": "Mrs.",
+                                        "value": "Mrs."
+                                    },
+                                    {
+                                        "label": "Dr.",
+                                        "value": "Dr."
+                                    },
+                                    {
+                                        "label": "Prof.",
+                                        "value": "Prof."
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "OtherStreet",
+                                "label": "Other Street",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherCity",
+                                "label": "Other City",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherState",
+                                "label": "Other State\/Province",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherPostalCode",
+                                "label": "Other Zip\/Postal Code",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherCountry",
+                                "label": "Other Country",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherLatitude",
+                                "label": "Other Latitude",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherLongitude",
+                                "label": "Other Longitude",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherGeocodeAccuracy",
+                                "label": "Other Geocode Accuracy",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Address",
+                                        "value": "Address"
+                                    },
+                                    {
+                                        "label": "NearAddress",
+                                        "value": "NearAddress"
+                                    },
+                                    {
+                                        "label": "Block",
+                                        "value": "Block"
+                                    },
+                                    {
+                                        "label": "Street",
+                                        "value": "Street"
+                                    },
+                                    {
+                                        "label": "ExtendedZip",
+                                        "value": "ExtendedZip"
+                                    },
+                                    {
+                                        "label": "Zip",
+                                        "value": "Zip"
+                                    },
+                                    {
+                                        "label": "Neighborhood",
+                                        "value": "Neighborhood"
+                                    },
+                                    {
+                                        "label": "City",
+                                        "value": "City"
+                                    },
+                                    {
+                                        "label": "County",
+                                        "value": "County"
+                                    },
+                                    {
+                                        "label": "State",
+                                        "value": "State"
+                                    },
+                                    {
+                                        "label": "Unknown",
+                                        "value": "Unknown"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "MailingStreet",
+                                "label": "Mailing Street",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MailingCity",
+                                "label": "Mailing City",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MailingState",
+                                "label": "Mailing State\/Province",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MailingPostalCode",
+                                "label": "Mailing Zip\/Postal Code",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MailingCountry",
+                                "label": "Mailing Country",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MailingLatitude",
+                                "label": "Mailing Latitude",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MailingLongitude",
+                                "label": "Mailing Longitude",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MailingGeocodeAccuracy",
+                                "label": "Mailing Geocode Accuracy",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Address",
+                                        "value": "Address"
+                                    },
+                                    {
+                                        "label": "NearAddress",
+                                        "value": "NearAddress"
+                                    },
+                                    {
+                                        "label": "Block",
+                                        "value": "Block"
+                                    },
+                                    {
+                                        "label": "Street",
+                                        "value": "Street"
+                                    },
+                                    {
+                                        "label": "ExtendedZip",
+                                        "value": "ExtendedZip"
+                                    },
+                                    {
+                                        "label": "Zip",
+                                        "value": "Zip"
+                                    },
+                                    {
+                                        "label": "Neighborhood",
+                                        "value": "Neighborhood"
+                                    },
+                                    {
+                                        "label": "City",
+                                        "value": "City"
+                                    },
+                                    {
+                                        "label": "County",
+                                        "value": "County"
+                                    },
+                                    {
+                                        "label": "State",
+                                        "value": "State"
+                                    },
+                                    {
+                                        "label": "Unknown",
+                                        "value": "Unknown"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Phone",
+                                "label": "Business Phone",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Fax",
+                                "label": "Business Fax",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "MobilePhone",
+                                "label": "Mobile Phone",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "HomePhone",
+                                "label": "Home Phone",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OtherPhone",
+                                "label": "Other Phone",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "AssistantPhone",
+                                "label": "Asst. Phone",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "ReportsToId",
+                                "label": "Reports To ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Email",
+                                "label": "Email",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Title",
+                                "label": "Title",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Department",
+                                "label": "Department",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "AssistantName",
+                                "label": "Assistant's Name",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "LeadSource",
+                                "label": "Lead Source",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Web",
+                                        "value": "Web"
+                                    },
+                                    {
+                                        "label": "Phone Inquiry",
+                                        "value": "Phone Inquiry"
+                                    },
+                                    {
+                                        "label": "Partner Referral",
+                                        "value": "Partner Referral"
+                                    },
+                                    {
+                                        "label": "Purchased List",
+                                        "value": "Purchased List"
+                                    },
+                                    {
+                                        "label": "Other",
+                                        "value": "Other"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Birthdate",
+                                "label": "Birthdate",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Description",
+                                "label": "Contact Description",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "OwnerId",
+                                "label": "Owner ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "EmailBouncedReason",
+                                "label": "Email Bounced Reason",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "EmailBouncedDate",
+                                "label": "Email Bounced Date",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Jigsaw",
+                                "label": "Data.com Key",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "CleanStatus",
+                                "label": "Clean Status",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "In Sync",
+                                        "value": "Matched"
+                                    },
+                                    {
+                                        "label": "Different",
+                                        "value": "Different"
+                                    },
+                                    {
+                                        "label": "Reviewed",
+                                        "value": "Acknowledged"
+                                    },
+                                    {
+                                        "label": "Not Found",
+                                        "value": "NotFound"
+                                    },
+                                    {
+                                        "label": "Inactive",
+                                        "value": "Inactive"
+                                    },
+                                    {
+                                        "label": "Not Compared",
+                                        "value": "Pending"
+                                    },
+                                    {
+                                        "label": "Select Match",
+                                        "value": "SelectMatch"
+                                    },
+                                    {
+                                        "label": "Skipped",
+                                        "value": "Skipped"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "IndividualId",
+                                "label": "Individual ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Level__c",
+                                "label": "Level",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Secondary",
+                                        "value": "Secondary"
+                                    },
+                                    {
+                                        "label": "Tertiary",
+                                        "value": "Tertiary"
+                                    },
+                                    {
+                                        "label": "Primary",
+                                        "value": "Primary"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "Languages__c",
+                                "label": "Languages",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "ShopifyCustomerID__c",
+                                "label": "Shopify Customer ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Jefftest__c",
+                                "label": "Jefftest",
+                                "type": "text",
+                                "source": "salesforce"
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }
