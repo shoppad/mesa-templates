@@ -1,5 +1,5 @@
 {
-    "key": "tracktor/order/email_when_package_takes_too_long",
+    "key": "tracktor/fulfillment/email_when_package_takes_too_long",
     "name": "Send an email if a package hasn't been delivered",
     "version": "1.0.0",
     "description": "Shipping delays happen. Keep your customers up-to-date so they can plan accordingly and reset their expectations. This template emails customers after 20 days if their package still hasn't been delivered. Need a different timeframe than 20 days? No problem, this template is configurable to fit your needs. Give your customers peace of mind with automatic updates so they know you're aware of the delay.",
