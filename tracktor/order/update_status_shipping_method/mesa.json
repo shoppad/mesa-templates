@@ -1,94 +1,79 @@
 {
-  "key": "update_status_shipping_method",
-  "name": "Update a Custom Order Status in Tracktor and Send an Email if EXPRESS Shipping Enabled",
-  "version": "1.0.0",
-  "description": "Customers may adopt special shipping options such as EXPRESS for their custom orders. Mesa allows you to update their customer order status automatically and include this information, so you can then send an email to them to let them know that the shipping option is enabled.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "tracktor",
-        "entity": "order",
-        "action": "order/ordered",
-        "name": "Tracktor Order Created",
-        "key": "tracktor_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Order",
-        "key": "shopify_order",
-        "metadata": {
-          "order_id": "{{tracktor_order.order_id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "EXPRESS",
-          "comparison": "in",
-          "b": "{{shopify_order.shipping_lines[0].title}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "tracktor",
-        "entity": "order",
-        "action": "update",
-        "name": "Tracktor Update Manual Status Order",
-        "key": "tracktor_order_1",
-        "metadata": {
-          "order_id": "{{shopify_order.id}}",
-          "body": {
-            "automatic_carrier_updates": "false",
-            "force": "true"
-          }
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{shopify_order.email}}",
-          "subject": "An update on your order {{shopify_order.name}} ",
-          "message": "Hey {{shopify_order.customer.first_name}}!\n\nWe noticed that your order requires Express shipping. Our team is making sure that your order gets out of the door as soon as possible!\n\nThanks!"
-        },
-        "local_fields": [],
-        "weight": 3
-      }
-    ],
-    "storage": []
-  }
+    "key": "update_status_shipping_method",
+    "name": "Update a custom order status in Tracktor and send an email if \"Express\" shipping is enabled",
+    "version": "1.0.0",
+    "description": "Customers may adopt special shipping options such as \"Express\" for their custom orders. MESA allows you to update their customer order status automatically and include this information, so you can then send an email to them to let them know that the shipping option is enabled.\u00a0",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "Express",
+                    "comparison": "in",
+                    "b": "{{shopify_order.shipping_lines[0].title}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "update",
+                "name": "Tracktor Update Order's Manual Status",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{shopify_order.email}}",
+                    "subject": "An update on your order {{shopify_order.name}} ",
+                    "message": "Hey {{shopify_order.customer.first_name}}!\n\nWe noticed that your order requires Express shipping. Our team is making sure that your order gets out of the door as soon as possible!\n\nThanks!\n- {{context.shop.name}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
 }
