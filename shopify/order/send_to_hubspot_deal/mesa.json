@@ -9,7 +9,7 @@
   "source": "shopify",
   "destination": "hubspot",
   "enabled": false,
-  "logging": false,
+  "logging": true,
   "debug": false,
   "config": {
       "inputs": [
@@ -38,7 +38,7 @@
                   "body": {
                       "properties": {
                           "amount": "{{shopify_order.total_price}}",
-                          "dealname": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} {{shopify_order.name}} Deal",
+                          "dealname": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} {{shopify_order.name}} Deal"
                       }
                   }
               },

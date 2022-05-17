@@ -11,7 +11,7 @@
     "source": "shopify",
     "destination": "hubspot",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

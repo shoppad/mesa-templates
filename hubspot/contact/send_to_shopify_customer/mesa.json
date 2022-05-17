@@ -11,7 +11,7 @@
     "source": "hubspot",
     "destination": "shopify",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -24,7 +24,8 @@
                 "name": "Hubspot Contact Updated",
                 "key": "hubspot_contact",
                 "metadata": {
-                  "poll": "0 * * * *"
+                  "poll": "0 * * * *",
+                  "last_sync_date_time": ""
                 },
                 "local_fields": [],
                 "weight": 0
