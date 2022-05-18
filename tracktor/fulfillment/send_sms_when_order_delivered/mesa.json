@@ -50,7 +50,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "comparison": "does not equal",
+                    "comparison": "is not empty",
                     "a": "{{shopify_order.customer.phone}}"
                 },
                 "local_fields": [],
