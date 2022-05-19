@@ -2,7 +2,7 @@
     "key": "send_email_when_in_transit",
     "name": "Send an email when a package is \"In Transit\"",
     "version": "1.0.0",
-    "description": "Keeping customers up to date on their orders is key to avoiding the dreaded, where is my package question. When you combine MESA with Tracktor, you can set up a workflow that automatically sends an email to customers when their package is \"In Transit.\" It\u2019s going to give them peace of mind as they continue to wait for their order.",
+    "description": "Keeping customers up to date on their orders is key to avoiding the dreaded, where is my package question. When you combine MESA with Tracktor, you can set up a workflow that automatically sends an email to customers when their package's delivery status changes to In Transit. It's going to give them peace of mind as they continue to wait for their order.",
     "video": "",
     "readme": "",
     "tags": [],
