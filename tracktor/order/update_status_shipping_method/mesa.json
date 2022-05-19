@@ -1,8 +1,8 @@
 {
     "key": "update_status_shipping_method",
-    "name": "Update a custom order status in Tracktor and send an email if \"Express\" shipping is enabled",
+    "name": "Update an order's status and send an email if Express shipping is enabled",
     "version": "1.0.0",
-    "description": "Customers may adopt special shipping options such as \"Express\" for their custom orders. MESA allows you to update their customer order status automatically and include this information, so you can then send an email to them to let them know that the shipping option is enabled.\u00a0",
+    "description": "Customers may select special shipping options such as Express for their custom orders. MESA will automatically update the order's manual status in Tracktor and email the customer to let them know that the shipping option is enabled. Your customer will be ecstatic to know that their order from you will quickly be on its way.",
     "video": "",
     "readme": "",
     "tags": [],
