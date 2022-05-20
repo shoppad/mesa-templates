@@ -497,12 +497,6 @@
                                 "label": "Shopify Customer ID",
                                 "type": "text",
                                 "source": "salesforce"
-                            },
-                            {
-                                "key": "Jefftest__c",
-                                "label": "Jefftest",
-                                "type": "text",
-                                "source": "salesforce"
                             }
                         ]
                     }
