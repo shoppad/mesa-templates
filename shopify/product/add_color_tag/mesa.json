@@ -2,7 +2,7 @@
     "key": "shopify/product/add_color_tag",
     "name": "Add Color Tag To Product",
     "version": "2.0.0",
-    "enabled": true,
+    "enabled": false,
     "config": {
         "inputs": [
             {

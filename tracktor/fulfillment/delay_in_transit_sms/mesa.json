@@ -2,7 +2,7 @@
     "key": "tracktor/fulfillment/delay_in_transit_sms",
     "name": "Send a text message if a Tracktor Package is delayed In Transit",
     "version": "1.0.0",
-    "enabled": true,
+    "enabled": false,
     "config": {
         "inputs": [
             {

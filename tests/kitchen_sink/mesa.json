@@ -4,12 +4,12 @@
   "key": "tests/kitchen_sink",
   "description": "Ensure that all Mesa SDK methods, Inputs, and Output types are working.",
   "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/tests/kitchen-sink/README.md",
-  "enabled": true,
+  "enabled": false,
   "config": {
     "inputs": [
       {
         "trigger_type": "input",
-        "enabled": true,
+        "enabled": false,
         "type": "custom",
         "name": "Kitchen Sink",
         "key": "in-kitchen-sink",
@@ -19,7 +19,7 @@
       },
       {
         "trigger_type": "input",
-        "enabled": true,
+        "enabled": false,
         "type": "ftp",
         "name": "Kitchen Sink FTP",
         "key": "in-kitchen-sink-ftp",
@@ -36,7 +36,7 @@
     "outputs": [
       {
         "trigger_type": "output",
-        "enabled": true,
+        "enabled": false,
         "type": "virtual_output",
         "name": "Kitchen Sink VO",
         "key": "out-kitchen-sink-vo",
@@ -45,7 +45,7 @@
       },
       {
         "trigger_type": "output",
-        "enabled": true,
+        "enabled": false,
         "type": "ftp",
         "name": "Kitchen Sink FTP",
         "key": "out-kitchen-sink-ftp",

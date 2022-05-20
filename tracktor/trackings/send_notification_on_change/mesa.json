@@ -13,7 +13,7 @@
         "inputs": [
             {
                 "trigger_type": "input",
-                "enabled": true,
+                "enabled": false,
                 "type": "webhook",
                 "name": "Send Notification on Tracktor Status Change",
                 "key": "in-tracktor-alerts",
@@ -24,7 +24,7 @@
         "outputs": [
             {
                 "trigger_type": "output",
-                "enabled": true,
+                "enabled": false,
                 "type": "custom",
                 "name": "Send Notification on Tracktor Status Change: Email",
                 "key": "out-tracktor-email",
@@ -33,7 +33,7 @@
             },
             {
                 "trigger_type": "output",
-                "enabled": true,
+                "enabled": false,
                 "type": "custom",
                 "name": "Send Notification on Tracktor Status Change: SMS",
                 "key": "out-tracktor-twilio",

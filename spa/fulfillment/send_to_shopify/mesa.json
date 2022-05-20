@@ -30,7 +30,7 @@
         "outputs": [
             {
                 "trigger_type": "output",
-                "enabled": true,
+                "enabled": false,
                 "type": "shopify",
                 "name": "Create Shopify Fulfillment",
                 "key": "out-create-shopify-fulfillment",

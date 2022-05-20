@@ -8,7 +8,7 @@
   "tags": [],
   "source": "shopify",
   "destination": "tracktor",
-  "enabled": true,
+  "enabled": false,
   "logging": false,
   "debug": false,
   "config": {
