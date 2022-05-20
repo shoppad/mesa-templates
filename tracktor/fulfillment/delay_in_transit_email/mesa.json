@@ -7,7 +7,7 @@
     "tags": ["tracktor"],
     "source": "tracktor",
     "destination": "email",
-    "enabled": true,
+    "enabled": false,
     "config": {
         "inputs": [
             {

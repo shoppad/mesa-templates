@@ -9,7 +9,7 @@
     ],
     "source": "uploadery",
     "destination": "shopify",
-    "enabled": true,
+    "enabled": false,
     "config": {
         "inputs": [
             {

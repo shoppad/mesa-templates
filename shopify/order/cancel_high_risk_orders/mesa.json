@@ -9,7 +9,7 @@
     "source": "",
     "destination": "",
     "seconds": 60,
-    "enabled": true,
+    "enabled": false,
     "logging": true,
     "debug": false,
     "config": {

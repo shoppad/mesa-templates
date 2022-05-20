@@ -9,7 +9,7 @@
   "source": "shopify",
   "destination": "shopify",
   "seconds": 0,
-  "enabled": true,
+  "enabled": false,
   "logging": true,
   "debug": false,
   "config": {

@@ -7,7 +7,7 @@
     "tags": [],
     "source": "shopify",
     "destination": "email",
-    "enabled": true,
+    "enabled": false,
     "config": {
         "inputs": [
             {
