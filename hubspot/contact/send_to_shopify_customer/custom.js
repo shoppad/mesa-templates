@@ -14,9 +14,8 @@ module.exports = new class {
   script = (payload, context) => {
 
     // Add your custom code here
-    Mesa.log.debug('context', context);
+    
 
-    // We're done, call the next step!
-    Mesa.output.next(payload);
+    // Don't call the next output, simply terminate execution
   }
 }

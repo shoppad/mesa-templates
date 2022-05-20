@@ -1,75 +1,54 @@
 {
-    "key": "shopify/customer/send_to_hubspot_contact",
-    "name": "Send Shopify Customer To HubSpot Contact",
-    "version": "1.0.0",
-    "description": "Send customer from Shopify to HubSpot Contact when customer is created.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Customer"
-    ],
-    "source": "shopify",
-    "destination": "hubspot",
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "created",
-                "name": "Shopify Customer Created",
-                "key": "shopify_customer",
-                "metadata": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "hubspot",
-                "entity": "contact",
-                "action": "create",
-                "name": "Hubspot Create Contact",
-                "key": "hubspot_contact_1",
-                "metadata": {
-                    "method": "POST",
-                    "path": "\/contacts\/v1\/contact",
-                    "mapping": [
-                        {
-                            "destination": "FirstName",
-                            "source": "{{shopify_customer.first_name}}"
-                        },
-                        {
-                            "destination": "LastName",
-                            "source": "{{shopify_customer.last_name}}"
-                        },
-                        {
-                            "destination": "Email",
-                            "source": "{{shopify_customer.email}}"
-                        },
-                        {
-                            "destination": "Phone",
-                            "source": "{{shopify_customer.phone}}"
-                        }
-                    ],
-                    "token": ""
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
-                    }
-                ],
-                "weight": 0
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/customer/send_to_hubspot_contact",
+  "name": "Send Shopify Customer To HubSpot Contact",
+  "version": "1.0.0",
+  "description": "Send customer from Shopify to HubSpot Contact when customer is created.",
+  "video": "",
+  "readme": "",
+  "tags": [
+    "Customer"
+  ],
+  "source": "shopify",
+  "destination": "hubspot",
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+      "inputs": [
+          {
+              "schema": 3,
+              "trigger_type": "input",
+              "type": "shopify",
+              "entity": "customer",
+              "action": "created",
+              "name": "Shopify Customer Created",
+              "key": "shopify_customer",
+              "metadata": [],
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "hubspot",
+              "entity": "contact",
+              "action": "create",
+              "name": "Hubspot Create Contact",
+              "key": "hubspot_contact",
+              "metadata": {
+                  "body": {
+                      "properties": {
+                          "email": "{{shopify_customer.email}}",
+                          "firstname": "{{shopify_customer.first_name}}",
+                          "lastname": "{{shopify_customer.last_name}}",
+                          "phone": "{{shopify_customer.phone}}"
+                      }
+                  }
+              },                
+              "weight": 0
+          }
+      ],
+      "storage": []
+  }
 }
