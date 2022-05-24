@@ -1,8 +1,8 @@
 {
     "key": "send_to_delighted_nps_survey",
-    "name": "Automatically send Delighted NPS surveys to customers after their order is delivered",
+    "name": "Send a Delighted NPS survey to a customer after their order is delivered",
     "version": "1.0.0",
-    "description": "Measuring your net promoter score (NPS) provides many rewards. Not only is it a solid criteria of your store\u2019s product and service quality, but it can help you identify potential brand advocates. Automatically send your customers a NPS survey after their order has been delivered and gather feedback on their experience.",
+    "description": "Measuring your net promoter score (NPS) provides many rewards. Not only is it a check of your product and service quality, but it can help you identify potential brand advocates. Automatically send your customers a NPS survey after the order's fulfillment status changes to delivered and gather feedback on their experience.",
     "video": "",
     "readme": "",
     "tags": [],
