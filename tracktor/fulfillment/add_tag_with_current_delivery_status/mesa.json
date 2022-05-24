@@ -1,8 +1,8 @@
 {
     "key": "add_tag_with_current_delivery_status",
-    "name": "Tag orders with delivery status",
+    "name": "Tag orders with fulfillment status",
     "version": "1.0.0",
-    "description": "Once an order changes status during transit, you\u2019ll need to update the fulfillment status on Shopify. Thankfully, MESA does everything for you by instantly tagging orders that are being shipped with the \u201cdelivery status\u201d. It\u2019s going to make it easier for both you and the customer to track where the order is going. Note: This workflow will not remove past Tracktor delivery status tags but will keep adding the latest statuses as tags.",
+    "description": "Once an order changes status during transit, you’ll need to update the fulfillment status on Shopify. Thankfully, MESA does everything for you by instantly tagging orders that are being shipped with the fulfillment status. It’s going to make it easier for both you and the customer to track where the order is going. Note: This workflow will not remove past Tracktor fulfillment status tags but will keep adding the latest statuses as tags.",
     "video": "",
     "readme": "",
     "tags": [],
