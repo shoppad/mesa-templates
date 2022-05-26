@@ -1,0 +1,79 @@
+{
+    "key": "tracktor/fulfillment/send_sms_when_order_delivered",
+    "name": "Send an SMS message to your customer when their order arrives",
+    "version": "1.0.0",
+    "description": "When your customers purchase time-sensitive products such as ice cream or frozen meat, they will want to be available and notified immediately upon the package's arrival. This template sends an SMS text message when a customer's order is delivered. Your customers will do a little happy dance knowing their order hasn't been spoiling on their porch.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment\/delivered",
+                "name": "Tracktor Fulfillment Status is Delivered",
+                "key": "tracktor_fulfillment",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "is not empty",
+                    "a": "{{shopify_order.customer.phone}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "sms",
+                "entity": "message",
+                "action": "send",
+                "name": "SMS Send Message",
+                "key": "sms_message",
+                "metadata": {
+                    "to": "{{shopify_order.customer.phone}}",
+                    "message": "Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card. "
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
