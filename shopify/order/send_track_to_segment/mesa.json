@@ -1,72 +1,55 @@
 {
-    "key": "tracktor/order/send_track_to_segment",
-    "name": "Send a Tracktor Order Status Update to Segment",
+    "key": "shopify/order/send_track_to_segment",
+    "name": "Send a Shopify order status update to Segment",
     "version": "1.0.0",
-    "description": "A great way to boost the customer experience is to offer order tracking through Tracktor. Using Mesa, Tracktor can connect to Segment and track the fulfillment status of each order as part of your database.",
+    "description": "A great way to boost the customer experience is to offer order tracking through Tracktor. Using MESA, Tracktor can connect to Segment and track the fulfillment status of each order as part of your database.",
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "tracktor",
-    "destination": "segment",
-    "seconds": 0,
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
-                "type": "tracktor",
+                "type": "shopify",
                 "entity": "order",
-                "action": "order\/all",
-                "name": "Tracktor Order Any Update",
-                "key": "tracktor_order",
+                "action": "updated",
+                "name": "Shopify Order Updated",
+                "key": "shopify_order",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Shopify Retrieve Order",
-                "key": "shopify_order",
-                "metadata": {
-                    "order_id": "{{tracktor_order.order_id}}"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
             {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "segment",
                 "entity": "track",
                 "action": "send",
-                "name": "Segment Send Track",
+                "name": "Segment Track",
                 "key": "segment_track",
                 "metadata": {
                     "body": {
                         "userId": "{{shopify_order.customer.id}}",
                         "event": "Order Status Update",
-                        "timestamp": "{{tracktor_order.fulfillments[0].latest_status.datetime}}",
+                        "timestamp": "{{shopify_order.updated_at}}",
                         "properties": {
-                            "order_id": "{{tracktor_order.order_id}}",
-                            "order_number": "{{tracktor_order.order_name}}",
+                            "order_id": "{{shopify_order.id}}",
+                            "order_number": "{{shopify_order.name}}",
                             "order_tags": "{{shopify_order.tags}}",
                             "order_processed_at": "{{shopify_order.processed_at}}",
-                            "days_since_ordered": "{{tracktor_order.days_since_ordered}}",
-                            "carrier": "{{tracktor_order.fulfillments[0].carrier}}",
-                            "shopify_carrier": "{{tracktor_order.fulfillments[0].shopify_carrier}}",
                             "shipping_state": "{{shopify_order.shipping_address.province}}",
                             "shipping_zip": "{{shopify_order.shipping_address.zip}}",
                             "email": "{{shopify_order.email}}",
-                            "phone": "{{shopify_order.phone}}",
-                            "tracking_number": "{{tracktor_order.fulfillments[0].tracking_number}}"
+                            "phone": "{{shopify_order.phone}}"
                         },
                         "context": {
                             "app": {
@@ -77,9 +60,9 @@
                                 "firstName": "{{shopify_order.customer.first_name}}",
                                 "id": "{{shopify_order.customer.id}}",
                                 "lastName": "{{shopify_order.customer.last_name}}",
-                                "phone": "{{tracktor_order.order_phone}}",
+                                "phone": "{{shopify_order.phone}}",
                                 "address": {
-                                    "street": "{{shopify_order.billing_address.address1}}",
+                                    "street": "{{shopify_order.billing_address.address1}}{{shopify_order.billing_address.address2}}",
                                     "city": "{{shopify_order.billing_address.city}}",
                                     "state": "{{shopify_order.billing_address.province}}",
                                     "postalCode": "{{shopify_order.billing_address.zip}}",
@@ -117,21 +100,6 @@
                                         "allow_custom_fields": false
                                     },
                                     {
-                                        "key": "days_since_ordered",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "carrier",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "shopify_carrier",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
                                         "key": "shipping_state",
                                         "type": "custom",
                                         "allow_custom_fields": false
@@ -150,18 +118,14 @@
                                         "key": "phone",
                                         "type": "custom",
                                         "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "tracking_number",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
                                     }
                                 ]
                             }
                         ]
                     }
                 ],
-                "weight": 1
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "storage": []
