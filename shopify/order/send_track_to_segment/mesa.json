@@ -2,7 +2,7 @@
     "key": "shopify/order/send_track_to_segment",
     "name": "Send a Shopify order status update to Segment",
     "version": "1.0.0",
-    "description": "A great way to boost the customer experience is to offer order tracking through Tracktor. Using MESA, Tracktor can connect to Segment and track the fulfillment status of each order as part of your database.",
+    "description": "When Shopify orders are updated, it can be challenging to track what was updated and when. Eliminate manual effort and the potential for user mistakes by keeping your systems in check with automation. This template will automatically send updates to a Segment track when a Shopify order is updated.",
     "video": "",
     "readme": "",
     "tags": [],
