@@ -1,5 +1,5 @@
 {
-    "key": "recharge\/customer\/update_address_when_customer_created",
+    "key": "recharge/customer/update_customer_details",
     "name": "Update an address in Recharge when a customer is created in Shopify",
     "version": "1.0.0",
     "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will update an address in Recharge when a customer is created in Shopify and uses a different address. Now you can ensure your customer details match with minimal effort.",
