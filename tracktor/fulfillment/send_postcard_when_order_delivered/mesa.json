@@ -1,0 +1,76 @@
+{
+    "key": "tracktor/fulfillment/send_postcard_when_order_delivered",
+    "name": "Send a postcard when an order is delivered",
+    "version": "1.0.0",
+    "description": "Instantly send a postcard from PostcardMania to your customer when a Tracktor order fulfillment status changes to Delivered. It's a small but mighty gesture that ensures your customer ends their purchase experience on a positive note.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment\/delivered",
+                "name": "Tracktor Fulfillment Status is Delivered",
+                "key": "tracktor_fulfillment",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "postcardmania",
+                "entity": "order",
+                "action": "create",
+                "name": "PostcardMania Send Postcard",
+                "key": "postcardmania_order",
+                "metadata": {
+                    "body": {
+                        "recipientList": [
+                            {
+                                "firstName": "{{shopify_order.shipping_address.first_name}}",
+                                "lastName": "{{shopify_order.shipping_address.last_name}}",
+                                "address": "{{shopify_order.shipping_address.address1}}",
+                                "address2": "{{shopify_order.shipping_address.address2}}",
+                                "city": "{{shopify_order.shipping_address.city}}",
+                                "state": "{{shopify_order.shipping_address.province}}",
+                                "zipCode": "{{shopify_order.shipping_address.zip}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
