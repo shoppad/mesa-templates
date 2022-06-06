@@ -34,9 +34,9 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify_order.shipping_lines[0].title}}",
+                    "a": "2 day, next day",
                     "comparison": "in",
-                    "b": "2 day, next day",
+                    "b": "{{shopify_order.shipping_lines[0].title}}",
                     "script": "filter.js"
                 },
                 "local_fields": [],
