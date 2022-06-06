@@ -1,6 +1,6 @@
 {
     "key": "delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
-    "name": "Tag Shopify Customer if Low Delighted Survey Score",
+    "name": "Tag a customer if they provide a negative survey response",
     "version": "1.0.0",
     "description": "Knowing how you should interact with specific customers can be very helpful in certain situations. This template tags a Shopify customer if they give a low score on their Delighted survey. This provides your team with more insight on your customers.",
     "video": "",
