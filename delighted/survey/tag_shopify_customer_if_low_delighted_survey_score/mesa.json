@@ -1,102 +1,97 @@
 {
-  "key": "delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
-  "name": "Tag Shopify Customer if Low Delighted Survey Score",
-  "version": "1.0.0",
-  "description": "Tag a Shopify customer if they give a low score on their Delighted survey.",
-  "video": "",
-  "tags": ["delighted", "customer"],
-  "source": "delighted",
-  "destination": "shopify",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "delighted",
-        "entity": "survey",
-        "action": "survey/created",
-        "name": "Delighted Survey Response Created",
-        "key": "delighted_survey",
-        "metadata": {
-          "topic": "survey_response.created||survey_response.updated"
-        },
-        "local_fields": null,
-        "weight": 0
-      }
+    "key": "delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
+    "name": "Tag Shopify Customer if Low Delighted Survey Score",
+    "version": "1.0.0",
+    "description": "Knowing how you should interact with specific customers can be very helpful in certain situations. This template tags a Shopify customer if they give a low score on their Delighted survey. This provides your team with more insight on your customers.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "delighted",
+        "customer"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "entity": "",
-        "action": "",
-        "name": "Filter  ",
-        "key": "filter",
-        "metadata": {
-          "a": "{{delighted_survey.score}}",
-          "comparison": "less than",
-          "b": "5"
-        },
-        "local_fields": null,
-        "weight": 0
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer_search",
-        "action": "list",
-        "name": "Shopify Get List Customer Search",
-        "key": "shopify_customer_search",
-        "metadata": {
-          "api_endpoint": "GET admin/customers/search.json",
-          "parameters": "query=email:{{delighted_survey.person.email}}"
-        },
-        "local_fields": null,
-        "weight": 1
-      },
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "entity": "",
-        "action": "",
-        "name": "Filter  ",
-        "key": "filter_1",
-        "metadata": {
-          "a": "{{shopify_customer_search[0].email}}",
-          "comparison": "equals",
-          "b": "{{delighted_survey.person.email}}"
-        },
-        "local_fields": null,
-        "weight": 2
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "update",
-        "name": "Shopify Update Customer",
-        "key": "shopify_customer",
-        "metadata": {
-          "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
-          "customer_id": "{{shopify_customer_search.customers[0].id}}",
-          "mapping": [
+    "source": "delighted",
+    "destination": "shopify",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "tags",
-              "source": "Unhappy Survey,{{shopify_customer_search.customers[0].tags}}"
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "delighted",
+                "entity": "survey",
+                "action": "survey\/created",
+                "name": "Delighted Survey Response Created",
+                "key": "delighted_survey",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets",
-            "location": "mapping"
-          }
         ],
-        "weight": 3
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{delighted_survey.score}}",
+                    "comparison": "less than",
+                    "b": "5"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer_search",
+                "action": "list",
+                "name": "Shopify Get List Customer Search",
+                "key": "shopify_customer_search",
+                "metadata": {
+                    "parameters": "query=email:{{delighted_survey.person.email}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{shopify_customer_search[0].email}}",
+                    "comparison": "equals",
+                    "b": "{{delighted_survey.person.email}}"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Shopify Customer Add Tag",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{shopify_customer_search.0.id}}",
+                    "body": {
+                        "tag": "Unhappy Survey"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
 }

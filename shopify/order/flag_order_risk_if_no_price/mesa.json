@@ -1,91 +1,71 @@
 {
-  "key": "shopify/order/flag_order_risk_if_no_price",
-  "name": "Flag Order as Risky if Total Price is 0",
-  "version": "1.0.0",
-  "description": "If a new Order has a total price of 0, create a new \"Order Risk\"",
-  "video": "",
-  "readme": "## Optional Customizations\n\n- Open `Transform: Order to Order Risk` Step and set the \"recommendation\" line to `investigate` if you would like to reduce the severity of the Order Risk.  See https:\/\/shopify.dev\/docs\/admin-api\/rest\/reference\/orders\/order-risk for more information\n",
-  "tags": [],
-  "source": "shopify",
-  "destination": "filter",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify: Order Created",
-              "key": "shopify-order-created",
-              "metadata": [],
-              "local_fields": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "filter",
-              "name": "Filter",
-              "key": "filter",
-              "metadata": {
-                  "comparison": "less than",
-                  "a": "{{shopify-order-created.total_price}}",
-                  "b": "0.01"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "shopify",
-              "entity": "order_risk",
-              "action": "create",
-              "name": "Shopify Create Order Risk",
-              "key": "shopify_order_risk",
-              "metadata": {
-                  "order_id": "{{shopify-order-created.id}}",
-                  "mapping": [
-                      {
-                          "destination": "message",
-                          "source": "This order has a total price of 0"
-                      },
-                      {
-                          "destination": "recommendation",
-                          "source": "cancel"
-                      },
-                      {
-                          "destination": "score",
-                          "source": "1.0"
-                      },
-                      {
-                          "destination": "display",
-                          "source": "true"
-                      },
-                      {
-                          "destination": "source",
-                          "source": "External"
-                      }
-                  ],
-                  "site": "current"
-              },
-              "local_fields": [
-                  {
-                      "key": "mapping",
-                      "type": "mapping",
-                      "tokens": "brackets",
-                      "location": "mapping"
-                  }
-              ],
-              "weight": 1
-          }
-      ],
-      "storage": []
-  }
+    "key": "shopify/order/flag_order_risk_if_no_price",
+    "name": "Flag order as risky if total price is 0",
+    "version": "1.0.0",
+    "description": "Intercept orders from being placed on your Shopify store that are potentially fraudulent. This template creates an \u201corder risk\u201d flag when a new order has a total price of 0. With this method, you are able to stay on top of orders that pose risks of chargebacks for your store.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify-order-created",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "less than",
+                    "a": "{{shopify-order-created.total_price}}",
+                    "b": "0.01"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_risk",
+                "action": "create",
+                "name": "Shopify Create Order Risk",
+                "key": "shopify_order_risk_1",
+                "metadata": {
+                    "order_id": "{{shopify-order-created.id}}",
+                    "body": {
+                        "message": "This order has a total price of 0",
+                        "recommendation": "cancel",
+                        "score": "1.0",
+                        "source": "External",
+                        "cause_cancel": "false",
+                        "display": "true"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }
