@@ -1,8 +1,8 @@
 {
     "key": "send_to_stampedio_review_request",
-    "name": "Send a Stamped.io review request after an order has been delivered",
+    "name": "Send a review request after an order has been delivered",
     "version": "1.0.0",
-    "description": "When a customer receives an order, it is beneficial to understand if their experience matched their expectation. Get an accurate review by requesting feedback when the experience is fresh in the customer's mind. With MESA, you can automatically send a Stamped.io review request immediately after an order has been delivered.",
+    "description": "When a customer receives an order, it is beneficial to understand if their experience matched their expectation. Get an accurate review by requesting feedback when the experience is fresh in the customer's mind. This template will send a Stamped.io review request after a Tracktor fulfillment status changes to Delivered.",
     "video": "",
     "readme": "",
     "tags": [],
