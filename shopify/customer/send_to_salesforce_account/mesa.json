@@ -24,7 +24,9 @@
                 "action": "create-update",
                 "name": "Shopify Customer Created or Updated",
                 "key": "shopify-customer-created-or-updated",
-                "metadata": [],
+                "metadata": {
+                  "topic": "customers/create+customers/update"
+                },
                 "local_fields": [],
                 "weight": 0
             }
