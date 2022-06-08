@@ -1,15 +1,16 @@
 {
-    "key": "form_shopify_order_return",
-    "name": "Start a Return with Mesa Forms",
+    "key": "form/shopify_order_return",
+    "name": "Start a return with Forms by MESA",
     "version": "1.0.0",
-    "description": "Link to a form from your Tracktor tracking page or on a customer's Order History page that allows customers to easily initiate an order return. The full order details as well as the Reason for Return will be included in the email to your back office. This automation could be extended to automatically generate a return label that is sent to the customer.",
+    "description": "Link to a form from your Tracktor tracking page or on a customer's Order History page that allows customers to easily initiate an order return. The full order details, as well as the Reason for Return, will be included in the email to your back office. This automation could be extended to automatically generate a return label that is sent to the customer.",
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "forms",
-    "destination": "shopify",
+    "source": "forms-by-mesa",
+    "destination": "slack",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -63,8 +64,7 @@
                                 }
                             ]
                         }
-                    ],
-                    "body": []
+                    ]
                 },
                 "local_fields": [],
                 "weight": 0
@@ -86,49 +86,72 @@
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
                 "entity": "row",
-                "action": "add",
+                "action": "create",
                 "name": "Google Sheets Add Row",
-                "key": "googlesheets_row",
+                "key": "googlesheets_row_1",
                 "metadata": {
-                    "spreadsheet_id": "",
-                    "mapping": [
-                        {
-                            "destination": "A",
-                            "source": "{{shopify_order.name}}"
-                        },
-                        {
-                            "destination": "C",
-                            "source": "{{shopify_order.created_at}}"
-                        },
-                        {
-                            "destination": "B",
-                            "source": "{{shopify_order.total_price}}"
-                        },
-                        {
-                            "destination": "E",
-                            "source": "{{forms.reason}}"
+                    "path": {
+                        "mode": "create",
+                        "header_row": "first_row"
+                    },
+                    "body": {
+                        "fields": {
+                            "Order Name": "{{shopify_order.name}}",
+                            "Created At": "{{shopify_order.created_at}}",
+                            "Total Price": "{{shopify_order.total_price}}",
+                            "Reason for Return": "{{forms.reason}}"
                         }
-                    ]
+                    }
                 },
                 "local_fields": [
                     {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Order Name",
+                                        "label": "Order Name",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    },
+                                    {
+                                        "key": "Total Price",
+                                        "label": "Total Price",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    },
+                                    {
+                                        "key": "Reason for Return",
+                                        "label": "Reason for Return",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ],
+                "on_error": "default",
                 "weight": 1
             },
             {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
-                "is_premium": true,
                 "name": "Customer Email",
                 "key": "email",
                 "metadata": {

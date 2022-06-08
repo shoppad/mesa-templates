@@ -1,90 +1,80 @@
 {
-  "key": "shopify/customer/tag_vip_customers",
-  "name": "Tag Customers With \"VIP\" After They Spend $500 or More",
-  "version": "1.0.0",
-  "description": "",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": {
-          "topic": "orders/create"
-        },
-        "local_fields": null,
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Customer",
-        "key": "shopify_customer_1",
-        "metadata": {
-          "api_endpoint": "GET admin/customers/{{customer_id}}.json",
-          "customer_id": "{{shopify_order.customer.id}}"
-        },
-        "local_fields": null,
-        "weight": 0
-      },
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "entity": "",
-        "action": "",
-        "name": "Filter  ",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_customer_1.total_spent}}",
-          "comparison": "greater than",
-          "b": "499.99"
-        },
-        "local_fields": null,
-        "weight": 1
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "update",
-        "name": "Shopify Update Customer",
-        "key": "shopify_customer",
-        "metadata": {
-          "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
-          "mapping": [
+    "key": "shopify/customer/tag_vip_customers",
+    "name": "Tag customers with \"VIP\" after they spend $500 or more",
+    "version": "1.0.0",
+    "description": "Knowing who spends a lot on your store is helpful for your marketing and logistics team. This template adds a tag \"VIP\" to the customer's account after they spend $500 or more on your store. You can keep track of your top customers and offer incentives or send personalized emails.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "tags",
-              "source": "{{shopify_customer_1.tags}}, VIP"
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Shopify Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
             }
-          ],
-          "customer_id": "{{shopify_order.customer.id}}"
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets",
-            "location": "mapping"
-          }
         ],
-        "weight": 2
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Customer",
+                "key": "shopify_customer_1",
+                "metadata": {
+                    "customer_id": "{{shopify_order.customer.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_customer_1.total_spent}}",
+                    "comparison": "greater than",
+                    "b": "499.99"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Shopify Customer Add Tag",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{shopify_order.customer.id}}",
+                    "body": {
+                        "tag": "VIP"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
 }
