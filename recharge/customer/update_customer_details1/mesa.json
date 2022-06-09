@@ -22,7 +22,7 @@
                 "key": "custom",
                 "metadata": {
                     "schedule": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2022-06-09T16:00:00-04:00"
+                    "next_sync_date_time": "2022-06-08T20:00:00-04:00"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -32,16 +32,13 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify",
+                "type": "shopify_api",
                 "entity": "customer",
                 "action": "list",
                 "name": "Shopify: Get customers that were updated within the past 24 hours",
-                "key": "shopify_customer_1",
-                "metadata": {
-                    "parameters": "updated_at_min={{date:1 days ago}}&limit=250"
-                },
+                "key": "shopify_customer",
+                "metadata": [],
                 "local_fields": [],
-                "on_error": "default",
                 "weight": 0
             },
             {
@@ -58,16 +55,13 @@
                 "weight": 1
             },
             {
-                "schema": 4,
+                "schema": 2,
                 "trigger_type": "output",
-                "type": "loop",
+                "type": "iterator",
                 "name": "Loop",
-                "key": "loop",
-                "metadata": {
-                    "key": "{{shopify_customer}}"
-                },
+                "key": "iterator",
+                "metadata": [],
                 "local_fields": [],
-                "on_error": "default",
                 "weight": 2
             },
             {
