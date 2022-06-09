@@ -2,7 +2,7 @@
     "key": "recharge/order/tag_order_when_subscription_purchased",
     "name": "Tag an order when a subscription is purchased",
     "version": "1.0.0",
-    "description": "Know right away when a customer purchases a subscription with the help of tags. This template will add the tag \"recharge-payments-order\" to the Shopify order when a customer purchases a subscription product through Recharge. You'll be able to identify new subscriptions without the added hassle of manual effort.",
+    "description": "Know right away when a customer purchases a subscription with the help of tags. This template will add the tag \"recharge-payments-order\" to the Shopify order when a customer purchases a subscription product through Recharge. You'll be able to identify new subscriptions without the added hassle of manual effort.Know right away when a customer purchases a subscription with the help of tags. This template will add the tag \"recharge-payments-order\" to the Shopify order when a customer purchases a subscription product through Recharge. You'll be able to identify new subscriptions without the added hassle of manual effort.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -30,12 +30,14 @@
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
-                "type": "iterator",
+                "type": "loop",
                 "name": "Loop",
-                "key": "iterator",
-                "metadata": [],
+                "key": "loop",
+                "metadata": {
+                    "key": "{{recharge_order.line_items[]}}"
+                },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
@@ -58,12 +60,17 @@
             {
                 "schema": 3,
                 "trigger_type": "output",
-                "type": "shopify_api",
+                "type": "shopify",
                 "entity": "order",
                 "action": "tag_add",
                 "name": "Shopify Order Add Tag",
-                "key": "shopify_order",
-                "metadata": [],
+                "key": "shopify_order_1",
+                "metadata": {
+                    "order_id": "{{recharge_order.external_order_id.ecommerce}}",
+                    "body": {
+                        "tag": "recharge-payments-order"
+                    }
+                },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 2
