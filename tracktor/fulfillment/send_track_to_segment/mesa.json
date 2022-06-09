@@ -1,16 +1,16 @@
 {
     "key": "tracktor/fulfillment/send_track_to_segment",
-    "name": "Send a Tracktor Fulfillment Status Update to Segment",
+    "name": "Send a Tracktor fulfillment status update to Segment",
     "version": "1.0.0",
-    "description": "Mesa can track down orders automatically via Tracktor with status updates on fulfillment. Easily monitor which orders are delivered and which are delayed.",
+    "description": "When fulfillment status updates in Tracktor occur, you'll want to ensure all your integrated systems have the latest information. Eliminate manual effort and the potential for user mistakes by keeping your systems in check. This template will automatically send Tracktor fulfillment status updates to a Segment track.",
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "tracktor",
-    "destination": "segment",
-    "seconds": 0,
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -20,9 +20,10 @@
                 "type": "tracktor",
                 "entity": "fulfillment",
                 "action": "fulfillment\/all",
-                "name": "Tracktor Fulfillment Any Update",
+                "name": "Tracktor Fulfillment Status Updated",
                 "key": "tracktor_fulfillment",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -39,6 +40,7 @@
                     "order_id": "{{tracktor_fulfillment.order_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -47,7 +49,7 @@
                 "type": "segment",
                 "entity": "track",
                 "action": "send",
-                "name": "Segment Send Track",
+                "name": "Segment Track",
                 "key": "segment_track",
                 "metadata": {
                     "body": {
@@ -78,7 +80,7 @@
                                 "lastName": "{{shopify_order.customer.last_name}}",
                                 "phone": "{{shopify_order.phone}}",
                                 "address": {
-                                    "street": "{{shopify_order.billing_address.address1}}",
+                                    "street": "{{shopify_order.billing_address.address1}}{{shopify_order.billing_address.address2}}",
                                     "city": "{{shopify_order.billing_address.city}}",
                                     "state": "{{shopify_order.billing_address.province}}",
                                     "postalCode": "{{shopify_order.billing_address.zip}}",
@@ -151,10 +153,15 @@
                                         "allow_custom_fields": false
                                     }
                                 ]
+                            },
+                            {
+                                "key": "context",
+                                "fields": []
                             }
                         ]
                     }
                 ],
+                "on_error": "default",
                 "weight": 1
             }
         ],
