@@ -1,0 +1,155 @@
+{
+    "key": "recharge/customer/update_customer_details",
+    "name": "Update customer details in Recharge when a customer is updated in Shopify",
+    "version": "1.0.0",
+    "description": "You're a busy merchant, and chances are you're managing your customers in multiple places. Eliminate manual effort and stay in sync with your customer updates with the help of MESA. This template will update customer information in Recharge when a customer updates their name or email address in Shopify.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "custom",
+                "name": "Custom Code: Runs daily",
+                "key": "custom",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2022-06-09T16:00:00-04:00"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "list",
+                "name": "Shopify: Get customers that were updated within the past 24 hours",
+                "key": "shopify_customer_1",
+                "metadata": {
+                    "parameters": "updated_at_min={{date:1 days ago}}&limit=250"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "comparison": "is not empty"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_customer}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "customer",
+                "action": "list",
+                "name": "Recharge List Customer",
+                "key": "recharge_customer",
+                "metadata": {
+                    "recharge_api": "GET \/customers",
+                    "parameters": "shopify_customer_id={{iterator.id}}"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{recharge_customer[0].first_name}}",
+                    "comparison": "does not equal",
+                    "additional": [
+                        {
+                            "operator": "or",
+                            "a": "{{recharge_customer[0].last_name}}",
+                            "comparison": "does not equal",
+                            "b": "{{iterator.last_name}}"
+                        },
+                        {
+                            "operator": "or",
+                            "a": "{{recharge_customer[0].email}}",
+                            "comparison": "does not equal",
+                            "b": "{{iterator.email}}"
+                        }
+                    ],
+                    "b": "{{iterator.first_name}}"
+                },
+                "local_fields": [],
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "customer",
+                "action": "update",
+                "name": "Recharge Update Customer",
+                "key": "recharge_customer_1",
+                "metadata": {
+                    "recharge_api": "PUT \/customers\/{{customer_id}}",
+                    "customer_id": "{{recharge_customer[0].id}}",
+                    "mapping": [
+                        {
+                            "destination": "email",
+                            "source": "{{iterator.email}}"
+                        },
+                        {
+                            "destination": "first_name",
+                            "source": "{{iterator.first_name}}"
+                        },
+                        {
+                            "destination": "last_name",
+                            "source": "{{iterator.last_name}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 5
+            }
+        ],
+        "storage": []
+    }
+}
