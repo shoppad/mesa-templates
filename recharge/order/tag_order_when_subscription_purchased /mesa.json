@@ -2,7 +2,7 @@
     "key": "recharge/order/tag_order_when_subscription_purchased",
     "name": "Tag an order when a subscription is purchased",
     "version": "1.0.0",
-    "description": "Know right away when a customer purchases a subscription with the help of tags. This template will add the tag \"recharge-payments-order\" to the Shopify order when a customer purchases a subscription product through Recharge. You'll be able to identify new subscriptions without the added hassle of manual effort.Know right away when a customer purchases a subscription with the help of tags. This template will add the tag \"recharge-payments-order\" to the Shopify order when a customer purchases a subscription product through Recharge. You'll be able to identify new subscriptions without the added hassle of manual effort.",
+    "description": "Know right away when a customer purchases a subscription with the help of tags. This template will add the tag \"recharge-payments-order\" to the Shopify order when a customer purchases a subscription product through Recharge. You'll be able to identify new subscriptions without the added hassle of manual effort.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -51,7 +51,7 @@
                 "name": "Recharge List Order",
                 "key": "recharge_order_1",
                 "metadata": {
-                    "parameters": "customer_id={{recharge_order.customer.id}}&purchase_item_id={{iterator.purchase_item_id}}"
+                    "parameters": "customer_id={{recharge_order.customer.id}}&purchase_item_id={{loop.purchase_item_id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
