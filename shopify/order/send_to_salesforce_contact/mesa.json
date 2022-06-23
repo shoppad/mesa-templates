@@ -1,61 +1,61 @@
 {
-    "key": "shopify/order/send_to_salesforce_contact",
-    "name": "Send Order To Salesforce Contact",
-    "version": "1.0.0",
-    "description": "Minimize the need to manually memorize customer contact information by simply connecting Shopify to Salesforce Contact. This template sends orders from Shopify to Salesforce Contact as soon as the order is created. This allows you to stay on top of critical information to keep track of your customers.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "salesforce",
-                "entity": "contact",
-                "action": "create",
-                "name": "Salesforce Create Contact",
-                "key": "salesforce_contact",
-                "metadata": {
-                    "entity_name": "Contact",
-                    "method": "POST",
-                    "body": {
-                        "FirstName": "{{shopify_order.customer.first_name}}",
-                        "LastName": "{{shopify_order.customer.last_name}}",
-                        "Email": "{{shopify_order.email}}",
-                        "MailingStreet": "{{shopify_order.customer.default_address.address1}} {{shopify_order.customer.default_address.address2}}",
-                        "MailingCity": "{{shopify_order.customer.default_address.city}}",
-                        "MailingState": "{{shopify_order.customer.default_address.province}}",
-                        "MailingPostalCode": "{{shopify_order.customer.default_address.zip}}",
-                        "MailingCountry": "{{shopify_order.customer.default_address.country}}",
-                        "Phone": "{{shopify_order.customer.default_address.phone}}"
-                    }
-                },
-                "local_fields":[],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/order/send_to_salesforce_contact",
+  "name": "Send Order To Salesforce Contact",
+  "version": "1.0.0",
+  "description": "Minimize the need to manually memorize customer contact information by simply connecting Shopify to Salesforce Contact. This template sends orders from Shopify to Salesforce Contact as soon as the order is created. This allows you to stay on top of critical information to keep track of your customers.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "salesforce",
+        "entity": "contact",
+        "action": "create",
+        "name": "Salesforce Create Contact",
+        "key": "salesforce_contact",
+        "metadata": {
+          "entity_name": "Contact",
+          "method": "POST",
+          "body": {
+            "FirstName": "{{shopify_order.customer.first_name}}",
+            "LastName": "{{shopify_order.customer.last_name}}",
+            "Email": "{{shopify_order.email}}",
+            "MailingStreet": "{{shopify_order.customer.default_address.address1}} {{shopify_order.customer.default_address.address2}}",
+            "MailingCity": "{{shopify_order.customer.default_address.city}}",
+            "MailingState": "{{shopify_order.customer.default_address.province}}",
+            "MailingPostalCode": "{{shopify_order.customer.default_address.zip}}",
+            "MailingCountry": "{{shopify_order.customer.default_address.country}}",
+            "Phone": "{{shopify_order.customer.default_address.phone}}"
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
 }

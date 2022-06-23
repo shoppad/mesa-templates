@@ -1,89 +1,89 @@
 {
-    "key": "yotpoloyalty/customer_points/send_to_omnisend_contact",
-    "name": "Save a Customer's Points Balance to an Omnisend Contact when Yotpo Points Change",
-    "version": "1.0.0",
-    "description": "You’re likely using tools such as Omnisend to manage the customer experience through email marketing as well. To save yourself time from frequent back-and-forths, Mesa automatically saves customer points balance to your Omnisend contacts when Yotpo Points are changed.",
-    "video": "",
-    "readme": "You can change the name of the custom field set on the Omnisend contact: Open the **Omnisend Update Contact** action, then under the **Configuration** section, change the value for **Key** under **Custom Properties** (spaces are not allowed)",
-    "tags": [],
-    "source": "yotpoloyalty",
-    "destination": "omnisend",
-    "seconds": 0,
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 4,
-                "trigger_type": "input",
-                "type": "yotpoloyalty",
-                "entity": "points",
-                "action": "changed",
-                "name": "Yotpo Loyalty & Referrals Points Changed",
-                "key": "yotpoloyalty_points",
-                "metadata": [],
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "omnisend",
-                "entity": "contact",
-                "action": "list",
-                "name": "Omnisend List Contact",
-                "key": "omnisend_contact",
-                "metadata": {
-                    "query": {
-                        "email": "{{yotpoloyalty_points.email}}",
-                        "limit": "100"
-                    }
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{omnisend_contact.contacts.size}}",
-                    "comparison": "equals",
-                    "b": "1"
-                },
-                "local_fields": [],
-                "weight": 1
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "omnisend",
-                "entity": "contact",
-                "action": "update",
-                "name": "Omnisend Update Contact",
-                "key": "omnisend_contact_1",
-                "metadata": {
-                    "path": {
-                        "contactID": "{{omnisend_contact.contacts[0].contactID}}"
-                    },
-                    "body": {
-                        "customProperties": [
-                            {
-                                "key": "yotpo_loyalty_points",
-                                "value": "{{yotpoloyalty_points.current_balance}}"
-                            }
-                        ]
-                    }
-                },
-                "local_fields": [],
-                "weight": 2
-            }
-        ],
-        "storage": []
-    }
+  "key": "yotpoloyalty/customer_points/send_to_omnisend_contact",
+  "name": "Save a Customer's Points Balance to an Omnisend Contact when Yotpo Points Change",
+  "version": "1.0.0",
+  "description": "You’re likely using tools such as Omnisend to manage the customer experience through email marketing as well. To save yourself time from frequent back-and-forths, Mesa automatically saves customer points balance to your Omnisend contacts when Yotpo Points are changed.",
+  "video": "",
+  "readme": "You can change the name of the custom field set on the Omnisend contact: Open the **Omnisend Update Contact** action, then under the **Configuration** section, change the value for **Key** under **Custom Properties** (spaces are not allowed)",
+  "tags": [],
+  "source": "yotpoloyalty",
+  "destination": "omnisend",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "yotpoloyalty",
+        "entity": "points",
+        "action": "changed",
+        "name": "Yotpo Loyalty & Referrals Points Changed",
+        "key": "yotpoloyalty_points",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "omnisend",
+        "entity": "contact",
+        "action": "list",
+        "name": "Omnisend List Contact",
+        "key": "omnisend_contact",
+        "metadata": {
+          "query": {
+            "email": "{{yotpoloyalty_points.email}}",
+            "limit": "100"
+          }
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{omnisend_contact.contacts.size}}",
+          "comparison": "equals",
+          "b": "1"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "omnisend",
+        "entity": "contact",
+        "action": "update",
+        "name": "Omnisend Update Contact",
+        "key": "omnisend_contact_1",
+        "metadata": {
+          "path": {
+            "contactID": "{{omnisend_contact.contacts[0].contactID}}"
+          },
+          "body": {
+            "customProperties": [
+              {
+                "key": "yotpo_loyalty_points",
+                "value": "{{yotpoloyalty_points.current_balance}}"
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
 }

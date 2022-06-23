@@ -1,80 +1,80 @@
 {
-    "key": "shopify/order/send_expedited_shipping_alert_to_logistics",
-    "name": "Tag an order when expedited shipping is selected",
-    "version": "1.0.0",
-    "description": "Prioritizing orders that require expedited shipping is important for your team and the customer. This template tags an order with \"expedited shipping\" and sends an email to the store administrator if the order's shipping method is 2 days or next day. This ensures that you and your team are on top of things, especially during a busy holiday season!",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "email-by-mesa",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "2 day, next day",
-                    "comparison": "in",
-                    "b": "{{shopify_order.shipping_lines[0].title}}",
-                    "script": "filter.js"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "email",
-                "name": "Email",
-                "key": "email",
-                "metadata": {
-                    "to": "{{context.shop.email}}",
-                    "subject": "New {{shopify_order.shipping_lines[0].title}} order received: {{shopify_order.name}}",
-                    "message": "Order {{shopify_order.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify_order.shipping_address.city}}, {{shopify_order.shipping_address.province}} {{shopify_order.shipping_address.country}}.\n\nView the order: https:\/\/{{context.shop.myshopify_domain}}\/admin\/orders\/{{shopify_order.id}}"
-                },
-                "local_fields": [],
-                "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "tag_add",
-                "name": "Shopify Order Add Tag",
-                "key": "shopify_order_1",
-                "metadata": {
-                    "order_id": "{{shopify_order.id}}",
-                    "body": {
-                        "tag": "Expedited shipping"
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/order/send_expedited_shipping_alert_to_logistics",
+  "name": "Tag an order when expedited shipping is selected",
+  "version": "1.0.0",
+  "description": "Prioritizing orders that require expedited shipping is important for your team and the customer. This template tags an order with \"expedited shipping\" and sends an email to the store administrator if the order's shipping method is 2 days or next day. This ensures that you and your team are on top of things, especially during a busy holiday season!",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "email-by-mesa",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "2 day, next day",
+          "comparison": "in",
+          "b": "{{shopify_order.shipping_lines[0].title}}",
+          "script": "filter.js"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "email",
+        "name": "Email",
+        "key": "email",
+        "metadata": {
+          "to": "{{context.shop.email}}",
+          "subject": "New {{shopify_order.shipping_lines[0].title}} order received: {{shopify_order.name}}",
+          "message": "Order {{shopify_order.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify_order.shipping_address.city}}, {{shopify_order.shipping_address.province}} {{shopify_order.shipping_address.country}}.\n\nView the order: https://{{context.shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "tag_add",
+        "name": "Shopify Order Add Tag",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "tag": "Expedited shipping"
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
 }

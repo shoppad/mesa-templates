@@ -6,7 +6,7 @@
   "video": "",
   "readme": "",
   "tags": [
-      "uploadery"
+    "uploadery"
   ],
   "source": "uploadery",
   "destination": "google-drive",
@@ -14,50 +14,50 @@
   "logging": false,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "uploadery",
-              "entity": "order",
-              "action": "created",
-              "name": "Uploadery: Order Created",
-              "key": "uploadery-order-created",
-              "metadata": [],
-              "local_fields": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "loop",
-              "name": "Loop",
-              "key": "loop",
-              "metadata": {
-                  "key": "{{uploadery-order-created.fields[]}}"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "googledrive",
-              "entity": "file",
-              "action": "save",
-              "name": "Google Drive: Save File",
-              "key": "googledrive-save-file",
-              "metadata": {
-                  "token": "",
-                  "file_url": "{{loop.value}}",
-                  "file_name": "{{filename}}"
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "uploadery",
+        "entity": "order",
+        "action": "created",
+        "name": "Uploadery: Order Created",
+        "key": "uploadery-order-created",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "loop",
+        "name": "Loop",
+        "key": "loop",
+        "metadata": {
+          "key": "{{uploadery-order-created.fields[]}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "googledrive",
+        "entity": "file",
+        "action": "save",
+        "name": "Google Drive: Save File",
+        "key": "googledrive-save-file",
+        "metadata": {
+          "token": "",
+          "file_url": "{{loop.value}}",
+          "file_name": "{{filename}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
   }
 }

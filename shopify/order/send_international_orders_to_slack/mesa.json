@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "description": "Send a slack message whenever an international order is created.",
   "video": "",
-  "readme": "## Setup\n- [Create a connected app in Slack](https:\/\/api.slack.com\/apps\/new).\n- Enable **Incoming Webhooks** from the settings page.\n- Click **Add New Webhook to Workspace**.\n- Select a channel that the app will post to and click **Authorize**.\n- Click **Copy** near your Webhook URL and paste the value in the `slack-webhook-url` Credential (located\u00a0under\u00a0the\u00a0Credentials\u00a0tab).\n- Save the slack channel name you wish to use (for example \"#order-paid\") as a Storage Item, with the key as `slack-channel`.\n- Enable the Automation in the right sidebar and click **Save**.\n\n## Optional Customizations\n- Change the country to filter by changing the the two-letter country code in the Filter Step. For example: **US** for the United States, **FR** for France, etc. [View a list of country codes](https:\/\/en.wikipedia.org\/wiki\/ISO_3166-1_alpha-2#Current_codes).",
+  "readme": "## Setup\n- [Create a connected app in Slack](https://api.slack.com/apps/new).\n- Enable **Incoming Webhooks** from the settings page.\n- Click **Add New Webhook to Workspace**.\n- Select a channel that the app will post to and click **Authorize**.\n- Click **Copy** near your Webhook URL and paste the value in the `slack-webhook-url` Credential (located under the Credentials tab).\n- Save the slack channel name you wish to use (for example \"#order-paid\") as a Storage Item, with the key as `slack-channel`.\n- Enable the Automation in the right sidebar and click **Save**.\n\n## Optional Customizations\n- Change the country to filter by changing the the two-letter country code in the Filter Step. For example: **US** for the United States, **FR** for France, etc. [View a list of country codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Current_codes).",
   "tags": [
-      "slack"
+    "slack"
   ],
   "source": "shopify",
   "destination": "slack",
@@ -14,49 +14,49 @@
   "logging": false,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify: Order Created",
-              "key": "shopify-order-created",
-              "metadata": [],
-              "local_fields": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "filter",
-              "name": "Filter",
-              "key": "filter",
-              "metadata": {
-                  "a": "{{shopify-order-created.shipping_address.country_code}}",
-                  "comparison": "does not equal",
-                  "b": "US"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "slack",
-              "name": "Slack",
-              "key": "slack",
-              "metadata": {
-                  "webhook": "",
-                  "message": "New international order created: {{shopify-order-created.name}}\nTotal: {{shopify-order-created.total_price}}\n\n{{shopify-order-created.shipping_address.first_name}} {{shopify-order-created.shipping_address.last_name}}\n{{shopify-order-created.shipping_address.address1}}\n{{shopify-order-created.shipping_address.city}}, {{shopify-order-created.shipping_address.province}}, {{shopify-order-created.shipping_address.zip}}\n{{shopify-order-created.shipping_address.country}}\n\n\n"
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify: Order Created",
+        "key": "shopify-order-created",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify-order-created.shipping_address.country_code}}",
+          "comparison": "does not equal",
+          "b": "US"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "slack",
+        "name": "Slack",
+        "key": "slack",
+        "metadata": {
+          "webhook": "",
+          "message": "New international order created: {{shopify-order-created.name}}\nTotal: {{shopify-order-created.total_price}}\n\n{{shopify-order-created.shipping_address.first_name}} {{shopify-order-created.shipping_address.last_name}}\n{{shopify-order-created.shipping_address.address1}}\n{{shopify-order-created.shipping_address.city}}, {{shopify-order-created.shipping_address.province}}, {{shopify-order-created.shipping_address.zip}}\n{{shopify-order-created.shipping_address.country}}\n\n\n"
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
   }
 }

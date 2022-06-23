@@ -1,88 +1,88 @@
 {
-    "key": "shopify/order/send_discord_message_when_tagged",
-    "name": "Send a Discord Message when a Tagged Shopify Order is Purchased",
-    "version": "1.0.0",
-    "description": "Send a Discord message when a Shopify Order is purchased with a specific product tag. This will come in handy if you're already using Discord; your team will receive notifications with any special instructions that a product might require.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "loop",
-                "name": "Loop",
-                "key": "loop",
-                "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "retrieve",
-                "name": "Shopify Retrieve Product",
-                "key": "shopify_product",
-                "metadata": {
-                    "product_id": "{{loop.product_id}}"
-                },
-                "local_fields": [],
-                "weight": 1
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "comparison": "in",
-                    "b": "{{shopify_product.tags}}"
-                },
-                "local_fields": [],
-                "weight": 2
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "discord",
-                "entity": "channel_message",
-                "action": "create",
-                "name": "Discord Channel Message Create",
-                "key": "discord_channel_message",
-                "metadata": {
-                    "body": {
-                        "content": "**New {{shopify_product.title}} Order**\n\nWe've received Order {{shopify_order.name}} with the {{shopify_product.title}} product included.\n\nPlease fulfill this order accordingly.\n\nAdmin Order URL: https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
-                    }
-                },
-                "local_fields": [],
-                "weight": 3
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/order/send_discord_message_when_tagged",
+  "name": "Send a Discord Message when a Tagged Shopify Order is Purchased",
+  "version": "1.0.0",
+  "description": "Send a Discord message when a Shopify Order is purchased with a specific product tag. This will come in handy if you're already using Discord; your team will receive notifications with any special instructions that a product might require.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "loop",
+        "name": "Loop",
+        "key": "loop",
+        "metadata": {
+          "key": "{{shopify_order.line_items[]}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Product",
+        "key": "shopify_product",
+        "metadata": {
+          "product_id": "{{loop.product_id}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "comparison": "in",
+          "b": "{{shopify_product.tags}}"
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "discord",
+        "entity": "channel_message",
+        "action": "create",
+        "name": "Discord Channel Message Create",
+        "key": "discord_channel_message",
+        "metadata": {
+          "body": {
+            "content": "**New {{shopify_product.title}} Order**\n\nWe've received Order {{shopify_order.name}} with the {{shopify_product.title}} product included.\n\nPlease fulfill this order accordingly.\n\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
 }

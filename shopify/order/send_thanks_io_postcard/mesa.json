@@ -1,82 +1,82 @@
 {
-    "key": "shopify/order/send_thanks_io_postcard",
-    "name": "Send a Postcard with Thanks.io 10 Days After Order is Created",
-    "version": "1.0.0",
-    "description": "Give a personal touch by mailing your customers a handwritten postcard without lifting a finger.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "thanks",
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders\/create"
-                },
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "delay",
-                "name": "Delay",
-                "key": "delay",
-                "metadata": {
-                    "amount": "10",
-                    "unit": "days"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "thanks",
-                "entity": "postcard",
-                "action": "create",
-                "name": "Thanks.io Send Postcard",
-                "key": "thanks_postcard",
-                "metadata": {
-                    "body": {
-                        "front_image_url": "https:\/\/blog.theshoppad.com\/wp-content\/uploads\/Shipping_Handling_Profitability-300x169.png",
-                        "handwriting_style": "1",
-                        "message": "Dear {{delay.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{delay.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n- The {{context.shop.name}} Team",
-                        "return_name": "{{context.shop.name}}",
-                        "return_address": "{{context.shop.address1}}",
-                        "return_address2": "{{context.shop.address2}}",
-                        "return_city": "{{context.shop.city}}",
-                        "return_state": "{{context.shop.province}}",
-                        "return_postal_code": "{{context.shop.zip}}",
-                        "recipients": [
-                            {
-                                "name": "{{delay.shipping_address.first_name}} {{delay.shipping_address.last_name}}",
-                                "address": "{{delay.shipping_address.address1}}",
-                                "city": "{{delay.shipping_address.city}}",
-                                "province": "{{delay.shipping_address.province}}",
-                                "postal_code": "{{delay.shipping_address.zip}}",
-                                "country": "{{delay.shipping_address.country}}"
-                            }
-                        ]
-                    }
-                },
-                "local_fields": [],
-                "weight": 1
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/order/send_thanks_io_postcard",
+  "name": "Send a Postcard with Thanks.io 10 Days After Order is Created",
+  "version": "1.0.0",
+  "description": "Give a personal touch by mailing your customers a handwritten postcard without lifting a finger.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "thanks",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delay",
+        "name": "Delay",
+        "key": "delay",
+        "metadata": {
+          "amount": "10",
+          "unit": "days"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "thanks",
+        "entity": "postcard",
+        "action": "create",
+        "name": "Thanks.io Send Postcard",
+        "key": "thanks_postcard",
+        "metadata": {
+          "body": {
+            "front_image_url": "https://blog.theshoppad.com/wp-content/uploads/Shipping_Handling_Profitability-300x169.png",
+            "handwriting_style": "1",
+            "message": "Dear {{delay.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{delay.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n- The {{context.shop.name}} Team",
+            "return_name": "{{context.shop.name}}",
+            "return_address": "{{context.shop.address1}}",
+            "return_address2": "{{context.shop.address2}}",
+            "return_city": "{{context.shop.city}}",
+            "return_state": "{{context.shop.province}}",
+            "return_postal_code": "{{context.shop.zip}}",
+            "recipients": [
+              {
+                "name": "{{delay.shipping_address.first_name}} {{delay.shipping_address.last_name}}",
+                "address": "{{delay.shipping_address.address1}}",
+                "city": "{{delay.shipping_address.city}}",
+                "province": "{{delay.shipping_address.province}}",
+                "postal_code": "{{delay.shipping_address.zip}}",
+                "country": "{{delay.shipping_address.country}}"
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
 }

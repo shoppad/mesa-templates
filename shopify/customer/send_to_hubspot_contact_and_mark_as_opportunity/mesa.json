@@ -14,59 +14,59 @@
   "logging": true,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 3,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "customer",
-              "action": "created",
-              "name": "Shopify Customer Created",
-              "key": "shopify_customer",
-              "metadata": [],
-              "weight": 0
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "created",
+        "name": "Shopify Customer Created",
+        "key": "shopify_customer",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "hubspot",
+        "entity": "contact",
+        "action": "create",
+        "name": "Hubspot Create Contact",
+        "key": "hubspot_contact",
+        "metadata": {
+          "body": {
+            "properties": {
+              "email": "{{shopify_customer.email}}",
+              "firstname": "{{shopify_customer.first_name}}",
+              "lastname": "{{shopify_customer.last_name}}",
+              "phone": "{{shopify_customer.phone}}",
+              "lifecyclestage": "opportunity"
+            }
           }
-      ],
-      "outputs": [
+        },
+        "local_fields": [
           {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "contact",
-              "action": "create",
-              "name": "Hubspot Create Contact",
-              "key": "hubspot_contact",
-              "metadata": {
-                  "body": {
-                      "properties": {
-                          "email": "{{shopify_customer.email}}",
-                          "firstname": "{{shopify_customer.first_name}}",
-                          "lastname": "{{shopify_customer.last_name}}",
-                          "phone": "{{shopify_customer.phone}}",
-                          "lifecyclestage": "opportunity"
-                      }
-                  }
-              },
-              "local_fields": [
+            "key": "body",
+            "fields": [
+              {
+                "key": "properties",
+                "fields": [
                   {
-                      "key": "body",
-                      "fields": [
-                          {
-                              "key": "properties",
-                              "fields": [
-                                  {
-                                      "key": "lifecyclestage",
-                                      "type": "custom",
-                                      "allow_custom_fields": false
-                                  }
-                              ]
-                          }
-                      ]
+                    "key": "lifecyclestage",
+                    "type": "custom",
+                    "allow_custom_fields": false
                   }
-              ],
-              "weight": 0
+                ]
+              }
+            ]
           }
-      ],
-      "storage": []
+        ],
+        "weight": 0
+      }
+    ],
+    "storage": []
   }
 }

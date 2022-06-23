@@ -1,72 +1,72 @@
 {
-    "key": "send_to_delighted_nps_survey",
-    "name": "Automatically Send Delighted NPS Surveys to Shopify Customers 5 Days After They Place an Order on Your Store",
-    "version": "1.0.0",
-    "description": "Measuring your net promoter score (NPS) provides many rewards. Not only is it a solid criteria of your store\u2019s product and service quality, but it can help you identify potential brand advocates. Automatically send your customers a NPS survey after their purchase and gather feedback on their experience.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "delighted",
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
+  "key": "send_to_delighted_nps_survey",
+  "name": "Automatically Send Delighted NPS Surveys to Shopify Customers 5 Days After They Place an Order on Your Store",
+  "version": "1.0.0",
+  "description": "Measuring your net promoter score (NPS) provides many rewards. Not only is it a solid criteria of your store’s product and service quality, but it can help you identify potential brand advocates. Automatically send your customers a NPS survey after their purchase and gather feedback on their experience.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "delighted",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delay",
+        "name": "Delay",
+        "key": "delay",
+        "metadata": {
+          "amount": "5",
+          "unit": "days",
+          "test_bypass": false
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delighted",
+        "entity": "people",
+        "action": "send",
+        "name": "Delighted Send (Create or Update) People",
+        "key": "delighted_people",
+        "metadata": {
+          "mapping": [
             {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": [],
-                "weight": 0
+              "destination": "email",
+              "source": "{{shopify_order.email}}"
             }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
         ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "delay",
-                "name": "Delay",
-                "key": "delay",
-                "metadata": {
-                    "amount": "5",
-                    "unit": "days",
-                    "test_bypass": false
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "delighted",
-                "entity": "people",
-                "action": "send",
-                "name": "Delighted Send (Create or Update) People",
-                "key": "delighted_people",
-                "metadata": {
-                    "mapping": [
-                        {
-                            "destination": "email",
-                            "source": "{{shopify_order.email}}"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
-                    }
-                ],
-                "weight": 1
-            }
-        ],
-        "storage": []
-    }
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
 }

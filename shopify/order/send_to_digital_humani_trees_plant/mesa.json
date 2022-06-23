@@ -1,92 +1,92 @@
 {
-    "key": "shopify_order_send_to_digital_humani_trees_plant",
-    "name": "Plant a tree with Digital Humani when Shopify Order is over $10",
-    "version": "1.0.0",
-    "description": "",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "order",
-        "shopify"
+  "key": "shopify_order_send_to_digital_humani_trees_plant",
+  "name": "Plant a tree with Digital Humani when Shopify Order is over $10",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [
+    "order",
+    "shopify"
+  ],
+  "source": "shopify",
+  "destination": "digitalhumani",
+  "seconds": 60,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
     ],
-    "source": "shopify",
-    "destination": "digitalhumani",
-    "seconds": 60,
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": [],
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{shopify_order.total_price}}",
-                    "comparison": "greater than",
-                    "b": "10",
-                    "script": "filter.js"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "digitalhumani",
-                "entity": "trees",
-                "action": "plant",
-                "name": "Digital Humani Plant Trees",
-                "key": "digitalhumani_trees",
-                "metadata": {
-                    "body": {
-                        "enterpriseId": "",
-                        "projectId": "",
-                        "user": "{{shopify_order.email}}",
-                        "treeCount": 1
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "note_update",
-                "name": "Shopify Update Order Notes",
-                "key": "shopify_order_update_notes",
-                "metadata": {
-                    "order_id": "{{shopify_order.id}}",
-                    "body": {
-                        "note": "{% if shopify_order.note %}\n{{shopify_order.note}}\n\n{% endif %}{{date:M j Y H:i:s}}: Submitted Digital Humani tree planting request. Total trees: {{digitalhumani_trees.treeCount}}. Request ID: {{digitalhumani_trees.uuid}}"
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            }
-        ],
-        "storage": []
-    }
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_order.total_price}}",
+          "comparison": "greater than",
+          "b": "10",
+          "script": "filter.js"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "digitalhumani",
+        "entity": "trees",
+        "action": "plant",
+        "name": "Digital Humani Plant Trees",
+        "key": "digitalhumani_trees",
+        "metadata": {
+          "body": {
+            "enterpriseId": "",
+            "projectId": "",
+            "user": "{{shopify_order.email}}",
+            "treeCount": 1
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "note_update",
+        "name": "Shopify Update Order Notes",
+        "key": "shopify_order_update_notes",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "note": "{% if shopify_order.note %}\n{{shopify_order.note}}\n\n{% endif %}{{date:M j Y H:i:s}}: Submitted Digital Humani tree planting request. Total trees: {{digitalhumani_trees.treeCount}}. Request ID: {{digitalhumani_trees.uuid}}"
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
 }

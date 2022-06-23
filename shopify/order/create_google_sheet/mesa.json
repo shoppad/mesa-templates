@@ -1,63 +1,63 @@
 {
-    "key": "shopify/order/create_google_sheet",
-    "name": "Create a New Google Sheet for Every Large Order",
-    "version": "1.0.0",
-    "description": "Large orders can be challenging to manage without the right tools. With this template, you can create a new Google Sheet for every Shopify Order with more than 15 line items. This is a great way to view larger orders in a single spreadsheet view rather than within the Shopify Admin.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{shopify_order.line_items.size}}",
-                    "comparison": "greater than",
-                    "b": "15"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "googlesheets",
-                "entity": "sheet",
-                "action": "write",
-                "name": "Google Sheets Sheet Write",
-                "key": "googlesheets_sheet",
-                "metadata": {
-                    "make_labels": true,
-                    "append": true,
-                    "rows": "{{shopify_order.line_items[]}}"
-                },
-                "local_fields": [],
-                "weight": 1
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/order/create_google_sheet",
+  "name": "Create a New Google Sheet for Every Large Order",
+  "version": "1.0.0",
+  "description": "Large orders can be challenging to manage without the right tools. With this template, you can create a new Google Sheet for every Shopify Order with more than 15 line items. This is a great way to view larger orders in a single spreadsheet view rather than within the Shopify Admin.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_order.line_items.size}}",
+          "comparison": "greater than",
+          "b": "15"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "googlesheets",
+        "entity": "sheet",
+        "action": "write",
+        "name": "Google Sheets Sheet Write",
+        "key": "googlesheets_sheet",
+        "metadata": {
+          "make_labels": true,
+          "append": true,
+          "rows": "{{shopify_order.line_items[]}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
 }

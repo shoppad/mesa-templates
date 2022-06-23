@@ -3,7 +3,10 @@
   "name": "Send Orders To Fosdick Fulfillment",
   "version": "1.0.0",
   "description": "Send orders from Shopify to Fosdick Fulfillment every hour.",
-  "tags": ["Fulfillment", "Order"],
+  "tags": [
+    "Fulfillment",
+    "Order"
+  ],
   "source": "shopify",
   "destination": "fosdick",
   "enabled": false,
@@ -35,7 +38,7 @@
         "name": "Process virtual output",
         "key": "out-process-virtual-output",
         "metadata": {
-            "script": "out_create_fosdick_order.js"
+          "script": "out_create_fosdick_order.js"
         },
         "local_fields": []
       }

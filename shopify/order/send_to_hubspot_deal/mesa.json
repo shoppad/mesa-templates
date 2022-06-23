@@ -5,47 +5,49 @@
   "description": "Send order from Shopify to HubSpot Deal when order is created.",
   "video": "",
   "readme": "",
-  "tags": ["Order"],
+  "tags": [
+    "Order"
+  ],
   "source": "shopify",
   "destination": "hubspot",
   "enabled": false,
   "logging": true,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 3,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify Order Created",
-              "key": "shopify_order",
-              "metadata": [],
-              "weight": 0
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "hubspot",
+        "entity": "deal",
+        "action": "create",
+        "name": "Hubspot Create Deal",
+        "key": "hubspot_deal",
+        "metadata": {
+          "body": {
+            "properties": {
+              "amount": "{{shopify_order.total_price}}",
+              "dealname": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} {{shopify_order.name}} Deal"
+            }
           }
-      ],
-      "outputs": [
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "deal",
-              "action": "create",
-              "name": "Hubspot Create Deal",
-              "key": "hubspot_deal",
-              "metadata": {
-                  "body": {
-                      "properties": {
-                          "amount": "{{shopify_order.total_price}}",
-                          "dealname": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} {{shopify_order.name}} Deal"
-                      }
-                  }
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
   }
 }

@@ -1,67 +1,67 @@
 {
-    "key": "shopify/order/edit_add_product",
-    "name": "Add a Free Product to Orders Over $100",
-    "version": "1.0.0",
-    "video": "",
-    "tags": [],
-    "seconds": 0,
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": [],
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{shopify_order.total_line_items_price}}",
-                    "comparison": "greater than",
-                    "b": "100"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "line_item_add",
-                "name": "Shopify Order Line Item Add",
-                "key": "shopify_order_1",
-                "metadata": {
-                    "order_id": "{{shopify_order.id}}",
-                    "body": {
-                        "product_id": "",
-                        "variant_id": "",
-                        "quantity": "1",
-                        "discount_type": "Percentage",
-                        "discount_amount": "100",
-                        "notify_customer": "false",
-                        "order_note": "Add free product"
-                    }
-                },
-                "local_fields": [],
-                "weight": 1
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/order/edit_add_product",
+  "name": "Add a Free Product to Orders Over $100",
+  "version": "1.0.0",
+  "video": "",
+  "tags": [],
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_order.total_line_items_price}}",
+          "comparison": "greater than",
+          "b": "100"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "line_item_add",
+        "name": "Shopify Order Line Item Add",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "product_id": "",
+            "variant_id": "",
+            "quantity": "1",
+            "discount_type": "Percentage",
+            "discount_amount": "100",
+            "notify_customer": "false",
+            "order_note": "Add free product"
+          }
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
 }

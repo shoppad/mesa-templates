@@ -1,200 +1,200 @@
 {
-    "key": "recharge/customer/update_address_when_customer_updated",
-    "name": "Send an updated address to Recharge when a Shopify Customer is updated",
-    "version": "1.0.0",
-    "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will automatically update an address in Recharge when a customer in Shopify is updated.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
+  "key": "recharge/customer/update_address_when_customer_updated",
+  "name": "Send an updated address to Recharge when a Shopify Customer is updated",
+  "version": "1.0.0",
+  "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will automatically update an address in Recharge when a customer in Shopify is updated.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "schedule",
+        "name": "Schedule",
+        "key": "schedule",
+        "metadata": {
+          "schedule": "@daily:0 0 * * *",
+          "enqueue_type": "schedule",
+          "next_sync_date_time": "2022-05-25T00:00:00-04:00",
+          "datetime": null
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "list",
+        "name": "Shopify Get List of Customers updated within the past 24 hours",
+        "key": "shopify_customer",
+        "metadata": {
+          "parameters": "updated_at_min={{date:1 days ago}}&limit=250"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter: Stop the automation if no customers were found",
+        "key": "filter",
+        "metadata": {
+          "comparison": "is not empty",
+          "a": "{{shopify_customer}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "loop",
+        "name": "Loop over each customer",
+        "key": "loop",
+        "metadata": {
+          "key": "{{shopify_customer}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "recharge",
+        "entity": "customer",
+        "action": "list",
+        "name": "Recharge List Customers",
+        "key": "recharge_customer",
+        "metadata": {
+          "parameters": "email={{loop.email}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter: Stop the automation if no customers were retrieved",
+        "key": "filter_2",
+        "metadata": {
+          "a": "{{recharge_customer}}",
+          "comparison": "is not empty"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 4
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "recharge",
+        "entity": "address",
+        "action": "list",
+        "name": "Recharge List Address",
+        "key": "recharge_address",
+        "metadata": {
+          "parameters": "customer_id={{recharge_customer.0.id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 5
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter: Compare the recent Shopify information to ReCharge information",
+        "key": "filter_1",
+        "metadata": {
+          "comparison": "does not equal",
+          "additional": [
             {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "schedule",
-                "name": "Schedule",
-                "key": "schedule",
-                "metadata": {
-                    "schedule": "@daily:0 0 * * *",
-                    "enqueue_type": "schedule",
-                    "next_sync_date_time": "2022-05-25T00:00:00-04:00",
-                    "datetime": null
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
+              "operator": "or",
+              "a": "{{recharge_address.0.address2}}",
+              "comparison": "does not equal",
+              "b": "{{loop.default_address.address2}}"
+            },
+            {
+              "operator": "or",
+              "a": "{{recharge_address.0.city}}",
+              "comparison": "does not equal",
+              "b": "{{loop.default_address.city}}"
+            },
+            {
+              "operator": "or",
+              "a": "{{recharge_address.0.province}}",
+              "comparison": "does not equal",
+              "b": "{{loop.default_address.province}}"
+            },
+            {
+              "operator": "or",
+              "a": "{{recharge_address.0.zip}}",
+              "comparison": "does not equal",
+              "b": "{{loop.default_address.zip}}"
+            },
+            {
+              "operator": "or",
+              "a": "{{recharge_address.0.country_code}}",
+              "comparison": "does not equal",
+              "b": "{{loop.default_address.country_code}}"
             }
-        ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "list",
-                "name": "Shopify Get List of Customers updated within the past 24 hours",
-                "key": "shopify_customer",
-                "metadata": {
-                    "parameters": "updated_at_min={{date:1 days ago}}&limit=250"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter: Stop the automation if no customers were found",
-                "key": "filter",
-                "metadata": {
-                    "comparison": "is not empty",
-                    "a": "{{shopify_customer}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "loop",
-                "name": "Loop over each customer",
-                "key": "loop",
-                "metadata": {
-                    "key": "{{shopify_customer}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "recharge",
-                "entity": "customer",
-                "action": "list",
-                "name": "Recharge List Customers",
-                "key": "recharge_customer",
-                "metadata": {
-                    "parameters": "email={{loop.email}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter: Stop the automation if no customers were retrieved",
-                "key": "filter_2",
-                "metadata": {
-                    "a": "{{recharge_customer}}",
-                    "comparison": "is not empty"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 4
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "recharge",
-                "entity": "address",
-                "action": "list",
-                "name": "Recharge List Address",
-                "key": "recharge_address",
-                "metadata": {
-                    "parameters": "customer_id={{recharge_customer.0.id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 5
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter: Compare the recent Shopify information to ReCharge information",
-                "key": "filter_1",
-                "metadata": {
-                    "comparison": "does not equal",
-                    "additional": [
-                        {
-                            "operator": "or",
-                            "a": "{{recharge_address.0.address2}}",
-                            "comparison": "does not equal",
-                            "b": "{{loop.default_address.address2}}"
-                        },
-                        {
-                            "operator": "or",
-                            "a": "{{recharge_address.0.city}}",
-                            "comparison": "does not equal",
-                            "b": "{{loop.default_address.city}}"
-                        },
-                        {
-                            "operator": "or",
-                            "a": "{{recharge_address.0.province}}",
-                            "comparison": "does not equal",
-                            "b": "{{loop.default_address.province}}"
-                        },
-                        {
-                            "operator": "or",
-                            "a": "{{recharge_address.0.zip}}",
-                            "comparison": "does not equal",
-                            "b": "{{loop.default_address.zip}}"
-                        },
-                        {
-                            "operator": "or",
-                            "a": "{{recharge_address.0.country_code}}",
-                            "comparison": "does not equal",
-                            "b": "{{loop.default_address.country_code}}"
-                        }
-                    ],
-                    "a": "{{recharge_address.0.address1}}",
-                    "b": "{{loop.default_address.address1}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 6
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "recharge",
-                "entity": "address",
-                "action": "update",
-                "name": "Recharge Update Address",
-                "key": "recharge_address_1",
-                "metadata": {
-                    "path": {
-                        "address_id": "{{recharge_address.0.id}}"
-                    },
-                    "body": {
-                        "address1": "{{loop.default_address.address1}}",
-                        "address2": "{{loop.default_address.address2}}",
-                        "city": "{{loop.default_address.city}}",
-                        "country": "{{loop.default_address.country_code}}",
-                        "customer_id": "{{loop.id}}",
-                        "first_name": "{{loop.first_name}}",
-                        "last_name": "{{loop.last_name}}",
-                        "zip": "{{loop.default_address.zip}}",
-                        "province": "{{loop.default_address.province}}"
-                    },
-                    "parameters": "{{recharge_address.addresses.0.id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 7
-            }
-        ],
-        "storage": []
-    }
+          ],
+          "a": "{{recharge_address.0.address1}}",
+          "b": "{{loop.default_address.address1}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 6
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "recharge",
+        "entity": "address",
+        "action": "update",
+        "name": "Recharge Update Address",
+        "key": "recharge_address_1",
+        "metadata": {
+          "path": {
+            "address_id": "{{recharge_address.0.id}}"
+          },
+          "body": {
+            "address1": "{{loop.default_address.address1}}",
+            "address2": "{{loop.default_address.address2}}",
+            "city": "{{loop.default_address.city}}",
+            "country": "{{loop.default_address.country_code}}",
+            "customer_id": "{{loop.id}}",
+            "first_name": "{{loop.first_name}}",
+            "last_name": "{{loop.last_name}}",
+            "zip": "{{loop.default_address.zip}}",
+            "province": "{{loop.default_address.province}}"
+          },
+          "parameters": "{{recharge_address.addresses.0.id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 7
+      }
+    ],
+    "storage": []
+  }
 }

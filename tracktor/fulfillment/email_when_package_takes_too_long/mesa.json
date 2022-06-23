@@ -1,109 +1,109 @@
 {
-    "key": "tracktor/fulfillment/email_when_package_takes_too_long",
-    "name": "Send an email if a package hasn't been delivered",
-    "version": "1.0.0",
-    "description": "Shipping delays happen. Keep your customers up-to-date so they can plan accordingly and reset their expectations. This template emails customers after 20 days if their package still hasn't been delivered. Need a different timeframe than 20 days? No problem, this template is configurable to fit your needs. Give your customers peace of mind with automatic updates so they know you're aware of the delay.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "fulfillment\/pre_transit",
-                "name": "Tracktor Fulfillment Created",
-                "key": "tracktor_fulfillment",
-                "metadata": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "delay",
-                "name": "Delay",
-                "key": "delay",
-                "metadata": {
-                    "amount": "20",
-                    "unit": "days",
-                    "test_bypass": true
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "retrieve",
-                "name": "Tracktor Retrieve Fulfillment",
-                "key": "tracktor_fulfillment_1",
-                "metadata": {
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{tracktor_fulfillment_1.latest_status.key}}",
-                    "comparison": "does not equal",
-                    "b": "delivered"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "tracktor",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Tracktor Retrieve Order",
-                "key": "tracktor_order",
-                "metadata": {
-                    "order_id": "{{tracktor_fulfillment_1.order_id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "email",
-                "name": "Email",
-                "key": "email",
-                "metadata": {
-                    "to": "{{tracktor_order.order_email}}",
-                    "subject": "Sorry your package is taking so long!",
-                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in tracktor_fulfillment_1.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page: {{tracktor_fulfillment_1.tracking_url}}\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 4
-            }
-        ],
-        "storage": []
-    }
+  "key": "tracktor/fulfillment/email_when_package_takes_too_long",
+  "name": "Send an email if a package hasn't been delivered",
+  "version": "1.0.0",
+  "description": "Shipping delays happen. Keep your customers up-to-date so they can plan accordingly and reset their expectations. This template emails customers after 20 days if their package still hasn't been delivered. Need a different timeframe than 20 days? No problem, this template is configurable to fit your needs. Give your customers peace of mind with automatic updates so they know you're aware of the delay.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "tracktor",
+        "entity": "fulfillment",
+        "action": "fulfillment/pre_transit",
+        "name": "Tracktor Fulfillment Created",
+        "key": "tracktor_fulfillment",
+        "metadata": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delay",
+        "name": "Delay",
+        "key": "delay",
+        "metadata": {
+          "amount": "20",
+          "unit": "days",
+          "test_bypass": true
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "fulfillment",
+        "action": "retrieve",
+        "name": "Tracktor Retrieve Fulfillment",
+        "key": "tracktor_fulfillment_1",
+        "metadata": {
+          "fulfillment_id": "{{delay.fulfillment_id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{tracktor_fulfillment_1.latest_status.key}}",
+          "comparison": "does not equal",
+          "b": "delivered"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Tracktor Retrieve Order",
+        "key": "tracktor_order",
+        "metadata": {
+          "order_id": "{{tracktor_fulfillment_1.order_id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "email",
+        "name": "Email",
+        "key": "email",
+        "metadata": {
+          "to": "{{tracktor_order.order_email}}",
+          "subject": "Sorry your package is taking so long!",
+          "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in tracktor_fulfillment_1.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page: {{tracktor_fulfillment_1.tracking_url}}\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 4
+      }
+    ],
+    "storage": []
+  }
 }

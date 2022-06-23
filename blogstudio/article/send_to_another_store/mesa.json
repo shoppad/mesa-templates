@@ -1,56 +1,56 @@
 {
-    "key": "blogstudio/article/send_to_another_store",
-    "name": "Send Blog Studio Article to Another Store",
-    "version": "1.0.0",
-    "description": "Sends Blog Studio articles from one Shopify store to another Shopify store after a new article is created.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "blogstudio",
-    "destination": "blogstudio",
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-      "inputs": [
-          {
-              "schema": 3,
-              "trigger_type": "input",
-              "type": "blogstudio",
-              "entity": "blog_article",
-              "action": "created",
-              "name": "Blog Studio Article Created",
-              "key": "blogstudio_article",
-              "metadata": {
-                  "last_sync_date_time": "2021-01-08T11:59:18-08:00"
-              },
-              "local_fields": [],
-              "weight": 0
+  "key": "blogstudio/article/send_to_another_store",
+  "name": "Send Blog Studio Article to Another Store",
+  "version": "1.0.0",
+  "description": "Sends Blog Studio articles from one Shopify store to another Shopify store after a new article is created.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "blogstudio",
+  "destination": "blogstudio",
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "blogstudio",
+        "entity": "blog_article",
+        "action": "created",
+        "name": "Blog Studio Article Created",
+        "key": "blogstudio_article",
+        "metadata": {
+          "last_sync_date_time": "2021-01-08T11:59:18-08:00"
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "blogstudio",
+        "entity": "blog_article",
+        "action": "create",
+        "name": "Blog Studio Create Blog Article on Another Store",
+        "key": "blogstudio_article2",
+        "metadata": {
+          "body": {
+            "title": "{{blogstudio_article.title}}",
+            "handle": "{{blogstudio_article.handle}}",
+            "body_html": "{{blogstudio_article.body_html}}",
+            "tags": "{{blogstudio_article.tags}}",
+            "published": "{{blogstudio_article.published}}",
+            "author": "{{blogstudio_article.author}}"
           }
-      ],
-      "outputs": [
-          {
-              "schema": 3,
-              "trigger_type": "output",
-              "type": "blogstudio",
-              "entity": "blog_article",
-              "action": "create",
-              "name": "Blog Studio Create Blog Article on Another Store",
-              "key": "blogstudio_article2",
-              "metadata": {
-                  "body": {
-                      "title": "{{blogstudio_article.title}}",
-                      "handle": "{{blogstudio_article.handle}}",
-                      "body_html": "{{blogstudio_article.body_html}}",
-                      "tags": "{{blogstudio_article.tags}}",
-                      "published": "{{blogstudio_article.published}}",
-                      "author": "{{blogstudio_article.author}}"
-                  }
-              },
-              "local_fields": [],
-              "weight": 0
-          }
-      ],
-      "storage": []
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "storage": []
   }
 }

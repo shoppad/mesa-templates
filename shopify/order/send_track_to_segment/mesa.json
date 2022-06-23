@@ -1,133 +1,133 @@
 {
-    "key": "shopify/order/send_track_to_segment",
-    "name": "Send a Shopify order status update to Segment",
-    "version": "1.0.0",
-    "description": "When Shopify orders are updated, it can be challenging to track what was updated and when. Eliminate manual effort and the potential for user mistakes by keeping your systems in check with automation. This template will automatically send updates to a Segment track when a Shopify order is updated.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "updated",
-                "name": "Shopify Order Updated",
-                "key": "shopify_order",
-                "metadata": [],
-                "on_error": "default",
-                "weight": 0
+  "key": "shopify/order/send_track_to_segment",
+  "name": "Send a Shopify order status update to Segment",
+  "version": "1.0.0",
+  "description": "When Shopify orders are updated, it can be challenging to track what was updated and when. Eliminate manual effort and the potential for user mistakes by keeping your systems in check with automation. This template will automatically send updates to a Segment track when a Shopify order is updated.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "updated",
+        "name": "Shopify Order Updated",
+        "key": "shopify_order",
+        "metadata": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "segment",
+        "entity": "track",
+        "action": "send",
+        "name": "Segment Track",
+        "key": "segment_track",
+        "metadata": {
+          "body": {
+            "userId": "{{shopify_order.customer.id}}",
+            "event": "Order Status Update",
+            "timestamp": "{{shopify_order.updated_at}}",
+            "properties": {
+              "order_id": "{{shopify_order.id}}",
+              "order_number": "{{shopify_order.name}}",
+              "order_tags": "{{shopify_order.tags}}",
+              "order_processed_at": "{{shopify_order.processed_at}}",
+              "shipping_state": "{{shopify_order.shipping_address.province}}",
+              "shipping_zip": "{{shopify_order.shipping_address.zip}}",
+              "email": "{{shopify_order.email}}",
+              "phone": "{{shopify_order.phone}}"
+            },
+            "context": {
+              "app": {
+                "name": "Mesa"
+              },
+              "traits": {
+                "email": "{{shopify_order.email}}",
+                "firstName": "{{shopify_order.customer.first_name}}",
+                "id": "{{shopify_order.customer.id}}",
+                "lastName": "{{shopify_order.customer.last_name}}",
+                "phone": "{{shopify_order.phone}}",
+                "address": {
+                  "street": "{{shopify_order.billing_address.address1}}{{shopify_order.billing_address.address2}}",
+                  "city": "{{shopify_order.billing_address.city}}",
+                  "state": "{{shopify_order.billing_address.province}}",
+                  "postalCode": "{{shopify_order.billing_address.zip}}",
+                  "country": "{{shopify_order.billing_address.country}}"
+                }
+              }
             }
+          }
+        },
+        "local_fields": [
+          {
+            "key": "body",
+            "fields": [
+              {
+                "key": "properties",
+                "fields": [
+                  {
+                    "key": "order_id",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  },
+                  {
+                    "key": "order_number",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  },
+                  {
+                    "key": "order_tags",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  },
+                  {
+                    "key": "order_processed_at",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  },
+                  {
+                    "key": "shipping_state",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  },
+                  {
+                    "key": "shipping_zip",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  },
+                  {
+                    "key": "email",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  },
+                  {
+                    "key": "phone",
+                    "type": "custom",
+                    "allow_custom_fields": false
+                  }
+                ]
+              }
+            ]
+          }
         ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "segment",
-                "entity": "track",
-                "action": "send",
-                "name": "Segment Track",
-                "key": "segment_track",
-                "metadata": {
-                    "body": {
-                        "userId": "{{shopify_order.customer.id}}",
-                        "event": "Order Status Update",
-                        "timestamp": "{{shopify_order.updated_at}}",
-                        "properties": {
-                            "order_id": "{{shopify_order.id}}",
-                            "order_number": "{{shopify_order.name}}",
-                            "order_tags": "{{shopify_order.tags}}",
-                            "order_processed_at": "{{shopify_order.processed_at}}",
-                            "shipping_state": "{{shopify_order.shipping_address.province}}",
-                            "shipping_zip": "{{shopify_order.shipping_address.zip}}",
-                            "email": "{{shopify_order.email}}",
-                            "phone": "{{shopify_order.phone}}"
-                        },
-                        "context": {
-                            "app": {
-                                "name": "Mesa"
-                            },
-                            "traits": {
-                                "email": "{{shopify_order.email}}",
-                                "firstName": "{{shopify_order.customer.first_name}}",
-                                "id": "{{shopify_order.customer.id}}",
-                                "lastName": "{{shopify_order.customer.last_name}}",
-                                "phone": "{{shopify_order.phone}}",
-                                "address": {
-                                    "street": "{{shopify_order.billing_address.address1}}{{shopify_order.billing_address.address2}}",
-                                    "city": "{{shopify_order.billing_address.city}}",
-                                    "state": "{{shopify_order.billing_address.province}}",
-                                    "postalCode": "{{shopify_order.billing_address.zip}}",
-                                    "country": "{{shopify_order.billing_address.country}}"
-                                }
-                            }
-                        }
-                    }
-                },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "fields": [
-                            {
-                                "key": "properties",
-                                "fields": [
-                                    {
-                                        "key": "order_id",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "order_number",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "order_tags",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "order_processed_at",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "shipping_state",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "shipping_zip",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "email",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    },
-                                    {
-                                        "key": "phone",
-                                        "type": "custom",
-                                        "allow_custom_fields": false
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "storage": []
-    }
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
 }

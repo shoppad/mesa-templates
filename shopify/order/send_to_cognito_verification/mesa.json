@@ -1,73 +1,73 @@
 {
-    "key": "shopify/order/send_to_cognito_verification",
-    "name": "Send Shopify Order To Blockscore Cognito Verification",
-    "version": "1.0.0",
-    "description": "Send order from Shopify to Blockscore Cognito verification and add Order Notes Attributes.",
-    "tags": [
-        "Order"
+  "key": "shopify/order/send_to_cognito_verification",
+  "name": "Send Shopify Order To Blockscore Cognito Verification",
+  "version": "1.0.0",
+  "description": "Send order from Shopify to Blockscore Cognito verification and add Order Notes Attributes.",
+  "tags": [
+    "Order"
+  ],
+  "source": "shopify",
+  "destination": "cognito",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify",
+        "name": "Shopify Order Create",
+        "key": "in-shopify-order-create",
+        "script": "in_shopify_order_create.js",
+        "entity": "order",
+        "action": "created"
+      }
     ],
-    "source": "shopify",
-    "destination": "cognito",
-    "enabled": false,
-    "config": {
-        "inputs": [
-            {
-                "trigger_type": "input",
-                "type": "shopify",
-                "name": "Shopify Order Create",
-                "key": "in-shopify-order-create",
-                "script": "in_shopify_order_create.js",
-                "entity": "order",
-                "action": "created"
-            }
-        ],
-        "outputs": [
-            {
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Cognito Verification",
-                "key": "out-cognito-verification",
-                "script": "out_cognito_verification.js"
-            },
-            {
-                "trigger_type": "output",
-                "type": "shopify",
-                "name": "Update Shopify Order Notes",
-                "key": "out-update-shopify-order-notes",
-                "script": "out_update_shopify_order_notes.js",
-                "api_endpoint": "PUT admin/orders/{{order_id}}.json"
-            },
-            {
-                "trigger_type": "output",
-                "type": "virtual_output",
-                "name": "Cognito Virtual Output",
-                "key": "out-cognito-virtual-output"
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Process virtual output",
-                "key": "out-process-virtual-output",
-                "metadata": {
-                    "script": "out_cognito_virtual_output.js"
-                },
-                "local_fields": []
-            }
-        ],
-        "secrets": [
-            {
-                "key": "cognito-key"
-            },
-            {
-                "key": "cognito-secret"
-            }
-        ],
-        "storage": [
-            {
-                "key": "cognito-environment",
-                "value": "sandbox"
-            }
-        ]
-    }
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Cognito Verification",
+        "key": "out-cognito-verification",
+        "script": "out_cognito_verification.js"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify",
+        "name": "Update Shopify Order Notes",
+        "key": "out-update-shopify-order-notes",
+        "script": "out_update_shopify_order_notes.js",
+        "api_endpoint": "PUT admin/orders/{{order_id}}.json"
+      },
+      {
+        "trigger_type": "output",
+        "type": "virtual_output",
+        "name": "Cognito Virtual Output",
+        "key": "out-cognito-virtual-output"
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Process virtual output",
+        "key": "out-process-virtual-output",
+        "metadata": {
+          "script": "out_cognito_virtual_output.js"
+        },
+        "local_fields": []
+      }
+    ],
+    "secrets": [
+      {
+        "key": "cognito-key"
+      },
+      {
+        "key": "cognito-secret"
+      }
+    ],
+    "storage": [
+      {
+        "key": "cognito-environment",
+        "value": "sandbox"
+      }
+    ]
+  }
 }

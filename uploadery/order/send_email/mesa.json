@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "description": "Send your designer an email with Uploadery files when a new Uploadery order is created.",
   "video": "",
-  "tags": ["uploadery"],
+  "tags": [
+    "uploadery"
+  ],
   "source": "uploadery",
   "destination": "email",
   "enabled": false,

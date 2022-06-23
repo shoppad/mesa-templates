@@ -1,114 +1,114 @@
 {
-    "key": "hubspot_contact_send_to_shopify_customer",
-    "name": "Send HubSpot Contact To Shopify Customer",
-    "version": "1.0.0",
-    "description": "Keeping track of orders in multiple systems requires accuracy and time. This template sends a contact from HubSpot to Shopify customer whenever a contact is created. This reduces the effort to ensure that all information across your systems are the same.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Customer"
+  "key": "hubspot_contact_send_to_shopify_customer",
+  "name": "Send HubSpot Contact To Shopify Customer",
+  "version": "1.0.0",
+  "description": "Keeping track of orders in multiple systems requires accuracy and time. This template sends a contact from HubSpot to Shopify customer whenever a contact is created. This reduces the effort to ensure that all information across your systems are the same.",
+  "video": "",
+  "readme": "",
+  "tags": [
+    "Customer"
+  ],
+  "source": "hubspot",
+  "destination": "shopify",
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "hubspot",
+        "entity": "contact",
+        "action": "list-updated",
+        "name": "Hubspot Contact Updated",
+        "key": "hubspot_contact",
+        "metadata": {
+          "poll": "0 * * * *",
+          "last_sync_date_time": ""
+        },
+        "local_fields": [],
+        "weight": 0
+      }
     ],
-    "source": "hubspot",
-    "destination": "shopify",
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 4,
-                "trigger_type": "input",
-                "type": "hubspot",
-                "entity": "contact",
-                "action": "list-updated",
-                "name": "Hubspot Contact Updated",
-                "key": "hubspot_contact",
-                "metadata": {
-                  "poll": "0 * * * *",
-                  "last_sync_date_time": ""
-                },
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer_search",
-                "action": "list",
-                "name": "Shopify Get List Customer Search",
-                "key": "shopify_customer_search",
-                "metadata": {
-                    "parameters": "query=email:{{hubspot_contact.properties.email}}&fields=id,email"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom: Filter Shopify Customer by Exact Email Match",
-                "key": "custom_filter",
-                "metadata": {
-                    "script": "custom_filter.js"
-                },
-                "local_fields": [],
-                "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "create",
-                "name": "Shopify Create Customer",
-                "key": "shopify_customer_create",
-                "metadata": {
-                    "body": {
-                        "email": "{{hubspot_contact.properties.email}}",
-                        "first_name": "{{hubspot_contact.properties.firstname}}",
-                        "last_name": "{{hubspot_contact.properties.lastname}}"
-                    }
-                },
-                "local_fields": [],
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom: Terminate flow after Shopify Create Customer",
-                "key": "custom_terminate",
-                "metadata": {
-                    "script": "custom.js"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "update",
-                "name": "Shopify Update Customer",
-                "key": "shopify_customer_update",
-                "metadata": {
-                    "customer_id": "{{custom_filter.id}}",
-                    "body": {
-                        "email": "{{hubspot_contact.properties.email}}",
-                        "first_name": "{{hubspot_contact.properties.firstname}}",
-                        "last_name": "{{hubspot_contact.properties.lastname}}"
-                    }
-                },
-                "local_fields": [],
-                "weight": 4
-            }
-        ],
-        "storage": []
-    }
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "customer_search",
+        "action": "list",
+        "name": "Shopify Get List Customer Search",
+        "key": "shopify_customer_search",
+        "metadata": {
+          "parameters": "query=email:{{hubspot_contact.properties.email}}&fields=id,email"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Custom: Filter Shopify Customer by Exact Email Match",
+        "key": "custom_filter",
+        "metadata": {
+          "script": "custom_filter.js"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "create",
+        "name": "Shopify Create Customer",
+        "key": "shopify_customer_create",
+        "metadata": {
+          "body": {
+            "email": "{{hubspot_contact.properties.email}}",
+            "first_name": "{{hubspot_contact.properties.firstname}}",
+            "last_name": "{{hubspot_contact.properties.lastname}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Custom: Terminate flow after Shopify Create Customer",
+        "key": "custom_terminate",
+        "metadata": {
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "update",
+        "name": "Shopify Update Customer",
+        "key": "shopify_customer_update",
+        "metadata": {
+          "customer_id": "{{custom_filter.id}}",
+          "body": {
+            "email": "{{hubspot_contact.properties.email}}",
+            "first_name": "{{hubspot_contact.properties.firstname}}",
+            "last_name": "{{hubspot_contact.properties.lastname}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 4
+      }
+    ],
+    "storage": []
+  }
 }

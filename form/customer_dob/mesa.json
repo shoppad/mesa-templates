@@ -1,73 +1,73 @@
 {
-    "key": "form_customer_dob",
-    "name": "Save a customer's birthday to notes",
-    "version": "1.0.0",
-    "description": "Create a form hosted within a Shopify customer's profile page that saves their date of birth to the Customer Notes field.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "form",
-    "destination": "shopify",
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
+  "key": "form_customer_dob",
+  "name": "Save a customer's birthday to notes",
+  "version": "1.0.0",
+  "description": "Create a form hosted within a Shopify customer's profile page that saves their date of birth to the Customer Notes field.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "form",
+  "destination": "shopify",
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "form",
+        "name": "Form",
+        "key": "form",
+        "metadata": {
+          "form_data": [
             {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "form",
-                "name": "Form",
-                "key": "form",
-                "metadata": {
-                    "form_data": [
-                        {
-                            "type": "header",
-                            "subtype": "h1",
-                            "label": "When's Your Birthday?"
-                        },
-                        {
-                            "type": "paragraph",
-                            "subtype": "p",
-                            "label": "Enter your birthday to receive a special gift :)<div><br><\/div>"
-                        },
-                        {
-                            "type": "date",
-                            "required": true,
-                            "label": "Date of Birth",
-                            "className": "form-control",
-                            "name": "dob"
-                        },
-                        {
-                          "type": "hidden",
-                          "name": "customer-id",
-                          "value": "{{customer.id}}"
-                      }
-                    ]
-                },
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
+              "type": "header",
+              "subtype": "h1",
+              "label": "When's Your Birthday?"
+            },
             {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "update",
-                "name": "Shopify Update Customer",
-                "key": "shopify_customer",
-                "metadata": {
-                    "customer_id": "{{form.customer-id}}",
-                    "body": {
-                        "note": "{{form.dob}}"
-                    }
-                },
-                "local_fields": [],
-                "weight": 0
+              "type": "paragraph",
+              "subtype": "p",
+              "label": "Enter your birthday to receive a special gift :)<div><br></div>"
+            },
+            {
+              "type": "date",
+              "required": true,
+              "label": "Date of Birth",
+              "className": "form-control",
+              "name": "dob"
+            },
+            {
+              "type": "hidden",
+              "name": "customer-id",
+              "value": "{{customer.id}}"
             }
-        ],
-        "storage": []
-    }
+          ]
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "update",
+        "name": "Shopify Update Customer",
+        "key": "shopify_customer",
+        "metadata": {
+          "customer_id": "{{form.customer-id}}",
+          "body": {
+            "note": "{{form.dob}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
 }

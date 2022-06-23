@@ -14,80 +14,80 @@
   "logging": true,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 3,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "customer",
-              "action": "created",
-              "name": "Shopify Customer Created",
-              "key": "shopify_customer",
-              "metadata": [],
-              "weight": 0
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "created",
+        "name": "Shopify Customer Created",
+        "key": "shopify_customer",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "hubspot",
+        "entity": "contact",
+        "action": "create",
+        "name": "Hubspot Create Contact",
+        "key": "hubspot_contact",
+        "metadata": {
+          "body": {
+            "properties": {
+              "email": "{{shopify_customer.email}}",
+              "firstname": "{{shopify_customer.first_name}}",
+              "lastname": "{{shopify_customer.last_name}}",
+              "phone": "{{shopify_customer.phone}}"
+            }
           }
-      ],
-      "outputs": [
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "contact",
-              "action": "create",
-              "name": "Hubspot Create Contact",
-              "key": "hubspot_contact",
-              "metadata": {
-                  "body": {
-                      "properties": {
-                          "email": "{{shopify_customer.email}}",
-                          "firstname": "{{shopify_customer.first_name}}",
-                          "lastname": "{{shopify_customer.last_name}}",
-                          "phone": "{{shopify_customer.phone}}"
-                      }
-                  }
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "deal",
-              "action": "create",
-              "name": "Hubspot Create Deal",
-              "key": "hubspot_deal",
-              "metadata": {
-                  "body": {
-                      "properties": {
-                          "dealname": "{{shopify_customer.first_name}} {{shopify_customer.last_name}} Deal"
-                      }
-                  }
-              },
-              "local_fields": [],
-              "on_error": "default",
-              "weight": 1
-          },
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "contact_association",
-              "action": "update",
-              "name": "Hubspot Contact Association Update",
-              "key": "hubspot_contact_association",
-              "metadata": {
-                  "path": {
-                      "contactId": "{{hubspot_contact.id}}",
-                      "toObjectType": "deals",
-                      "toObjectId": "{{hubspot_deal.id}}",
-                      "associationType": "4"
-                  }
-              },
-              "local_fields": [],
-              "weight": 2
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "hubspot",
+        "entity": "deal",
+        "action": "create",
+        "name": "Hubspot Create Deal",
+        "key": "hubspot_deal",
+        "metadata": {
+          "body": {
+            "properties": {
+              "dealname": "{{shopify_customer.first_name}} {{shopify_customer.last_name}} Deal"
+            }
           }
-      ],
-      "storage": []
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "hubspot",
+        "entity": "contact_association",
+        "action": "update",
+        "name": "Hubspot Contact Association Update",
+        "key": "hubspot_contact_association",
+        "metadata": {
+          "path": {
+            "contactId": "{{hubspot_contact.id}}",
+            "toObjectType": "deals",
+            "toObjectId": "{{hubspot_deal.id}}",
+            "associationType": "4"
+          }
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
   }
 }

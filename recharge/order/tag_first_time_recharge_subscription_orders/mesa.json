@@ -1,97 +1,97 @@
 {
-    "key": "recharge/order/tag_first_time_recharge_subscription_orders",
-    "name": "Tag first time Recharge subscription orders",
-    "version": "1.0.0",
-    "description": "Keep track of your first-time Recharge subscription orders with automatic tagging. Whenever a customer places their first Recharge subscription order, MESA instantly adds a 'Subscription First Order' tag to the Shopify Order.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "recharge",
-                "entity": "order",
-                "action": "order\/created",
-                "name": "Recharge Order Created",
-                "key": "recharge_order",
-                "metadata": [],
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "loop",
-                "name": "Loop",
-                "key": "iterator",
-                "metadata": {
-                    "key": "{{recharge_order.line_items[]}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "recharge",
-                "entity": "order",
-                "action": "list",
-                "name": "Recharge List Order",
-                "key": "recharge_order_1",
-                "metadata": {
-                    "parameters": "customer_id={{recharge_order.customer.id}}&purchase_item_id={{iterator.purchase_item_id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Check to see if it's the customer's first-ever order",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{recharge_order_1.size}}",
-                    "comparison": "equals",
-                    "b": "1",
-                    "script": "filter.js"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "tag_add",
-                "name": "Shopify Order Add Tag",
-                "key": "shopify_order",
-                "metadata": {
-                    "order_id": "{{recharge_order.external_order_id.ecommerce}}",
-                    "body": {
-                        "tag": "Subscription First Order"
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 3
-            }
-        ],
-        "storage": []
-    }
+  "key": "recharge/order/tag_first_time_recharge_subscription_orders",
+  "name": "Tag first time Recharge subscription orders",
+  "version": "1.0.0",
+  "description": "Keep track of your first-time Recharge subscription orders with automatic tagging. Whenever a customer places their first Recharge subscription order, MESA instantly adds a 'Subscription First Order' tag to the Shopify Order.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "recharge",
+        "entity": "order",
+        "action": "order/created",
+        "name": "Recharge Order Created",
+        "key": "recharge_order",
+        "metadata": [],
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "loop",
+        "name": "Loop",
+        "key": "iterator",
+        "metadata": {
+          "key": "{{recharge_order.line_items[]}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "recharge",
+        "entity": "order",
+        "action": "list",
+        "name": "Recharge List Order",
+        "key": "recharge_order_1",
+        "metadata": {
+          "parameters": "customer_id={{recharge_order.customer.id}}&purchase_item_id={{iterator.purchase_item_id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Check to see if it's the customer's first-ever order",
+        "key": "filter",
+        "metadata": {
+          "a": "{{recharge_order_1.size}}",
+          "comparison": "equals",
+          "b": "1",
+          "script": "filter.js"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "tag_add",
+        "name": "Shopify Order Add Tag",
+        "key": "shopify_order",
+        "metadata": {
+          "order_id": "{{recharge_order.external_order_id.ecommerce}}",
+          "body": {
+            "tag": "Subscription First Order"
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
 }

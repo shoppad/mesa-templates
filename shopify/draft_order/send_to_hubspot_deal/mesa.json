@@ -1,54 +1,54 @@
 {
-    "key": "shopify/draft_order/send_to_hubspot_deal",
-    "name": "Send Draft Order To HubSpot Deal",
-    "version": "1.0.0",
-    "description": "Send draft order from Shopify to HubSpot Deal when draft order is created.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Draft-Order"
+  "key": "shopify/draft_order/send_to_hubspot_deal",
+  "name": "Send Draft Order To HubSpot Deal",
+  "version": "1.0.0",
+  "description": "Send draft order from Shopify to HubSpot Deal when draft order is created.",
+  "video": "",
+  "readme": "",
+  "tags": [
+    "Draft-Order"
+  ],
+  "source": "shopify",
+  "destination": "hubspot",
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "draft_order",
+        "action": "created",
+        "name": "Shopify Draft Order Created",
+        "key": "shopify_draft_order",
+        "metadata": [],
+        "weight": 0
+      }
     ],
-    "source": "shopify",
-    "destination": "hubspot",
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "draft_order",
-                "action": "created",
-                "name": "Shopify Draft Order Created",
-                "key": "shopify_draft_order",
-                "metadata": [],
-                "weight": 0
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "hubspot",
+        "entity": "deal",
+        "action": "create",
+        "name": "Hubspot Create Deal",
+        "key": "hubspot_deal",
+        "metadata": {
+          "body": {
+            "properties": {
+              "amount": "{{shopify_draft_order.total_price}}",
+              "dealname": "{{shopify_draft_order.customer.first_name}} {{shopify_draft_order.customer.last_name}} {{shopify_draft_order.name}} Deal"
             }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "hubspot",
-                "entity": "deal",
-                "action": "create",
-                "name": "Hubspot Create Deal",
-                "key": "hubspot_deal",
-                "metadata": {
-                    "body": {
-                        "properties": {
-                            "amount": "{{shopify_draft_order.total_price}}",
-                            "dealname": "{{shopify_draft_order.customer.first_name}} {{shopify_draft_order.customer.last_name}} {{shopify_draft_order.name}} Deal"
-                        }
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "storage": []
-    }
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
 }

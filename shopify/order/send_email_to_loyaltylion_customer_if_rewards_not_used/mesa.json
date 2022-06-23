@@ -1,168 +1,168 @@
 {
-    "key": "shopify/order/send_email_to_loyaltylion_customer_if_rewards_not_used",
-    "name": "Send Email to LoyaltyLion Customer if Rewards not Used",
-    "version": "1.0.0",
-    "description": "Sends an email notification to a LoyaltyLion user if they make an order and don't use any loyalty points.  See the Documentation for setup steps.",
-    "video": "",
-    "tags": [
-        "email",
-        "loyaltylion"
+  "key": "shopify/order/send_email_to_loyaltylion_customer_if_rewards_not_used",
+  "name": "Send Email to LoyaltyLion Customer if Rewards not Used",
+  "version": "1.0.0",
+  "description": "Sends an email notification to a LoyaltyLion user if they make an order and don't use any loyalty points.  See the Documentation for setup steps.",
+  "video": "",
+  "tags": [
+    "email",
+    "loyaltylion"
+  ],
+  "source": "shopify",
+  "destination": "email",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": {
+          "topic": "orders/create"
+        },
+        "local_fields": null,
+        "weight": 0
+      }
     ],
-    "source": "shopify",
-    "destination": "email",
-    "enabled": false,
-    "config": {
-        "inputs": [
-            {
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify Order Created",
-                "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders/create"
-                },
-                "local_fields": null,
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "trigger_type": "output",
-                "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{shopify_order.buyer_accepts_marketing}}",
-                    "comparison": "equals",
-                    "b": "true"
-                },
-                "local_fields": null,
-                "weight": 0
-            },
-            {
-                "trigger_type": "output",
-                "type": "loyaltylion",
-                "entity": "customer",
-                "action": "list",
-                "name": "LoyaltyLion List Customer",
-                "key": "loyaltylion_customer",
-                "metadata": {
-                    "api_endpoint": "GET /v2/customers",
-                    "parameters": "email={{shopify_order.email}}"
-                },
-                "local_fields": null,
-                "weight": 1
-            },
-            {
-                "trigger_type": "output",
-                "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
-                "key": "filter_1",
-                "metadata": {
-                    "a": "{{loyaltylion_customer.0.enrolled}}",
-                    "comparison": "equals",
-                    "b": "1"
-                },
-                "local_fields": null,
-                "weight": 2
-            },
-            {
-                "trigger_type": "output",
-                "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
-                "key": "filter_2",
-                "metadata": {
-                    "a": "{{loyaltylion_customer.0.rewards_claimed}}",
-                    "comparison": "equals",
-                    "b": "0"
-                },
-                "local_fields": null,
-                "weight": 3
-            },
-            {
-                "trigger_type": "output",
-                "type": "delay",
-                "entity": "",
-                "action": "",
-                "name": "Delay  ",
-                "key": "delay",
-                "metadata": {
-                    "amount": "10",
-                    "unit": "days",
-                    "test_bypass": true
-                },
-                "local_fields": null,
-                "weight": 4
-            },
-            {
-                "trigger_type": "output",
-                "type": "loyaltylion",
-                "entity": "customer",
-                "action": "list",
-                "name": "LoyaltyLion List Customer",
-                "key": "loyaltylion_customer_1",
-                "metadata": {
-                    "api_endpoint": "GET /v2/customers",
-                    "parameters": "email={{shopify_order.email}}"
-                },
-                "local_fields": null,
-                "weight": 5
-            },
-            {
-                "trigger_type": "output",
-                "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
-                "key": "filter_3",
-                "metadata": {
-                    "a": "{{loyaltylion_customer_1.0.enrolled}}",
-                    "comparison": "equals",
-                    "b": "1"
-                },
-                "local_fields": null,
-                "weight": 6
-            },
-            {
-                "trigger_type": "output",
-                "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
-                "key": "filter_4",
-                "metadata": {
-                    "a": "{{loyaltylion_customer_1.0.rewards_claimed}}",
-                    "comparison": "equals",
-                    "b": "0"
-                },
-                "local_fields": null,
-                "weight": 7
-            },
-            {
-                "trigger_type": "output",
-                "type": "email",
-                "is_premium": true,
-                "entity": null,
-                "action": null,
-                "name": "Email  ",
-                "key": "email",
-                "metadata": {
-                    "to": "{{shopify_order.email}}",
-                    "subject": "{{shopify_order.customer.first_name}}, don't forget about your loyalty points!",
-                    "message": "Looks like you haven't used any of your loyalty points yet.  Get started with our program now! https://{{context.shop.domain}}"
-                },
-                "local_fields": null,
-                "weight": 8
-            }
-        ],
-        "storage": []
-    }
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify_order.buyer_accepts_marketing}}",
+          "comparison": "equals",
+          "b": "true"
+        },
+        "local_fields": null,
+        "weight": 0
+      },
+      {
+        "trigger_type": "output",
+        "type": "loyaltylion",
+        "entity": "customer",
+        "action": "list",
+        "name": "LoyaltyLion List Customer",
+        "key": "loyaltylion_customer",
+        "metadata": {
+          "api_endpoint": "GET /v2/customers",
+          "parameters": "email={{shopify_order.email}}"
+        },
+        "local_fields": null,
+        "weight": 1
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter_1",
+        "metadata": {
+          "a": "{{loyaltylion_customer.0.enrolled}}",
+          "comparison": "equals",
+          "b": "1"
+        },
+        "local_fields": null,
+        "weight": 2
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter_2",
+        "metadata": {
+          "a": "{{loyaltylion_customer.0.rewards_claimed}}",
+          "comparison": "equals",
+          "b": "0"
+        },
+        "local_fields": null,
+        "weight": 3
+      },
+      {
+        "trigger_type": "output",
+        "type": "delay",
+        "entity": "",
+        "action": "",
+        "name": "Delay  ",
+        "key": "delay",
+        "metadata": {
+          "amount": "10",
+          "unit": "days",
+          "test_bypass": true
+        },
+        "local_fields": null,
+        "weight": 4
+      },
+      {
+        "trigger_type": "output",
+        "type": "loyaltylion",
+        "entity": "customer",
+        "action": "list",
+        "name": "LoyaltyLion List Customer",
+        "key": "loyaltylion_customer_1",
+        "metadata": {
+          "api_endpoint": "GET /v2/customers",
+          "parameters": "email={{shopify_order.email}}"
+        },
+        "local_fields": null,
+        "weight": 5
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter_3",
+        "metadata": {
+          "a": "{{loyaltylion_customer_1.0.enrolled}}",
+          "comparison": "equals",
+          "b": "1"
+        },
+        "local_fields": null,
+        "weight": 6
+      },
+      {
+        "trigger_type": "output",
+        "type": "filter",
+        "entity": "",
+        "action": "",
+        "name": "Filter  ",
+        "key": "filter_4",
+        "metadata": {
+          "a": "{{loyaltylion_customer_1.0.rewards_claimed}}",
+          "comparison": "equals",
+          "b": "0"
+        },
+        "local_fields": null,
+        "weight": 7
+      },
+      {
+        "trigger_type": "output",
+        "type": "email",
+        "is_premium": true,
+        "entity": null,
+        "action": null,
+        "name": "Email  ",
+        "key": "email",
+        "metadata": {
+          "to": "{{shopify_order.email}}",
+          "subject": "{{shopify_order.customer.first_name}}, don't forget about your loyalty points!",
+          "message": "Looks like you haven't used any of your loyalty points yet.  Get started with our program now! https://{{context.shop.domain}}"
+        },
+        "local_fields": null,
+        "weight": 8
+      }
+    ],
+    "storage": []
+  }
 }

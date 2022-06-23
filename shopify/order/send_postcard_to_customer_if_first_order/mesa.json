@@ -13,103 +13,103 @@
   "logging": false,
   "debug": false,
   "config": {
-      "inputs": [
-          {
-              "schema": 3,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify Order Created",
-              "key": "shopify_order",
-              "metadata": [],
-              "weight": 0
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify Order Created",
+        "key": "shopify_order",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "comparison": "equals",
+          "a": "{{shopify_order.customer.orders_count}}",
+          "b": "1"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "postcardmania",
+        "entity": "order",
+        "action": "create",
+        "name": "PostcardMania Create Order",
+        "key": "postcardmania_order",
+        "metadata": {
+          "body": {
+            "recipientList": [
+              {
+                "firstName": "{{shopify_order.customer.first_name}}",
+                "lastName": "{{shopify_order.customer.last_name}}",
+                "address": "{{shopify_order.customer.default_address.address1}}",
+                "address2": "{{shopify_order.customer.default_address.address2}}",
+                "city": "{{shopify_order.customer.default_address.city}}",
+                "state": "{{shopify_order.customer.default_address.province}}",
+                "zipCode": "{{shopify_order.customer.default_address.zip}}"
+              }
+            ],
+            "orderConfig": {
+              "designID": "",
+              "mailClass": "Standard",
+              "globalDesignVariables": [
+                {
+                  "key": "logo",
+                  "value": ""
+                },
+                {
+                  "key": "companyaddress",
+                  "value": "{{context.shop.email}}"
+                },
+                {
+                  "key": "companycity",
+                  "value": "{{ context.shop.city }}"
+                },
+                {
+                  "key": "companyname",
+                  "value": "{{context.shop.name}}"
+                },
+                {
+                  "key": "companystate",
+                  "value": "{{context.shop.province}}"
+                },
+                {
+                  "key": "companyurl",
+                  "value": "{{context.shop.domain}}"
+                },
+                {
+                  "key": "companyzipcode",
+                  "value": "{{context.shop.zip}}"
+                },
+                {
+                  "key": "phone",
+                  "value": "{{context.shop.phone}}"
+                },
+                {
+                  "key": "productname",
+                  "value": "{{shopify_order.line_items[0].title}}"
+                }
+              ]
+            }
           }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "filter",
-              "name": "Filter",
-              "key": "filter",
-              "metadata": {
-                  "comparison": "equals",
-                  "a": "{{shopify_order.customer.orders_count}}",
-                  "b": "1"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "postcardmania",
-              "entity": "order",
-              "action": "create",
-              "name": "PostcardMania Create Order",
-              "key": "postcardmania_order",
-              "metadata": {
-                  "body": {
-                      "recipientList": [
-                          {
-                              "firstName": "{{shopify_order.customer.first_name}}",
-                              "lastName": "{{shopify_order.customer.last_name}}",
-                              "address": "{{shopify_order.customer.default_address.address1}}",
-                              "address2": "{{shopify_order.customer.default_address.address2}}",
-                              "city": "{{shopify_order.customer.default_address.city}}",
-                              "state": "{{shopify_order.customer.default_address.province}}",
-                              "zipCode": "{{shopify_order.customer.default_address.zip}}"
-                          }
-                      ],
-                      "orderConfig": {
-                          "designID": "",
-                          "mailClass": "Standard",
-                          "globalDesignVariables": [
-                              {
-                                 "key": "logo",
-                                 "value": ""
-                              },
-                              {
-                                  "key": "companyaddress",
-                                  "value": "{{context.shop.email}}"
-                              },
-                              {
-                                  "key": "companycity",
-                                  "value": "{{ context.shop.city }}"
-                              },
-                              {
-                                  "key": "companyname",
-                                  "value": "{{context.shop.name}}"
-                              },
-                              {
-                                  "key": "companystate",
-                                  "value": "{{context.shop.province}}"
-                              },
-                              {
-                                  "key": "companyurl",
-                                  "value": "{{context.shop.domain}}"
-                              },
-                              {
-                                  "key": "companyzipcode",
-                                  "value": "{{context.shop.zip}}"
-                              },
-                              {
-                                  "key": "phone",
-                                  "value": "{{context.shop.phone}}"
-                              },
-                              {
-                                "key": "productname",
-                                "value": "{{shopify_order.line_items[0].title}}"
-                              }
-                          ]
-                      }
-                  }
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
   }
 }

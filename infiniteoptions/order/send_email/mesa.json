@@ -22,8 +22,7 @@
         "action": "created",
         "name": "Infinite Options Order Created",
         "key": "infiniteoptions_order",
-        "metadata": {
-        },
+        "metadata": {},
         "local_fields": [],
         "weight": 0
       }

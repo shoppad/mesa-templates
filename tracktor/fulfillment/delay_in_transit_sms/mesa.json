@@ -1,83 +1,83 @@
 {
-    "key": "tracktor/fulfillment/delay_in_transit_sms",
-    "name": "Send a text message if a Tracktor Package is delayed In Transit",
-    "version": "1.0.0",
-    "enabled": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "fulfillment\/in_transit",
-                "name": "Tracktor Fulfillment Status In Transit",
-                "key": "tracktor_fulfillment_status",
-                "metadata": [],
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "delay",
-                "name": "Delay",
-                "key": "delay",
-                "metadata": {
-                    "amount": "60",
-                    "unit": "hours",
-                    "test_bypass": false
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "retrieve",
-                "name": "Tracktor Retrieve Fulfillment",
-                "key": "tracktor_fulfillment",
-                "metadata": {
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
-                },
-                "local_fields": [],
-                "weight": 1
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{tracktor_fulfillment.latest_status.label}}",
-                    "comparison": "does not equal",
-                    "b": "{{tracktor_fulfillment.status.delivered.label}}"
-                },
-                "local_fields": [],
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "sms",
-                "is_premium": true,
-                "entity": "message",
-                "action": "send",
-                "name": "SMS Message Send",
-                "key": "sms_message",
-                "metadata": {
-                    "to": "{{context.shop.phone}}",
-                    "message": "Order {{tracktor_fulfillment.order_name}} has been in transit for over 60 hours!"
-                },
-                "local_fields": [],
-                "weight": 3
-            }
-        ],
-        "storage": []
-    }
+  "key": "tracktor/fulfillment/delay_in_transit_sms",
+  "name": "Send a text message if a Tracktor Package is delayed In Transit",
+  "version": "1.0.0",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "tracktor",
+        "entity": "fulfillment",
+        "action": "fulfillment/in_transit",
+        "name": "Tracktor Fulfillment Status In Transit",
+        "key": "tracktor_fulfillment_status",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delay",
+        "name": "Delay",
+        "key": "delay",
+        "metadata": {
+          "amount": "60",
+          "unit": "hours",
+          "test_bypass": false
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "tracktor",
+        "entity": "fulfillment",
+        "action": "retrieve",
+        "name": "Tracktor Retrieve Fulfillment",
+        "key": "tracktor_fulfillment",
+        "metadata": {
+          "fulfillment_id": "{{delay.fulfillment_id}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{tracktor_fulfillment.latest_status.label}}",
+          "comparison": "does not equal",
+          "b": "{{tracktor_fulfillment.status.delivered.label}}"
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "sms",
+        "is_premium": true,
+        "entity": "message",
+        "action": "send",
+        "name": "SMS Message Send",
+        "key": "sms_message",
+        "metadata": {
+          "to": "{{context.shop.phone}}",
+          "message": "Order {{tracktor_fulfillment.order_name}} has been in transit for over 60 hours!"
+        },
+        "local_fields": [],
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
 }

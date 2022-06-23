@@ -1,93 +1,93 @@
 {
-    "key": "tests/template_collection_test/shopify_tokens",
-    "name": "Test: Shopify: Legacy and new tokens",
-    "version": "1.0.0",
-    "description": "",
-    "video": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "shopify",
-    "enabled": false,
-    "logging": true,
-    "config": {
-        "inputs": [
+  "key": "tests/template_collection_test/shopify_tokens",
+  "name": "Test: Shopify: Legacy and new tokens",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "shopify",
+  "enabled": false,
+  "logging": true,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Shopify: Order Created",
+        "key": "shopify_order_created",
+        "metadata": {
+          "topic": "orders/create"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "retrieve",
+        "name": "Shopify: Retrieve Customer",
+        "key": "shopify_retrieve_customer",
+        "metadata": {
+          "api_endpoint": "GET admin/customers/{{customer_id}}.json",
+          "customer_id": "{{source.customer.id}}",
+          "site": "current"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "transform",
+        "name": "Mapping to Shopify: Update Customer",
+        "key": "shopify_update_customer_transform",
+        "metadata": {
+          "script": "shopify_update_customer_transform.js",
+          "mapping": [
             {
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Shopify: Order Created",
-                "key": "shopify_order_created",
-                "metadata": {
-                    "topic": "orders/create"
-                }
+              "destination": "note",
+              "source": "customer_id: {{shopify_retrieve_customer.id}}"
             }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping"
+          }
         ],
-        "outputs": [
-            {
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "retrieve",
-                "name": "Shopify: Retrieve Customer",
-                "key": "shopify_retrieve_customer",
-                "metadata": {
-                    "api_endpoint": "GET admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{source.customer.id}}",
-                    "site": "current"
-                }
-            },
-            {
-                "trigger_type": "output",
-                "type": "transform",
-                "name": "Mapping to Shopify: Update Customer",
-                "key": "shopify_update_customer_transform",
-                "metadata": {
-                    "script": "shopify_update_customer_transform.js",
-                    "mapping": [
-                        {
-                            "destination": "note",
-                            "source": "customer_id: {{shopify_retrieve_customer.id}}"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping"
-                    }
-                ],
-                "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-                "source_entity": "customer",
-                "destination_entity": "customer"
-            },
-            {
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "update",
-                "name": "Shopify: Update Customer",
-                "key": "shopify_update_customer",
-                "metadata": {
-                    "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{shopify_retrieve_customer.id}}",
-                    "site": "current"
-                }
-            },
-            {
-                "trigger_type": "output",
-                "type": "email",
-                "is_premium": true,
-                "name": "Email",
-                "key": "email",
-                "metadata": {
-                    "to": "saas@theshoppad.com",
-                    "subject": "Mesa Test: Shopify: Legacy and new tokens",
-                    "message": "There should be a value for all of the tokens below:\nsource.id: {{source.id}}\nshopify_order_created.id: {{shopify_order_created.id}}\nshopify_retrieve_customer.id: {{shopify_retrieve_customer.id}}\n"
-                },
-                "source_entity": "customer"
-            }
-        ],
-        "storage": []
-    }
+        "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
+        "source_entity": "customer",
+        "destination_entity": "customer"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "customer",
+        "action": "update",
+        "name": "Shopify: Update Customer",
+        "key": "shopify_update_customer",
+        "metadata": {
+          "api_endpoint": "PUT admin/customers/{{customer_id}}.json",
+          "customer_id": "{{shopify_retrieve_customer.id}}",
+          "site": "current"
+        }
+      },
+      {
+        "trigger_type": "output",
+        "type": "email",
+        "is_premium": true,
+        "name": "Email",
+        "key": "email",
+        "metadata": {
+          "to": "saas@theshoppad.com",
+          "subject": "Mesa Test: Shopify: Legacy and new tokens",
+          "message": "There should be a value for all of the tokens below:\nsource.id: {{source.id}}\nshopify_order_created.id: {{shopify_order_created.id}}\nshopify_retrieve_customer.id: {{shopify_retrieve_customer.id}}\n"
+        },
+        "source_entity": "customer"
+      }
+    ],
+    "storage": []
+  }
 }

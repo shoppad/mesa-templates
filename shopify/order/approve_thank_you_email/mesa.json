@@ -2,7 +2,7 @@
   "key": "shopify/order/approve_thank_you_email",
   "name": "Approve automated thank-you email before it gets sent",
   "version": "1.0.0",
-  "description": "The wrong message going out can affect your brand and influence future interactions. With this template, merchants can now approve email content before it reaches the customer.\u00a0",
+  "description": "The wrong message going out can affect your brand and influence future interactions. With this template, merchants can now approve email content before it reaches the customer. ",
   "video": "",
   "readme": "",
   "tags": [],

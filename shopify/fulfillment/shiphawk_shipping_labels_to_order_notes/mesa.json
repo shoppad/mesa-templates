@@ -1,66 +1,66 @@
 {
-    "key": "shopify/fulfillment/shiphawk_shipping_labels_to_order_notes",
-    "name": "Create Shipping Labels With ShipHawk When Order Is Fulfilled",
-    "version": "1.0.0",
-    "description": "When an order is fulfilled, automatically purchase shipping labels with ShipHawk and add label download links to the Shopify Order Notes.",
-    "tags": [
-        "Fulfillment",
-        "Order"
+  "key": "shopify/fulfillment/shiphawk_shipping_labels_to_order_notes",
+  "name": "Create Shipping Labels With ShipHawk When Order Is Fulfilled",
+  "version": "1.0.0",
+  "description": "When an order is fulfilled, automatically purchase shipping labels with ShipHawk and add label download links to the Shopify Order Notes.",
+  "tags": [
+    "Fulfillment",
+    "Order"
+  ],
+  "source": "shopify",
+  "destination": "shiphawk",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "type": "shopify",
+        "name": "Shopify Fulfillment Created",
+        "key": "in-shopify-fulfillment-created",
+        "script": "in_shopify_fulfillment_created.js",
+        "entity": "fulfillment",
+        "action": "created"
+      }
     ],
-    "source": "shopify",
-    "destination": "shiphawk",
-    "enabled": false,
-    "config": {
-        "inputs": [
-            {
-                "trigger_type": "input",
-                "type": "shopify",
-                "name": "Shopify Fulfillment Created",
-                "key": "in-shopify-fulfillment-created",
-                "script": "in_shopify_fulfillment_created.js",
-                "entity": "fulfillment",
-                "action": "created"
-            }
-        ],
-        "outputs": [
-            {
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Create ShipHawk Label",
-                "key": "out-create-shiphawk-label",
-                "script": "out_create_shiphawk_label.js"
-            },
-            {
-                "trigger_type": "output",
-                "type": "shopify",
-                "name": "Update Shopify Order Notes",
-                "key": "out-update-shopify-order-notes",
-                "script": "out_update_shopify_order_notes.js",
-                "api_endpoint": "PUT admin/orders/{{order_id}}.json"
-            },
-            {
-                "trigger_type": "output",
-                "type": "shopify",
-                "name": "Update Shopify Fulfillment",
-                "key": "out-update-shopify-fulfillment",
-                "script": "out_update_shopify_fulfillment.js",
-                "api_endpoint": "PUT admin/orders/{{order_id}}/fulfillments/{{fulfillment_id}}.json"
-            }
-        ],
-        "secrets": [
-            {
-                "key": "shiphawk-key"
-            }
-        ],
-        "storage": [
-            {
-                "key": "shophawk-environment",
-                "value": "sandbox"
-            },
-            {
-                "key": "callback",
-                "value": ""
-            }
-        ]
-    }
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create ShipHawk Label",
+        "key": "out-create-shiphawk-label",
+        "script": "out_create_shiphawk_label.js"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify",
+        "name": "Update Shopify Order Notes",
+        "key": "out-update-shopify-order-notes",
+        "script": "out_update_shopify_order_notes.js",
+        "api_endpoint": "PUT admin/orders/{{order_id}}.json"
+      },
+      {
+        "trigger_type": "output",
+        "type": "shopify",
+        "name": "Update Shopify Fulfillment",
+        "key": "out-update-shopify-fulfillment",
+        "script": "out_update_shopify_fulfillment.js",
+        "api_endpoint": "PUT admin/orders/{{order_id}}/fulfillments/{{fulfillment_id}}.json"
+      }
+    ],
+    "secrets": [
+      {
+        "key": "shiphawk-key"
+      }
+    ],
+    "storage": [
+      {
+        "key": "shophawk-environment",
+        "value": "sandbox"
+      },
+      {
+        "key": "callback",
+        "value": ""
+      }
+    ]
+  }
 }

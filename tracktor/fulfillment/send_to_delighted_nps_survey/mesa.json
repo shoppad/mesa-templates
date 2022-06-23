@@ -1,106 +1,106 @@
 {
-    "key": "send_to_delighted_nps_survey",
-    "name": "Send a Delighted NPS survey to a customer after their order is delivered",
-    "version": "1.0.0",
-    "description": "Measuring your net promoter score (NPS) provides many rewards. Not only is it a check of your product and service quality, but it can help you identify potential brand advocates. Automatically send your customers a NPS survey after the order's fulfillment status changes to delivered and gather feedback on their experience.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
+  "key": "send_to_delighted_nps_survey",
+  "name": "Send a Delighted NPS survey to a customer after their order is delivered",
+  "version": "1.0.0",
+  "description": "Measuring your net promoter score (NPS) provides many rewards. Not only is it a check of your product and service quality, but it can help you identify potential brand advocates. Automatically send your customers a NPS survey after the order's fulfillment status changes to delivered and gather feedback on their experience.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "tracktor",
+        "entity": "fulfillment",
+        "action": "fulfillment/delivered",
+        "name": "Tracktor Fulfillment Status is Delivered",
+        "key": "tracktor_fulfillment",
+        "metadata": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Order",
+        "key": "shopify_order",
+        "metadata": {
+          "order_id": "{{tracktor_fulfillment.order_id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delay",
+        "name": "Delay",
+        "key": "delay",
+        "metadata": {
+          "amount": "1",
+          "unit": "days",
+          "test_bypass": true
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Order",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{delay.id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "delighted",
+        "entity": "people",
+        "action": "send",
+        "name": "Delighted Send (Create or Update) People",
+        "key": "delighted_people",
+        "metadata": {
+          "mapping": [
             {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "fulfillment\/delivered",
-                "name": "Tracktor Fulfillment Status is Delivered",
-                "key": "tracktor_fulfillment",
-                "metadata": [],
-                "on_error": "default",
-                "weight": 0
+              "destination": "email",
+              "source": "{{shopify_order_1.email}}"
             }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
         ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Shopify Retrieve Order",
-                "key": "shopify_order",
-                "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "delay",
-                "name": "Delay",
-                "key": "delay",
-                "metadata": {
-                    "amount": "1",
-                    "unit": "days",
-                    "test_bypass": true
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Shopify Retrieve Order",
-                "key": "shopify_order_1",
-                "metadata": {
-                    "order_id": "{{delay.id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "delighted",
-                "entity": "people",
-                "action": "send",
-                "name": "Delighted Send (Create or Update) People",
-                "key": "delighted_people",
-                "metadata": {
-                    "mapping": [
-                        {
-                            "destination": "email",
-                            "source": "{{shopify_order_1.email}}"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
-                    }
-                ],
-                "on_error": "default",
-                "weight": 3
-            }
-        ],
-        "storage": []
-    }
+        "on_error": "default",
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
 }

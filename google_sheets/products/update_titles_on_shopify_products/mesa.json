@@ -1,65 +1,65 @@
 {
-    "name": "Sync product title updates Google Sheets to Shopify",
-    "version": "1.0.0",
-    "description": "",
-    "documentation": "https://github.com/blob/master/google-sheets/products/update-titles-on-shopify-products/README.md",
-    "tags": [
-        "products",
-        "google-sheets"
+  "name": "Sync product title updates Google Sheets to Shopify",
+  "version": "1.0.0",
+  "description": "",
+  "documentation": "https://github.com/blob/master/google-sheets/products/update-titles-on-shopify-products/README.md",
+  "tags": [
+    "products",
+    "google-sheets"
+  ],
+  "source": "google-sheets",
+  "destination": "shopify",
+  "config": {
+    "inputs": [
+      {
+        "trigger_type": "input",
+        "enabled": false,
+        "type": "custom",
+        "name": "products google",
+        "key": "in-products-google",
+        "trigger_name": "In: products google",
+        "schedule": "0 * * * *",
+        "script": "google-sheets/products/update-titles-on-shopify-products/in/in_products_google.js"
+      }
     ],
-    "source": "google-sheets",
-    "destination": "shopify",
-    "config": {
-        "inputs": [
-            {
-                "trigger_type": "input",
-                "enabled": false,
-                "type": "custom",
-                "name": "products google",
-                "key": "in-products-google",
-                "trigger_name": "In: products google",
-                "schedule": "0 * * * *",
-                "script": "google-sheets/products/update-titles-on-shopify-products/in/in_products_google.js"
-            }
-        ],
-        "outputs": [
-            {
-                "trigger_type": "output",
-                "enabled": false,
-                "type": "custom",
-                "name": "products google",
-                "key": "out-products-google",
-                "trigger_name": "Out: products google",
-                "script": "google-sheets/products/update-titles-on-shopify-products/out_products_google.js"
-            }
-        ],
-        "secrets": [
-            {
-                "name": "google_refresh_token"
-            },
-            {
-                "name": "google_access_token"
-            },
-            {
-                "name": "google_client_id"
-            },
-            {
-                "name": "google_client_secret"
-            },
-            {
-                "name": "google_expires_at"
-            }
-        ],
-        "storage": [
-            {
-                "name": "google_sheets_products_id",
-                "value": ""
-            }
-        ]
-    },
-    "files": [
-        "google-sheets/products/update-titles-on-shopify-products/in_products_google.js",
-        "google-sheets/products/update-titles-on-shopify-products/out_products_google.js"
+    "outputs": [
+      {
+        "trigger_type": "output",
+        "enabled": false,
+        "type": "custom",
+        "name": "products google",
+        "key": "out-products-google",
+        "trigger_name": "Out: products google",
+        "script": "google-sheets/products/update-titles-on-shopify-products/out_products_google.js"
+      }
     ],
-    "key": "google_sheets/products/update_titles_on_shopify_products"
+    "secrets": [
+      {
+        "name": "google_refresh_token"
+      },
+      {
+        "name": "google_access_token"
+      },
+      {
+        "name": "google_client_id"
+      },
+      {
+        "name": "google_client_secret"
+      },
+      {
+        "name": "google_expires_at"
+      }
+    ],
+    "storage": [
+      {
+        "name": "google_sheets_products_id",
+        "value": ""
+      }
+    ]
+  },
+  "files": [
+    "google-sheets/products/update-titles-on-shopify-products/in_products_google.js",
+    "google-sheets/products/update-titles-on-shopify-products/out_products_google.js"
+  ],
+  "key": "google_sheets/products/update_titles_on_shopify_products"
 }

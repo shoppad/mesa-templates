@@ -1,53 +1,53 @@
 {
-    "key": "pagestudio/page/send_to_another_store",
-    "name": "Send Page Studio Page to Another Store",
-    "version": "1.0.0",
-    "description": "Sends Page Studio pages from one Shopify store to another Shopify store after a new page is created.",
-    "video": "",
-    "tags": [
-        "shopify"
+  "key": "pagestudio/page/send_to_another_store",
+  "name": "Send Page Studio Page to Another Store",
+  "version": "1.0.0",
+  "description": "Sends Page Studio pages from one Shopify store to another Shopify store after a new page is created.",
+  "video": "",
+  "tags": [
+    "shopify"
+  ],
+  "source": "pagestudio",
+  "destination": "pagestudio",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "pagestudio",
+        "entity": "page",
+        "action": "created",
+        "name": "Page Studio Page Created",
+        "key": "pagestudio_page",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
     ],
-    "source": "pagestudio",
-    "destination": "pagestudio",
-    "enabled": false,
-    "config": {
-      "inputs": [
-        {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "pagestudio",
-                "entity": "page",
-                "action": "created",
-                "name": "Page Studio Page Created",
-                "key": "pagestudio_page",
-                "metadata": [],
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "pagestudio",
-                "entity": "page",
-                "action": "create",
-                "name": "Page Studio Create Page",
-                "key": "pagestudio_page",
-                "metadata": {
-                    "body": {
-                        "title": "{{pagestudio_page.title}}",
-                        "handle": "{{pagestudio_page.handle}}",
-                        "body_html": "{{pagestudio_page.body_html}}",
-                        "author": "{{pagestudio_page.author}}",
-                        "created_at": "{{pagestudio_page.created_at}}",
-                        "published_at": "{{pagestudio_page.published_at}}"
-                    }
-                },
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "storage": []
-    }
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "pagestudio",
+        "entity": "page",
+        "action": "create",
+        "name": "Page Studio Create Page",
+        "key": "pagestudio_page",
+        "metadata": {
+          "body": {
+            "title": "{{pagestudio_page.title}}",
+            "handle": "{{pagestudio_page.handle}}",
+            "body_html": "{{pagestudio_page.body_html}}",
+            "author": "{{pagestudio_page.author}}",
+            "created_at": "{{pagestudio_page.created_at}}",
+            "published_at": "{{pagestudio_page.published_at}}"
+          }
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
 }

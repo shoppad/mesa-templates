@@ -1,70 +1,70 @@
 {
-    "key": "shopify/product/add_color_tag",
-    "name": "Add Color Tag To Product",
-    "version": "2.0.0",
-    "enabled": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "product",
-                "action": "updated",
-                "name": "Shopify Product Updated",
-                "key": "shopify_product",
-                "metadata": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter: Does not have Color tag",
-                "key": "filter_1",
-                "metadata": {
-                    "comparison": "not in",
-                    "b": "{{shopify_product.tags}}",
-                    "a": "Color:"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "image",
-                "is_premium": true,
-                "entity": "colors",
-                "action": "identify",
-                "name": "Image Identify Colors",
-                "key": "image_colors",
-                "metadata": {
-                    "image_url": "{{shopify_product.images[0].src}}"
-                },
-                "local_fields": [],
-                "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "tag_add",
-                "name": "Shopify Product Add Tag",
-                "key": "shopify_product_1",
-                "metadata": {
-                    "product_id": "{{shopify_product.id}}",
-                    "body": {
-                        "tag": "Color: {{ image_colors.colors | join: \", Color: \" }}\n"
-                    }
-                },
-                "local_fields": [],
-                "weight": 2
-            }
-        ],
-        "storage": []
-    }
+  "key": "shopify/product/add_color_tag",
+  "name": "Add Color Tag To Product",
+  "version": "2.0.0",
+  "enabled": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "product",
+        "action": "updated",
+        "name": "Shopify Product Updated",
+        "key": "shopify_product",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter: Does not have Color tag",
+        "key": "filter_1",
+        "metadata": {
+          "comparison": "not in",
+          "b": "{{shopify_product.tags}}",
+          "a": "Color:"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "image",
+        "is_premium": true,
+        "entity": "colors",
+        "action": "identify",
+        "name": "Image Identify Colors",
+        "key": "image_colors",
+        "metadata": {
+          "image_url": "{{shopify_product.images[0].src}}"
+        },
+        "local_fields": [],
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product",
+        "action": "tag_add",
+        "name": "Shopify Product Add Tag",
+        "key": "shopify_product_1",
+        "metadata": {
+          "product_id": "{{shopify_product.id}}",
+          "body": {
+            "tag": "Color: {{ image_colors.colors | join: \", Color: \" }}\n"
+          }
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
 }

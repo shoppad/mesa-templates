@@ -1,67 +1,67 @@
 {
-    "key": "add_tag_with_current_delivery_status",
-    "name": "Tag orders with fulfillment status",
-    "version": "1.0.0",
-    "description": "Once an order changes status during transit, you’ll need to update the fulfillment status on Shopify. Thankfully, MESA does everything for you by instantly tagging orders that are being shipped with the fulfillment status. It’s going to make it easier for both you and the customer to track where the order is going. Note: This workflow will not remove past Tracktor fulfillment status tags but will keep adding the latest statuses as tags.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "fulfillment\/all",
-                "name": "Tracktor Fulfillment Status Updated",
-                "key": "tracktor_fulfillment",
-                "metadata": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Shopify Retrieve Order",
-                "key": "shopify_order",
-                "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "tag_add",
-                "name": "Shopify Order Add Tag",
-                "key": "shopify_order_1",
-                "metadata": {
-                    "order_id": "{{shopify_order.id}}",
-                    "body": {
-                        "tag": "{{tracktor_fulfillment.latest_status.label}}"
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            }
-        ],
-        "storage": []
-    }
+  "key": "add_tag_with_current_delivery_status",
+  "name": "Tag orders with fulfillment status",
+  "version": "1.0.0",
+  "description": "Once an order changes status during transit, you’ll need to update the fulfillment status on Shopify. Thankfully, MESA does everything for you by instantly tagging orders that are being shipped with the fulfillment status. It’s going to make it easier for both you and the customer to track where the order is going. Note: This workflow will not remove past Tracktor fulfillment status tags but will keep adding the latest statuses as tags.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "tracktor",
+        "entity": "fulfillment",
+        "action": "fulfillment/all",
+        "name": "Tracktor Fulfillment Status Updated",
+        "key": "tracktor_fulfillment",
+        "metadata": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Order",
+        "key": "shopify_order",
+        "metadata": {
+          "order_id": "{{tracktor_fulfillment.order_id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "tag_add",
+        "name": "Shopify Order Add Tag",
+        "key": "shopify_order_1",
+        "metadata": {
+          "order_id": "{{shopify_order.id}}",
+          "body": {
+            "tag": "{{tracktor_fulfillment.latest_status.label}}"
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
 }

@@ -1,67 +1,67 @@
 {
-    "key": "add_placeholder_image",
-    "name": "Add a Placeholder Image when Products are Created",
-    "version": "1.0.0",
-    "description": "Adding multiple products to your store from a third-party service can be confusing. This template adds a placeholder image when products are created, allowing automatic updates to the product image.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "product",
-                "action": "created",
-                "name": "Shopify Product Created",
-                "key": "shopify_product",
-                "metadata": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "comparison": "equals",
-                    "a": "{{shopify_product.images[0].src}}"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "update",
-                "name": "Shopify Update Product",
-                "key": "shopify_product_1",
-                "metadata": {
-                    "product_id": "{{shopify_product.id}}",
-                    "body": {
-                        "images": [
-                            {
-                                "src": ""
-                            }
-                        ]
-                    }
-                },
-                "local_fields": [],
-                "weight": 1
-            }
-        ],
-        "storage": []
-    }
+  "key": "add_placeholder_image",
+  "name": "Add a Placeholder Image when Products are Created",
+  "version": "1.0.0",
+  "description": "Adding multiple products to your store from a third-party service can be confusing. This template adds a placeholder image when products are created, allowing automatic updates to the product image.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "product",
+        "action": "created",
+        "name": "Shopify Product Created",
+        "key": "shopify_product",
+        "metadata": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "comparison": "equals",
+          "a": "{{shopify_product.images[0].src}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product",
+        "action": "update",
+        "name": "Shopify Update Product",
+        "key": "shopify_product_1",
+        "metadata": {
+          "product_id": "{{shopify_product.id}}",
+          "body": {
+            "images": [
+              {
+                "src": ""
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
 }

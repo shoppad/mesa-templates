@@ -1,161 +1,161 @@
 {
-    "key": "wholesale_application",
-    "name": "Send Wholesale Applications to Google Sheets",
-    "version": "1.0.0",
-    "description": "Create wholesale application forms to expand your network and seamlessly send them to Google Sheets. Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Never miss another form submission again.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
+  "key": "wholesale_application",
+  "name": "Send Wholesale Applications to Google Sheets",
+  "version": "1.0.0",
+  "description": "Create wholesale application forms to expand your network and seamlessly send them to Google Sheets. Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Never miss another form submission again.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": false,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "form",
+        "name": "Form",
+        "key": "form",
+        "metadata": {
+          "form_data": [
             {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "form",
-                "name": "Form",
-                "key": "form",
-                "metadata": {
-                    "form_data": [
-                        {
-                            "type": "header",
-                            "subtype": "h1",
-                            "label": "Wholesale Application"
-                        },
-                        {
-                            "type": "text",
-                            "required": true,
-                            "label": "Business Name",
-                            "className": "form-control",
-                            "name": "business_name",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "text",
-                            "required": true,
-                            "label": "Business Contact Name",
-                            "className": "form-control",
-                            "name": "business_contact_name",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "text",
-                            "required": true,
-                            "label": "Business Contact Phone",
-                            "className": "form-control",
-                            "name": "business_contact_phone",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "text",
-                            "required": true,
-                            "label": "Business Contact Email",
-                            "className": "form-control",
-                            "name": "business_contact_email",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "text",
-                            "required": false,
-                            "label": "Business Website URL",
-                            "className": "form-control",
-                            "name": "business_website_url",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "textarea",
-                            "required": false,
-                            "label": "Additional Details",
-                            "className": "form-control",
-                            "name": "additional_details",
-                            "subtype": "textarea",
-                            "rows": 5
-                        }
-                    ]
-                },
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
+              "type": "header",
+              "subtype": "h1",
+              "label": "Wholesale Application"
+            },
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "googlesheets",
-                "entity": "row",
-                "action": "create",
-                "name": "Google Sheets Row Create",
-                "key": "googlesheets_row",
-                "metadata": {
-                    "path": {
-                        "mode": "create",
-                        "spreadsheet_id": "",
-                        "sheet_name": "Sheet1",
-                        "header_row": "first_row"
-                    },
-                    "body": {
-                        "fields": {
-                            "Business Name": "{{form.business_name}}",
-                            "Business Contact Name": "{{form.business_contact_name}}",
-                            "Business Contact Phone": "{{form.business_contact_phone}}",
-                            "Business Contact Email": "{{form.business_contact_email}}",
-                            "Business Website URL": "{{form.business_website_url}}",
-                            "Additional Details": "{{form.additional_details}}"
-                        }
-                    }
-                },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "fields",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "Business Name",
-                                        "label": "Business Name",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Contact Name",
-                                        "label": "Business Contact Name",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Contact Phone",
-                                        "label": "Business Contact Phone",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Contact Email",
-                                        "label": "Business Contact Email",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Website URL",
-                                        "label": "Business Website URL",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Additional Details",
-                                        "label": "Additional Details",
-                                        "type": "text"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "weight": 0
+              "type": "text",
+              "required": true,
+              "label": "Business Name",
+              "className": "form-control",
+              "name": "business_name",
+              "subtype": "text"
+            },
+            {
+              "type": "text",
+              "required": true,
+              "label": "Business Contact Name",
+              "className": "form-control",
+              "name": "business_contact_name",
+              "subtype": "text"
+            },
+            {
+              "type": "text",
+              "required": true,
+              "label": "Business Contact Phone",
+              "className": "form-control",
+              "name": "business_contact_phone",
+              "subtype": "text"
+            },
+            {
+              "type": "text",
+              "required": true,
+              "label": "Business Contact Email",
+              "className": "form-control",
+              "name": "business_contact_email",
+              "subtype": "text"
+            },
+            {
+              "type": "text",
+              "required": false,
+              "label": "Business Website URL",
+              "className": "form-control",
+              "name": "business_website_url",
+              "subtype": "text"
+            },
+            {
+              "type": "textarea",
+              "required": false,
+              "label": "Additional Details",
+              "className": "form-control",
+              "name": "additional_details",
+              "subtype": "textarea",
+              "rows": 5
             }
+          ]
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "googlesheets",
+        "entity": "row",
+        "action": "create",
+        "name": "Google Sheets Row Create",
+        "key": "googlesheets_row",
+        "metadata": {
+          "path": {
+            "mode": "create",
+            "spreadsheet_id": "",
+            "sheet_name": "Sheet1",
+            "header_row": "first_row"
+          },
+          "body": {
+            "fields": {
+              "Business Name": "{{form.business_name}}",
+              "Business Contact Name": "{{form.business_contact_name}}",
+              "Business Contact Phone": "{{form.business_contact_phone}}",
+              "Business Contact Email": "{{form.business_contact_email}}",
+              "Business Website URL": "{{form.business_website_url}}",
+              "Additional Details": "{{form.additional_details}}"
+            }
+          }
+        },
+        "local_fields": [
+          {
+            "key": "body",
+            "type": "object",
+            "fields": [
+              {
+                "key": "fields",
+                "type": "object",
+                "fields": [
+                  {
+                    "key": "Business Name",
+                    "label": "Business Name",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Business Contact Name",
+                    "label": "Business Contact Name",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Business Contact Phone",
+                    "label": "Business Contact Phone",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Business Contact Email",
+                    "label": "Business Contact Email",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Business Website URL",
+                    "label": "Business Website URL",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Additional Details",
+                    "label": "Additional Details",
+                    "type": "text"
+                  }
+                ]
+              }
+            ]
+          }
         ],
-        "storage": []
-    }
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
 }

@@ -1,64 +1,64 @@
 {
-    "key": "salesforce/product/send_to_shopify_product",
-    "name": "Send Salesforce Product To Shopify Product",
-    "version": "1.0.0",
-    "description": "Effectively maintain consistent product information between Shopify and Salesforce. This template sends the product details from Salesforce to Shopify Product as soon as the Salesforce product is created. Save yourself time and let both platforms team up to share key information.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "config": {
-        "inputs": [
-            {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "salesforce",
-                "entity": "product",
-                "action": "list-created",
-                "name": "Salesforce Product Created",
-                "key": "salesforce_product",
-                "metadata": {
-                    "entity_name": "Product2",
-                    "method": "list-created",
-                    "poll": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2022-05-13T11:00:00-07:00"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "create",
-                "name": "Shopify Create Product",
-                "key": "shopify_product",
-                "metadata": {
-                    "body": {
-                        "title": "{{salesforce_product.Name}}",
-                        "body_html": "{{salesforce_product.Description}}",
-                        "variants": [
-                            {
-                                "barcode": "{{salesforce_product.ProductCode}}",
-                                "sku": "{{salesforce_product.StockKeepingUnit}}"
-                            }
-                        ]
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "storage": []
-    }
+  "key": "salesforce/product/send_to_shopify_product",
+  "name": "Send Salesforce Product To Shopify Product",
+  "version": "1.0.0",
+  "description": "Effectively maintain consistent product information between Shopify and Salesforce. This template sends the product details from Salesforce to Shopify Product as soon as the Salesforce product is created. Save yourself time and let both platforms team up to share key information.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "salesforce",
+        "entity": "product",
+        "action": "list-created",
+        "name": "Salesforce Product Created",
+        "key": "salesforce_product",
+        "metadata": {
+          "entity_name": "Product2",
+          "method": "list-created",
+          "poll": "@hourly:0 * * * *",
+          "next_sync_date_time": "2022-05-13T11:00:00-07:00"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product",
+        "action": "create",
+        "name": "Shopify Create Product",
+        "key": "shopify_product",
+        "metadata": {
+          "body": {
+            "title": "{{salesforce_product.Name}}",
+            "body_html": "{{salesforce_product.Description}}",
+            "variants": [
+              {
+                "barcode": "{{salesforce_product.ProductCode}}",
+                "sku": "{{salesforce_product.StockKeepingUnit}}"
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "storage": []
+  }
 }
