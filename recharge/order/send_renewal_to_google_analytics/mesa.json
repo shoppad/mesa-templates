@@ -90,27 +90,10 @@
                             "source": "{{shopify-retrieve-order.source_name}}"
                         },
                         {
-                            "destination": "items[].in",
-                            "source": "{{shopify-retrieve-order.line_items[0].name}}"
-                        },
-                        {
-                            "destination": "items[].ip",
-                            "source": "{{shopify-retrieve-order.line_items[0].price}}"
-                        },
-                        {
-                            "destination": "items[].iq",
-                            "source": "{{shopify-retrieve-order.line_items[0].quantity}}"
-                        },
-                        {
-                            "destination": "items[].ic",
-                            "source": "{{shopify-retrieve-order.line_items[0].sku}}"
-                        },
-                        {
                             "destination": "cid",
                             "source": "{{custom.cid}}"
                         }
-                    ],
-                    "script": "googleanalytics_transaction.js"
+                    ]
                 },
                 "local_fields": [
                     {
@@ -122,6 +105,37 @@
                 ],
                 "on_error": "default",
                 "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify-retrieve-order.line_items[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": "4",
+                "trigger_type": "output",
+                "type": "api",
+                "entity": "no_auth",
+                "name": "API No Authentication",
+                "key": "api_no_auth",
+                "metadata": {
+                    "method": "post",
+                    "url": "https:\/\/www.google-analytics.com\/collect",
+                    "content_type": "application\/json",
+                    "custom_body_toggle": true,
+                    "custom_body": "v=1&tid={{Add Google Analytics ID}}&cid={{custom.cid}}&t=item&ti={{shopify-retrieve-order.name}}&in={{loop.title}}&ip={{loop.price}}&iq={{loop.quantity}}&ic={{loop.sku}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
             }
         ],
         "storage": []
