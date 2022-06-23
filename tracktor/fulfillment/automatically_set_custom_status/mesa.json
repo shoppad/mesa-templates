@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "on_error": "default",
@@ -49,7 +49,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order_1",
         "metadata": {
           "order_id": "{{delay.id}}"
@@ -79,7 +79,7 @@
         "type": "tracktor",
         "entity": "order",
         "action": "update",
-        "name": "Tracktor Update Order's Manual Status",
+        "name": "Update Order's Manual Status",
         "key": "tracktor_order",
         "metadata": {
           "order_id": "{{shopify_order_1.id}}"

@@ -15,7 +15,7 @@
         "type": "shopify",
         "entity": "product",
         "action": "created",
-        "name": "Shopify: Product Created",
+        "name": "Product Created",
         "key": "shopify-product-created",
         "metadata": {
           "topic": "products/create"
@@ -51,7 +51,7 @@
         "type": "shopify",
         "entity": "product",
         "action": "update",
-        "name": "Shopify: Update Product",
+        "name": "Update Product",
         "key": "shopify-update-product",
         "metadata": {
           "api_endpoint": "PUT admin/products/{{product_id}}.json",

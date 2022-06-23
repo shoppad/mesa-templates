@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "updated",
-        "name": "Shopify Customer Updated",
+        "name": "Customer Updated",
         "key": "shopify_customer",
         "metadata": [],
         "weight": 0
@@ -46,7 +46,7 @@
         "type": "klaviyo",
         "entity": "list",
         "action": "subscribe",
-        "name": "Klaviyo Subscribe List",
+        "name": "Subscribe List",
         "key": "klaviyo_list",
         "metadata": {
           "email": "{{shopify_customer.email}}",

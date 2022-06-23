@@ -20,7 +20,7 @@
         "type": "infiniteoptions",
         "entity": "order",
         "action": "created",
-        "name": "Infinite Options Order Created",
+        "name": "Order Created",
         "key": "infiniteoptions_order",
         "metadata": [],
         "local_fields": [],
@@ -34,7 +34,7 @@
         "type": "klaviyo",
         "entity": "track",
         "action": "create",
-        "name": "Klaviyo Track event Create",
+        "name": "Track event Create",
         "key": "klaviyo_track",
         "metadata": {
           "event": "Infinite Options Order",

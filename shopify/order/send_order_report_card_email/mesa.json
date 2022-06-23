@@ -36,7 +36,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "list",
-        "name": "Shopify List Order",
+        "name": "List Order",
         "key": "shopify_order",
         "metadata": {
           "parameters": "status=any&limit=250&created_at_min={{date:24 hours ago}}&created_at_max={{date:now}}"

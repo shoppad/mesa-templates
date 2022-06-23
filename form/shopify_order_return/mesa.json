@@ -77,7 +77,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order",
         "metadata": {
           "order_id": "{{forms.shopify_order_id}}"
@@ -91,7 +91,7 @@
         "type": "googlesheets",
         "entity": "row",
         "action": "create",
-        "name": "Google Sheets Add Row",
+        "name": "Add Row",
         "key": "googlesheets_row_1",
         "metadata": {
           "path": {
@@ -166,7 +166,7 @@
         "schema": 2,
         "trigger_type": "output",
         "type": "slack",
-        "name": "Slack",
+        "name": "",
         "key": "slack",
         "metadata": {
           "message": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{forms.reason}}"

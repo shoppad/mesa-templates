@@ -12,7 +12,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "created",
-        "name": "Shopify Customer Created",
+        "name": "Customer Created",
         "key": "shopify_customer",
         "metadata": [],
         "local_fields": [],
@@ -26,7 +26,7 @@
         "type": "googlesheets",
         "entity": "row",
         "action": "create",
-        "name": "Google Sheets Add Row",
+        "name": "Add Row",
         "key": "googlesheets_row_1",
         "metadata": {
           "path": {

@@ -19,7 +19,7 @@
         "type": "returnly",
         "entity": "return",
         "action": "authorized",
-        "name": "Returnly Return Authorized",
+        "name": "Return Authorized",
         "key": "returnly_return",
         "metadata": [],
         "local_fields": [],
@@ -31,7 +31,7 @@
         "schema": 2,
         "trigger_type": "output",
         "type": "slack",
-        "name": "Slack",
+        "name": "",
         "key": "slack",
         "metadata": {
           "message": "Authorized return. Return ID: {{returnly_return.payload.data.id}}"

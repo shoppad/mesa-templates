@@ -17,7 +17,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "fulfillment/in_transit",
-        "name": "Tracktor Fulfillment Status In Transit",
+        "name": "Fulfillment Status In Transit",
         "key": "tracktor_fulfillment_status"
       }
     ],
@@ -37,7 +37,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "retrieve",
-        "name": "Tracktor Retrieve Fulfillment",
+        "name": "Retrieve Fulfillment",
         "key": "tracktor_fulfillment",
         "metadata": {
           "fulfillment_id": "{{delay.fulfillment_id}}"
@@ -59,7 +59,7 @@
         "type": "tracktor",
         "entity": "order",
         "action": "retrieve",
-        "name": "Tracktor Retrieve Order",
+        "name": "Retrieve Order",
         "key": "tracktor_order",
         "metadata": {
           "order_id": "{{tracktor_fulfillment.order_id}}"

@@ -16,7 +16,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify: Order Created",
+        "name": "Order Created",
         "key": "shopify_order_created",
         "metadata": {
           "topic": "orders/create"
@@ -29,7 +29,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Shopify: Retrieve Customer",
+        "name": "Retrieve Customer",
         "key": "shopify_retrieve_customer",
         "metadata": {
           "api_endpoint": "GET admin/customers/{{customer_id}}.json",
@@ -66,7 +66,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "update",
-        "name": "Shopify: Update Customer",
+        "name": "Update Customer",
         "key": "shopify_update_customer",
         "metadata": {
           "api_endpoint": "PUT admin/customers/{{customer_id}}.json",

@@ -33,7 +33,7 @@
         "type": "shopify",
         "entity": "theme",
         "action": "publish",
-        "name": "Shopify Publish Theme",
+        "name": "Publish Theme",
         "key": "shopify_theme",
         "metadata": [],
         "local_fields": [],

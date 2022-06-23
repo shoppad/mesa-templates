@@ -14,7 +14,7 @@
       {
         "trigger_type": "input",
         "type": "shopify",
-        "name": "Shopify Product Create Webhook",
+        "name": "Product Create Webhook",
         "key": "in-shopify-product-create",
         "script": "in_shopify_product_create.js",
         "entity": "product",
@@ -23,7 +23,7 @@
       {
         "trigger_type": "input",
         "type": "shopify",
-        "name": "Shopify Product Update Webhook",
+        "name": "Product Update Webhook",
         "key": "in-shopify-product-update",
         "script": "in_shopify_product_update.js",
         "entity": "product",
@@ -32,7 +32,7 @@
       {
         "trigger_type": "input",
         "type": "shopify",
-        "name": "Shopify Product Delete Webhook",
+        "name": "Product Delete Webhook",
         "key": "in-shopify-product-delete",
         "script": "in_shopify_product_delete.js",
         "entity": "product",

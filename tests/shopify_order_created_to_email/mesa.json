@@ -15,7 +15,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify: Order Created",
+        "name": "Order Created",
         "key": "shopify-order-created",
         "metadata": {
           "topic": "orders/create"
@@ -70,7 +70,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "update",
-        "name": "Shopify: Update Order",
+        "name": "Update Order",
         "key": "shopify-update-order",
         "metadata": {
           "api_endpoint": "PUT admin/orders/{{order_id}}.json",
@@ -80,7 +80,7 @@
       {
         "trigger_type": "output",
         "type": "slack",
-        "name": "Slack",
+        "name": "",
         "key": "slack",
         "metadata": {
           "webhook": "5e2a3f76cd392305fb74364b",

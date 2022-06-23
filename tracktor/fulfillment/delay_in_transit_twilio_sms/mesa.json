@@ -20,7 +20,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "fulfillment/in_transit",
-        "name": "Tracktor Fulfillment Status is In Transit",
+        "name": "Fulfillment Status is In Transit",
         "key": "tracktor_fulfillment",
         "metadata": [],
         "on_error": "default",
@@ -49,7 +49,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "retrieve",
-        "name": "Tracktor Retrieve Fulfillment",
+        "name": "Retrieve Fulfillment",
         "key": "tracktor_fulfillment_1",
         "metadata": {
           "fulfillment_id": "{{delay.fulfillment_id}}"
@@ -79,7 +79,7 @@
         "type": "twilio",
         "entity": "sms",
         "action": "send",
-        "name": "Twilio Send SMS",
+        "name": "Send SMS",
         "key": "twilio_sms",
         "metadata": {
           "message": "Order {{tracktor_fulfillment_1.order_name}} has been in transit for over 60 hours!"

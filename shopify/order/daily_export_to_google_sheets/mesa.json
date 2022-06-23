@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "weight": 0
@@ -82,7 +82,7 @@
         "type": "googledrive",
         "entity": "spreadsheet",
         "action": "create",
-        "name": "Google Drive Create Spreadsheet",
+        "name": "Create Spreadsheet",
         "key": "googledrive_spreadsheet",
         "metadata": {
           "file_name": "Order Export for {{date:now}}"
@@ -96,7 +96,7 @@
         "type": "googlesheets",
         "entity": "sheet",
         "action": "write",
-        "name": "Google Sheets Write Sheet",
+        "name": "Write Sheet",
         "key": "googlesheets_sheet",
         "metadata": {
           "make_labels": true,

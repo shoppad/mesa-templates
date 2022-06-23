@@ -17,7 +17,7 @@
         "type": "uploadery",
         "entity": "order",
         "action": "created",
-        "name": "Uploadery: Order Created",
+        "name": "Order Created",
         "key": "uploadery-order-created"
       }
     ],
@@ -72,7 +72,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "update",
-        "name": "Shopify: Update Order",
+        "name": "Update Order",
         "key": "shopify-update-order",
         "metadata": {
           "api_endpoint": "PUT admin/orders/{{order_id}}.json",

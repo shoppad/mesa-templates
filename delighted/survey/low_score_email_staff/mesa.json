@@ -20,7 +20,7 @@
         "type": "delighted",
         "entity": "survey",
         "action": "survey/response",
-        "name": "Delighted Survey Response",
+        "name": "Survey Response",
         "key": "delighted_survey",
         "metadata": [],
         "local_fields": [],

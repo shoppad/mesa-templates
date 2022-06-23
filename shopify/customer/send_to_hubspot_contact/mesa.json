@@ -21,7 +21,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "created",
-        "name": "Shopify Customer Created",
+        "name": "Customer Created",
         "key": "shopify_customer",
         "metadata": [],
         "weight": 0

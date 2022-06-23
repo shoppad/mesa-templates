@@ -35,7 +35,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "list",
-        "name": "Shopify: Get customers that were updated within the past 24 hours",
+        "name": "Get customers that were updated within the past 24 hours",
         "key": "shopify_customer_1",
         "metadata": {
           "parameters": "updated_at_min={{date:1 days ago}}&limit=250"
@@ -76,7 +76,7 @@
         "type": "recharge",
         "entity": "customer",
         "action": "list",
-        "name": "Recharge List Customer",
+        "name": "List Customer",
         "key": "recharge_customer",
         "metadata": {
           "recharge_api": "GET /customers",
@@ -119,7 +119,7 @@
         "type": "recharge",
         "entity": "customer",
         "action": "update",
-        "name": "Recharge Update Customer",
+        "name": "Update Customer",
         "key": "recharge_customer_1",
         "metadata": {
           "recharge_api": "PUT /customers/{{customer_id}}",

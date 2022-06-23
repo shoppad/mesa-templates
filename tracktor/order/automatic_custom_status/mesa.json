@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "weight": 0
@@ -33,7 +33,7 @@
         "type": "tracktor",
         "entity": "order",
         "action": "update",
-        "name": "Tracktor Update Manual Status Order",
+        "name": "Update Manual Status Order",
         "key": "tracktor_order",
         "metadata": {
           "order_id": "{{shopify_order.id}}",

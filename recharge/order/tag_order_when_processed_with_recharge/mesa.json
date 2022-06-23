@@ -20,7 +20,7 @@
         "type": "recharge",
         "entity": "order",
         "action": "order/created",
-        "name": "Recharge Order Created",
+        "name": "Order Created",
         "key": "recharge_order",
         "metadata": [],
         "local_fields": [],
@@ -35,7 +35,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order",
         "metadata": {
           "order_id": "{{recharge_order.external_order_id.ecommerce}}"
@@ -50,7 +50,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "tag_add",
-        "name": "Shopify Order Add Tag",
+        "name": "Order Add Tag",
         "key": "shopify_order_1",
         "metadata": {
           "order_id": "{{shopify_order.id}}",

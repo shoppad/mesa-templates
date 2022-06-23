@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": {
           "topic": "orders/create"
@@ -48,7 +48,7 @@
         "type": "thanks",
         "entity": "postcard",
         "action": "create",
-        "name": "Thanks.io Send Postcard",
+        "name": "Send Postcard",
         "key": "thanks_postcard",
         "metadata": {
           "body": {

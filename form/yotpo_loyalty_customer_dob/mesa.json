@@ -78,7 +78,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Shopify Customer Retrieve",
+        "name": "Customer Retrieve",
         "key": "shopify_customer",
         "metadata": {
           "customer_id": "{{form.customer-id}}"
@@ -92,7 +92,7 @@
         "type": "yotpoloyalty",
         "entity": "birthday",
         "action": "set",
-        "name": "Yotpo Loyalty & Referrals Birthday Set",
+        "name": "& Referrals Birthday Set",
         "key": "yotpoloyalty_birthday",
         "metadata": {
           "body": {

@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "product",
         "action": "create-update",
-        "name": "Shopify: Product Created or Updated",
+        "name": "Product Created or Updated",
         "key": "shopify-product-created-or-updated",
         "metadata": {
           "topic": "products/create+products/update"
@@ -42,7 +42,7 @@
         "type": "salesforce",
         "entity": "product",
         "action": "query",
-        "name": "Salesforce: Query Product",
+        "name": "Query Product",
         "key": "salesforce_query_product",
         "metadata": {
           "entity_name": "Product2",
@@ -99,7 +99,7 @@
         "type": "salesforce",
         "entity": "product",
         "action": "create_or_update",
-        "name": "Salesforce: Create or Update Product",
+        "name": "Create or Update Product",
         "key": "salesforce_create_or_update_product",
         "metadata": {
           "entity_name": "Product2",
@@ -113,7 +113,7 @@
         "type": "salesforce",
         "entity": "pricebook_entry",
         "action": "query",
-        "name": "Salesforce: Query Pricebook Entry",
+        "name": "Query Pricebook Entry",
         "key": "salesforce_query_pricebook_entry",
         "metadata": {
           "entity_name": "PricebookEntry",
@@ -163,7 +163,7 @@
         "type": "salesforce",
         "entity": "pricebook_entry",
         "action": "create_or_update",
-        "name": "Salesforce: Create or Update Pricebook Entry",
+        "name": "Create or Update Pricebook Entry",
         "key": "salesforce_create_or_update_pricebook_entry",
         "metadata": {
           "entity_name": "PricebookEntry",

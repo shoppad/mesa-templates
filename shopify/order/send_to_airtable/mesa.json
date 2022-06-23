@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "weight": 0
@@ -45,7 +45,7 @@
         "type": "airtable",
         "entity": "record",
         "action": "create",
-        "name": "Airtable Add Record",
+        "name": "Add Record",
         "key": "airtable_record",
         "metadata": {
           "path": {

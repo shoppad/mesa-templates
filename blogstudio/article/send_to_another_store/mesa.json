@@ -19,7 +19,7 @@
         "type": "blogstudio",
         "entity": "blog_article",
         "action": "created",
-        "name": "Blog Studio Article Created",
+        "name": "Article Created",
         "key": "blogstudio_article",
         "metadata": {
           "last_sync_date_time": "2021-01-08T11:59:18-08:00"
@@ -35,7 +35,7 @@
         "type": "blogstudio",
         "entity": "blog_article",
         "action": "create",
-        "name": "Blog Studio Create Blog Article on Another Store",
+        "name": "Create Blog Article on Another Store",
         "key": "blogstudio_article2",
         "metadata": {
           "body": {

@@ -18,7 +18,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": {
           "topic": "orders/create"
@@ -33,7 +33,7 @@
         "type": "loyaltylion",
         "entity": "customer",
         "action": "list",
-        "name": "LoyaltyLion List Customer",
+        "name": "List Customer",
         "key": "loyaltylion_customer_1",
         "metadata": {
           "api_endpoint": "GET /v2/customers",
@@ -47,7 +47,7 @@
         "type": "loyaltylion",
         "entity": "customer",
         "action": "add_points",
-        "name": "LoyaltyLion Add Points Customer",
+        "name": "Add Points Customer",
         "key": "loyaltylion_customer",
         "metadata": {
           "api_endpoint": "POST /v2/customers/{{merchant_id}}/points",

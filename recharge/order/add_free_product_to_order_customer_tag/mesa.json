@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "updated",
-        "name": "Shopify Customer Updated",
+        "name": "Customer Updated",
         "key": "shopify_customer",
         "metadata": [],
         "on_error": "default",
@@ -64,7 +64,7 @@
         "type": "recharge",
         "entity": "subscription",
         "action": "list",
-        "name": "Recharge List Subscription",
+        "name": "List Subscription",
         "key": "recharge_subscription",
         "metadata": {
           "parameters": "shopify_customer_id={{shopify_customer.id}}"
@@ -79,7 +79,7 @@
         "type": "recharge",
         "entity": "onetime",
         "action": "create",
-        "name": "Recharge Create (ALPHA) Onetime Product",
+        "name": "Create (ALPHA) Onetime Product",
         "key": "recharge_onetime",
         "metadata": {
           "body": {
@@ -99,7 +99,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "tag_add",
-        "name": "Shopify Customer Add \"recharge-workflow\" Tag",
+        "name": "Customer Add \"recharge-workflow\" Tag",
         "key": "shopify_customer_1",
         "metadata": {
           "customer_id": "{{shopify_customer.id}}",

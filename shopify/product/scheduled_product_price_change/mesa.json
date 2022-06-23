@@ -37,7 +37,7 @@
         "type": "shopify",
         "entity": "product_variant",
         "action": "update_id",
-        "name": "Shopify Update Product Variant",
+        "name": "Update Product Variant",
         "key": "shopify_product_variant_1",
         "metadata": [],
         "local_fields": [],

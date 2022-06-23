@@ -19,7 +19,7 @@
         "type": "recharge",
         "entity": "subscription",
         "action": "subscription/cancelled",
-        "name": "Recharge Subscription Cancelled",
+        "name": "Subscription Cancelled",
         "key": "recharge_subscription",
         "metadata": [],
         "local_fields": [],
@@ -33,7 +33,7 @@
         "type": "recharge",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Recharge Retrieve Customer",
+        "name": "Retrieve Customer",
         "key": "recharge_customer",
         "metadata": {
           "api_endpoint": "GET /customers/{{customer_id}}",
@@ -48,7 +48,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Shopify Retrieve Customer",
+        "name": "Retrieve Customer",
         "key": "shopify_customer_1",
         "metadata": {
           "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
@@ -76,7 +76,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "tag_remove",
-        "name": "Shopify Customer Remove Tag",
+        "name": "Customer Remove Tag",
         "key": "shopify_customer_2",
         "metadata": {
           "customer_id": "{{shopify_customer_1.id}}",

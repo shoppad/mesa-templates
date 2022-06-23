@@ -33,7 +33,7 @@
         "type": "twilio",
         "entity": "sms",
         "action": "send",
-        "name": "Twilio Send SMS",
+        "name": "Send SMS",
         "key": "twilio_sms",
         "metadata": {
           "from": "+15105551234",

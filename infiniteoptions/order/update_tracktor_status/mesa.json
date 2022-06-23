@@ -20,7 +20,7 @@
         "type": "infiniteoptions",
         "entity": "order",
         "action": "created",
-        "name": "Infinite Options Order Created",
+        "name": "Order Created",
         "key": "infiniteoptions_order",
         "metadata": [],
         "local_fields": [],
@@ -34,7 +34,7 @@
         "type": "tracktor",
         "entity": "order",
         "action": "update",
-        "name": "Tracktor Update Manual Status Order",
+        "name": "Update Manual Status Order",
         "key": "tracktor_order",
         "metadata": {
           "order_id": "{{infiniteoptions_order.order.id}}",

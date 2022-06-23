@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "updated",
-        "name": "Shopify Order Updated",
+        "name": "Order Updated",
         "key": "shopify_order",
         "metadata": [],
         "local_fields": [],
@@ -142,7 +142,7 @@
         "type": "shipstation",
         "entity": "order",
         "action": "update",
-        "name": "ShipStation Update Order",
+        "name": "Update Order",
         "key": "shipstation_order",
         "metadata": {
           "api_endpoint": "POST /orders/createorder",

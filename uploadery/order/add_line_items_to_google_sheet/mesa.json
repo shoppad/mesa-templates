@@ -10,7 +10,7 @@
         "type": "uploadery",
         "entity": "order",
         "action": "created",
-        "name": "Uploadery: Order Created",
+        "name": "Order Created",
         "key": "uploadery_order_created",
         "metadata": [],
         "local_fields": [],
@@ -36,7 +36,7 @@
         "type": "googlesheets",
         "entity": "row",
         "action": "create",
-        "name": "Google Sheets Create Row",
+        "name": "Create Row",
         "key": "googlesheets_row",
         "metadata": {
           "path": {

@@ -19,7 +19,7 @@
         "type": "stampedio",
         "entity": "review",
         "action": "created",
-        "name": "Stamped.io Review Created",
+        "name": "Review Created",
         "key": "stampedio_review",
         "metadata": [],
         "weight": 0

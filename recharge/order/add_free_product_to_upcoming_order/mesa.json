@@ -20,7 +20,7 @@
         "type": "recharge",
         "entity": "charge",
         "action": "charge/created",
-        "name": "Recharge Charge Created",
+        "name": "Charge Created",
         "key": "recharge_charge",
         "metadata": [],
         "local_fields": [],
@@ -48,7 +48,7 @@
         "type": "recharge",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Recharge Retrieve Customer",
+        "name": "Retrieve Customer",
         "key": "recharge_customer",
         "metadata": {
           "recharge_api": "GET /customers/{{customer_id}}",
@@ -63,7 +63,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Shopify Retrieve Customer",
+        "name": "Retrieve Customer",
         "key": "shopify_customer",
         "metadata": {
           "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
@@ -77,7 +77,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order",
         "metadata": {
           "order_id": "{{recharge_charge.external_order_id.ecommerce}}"
@@ -105,7 +105,7 @@
         "type": "recharge",
         "entity": "subscription",
         "action": "list",
-        "name": "Recharge List subscription",
+        "name": "List subscription",
         "key": "recharge_subscription",
         "metadata": {
           "recharge_api": "GET /subscriptions",
@@ -120,7 +120,7 @@
         "type": "recharge",
         "entity": "onetime",
         "action": "create",
-        "name": "Recharge Create Onetime Product",
+        "name": "Create Onetime Product",
         "key": "recharge_onetime_1",
         "metadata": {
           "body": {

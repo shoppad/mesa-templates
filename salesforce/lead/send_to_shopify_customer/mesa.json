@@ -20,7 +20,7 @@
         "type": "salesforce",
         "entity": "lead",
         "action": "list-converted",
-        "name": "Salesforce Lead Converted",
+        "name": "Lead Converted",
         "key": "salesforce_lead",
         "metadata": {
           "entity_name": "Lead",
@@ -40,7 +40,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "create",
-        "name": "Shopify Create Customer",
+        "name": "Create Customer",
         "key": "shopify_customer",
         "metadata": {
           "body": {

@@ -11,7 +11,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "fulfillment/in_transit",
-        "name": "Tracktor Fulfillment Status In Transit",
+        "name": "Fulfillment Status In Transit",
         "key": "tracktor_fulfillment_status",
         "metadata": [],
         "local_fields": [],
@@ -39,7 +39,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "retrieve",
-        "name": "Tracktor Retrieve Fulfillment",
+        "name": "Retrieve Fulfillment",
         "key": "tracktor_fulfillment",
         "metadata": {
           "fulfillment_id": "{{delay.fulfillment_id}}"

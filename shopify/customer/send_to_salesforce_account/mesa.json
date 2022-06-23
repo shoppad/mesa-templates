@@ -22,7 +22,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "create-update",
-        "name": "Shopify Customer Created or Updated",
+        "name": "Customer Created or Updated",
         "key": "shopify-customer-created-or-updated",
         "metadata": {
           "topic": "customers/create+customers/update"
@@ -38,7 +38,7 @@
         "type": "salesforce",
         "entity": "account",
         "action": "query",
-        "name": "Salesforce Query Single Account",
+        "name": "Query Single Account",
         "key": "salesforce-query-single-account",
         "metadata": {
           "entity_name": "Account",
@@ -54,7 +54,7 @@
         "type": "salesforce",
         "entity": "account",
         "action": "create_or_update",
-        "name": "Salesforce Create or Update Account",
+        "name": "Create or Update Account",
         "key": "salesforce_account_1",
         "metadata": {
           "entity_name": "Account",

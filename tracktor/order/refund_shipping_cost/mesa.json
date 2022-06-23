@@ -20,7 +20,7 @@
         "type": "tracktor",
         "entity": "order",
         "action": "order/ordered",
-        "name": "Tracktor Order Created",
+        "name": "Order Created",
         "key": "tracktor_order",
         "metadata": [],
         "weight": 0
@@ -33,7 +33,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order",
         "metadata": {
           "order_id": "{{tracktor_order.order_id}}"
@@ -74,7 +74,7 @@
         "type": "tracktor",
         "entity": "order",
         "action": "retrieve",
-        "name": "Tracktor Retrieve Order from Delay",
+        "name": "Retrieve Order from Delay",
         "key": "tracktor_order_1",
         "metadata": {
           "order_id": "{{delay.id}}"
@@ -114,7 +114,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order_1",
         "metadata": {
           "order_id": "{{tracktor_order_1.order_id}}"
@@ -171,7 +171,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order_2",
         "metadata": {
           "order_id": "{{tracktor_order_1.order_id}}"
@@ -185,7 +185,7 @@
         "type": "shopify",
         "entity": "order_transaction",
         "action": "list",
-        "name": "Shopify List Order Transaction",
+        "name": "List Order Transaction",
         "key": "shopify_order_transaction",
         "metadata": {
           "order_id": "{{tracktor_order_1.order_id}}"
@@ -225,7 +225,7 @@
         "type": "shopify",
         "entity": "order_refund",
         "action": "create",
-        "name": "Shopify Create Order Refund",
+        "name": "Create Order Refund",
         "key": "shopify_order_refund",
         "metadata": {
           "order_id": "{{shopify_order_2.id}}",

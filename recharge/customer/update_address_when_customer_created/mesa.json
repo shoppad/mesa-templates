@@ -38,7 +38,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "list",
-        "name": "Shopify Get List of Customers within the past 24 hours",
+        "name": "Get List of Customers within the past 24 hours",
         "key": "shopify_customer",
         "metadata": {
           "parameters": "created_at_min={{date:1 days ago}}&limit=250"
@@ -80,7 +80,7 @@
         "type": "recharge",
         "entity": "customer",
         "action": "list",
-        "name": "Recharge List Customer",
+        "name": "List Customer",
         "key": "recharge_customer",
         "metadata": {
           "parameters": "email={{loop.email}}"
@@ -95,7 +95,7 @@
         "type": "recharge",
         "entity": "address",
         "action": "list",
-        "name": "Recharge List Address",
+        "name": "List Address",
         "key": "recharge_address",
         "metadata": {
           "parameters": "customer_id={{recharge_customer[0].id}}"
@@ -157,7 +157,7 @@
         "type": "recharge",
         "entity": "address",
         "action": "update",
-        "name": "Recharge Update Address",
+        "name": "Update Address",
         "key": "recharge_address_1",
         "metadata": {
           "path": {

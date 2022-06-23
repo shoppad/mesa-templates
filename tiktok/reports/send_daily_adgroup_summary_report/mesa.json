@@ -33,7 +33,7 @@
         "type": "tiktok",
         "entity": "reports",
         "action": "ad_group_summary_report",
-        "name": "TikTok Reports Ad Group Summary",
+        "name": "Reports Ad Group Summary",
         "key": "tiktokmarketing_reports",
         "metadata": {
           "query": {
@@ -71,7 +71,7 @@
         "type": "googlesheets",
         "entity": "row",
         "action": "create",
-        "name": "Google Sheets Create Row",
+        "name": "Create Row",
         "key": "googlesheets_row_1",
         "metadata": {
           "path": {

@@ -65,7 +65,7 @@
         "type": "shopify",
         "entity": "product",
         "action": "retrieve",
-        "name": "Shopify Product Retrieve",
+        "name": "Product Retrieve",
         "key": "shopify_product",
         "metadata": {
           "product_id": ""

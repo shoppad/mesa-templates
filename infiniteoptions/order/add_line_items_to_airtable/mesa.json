@@ -20,7 +20,7 @@
         "type": "infiniteoptions",
         "entity": "order",
         "action": "created",
-        "name": "Infinite Options Order Created",
+        "name": "Order Created",
         "key": "infiniteoptions_order",
         "metadata": [],
         "local_fields": [],
@@ -46,7 +46,7 @@
         "type": "airtable",
         "entity": "record",
         "action": "create",
-        "name": "Airtable Add Record",
+        "name": "Add Record",
         "key": "airtable_record",
         "metadata": {
           "path": {

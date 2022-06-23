@@ -100,14 +100,14 @@ async function getFiles(dir) {
                 const oldName = trigger.name;
                 json.config[key][i].name = trigger.name ? trigger.name.replace(new RegExp(regex), '') : replacementValue;
                 console.log(`OLD: ${oldName}, NEW: ${trigger.name}`);
+                fs.writeFileSync(res, JSON.stringify(json, null, '  '));
+                console.log(`SAVING: ${res}`);
             });
           });
           // ---
 
 
           
-          fs.writeFileSync(res, JSON.stringify(json, null, '  '));
-          console.log(`SAVING: ${res}`);
         }
         else {
           console.log(`SKIPPED: ${res}`);

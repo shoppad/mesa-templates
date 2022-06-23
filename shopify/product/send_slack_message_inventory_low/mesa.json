@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "inventory_level",
         "action": "updated",
-        "name": "Shopify Inventory Level Updated",
+        "name": "Inventory Level Updated",
         "key": "shopify_inventory_level",
         "metadata": [],
         "weight": 0
@@ -56,7 +56,7 @@
         "schema": 2,
         "trigger_type": "output",
         "type": "slack",
-        "name": "Slack",
+        "name": "",
         "key": "slack",
         "metadata": {
           "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \nCurrent inventory quantity: {{shopify_inventory_level.available}}."

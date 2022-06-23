@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "local_fields": [],
@@ -46,7 +46,7 @@
         "type": "shopify",
         "entity": "product_variant",
         "action": "retrieve_id",
-        "name": "Shopify Retrieve By Variant ID Product Variant",
+        "name": "Retrieve By Variant ID Product Variant",
         "key": "shopify_product_variant",
         "metadata": {
           "variant_id": "{{loop.variant_id}}"
@@ -74,7 +74,7 @@
         "type": "shopify",
         "entity": "product",
         "action": "retrieve",
-        "name": "Shopify Retrieve Product",
+        "name": "Retrieve Product",
         "key": "shopify_product_1",
         "metadata": {
           "product_id": "{{loop.product_id}}"
@@ -100,7 +100,7 @@
         "type": "shopify",
         "entity": "product",
         "action": "update",
-        "name": "Shopify Update Product",
+        "name": "Update Product",
         "key": "shopify_product",
         "metadata": {
           "product_id": "{{shopify_product_1.id}}",

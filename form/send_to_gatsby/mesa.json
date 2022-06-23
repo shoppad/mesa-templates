@@ -59,7 +59,7 @@
         "type": "gatsby",
         "entity": "contact",
         "action": "create",
-        "name": "Gatsby Create Contact",
+        "name": "Create Contact",
         "key": "gatsby_contact",
         "metadata": {
           "webhook_url": "",

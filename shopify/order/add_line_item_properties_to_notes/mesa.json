@@ -12,7 +12,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "weight": 0
@@ -25,7 +25,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "note_update",
-        "name": "Shopify Order Note Update",
+        "name": "Order Note Update",
         "key": "shopify_order_2",
         "metadata": {
           "order_id": "{{shopify_order.id}}",

@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "weight": 0
@@ -33,7 +33,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Shopify Retrieve Customer",
+        "name": "Retrieve Customer",
         "key": "shopify_customer_1",
         "metadata": {
           "customer_id": "{{shopify_order.customer.id}}"
@@ -62,7 +62,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "tag_add",
-        "name": "Shopify Customer Add Tag",
+        "name": "Customer Add Tag",
         "key": "shopify_customer",
         "metadata": {
           "customer_id": "{{shopify_order.customer.id}}",

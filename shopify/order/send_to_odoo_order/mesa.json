@@ -23,7 +23,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "paid",
-        "name": "Shopify Order Paid",
+        "name": "Order Paid",
         "key": "shopify_order",
         "metadata": [],
         "local_fields": [],
@@ -37,7 +37,7 @@
         "type": "odoo",
         "entity": "product.product",
         "action": "search_read",
-        "name": "Odoo List Product Variant",
+        "name": "List Product Variant",
         "key": "odoo_product_product",
         "metadata": {
           "entity_name": "product.product",
@@ -85,7 +85,7 @@
         "type": "odoo",
         "entity": "res.partner",
         "action": "search_read",
-        "name": "Odoo List Customer",
+        "name": "List Customer",
         "key": "odoo_res_partner",
         "metadata": {
           "entity_name": "res.partner",
@@ -162,7 +162,7 @@
         "type": "odoo",
         "entity": "sale.order",
         "action": "create",
-        "name": "Odoo Create Order",
+        "name": "Create Order",
         "key": "odoo_sale_order",
         "metadata": {
           "entity_name": "sale.order",
@@ -234,7 +234,7 @@
         "type": "odoo",
         "entity": "sale.order.line",
         "action": "create",
-        "name": "Odoo Create Order Line",
+        "name": "Create Order Line",
         "key": "odoo_sale_order_line",
         "metadata": {
           "entity_name": "sale.order.line",

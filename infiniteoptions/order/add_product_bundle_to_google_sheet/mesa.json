@@ -22,7 +22,7 @@
         "type": "infiniteoptions",
         "entity": "order",
         "action": "created",
-        "name": "Infinite Options: Order Created",
+        "name": "Order Created",
         "key": "infinite_options_order_created",
         "metadata": [],
         "local_fields": [],
@@ -75,7 +75,7 @@
         "type": "googlesheets",
         "entity": "row",
         "action": "create",
-        "name": "Google Sheets Row Create",
+        "name": "Row Create",
         "key": "googlesheets_row",
         "metadata": {
           "path": {

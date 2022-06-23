@@ -17,7 +17,7 @@
         "type": "uploadery",
         "entity": "order",
         "action": "created",
-        "name": "Uploadery: Order Created",
+        "name": "Order Created",
         "key": "uploadery-order-created"
       }
     ],

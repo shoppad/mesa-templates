@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "weight": 0
@@ -32,7 +32,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "update",
-        "name": "Shopify Update Order - Apply initial tag",
+        "name": "Update Order - Apply initial tag",
         "key": "shopify_order_1",
         "metadata": {
           "order_id": "{{shopify_order.id}}",
@@ -63,7 +63,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order - Get latest order data",
+        "name": "Retrieve Order - Get latest order data",
         "key": "shopify_order_2",
         "metadata": {
           "order_id": "{{delay.id}}"
@@ -77,7 +77,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "update",
-        "name": "Shopify Update Order - Apply new tag",
+        "name": "Update Order - Apply new tag",
         "key": "shopify_order_3",
         "metadata": {
           "order_id": "{{shopify_order_2.id}}",

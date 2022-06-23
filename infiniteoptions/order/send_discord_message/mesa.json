@@ -20,7 +20,7 @@
         "type": "infiniteoptions",
         "entity": "order",
         "action": "created",
-        "name": "Infinite Options Order Created",
+        "name": "Order Created",
         "key": "infiniteoptions_order",
         "metadata": {
           "field_name": "Special_Notes"
@@ -36,7 +36,7 @@
         "type": "discord",
         "entity": "channel_message",
         "action": "create",
-        "name": "Discord Channel Message Create",
+        "name": "Channel Message Create",
         "key": "discord_channel_message",
         "metadata": {
           "path": {

@@ -20,7 +20,7 @@
         "type": "yotpo",
         "entity": "review",
         "action": "created",
-        "name": "Yotpo Review Created",
+        "name": "Review Created",
         "key": "yotpo_review",
         "metadata": [],
         "local_fields": [],
@@ -48,7 +48,7 @@
         "type": "gorgias",
         "entity": "ticket",
         "action": "create",
-        "name": "Gorgias Create Ticket",
+        "name": "Create Ticket",
         "key": "gorgias_ticket",
         "metadata": {
           "entity_wrapper": "body",

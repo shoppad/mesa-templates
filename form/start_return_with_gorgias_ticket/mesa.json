@@ -96,7 +96,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Order Retrieve",
+        "name": "Order Retrieve",
         "key": "shopify_order",
         "metadata": {
           "order_id": "{{form.order-id}}"
@@ -110,7 +110,7 @@
         "type": "gorgias",
         "entity": "ticket",
         "action": "create",
-        "name": "Gorgias Ticket Create",
+        "name": "Ticket Create",
         "key": "gorgias_ticket",
         "metadata": {
           "entity_wrapper": "body",

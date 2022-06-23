@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify Order Created",
+        "name": "Order Created",
         "key": "shopify_order",
         "metadata": [],
         "local_fields": [],
@@ -34,7 +34,7 @@
         "type": "shopify",
         "entity": "order_risk",
         "action": "list",
-        "name": "Shopify Order Risk List",
+        "name": "Order Risk List",
         "key": "shopify_order_risk",
         "metadata": {
           "order_id": "{{shopify_order.id}}"
@@ -85,7 +85,7 @@
         "type": "shopify",
         "entity": "order_transaction",
         "action": "create",
-        "name": "Shopify Order Transaction Create",
+        "name": "Order Transaction Create",
         "key": "shopify_order_transaction",
         "metadata": {
           "order_id": "{{shopify_order.id}}",
@@ -116,7 +116,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "cancel",
-        "name": "Shopify Order Cancel",
+        "name": "Order Cancel",
         "key": "shopify_order_1",
         "metadata": {
           "order_id": "{{shopify_order.id}}"

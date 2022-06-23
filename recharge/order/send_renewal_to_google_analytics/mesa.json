@@ -20,7 +20,7 @@
         "type": "recharge",
         "entity": "order",
         "action": "order/processed",
-        "name": "Recharge: Order Processed",
+        "name": "Order Processed",
         "key": "recharge-order-processed",
         "metadata": [],
         "local_fields": [],
@@ -34,7 +34,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify: Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify-retrieve-order",
         "metadata": {
           "order_id": "{{recharge-order-processed.external_order_id.ecommerce}}"
@@ -61,7 +61,7 @@
         "type": "googleanalytics",
         "entity": "transaction",
         "action": "create",
-        "name": "Google Analytics Create Transaction",
+        "name": "Create Transaction",
         "key": "googleanalytics_transaction",
         "metadata": {
           "mapping": [

@@ -20,7 +20,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "fulfillment/delivered",
-        "name": "Tracktor Fulfillment Status is Delivered",
+        "name": "Fulfillment Status is Delivered",
         "key": "tracktor_fulfillment",
         "metadata": [],
         "on_error": "default",
@@ -34,7 +34,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "retrieve",
-        "name": "Shopify Retrieve Order",
+        "name": "Retrieve Order",
         "key": "shopify_order",
         "metadata": {
           "order_id": "{{tracktor_fulfillment.order_id}}"
@@ -49,7 +49,7 @@
         "type": "postcardmania",
         "entity": "order",
         "action": "create",
-        "name": "PostcardMania Send Postcard",
+        "name": "Send Postcard",
         "key": "postcardmania_order",
         "metadata": {
           "body": {

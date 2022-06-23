@@ -20,7 +20,7 @@
         "type": "yotpoloyalty",
         "entity": "points",
         "action": "changed",
-        "name": "Yotpo Loyalty & Referrals Points Changed",
+        "name": "& Referrals Points Changed",
         "key": "yotpoloyalty_points",
         "metadata": [],
         "local_fields": [],
@@ -34,7 +34,7 @@
         "type": "omnisend",
         "entity": "contact",
         "action": "list",
-        "name": "Omnisend List Contact",
+        "name": "List Contact",
         "key": "omnisend_contact",
         "metadata": {
           "query": {
@@ -65,7 +65,7 @@
         "type": "omnisend",
         "entity": "contact",
         "action": "update",
-        "name": "Omnisend Update Contact",
+        "name": "Update Contact",
         "key": "omnisend_contact_1",
         "metadata": {
           "path": {

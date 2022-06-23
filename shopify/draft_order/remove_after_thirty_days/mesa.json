@@ -20,7 +20,7 @@
         "type": "shopify",
         "entity": "draft_order",
         "action": "created",
-        "name": "Shopify Draft Order Created",
+        "name": "Draft Order Created",
         "key": "shopify_draft_order",
         "metadata": [],
         "local_fields": [],
@@ -48,7 +48,7 @@
         "type": "shopify",
         "entity": "draft_order",
         "action": "delete",
-        "name": "Shopify Delete Draft Order",
+        "name": "Delete Draft Order",
         "key": "shopify_draft_order_1",
         "metadata": {
           "draft_order_id": "{{delay.id}}"

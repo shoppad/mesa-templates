@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "created",
-        "name": "Shopify Customer Created",
+        "name": "Customer Created",
         "key": "shopify_customer",
         "metadata": [],
         "local_fields": [],
@@ -33,7 +33,7 @@
         "type": "klaviyo",
         "entity": "list",
         "action": "subscribe",
-        "name": "Klaviyo Subscribe List",
+        "name": "Subscribe List",
         "key": "klaviyo_list",
         "metadata": {
           "email": "{{shopify_customer.email}}",

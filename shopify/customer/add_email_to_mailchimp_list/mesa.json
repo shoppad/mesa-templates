@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "created",
-        "name": "Shopify Customer Created",
+        "name": "Customer Created",
         "key": "shopify_customer",
         "metadata": [],
         "weight": 0
@@ -30,7 +30,7 @@
         "schema": 2,
         "trigger_type": "output",
         "type": "mailchimp",
-        "name": "Mailchimp",
+        "name": "",
         "key": "mailchimp",
         "metadata": {
           "email_address": "{{shopify_customer.email}}",

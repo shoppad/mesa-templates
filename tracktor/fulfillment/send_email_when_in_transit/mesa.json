@@ -20,7 +20,7 @@
         "type": "tracktor",
         "entity": "fulfillment",
         "action": "fulfillment/in_transit",
-        "name": "Tracktor Fulfillment Status is In Transit",
+        "name": "Fulfillment Status is In Transit",
         "key": "tracktor_fulfillment",
         "metadata": [],
         "on_error": "default",
@@ -34,7 +34,7 @@
         "type": "tracktor",
         "entity": "order",
         "action": "retrieve",
-        "name": "Tracktor Retrieve Order",
+        "name": "Retrieve Order",
         "key": "tracktor_order",
         "metadata": {
           "order_id": "{{tracktor_fulfillment.order_id}}"

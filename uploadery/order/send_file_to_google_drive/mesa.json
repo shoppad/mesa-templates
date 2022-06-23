@@ -21,7 +21,7 @@
         "type": "uploadery",
         "entity": "order",
         "action": "created",
-        "name": "Uploadery: Order Created",
+        "name": "Order Created",
         "key": "uploadery-order-created",
         "metadata": [],
         "local_fields": [],
@@ -47,7 +47,7 @@
         "type": "googledrive",
         "entity": "file",
         "action": "save",
-        "name": "Google Drive: Save File",
+        "name": "Save File",
         "key": "googledrive-save-file",
         "metadata": {
           "token": "",

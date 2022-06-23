@@ -89,7 +89,7 @@
         "type": "googlesheets",
         "entity": "row",
         "action": "create",
-        "name": "Google Sheets Row Create",
+        "name": "Row Create",
         "key": "googlesheets_row",
         "metadata": {
           "path": {

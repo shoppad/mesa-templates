@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "product",
         "action": "created",
-        "name": "Shopify Product Created",
+        "name": "Product Created",
         "key": "shopify_product",
         "metadata": [],
         "weight": 0
@@ -32,7 +32,7 @@
         "type": "etsy",
         "entity": "listing",
         "action": "create",
-        "name": "Etsy Create Listing",
+        "name": "Create Listing",
         "key": "etsy_listing",
         "metadata": {
           "body": {

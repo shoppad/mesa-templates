@@ -68,7 +68,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "retrieve",
-        "name": "Shopify Customer Retrieve",
+        "name": "Customer Retrieve",
         "key": "shopify_customer",
         "metadata": {
           "customer_id": "{{form.customer-id}}"
@@ -82,7 +82,7 @@
         "type": "shopify",
         "entity": "customer",
         "action": "update",
-        "name": "Shopify Customer Update",
+        "name": "Customer Update",
         "key": "shopify_customer_2",
         "metadata": {
           "body": {

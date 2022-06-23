@@ -19,7 +19,7 @@
         "type": "shopify",
         "entity": "order",
         "action": "created",
-        "name": "Shopify: Order Created",
+        "name": "Order Created",
         "key": "shopify-order-created",
         "metadata": {
           "topic": "orders/create"
@@ -32,7 +32,7 @@
         "type": "salesforce",
         "entity": "account",
         "action": "query",
-        "name": "Salesforce: Query Single Account",
+        "name": "Query Single Account",
         "key": "salesforce-query-single-account",
         "metadata": {
           "entity_name": "Account",
@@ -56,7 +56,7 @@
         "type": "salesforce",
         "entity": "product",
         "action": "query_multiple",
-        "name": "Salesforce: Query Multiple Product",
+        "name": "Query Multiple Product",
         "key": "salesforce-query-multiple-product",
         "metadata": {
           "entity_name": "Product2",
@@ -118,7 +118,7 @@
         "type": "salesforce",
         "entity": "opportunity",
         "action": "create",
-        "name": "Salesforce: Create Opportunity",
+        "name": "Create Opportunity",
         "key": "salesforce-create-opportunity",
         "metadata": {
           "entity_name": "Opportunity",
@@ -184,7 +184,7 @@
         "type": "salesforce",
         "entity": "opportunity_product",
         "action": "create",
-        "name": "Salesforce: Create Opportunity Product",
+        "name": "Create Opportunity Product",
         "key": "salesforce-create-opportunity-product",
         "metadata": {
           "entity_name": "OpportunityLineItem",
