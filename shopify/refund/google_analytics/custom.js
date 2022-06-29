@@ -14,13 +14,14 @@ module.exports = new class {
   script = (payload, context) => {
 
     // Loop through transactions on the refund, and total up the refund amount
-     let refundAmount = 0;
-     payload.transactions.forEach(transaction => {
-       refundAmount -= transaction.amount;
-     });
+    const refundPayload = context.steps['shopify_refund'];
+    let refundAmount = 0;
+    refundPayload.transactions.forEach(transaction => {
+      refundAmount -= transaction.amount;
+    });
      
-     // Add to payload
-     payload.total_refund_amount = refundAmount;
+    // Add to payload
+    payload.total_refund_amount = refundAmount;
     
     // We're done, call the next step!
     Mesa.output.next(payload);
