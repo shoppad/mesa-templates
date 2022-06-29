@@ -1,65 +1,65 @@
 {
-  "key": "shopify_product_update",
-  "name": "Test: Shopify Product Update",
-  "version": "1.0.0",
-  "description": "",
-  "video": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "product",
-        "action": "created",
-        "name": "Product Created",
-        "key": "shopify-product-created",
-        "metadata": {
-          "topic": "products/create"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to Shopify Update Product",
-        "key": "mapping-to-shopify-update-product",
-        "metadata": {
-          "mapping": [
+    "key": "shopify_product_update",
+    "name": "Test: Shopify Product Update",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "tags",
-              "source": "Product Date: {{ \"now\" | date: \"%Y-%m\" }}"
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify-product-created",
+                "metadata": {
+                    "topic": "products/create"
+                }
             }
-          ],
-          "script": "transform.js"
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping"
-          }
         ],
-        "destination_entity": "product"
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "product",
-        "action": "update",
-        "name": "Update Product",
-        "key": "shopify-update-product",
-        "metadata": {
-          "api_endpoint": "PUT admin/products/{{product_id}}.json",
-          "product_id": "{{source.id}}"
-        },
-        "source_entity": "mapping"
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Mapping to Shopify Update Product",
+                "key": "mapping-to-shopify-update-product",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "tags",
+                            "source": "Product Date: {{ \"now\" | date: \"%Y-%m\" }}"
+                        }
+                    ],
+                    "script": "transform.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping"
+                    }
+                ],
+                "destination_entity": "product"
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "shopify-update-product",
+                "metadata": {
+                    "api_endpoint": "PUT admin/products/{{product_id}}.json",
+                    "product_id": "{{source.id}}"
+                },
+                "source_entity": "mapping"
+            }
+        ],
+        "storage": []
+    }
 }

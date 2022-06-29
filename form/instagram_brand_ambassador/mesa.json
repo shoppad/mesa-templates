@@ -1,100 +1,100 @@
 {
-  "key": "instagram_brand_ambassador",
-  "name": "Collect Brand Ambassador Instagram Handles and Tag Customers with \"Influencer\"",
-  "version": "1.0.0",
-  "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Grow your influencer and ambassador programs by asking for Instagram handles at checkout.  You can then reach out to customers with large followings and make sure their experience is top-notch.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "form",
-        "name": "Form",
-        "key": "form",
-        "metadata": {
-          "form_data": [
+    "key": "instagram_brand_ambassador",
+    "name": "Collect Brand Ambassador Instagram Handles and Tag Customers with \"Influencer\"",
+    "version": "1.0.0",
+    "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Grow your influencer and ambassador programs by asking for Instagram handles at checkout.  You can then reach out to customers with large followings and make sure their experience is top-notch.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "type": "header",
-              "subtype": "h3",
-              "label": "Apply to be a Brand Ambassador"
-            },
-            {
-              "type": "paragraph",
-              "subtype": "p",
-              "label": "<br>Thank you for your purchase. Are you interested in becoming a Brand Ambassador with us?<br><br>Fill out the fields below to submit your request to become an Instagram Influencer for our team!<br><br>"
-            },
-            {
-              "type": "text",
-              "required": true,
-              "label": "Instagram Handle",
-              "placeholder": "@examplehandle",
-              "className": "form-control",
-              "name": "instagram-handle",
-              "subtype": "text"
-            },
-            {
-              "type": "text",
-              "required": true,
-              "label": "Email Address",
-              "placeholder": "someone@example.com",
-              "className": "form-control",
-              "name": "email-address",
-              "subtype": "text"
-            },
-            {
-              "type": "hidden",
-              "name": "customer-id",
-              "value": "{{customer.id}}"
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "form",
+                "name": "Form",
+                "key": "form",
+                "metadata": {
+                    "form_data": [
+                        {
+                            "type": "header",
+                            "subtype": "h3",
+                            "label": "Apply to be a Brand Ambassador"
+                        },
+                        {
+                            "type": "paragraph",
+                            "subtype": "p",
+                            "label": "<br>Thank you for your purchase. Are you interested in becoming a Brand Ambassador with us?<br><br>Fill out the fields below to submit your request to become an Instagram Influencer for our team!<br><br>"
+                        },
+                        {
+                            "type": "text",
+                            "required": true,
+                            "label": "Instagram Handle",
+                            "placeholder": "@examplehandle",
+                            "className": "form-control",
+                            "name": "instagram-handle",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "required": true,
+                            "label": "Email Address",
+                            "placeholder": "someone@example.com",
+                            "className": "form-control",
+                            "name": "email-address",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "customer-id",
+                            "value": "{{customer.id}}"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 0
             }
-          ]
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "retrieve",
-        "name": "Customer Retrieve",
-        "key": "shopify_customer",
-        "metadata": {
-          "customer_id": "{{form.customer-id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "update",
-        "name": "Customer Update",
-        "key": "shopify_customer_2",
-        "metadata": {
-          "body": {
-            "tags": "{{shopify_customer.tags}},Influencer",
-            "note": "{{shopify_customer.note}}\nBrand Ambassador submission:\n\nEmail: {{form.email-address}}\nIG handle: {{form.instagram-handle}}"
-          },
-          "customer_id": "{{shopify_customer.id}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Customer Retrieve",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{form.customer-id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "update",
+                "name": "Customer Update",
+                "key": "shopify_customer_2",
+                "metadata": {
+                    "body": {
+                        "tags": "{{shopify_customer.tags}},Influencer",
+                        "note": "{{shopify_customer.note}}\nBrand Ambassador submission:\n\nEmail: {{form.email-address}}\nIG handle: {{form.instagram-handle}}"
+                    },
+                    "customer_id": "{{shopify_customer.id}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

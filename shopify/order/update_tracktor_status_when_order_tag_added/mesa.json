@@ -1,79 +1,79 @@
 {
-  "key": "shopify/order/update_tracktor_status_when_order_tag_added",
-  "name": "Update Tracktor status when an order tag is added in Shopify",
-  "version": "1.0.0",
-  "description": "Changes the Tracktor order status to \"Preparing your order\" when a \"made to order\" tag is added to the Shopify order.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "tracktor",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "updated",
-        "name": "Order Updated",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "made to order",
-          "comparison": "in",
-          "b": "{{shopify_order.tags}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter_1",
-        "metadata": {
-          "a": "{{shopify_order.fulfillment_status}}",
-          "comparison": "equals",
-          "b": "null"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "tracktor",
-        "entity": "order",
-        "action": "update",
-        "name": "Update Manual Status Order",
-        "key": "tracktor_order_1",
-        "metadata": {
-          "order_id": "{{shopify_order.id}}",
-          "body": {
-            "automatic_carrier_updates": "false",
-            "force": true,
-            "status": "Preparing your order"
-          }
-        },
-        "local_fields": [],
-        "weight": 2
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/order/update_tracktor_status_when_order_tag_added",
+    "name": "Update Tracktor status when an order tag is added in Shopify",
+    "version": "1.0.0",
+    "description": "Changes the Tracktor order status to \"Preparing your order\" when a \"made to order\" tag is added to the Shopify order.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "tracktor",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "updated",
+                "name": "Order Updated",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "made to order",
+                    "comparison": "in",
+                    "b": "{{shopify_order.tags}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{shopify_order.fulfillment_status}}",
+                    "comparison": "equals",
+                    "b": "null"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "update",
+                "name": "Update Manual Status Order",
+                "key": "tracktor_order_1",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "automatic_carrier_updates": "false",
+                        "force": true,
+                        "status": "Preparing your order"
+                    }
+                },
+                "local_fields": [],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
 }

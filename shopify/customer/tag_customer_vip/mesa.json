@@ -1,78 +1,78 @@
 {
-  "key": "shopify/customer/tag_customer_vip",
-  "name": "Automatically Tag Customers After They Hit a Lifetime Spending Threshold",
-  "version": "1.0.0",
-  "description": "Automatically tag your customers as VIPs once they hit a lifetime spending milestone. Then you can be extra attentive to your top buyers by offering them exclusive merchandise, sending them personalized thank you emails, or even providing special discounts.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "retrieve",
-        "name": "Retrieve Customer",
-        "key": "shopify_customer",
-        "metadata": {
-          "customer_id": "{{shopify_order.customer.id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_customer.total_spent}}",
-          "comparison": "greater than",
-          "b": "1500"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "tag_add",
-        "name": "Customer Add Tag",
-        "key": "shopify_customer_2",
-        "metadata": {
-          "customer_id": "{{shopify_order.customer.id}}",
-          "body": {
-            "tag": "VIP"
-          }
-        },
-        "local_fields": [],
-        "weight": 2
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/customer/tag_customer_vip",
+    "name": "Automatically Tag Customers After They Hit a Lifetime Spending Threshold",
+    "version": "1.0.0",
+    "description": "Automatically tag your customers as VIPs once they hit a lifetime spending milestone. Then you can be extra attentive to your top buyers by offering them exclusive merchandise, sending them personalized thank you emails, or even providing special discounts.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{shopify_order.customer.id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_customer.total_spent}}",
+                    "comparison": "greater than",
+                    "b": "1500"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_customer_2",
+                "metadata": {
+                    "customer_id": "{{shopify_order.customer.id}}",
+                    "body": {
+                        "tag": "VIP"
+                    }
+                },
+                "local_fields": [],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
 }

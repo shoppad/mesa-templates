@@ -1,104 +1,104 @@
 {
-  "key": "shopify/order/add_fulfillment",
-  "name": "Add fulfillment to line items that don't require shipping",
-  "version": "1.0.0",
-  "description": "Consolidate fulfillment information and reduce clutter for your fulfillment service. This template instantly adds fulfillment to Shopify orders when an order is created with line-items that do not require shipping. With this workflow, you reduce the risk of fulfillment errors for your store.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "loop",
-        "name": "Loop",
-        "key": "loop",
-        "metadata": {
-          "key": "{{shopify_order.line_items[]}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{loop.requires_shipping}}",
-          "comparison": "equals",
-          "b": "false"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order_fulfillment",
-        "action": "create",
-        "name": "Create Order Fulfillment",
-        "key": "shopify_order_fulfillment",
-        "metadata": {
-          "order_id": "{{shopify_order.id}}",
-          "body": {
-            "line_items": [
-              {
-                "id": "{{loop.id}}",
-                "variant_id": "{{loop.variant_id}}",
-                "quantity": "{{loop.quantity}}"
-              }
-            ],
-            "notify_customer": "false"
-          }
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "fields": [
-              {
-                "key": "line_items",
-                "fields": [
-                  {
-                    "key": "applied_discount",
-                    "fields": []
-                  }
-                ]
-              },
-              {
-                "key": "notify_customer",
-                "type": "custom",
-                "allow_custom_fields": false
-              }
-            ]
-          }
+    "key": "shopify/order/add_fulfillment",
+    "name": "Add fulfillment to line items that don't require shipping",
+    "version": "1.0.0",
+    "description": "Consolidate fulfillment information and reduce clutter for your fulfillment service. This template instantly adds fulfillment to Shopify orders when an order is created with line-items that do not require shipping. With this workflow, you reduce the risk of fulfillment errors for your store.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
         ],
-        "weight": 2
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.requires_shipping}}",
+                    "comparison": "equals",
+                    "b": "false"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_fulfillment",
+                "action": "create",
+                "name": "Create Order Fulfillment",
+                "key": "shopify_order_fulfillment",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "line_items": [
+                            {
+                                "id": "{{loop.id}}",
+                                "variant_id": "{{loop.variant_id}}",
+                                "quantity": "{{loop.quantity}}"
+                            }
+                        ],
+                        "notify_customer": "false"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "line_items",
+                                "fields": [
+                                    {
+                                        "key": "applied_discount",
+                                        "fields": []
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "notify_customer",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            }
+                        ]
+                    }
+                ],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
 }

@@ -1,267 +1,267 @@
 {
-  "key": "shopify/order/send_to_odoo_order",
-  "name": "Send Shopify Order to Odoo Order",
-  "version": "1.0.0",
-  "description": "Send Shopify Order from Shopify to Odoo Order and Order Lines when order is created.",
-  "video": "",
-  "readme": "",
-  "tags": [
-    "order",
-    "odoo",
-    "shopify"
-  ],
-  "source": "shopify",
-  "destination": "odoo",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "paid",
-        "name": "Order Paid",
-        "key": "shopify_order",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
+    "key": "shopify/order/send_to_odoo_order",
+    "name": "Send Shopify Order to Odoo Order",
+    "version": "1.0.0",
+    "description": "Send Shopify Order from Shopify to Odoo Order and Order Lines when order is created.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "order",
+        "odoo",
+        "shopify"
     ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "odoo",
-        "entity": "product.product",
-        "action": "search_read",
-        "name": "List Product Variant",
-        "key": "odoo_product_product",
-        "metadata": {
-          "entity_name": "product.product",
-          "method": "search_read",
-          "query": [
+    "source": "shopify",
+    "destination": "odoo",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "property": "default_code",
-              "operator": "in",
-              "value": "{{shopify_order.line_items | map:'sku' | join:','}}"
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "paid",
+                "name": "Order Paid",
+                "key": "shopify_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
             }
-          ],
-          "fields": [
-            {
-              "property": "id"
-            },
-            {
-              "property": "name"
-            },
-            {
-              "property": "default_code"
-            }
-          ],
-          "secret": ""
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_order.line_items | map:'sku' | join:','}}",
-          "comparison": "equals",
-          "b": "{{odoo_product_product | map:'default_code' | join:','}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "odoo",
-        "entity": "res.partner",
-        "action": "search_read",
-        "name": "List Customer",
-        "key": "odoo_res_partner",
-        "metadata": {
-          "entity_name": "res.partner",
-          "method": "search_read",
-          "query": [
-            {
-              "property": "email",
-              "operator": "=",
-              "value": "{{shopify_order.customer.email}}"
-            },
-            {
-              "property": "customer",
-              "operator": "=",
-              "value": "TRUE"
-            },
-            {
-              "property": "active",
-              "operator": "=",
-              "value": "TRUE"
-            },
-            {
-              "property": "street",
-              "operator": "=",
-              "value": "{{shopify_order.shipping_address.address1}}"
-            },
-            {
-              "property": "zip",
-              "operator": "=",
-              "value": "{{shopify_order.shipping_address.zip}}"
-            }
-          ],
-          "fields": [
-            {
-              "property": "id"
-            },
-            {
-              "property": "parent_id"
-            },
-            {
-              "property": "name"
-            },
-            {
-              "property": "email"
-            },
-            {
-              "property": "street"
-            },
-            {
-              "property": "zip"
-            }
-          ],
-          "secret": ""
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter_1",
-        "metadata": {
-          "a": "{{odoo_res_partner.0.id}}",
-          "comparison": "greater than",
-          "b": "1"
-        },
-        "local_fields": [],
-        "weight": 3
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "odoo",
-        "entity": "sale.order",
-        "action": "create",
-        "name": "Create Order",
-        "key": "odoo_sale_order",
-        "metadata": {
-          "entity_name": "sale.order",
-          "method": "create",
-          "body": {
-            "name": "{{shopify_order.order_number}}",
-            "state": "draft",
-            "partner_id": "{{odoo_res_partner.0.id}}",
-            "partner_invoice_id": "{{odoo_res_partner.0.id}}",
-            "partner_shipping_id": "{{odoo_res_partner.0.id}}",
-            "delivery_price": "{{shopify_order.shipping_lines[0].price}}",
-            "amount_untaxed": "{{shopify_order.subtotal_price}}",
-            "amount_tax": "{{shopify_order.total_tax}}",
-            "amount_total": "{{shopify_order.total_price}}",
-            "type_name": "Quotation",
-            "display_name": "{{shopify_order.name}}"
-          },
-          "secret": ""
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "fields": []
-          }
         ],
-        "weight": 4
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "loop",
-        "name": "Loop",
-        "key": "loop",
-        "metadata": {
-          "key": "{{shopify_order.line_items[]}}"
-        },
-        "local_fields": [],
-        "weight": 5
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Transform  Mapping",
-        "key": "transformmapping",
-        "metadata": {
-          "script": "transformmapping.js",
-          "mapping": [
+        "outputs": [
             {
-              "destination": "product_id",
-              "source": "{{SEE_SCRIPT}}"
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "product.product",
+                "action": "search_read",
+                "name": "List Product Variant",
+                "key": "odoo_product_product",
+                "metadata": {
+                    "entity_name": "product.product",
+                    "method": "search_read",
+                    "query": [
+                        {
+                            "property": "default_code",
+                            "operator": "in",
+                            "value": "{{shopify_order.line_items | map:'sku' | join:','}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "name"
+                        },
+                        {
+                            "property": "default_code"
+                        }
+                    ],
+                    "secret": ""
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_order.line_items | map:'sku' | join:','}}",
+                    "comparison": "equals",
+                    "b": "{{odoo_product_product | map:'default_code' | join:','}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "res.partner",
+                "action": "search_read",
+                "name": "List Customer",
+                "key": "odoo_res_partner",
+                "metadata": {
+                    "entity_name": "res.partner",
+                    "method": "search_read",
+                    "query": [
+                        {
+                            "property": "email",
+                            "operator": "=",
+                            "value": "{{shopify_order.customer.email}}"
+                        },
+                        {
+                            "property": "customer",
+                            "operator": "=",
+                            "value": "TRUE"
+                        },
+                        {
+                            "property": "active",
+                            "operator": "=",
+                            "value": "TRUE"
+                        },
+                        {
+                            "property": "street",
+                            "operator": "=",
+                            "value": "{{shopify_order.shipping_address.address1}}"
+                        },
+                        {
+                            "property": "zip",
+                            "operator": "=",
+                            "value": "{{shopify_order.shipping_address.zip}}"
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "property": "id"
+                        },
+                        {
+                            "property": "parent_id"
+                        },
+                        {
+                            "property": "name"
+                        },
+                        {
+                            "property": "email"
+                        },
+                        {
+                            "property": "street"
+                        },
+                        {
+                            "property": "zip"
+                        }
+                    ],
+                    "secret": ""
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{odoo_res_partner.0.id}}",
+                    "comparison": "greater than",
+                    "b": "1"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "sale.order",
+                "action": "create",
+                "name": "Create Order",
+                "key": "odoo_sale_order",
+                "metadata": {
+                    "entity_name": "sale.order",
+                    "method": "create",
+                    "body": {
+                        "name": "{{shopify_order.order_number}}",
+                        "state": "draft",
+                        "partner_id": "{{odoo_res_partner.0.id}}",
+                        "partner_invoice_id": "{{odoo_res_partner.0.id}}",
+                        "partner_shipping_id": "{{odoo_res_partner.0.id}}",
+                        "delivery_price": "{{shopify_order.shipping_lines[0].price}}",
+                        "amount_untaxed": "{{shopify_order.subtotal_price}}",
+                        "amount_tax": "{{shopify_order.total_tax}}",
+                        "amount_total": "{{shopify_order.total_price}}",
+                        "type_name": "Quotation",
+                        "display_name": "{{shopify_order.name}}"
+                    },
+                    "secret": ""
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 5
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform  Mapping",
+                "key": "transformmapping",
+                "metadata": {
+                    "script": "transformmapping.js",
+                    "mapping": [
+                        {
+                            "destination": "product_id",
+                            "source": "{{SEE_SCRIPT}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 6
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "sale.order.line",
+                "action": "create",
+                "name": "Create Order Line",
+                "key": "odoo_sale_order_line",
+                "metadata": {
+                    "entity_name": "sale.order.line",
+                    "method": "create",
+                    "body": {
+                        "name": "{{loop.name}}",
+                        "order_id": "{{odoo_sale_order.id}}",
+                        "price_unit": "{{loop.price}}",
+                        "price_subtotal": "{{loop.price | times: loop.quantity}}",
+                        "price_total": "{{loop.price | times: loop.quantity}}",
+                        "product_id": "{{transformmapping.product_id}}",
+                        "notes": "{{loop.notes}}",
+                        "gift_notes": "{{loop.gift_notes}}",
+                        "product_uom_qty": "{{loop.quantity}}",
+                        "product_qty": "{{loop.quantity}}"
+                    },
+                    "secret": ""
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "weight": 7
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets",
-            "location": "mapping"
-          }
         ],
-        "weight": 6
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "odoo",
-        "entity": "sale.order.line",
-        "action": "create",
-        "name": "Create Order Line",
-        "key": "odoo_sale_order_line",
-        "metadata": {
-          "entity_name": "sale.order.line",
-          "method": "create",
-          "body": {
-            "name": "{{loop.name}}",
-            "order_id": "{{odoo_sale_order.id}}",
-            "price_unit": "{{loop.price}}",
-            "price_subtotal": "{{loop.price | times: loop.quantity}}",
-            "price_total": "{{loop.price | times: loop.quantity}}",
-            "product_id": "{{transformmapping.product_id}}",
-            "notes": "{{loop.notes}}",
-            "gift_notes": "{{loop.gift_notes}}",
-            "product_uom_qty": "{{loop.quantity}}",
-            "product_qty": "{{loop.quantity}}"
-          },
-          "secret": ""
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "fields": []
-          }
-        ],
-        "weight": 7
-      }
-    ],
-    "storage": []
-  }
+        "storage": []
+    }
 }

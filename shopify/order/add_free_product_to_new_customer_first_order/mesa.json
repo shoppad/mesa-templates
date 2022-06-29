@@ -1,62 +1,62 @@
 {
-  "key": "shopify/order/add_free_product_to_new_customer_first_order",
-  "name": "Add a Free Product to First Time Customer's Order",
-  "version": "1.0.0",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_order.customer.orders_count}}",
-          "comparison": "equals",
-          "b": "1"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "line_item_add",
-        "name": "Order Line Item Add",
-        "key": "shopify_order_1",
-        "metadata": {
-          "order_id": "{{shopify_order.id}}",
-          "body": {
-            "quantity": "1",
-            "notify_customer": true,
-            "order_note": "Add free product",
-            "discount_type": "Percentage",
-            "discount_amount": "100"
-          }
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/order/add_free_product_to_new_customer_first_order",
+    "name": "Add a Free Product to First Time Customer's Order",
+    "version": "1.0.0",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_order.customer.orders_count}}",
+                    "comparison": "equals",
+                    "b": "1"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "line_item_add",
+                "name": "Order Line Item Add",
+                "key": "shopify_order_1",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "quantity": "1",
+                        "notify_customer": true,
+                        "order_note": "Add free product",
+                        "discount_type": "Percentage",
+                        "discount_amount": "100"
+                    }
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

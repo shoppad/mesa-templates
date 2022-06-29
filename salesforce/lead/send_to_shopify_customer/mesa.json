@@ -1,70 +1,70 @@
 {
-  "key": "salesforce/lead/send_to_shopify_customer",
-  "name": "Send Salesforce Lead To Shopify Customer",
-  "version": "1.0.0",
-  "description": "Retain customer loyalty by connecting your converted lead from Salesforce to Shopify. This template sends contact details from Salesforce to Shopify customer when a lead converts. Keep the momentum going by bridging the gap between these two major platforms.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "salesforce",
-        "entity": "lead",
-        "action": "list-converted",
-        "name": "Lead Converted",
-        "key": "salesforce_lead",
-        "metadata": {
-          "entity_name": "Lead",
-          "method": "list-converted",
-          "poll": "@hourly:0 * * * *",
-          "next_sync_date_time": "2022-05-25T14:00:00-07:00"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "create",
-        "name": "Create Customer",
-        "key": "shopify_customer",
-        "metadata": {
-          "body": {
-            "email": "{{salesforce_lead.Email}}",
-            "phone": "{{salesforce_lead.Phone}}",
-            "first_name": "{{salesforce_lead.FirstName}}",
-            "last_name": "{{salesforce_lead.LastName}}",
-            "addresses": [
-              {
-                "address1": "{{salesforce_lead.Street}}",
-                "phone": "{{salesforce_lead.Phone}}",
-                "city": "{{salesforce_lead.City}}",
-                "province": "{{salesforce_lead.State}}",
-                "zip": "{{salesforce_lead.PostalCode}}",
-                "country": "{{salesforce_lead.Country}}"
-              }
-            ]
-          }
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "salesforce/lead/send_to_shopify_customer",
+    "name": "Send Salesforce Lead To Shopify Customer",
+    "version": "1.0.0",
+    "description": "Retain customer loyalty by connecting your converted lead from Salesforce to Shopify. This template sends contact details from Salesforce to Shopify customer when a lead converts. Keep the momentum going by bridging the gap between these two major platforms.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "salesforce",
+                "entity": "lead",
+                "action": "list-converted",
+                "name": "Lead Converted",
+                "key": "salesforce_lead",
+                "metadata": {
+                    "entity_name": "Lead",
+                    "method": "list-converted",
+                    "poll": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2022-05-25T14:00:00-07:00"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "shopify_customer",
+                "metadata": {
+                    "body": {
+                        "email": "{{salesforce_lead.Email}}",
+                        "phone": "{{salesforce_lead.Phone}}",
+                        "first_name": "{{salesforce_lead.FirstName}}",
+                        "last_name": "{{salesforce_lead.LastName}}",
+                        "addresses": [
+                            {
+                                "address1": "{{salesforce_lead.Street}}",
+                                "phone": "{{salesforce_lead.Phone}}",
+                                "city": "{{salesforce_lead.City}}",
+                                "province": "{{salesforce_lead.State}}",
+                                "zip": "{{salesforce_lead.PostalCode}}",
+                                "country": "{{salesforce_lead.Country}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

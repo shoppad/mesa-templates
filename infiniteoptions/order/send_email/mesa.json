@@ -1,49 +1,49 @@
 {
-  "key": "infiniteoptions/order/send_email",
-  "name": "Send an Email When an Infinite Options Product Is Purchased",
-  "version": "1.0.0",
-  "description": "Avoid surprises and ensure both you and your team are prepared for when an order is placed containing a product that requires special handling. MESA will automatically send an email to your store’s registered email address when an order with Infinite Options products is purchased",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 4.1,
-        "trigger_type": "input",
-        "type": "infiniteoptions",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "infiniteoptions_order",
-        "metadata": {},
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{context.shop.email}}",
-          "subject": "New Infinite Options Order {{infiniteoptions_order.order.order_number}}",
-          "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "infiniteoptions/order/send_email",
+    "name": "Send an Email When an Infinite Options Product Is Purchased",
+    "version": "1.0.0",
+    "description": "Avoid surprises and ensure both you and your team are prepared for when an order is placed containing a product that requires special handling. MESA will automatically send an email to your store’s registered email address when an order with Infinite Options products is purchased",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "infiniteoptions_order",
+                "metadata": {},
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "is_premium": true,
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{context.shop.email}}",
+                    "subject": "New Infinite Options Order {{infiniteoptions_order.order.order_number}}",
+                    "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

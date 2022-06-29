@@ -1,42 +1,42 @@
 {
-  "name": "Add Destination Weather Forecast To Order Notes",
-  "version": "1.0.0",
-  "description": "Add destination weather forecast to Shopify Order Notes when order is created with OpenWeatherMap.",
-  "key": "shopify/order/add_destination_forecast_to_order_notes_with_openweathermap",
-  "tags": [
-    "Order"
-  ],
-  "source": "shopify",
-  "destination": "openweather",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Order Webhook",
-        "key": "in-shopify-order-webhook",
-        "script": "in_shopify_order_webhook.js",
-        "logging": "error",
-        "entity": "order",
-        "action": "created"
-      }
+    "name": "Add Destination Weather Forecast To Order Notes",
+    "version": "1.0.0",
+    "description": "Add destination weather forecast to Shopify Order Notes when order is created with OpenWeatherMap.",
+    "key": "shopify/order/add_destination_forecast_to_order_notes_with_openweathermap",
+    "tags": [
+        "Order"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "name": "Add Weather Forecast",
-        "key": "out-add-weather-forecast",
-        "script": "out_add_weather_forecast.js",
-        "logging": "error",
-        "api_endpoint": "PUT admin/orders/{{order_id}}.json"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "openweathermap-key"
-      }
-    ]
-  }
+    "source": "shopify",
+    "destination": "openweather",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Order Webhook",
+                "key": "in-shopify-order-webhook",
+                "script": "in_shopify_order_webhook.js",
+                "logging": "error",
+                "entity": "order",
+                "action": "created"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "shopify",
+                "name": "Add Weather Forecast",
+                "key": "out-add-weather-forecast",
+                "script": "out_add_weather_forecast.js",
+                "logging": "error",
+                "api_endpoint": "PUT admin/orders/{{order_id}}.json"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "openweathermap-key"
+            }
+        ]
+    }
 }

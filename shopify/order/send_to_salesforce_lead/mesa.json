@@ -1,61 +1,61 @@
 {
-  "key": "shopify/order/send_to_salesforce_lead",
-  "name": "Send Order To Salesforce Lead",
-  "version": "1.0.0",
-  "description": "Seize the moment and secure your customer’s loyalty by linking your Shopify customers to the Salesforce lead system.  This template sends orders from Shopify to Salesforce Lead as soon as the order is created on Shopify. Keep the momentum going by bridging the gap between these two major platforms.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "salesforce",
-        "entity": "lead",
-        "action": "create",
-        "name": "Create Lead",
-        "key": "salesforce_lead",
-        "metadata": {
-          "entity_name": "Lead",
-          "method": "POST",
-          "body": {
-            "LastName": "{{shopify_order.customer.last_name}}",
-            "FirstName": "{{shopify_order.customer.first_name}}",
-            "Company": "{% if shopify_order.customer.default_address.company %}{{shopify_order.customer.default_address.company}}{% else %}Shopify Customer{% endif %}",
-            "Street": "{{shopify_order.customer.default_address.address1}} {{shopify_order.customer.default_address.address2}}",
-            "City": "{{shopify_order.customer.default_address.city}}",
-            "State": "{{shopify_order.customer.default_address.province}}",
-            "PostalCode": "{{shopify_order.customer.default_address.zip}}",
-            "Country": "{{shopify_order.customer.default_address.country}}",
-            "Phone": "{{shopify_order.customer.default_address.phone}}",
-            "Email": "{{shopify_order.email}}"
-          }
-        },
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/order/send_to_salesforce_lead",
+    "name": "Send Order To Salesforce Lead",
+    "version": "1.0.0",
+    "description": "Seize the moment and secure your customer’s loyalty by linking your Shopify customers to the Salesforce lead system.  This template sends orders from Shopify to Salesforce Lead as soon as the order is created on Shopify. Keep the momentum going by bridging the gap between these two major platforms.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "lead",
+                "action": "create",
+                "name": "Create Lead",
+                "key": "salesforce_lead",
+                "metadata": {
+                    "entity_name": "Lead",
+                    "method": "POST",
+                    "body": {
+                        "LastName": "{{shopify_order.customer.last_name}}",
+                        "FirstName": "{{shopify_order.customer.first_name}}",
+                        "Company": "{% if shopify_order.customer.default_address.company %}{{shopify_order.customer.default_address.company}}{% else %}Shopify Customer{% endif %}",
+                        "Street": "{{shopify_order.customer.default_address.address1}} {{shopify_order.customer.default_address.address2}}",
+                        "City": "{{shopify_order.customer.default_address.city}}",
+                        "State": "{{shopify_order.customer.default_address.province}}",
+                        "PostalCode": "{{shopify_order.customer.default_address.zip}}",
+                        "Country": "{{shopify_order.customer.default_address.country}}",
+                        "Phone": "{{shopify_order.customer.default_address.phone}}",
+                        "Email": "{{shopify_order.email}}"
+                    }
+                },
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

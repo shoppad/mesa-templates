@@ -1,69 +1,69 @@
 {
-  "key": "infiniteoptions/order/yotpo_loyalty_set_birthday",
-  "name": "Save customer's birthday to Yotpo Loyalty when an Infinite Options order occurs",
-  "version": "1.0.0",
-  "description": "Engaging customers on their birthday is the best way to keep them coming back for more. Add a line item property \"Birthday\" in an Infinite Options order and have it automatically saved in Yotpo Loyalty.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 4.1,
-        "trigger_type": "input",
-        "type": "infiniteoptions",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "infiniteoptions_order",
-        "metadata": {
-          "field_name": "Birthday"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Getting Birthday Data",
-        "key": "custom",
-        "metadata": {
-          "description": "We are converting the date string into an object with date values.",
-          "script": "custom.js"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "yotpoloyalty",
-        "entity": "birthday",
-        "action": "set",
-        "name": "& Referrals Birthday Set",
-        "key": "yotpoloyalty_birthday",
-        "metadata": {
-          "body": {
-            "customer_email": "{{infiniteoptions_order.order.email}}",
-            "customer_id": "{{infiniteoptions_order.order.customer.id}}",
-            "day": "{{ custom.birthday_payload.day }}",
-            "month": "{{ custom.birthday_payload.month }}",
-            "year": "{{ custom.birthday_payload.year }}"
-          }
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "infiniteoptions/order/yotpo_loyalty_set_birthday",
+    "name": "Save customer's birthday to Yotpo Loyalty when an Infinite Options order occurs",
+    "version": "1.0.0",
+    "description": "Engaging customers on their birthday is the best way to keep them coming back for more. Add a line item property \"Birthday\" in an Infinite Options order and have it automatically saved in Yotpo Loyalty.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "infiniteoptions_order",
+                "metadata": {
+                    "field_name": "Birthday"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Getting Birthday Data",
+                "key": "custom",
+                "metadata": {
+                    "description": "We are converting the date string into an object with date values.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "yotpoloyalty",
+                "entity": "birthday",
+                "action": "set",
+                "name": "& Referrals Birthday Set",
+                "key": "yotpoloyalty_birthday",
+                "metadata": {
+                    "body": {
+                        "customer_email": "{{infiniteoptions_order.order.email}}",
+                        "customer_id": "{{infiniteoptions_order.order.customer.id}}",
+                        "day": "{{ custom.birthday_payload.day }}",
+                        "month": "{{ custom.birthday_payload.month }}",
+                        "year": "{{ custom.birthday_payload.year }}"
+                    }
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

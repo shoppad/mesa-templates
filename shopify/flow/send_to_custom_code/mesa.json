@@ -1,40 +1,40 @@
 {
-  "key": "shopify_flow_send_to_custom_code",
-  "name": "Trigger custom code from a Shopify Flow workflow",
-  "version": "1.0.0",
-  "description": "",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "shopify_flow",
-        "name": "Action",
-        "key": "shopify_flow",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Custom Code",
-        "key": "custom",
-        "metadata": {},
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify_flow_send_to_custom_code",
+    "name": "Trigger custom code from a Shopify Flow workflow",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify_flow",
+                "name": "Action",
+                "key": "shopify_flow",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {},
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

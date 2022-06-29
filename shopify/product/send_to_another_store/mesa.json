@@ -1,83 +1,83 @@
 {
-  "key": "shopify/product/send_to_another_store",
-  "name": "Send Product To Another Store",
-  "version": "1.0.0",
-  "description": "Send product from Shopify to another store when product is created, updated or deleted.",
-  "tags": [
-    "Product"
-  ],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Product Create Webhook",
-        "key": "in-shopify-product-create",
-        "script": "in_shopify_product_create.js",
-        "entity": "product",
-        "action": "created"
-      },
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Product Update Webhook",
-        "key": "in-shopify-product-update",
-        "script": "in_shopify_product_update.js",
-        "entity": "product",
-        "action": "updated"
-      },
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Product Delete Webhook",
-        "key": "in-shopify-product-delete",
-        "script": "in_shopify_product_delete.js",
-        "entity": "product",
-        "action": "deleted"
-      }
+    "key": "shopify/product/send_to_another_store",
+    "name": "Send Product To Another Store",
+    "version": "1.0.0",
+    "description": "Send product from Shopify to another store when product is created, updated or deleted.",
+    "tags": [
+        "Product"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Create Shopify Product",
-        "key": "out-create-shopify-product",
-        "script": "out_create_shopify_product.js"
-      },
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Update Shopify Product",
-        "key": "out-update-shopify-product",
-        "script": "out_update_shopify_product.js"
-      },
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Remove Shopify Product",
-        "key": "out-delete-shopify-product",
-        "script": "out_delete_shopify_product.js"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "store-password"
-      }
-    ],
-    "storage": [
-      {
-        "key": "store-host"
-      },
-      {
-        "key": "store-key"
-      },
-      {
-        "key": "product-map.json",
-        "value": "{}"
-      }
-    ]
-  }
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Product Create Webhook",
+                "key": "in-shopify-product-create",
+                "script": "in_shopify_product_create.js",
+                "entity": "product",
+                "action": "created"
+            },
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Product Update Webhook",
+                "key": "in-shopify-product-update",
+                "script": "in_shopify_product_update.js",
+                "entity": "product",
+                "action": "updated"
+            },
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Product Delete Webhook",
+                "key": "in-shopify-product-delete",
+                "script": "in_shopify_product_delete.js",
+                "entity": "product",
+                "action": "deleted"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Create Shopify Product",
+                "key": "out-create-shopify-product",
+                "script": "out_create_shopify_product.js"
+            },
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Update Shopify Product",
+                "key": "out-update-shopify-product",
+                "script": "out_update_shopify_product.js"
+            },
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Remove Shopify Product",
+                "key": "out-delete-shopify-product",
+                "script": "out_delete_shopify_product.js"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "store-password"
+            }
+        ],
+        "storage": [
+            {
+                "key": "store-host"
+            },
+            {
+                "key": "store-key"
+            },
+            {
+                "key": "product-map.json",
+                "value": "{}"
+            }
+        ]
+    }
 }

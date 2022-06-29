@@ -1,63 +1,63 @@
 {
-  "key": "low_score_email_staff",
-  "name": "Send an Email to Staff When a Low Delighted Score is Posted",
-  "version": "1.0.0",
-  "description": "When customers provide negative feedback, you must follow up with them and try to understand why. Mesa allows you to automatically send an email to staff when you receive a low Delighted score, so you can proceed to contact the customer and learn more about their negative review.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "delighted",
-        "entity": "survey",
-        "action": "survey/response",
-        "name": "Survey Response",
-        "key": "delighted_survey",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{delighted_survey.score}}",
-          "comparison": "less than",
-          "b": "5"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "subject": "Low NPS Score:  {{delighted_survey.person.name}}left a score of {{delighted_survey.score}}",
-          "message": "{{delighted_survey.person.name}}gave a Delighted score of: {{delighted_survey.score}}\n\n{{delighted_survey.comment}}\n\n{{delighted_survey.person.email}}",
-          "from": "{{delighted_survey.person.email}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "low_score_email_staff",
+    "name": "Send an Email to Staff When a Low Delighted Score is Posted",
+    "version": "1.0.0",
+    "description": "When customers provide negative feedback, you must follow up with them and try to understand why. Mesa allows you to automatically send an email to staff when you receive a low Delighted score, so you can proceed to contact the customer and learn more about their negative review.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "delighted",
+                "entity": "survey",
+                "action": "survey/response",
+                "name": "Survey Response",
+                "key": "delighted_survey",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{delighted_survey.score}}",
+                    "comparison": "less than",
+                    "b": "5"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "is_premium": true,
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "subject": "Low NPS Score:  {{delighted_survey.person.name}}left a score of {{delighted_survey.score}}",
+                    "message": "{{delighted_survey.person.name}}gave a Delighted score of: {{delighted_survey.score}}\n\n{{delighted_survey.comment}}\n\n{{delighted_survey.person.email}}",
+                    "from": "{{delighted_survey.person.email}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

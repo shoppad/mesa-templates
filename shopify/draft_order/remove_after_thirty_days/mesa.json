@@ -1,63 +1,63 @@
 {
-  "key": "shopify/draft_order/remove_after_thirty_days",
-  "name": "Remove draft orders after thirty days",
-  "version": "1.0.0",
-  "description": "Keep the draft orders on your online store tidy and current with the help of MESA. This template removes draft orders that have been sitting on your Shopify store for more than 30 days. Now you can keep draft order clutter at bay automatically!",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shopify",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "draft_order",
-        "action": "created",
-        "name": "Draft Order Created",
-        "key": "shopify_draft_order",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "delay",
-        "name": "Delay for 30 days",
-        "key": "delay",
-        "metadata": {
-          "amount": "30",
-          "unit": "days",
-          "test_bypass": false
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "draft_order",
-        "action": "delete",
-        "name": "Delete Draft Order",
-        "key": "shopify_draft_order_1",
-        "metadata": {
-          "draft_order_id": "{{delay.id}}"
-        },
-        "local_fields": [],
-        "on_error": "ignore",
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/draft_order/remove_after_thirty_days",
+    "name": "Remove draft orders after thirty days",
+    "version": "1.0.0",
+    "description": "Keep the draft orders on your online store tidy and current with the help of MESA. This template removes draft orders that have been sitting on your Shopify store for more than 30 days. Now you can keep draft order clutter at bay automatically!",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "created",
+                "name": "Draft Order Created",
+                "key": "shopify_draft_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay for 30 days",
+                "key": "delay",
+                "metadata": {
+                    "amount": "30",
+                    "unit": "days",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "delete",
+                "name": "Delete Draft Order",
+                "key": "shopify_draft_order_1",
+                "metadata": {
+                    "draft_order_id": "{{delay.id}}"
+                },
+                "local_fields": [],
+                "on_error": "ignore",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

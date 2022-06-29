@@ -1,48 +1,48 @@
 {
-  "key": "infiniteoptions/order/send_slack_notification",
-  "name": "Send a Slack Notification When an Infinite Options Product is Purchased",
-  "version": "1.0.0",
-  "description": "Send a Slack message when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is handy for companies using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 4.1,
-        "trigger_type": "input",
-        "type": "infiniteoptions",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "infiniteoptions_order",
-        "metadata": {
-          "field_name": "Special_Notes"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "slack",
-        "name": "",
-        "key": "slack",
-        "metadata": {
-          "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "infiniteoptions/order/send_slack_notification",
+    "name": "Send a Slack Notification When an Infinite Options Product is Purchased",
+    "version": "1.0.0",
+    "description": "Send a Slack message when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is handy for companies using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "infiniteoptions_order",
+                "metadata": {
+                    "field_name": "Special_Notes"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "",
+                "key": "slack",
+                "metadata": {
+                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

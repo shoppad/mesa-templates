@@ -1,127 +1,127 @@
 {
-  "key": "send_to_stampedio_review_request",
-  "name": "Send a review request after an order has been delivered",
-  "version": "1.0.0",
-  "description": "When a customer receives an order, it is beneficial to understand if their experience matched their expectation. Get an accurate review by requesting feedback when the experience is fresh in the customer's mind. This template will send a Stamped.io review request after a Tracktor fulfillment status changes to Delivered.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "tracktor",
-        "entity": "fulfillment",
-        "action": "fulfillment/delivered",
-        "name": "Fulfillment Status is Delivered",
-        "key": "tracktor_fulfillment",
-        "metadata": [],
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Retrieve Order",
-        "key": "shopify_order",
-        "metadata": {
-          "order_id": "{{tracktor_fulfillment.order_id}}"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "delay",
-        "name": "Delay",
-        "key": "delay",
-        "metadata": {
-          "amount": "1",
-          "unit": "days",
-          "test_bypass": true
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 1
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "stampedio",
-        "entity": "review_request",
-        "action": "list",
-        "name": "List Review Request",
-        "key": "stampedio_review_request",
-        "metadata": {
-          "query": {
-            "search": "{{delay.id}}"
-          }
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 2
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "loop",
-        "name": "Loop",
-        "key": "loop",
-        "metadata": {
-          "key": "{{stampedio_review_request.results[]}}"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 3
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{loop.orderIdShopify}}",
-          "comparison": "equals",
-          "b": "{{delay.id}}"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 4
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "stampedio",
-        "entity": "review_request",
-        "action": "send",
-        "name": "Send Review Request",
-        "key": "stampedio_review_request_1",
-        "metadata": {
-          "path": {
-            "id": "{{loop.id}}"
-          }
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 5
-      }
-    ],
-    "storage": []
-  }
+    "key": "send_to_stampedio_review_request",
+    "name": "Send a review request after an order has been delivered",
+    "version": "1.0.0",
+    "description": "When a customer receives an order, it is beneficial to understand if their experience matched their expectation. Get an accurate review by requesting feedback when the experience is fresh in the customer's mind. This template will send a Stamped.io review request after a Tracktor fulfillment status changes to Delivered.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment/delivered",
+                "name": "Fulfillment Status is Delivered",
+                "key": "tracktor_fulfillment",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "days",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "stampedio",
+                "entity": "review_request",
+                "action": "list",
+                "name": "List Review Request",
+                "key": "stampedio_review_request",
+                "metadata": {
+                    "query": {
+                        "search": "{{delay.id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{stampedio_review_request.results[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.orderIdShopify}}",
+                    "comparison": "equals",
+                    "b": "{{delay.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "stampedio",
+                "entity": "review_request",
+                "action": "send",
+                "name": "Send Review Request",
+                "key": "stampedio_review_request_1",
+                "metadata": {
+                    "path": {
+                        "id": "{{loop.id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            }
+        ],
+        "storage": []
+    }
 }

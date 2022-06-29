@@ -1,68 +1,68 @@
 {
-  "name": "Send Fulfillment Issue To Slack Channel",
-  "version": "1.0.0",
-  "description": "Send fulfillment issue from Shopify to Slack channel when an order has not been fulfilled for N amount of days.",
-  "key": "shopify/order/send_fulfillment_issue_to_slack_channel",
-  "tags": [
-    "Fulfillment"
-  ],
-  "source": "shopify",
-  "destination": "slack",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Order Webhook",
-        "key": "in-shopify-order-webhook",
-        "script": "in_shopify_order_webhook.js",
-        "logging": "error",
-        "entity": "order",
-        "action": "created"
-      }
+    "name": "Send Fulfillment Issue To Slack Channel",
+    "version": "1.0.0",
+    "description": "Send fulfillment issue from Shopify to Slack channel when an order has not been fulfilled for N amount of days.",
+    "key": "shopify/order/send_fulfillment_issue_to_slack_channel",
+    "tags": [
+        "Fulfillment"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "virtual_output",
-        "name": "Orders Virtual Output",
-        "key": "out-orders-virtual-output",
-        "schedule": "0 9 * * *",
-        "logging": "error",
-        "custom_connection": true,
-        "parameters": "limit=-1&created_at_max={{date:7 days ago}}"
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Process virtual output",
-        "key": "out-process-virtual-output",
-        "metadata": {
-          "script": "out_orders_virtual_output.js"
-        },
-        "local_fields": []
-      },
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Send Slack Notification",
-        "key": "out-send-slack-notification",
-        "script": "out_send_slack_notification.js",
-        "logging": "error"
-      }
-    ],
-    "storage": [
-      {
-        "key": "slack-channel",
-        "value": "#unfulfilled-orders"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "slack-webhook-url"
-      }
-    ]
-  }
+    "source": "shopify",
+    "destination": "slack",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Order Webhook",
+                "key": "in-shopify-order-webhook",
+                "script": "in_shopify_order_webhook.js",
+                "logging": "error",
+                "entity": "order",
+                "action": "created"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "virtual_output",
+                "name": "Orders Virtual Output",
+                "key": "out-orders-virtual-output",
+                "schedule": "0 9 * * *",
+                "logging": "error",
+                "custom_connection": true,
+                "parameters": "limit=-1&created_at_max={{date:7 days ago}}"
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Process virtual output",
+                "key": "out-process-virtual-output",
+                "metadata": {
+                    "script": "out_orders_virtual_output.js"
+                },
+                "local_fields": []
+            },
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Send Slack Notification",
+                "key": "out-send-slack-notification",
+                "script": "out_send_slack_notification.js",
+                "logging": "error"
+            }
+        ],
+        "storage": [
+            {
+                "key": "slack-channel",
+                "value": "#unfulfilled-orders"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "slack-webhook-url"
+            }
+        ]
+    }
 }

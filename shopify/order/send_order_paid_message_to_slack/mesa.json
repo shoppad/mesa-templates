@@ -1,45 +1,45 @@
 {
-  "key": "shopify/order/send_order_paid_message_to_slack",
-  "name": "Send Order Paid Message To Slack Channel",
-  "version": "1.0.0",
-  "description": "Constantly checking for new Shopify orders is not an efficient process for you or your team. This template sends a message to a Slack channel when a Shopify order has been paid. You can now notify your logistics and other teams about new orders on the fly during a busy holiday season.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "paid",
-        "name": "Paid Order",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "slack",
-        "name": "",
-        "key": "slack",
-        "metadata": {
-          "message": "Order paid for: {{shopify_order.name}}  :thumbsup:"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/order/send_order_paid_message_to_slack",
+    "name": "Send Order Paid Message To Slack Channel",
+    "version": "1.0.0",
+    "description": "Constantly checking for new Shopify orders is not an efficient process for you or your team. This template sends a message to a Slack channel when a Shopify order has been paid. You can now notify your logistics and other teams about new orders on the fly during a busy holiday season.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "paid",
+                "name": "Paid Order",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "",
+                "key": "slack",
+                "metadata": {
+                    "message": "Order paid for: {{shopify_order.name}}  :thumbsup:"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

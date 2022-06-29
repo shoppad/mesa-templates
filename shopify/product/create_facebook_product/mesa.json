@@ -1,75 +1,75 @@
 {
-  "key": "shopify_product_create_facebook_product",
-  "name": "Create Facebook Product when Shopify Product is Created",
-  "version": "1.0.0",
-  "description": "",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "product",
-        "action": "created",
-        "name": "Product Created",
-        "key": "shopify_product",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "facebook",
-          "comparison": "in",
-          "b": "{{shopify_product.tags}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "facebook",
-        "entity": "product",
-        "action": "create",
-        "name": "Product Create",
-        "key": "facebook_product",
-        "metadata": {
-          "path": {
-            "business": "",
-            "catalog": ""
-          },
-          "body": {
-            "name": "{{shopify_product.title}}",
-            "currency": "USD",
-            "price": "{{shopify_product.variants[0].price}}",
-            "image_url": "{{shopify_product.images[0].src}}",
-            "category": "{{shopify_product.product_type}}",
-            "retailer_id": "{{shopify_product.variants[0].sku}}",
-            "url": "https://{{context.shop.domain}}/products/{{shopify_product.handle}}",
-            "description": "{{shopify_product.body_html}}",
-            "brand": "{{shopify_product.vendor}}"
-          }
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify_product_create_facebook_product",
+    "name": "Create Facebook Product when Shopify Product is Created",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify_product",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "facebook",
+                    "comparison": "in",
+                    "b": "{{shopify_product.tags}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "facebook",
+                "entity": "product",
+                "action": "create",
+                "name": "Product Create",
+                "key": "facebook_product",
+                "metadata": {
+                    "path": {
+                        "business": "",
+                        "catalog": ""
+                    },
+                    "body": {
+                        "name": "{{shopify_product.title}}",
+                        "currency": "USD",
+                        "price": "{{shopify_product.variants[0].price}}",
+                        "image_url": "{{shopify_product.images[0].src}}",
+                        "category": "{{shopify_product.product_type}}",
+                        "retailer_id": "{{shopify_product.variants[0].sku}}",
+                        "url": "https://{{context.shop.domain}}/products/{{shopify_product.handle}}",
+                        "description": "{{shopify_product.body_html}}",
+                        "brand": "{{shopify_product.vendor}}"
+                    }
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

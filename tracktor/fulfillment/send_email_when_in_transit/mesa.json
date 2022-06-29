@@ -1,64 +1,64 @@
 {
-  "key": "send_email_when_in_transit",
-  "name": "Send an email when a package is \"In Transit\"",
-  "version": "1.0.0",
-  "description": "Keeping customers up to date on their orders is key to avoiding the dreaded, where is my package question. When you combine MESA with Tracktor, you can set up a workflow that automatically sends an email to customers when their package's delivery status changes to In Transit. It's going to give them peace of mind as they continue to wait for their order.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "tracktor",
-        "entity": "fulfillment",
-        "action": "fulfillment/in_transit",
-        "name": "Fulfillment Status is In Transit",
-        "key": "tracktor_fulfillment",
-        "metadata": [],
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "tracktor",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Retrieve Order",
-        "key": "tracktor_order",
-        "metadata": {
-          "order_id": "{{tracktor_fulfillment.order_id}}"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "email",
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{tracktor_order.order_email}}",
-          "subject": "Order {{tracktor_order.order_name}} is on your way!",
-          "message": "Hello {{tracktor_order.customer_first_name}}!\n\nThanks for your patience as your order is on its way to you!\n\n- {{context.shop.name}}"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "send_email_when_in_transit",
+    "name": "Send an email when a package is \"In Transit\"",
+    "version": "1.0.0",
+    "description": "Keeping customers up to date on their orders is key to avoiding the dreaded, where is my package question. When you combine MESA with Tracktor, you can set up a workflow that automatically sends an email to customers when their package's delivery status changes to In Transit. It's going to give them peace of mind as they continue to wait for their order.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment/in_transit",
+                "name": "Fulfillment Status is In Transit",
+                "key": "tracktor_fulfillment",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "tracktor_order",
+                "metadata": {
+                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{tracktor_order.order_email}}",
+                    "subject": "Order {{tracktor_order.order_name}} is on your way!",
+                    "message": "Hello {{tracktor_order.customer_first_name}}!\n\nThanks for your patience as your order is on its way to you!\n\n- {{context.shop.name}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

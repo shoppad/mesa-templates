@@ -1,245 +1,245 @@
 {
-  "key": "shopify/order/send_to_airtable",
-  "name": "Send orders to Airtable",
-  "version": "1.0.0",
-  "description": "As a merchant, you have a lot to manage. Order details shouldn't be one of them. But what if you could quickly send order data from Shopify to Airtable every time a customer places an order? MESA makes it possible with this simple template. Gain peace of mind knowing that you can now track your orders and options on one of the most popular spreadsheet-database hybrids available.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "airtable",
-  "seconds": 0,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "loop",
-        "name": "Loop Over order products",
-        "key": "loop",
-        "metadata": {
-          "key": "{{shopify_order.line_items[]}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "airtable",
-        "entity": "record",
-        "action": "create",
-        "name": "Add Record",
-        "key": "airtable_record",
-        "metadata": {
-          "path": {
-            "table": "Orders"
-          },
-          "body": {
-            "fields": {
-              "Order ID": "{{shopify_order.id}}",
-              "Order Name (number)": "{{shopify_order.name}}",
-              "Order Email": "{{shopify_order.email}}",
-              "Customer First Name": "{{shopify_order.customer.first_name}}",
-              "Customer Last Name": "{{shopify_order.customer.last_name}}",
-              "Customer Email": "{{shopify_order.customer.email}}",
-              "Total Price": "{{shopify_order.total_price}}",
-              "Shipping Address 1": "{{shopify_order.shipping_address.address1}}",
-              "Shipping City": "{{shopify_order.shipping_address.city}}",
-              "Shipping Address 2": "{{shopify_order.shipping_address.address2}}",
-              "Shipping Zip": "{{shopify_order.shipping_address.zip}}",
-              "Shipping Province": "{{shopify_order.shipping_address.province}}",
-              "Shipping Country": "{{shopify_order.shipping_address.country}}",
-              "Order Tags": "{{shopify_order.tags}}",
-              "Order Notes": "{{shopify_order.note}}",
-              "Product Title": "{{loop.title}}",
-              "Product Variant": "{{loop.variant_title}}",
-              "Product SKU": "{{loop.sku}}",
-              "Product Price": "{{loop.price}}",
-              "Product Quantity": "{{loop.quantity}}",
-              "Line Item ID": "{{loop.id}}",
-              "Created At": "{{shopify_order.created_at}}",
-              "Admin Order URL": "https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}"
+    "key": "shopify/order/send_to_airtable",
+    "name": "Send orders to Airtable",
+    "version": "1.0.0",
+    "description": "As a merchant, you have a lot to manage. Order details shouldn't be one of them. But what if you could quickly send order data from Shopify to Airtable every time a customer places an order? MESA makes it possible with this simple template. Gain peace of mind knowing that you can now track your orders and options on one of the most popular spreadsheet-database hybrids available.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "airtable",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
             }
-          }
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "type": "object",
-            "fields": [
-              {
-                "key": "fields",
-                "type": "object",
-                "fields": [
-                  {
-                    "key": "Order ID",
-                    "label": "Order ID",
-                    "type": "text",
-                    "source": "airtable",
-                    "data_type": "number"
-                  },
-                  {
-                    "key": "Order Name (number)",
-                    "label": "Order Name (number)",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Order Email",
-                    "label": "Order Email",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Customer First Name",
-                    "label": "Customer First Name",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Customer Last Name",
-                    "label": "Customer Last Name",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Customer Email",
-                    "label": "Customer Email",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Total Price",
-                    "label": "Total Price",
-                    "type": "text",
-                    "source": "airtable",
-                    "data_type": "number"
-                  },
-                  {
-                    "key": "Shipping Address 1",
-                    "label": "Shipping Address 1",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Shipping City",
-                    "label": "Shipping City",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Shipping Address 2",
-                    "label": "Shipping Address 2",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Shipping Zip",
-                    "label": "Shipping Zip",
-                    "type": "text",
-                    "source": "airtable",
-                    "data_type": "number"
-                  },
-                  {
-                    "key": "Shipping Province",
-                    "label": "Shipping Province",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Shipping Country",
-                    "label": "Shipping Country",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Order Tags",
-                    "label": "Order Tags",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Order Notes",
-                    "label": "Order Notes",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Product Title",
-                    "label": "Product Title",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Product Variant",
-                    "label": "Product Variant",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Product SKU",
-                    "label": "Product SKU",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Product Price",
-                    "label": "Product Price",
-                    "type": "text",
-                    "source": "airtable",
-                    "data_type": "number"
-                  },
-                  {
-                    "key": "Product Quantity",
-                    "label": "Product Quantity",
-                    "type": "text",
-                    "source": "airtable",
-                    "data_type": "number"
-                  },
-                  {
-                    "key": "Line Item ID",
-                    "label": "Line Item ID",
-                    "type": "text",
-                    "source": "airtable",
-                    "data_type": "number"
-                  },
-                  {
-                    "key": "Created At",
-                    "label": "Created At",
-                    "type": "text",
-                    "source": "airtable"
-                  },
-                  {
-                    "key": "Admin Order URL",
-                    "label": "Admin Order URL",
-                    "type": "text",
-                    "source": "airtable"
-                  }
-                ]
-              }
-            ]
-          }
         ],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop Over order products",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "airtable",
+                "entity": "record",
+                "action": "create",
+                "name": "Add Record",
+                "key": "airtable_record",
+                "metadata": {
+                    "path": {
+                        "table": "Orders"
+                    },
+                    "body": {
+                        "fields": {
+                            "Order ID": "{{shopify_order.id}}",
+                            "Order Name (number)": "{{shopify_order.name}}",
+                            "Order Email": "{{shopify_order.email}}",
+                            "Customer First Name": "{{shopify_order.customer.first_name}}",
+                            "Customer Last Name": "{{shopify_order.customer.last_name}}",
+                            "Customer Email": "{{shopify_order.customer.email}}",
+                            "Total Price": "{{shopify_order.total_price}}",
+                            "Shipping Address 1": "{{shopify_order.shipping_address.address1}}",
+                            "Shipping City": "{{shopify_order.shipping_address.city}}",
+                            "Shipping Address 2": "{{shopify_order.shipping_address.address2}}",
+                            "Shipping Zip": "{{shopify_order.shipping_address.zip}}",
+                            "Shipping Province": "{{shopify_order.shipping_address.province}}",
+                            "Shipping Country": "{{shopify_order.shipping_address.country}}",
+                            "Order Tags": "{{shopify_order.tags}}",
+                            "Order Notes": "{{shopify_order.note}}",
+                            "Product Title": "{{loop.title}}",
+                            "Product Variant": "{{loop.variant_title}}",
+                            "Product SKU": "{{loop.sku}}",
+                            "Product Price": "{{loop.price}}",
+                            "Product Quantity": "{{loop.quantity}}",
+                            "Line Item ID": "{{loop.id}}",
+                            "Created At": "{{shopify_order.created_at}}",
+                            "Admin Order URL": "https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Order ID",
+                                        "label": "Order ID",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "Order Name (number)",
+                                        "label": "Order Name (number)",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Order Email",
+                                        "label": "Order Email",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Customer First Name",
+                                        "label": "Customer First Name",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Customer Last Name",
+                                        "label": "Customer Last Name",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Customer Email",
+                                        "label": "Customer Email",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Total Price",
+                                        "label": "Total Price",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "Shipping Address 1",
+                                        "label": "Shipping Address 1",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Shipping City",
+                                        "label": "Shipping City",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Shipping Address 2",
+                                        "label": "Shipping Address 2",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Shipping Zip",
+                                        "label": "Shipping Zip",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "Shipping Province",
+                                        "label": "Shipping Province",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Shipping Country",
+                                        "label": "Shipping Country",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Order Tags",
+                                        "label": "Order Tags",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Order Notes",
+                                        "label": "Order Notes",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product Title",
+                                        "label": "Product Title",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product Variant",
+                                        "label": "Product Variant",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product SKU",
+                                        "label": "Product SKU",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product Price",
+                                        "label": "Product Price",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "Product Quantity",
+                                        "label": "Product Quantity",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "Line Item ID",
+                                        "label": "Line Item ID",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Admin Order URL",
+                                        "label": "Admin Order URL",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

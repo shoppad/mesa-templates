@@ -1,97 +1,97 @@
 {
-  "key": "delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
-  "name": "Tag a customer if they provide a negative survey response",
-  "version": "1.0.0",
-  "description": "Knowing how you should interact with specific customers can be very helpful in certain situations. This template tags a Shopify customer if they give a low score on their Delighted survey. This provides your team with more insight on your customers.",
-  "video": "",
-  "readme": "",
-  "tags": [
-    "delighted",
-    "customer"
-  ],
-  "source": "delighted",
-  "destination": "shopify",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "delighted",
-        "entity": "survey",
-        "action": "survey/created",
-        "name": "Survey Response Created",
-        "key": "delighted_survey",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
+    "key": "delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
+    "name": "Tag a customer if they provide a negative survey response",
+    "version": "1.0.0",
+    "description": "Knowing how you should interact with specific customers can be very helpful in certain situations. This template tags a Shopify customer if they give a low score on their Delighted survey. This provides your team with more insight on your customers.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "delighted",
+        "customer"
     ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{delighted_survey.score}}",
-          "comparison": "less than",
-          "b": "5"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer_search",
-        "action": "list",
-        "name": "Get List Customer Search",
-        "key": "shopify_customer_search",
-        "metadata": {
-          "parameters": "query=email:{{delighted_survey.person.email}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter_1",
-        "metadata": {
-          "a": "{{shopify_customer_search[0].email}}",
-          "comparison": "equals",
-          "b": "{{delighted_survey.person.email}}"
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "tag_add",
-        "name": "Customer Add Tag",
-        "key": "shopify_customer",
-        "metadata": {
-          "customer_id": "{{shopify_customer_search.0.id}}",
-          "body": {
-            "tag": "Unhappy Survey"
-          }
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 3
-      }
-    ],
-    "storage": []
-  }
+    "source": "delighted",
+    "destination": "shopify",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "delighted",
+                "entity": "survey",
+                "action": "survey/created",
+                "name": "Survey Response Created",
+                "key": "delighted_survey",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{delighted_survey.score}}",
+                    "comparison": "less than",
+                    "b": "5"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer_search",
+                "action": "list",
+                "name": "Get List Customer Search",
+                "key": "shopify_customer_search",
+                "metadata": {
+                    "parameters": "query=email:{{delighted_survey.person.email}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{shopify_customer_search[0].email}}",
+                    "comparison": "equals",
+                    "b": "{{delighted_survey.person.email}}"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{shopify_customer_search.0.id}}",
+                    "body": {
+                        "tag": "Unhappy Survey"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
 }

@@ -1,68 +1,68 @@
 {
-  "key": "recharge/order/tag_order_when_processed_with_recharge",
-  "name": "Tag an order when processed with Recharge",
-  "version": "1.0.0",
-  "description": "Gain better visibility into when subscription orders are processed and reduce your workload with the help of tags. This template will tag orders with \"subscription\" when processed with Recharge. You'll have up-to-date information at your fingertips without lifting a finger.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "recharge",
-        "entity": "order",
-        "action": "order/created",
-        "name": "Order Created",
-        "key": "recharge_order",
-        "metadata": [],
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Retrieve Order",
-        "key": "shopify_order",
-        "metadata": {
-          "order_id": "{{recharge_order.external_order_id.ecommerce}}"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "tag_add",
-        "name": "Order Add Tag",
-        "key": "shopify_order_1",
-        "metadata": {
-          "order_id": "{{shopify_order.id}}",
-          "body": {
-            "tag": "subscription"
-          }
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "recharge/order/tag_order_when_processed_with_recharge",
+    "name": "Tag an order when processed with Recharge",
+    "version": "1.0.0",
+    "description": "Gain better visibility into when subscription orders are processed and reduce your workload with the help of tags. This template will tag orders with \"subscription\" when processed with Recharge. You'll have up-to-date information at your fingertips without lifting a finger.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "recharge",
+                "entity": "order",
+                "action": "order/created",
+                "name": "Order Created",
+                "key": "recharge_order",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{recharge_order.external_order_id.ecommerce}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_order_1",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "tag": "subscription"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

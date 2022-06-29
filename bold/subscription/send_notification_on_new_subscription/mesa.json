@@ -1,44 +1,44 @@
 {
-  "key": "bold/subscription/send_notification_on_new_subscription",
-  "name": "Send SMS Notification when Bold Subscription is Created",
-  "version": "1.0.0",
-  "description": "Sends a SMS notification when new Bold Subscriptions are created via the Twillio service.  See the Documentation for setup steps.",
-  "video": "",
-  "tags": [
-    "bold",
-    "twilio"
-  ],
-  "source": "bold",
-  "destination": "twilio",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "bold",
-        "entity": "subscription",
-        "action": "subscription/created",
-        "name": "Bold Subscription Created",
-        "key": "bold_subscription",
-        "metadata": {
-          "topic": "subscription/created",
-          "host": ""
-        }
-      }
+    "key": "bold/subscription/send_notification_on_new_subscription",
+    "name": "Send SMS Notification when Bold Subscription is Created",
+    "version": "1.0.0",
+    "description": "Sends a SMS notification when new Bold Subscriptions are created via the Twillio service.  See the Documentation for setup steps.",
+    "video": "",
+    "tags": [
+        "bold",
+        "twilio"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "twilio",
-        "entity": "sms",
-        "action": "send",
-        "name": "Send SMS",
-        "key": "twilio_sms",
-        "metadata": {
-          "message": "New subscription:\n{% assign shop = 'MYSHOP' %}\n{{bold_subscription.first_name}} {{bold_subscription.last_name}} - {{bold_subscription.customer_email}}\nLink: https://{{shop}}.myshopify.com/admin/apps/recurring-orders/s/{{shop}}/customers/edit_customer?customer_id={{bold_subscription.shopify_customer_id}}&customer_email={{bold_subscription.customer_email}}"
-        }
-      }
-    ],
-    "storage": []
-  }
+    "source": "bold",
+    "destination": "twilio",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "bold",
+                "entity": "subscription",
+                "action": "subscription/created",
+                "name": "Bold Subscription Created",
+                "key": "bold_subscription",
+                "metadata": {
+                    "topic": "subscription/created",
+                    "host": ""
+                }
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "twilio",
+                "entity": "sms",
+                "action": "send",
+                "name": "Send SMS",
+                "key": "twilio_sms",
+                "metadata": {
+                    "message": "New subscription:\n{% assign shop = 'MYSHOP' %}\n{{bold_subscription.first_name}} {{bold_subscription.last_name}} - {{bold_subscription.customer_email}}\nLink: https://{{shop}}.myshopify.com/admin/apps/recurring-orders/s/{{shop}}/customers/edit_customer?customer_id={{bold_subscription.shopify_customer_id}}&customer_email={{bold_subscription.customer_email}}"
+                }
+            }
+        ],
+        "storage": []
+    }
 }

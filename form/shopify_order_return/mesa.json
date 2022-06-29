@@ -1,180 +1,180 @@
 {
-  "key": "form/shopify_order_return",
-  "name": "Start a return with Forms by MESA",
-  "version": "1.0.0",
-  "description": "Link to a form from your Tracktor tracking page or on a customer's Order History page that allows customers to easily initiate an order return. The full order details, as well as the Reason for Return, will be included in the email to your back office. This automation could be extended to automatically generate a return label that is sent to the customer.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "forms-by-mesa",
-  "destination": "slack",
-  "seconds": 60,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "form",
-        "name": "Form",
-        "key": "forms",
-        "metadata": {
-          "form_data": [
+    "key": "form/shopify_order_return",
+    "name": "Start a return with Forms by MESA",
+    "version": "1.0.0",
+    "description": "Link to a form from your Tracktor tracking page or on a customer's Order History page that allows customers to easily initiate an order return. The full order details, as well as the Reason for Return, will be included in the email to your back office. This automation could be extended to automatically generate a return label that is sent to the customer.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "forms-by-mesa",
+    "destination": "slack",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "type": "header",
-              "subtype": "h1",
-              "label": "Return Your Order"
-            },
-            {
-              "type": "paragraph",
-              "subtype": "p",
-              "label": "We're sorry that you are returning your order."
-            },
-            {
-              "type": "hidden",
-              "name": "shopify_order_id",
-              "value": "{{ order.id }}"
-            },
-            {
-              "type": "radio-group",
-              "required": false,
-              "label": "Reason for your return",
-              "inline": false,
-              "name": "reason",
-              "other": true,
-              "values": [
-                {
-                  "label": "Purchased the wrong item",
-                  "value": "Purchased the wrong item",
-                  "selected": true
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "form",
+                "name": "Form",
+                "key": "forms",
+                "metadata": {
+                    "form_data": [
+                        {
+                            "type": "header",
+                            "subtype": "h1",
+                            "label": "Return Your Order"
+                        },
+                        {
+                            "type": "paragraph",
+                            "subtype": "p",
+                            "label": "We're sorry that you are returning your order."
+                        },
+                        {
+                            "type": "hidden",
+                            "name": "shopify_order_id",
+                            "value": "{{ order.id }}"
+                        },
+                        {
+                            "type": "radio-group",
+                            "required": false,
+                            "label": "Reason for your return",
+                            "inline": false,
+                            "name": "reason",
+                            "other": true,
+                            "values": [
+                                {
+                                    "label": "Purchased the wrong item",
+                                    "value": "Purchased the wrong item",
+                                    "selected": true
+                                },
+                                {
+                                    "label": "Received the wrong item",
+                                    "value": "Received the wrong item"
+                                },
+                                {
+                                    "label": "Item arrived too late",
+                                    "value": "Item arrived too late"
+                                },
+                                {
+                                    "label": "Item was damaged or defective",
+                                    "value": "Item was damaged or defective"
+                                }
+                            ]
+                        }
+                    ]
                 },
-                {
-                  "label": "Received the wrong item",
-                  "value": "Received the wrong item"
-                },
-                {
-                  "label": "Item arrived too late",
-                  "value": "Item arrived too late"
-                },
-                {
-                  "label": "Item was damaged or defective",
-                  "value": "Item was damaged or defective"
-                }
-              ]
+                "local_fields": [],
+                "weight": 0
             }
-          ]
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "retrieve",
-        "name": "Retrieve Order",
-        "key": "shopify_order",
-        "metadata": {
-          "order_id": "{{forms.shopify_order_id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "googlesheets",
-        "entity": "row",
-        "action": "create",
-        "name": "Add Row",
-        "key": "googlesheets_row_1",
-        "metadata": {
-          "path": {
-            "mode": "create",
-            "header_row": "first_row"
-          },
-          "body": {
-            "fields": {
-              "Order Name": "{{shopify_order.name}}",
-              "Created At": "{{shopify_order.created_at}}",
-              "Total Price": "{{shopify_order.total_price}}",
-              "Reason for Return": "{{forms.reason}}"
-            }
-          }
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "type": "object",
-            "fields": [
-              {
-                "key": "fields",
-                "type": "object",
-                "fields": [
-                  {
-                    "key": "Order Name",
-                    "label": "Order Name",
-                    "type": "text",
-                    "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
-                  },
-                  {
-                    "key": "Created At",
-                    "label": "Created At",
-                    "type": "text",
-                    "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
-                  },
-                  {
-                    "key": "Total Price",
-                    "label": "Total Price",
-                    "type": "text",
-                    "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
-                  },
-                  {
-                    "key": "Reason for Return",
-                    "label": "Reason for Return",
-                    "type": "text",
-                    "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
-                  }
-                ]
-              }
-            ]
-          }
         ],
-        "on_error": "default",
-        "weight": 1
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "name": "Customer Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{shopify_order.email}}",
-          "subject": "Your return for order {{shopify_order.name}}",
-          "message": "Hello {{shopify_order.customer.first_name}},\n\nWe're sorry that you had an issue with your order. We are working on initiating a return for the following products and will reach out shortly with next steps.\n\nThank you,\nThe {{context.shop.name}} Team"
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "slack",
-        "name": "",
-        "key": "slack",
-        "metadata": {
-          "message": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{forms.reason}}"
-        },
-        "local_fields": [],
-        "weight": 3
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{forms.shopify_order_id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "key": "googlesheets_row_1",
+                "metadata": {
+                    "path": {
+                        "mode": "create",
+                        "header_row": "first_row"
+                    },
+                    "body": {
+                        "fields": {
+                            "Order Name": "{{shopify_order.name}}",
+                            "Created At": "{{shopify_order.created_at}}",
+                            "Total Price": "{{shopify_order.total_price}}",
+                            "Reason for Return": "{{forms.reason}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Order Name",
+                                        "label": "Order Name",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    },
+                                    {
+                                        "key": "Total Price",
+                                        "label": "Total Price",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    },
+                                    {
+                                        "key": "Reason for Return",
+                                        "label": "Reason for Return",
+                                        "type": "text",
+                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Customer Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{shopify_order.email}}",
+                    "subject": "Your return for order {{shopify_order.name}}",
+                    "message": "Hello {{shopify_order.customer.first_name}},\n\nWe're sorry that you had an issue with your order. We are working on initiating a return for the following products and will reach out shortly with next steps.\n\nThank you,\nThe {{context.shop.name}} Team"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "",
+                "key": "slack",
+                "metadata": {
+                    "message": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{forms.reason}}"
+                },
+                "local_fields": [],
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
 }

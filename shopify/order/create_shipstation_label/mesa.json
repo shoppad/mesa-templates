@@ -1,144 +1,144 @@
 {
-  "key": "shopify/order/create_shipstation_label",
-  "name": "Create a ShipStation label when a Shopify Order is Created",
-  "version": "1.0.0",
-  "description": "Automatically fulfill all shippable products in the order, create a Shipping label, and attach it to the Shopify Order Notes field.",
-  "video": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shipstation",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "shipstation",
-        "entity": "order_createorder",
-        "action": "create_order",
-        "name": "Create/Update Order",
-        "key": "shipstation_order_createorder",
-        "metadata": {
-          "body": {
-            "orderNumber": "{{shopify_order.order_number}}",
-            "orderKey": "{{shopify_order.id}}",
-            "orderStatus": "awaiting_shipment",
-            "customerEmail": "{{shopify_order.email}}",
-            "shipDate": "{{ \"now\" | date: \"%Y-%m-%d\" }}",
-            "orderDate": "{{shopify_order.created_at}}",
-            "billTo": {
-              "name": "{{shopify_order.billing_address.name}}",
-              "company": "{{shopify_order.billing_address.company}}",
-              "street1": "{{shopify_order.billing_address.address1}}",
-              "street2": "{{shopify_order.billing_address.address2}}",
-              "city": "{{shopify_order.billing_address.city}}",
-              "state": "{{shopify_order.billing_address.province_code}}",
-              "postalCode": "{{shopify_order.billing_address.zip}}",
-              "country": "{{shopify_order.billing_address.country_code}}",
-              "phone": "{{shopify_order.billing_address.phone}}"
-            },
-            "shipTo": {
-              "name": "{{shopify_order.shipping_address.name}}",
-              "company": "{{shopify_order.shipping_address.company}}",
-              "street1": "{{shopify_order.shipping_address.address1}}",
-              "street2": "{{shopify_order.shipping_address.address2}}",
-              "city": "{{shopify_order.shipping_address.city}}",
-              "state": "{{shopify_order.shipping_address.province_code}}",
-              "postalCode": "{{shopify_order.shipping_address.zip}}",
-              "country": "{{shopify_order.shipping_address.country_code}}",
-              "phone": "{{shopify_order.shipping_address.phone}}"
-            },
-            "weight": {
-              "value": "{{shopify_order.total_weight}}",
-              "units": "grams"
+    "key": "shopify/order/create_shipstation_label",
+    "name": "Create a ShipStation label when a Shopify Order is Created",
+    "version": "1.0.0",
+    "description": "Automatically fulfill all shippable products in the order, create a Shipping label, and attach it to the Shopify Order Notes field.",
+    "video": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shipstation",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
             }
-          }
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "shipstation",
-        "entity": "order_createlabelfororder",
-        "action": "create",
-        "name": "Create Label for Order",
-        "key": "shipstation_order_createlabelfororder",
-        "metadata": {
-          "body": {
-            "orderId": "{{shipstation_order_createorder.orderId}}",
-            "carrierCode": "stamps_com",
-            "serviceCode": "usps_parcel_select",
-            "packageCode": "package",
-            "confirmation": "none",
-            "testLabel": "true",
-            "shipDate": "{{ \"now\" | date: \"%Y-%m-%d\" }}",
-            "weight": {
-              "value": "{{shopify_order.total_weight}}",
-              "units": "grams"
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shipstation",
+                "entity": "order_createorder",
+                "action": "create_order",
+                "name": "Create/Update Order",
+                "key": "shipstation_order_createorder",
+                "metadata": {
+                    "body": {
+                        "orderNumber": "{{shopify_order.order_number}}",
+                        "orderKey": "{{shopify_order.id}}",
+                        "orderStatus": "awaiting_shipment",
+                        "customerEmail": "{{shopify_order.email}}",
+                        "shipDate": "{{ \"now\" | date: \"%Y-%m-%d\" }}",
+                        "orderDate": "{{shopify_order.created_at}}",
+                        "billTo": {
+                            "name": "{{shopify_order.billing_address.name}}",
+                            "company": "{{shopify_order.billing_address.company}}",
+                            "street1": "{{shopify_order.billing_address.address1}}",
+                            "street2": "{{shopify_order.billing_address.address2}}",
+                            "city": "{{shopify_order.billing_address.city}}",
+                            "state": "{{shopify_order.billing_address.province_code}}",
+                            "postalCode": "{{shopify_order.billing_address.zip}}",
+                            "country": "{{shopify_order.billing_address.country_code}}",
+                            "phone": "{{shopify_order.billing_address.phone}}"
+                        },
+                        "shipTo": {
+                            "name": "{{shopify_order.shipping_address.name}}",
+                            "company": "{{shopify_order.shipping_address.company}}",
+                            "street1": "{{shopify_order.shipping_address.address1}}",
+                            "street2": "{{shopify_order.shipping_address.address2}}",
+                            "city": "{{shopify_order.shipping_address.city}}",
+                            "state": "{{shopify_order.shipping_address.province_code}}",
+                            "postalCode": "{{shopify_order.shipping_address.zip}}",
+                            "country": "{{shopify_order.shipping_address.country_code}}",
+                            "phone": "{{shopify_order.shipping_address.phone}}"
+                        },
+                        "weight": {
+                            "value": "{{shopify_order.total_weight}}",
+                            "units": "grams"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shipstation",
+                "entity": "order_createlabelfororder",
+                "action": "create",
+                "name": "Create Label for Order",
+                "key": "shipstation_order_createlabelfororder",
+                "metadata": {
+                    "body": {
+                        "orderId": "{{shipstation_order_createorder.orderId}}",
+                        "carrierCode": "stamps_com",
+                        "serviceCode": "usps_parcel_select",
+                        "packageCode": "package",
+                        "confirmation": "none",
+                        "testLabel": "true",
+                        "shipDate": "{{ \"now\" | date: \"%Y-%m-%d\" }}",
+                        "weight": {
+                            "value": "{{shopify_order.total_weight}}",
+                            "units": "grams"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "update",
+                "name": "Update Order",
+                "key": "shopify_order_1",
+                "metadata": {
+                    "body": {
+                        "note_attributes": [
+                            {
+                                "name": "Shipping Label",
+                                "value": "{{shipstation_order_createlabelfororder.labelData}}"
+                            }
+                        ]
+                    },
+                    "order_id": "{{shopify_order.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_fulfillment",
+                "action": "create",
+                "name": "Create Order Fulfillment",
+                "key": "shopify_order_fulfillment",
+                "metadata": {
+                    "body": {
+                        "tracking_number": "{{shipstation_order_createlabelfororder.trackingNumber}}"
+                    },
+                    "order_id": "{{shopify_order.id}}"
+                },
+                "local_fields": [],
+                "weight": 3
             }
-          }
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "update",
-        "name": "Update Order",
-        "key": "shopify_order_1",
-        "metadata": {
-          "body": {
-            "note_attributes": [
-              {
-                "name": "Shipping Label",
-                "value": "{{shipstation_order_createlabelfororder.labelData}}"
-              }
-            ]
-          },
-          "order_id": "{{shopify_order.id}}"
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 2
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order_fulfillment",
-        "action": "create",
-        "name": "Create Order Fulfillment",
-        "key": "shopify_order_fulfillment",
-        "metadata": {
-          "body": {
-            "tracking_number": "{{shipstation_order_createlabelfororder.trackingNumber}}"
-          },
-          "order_id": "{{shopify_order.id}}"
-        },
-        "local_fields": [],
-        "weight": 3
-      }
-    ],
-    "storage": []
-  }
+        ],
+        "storage": []
+    }
 }

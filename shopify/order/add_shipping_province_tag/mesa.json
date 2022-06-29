@@ -1,50 +1,50 @@
 {
-  "key": "shopify/order/add_shipping_province_tag",
-  "name": "Add Shipping Province Tag To Order",
-  "version": "1.0.0",
-  "description": "Add shipping province/state tag to Shopify order when order is created.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "update",
-        "name": "Update Order",
-        "key": "shopify_order_1",
-        "metadata": {
-          "order_id": "{{shopify_order.id}}",
-          "body": {
-            "tags": "{{shopify_order.tags}}, {{shopify_order.shipping_address.province_code}}"
-          },
-          "site": "current"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/order/add_shipping_province_tag",
+    "name": "Add Shipping Province Tag To Order",
+    "version": "1.0.0",
+    "description": "Add shipping province/state tag to Shopify order when order is created.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "update",
+                "name": "Update Order",
+                "key": "shopify_order_1",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "tags": "{{shopify_order.tags}}, {{shopify_order.shipping_address.province_code}}"
+                    },
+                    "site": "current"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

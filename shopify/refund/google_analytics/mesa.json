@@ -1,75 +1,75 @@
 {
-  "key": "google_analytics",
-  "name": "Automatically Track Shopify Refunds in Google Analytics",
-  "version": "1.0.0",
-  "description": "It’s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, Mesa does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "google-analytics",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "refund",
-        "action": "created",
-        "name": "Refund Created",
-        "key": "shopify_refund",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Calculate Total Refund Amount",
-        "key": "custom",
-        "metadata": {
-          "script": "custom.js"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "googleanalytics",
-        "entity": "transaction",
-        "action": "create",
-        "name": "Create Transaction",
-        "key": "googleanalytics_transaction",
-        "metadata": {
-          "mapping": [
+    "key": "google_analytics",
+    "name": "Automatically Track Shopify Refunds in Google Analytics",
+    "version": "1.0.0",
+    "description": "It’s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, Mesa does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "google-analytics",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "tr",
-              "source": "{{custom.total_refund_amount}}"
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "refund",
+                "action": "created",
+                "name": "Refund Created",
+                "key": "shopify_refund",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Calculate Total Refund Amount",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "weight": 0
             },
             {
-              "destination": "ti",
-              "source": "{{shopify_refund.order_id}} - {{shopify_refund.id}}"
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "googleanalytics",
+                "entity": "transaction",
+                "action": "create",
+                "name": "Create Transaction",
+                "key": "googleanalytics_transaction",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "tr",
+                            "source": "{{custom.total_refund_amount}}"
+                        },
+                        {
+                            "destination": "ti",
+                            "source": "{{shopify_refund.order_id}} - {{shopify_refund.id}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 1
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets",
-            "location": "mapping"
-          }
         ],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+        "storage": []
+    }
 }

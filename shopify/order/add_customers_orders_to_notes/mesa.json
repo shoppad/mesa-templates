@@ -1,76 +1,76 @@
 {
-  "key": "shopify/order/add_customers_orders_to_notes",
-  "name": "Add Customer's Orders to Order Notes",
-  "version": "1.0.0",
-  "description": "When a repeat customer creates an order, add the number of orders the customer has made to the order notes.",
-  "video": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify-order-created",
-        "metadata": {
-          "topic": "orders/create"
-        }
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{source.customer.orders_count}}",
-          "comparison": "greater than",
-          "b": "0"
-        },
-        "destination_entity": "mapping"
-      },
-      {
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Mapping to Shopify Update Order",
-        "key": "mapping-to-shopify-update-order",
-        "metadata": {
-          "mapping": [
+    "key": "shopify/order/add_customers_orders_to_notes",
+    "name": "Add Customer's Orders to Order Notes",
+    "version": "1.0.0",
+    "description": "When a repeat customer creates an order, add the number of orders the customer has made to the order notes.",
+    "video": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "note",
-              "source": "Customer's {{source.customer.orders_count}} order"
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify-order-created",
+                "metadata": {
+                    "topic": "orders/create"
+                }
             }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping"
-          }
         ],
-        "destination_entity": "order"
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "update",
-        "name": "Update Order",
-        "key": "shopify-update-order",
-        "metadata": {
-          "api_endpoint": "PUT admin/orders/{{order_id}}.json",
-          "order_id": "{{source.id}}"
-        },
-        "source_entity": "mapping"
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{source.customer.orders_count}}",
+                    "comparison": "greater than",
+                    "b": "0"
+                },
+                "destination_entity": "mapping"
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Mapping to Shopify Update Order",
+                "key": "mapping-to-shopify-update-order",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "note",
+                            "source": "Customer's {{source.customer.orders_count}} order"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping"
+                    }
+                ],
+                "destination_entity": "order"
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "update",
+                "name": "Update Order",
+                "key": "shopify-update-order",
+                "metadata": {
+                    "api_endpoint": "PUT admin/orders/{{order_id}}.json",
+                    "order_id": "{{source.id}}"
+                },
+                "source_entity": "mapping"
+            }
+        ],
+        "storage": []
+    }
 }

@@ -1,83 +1,83 @@
 {
-  "key": "shopify/order/send_to_another_store",
-  "name": "Send Order To Another Store",
-  "version": "1.0.0",
-  "description": "Send order from one Shopify store to another store when order is created, updated or deleted.",
-  "tags": [
-    "Order"
-  ],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Order Create",
-        "key": "in-shopify-order-create",
-        "script": "in_shopify_order_create.js",
-        "entity": "order",
-        "action": "created"
-      },
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Order Update",
-        "key": "in-shopify-order-update",
-        "script": "in_shopify_order_update.js",
-        "entity": "order",
-        "action": "updated"
-      },
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "name": "Order Delete",
-        "key": "in-shopify-order-delete",
-        "script": "in_shopify_order_delete.js",
-        "entity": "order",
-        "action": "deleted"
-      }
+    "key": "shopify/order/send_to_another_store",
+    "name": "Send Order To Another Store",
+    "version": "1.0.0",
+    "description": "Send order from one Shopify store to another store when order is created, updated or deleted.",
+    "tags": [
+        "Order"
     ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Create Shopify Order",
-        "key": "out-create-shopify-order",
-        "script": "out_create_shopify_order.js"
-      },
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Update Shopify Order",
-        "key": "out-update-shopify-order",
-        "script": "out_update_shopify_order.js"
-      },
-      {
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Remove Shopify Order",
-        "key": "out-delete-shopify-order",
-        "script": "out_delete_shopify_order.js"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "store-password"
-      }
-    ],
-    "storage": [
-      {
-        "key": "store-host"
-      },
-      {
-        "key": "store-key"
-      },
-      {
-        "key": "order-map.json",
-        "value": "{}"
-      }
-    ]
-  }
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Order Create",
+                "key": "in-shopify-order-create",
+                "script": "in_shopify_order_create.js",
+                "entity": "order",
+                "action": "created"
+            },
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Order Update",
+                "key": "in-shopify-order-update",
+                "script": "in_shopify_order_update.js",
+                "entity": "order",
+                "action": "updated"
+            },
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "name": "Order Delete",
+                "key": "in-shopify-order-delete",
+                "script": "in_shopify_order_delete.js",
+                "entity": "order",
+                "action": "deleted"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Create Shopify Order",
+                "key": "out-create-shopify-order",
+                "script": "out_create_shopify_order.js"
+            },
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Update Shopify Order",
+                "key": "out-update-shopify-order",
+                "script": "out_update_shopify_order.js"
+            },
+            {
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Remove Shopify Order",
+                "key": "out-delete-shopify-order",
+                "script": "out_delete_shopify_order.js"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "store-password"
+            }
+        ],
+        "storage": [
+            {
+                "key": "store-host"
+            },
+            {
+                "key": "store-key"
+            },
+            {
+                "key": "order-map.json",
+                "value": "{}"
+            }
+        ]
+    }
 }

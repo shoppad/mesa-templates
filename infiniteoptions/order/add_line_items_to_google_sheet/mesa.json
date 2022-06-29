@@ -1,158 +1,158 @@
 {
-  "key": "infiniteoptions_order_add_line_items_to_google_sheet_1",
-  "name": "Add Infinite Options Line Items to Google Sheet",
-  "version": "1.0.0",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "infiniteoptions",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "infinite_options_order_created",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "loop",
-        "name": "Loop",
-        "key": "loop",
-        "metadata": {
-          "key": "{{infinite_options_order_created.line_items[]}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "googlesheets",
-        "entity": "row",
-        "action": "create",
-        "name": "Create Row",
-        "key": "googlesheets_row",
-        "metadata": {
-          "path": {
-            "mode": "create",
-            "spreadsheet_id": "",
-            "sheet_name": "Sheet1",
-            "header_row": "first_row"
-          },
-          "body": {
-            "fields": {
-              "Order URL": "https://{{context.shop.domain}}/admin/orders/{{infinite_options_order_created.order.id}}",
-              "Order Name": "{{infinite_options_order_created.order.name}}",
-              "Email": "{{infinite_options_order_created.order.email}}",
-              "Shipping Name": "{{infinite_options_order_created.order.shipping_address.first_name}} {{infinite_options_order_created.order.shipping_address.last_name}}",
-              "Address": "{{infinite_options_order_created.order.shipping_address.address1}}",
-              "City": "{{infinite_options_order_created.order.shipping_address.city}}",
-              "Province": "{{infinite_options_order_created.order.shipping_address.province}}",
-              "Zip": "{{infinite_options_order_created.order.shipping_address.zip}}",
-              "Country": "{{infinite_options_order_created.order.shipping_address.country}}",
-              "Product Name": "{{loop.title}}",
-              "Product SKU": "{{loop.sku}}",
-              "Product Price": "{{loop.price}}",
-              "infinite_options_1": "{{loop.fields.infinite_options_1}}"
+    "key": "infiniteoptions_order_add_line_items_to_google_sheet_1",
+    "name": "Add Infinite Options Line Items to Google Sheet",
+    "version": "1.0.0",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "infinite_options_order_created",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
             }
-          }
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "type": "object",
-            "fields": [
-              {
-                "key": "fields",
-                "type": "object",
-                "fields": [
-                  {
-                    "key": "Order URL",
-                    "label": "Order URL",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Order Name",
-                    "label": "Order Name",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Email",
-                    "label": "Email",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Shipping Name",
-                    "label": "Shipping Name",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Address",
-                    "label": "Address",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "City",
-                    "label": "City",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Province",
-                    "label": "Province",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Zip",
-                    "label": "Zip",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Country",
-                    "label": "Country",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Product Name",
-                    "label": "Product Name",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Product SKU",
-                    "label": "Product SKU",
-                    "type": "text",
-                    "source": ""
-                  },
-                  {
-                    "key": "Product Price",
-                    "label": "Product Price",
-                    "type": "text",
-                    "source": ""
-                  }
-                ]
-              }
-            ]
-          }
         ],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{infinite_options_order_created.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Create Row",
+                "key": "googlesheets_row",
+                "metadata": {
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
+                    "body": {
+                        "fields": {
+                            "Order URL": "https://{{context.shop.domain}}/admin/orders/{{infinite_options_order_created.order.id}}",
+                            "Order Name": "{{infinite_options_order_created.order.name}}",
+                            "Email": "{{infinite_options_order_created.order.email}}",
+                            "Shipping Name": "{{infinite_options_order_created.order.shipping_address.first_name}} {{infinite_options_order_created.order.shipping_address.last_name}}",
+                            "Address": "{{infinite_options_order_created.order.shipping_address.address1}}",
+                            "City": "{{infinite_options_order_created.order.shipping_address.city}}",
+                            "Province": "{{infinite_options_order_created.order.shipping_address.province}}",
+                            "Zip": "{{infinite_options_order_created.order.shipping_address.zip}}",
+                            "Country": "{{infinite_options_order_created.order.shipping_address.country}}",
+                            "Product Name": "{{loop.title}}",
+                            "Product SKU": "{{loop.sku}}",
+                            "Product Price": "{{loop.price}}",
+                            "infinite_options_1": "{{loop.fields.infinite_options_1}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Order URL",
+                                        "label": "Order URL",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Order Name",
+                                        "label": "Order Name",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Email",
+                                        "label": "Email",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Shipping Name",
+                                        "label": "Shipping Name",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Address",
+                                        "label": "Address",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "City",
+                                        "label": "City",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Province",
+                                        "label": "Province",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Zip",
+                                        "label": "Zip",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Country",
+                                        "label": "Country",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Product Name",
+                                        "label": "Product Name",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Product SKU",
+                                        "label": "Product SKU",
+                                        "type": "text",
+                                        "source": ""
+                                    },
+                                    {
+                                        "key": "Product Price",
+                                        "label": "Product Price",
+                                        "type": "text",
+                                        "source": ""
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }
