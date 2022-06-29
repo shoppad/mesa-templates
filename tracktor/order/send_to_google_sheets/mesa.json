@@ -19,8 +19,8 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment\/delivered",
-                "name": "Tracktor Fulfillment Delivered",
+                "action": "fulfillment/delivered",
+                "name": "Fulfillment Delivered",
                 "key": "tracktor_fulfillment",
                 "metadata": [],
                 "local_fields": [],
@@ -34,7 +34,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order",
                 "metadata": {
                     "order_id": "{{tracktor_fulfillment.order_id}}"
@@ -48,7 +48,7 @@
                 "type": "googlesheets",
                 "entity": "row",
                 "action": "create",
-                "name": "Google Sheets Create Row - Fulfillments",
+                "name": "Create Row - Fulfillments",
                 "key": "googlesheets_row_1",
                 "metadata": {
                     "path": {
@@ -69,7 +69,7 @@
                             "Shipment Status": "{{tracktor_fulfillment.shipment_status}}",
                             "Created At (date and time)": "{{shopify_order.created_at}}",
                             "Delivery Date (and time)": "{{tracktor_fulfillment.latest_status.datetime}}",
-                            "Tracking URL": "{{tracktor_fulfillment.shop_url}}\/apps\/tracktor\/track?order={{tracktor_fulfillment.order_name | url_encode }}&email={{shopify_order.email}}"
+                            "Tracking URL": "{{tracktor_fulfillment.shop_url}}/apps/tracktor/track?order={{tracktor_fulfillment.order_name | url_encode }}&email={{shopify_order.email}}"
                         }
                     }
                 },
@@ -155,7 +155,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order_1",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}"
@@ -181,7 +181,7 @@
                 "type": "googlesheets",
                 "entity": "row",
                 "action": "create",
-                "name": "Google Sheets Create Row - Orders",
+                "name": "Create Row - Orders",
                 "key": "googlesheets_row",
                 "metadata": {
                     "path": {
@@ -207,7 +207,7 @@
                             "Shipping Province": "{{shopify_order.shipping_address.province}}",
                             "Shipping Country": "{{shopify_order.shipping_address.country}}",
                             "Created At (date and time)": "{{shopify_order_1.created_at}}",
-                            "Tracking URL": "{{tracktor_fulfillment.shop_url}}\/apps\/tracktor\/track?order={{tracktor_fulfillment.order_name | url_encode }}&email={{shopify_order.email}}"
+                            "Tracking URL": "{{tracktor_fulfillment.shop_url}}/apps/tracktor/track?order={{tracktor_fulfillment.order_name | url_encode }}&email={{shopify_order.email}}"
                         }
                     }
                 },

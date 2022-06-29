@@ -30,7 +30,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify_flow",
-                "name": "Shopify Flow Trigger",
+                "name": "Trigger",
                 "key": "shopify_flow",
                 "metadata": [],
                 "local_fields": [],

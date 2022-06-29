@@ -11,14 +11,14 @@
     "destination": "pagestudio",
     "enabled": false,
     "config": {
-      "inputs": [
-        {
+        "inputs": [
+            {
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "pagestudio",
                 "entity": "page",
                 "action": "created",
-                "name": "Page Studio Page Created",
+                "name": "Page Created",
                 "key": "pagestudio_page",
                 "metadata": [],
                 "local_fields": [],
@@ -32,7 +32,7 @@
                 "type": "pagestudio",
                 "entity": "page",
                 "action": "create",
-                "name": "Page Studio Create Page",
+                "name": "Create Page",
                 "key": "pagestudio_page",
                 "metadata": {
                     "body": {

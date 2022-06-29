@@ -20,7 +20,7 @@
                 "type": "infiniteoptions",
                 "entity": "order",
                 "action": "created",
-                "name": "Infinite Options Order Created",
+                "name": "Order Created",
                 "key": "infiniteoptions_order",
                 "metadata": [],
                 "local_fields": [],
@@ -46,7 +46,7 @@
                 "type": "airtable",
                 "entity": "record",
                 "action": "create",
-                "name": "Airtable Add Record",
+                "name": "Add Record",
                 "key": "airtable_record",
                 "metadata": {
                     "path": {
@@ -54,7 +54,7 @@
                     },
                     "body": {
                         "fields": {
-                            "Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{infiniteoptions_order.order.id}}",
+                            "Order URL": "https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}",
                             "Order Name": "{{infiniteoptions_order.order.name}}",
                             "Email": "{{infiniteoptions_order.order.email}}",
                             "Shipping Name": "{{infiniteoptions_order.order.shipping_address.first_name}} {{infiniteoptions_order.order.shipping_address.last_name}}",

@@ -1,63 +1,63 @@
 {
-  "key": "shopify/order/approve_thank_you_email",
-  "name": "Approve automated thank-you email before it gets sent",
-  "version": "1.0.0",
-  "description": "The wrong message going out can affect your brand and influence future interactions. With this template, merchants can now approve email content before it reaches the customer.\u00a0",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "approval",
-        "name": "Approval",
-        "key": "approval",
-        "metadata": {
-          "message": "Thank you email for a new order:\n\n**Order Details:**\n\n- Order Number: {{shopify_order.name}}\n- Email: {{shopify_order.email}}\n- Total Price: ${{shopify_order.total_price}}",
-          "field": true,
-          "label_accept": "Send Email",
-          "label_reject": "Reject"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{shopify_order.email}}",
-          "subject": "Order {{shopify_order.name}} confirmation",
-          "message": "Hi {{shopify_order.customer.first_name}},\n\nThanks for your purchase! We're getting your order {{shopify_order.name}} ready to be shipped. We will notify you when it has been sent.\n\n{% if approval.field != \"\" %}Additional notes: {{approval.field}}\n\n{% endif %}Thanks,\n\nThe {{context.shop.name}} Team"
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/order/approve_thank_you_email",
+    "name": "Approve automated thank-you email before it gets sent",
+    "version": "1.0.0",
+    "description": "The wrong message going out can affect your brand and influence future interactions. With this template, merchants can now approve email content before it reaches the customer. ",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approval",
+                "key": "approval",
+                "metadata": {
+                    "message": "Thank you email for a new order:\n\n**Order Details:**\n\n- Order Number: {{shopify_order.name}}\n- Email: {{shopify_order.email}}\n- Total Price: ${{shopify_order.total_price}}",
+                    "field": true,
+                    "label_accept": "Send Email",
+                    "label_reject": "Reject"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "is_premium": true,
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{shopify_order.email}}",
+                    "subject": "Order {{shopify_order.name}} confirmation",
+                    "message": "Hi {{shopify_order.customer.first_name}},\n\nThanks for your purchase! We're getting your order {{shopify_order.name}} ready to be shipped. We will notify you when it has been sent.\n\n{% if approval.field != \"\" %}Additional notes: {{approval.field}}\n\n{% endif %}Thanks,\n\nThe {{context.shop.name}} Team"
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

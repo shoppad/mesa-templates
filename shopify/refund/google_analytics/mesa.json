@@ -2,7 +2,7 @@
     "key": "google_analytics",
     "name": "Automatically Track Shopify Refunds in Google Analytics",
     "version": "1.0.0",
-    "description": "It\u2019s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, Mesa does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
+    "description": "It’s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, Mesa does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "refund",
                 "action": "created",
-                "name": "Shopify Refund Created",
+                "name": "Refund Created",
                 "key": "shopify_refund",
                 "metadata": [],
                 "weight": 0
@@ -45,7 +45,7 @@
                 "type": "googleanalytics",
                 "entity": "transaction",
                 "action": "create",
-                "name": "Google Analytics Create Transaction",
+                "name": "Create Transaction",
                 "key": "googleanalytics_transaction",
                 "metadata": {
                     "mapping": [

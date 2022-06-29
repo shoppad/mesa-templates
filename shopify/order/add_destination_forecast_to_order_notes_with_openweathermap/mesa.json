@@ -14,7 +14,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
-                "name": "Shopify Order Webhook",
+                "name": "Order Webhook",
                 "key": "in-shopify-order-webhook",
                 "script": "in_shopify_order_webhook.js",
                 "logging": "error",

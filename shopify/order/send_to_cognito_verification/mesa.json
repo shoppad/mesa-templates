@@ -14,7 +14,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
-                "name": "Shopify Order Create",
+                "name": "Order Create",
                 "key": "in-shopify-order-create",
                 "script": "in_shopify_order_create.js",
                 "entity": "order",

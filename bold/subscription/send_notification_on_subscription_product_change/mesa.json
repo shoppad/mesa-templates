@@ -50,7 +50,7 @@
                 "type": "slack",
                 "entity": null,
                 "action": null,
-                "name": "Slack",
+                "name": "",
                 "key": "slack",
                 "metadata": {
                     "message": "{{transformeditor.text}}"

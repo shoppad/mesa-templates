@@ -1,104 +1,104 @@
 {
-  "key": "shopify_customer_add_to_google_sheets_document",
-  "name": "Add Shopify Customer to Google Sheets Document",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "customer",
-              "action": "created",
-              "name": "Shopify Customer Created",
-              "key": "shopify_customer",
-              "metadata": [],
-              "local_fields": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "googlesheets",
-              "entity": "row",
-              "action": "create",
-              "name": "Google Sheets Add Row",
-              "key": "googlesheets_row_1",
-              "metadata": {
-                "path": {
-                    "mode": "create",
-                    "spreadsheet_id": "",
-                    "sheet_name": "Sheet1",
-                    "header_row": "first_row"
+    "key": "shopify_customer_add_to_google_sheets_document",
+    "name": "Add Shopify Customer to Google Sheets Document",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "shopify_customer",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "key": "googlesheets_row_1",
+                "metadata": {
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
+                    "body": {
+                        "fields": {
+                            "Customer ID": "{{shopify_customer.id}}",
+                            "Email": "{{shopify_customer.email}}",
+                            "First Name": "{{shopify_customer.first_name}}",
+                            "Last Name": "{{shopify_customer.last_name}}",
+                            "Phone": "{{shopify_customer.phone}}",
+                            "Tags": "{{shopify_customer.tags}}",
+                            "Note": "{{shopify_customer.note}}"
+                        }
+                    }
                 },
-                  "body": {
-                      "fields": {
-                          "Customer ID": "{{shopify_customer.id}}",
-                          "Email": "{{shopify_customer.email}}",
-                          "First Name": "{{shopify_customer.first_name}}",
-                          "Last Name": "{{shopify_customer.last_name}}",
-                          "Phone": "{{shopify_customer.phone}}",
-                          "Tags": "{{shopify_customer.tags}}",
-                          "Note": "{{shopify_customer.note}}"
-                      }
-                  }
-              },
-              "local_fields": [
-                  {
-                      "key": "body",
-                      "type": "object",
-                      "fields": [
-                          {
-                              "key": "fields",
-                              "type": "object",
-                              "fields": [
-                                  {
-                                      "key": "Customer ID",
-                                      "label": "Customer ID",
-                                      "type": "text"
-                                  },
-                                  {
-                                      "key": "Email",
-                                      "label": "Email",
-                                      "type": "text"
-                                  },
-                                  {
-                                      "key": "First Name",
-                                      "label": "First Name",
-                                      "type": "text"
-                                  },
-                                  {
-                                      "key": "Last Name",
-                                      "label": "Last Name",
-                                      "type": "text"
-                                  },
-                                  {
-                                      "key": "Phone",
-                                      "label": "Phone",
-                                      "type": "text"
-                                  },
-                                  {
-                                      "key": "Tags",
-                                      "label": "Tags",
-                                      "type": "text"
-                                  },
-                                  {
-                                      "key": "Note",
-                                      "label": "Note",
-                                      "type": "text"
-                                  }
-                              ]
-                          }
-                      ]
-                  }
-              ],
-              "weight": 0
-          }
-      ],
-      "storage": []
-  }
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "Customer ID",
+                                        "label": "Customer ID",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Email",
+                                        "label": "Email",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "First Name",
+                                        "label": "First Name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Last Name",
+                                        "label": "Last Name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Phone",
+                                        "label": "Phone",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Tags",
+                                        "label": "Tags",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Note",
+                                        "label": "Note",
+                                        "type": "text"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

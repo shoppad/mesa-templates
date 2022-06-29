@@ -1,126 +1,126 @@
 {
-  "key": "update_when_out_of_stock",
-  "name": "Update a Product When the Inventory of its Variants Becomes Out of Stock",
-  "version": "1.0.0",
-  "description": "When the inventory of one of your product\u2019s variants becomes out of stock, it\u2019s important to update it to let customers know before they make the mistake of ordering it. However, keeping track of which product variants are currently available every time can take a toll on your schedule, which is why Mesa can do all the work for you.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "loop",
-        "name": "Loop",
-        "key": "loop",
-        "metadata": {
-          "key": "{{shopify_order.line_items[]}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "product_variant",
-        "action": "retrieve_id",
-        "name": "Shopify Retrieve By Variant ID Product Variant",
-        "key": "shopify_product_variant",
-        "metadata": {
-          "variant_id": "{{loop.variant_id}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_product_variant.variant.inventory_quantity}}",
-          "comparison": "less than equal",
-          "b": "0"
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "product",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Product",
-        "key": "shopify_product_1",
-        "metadata": {
-          "product_id": "{{loop.product_id}}"
-        },
-        "local_fields": [],
-        "weight": 3
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "custom",
-        "name": "Custom Code",
-        "key": "custom",
-        "metadata": {
-          "script": "custom.js"
-        },
-        "local_fields": [],
-        "weight": 4
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "product",
-        "action": "update",
-        "name": "Shopify Update Product",
-        "key": "shopify_product",
-        "metadata": {
-          "product_id": "{{shopify_product_1.id}}",
-          "body": {
-            "title": "{{shopify_product_1.title}} - OUT OF STOCK",
-            "body_html": "{{shopify_product_1.body_html}}<br><br>This product is currently out of stock, please check back soon!</br></br>",
-            "tags": "{{shopify_product_1.tags}}, Inventory = 0",
-            "published_at": "null",
-            "published_scope": "unavailable"
-          }
-        },
-        "local_fields": [
-          {
-            "key": "body",
-            "fields": []
-          }
+    "key": "update_when_out_of_stock",
+    "name": "Update a Product When the Inventory of its Variants Becomes Out of Stock",
+    "version": "1.0.0",
+    "description": "When the inventory of one of your product’s variants becomes out of stock, it’s important to update it to let customers know before they make the mistake of ordering it. However, keeping track of which product variants are currently available every time can take a toll on your schedule, which is why Mesa can do all the work for you.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
         ],
-        "weight": 5
-      }
-    ],
-    "storage": []
-  }
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve By Variant ID Product Variant",
+                "key": "shopify_product_variant",
+                "metadata": {
+                    "variant_id": "{{loop.variant_id}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_product_variant.variant.inventory_quantity}}",
+                    "comparison": "less than equal",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_product_1",
+                "metadata": {
+                    "product_id": "{{loop.product_id}}"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "shopify_product",
+                "metadata": {
+                    "product_id": "{{shopify_product_1.id}}",
+                    "body": {
+                        "title": "{{shopify_product_1.title}} - OUT OF STOCK",
+                        "body_html": "{{shopify_product_1.body_html}}<br><br>This product is currently out of stock, please check back soon!</br></br>",
+                        "tags": "{{shopify_product_1.tags}}, Inventory = 0",
+                        "published_at": "null",
+                        "published_scope": "unavailable"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": []
+                    }
+                ],
+                "weight": 5
+            }
+        ],
+        "storage": []
+    }
 }

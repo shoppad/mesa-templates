@@ -19,8 +19,8 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment\/delivered",
-                "name": "Tracktor Fulfillment Status is Delivered",
+                "action": "fulfillment/delivered",
+                "name": "Fulfillment Status is Delivered",
                 "key": "tracktor_fulfillment",
                 "metadata": [],
                 "on_error": "default",
@@ -34,7 +34,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order",
                 "metadata": {
                     "order_id": "{{tracktor_fulfillment.order_id}}"
@@ -63,7 +63,7 @@
                 "type": "twilio",
                 "entity": "sms",
                 "action": "send",
-                "name": "Twilio Send SMS",
+                "name": "Send SMS",
                 "key": "twilio_sms",
                 "metadata": {
                     "message": "Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card. ",

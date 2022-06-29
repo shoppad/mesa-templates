@@ -1,79 +1,79 @@
 {
-  "key": "shopify/order/add_loyaltylion_points",
-  "name": "Add Bonus Loyalty Points when Customer Completes an Order",
-  "version": "1.0.0",
-  "description": "Add 100 bonus points to customer's profile on LoyaltyLion every time they complete a purchase.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "loyaltylion",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": {
-          "topic": "orders/create"
-        },
-        "local_fields": null,
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "loyaltylion",
-        "entity": "customer",
-        "action": "list",
-        "name": "LoyaltyLion List Customer",
-        "key": "loyaltylion_customer_1",
-        "metadata": {
-          "api_endpoint": "GET /v2/customers",
-          "parameters": "email={{shopify_order.email}}&limit=1"
-        },
-        "local_fields": null,
-        "weight": 0
-      },
-      {
-        "trigger_type": "output",
-        "type": "loyaltylion",
-        "entity": "customer",
-        "action": "add_points",
-        "name": "LoyaltyLion Add Points Customer",
-        "key": "loyaltylion_customer",
-        "metadata": {
-          "api_endpoint": "POST /v2/customers/{{merchant_id}}/points",
-          "mapping": [
+    "key": "shopify/order/add_loyaltylion_points",
+    "name": "Add Bonus Loyalty Points when Customer Completes an Order",
+    "version": "1.0.0",
+    "description": "Add 100 bonus points to customer's profile on LoyaltyLion every time they complete a purchase.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "loyaltylion",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "destination": "points",
-              "source": "100"
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": {
+                    "topic": "orders/create"
+                },
+                "local_fields": null,
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "loyaltylion",
+                "entity": "customer",
+                "action": "list",
+                "name": "List Customer",
+                "key": "loyaltylion_customer_1",
+                "metadata": {
+                    "api_endpoint": "GET /v2/customers",
+                    "parameters": "email={{shopify_order.email}}&limit=1"
+                },
+                "local_fields": null,
+                "weight": 0
             },
             {
-              "destination": "reason",
-              "source": "Bonus points for online order"
+                "trigger_type": "output",
+                "type": "loyaltylion",
+                "entity": "customer",
+                "action": "add_points",
+                "name": "Add Points Customer",
+                "key": "loyaltylion_customer",
+                "metadata": {
+                    "api_endpoint": "POST /v2/customers/{{merchant_id}}/points",
+                    "mapping": [
+                        {
+                            "destination": "points",
+                            "source": "100"
+                        },
+                        {
+                            "destination": "reason",
+                            "source": "Bonus points for online order"
+                        }
+                    ],
+                    "merchant_id": "{{loyaltylion_customer_1.0.merchant_id}}"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "weight": 1
             }
-          ],
-          "merchant_id": "{{loyaltylion_customer_1.0.merchant_id}}"
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets",
-            "location": "mapping"
-          }
         ],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+        "storage": []
+    }
 }

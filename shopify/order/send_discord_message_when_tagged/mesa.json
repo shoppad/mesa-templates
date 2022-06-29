@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
                 "weight": 0
@@ -45,7 +45,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Product",
+                "name": "Retrieve Product",
                 "key": "shopify_product",
                 "metadata": {
                     "product_id": "{{loop.product_id}}"
@@ -72,11 +72,11 @@
                 "type": "discord",
                 "entity": "channel_message",
                 "action": "create",
-                "name": "Discord Channel Message Create",
+                "name": "Channel Message Create",
                 "key": "discord_channel_message",
                 "metadata": {
                     "body": {
-                        "content": "**New {{shopify_product.title}} Order**\n\nWe've received Order {{shopify_order.name}} with the {{shopify_product.title}} product included.\n\nPlease fulfill this order accordingly.\n\nAdmin Order URL: https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
+                        "content": "**New {{shopify_product.title}} Order**\n\nWe've received Order {{shopify_order.name}} with the {{shopify_product.title}} product included.\n\nPlease fulfill this order accordingly.\n\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}"
                     }
                 },
                 "local_fields": [],

@@ -2,7 +2,7 @@
     "key": "yotpo_loyalty_customer_dob",
     "name": "Save a Customer's Date of Birth to a Yotpo Loyalty Customer",
     "version": "1.0.0",
-    "description": "An excellent way to engage customers is to offer special rewards on their birthday. Thankfully, Mesa allows you to save a customer\u2019s data of birth via Mesa Forms so you don\u2019t forget.",
+    "description": "An excellent way to engage customers is to offer special rewards on their birthday. Thankfully, Mesa allows you to save a customer’s data of birth via Mesa Forms so you don’t forget.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -78,7 +78,7 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "retrieve",
-                "name": "Shopify Customer Retrieve",
+                "name": "Customer Retrieve",
                 "key": "shopify_customer",
                 "metadata": {
                     "customer_id": "{{form.customer-id}}"
@@ -92,7 +92,7 @@
                 "type": "yotpoloyalty",
                 "entity": "birthday",
                 "action": "set",
-                "name": "Yotpo Loyalty & Referrals Birthday Set",
+                "name": "& Referrals Birthday Set",
                 "key": "yotpoloyalty_birthday",
                 "metadata": {
                     "body": {

@@ -1,81 +1,81 @@
 {
-  "name": "Test: Kitchen Sink",
-  "version": "1.0.0",
-  "key": "tests/kitchen_sink",
-  "description": "Ensure that all Mesa SDK methods, Inputs, and Output types are working.",
-  "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/tests/kitchen-sink/README.md",
-  "enabled": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "enabled": false,
-        "type": "custom",
-        "name": "Kitchen Sink",
-        "key": "in-kitchen-sink",
-        "trigger_name": "In: Kitchen Sink",
-        "script": "in_kitchen_sink.js",
-        "logging": "error"
-      },
-      {
-        "trigger_type": "input",
-        "enabled": false,
-        "type": "ftp",
-        "name": "Kitchen Sink FTP",
-        "key": "in-kitchen-sink-ftp",
-        "trigger_name": "In: Kitchen Sink FTP",
-        "script": "in_kitchen_sink_ftp.js",
-        "method": "sftp",
-        "host": "harmony-files.theshoppad.com",
-        "port": "22",
-        "file": "clients/harmonia/kitchen-sink-ftp-*",
-        "username": "harmonia-dev",
-        "password": "test-ftp-password"
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "enabled": false,
-        "type": "virtual_output",
-        "name": "Kitchen Sink VO",
-        "key": "out-kitchen-sink-vo",
-        "trigger_name": "Out: Kitchen Sink VO",
-        "logging": "error"
-      },
-      {
-        "trigger_type": "output",
-        "enabled": false,
-        "type": "ftp",
-        "name": "Kitchen Sink FTP",
-        "key": "out-kitchen-sink-ftp",
-        "trigger_name": "Out: Kitchen Sink FTP",
-        "script": "out-output-done.js",
-        "method": "sftp",
-        "host": "harmony-files.theshoppad.com",
-        "port": "22",
-        "file": "clients/harmonia/kitchen-sink-ftp-{date:m_d_Y}.csv",
-        "username": "harmonia-dev",
-        "password": "test-ftp-password"
-      }
-    ],
-    "storage": [
-      {
-        "key": "kitchen-sink-default.json",
-        "value": "DO NOT DELETE"
-      },
-      {
-        "key": "test",
-        "value": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doc>\n  <hi>bye</hi>\n  <hello>goodbye</hello>\n</doc>\n"
-      }
-    ],
-    "secrets": [
-      {
-        "key": "test-ftp-password"
-      },
-      {
-        "key": "test-api-key"
-      }
-    ]
-  }
+    "name": "Test: Kitchen Sink",
+    "version": "1.0.0",
+    "key": "tests/kitchen_sink",
+    "description": "Ensure that all Mesa SDK methods, Inputs, and Output types are working.",
+    "documentation": "https://github.com/shoppad/mesa-recipes/blob/master/tests/kitchen-sink/README.md",
+    "enabled": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "enabled": false,
+                "type": "custom",
+                "name": "Kitchen Sink",
+                "key": "in-kitchen-sink",
+                "trigger_name": "In: Kitchen Sink",
+                "script": "in_kitchen_sink.js",
+                "logging": "error"
+            },
+            {
+                "trigger_type": "input",
+                "enabled": false,
+                "type": "ftp",
+                "name": "Kitchen Sink FTP",
+                "key": "in-kitchen-sink-ftp",
+                "trigger_name": "In: Kitchen Sink FTP",
+                "script": "in_kitchen_sink_ftp.js",
+                "method": "sftp",
+                "host": "harmony-files.theshoppad.com",
+                "port": "22",
+                "file": "clients/harmonia/kitchen-sink-ftp-*",
+                "username": "harmonia-dev",
+                "password": "test-ftp-password"
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "enabled": false,
+                "type": "virtual_output",
+                "name": "Kitchen Sink VO",
+                "key": "out-kitchen-sink-vo",
+                "trigger_name": "Out: Kitchen Sink VO",
+                "logging": "error"
+            },
+            {
+                "trigger_type": "output",
+                "enabled": false,
+                "type": "ftp",
+                "name": "Kitchen Sink FTP",
+                "key": "out-kitchen-sink-ftp",
+                "trigger_name": "Out: Kitchen Sink FTP",
+                "script": "out-output-done.js",
+                "method": "sftp",
+                "host": "harmony-files.theshoppad.com",
+                "port": "22",
+                "file": "clients/harmonia/kitchen-sink-ftp-{date:m_d_Y}.csv",
+                "username": "harmonia-dev",
+                "password": "test-ftp-password"
+            }
+        ],
+        "storage": [
+            {
+                "key": "kitchen-sink-default.json",
+                "value": "DO NOT DELETE"
+            },
+            {
+                "key": "test",
+                "value": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<doc>\n  <hi>bye</hi>\n  <hello>goodbye</hello>\n</doc>\n"
+            }
+        ],
+        "secrets": [
+            {
+                "key": "test-ftp-password"
+            },
+            {
+                "key": "test-api-key"
+            }
+        ]
+    }
 }

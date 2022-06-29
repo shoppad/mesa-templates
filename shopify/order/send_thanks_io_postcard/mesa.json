@@ -19,10 +19,10 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": {
-                    "topic": "orders\/create"
+                    "topic": "orders/create"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -48,11 +48,11 @@
                 "type": "thanks",
                 "entity": "postcard",
                 "action": "create",
-                "name": "Thanks.io Send Postcard",
+                "name": "Send Postcard",
                 "key": "thanks_postcard",
                 "metadata": {
                     "body": {
-                        "front_image_url": "https:\/\/blog.theshoppad.com\/wp-content\/uploads\/Shipping_Handling_Profitability-300x169.png",
+                        "front_image_url": "https://blog.theshoppad.com/wp-content/uploads/Shipping_Handling_Profitability-300x169.png",
                         "handwriting_style": "1",
                         "message": "Dear {{delay.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{delay.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n- The {{context.shop.name}} Team",
                         "return_name": "{{context.shop.name}}",

@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
                 "weight": 0
@@ -47,7 +47,7 @@
                 "type": "googlesheets",
                 "entity": "sheet",
                 "action": "write",
-                "name": "Google Sheets Sheet Write",
+                "name": "Sheet Write",
                 "key": "googlesheets_sheet",
                 "metadata": {
                     "make_labels": true,

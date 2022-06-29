@@ -20,7 +20,7 @@
                 "type": "salesforce",
                 "entity": "product",
                 "action": "list-created",
-                "name": "Salesforce Product Created",
+                "name": "Product Created",
                 "key": "salesforce_product",
                 "metadata": {
                     "entity_name": "Product2",
@@ -40,7 +40,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "create",
-                "name": "Shopify Create Product",
+                "name": "Create Product",
                 "key": "shopify_product",
                 "metadata": {
                     "body": {

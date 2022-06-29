@@ -22,10 +22,10 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "create-update",
-                "name": "Shopify Customer Created or Updated",
+                "name": "Customer Created or Updated",
                 "key": "shopify-customer-created-or-updated",
                 "metadata": {
-                  "topic": "customers/create+customers/update"
+                    "topic": "customers/create+customers/update"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -38,7 +38,7 @@
                 "type": "salesforce",
                 "entity": "account",
                 "action": "query",
-                "name": "Salesforce Query Single Account",
+                "name": "Query Single Account",
                 "key": "salesforce-query-single-account",
                 "metadata": {
                     "entity_name": "Account",
@@ -54,7 +54,7 @@
                 "type": "salesforce",
                 "entity": "account",
                 "action": "create_or_update",
-                "name": "Salesforce Create or Update Account",
+                "name": "Create or Update Account",
                 "key": "salesforce_account_1",
                 "metadata": {
                     "entity_name": "Account",
@@ -96,8 +96,8 @@
                                         "value": "Customer - Channel"
                                     },
                                     {
-                                        "label": "Channel Partner \/ Reseller",
-                                        "value": "Channel Partner \/ Reseller"
+                                        "label": "Channel Partner / Reseller",
+                                        "value": "Channel Partner / Reseller"
                                     },
                                     {
                                         "label": "Installation Partner",
@@ -133,13 +133,13 @@
                             },
                             {
                                 "key": "BillingState",
-                                "label": "Billing State\/Province",
+                                "label": "Billing State/Province",
                                 "type": "text",
                                 "source": "salesforce"
                             },
                             {
                                 "key": "BillingPostalCode",
-                                "label": "Billing Zip\/Postal Code",
+                                "label": "Billing Zip/Postal Code",
                                 "type": "text",
                                 "source": "salesforce"
                             },
@@ -227,13 +227,13 @@
                             },
                             {
                                 "key": "ShippingState",
-                                "label": "Shipping State\/Province",
+                                "label": "Shipping State/Province",
                                 "type": "text",
                                 "source": "salesforce"
                             },
                             {
                                 "key": "ShippingPostalCode",
-                                "label": "Shipping Zip\/Postal Code",
+                                "label": "Shipping Zip/Postal Code",
                                 "type": "text",
                                 "source": "salesforce"
                             },

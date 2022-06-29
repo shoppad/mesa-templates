@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
                 "weight": 0
@@ -51,7 +51,7 @@
                 "metadata": {
                     "to": "{{context.shop.email}}",
                     "subject": "New {{shopify_order.shipping_lines[0].title}} order received: {{shopify_order.name}}",
-                    "message": "Order {{shopify_order.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify_order.shipping_address.city}}, {{shopify_order.shipping_address.province}} {{shopify_order.shipping_address.country}}.\n\nView the order: https:\/\/{{context.shop.myshopify_domain}}\/admin\/orders\/{{shopify_order.id}}"
+                    "message": "Order {{shopify_order.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify_order.shipping_address.city}}, {{shopify_order.shipping_address.province}} {{shopify_order.shipping_address.country}}.\n\nView the order: https://{{context.shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
                 },
                 "local_fields": [],
                 "weight": 1
@@ -62,7 +62,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "tag_add",
-                "name": "Shopify Order Add Tag",
+                "name": "Order Add Tag",
                 "key": "shopify_order_1",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",

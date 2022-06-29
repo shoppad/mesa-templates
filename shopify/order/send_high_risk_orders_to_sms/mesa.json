@@ -19,7 +19,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
@@ -33,7 +33,7 @@
                 "type": "shopify",
                 "entity": "order_risk",
                 "action": "list",
-                "name": "Shopify Get List Order Risk",
+                "name": "Get List Order Risk",
                 "key": "shopify_order_risk",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}"
@@ -73,7 +73,7 @@
                 "type": "shopify",
                 "entity": "shop",
                 "action": "list",
-                "name": "Shopify Retrieve Shop",
+                "name": "Retrieve Shop",
                 "key": "shopify_shop",
                 "metadata": [],
                 "local_fields": [],
@@ -90,7 +90,7 @@
                 "key": "sms_message",
                 "metadata": {
                     "to": "{{shopify_shop.phone}}",
-                    "message": "Potentially fraudulent order {{shopify_order.name}}\n\nView order: https:\/\/{{shopify_shop.myshopify_domain}}\/admin\/orders\/{{shopify_order.id}}"
+                    "message": "Potentially fraudulent order {{shopify_order.name}}\n\nView order: https://{{shopify_shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
                 },
                 "local_fields": [],
                 "weight": 5

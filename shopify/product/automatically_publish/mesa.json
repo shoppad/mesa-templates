@@ -2,7 +2,7 @@
     "key": "automatically_publish",
     "name": "Automatically Publish a Product if it has an Image and Description",
     "version": "1.0.0",
-    "description": "You don\u2019t want to make the mistake of publishing a product to your website if it doesn\u2019t have any images or descriptions yet, which can make your website look unprofessional. With Mesa, you can make sure that your product appears on your website only if it\u2019s complete with a description and a set of images.",
+    "description": "You don’t want to make the mistake of publishing a product to your website if it doesn’t have any images or descriptions yet, which can make your website look unprofessional. With Mesa, you can make sure that your product appears on your website only if it’s complete with a description and a set of images.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "created",
-                "name": "Shopify Product Created",
+                "name": "Product Created",
                 "key": "shopify_product",
                 "metadata": [],
                 "weight": 0
@@ -61,7 +61,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "update",
-                "name": "Shopify Update Product",
+                "name": "Update Product",
                 "key": "shopify_product_1",
                 "metadata": {
                     "product_id": "{{shopify_product.id}}",

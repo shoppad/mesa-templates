@@ -1,65 +1,65 @@
 {
-  "key": "shopify/order/add_currency_to_order_tags",
-  "name": "Add Currency To Order Tags",
-  "version": "1.0.0",
-  "description": "Add currency tag to Shopify order when order is created.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shopify",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-      "inputs": [
-          {
-              "schema": 2,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "order",
-              "action": "created",
-              "name": "Shopify Order Created",
-              "key": "shopify_order",
-              "metadata": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 2,
-              "trigger_type": "output",
-              "type": "shopify",
-              "entity": "order",
-              "action": "retrieve",
-              "name": "Shopify Retrieve Order",
-              "key": "shopify_order_2",
-              "metadata": {
-                  "order_id": "{{shopify_order.id}}",
-                  "site": "current"
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 3,
-              "trigger_type": "output",
-              "type": "shopify",
-              "entity": "order",
-              "action": "update",
-              "name": "Shopify Update Order",
-              "key": "shopify_order_1",
-              "metadata": {
-                  "order_id": "{{shopify_order.id}}",
-                  "body": {
-                      "tags": "{{shopify_order_2.tags}}, {{shopify_order.currency}}"
-                  },
-                  "site": "current"
-              },
-              "local_fields": [],
-              "weight": 1
-          }
-      ],
-      "storage": []
-  }
+    "key": "shopify/order/add_currency_to_order_tags",
+    "name": "Add Currency To Order Tags",
+    "version": "1.0.0",
+    "description": "Add currency tag to Shopify order when order is created.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_order_2",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "site": "current"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "update",
+                "name": "Update Order",
+                "key": "shopify_order_1",
+                "metadata": {
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "tags": "{{shopify_order_2.tags}}, {{shopify_order.currency}}"
+                    },
+                    "site": "current"
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

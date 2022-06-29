@@ -1,5 +1,5 @@
 {
-    "key": "shopify\/order\/send_order_customer_details_to_odoo",
+    "key": "shopify/order/send_order_customer_details_to_odoo",
     "name": "Send Shopify order and customer details to Odoo",
     "version": "1.0.0",
     "description": "You're a busy merchant, and the last thing you want to do is manually synchronize the multiple systems you use each day. Let MESA do the heavy lifting for you! When a Shopify order is created, this template will send both the Shopify order details and customer information to Odoo. You'll save valuable time and gain peace of mind knowing both of your systems are in sync.",
@@ -24,7 +24,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
@@ -38,7 +38,7 @@
                 "type": "odoo",
                 "entity": "product.product",
                 "action": "search_read",
-                "name": "Odoo List Product Variant",
+                "name": "List Product Variant",
                 "key": "odoo_product_product",
                 "metadata": {
                     "entity_name": "product.product",
@@ -86,7 +86,7 @@
                 "type": "odoo",
                 "entity": "res.partner",
                 "action": "search_read",
-                "name": "Odoo List Customer",
+                "name": "List Customer",
                 "key": "odoo_res_partner",
                 "metadata": {
                     "entity_name": "res.partner",
@@ -163,7 +163,7 @@
                 "type": "odoo",
                 "entity": "custom",
                 "action": "search_read",
-                "name": "Odoo List Custom Model - Country",
+                "name": "List Custom Model - Country",
                 "key": "odoo_custom",
                 "metadata": {
                     "method": "search_read",
@@ -196,7 +196,7 @@
                 "type": "odoo",
                 "entity": "custom",
                 "action": "search_read",
-                "name": "Odoo List Custom Model - State",
+                "name": "List Custom Model - State",
                 "key": "odoo_custom_1",
                 "metadata": {
                     "method": "search_read",
@@ -237,7 +237,7 @@
                 "type": "odoo",
                 "entity": "res.partner",
                 "action": "create",
-                "name": "Odoo Customer Create",
+                "name": "Customer Create",
                 "key": "odoo_res_partner_1",
                 "metadata": {
                     "entity_name": "res.partner",
@@ -302,7 +302,7 @@
                 "type": "odoo",
                 "entity": "sale.order",
                 "action": "create",
-                "name": "Odoo Create Order",
+                "name": "Create Order",
                 "key": "odoo_sale_order",
                 "metadata": {
                     "entity_name": "sale.order",
@@ -479,7 +479,7 @@
                 "type": "odoo",
                 "entity": "sale.order.line",
                 "action": "create",
-                "name": "Odoo Create Order Line",
+                "name": "Create Order Line",
                 "key": "odoo_sale_order_line",
                 "metadata": {
                     "entity_name": "sale.order.line",

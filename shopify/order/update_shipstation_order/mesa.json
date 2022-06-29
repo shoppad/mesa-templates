@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Update a ShipStation Order when a Shopify Order is Updated",
     "video": "",
-    "readme": "[Follow the steps](https:\/\/help.shipstation.com\/hc\/en-us\/articles\/360025856212-ShipStation-API) under \"Accessing the ShipStation API\" to obtain your ShipStation API Key and Password. This requires ShipStation admin access. \n",
+    "readme": "[Follow the steps](https://help.shipstation.com/hc/en-us/articles/360025856212-ShipStation-API) under \"Accessing the ShipStation API\" to obtain your ShipStation API Key and Password. This requires ShipStation admin access. \n",
     "tags": [],
     "source": "shopify",
     "destination": "shipstation",
@@ -19,7 +19,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "updated",
-                "name": "Shopify Order Updated",
+                "name": "Order Updated",
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
@@ -142,10 +142,10 @@
                 "type": "shipstation",
                 "entity": "order",
                 "action": "update",
-                "name": "ShipStation Update Order",
+                "name": "Update Order",
                 "key": "shipstation_order",
                 "metadata": {
-                    "api_endpoint": "POST \/orders\/createorder",
+                    "api_endpoint": "POST /orders/createorder",
                     "key_secret": ""
                 },
                 "local_fields": [],
@@ -154,4 +154,4 @@
         ],
         "storage": []
     }
-  }
+}

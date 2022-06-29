@@ -19,7 +19,7 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "created",
-                "name": "Shopify Customer Created",
+                "name": "Customer Created",
                 "key": "shopify_customer",
                 "metadata": [],
                 "weight": 0
@@ -32,7 +32,7 @@
                 "type": "omnisend",
                 "entity": "contact",
                 "action": "create",
-                "name": "Omnisend Create Contact",
+                "name": "Create Contact",
                 "key": "omnisend_contact",
                 "metadata": {
                     "body": {

@@ -1,93 +1,93 @@
 {
-  "key": "shopify/customer/send_to_hubspot_deal",
-  "name": "Send Shopify Customer to HubSpot Contact and Deal",
-  "version": "1.0.0",
-  "description": "HubSpot provides an extensive overview so you can take a look at your store's analytics. This template sends a Shopify customer from Shopify to HubSpot contact and deal whenever a customer is created. This allows your sales team to always be in sync with your Shopify store and act on an opportunity in a timely manner.",
-  "video": "",
-  "readme": "",
-  "tags": [
-    "Customer"
-  ],
-  "source": "shopify",
-  "destination": "hubspot",
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-      "inputs": [
-          {
-              "schema": 3,
-              "trigger_type": "input",
-              "type": "shopify",
-              "entity": "customer",
-              "action": "created",
-              "name": "Shopify Customer Created",
-              "key": "shopify_customer",
-              "metadata": [],
-              "weight": 0
-          }
-      ],
-      "outputs": [
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "contact",
-              "action": "create",
-              "name": "Hubspot Create Contact",
-              "key": "hubspot_contact",
-              "metadata": {
-                  "body": {
-                      "properties": {
-                          "email": "{{shopify_customer.email}}",
-                          "firstname": "{{shopify_customer.first_name}}",
-                          "lastname": "{{shopify_customer.last_name}}",
-                          "phone": "{{shopify_customer.phone}}"
-                      }
-                  }
-              },
-              "local_fields": [],
-              "weight": 0
-          },
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "deal",
-              "action": "create",
-              "name": "Hubspot Create Deal",
-              "key": "hubspot_deal",
-              "metadata": {
-                  "body": {
-                      "properties": {
-                          "dealname": "{{shopify_customer.first_name}} {{shopify_customer.last_name}} Deal"
-                      }
-                  }
-              },
-              "local_fields": [],
-              "on_error": "default",
-              "weight": 1
-          },
-          {
-              "schema": 4,
-              "trigger_type": "output",
-              "type": "hubspot",
-              "entity": "contact_association",
-              "action": "update",
-              "name": "Hubspot Contact Association Update",
-              "key": "hubspot_contact_association",
-              "metadata": {
-                  "path": {
-                      "contactId": "{{hubspot_contact.id}}",
-                      "toObjectType": "deals",
-                      "toObjectId": "{{hubspot_deal.id}}",
-                      "associationType": "4"
-                  }
-              },
-              "local_fields": [],
-              "weight": 2
-          }
-      ],
-      "storage": []
-  }
+    "key": "shopify/customer/send_to_hubspot_deal",
+    "name": "Send Shopify Customer to HubSpot Contact and Deal",
+    "version": "1.0.0",
+    "description": "HubSpot provides an extensive overview so you can take a look at your store's analytics. This template sends a Shopify customer from Shopify to HubSpot contact and deal whenever a customer is created. This allows your sales team to always be in sync with your Shopify store and act on an opportunity in a timely manner.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "Customer"
+    ],
+    "source": "shopify",
+    "destination": "hubspot",
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "shopify_customer",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "create",
+                "name": "Hubspot Create Contact",
+                "key": "hubspot_contact",
+                "metadata": {
+                    "body": {
+                        "properties": {
+                            "email": "{{shopify_customer.email}}",
+                            "firstname": "{{shopify_customer.first_name}}",
+                            "lastname": "{{shopify_customer.last_name}}",
+                            "phone": "{{shopify_customer.phone}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "deal",
+                "action": "create",
+                "name": "Hubspot Create Deal",
+                "key": "hubspot_deal",
+                "metadata": {
+                    "body": {
+                        "properties": {
+                            "dealname": "{{shopify_customer.first_name}} {{shopify_customer.last_name}} Deal"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact_association",
+                "action": "update",
+                "name": "Hubspot Contact Association Update",
+                "key": "hubspot_contact_association",
+                "metadata": {
+                    "path": {
+                        "contactId": "{{hubspot_contact.id}}",
+                        "toObjectType": "deals",
+                        "toObjectId": "{{hubspot_deal.id}}",
+                        "associationType": "4"
+                    }
+                },
+                "local_fields": [],
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
 }

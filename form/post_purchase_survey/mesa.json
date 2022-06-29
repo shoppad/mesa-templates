@@ -30,7 +30,7 @@
                         {
                             "type": "radio-group",
                             "required": false,
-                            "label": "<p data-pm-slice=\"1 1 [\" list\",{},\"list_item\",{\"indent\":1,\"type\":\"bulleted\"}]\"=\"\">How did you hear about us?<\/p>",
+                            "label": "<p data-pm-slice=\"1 1 [\" list\",{},\"list_item\",{\"indent\":1,\"type\":\"bulleted\"}]\"=\"\">How did you hear about us?</p>",
                             "inline": false,
                             "name": "how-did-you-hear-about-us",
                             "other": true,
@@ -79,7 +79,7 @@
                 "type": "googlesheets",
                 "entity": "row",
                 "action": "create",
-                "name": "Google Sheets Row Create",
+                "name": "Row Create",
                 "key": "googlesheets_row",
                 "metadata": {
                     "path": {

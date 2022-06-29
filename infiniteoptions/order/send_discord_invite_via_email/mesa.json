@@ -1,123 +1,123 @@
 {
-  "key": "infiniteoptions/order/send_discord_invite_via_email",
-  "name": "Send Discord invitations when an Infinite Options tagged product is purchased",
-  "version": "1.0.0",
-  "description": "Merchants trying to build a community in Discord using Shopify will appreciate this template. Create new invitations if the customer has not received a Discord invite before the Mesa workflow while tagging at the same time. With Discord + Mesa, you can now connect on a whole new level and nurture like-minded customers.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 4,
-        "trigger_type": "input",
-        "type": "infiniteoptions",
-        "entity": "order",
-        "action": "created",
-        "name": "Infinite Options Order Created",
-        "key": "infiniteoptions_order",
-        "metadata": {
-          "field_name": "Discord"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Customer",
-        "key": "shopify_customer",
-        "metadata": {
-          "customer_id": "{{infiniteoptions_order.order.customer.id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": "discord:invite",
-          "comparison": "not in",
-          "b": "{{shopify_customer.tags}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "discord",
-        "entity": "channel_invite",
-        "action": "create",
-        "name": "Discord Create Channel Invite",
-        "key": "discord_channel_invite",
-        "metadata": {
-          "path": {
-            "channelId": ""
-          }
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "shop",
-        "action": "list",
-        "name": "Shopify List Shop",
-        "key": "shopify_shop",
-        "metadata": [],
-        "weight": 3
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{infiniteoptions_order.order.email}}",
-          "subject": "Welcome to our Discord community! - Discord Invite",
-          "message": "Hey {{infiniteoptions_order.order.customer.first_name}},\n\nHere is your discord invite https://discord.gg/{{discord_channel_invite.code}}\n\nThanks\n\n"
-        },
-        "local_fields": [],
-        "weight": 4
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "update",
-        "name": "Shopify Update Customer",
-        "key": "shopify_customer_1",
-        "metadata": {
-          "customer_id": "{{shopify_customer.id}}",
-          "body": {
-            "tags": "{{shopify_customer.tags}}, discord:invite"
-          }
-        },
-        "local_fields": [],
-        "weight": 5
-      }
-    ],
-    "storage": []
-  }
+    "key": "infiniteoptions/order/send_discord_invite_via_email",
+    "name": "Send Discord invitations when an Infinite Options tagged product is purchased",
+    "version": "1.0.0",
+    "description": "Merchants trying to build a community in Discord using Shopify will appreciate this template. Create new invitations if the customer has not received a Discord invite before the Mesa workflow while tagging at the same time. With Discord + Mesa, you can now connect on a whole new level and nurture like-minded customers.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "infiniteoptions_order",
+                "metadata": {
+                    "field_name": "Discord"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{infiniteoptions_order.order.customer.id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "discord:invite",
+                    "comparison": "not in",
+                    "b": "{{shopify_customer.tags}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_invite",
+                "action": "create",
+                "name": "Create Channel Invite",
+                "key": "discord_channel_invite",
+                "metadata": {
+                    "path": {
+                        "channelId": ""
+                    }
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "List Shop",
+                "key": "shopify_shop",
+                "metadata": [],
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "is_premium": true,
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{infiniteoptions_order.order.email}}",
+                    "subject": "Welcome to our Discord community! - Discord Invite",
+                    "message": "Hey {{infiniteoptions_order.order.customer.first_name}},\n\nHere is your discord invite https://discord.gg/{{discord_channel_invite.code}}\n\nThanks\n\n"
+                },
+                "local_fields": [],
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "update",
+                "name": "Update Customer",
+                "key": "shopify_customer_1",
+                "metadata": {
+                    "customer_id": "{{shopify_customer.id}}",
+                    "body": {
+                        "tags": "{{shopify_customer.tags}}, discord:invite"
+                    }
+                },
+                "local_fields": [],
+                "weight": 5
+            }
+        ],
+        "storage": []
+    }
 }

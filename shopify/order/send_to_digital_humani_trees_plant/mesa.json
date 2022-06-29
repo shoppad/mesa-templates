@@ -23,7 +23,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
@@ -54,7 +54,7 @@
                 "type": "digitalhumani",
                 "entity": "trees",
                 "action": "plant",
-                "name": "Digital Humani Plant Trees",
+                "name": "Plant Trees",
                 "key": "digitalhumani_trees",
                 "metadata": {
                     "body": {
@@ -74,7 +74,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "note_update",
-                "name": "Shopify Update Order Notes",
+                "name": "Update Order Notes",
                 "key": "shopify_order_update_notes",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",

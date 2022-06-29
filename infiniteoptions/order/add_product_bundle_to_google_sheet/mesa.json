@@ -5,7 +5,9 @@
     "description": "TBD",
     "video": "",
     "readme": "",
-    "tags": [""],
+    "tags": [
+        ""
+    ],
     "source": "infiniteoptions",
     "destination": "googlesheets",
     "seconds": 0,
@@ -20,7 +22,7 @@
                 "type": "infiniteoptions",
                 "entity": "order",
                 "action": "created",
-                "name": "Infinite Options: Order Created",
+                "name": "Order Created",
                 "key": "infinite_options_order_created",
                 "metadata": [],
                 "local_fields": [],
@@ -73,7 +75,7 @@
                 "type": "googlesheets",
                 "entity": "row",
                 "action": "create",
-                "name": "Google Sheets Row Create",
+                "name": "Row Create",
                 "key": "googlesheets_row",
                 "metadata": {
                     "path": {
@@ -96,7 +98,7 @@
                             "Order ID": "{{infinite_options_order_created.order.id}}",
                             "Order Name (number)": "{{infinite_options_order_created.order.name}}",
                             "Created At": "{{infinite_options_order_created.order.created_at}}",
-                            "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{infinite_options_order_created.order.id}}"
+                            "Admin Order URL": "https://{{context.shop.domain}}/admin/orders/{{infinite_options_order_created.order.id}}"
                         }
                     }
                 },

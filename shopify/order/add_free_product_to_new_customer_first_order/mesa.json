@@ -13,7 +13,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Shopify Order Created",
+                "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
@@ -41,7 +41,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "line_item_add",
-                "name": "Shopify Order Line Item Add",
+                "name": "Order Line Item Add",
                 "key": "shopify_order_1",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",

@@ -1,56 +1,56 @@
 {
-  "key": "infiniteoptions/order/send_discord_message",
-  "name": "Send a Discord Message When an Infinite Options Product is Purchased",
-  "version": "1.0.0",
-  "description": "Send a Discord message when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is handy for companies using Discord; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
-  "video": "",
-  "readme": "## Setup\n\n- In the `Infinite Options Order Created Action`, specify the field name of the Infinite Options field that should trigger slack notification. By default we use the Label cart \"Special\". For information on how to locate the field name in Infinite Options, [check out our documentation](https://docs.theshoppad.com/article/122-why-are-option-selections-labeled-infiniteoptions1).\n",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 4.1,
-        "trigger_type": "input",
-        "type": "infiniteoptions",
-        "entity": "order",
-        "action": "created",
-        "name": "Infinite Options Order Created",
-        "key": "infiniteoptions_order",
-        "metadata": {
-          "field_name": "Special_Notes"
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "discord",
-        "entity": "channel_message",
-        "action": "create",
-        "name": "Discord Channel Message Create",
-        "key": "discord_channel_message",
-        "metadata": {
-          "path": {
-            "channelId": ""
-          },
-          "body": {
-            "content": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}",
-            "tts": "true"
-          }
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "storage": []
-  }
+    "key": "infiniteoptions/order/send_discord_message",
+    "name": "Send a Discord Message When an Infinite Options Product is Purchased",
+    "version": "1.0.0",
+    "description": "Send a Discord message when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is handy for companies using Discord; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
+    "video": "",
+    "readme": "## Setup\n\n- In the `Infinite Options Order Created Action`, specify the field name of the Infinite Options field that should trigger slack notification. By default we use the Label cart \"Special\". For information on how to locate the field name in Infinite Options, [check out our documentation](https://docs.theshoppad.com/article/122-why-are-option-selections-labeled-infiniteoptions1).\n",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "infiniteoptions_order",
+                "metadata": {
+                    "field_name": "Special_Notes"
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Channel Message Create",
+                "key": "discord_channel_message",
+                "metadata": {
+                    "path": {
+                        "channelId": ""
+                    },
+                    "body": {
+                        "content": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}",
+                        "tts": "true"
+                    }
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
 }

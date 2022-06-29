@@ -1,112 +1,112 @@
 {
-  "key": "shopify/order/add_free_product_when_customer_tagged",
-  "name": "Add a Free Onetime Product to a Recharge Order if the Shopify Customer has a \"free_gift_needed\" Tag",
-  "version": "1.0.1",
-  "description": "If a retailer wants to add a one-time product to a customer\u2019s future subscription order on Recharge, you\u2019ll need to update the order and include a free gift on their purchase. It\u2019s something that Mesa manages for you with automation each time a customer on Shopify has a \u201cfree_gift_needed\u201d tag to their order.",
-  "video": "",
-  "readme": "<h2>Setup</h2><ul><li>On the following trigger and actions, create or select your Recharge Credential: <strong>Recharge&nbsp;Subscription&nbsp;Created</strong>, <strong>Recharge&nbsp;Retrieve&nbsp;Customer</strong>, <strong>Recharge&nbsp;List&nbsp;Subscription</strong>, <strong>Recharge&nbsp;Create&nbsp;(ALPHA)&nbsp;Onetime&nbsp;Product</strong>.</li><li>On the <strong>Recharge&nbsp;Create&nbsp;(ALPHA)&nbsp;Onetime&nbsp;Product </strong>action, add values for the <em>product_title</em> and <em>shopify_variant_id </em>of your free product. You can <a href=\"https://help.shopify.com/en/manual/products/variants/find-variant-id\">click to follow this Shopify guide</a> on how to find the Shopify Variant ID.</li><li>To find the Shopify Variant ID on a product without variants, you can add <strong>/variants.json </strong>at the end of the product URL. Locate the numbers set to<strong> id</strong>.</li><li>Save your changes and enable the workflow.</li></ul>",
-  "tags": [],
-  "source": "recharge",
-  "destination": "recharge",
-  "seconds": 0,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "recharge",
-        "entity": "subscription",
-        "action": "subscription/created",
-        "name": "Recharge Subscription Created",
-        "key": "recharge_subscription",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "recharge",
-        "entity": "customer",
-        "action": "retrieve",
-        "name": "Recharge Retrieve Customer",
-        "key": "recharge_customer",
-        "metadata": {
-          "api_endpoint": "GET /customers/{{customer_id}}",
-          "customer_id": "{{recharge_subscription.customer_id}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Customer",
-        "key": "shopify_customer",
-        "metadata": {
-          "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "comparison": "in",
-          "a": "free_gift_needed",
-          "b": "{{shopify_customer.tags}}"
-        },
-        "local_fields": [],
-        "weight": 2
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "recharge",
-        "entity": "subscription",
-        "action": "list",
-        "name": "Recharge List Subscription",
-        "key": "recharge_subscription_1",
-        "metadata": {
-          "api_endpoint": "GET /subscriptions",
-          "parameters": "shopify_customer_id={{shopify_customer.id}}"
-        },
-        "local_fields": [],
-        "weight": 3
-      },
-      {
-        "schema": 4,
-        "trigger_type": "output",
-        "type": "recharge",
-        "entity": "onetime",
-        "action": "create",
-        "name": "Recharge Create (ALPHA) Onetime Product",
-        "key": "recharge_onetime_1",
-        "metadata": {
-          "body": {
-            "address_id": "{{recharge_subscription.address_id}}",
-            "price": "0",
-            "next_charge_scheduled_at": "{{recharge_subscription.next_charge_scheduled_at}}",
-            "quantity": "1"
-          }
-        },
-        "local_fields": [],
-        "on_error": "default",
-        "weight": 4
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/order/add_free_product_when_customer_tagged",
+    "name": "Add a Free Onetime Product to a Recharge Order if the Shopify Customer has a \"free_gift_needed\" Tag",
+    "version": "1.0.1",
+    "description": "If a retailer wants to add a one-time product to a customer’s future subscription order on Recharge, you’ll need to update the order and include a free gift on their purchase. It’s something that Mesa manages for you with automation each time a customer on Shopify has a “free_gift_needed” tag to their order.",
+    "video": "",
+    "readme": "<h2>Setup</h2><ul><li>On the following trigger and actions, create or select your Recharge Credential: <strong>Recharge&nbsp;Subscription&nbsp;Created</strong>, <strong>Recharge&nbsp;Retrieve&nbsp;Customer</strong>, <strong>Recharge&nbsp;List&nbsp;Subscription</strong>, <strong>Recharge&nbsp;Create&nbsp;(ALPHA)&nbsp;Onetime&nbsp;Product</strong>.</li><li>On the <strong>Recharge&nbsp;Create&nbsp;(ALPHA)&nbsp;Onetime&nbsp;Product </strong>action, add values for the <em>product_title</em> and <em>shopify_variant_id </em>of your free product. You can <a href=\"https://help.shopify.com/en/manual/products/variants/find-variant-id\">click to follow this Shopify guide</a> on how to find the Shopify Variant ID.</li><li>To find the Shopify Variant ID on a product without variants, you can add <strong>/variants.json </strong>at the end of the product URL. Locate the numbers set to<strong> id</strong>.</li><li>Save your changes and enable the workflow.</li></ul>",
+    "tags": [],
+    "source": "recharge",
+    "destination": "recharge",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "recharge",
+                "entity": "subscription",
+                "action": "subscription/created",
+                "name": "Subscription Created",
+                "key": "recharge_subscription",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "recharge_customer",
+                "metadata": {
+                    "api_endpoint": "GET /customers/{{customer_id}}",
+                    "customer_id": "{{recharge_subscription.customer_id}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "in",
+                    "a": "free_gift_needed",
+                    "b": "{{shopify_customer.tags}}"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "subscription",
+                "action": "list",
+                "name": "List Subscription",
+                "key": "recharge_subscription_1",
+                "metadata": {
+                    "api_endpoint": "GET /subscriptions",
+                    "parameters": "shopify_customer_id={{shopify_customer.id}}"
+                },
+                "local_fields": [],
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "onetime",
+                "action": "create",
+                "name": "Create (ALPHA) Onetime Product",
+                "key": "recharge_onetime_1",
+                "metadata": {
+                    "body": {
+                        "address_id": "{{recharge_subscription.address_id}}",
+                        "price": "0",
+                        "next_charge_scheduled_at": "{{recharge_subscription.next_charge_scheduled_at}}",
+                        "quantity": "1"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ],
+        "storage": []
+    }
 }

@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "created",
-                "name": "Shopify Product Created",
+                "name": "Product Created",
                 "key": "shopify_product",
                 "metadata": [],
                 "weight": 0
@@ -47,7 +47,7 @@
                 "type": "facebook",
                 "entity": "product",
                 "action": "create",
-                "name": "Facebook Product Create",
+                "name": "Product Create",
                 "key": "facebook_product",
                 "metadata": {
                     "path": {
@@ -61,7 +61,7 @@
                         "image_url": "{{shopify_product.images[0].src}}",
                         "category": "{{shopify_product.product_type}}",
                         "retailer_id": "{{shopify_product.variants[0].sku}}",
-                        "url": "https:\/\/{{context.shop.domain}}\/products\/{{shopify_product.handle}}",
+                        "url": "https://{{context.shop.domain}}/products/{{shopify_product.handle}}",
                         "description": "{{shopify_product.body_html}}",
                         "brand": "{{shopify_product.vendor}}"
                     }

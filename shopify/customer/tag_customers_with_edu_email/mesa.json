@@ -1,65 +1,65 @@
 {
-  "key": "shopify/customer/tag_customers_with_edu_email",
-  "name": "Add Educational Discount Tag To Customer",
-  "version": "1.0.0",
-  "description": "Add Educational Discount Tag to Shopify Customer when customer is created.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "shopify",
-  "seconds": 0,
-  "enabled": false,
-  "logging": true,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": [],
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Filter",
-        "key": "filter",
-        "metadata": {
-          "a": ".edu",
-          "comparison": "in",
-          "b": "{{shopify_order.email}}"
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "customer",
-        "action": "tag_add",
-        "name": "Shopify Customer Add Tag",
-        "key": "shopify_customer",
-        "metadata": {
-          "customer_id": "{{shopify_order.customer.id}}",
-          "body": {
-            "tag": "Educational Discount"
-          }
-        },
-        "local_fields": [],
-        "weight": 1
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/customer/tag_customers_with_edu_email",
+    "name": "Add Educational Discount Tag To Customer",
+    "version": "1.0.0",
+    "description": "Add Educational Discount Tag to Shopify Customer when customer is created.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "seconds": 0,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": ".edu",
+                    "comparison": "in",
+                    "b": "{{shopify_order.email}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_customer",
+                "metadata": {
+                    "customer_id": "{{shopify_order.customer.id}}",
+                    "body": {
+                        "tag": "Educational Discount"
+                    }
+                },
+                "local_fields": [],
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
 }

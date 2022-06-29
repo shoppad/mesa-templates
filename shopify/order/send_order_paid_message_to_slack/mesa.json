@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "paid",
-                "name": "Shopify Paid Order",
+                "name": "Paid Order",
                 "key": "shopify_order",
                 "metadata": [],
                 "weight": 0
@@ -31,7 +31,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
-                "name": "Slack",
+                "name": "",
                 "key": "slack",
                 "metadata": {
                     "message": "Order paid for: {{shopify_order.name}}  :thumbsup:"

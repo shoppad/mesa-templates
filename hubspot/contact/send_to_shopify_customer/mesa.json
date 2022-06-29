@@ -24,8 +24,8 @@
                 "name": "Hubspot Contact Updated",
                 "key": "hubspot_contact",
                 "metadata": {
-                  "poll": "0 * * * *",
-                  "last_sync_date_time": ""
+                    "poll": "0 * * * *",
+                    "last_sync_date_time": ""
                 },
                 "local_fields": [],
                 "weight": 0
@@ -38,7 +38,7 @@
                 "type": "shopify",
                 "entity": "customer_search",
                 "action": "list",
-                "name": "Shopify Get List Customer Search",
+                "name": "Get List Customer Search",
                 "key": "shopify_customer_search",
                 "metadata": {
                     "parameters": "query=email:{{hubspot_contact.properties.email}}&fields=id,email"
@@ -64,7 +64,7 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "create",
-                "name": "Shopify Create Customer",
+                "name": "Create Customer",
                 "key": "shopify_customer_create",
                 "metadata": {
                     "body": {
@@ -95,7 +95,7 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "update",
-                "name": "Shopify Update Customer",
+                "name": "Update Customer",
                 "key": "shopify_customer_update",
                 "metadata": {
                     "customer_id": "{{custom_filter.id}}",

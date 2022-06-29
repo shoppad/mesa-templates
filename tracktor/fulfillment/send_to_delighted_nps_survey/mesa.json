@@ -19,8 +19,8 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment\/delivered",
-                "name": "Tracktor Fulfillment Status is Delivered",
+                "action": "fulfillment/delivered",
+                "name": "Fulfillment Status is Delivered",
                 "key": "tracktor_fulfillment",
                 "metadata": [],
                 "on_error": "default",
@@ -34,7 +34,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order",
                 "metadata": {
                     "order_id": "{{tracktor_fulfillment.order_id}}"
@@ -64,7 +64,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order_1",
                 "metadata": {
                     "order_id": "{{delay.id}}"
@@ -79,7 +79,7 @@
                 "type": "delighted",
                 "entity": "people",
                 "action": "send",
-                "name": "Delighted Send (Create or Update) People",
+                "name": "Send (Create or Update) People",
                 "key": "delighted_people",
                 "metadata": {
                     "mapping": [

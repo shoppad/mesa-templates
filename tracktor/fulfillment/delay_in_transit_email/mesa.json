@@ -4,7 +4,9 @@
     "version": "1.0.0",
     "description": "Send an email to the store owner when an order is in transit for 60+ hours",
     "video": "",
-    "tags": ["tracktor"],
+    "tags": [
+        "tracktor"
+    ],
     "source": "tracktor",
     "destination": "email",
     "enabled": false,
@@ -14,8 +16,8 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment\/in_transit",
-                "name": "Tracktor Fulfillment Status In Transit",
+                "action": "fulfillment/in_transit",
+                "name": "Fulfillment Status In Transit",
                 "key": "tracktor_fulfillment_status"
             }
         ],
@@ -35,7 +37,7 @@
                 "type": "tracktor",
                 "entity": "fulfillment",
                 "action": "retrieve",
-                "name": "Tracktor Retrieve Fulfillment",
+                "name": "Retrieve Fulfillment",
                 "key": "tracktor_fulfillment",
                 "metadata": {
                     "fulfillment_id": "{{delay.fulfillment_id}}"
@@ -57,7 +59,7 @@
                 "type": "tracktor",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Tracktor Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "tracktor_order",
                 "metadata": {
                     "order_id": "{{tracktor_fulfillment.order_id}}"

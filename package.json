@@ -1,0 +1,23 @@
+{
+  "name": "mesaify",
+  "version": "1.0.0",
+  "description": "Generate Mesa connectors automagically",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "algoliasearch": "^4.13.1",
+    "axios": "^0.18.0",
+    "commander": "^2.20.0",
+    "config-yml": "^0.10.3",
+    "dotenv": "10",
+    "shelljs": "^0.8.3"
+  },
+  "bin": {
+    "templates": "bin/index.js"
+  },
+  "devDependencies": {}
+}

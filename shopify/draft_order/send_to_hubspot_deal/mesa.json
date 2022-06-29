@@ -21,7 +21,7 @@
                 "type": "shopify",
                 "entity": "draft_order",
                 "action": "created",
-                "name": "Shopify Draft Order Created",
+                "name": "Draft Order Created",
                 "key": "shopify_draft_order",
                 "metadata": [],
                 "weight": 0

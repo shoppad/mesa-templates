@@ -29,7 +29,7 @@
                         {
                             "type": "paragraph",
                             "subtype": "p",
-                            "label": "Enter your birthday to receive a special gift :)<div><br><\/div>"
+                            "label": "Enter your birthday to receive a special gift :)<div><br></div>"
                         },
                         {
                             "type": "date",
@@ -39,10 +39,10 @@
                             "name": "dob"
                         },
                         {
-                          "type": "hidden",
-                          "name": "customer-id",
-                          "value": "{{customer.id}}"
-                      }
+                            "type": "hidden",
+                            "name": "customer-id",
+                            "value": "{{customer.id}}"
+                        }
                     ]
                 },
                 "local_fields": [],
@@ -56,7 +56,7 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "update",
-                "name": "Shopify Update Customer",
+                "name": "Update Customer",
                 "key": "shopify_customer",
                 "metadata": {
                     "customer_id": "{{form.customer-id}}",

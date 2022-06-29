@@ -1,94 +1,94 @@
 {
-  "key": "form/approval_join_waitlist",
-  "name": "Notify customers on a product waitlist",
-  "version": "1.0.0",
-  "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. This template allows you to manually approve or reject users on a product waitlist and notify them via email using Forms by Mesa.",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "",
-  "destination": "",
-  "seconds": 0,
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "form",
-        "name": "Form",
-        "key": "form",
-        "metadata": {
-          "form_data": [
+    "key": "form/approval_join_waitlist",
+    "name": "Notify customers on a product waitlist",
+    "version": "1.0.0",
+    "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. This template allows you to manually approve or reject users on a product waitlist and notify them via email using Forms by Mesa.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 0,
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
             {
-              "type": "header",
-              "subtype": "h1",
-              "label": "Join the waitlist"
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "form",
+                "name": "Form",
+                "key": "form",
+                "metadata": {
+                    "form_data": [
+                        {
+                            "type": "header",
+                            "subtype": "h1",
+                            "label": "Join the waitlist"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Email",
+                            "placeholder": "joe.doe@gmail.com",
+                            "className": "form-control",
+                            "name": "email",
+                            "subtype": "text"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approval",
+                "key": "approval",
+                "metadata": {
+                    "field": false,
+                    "label_accept": "Accept",
+                    "label_reject": "Reject",
+                    "message": "**Email:** {{form.email}}",
+                    "alert_emails": ""
+                },
+                "local_fields": [],
+                "weight": 0
             },
             {
-              "type": "text",
-              "required": false,
-              "label": "Email",
-              "placeholder": "joe.doe@gmail.com",
-              "className": "form-control",
-              "name": "email",
-              "subtype": "text"
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Product Retrieve",
+                "key": "shopify_product",
+                "metadata": {
+                    "product_id": ""
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "is_premium": true,
+                "name": "Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{form.email}}",
+                    "subject": "{{shopify_product.title}} is available now!",
+                    "message": "Hey there, \n\nThanks for signing up on our waitlist! {{shopify_product.title}} has become available. Get it while stock lasts: https://{{context.shop.domain}}/products/{{shopify_product.handle}}"
+                },
+                "local_fields": [],
+                "weight": 2
             }
-          ]
-        },
-        "local_fields": [],
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "approval",
-        "name": "Approval",
-        "key": "approval",
-        "metadata": {
-          "field": false,
-          "label_accept": "Accept",
-          "label_reject": "Reject",
-          "message": "**Email:** {{form.email}}",
-          "alert_emails": ""
-        },
-        "local_fields": [],
-        "weight": 0
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "product",
-        "action": "retrieve",
-        "name": "Shopify Product Retrieve",
-        "key": "shopify_product",
-        "metadata": {
-          "product_id": ""
-        },
-        "local_fields": [],
-        "weight": 1
-      },
-      {
-        "schema": 2,
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "name": "Email",
-        "key": "email",
-        "metadata": {
-          "to": "{{form.email}}",
-          "subject": "{{shopify_product.title}} is available now!",
-          "message": "Hey there, \n\nThanks for signing up on our waitlist! {{shopify_product.title}} has become available. Get it while stock lasts: https://{{context.shop.domain}}/products/{{shopify_product.handle}}"
-        },
-        "local_fields": [],
-        "weight": 2
-      }
-    ],
-    "storage": []
-  }
+        ],
+        "storage": []
+    }
 }

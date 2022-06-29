@@ -11,7 +11,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "updated",
-                "name": "Shopify Product Updated",
+                "name": "Product Updated",
                 "key": "shopify_product",
                 "metadata": [],
                 "weight": 0
@@ -53,7 +53,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "tag_add",
-                "name": "Shopify Product Add Tag",
+                "name": "Product Add Tag",
                 "key": "shopify_product_1",
                 "metadata": {
                     "product_id": "{{shopify_product.id}}",

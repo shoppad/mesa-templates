@@ -20,7 +20,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "updated",
-                "name": "Shopify Order Updated",
+                "name": "Order Updated",
                 "key": "shopify_order",
                 "metadata": [],
                 "on_error": "default",
@@ -34,7 +34,7 @@
                 "type": "segment",
                 "entity": "track",
                 "action": "send",
-                "name": "Segment Track",
+                "name": "Track",
                 "key": "segment_track",
                 "metadata": {
                     "body": {

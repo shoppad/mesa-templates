@@ -19,8 +19,8 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment\/delivered",
-                "name": "Tracktor Fulfillment Status is Delivered",
+                "action": "fulfillment/delivered",
+                "name": "Fulfillment Status is Delivered",
                 "key": "tracktor_fulfillment",
                 "metadata": [],
                 "local_fields": [],
@@ -35,7 +35,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order",
                 "metadata": {
                     "order_id": "{{tracktor_fulfillment.order_id}}"
@@ -65,7 +65,7 @@
                 "type": "stampedio",
                 "entity": "review_request",
                 "action": "list",
-                "name": "Stamped.io List Review Request",
+                "name": "List Review Request",
                 "key": "stampedio_review_request",
                 "metadata": {
                     "query": {
@@ -110,7 +110,7 @@
                 "type": "stampedio",
                 "entity": "review_request",
                 "action": "send",
-                "name": "Stamped.io Send Review Request",
+                "name": "Send Review Request",
                 "key": "stampedio_review_request_1",
                 "metadata": {
                     "path": {

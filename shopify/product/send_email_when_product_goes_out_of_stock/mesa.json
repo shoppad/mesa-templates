@@ -1,92 +1,92 @@
 {
-  "key": "shopify/product/send_email_when_product_goes_out_of_stock",
-  "name": "Send an Email when Product Goes Out of Stock",
-  "version": "1.0.0",
-  "description": "",
-  "video": "",
-  "readme": "",
-  "tags": [],
-  "source": "shopify",
-  "destination": "email",
-  "enabled": false,
-  "logging": false,
-  "debug": false,
-  "config": {
-    "inputs": [
-      {
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Shopify Order Created",
-        "key": "shopify_order",
-        "metadata": {
-          "topic": "orders/create"
-        },
-        "local_fields": null,
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "trigger_type": "output",
-        "type": "loop",
-        "entity": "",
-        "action": "",
-        "name": "Loop",
-        "key": "loop",
-        "metadata": {
-          "key": "{{shopify_order.line_items[]}}"
-        },
-        "local_fields": null,
-        "weight": 0
-      },
-      {
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "variant",
-        "action": "retrieve",
-        "name": "Shopify Retrieve Variant",
-        "key": "shopify_variant",
-        "metadata": {
-          "api_endpoint": "GET admin/variants/{{variant_id}}.json",
-          "variant_id": "{{loop.variant_id}}"
-        },
-        "local_fields": null,
-        "weight": 1
-      },
-      {
-        "trigger_type": "output",
-        "type": "filter",
-        "entity": "",
-        "action": "",
-        "name": "Filter  ",
-        "key": "filter",
-        "metadata": {
-          "a": "{{shopify_variant.inventory_quantity}}",
-          "comparison": "equals",
-          "b": "0"
-        },
-        "local_fields": null,
-        "weight": 2
-      },
-      {
-        "trigger_type": "output",
-        "type": "email",
-        "is_premium": true,
-        "entity": null,
-        "action": null,
-        "name": "Email  ",
-        "key": "email",
-        "metadata": {
-          "to": "{{context.shop.email}}",
-          "subject": "Item out of stock: {{shopify_variant.sku}}",
-          "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify_variant. product_id}}"
-        },
-        "local_fields": null,
-        "weight": 3
-      }
-    ],
-    "storage": []
-  }
+    "key": "shopify/product/send_email_when_product_goes_out_of_stock",
+    "name": "Send an Email when Product Goes Out of Stock",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "email",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": {
+                    "topic": "orders/create"
+                },
+                "local_fields": null,
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "",
+                "action": "",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": null,
+                "weight": 0
+            },
+            {
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "variant",
+                "action": "retrieve",
+                "name": "Retrieve Variant",
+                "key": "shopify_variant",
+                "metadata": {
+                    "api_endpoint": "GET admin/variants/{{variant_id}}.json",
+                    "variant_id": "{{loop.variant_id}}"
+                },
+                "local_fields": null,
+                "weight": 1
+            },
+            {
+                "trigger_type": "output",
+                "type": "filter",
+                "entity": "",
+                "action": "",
+                "name": "Filter  ",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_variant.inventory_quantity}}",
+                    "comparison": "equals",
+                    "b": "0"
+                },
+                "local_fields": null,
+                "weight": 2
+            },
+            {
+                "trigger_type": "output",
+                "type": "email",
+                "is_premium": true,
+                "entity": null,
+                "action": null,
+                "name": "Email  ",
+                "key": "email",
+                "metadata": {
+                    "to": "{{context.shop.email}}",
+                    "subject": "Item out of stock: {{shopify_variant.sku}}",
+                    "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify_variant. product_id}}"
+                },
+                "local_fields": null,
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
 }

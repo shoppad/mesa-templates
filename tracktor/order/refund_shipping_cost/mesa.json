@@ -2,7 +2,7 @@
     "key": "tracktor/order/refund_shipping_cost",
     "name": "Issue a Refund for the Shipping Cost if the Order Isn't Delivered within 5 Days",
     "version": "1.0.0",
-    "description": "Customers have high expectations regarding shipping and expect their orders to be delivered to them quickly. If their order doesn\u2019t arrive at their doorsteps within five days, you can set up an automation workflow on Mesa to provide them a refund for the shipping cost. It\u2019s going to make the customer feel less frustrated as they\u2019re still waiting for their order.",
+    "description": "Customers have high expectations regarding shipping and expect their orders to be delivered to them quickly. If their order doesn’t arrive at their doorsteps within five days, you can set up an automation workflow on Mesa to provide them a refund for the shipping cost. It’s going to make the customer feel less frustrated as they’re still waiting for their order.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -19,8 +19,8 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "order",
-                "action": "order\/ordered",
-                "name": "Tracktor Order Created",
+                "action": "order/ordered",
+                "name": "Order Created",
                 "key": "tracktor_order",
                 "metadata": [],
                 "weight": 0
@@ -33,7 +33,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order",
                 "metadata": {
                     "order_id": "{{tracktor_order.order_id}}"
@@ -74,7 +74,7 @@
                 "type": "tracktor",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Tracktor Retrieve Order from Delay",
+                "name": "Retrieve Order from Delay",
                 "key": "tracktor_order_1",
                 "metadata": {
                     "order_id": "{{delay.id}}"
@@ -114,7 +114,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order_1",
                 "metadata": {
                     "order_id": "{{tracktor_order_1.order_id}}"
@@ -160,7 +160,7 @@
                 "metadata": {
                     "to": "{{delay.email}}",
                     "subject": "Sorry your package is taking so long!",
-                    "message": "Hi {{delay.customer.first_name}},\n\n{{context.shop.name}} team here. We're reaching out to say we're sorry your order is taking longer than expected to arrive. We know how frustrating it is to wait on a package. Mail carriers are working extra hard right now and we're hoping it reaches you as quickly as possible, but because you paid for two day expedited shipping and your delivery will miss that window, we've already refunded you for your shipping cost. \n\nIf it looks like your package has been stalled in the same place for longer than three business days or if you have any questions, don't hesitate to reply to this email. We're happy to help!\u00a0\n\nWarmly,\n{{context.shop.name}}"
+                    "message": "Hi {{delay.customer.first_name}},\n\n{{context.shop.name}} team here. We're reaching out to say we're sorry your order is taking longer than expected to arrive. We know how frustrating it is to wait on a package. Mail carriers are working extra hard right now and we're hoping it reaches you as quickly as possible, but because you paid for two day expedited shipping and your delivery will miss that window, we've already refunded you for your shipping cost. \n\nIf it looks like your package has been stalled in the same place for longer than three business days or if you have any questions, don't hesitate to reply to this email. We're happy to help! \n\nWarmly,\n{{context.shop.name}}"
                 },
                 "local_fields": [],
                 "weight": 9
@@ -171,7 +171,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Shopify Retrieve Order",
+                "name": "Retrieve Order",
                 "key": "shopify_order_2",
                 "metadata": {
                     "order_id": "{{tracktor_order_1.order_id}}"
@@ -185,7 +185,7 @@
                 "type": "shopify",
                 "entity": "order_transaction",
                 "action": "list",
-                "name": "Shopify List Order Transaction",
+                "name": "List Order Transaction",
                 "key": "shopify_order_transaction",
                 "metadata": {
                     "order_id": "{{tracktor_order_1.order_id}}"
@@ -225,7 +225,7 @@
                 "type": "shopify",
                 "entity": "order_refund",
                 "action": "create",
-                "name": "Shopify Create Order Refund",
+                "name": "Create Order Refund",
                 "key": "shopify_order_refund",
                 "metadata": {
                     "order_id": "{{shopify_order_2.id}}",

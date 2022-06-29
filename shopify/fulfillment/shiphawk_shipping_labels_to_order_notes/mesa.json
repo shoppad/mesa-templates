@@ -15,7 +15,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
-                "name": "Shopify Fulfillment Created",
+                "name": "Fulfillment Created",
                 "key": "in-shopify-fulfillment-created",
                 "script": "in_shopify_fulfillment_created.js",
                 "entity": "fulfillment",
