@@ -166,7 +166,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "slack",
-                "name": "",
+                "name": "Send Message",
                 "key": "slack",
                 "metadata": {
                     "message": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{forms.reason}}"
