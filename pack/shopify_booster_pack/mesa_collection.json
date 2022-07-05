@@ -3,7 +3,7 @@
     "name": "Shopify Booster Pack",
     "version": "1.0.0",
     "description": "Give your business a boost with this curated collection of Shopify templates. Get notifications to protect yourself from fraud or manage orders automatically in just a few quick steps. Add the entire Shopify Booster Pack or select the templates that best fit your needs.",
-    "helpscout_id": "6286e37e8bf21a2e2b6d5ec0",
+    "helpscout_article_id": "6286e37e8bf21a2e2b6d5ec0",
     "templates": [
       "shopify/product/send_email_when_product_goes_out_of_stock",
       "shopify/order/send_high_risk_orders_to_sms",
