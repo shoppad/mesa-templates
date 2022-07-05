@@ -31,7 +31,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
-                "name": "",
+                "name": "Send Message",
                 "key": "slack",
                 "metadata": {
                     "message": "Order paid for: {{shopify_order.name}}  :thumbsup:"

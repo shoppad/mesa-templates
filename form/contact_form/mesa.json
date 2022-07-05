@@ -81,7 +81,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "slack",
-                "name": "",
+                "name": "Send Message",
                 "key": "slack",
                 "metadata": {
                     "message": "**New Contact Form Submission**\nName: {{form.name}}\nEmail: {{form.email}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}"

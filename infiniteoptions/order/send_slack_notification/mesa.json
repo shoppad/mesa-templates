@@ -34,7 +34,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "slack",
-                "name": "",
+                "name": "Send Message",
                 "key": "slack",
                 "metadata": {
                     "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
