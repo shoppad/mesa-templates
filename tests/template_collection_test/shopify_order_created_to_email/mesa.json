@@ -80,7 +80,7 @@
             {
                 "trigger_type": "output",
                 "type": "slack",
-                "name": "",
+                "name": "Send Message",
                 "key": "slack",
                 "metadata": {
                     "webhook": "5e2a3f76cd392305fb74364b",

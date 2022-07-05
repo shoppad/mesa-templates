@@ -56,7 +56,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "slack",
-                "name": "",
+                "name": "Send Message",
                 "key": "slack",
                 "metadata": {
                     "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \nCurrent inventory quantity: {{shopify_inventory_level.available}}."
