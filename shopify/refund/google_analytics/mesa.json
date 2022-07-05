@@ -1,16 +1,16 @@
 {
     "key": "google_analytics",
-    "name": "Automatically Track Shopify Refunds in Google Analytics",
+    "name": "Track Shopify refunds in Google Analytics",
     "version": "1.0.0",
-    "description": "It’s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, Mesa does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
+    "description": "It\u2019s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, MESA does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "google-analytics",
-    "seconds": 0,
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -23,10 +23,26 @@
                 "name": "Refund Created",
                 "key": "shopify_refund",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Shopify Retrieve Order",
+                "key": "shopify_order",
+                "metadata": {
+                    "order_id": "{{shopify_refund.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 2,
                 "trigger_type": "output",
@@ -37,7 +53,8 @@
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "weight": 0
+                "on_error": "default",
+                "weight": 1
             },
             {
                 "schema": 2,
@@ -55,7 +72,7 @@
                         },
                         {
                             "destination": "ti",
-                            "source": "{{shopify_refund.order_id}} - {{shopify_refund.id}}"
+                            "source": "{{shopify_order.name}} - {{shopify_refund.id}}"
                         }
                     ]
                 },
@@ -67,7 +84,8 @@
                         "location": "mapping"
                     }
                 ],
-                "weight": 1
+                "on_error": "default",
+                "weight": 2
             }
         ],
         "storage": []
