@@ -1,20 +1,23 @@
 {
     "key": "shopify/product/send_to_salesforce_product_and_pricebook_entry",
-    "name": "Shopify Product Created or Updated to Salesforce Product and Pricebook Entry",
+    "name": "Send an updated or new Shopify Product to a Salesforce Product and Pricebook entry",
     "version": "1.0.0",
-    "description": "Send Product from Shopify to Salesforce Product and Pricebook Entry when a product is created or updated.",
+    "description": "Set your business up for success by allowing Shopify and Salesforce to share details that are often tedious to manually transfer across platforms. This template sends Shopify products to Salesforce products and Pricebook entries each time the product is created or updated. You can now have all the key information of your products neatly organized to ensure that they are up to date, available, and appropriately priced for your customers.",
     "video": "",
+    "readme": "",
     "tags": [
         "Product"
     ],
     "source": "shopify",
     "destination": "salesforce",
-    "readme": "##Salesforce Customizations\n\nThis workflow requires some customization of your Salesforce account in order to function. Please complete all of the following steps:\n\n- Log in to your Salesforce account, then click on the gear icon in the top right corner to go to Setup\n\n- From the left hand menu, click on **Objects and Fields**, then **Object Manager**\n\n- Click on **Account**, then click **Fields & Relationships**\n\n- Click the **New** button, and select **Text** for the field type, then hit **Next**\n\n- Enter \"Shopify Variant ID\" for **Field Label** and `Shopify_Variant_ID` for **Field Name**, and a length (ex: 100)\n\n- Check the box for **External ID**\n\n- Hit **Next** again, and ensure your field is visible to the profile that the credential account belongs to (the account used when creating the Salesforce credential)\n\n- Hit **Next** again, then hit **Save**\n\n##Price Book ID\n\nYou must also enter a valid Price Book ID for \"Pricebook2Id\" under the **Mapping to Salesforce: Create or Update Pricebook Entry** action, then save the workflow. \n\n- To get the Salesforce Price Book ID, log in to Salesforce, and go to the **Price Books** page. \n\n- Copy the link for the Price Book you wish to use, then copy the ID in the link, between `r/` and `/view`. \n\n- Example: for `https://ab11.force.com/lightning/r/01s2E000002pddCQAQ/view`, the ID would be `01s2E000002pddCQAQ`",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "product",
@@ -22,12 +25,15 @@
                 "name": "Product Created or Updated",
                 "key": "shopify-product-created-or-updated",
                 "metadata": {
-                    "topic": "products/create+products/update"
-                }
+                  "topic": "products/create+products/update"
+                },
+                "local_fields": [],
+                "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "loop",
                 "name": "Loop",
@@ -35,9 +41,11 @@
                 "metadata": {
                     "key": "{{shopify-product-created-or-updated.variants[]}}"
                 },
-                "destination_entity": "product"
+                "local_fields": [],
+                "weight": 0
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "product",
@@ -48,9 +56,12 @@
                     "entity_name": "Product2",
                     "method": "QUERY",
                     "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{loop.current_item.id}}'"
-                }
+                },
+                "local_fields": [],
+                "weight": 1
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "transform",
                 "name": "Mapping to Salesforce: Create or Update Product",
@@ -90,11 +101,10 @@
                         "type": "mapping"
                     }
                 ],
-                "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-                "source_entity": "product",
-                "destination_entity": "product"
+                "weight": 2
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "product",
@@ -106,9 +116,96 @@
                     "method": "POST_OR_PATCH",
                     "id": "{{salesforce_query_product.Id}}"
                 },
-                "destination_entity": "pricebook_entry"
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Name",
+                                "label": "Product Name",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "ProductCode",
+                                "label": "Product Code",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Description",
+                                "label": "Product Description",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IsActive",
+                                "label": "Active",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Family",
+                                "label": "Product Family",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "None",
+                                        "value": "None"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "ExternalDataSourceId",
+                                "label": "External Data Source ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "ExternalId",
+                                "label": "External ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "DisplayUrl",
+                                "label": "Display URL",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "QuantityUnitOfMeasure",
+                                "label": "Quantity Unit Of Measure",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Each",
+                                        "value": "Each"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "StockKeepingUnit",
+                                "label": "Product SKU",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Shopify_Variant_ID__c",
+                                "label": "Shopify Variant ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            }
+                        ]
+                    }
+                ],
+                "weight": 3
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "pricebook_entry",
@@ -120,9 +217,11 @@
                     "method": "QUERY",
                     "salesforce_query": "SELECT Id FROM PricebookEntry WHERE Product2Id='{{salesforce_create_or_update_product.id}}'"
                 },
-                "source_entity": "product"
+                "local_fields": [],
+                "weight": 4
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "transform",
                 "name": "Mapping to Salesforce: Create or Update Pricebook Entry",
@@ -133,18 +232,6 @@
                         {
                             "destination": "Product2Id",
                             "source": "{{salesforce_create_or_update_product.id}}"
-                        },
-                        {
-                            "destination": "IsActive",
-                            "source": "true"
-                        },
-                        {
-                            "destination": "UnitPrice",
-                            "source": "{{loop.current_item.price}}"
-                        },
-                        {
-                            "destination": "Pricebook2Id",
-                            "source": ""
                         }
                     ]
                 },
@@ -154,22 +241,65 @@
                         "type": "mapping"
                     }
                 ],
-                "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-                "source_entity": "pricebook_entry",
-                "destination_entity": "pricebook_entry"
+                "weight": 5
             },
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "pricebook_entry",
                 "action": "create_or_update",
                 "name": "Create or Update Pricebook Entry",
-                "key": "salesforce_create_or_update_pricebook_entry",
+                "key": "salesforce",
                 "metadata": {
                     "entity_name": "PricebookEntry",
                     "method": "POST_OR_PATCH",
-                    "id": "{{salesforce_query_pricebook_entry.Id}}"
-                }
+                    "id": "{{salesforce_query_pricebook_entry.Id}}",
+                    "body": {
+                        "UnitPrice": "{{loop.current_item.price}}",
+                        "IsActive": "true"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Pricebook2Id",
+                                "label": "Price Book ID",
+                                "type": "typeahead",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Product2Id",
+                                "label": "Product ID",
+                                "type": "typeahead",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "UnitPrice",
+                                "label": "List Price",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IsActive",
+                                "label": "Active",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "UseStandardPrice",
+                                "label": "Use Standard Price",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 6
             }
         ],
         "storage": []
