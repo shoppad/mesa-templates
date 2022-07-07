@@ -1,13 +1,13 @@
 {
     "key": "recharge/customer/update_address_when_customer_updated",
-    "name": "Send an updated address to Recharge when a Shopify Customer is updated",
+    "name": "Send an updated address to Recharge when a Shopify customer is updated",
     "version": "1.0.0",
     "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will automatically update an address in Recharge when a customer in Shopify is updated.",
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "",
-    "destination": "",
+    "source": "schedule-by-mesa",
+    "destination": "recharge",
     "seconds": 60,
     "enabled": false,
     "logging": true,
@@ -23,7 +23,7 @@
                 "metadata": {
                     "schedule": "@daily:0 0 * * *",
                     "enqueue_type": "schedule",
-                    "next_sync_date_time": "2022-05-25T00:00:00-04:00",
+                    "next_sync_date_time": "2022-07-08T00:00:00-04:00",
                     "datetime": null
                 },
                 "local_fields": [],
@@ -185,6 +185,7 @@
                         "customer_id": "{{loop.id}}",
                         "first_name": "{{loop.first_name}}",
                         "last_name": "{{loop.last_name}}",
+                        "phone": "{% if loop.default_address.phone %}{{loop.default_address.phone}}{% else %}No phone number provided{% endif %}",
                         "zip": "{{loop.default_address.zip}}",
                         "province": "{{loop.default_address.province}}"
                     },
