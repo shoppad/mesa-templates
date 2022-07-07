@@ -1,0 +1,273 @@
+{
+    "key": "shopify/product/send_to_salesforce_product_and_pricebook_entry_2",
+    "name": "Send an updated Shopify Product to a Salesforce Product and Pricebook entry",
+    "version": "1.0.0",
+    "description": "Set your business up for success by allowing Shopify and Salesforce to share details that are often tedious to manually transfer across platforms. This template sends Shopify products to Salesforce products and Pricebook entries each time the product is created or updated. You can now have all the key information of your products neatly organized to ensure that they are up to date, available, and appropriately priced for your customers.",
+    "video": "",
+    "readme": "",
+    "tags": [
+        "Product"
+    ],
+    "source": "shopify",
+    "destination": "salesforce",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "key": "shopify",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify.variants[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "product",
+                "action": "query",
+                "name": "Query Product",
+                "key": "salesforce_query_product",
+                "metadata": {
+                    "entity_name": "Product2",
+                    "method": "QUERY",
+                    "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{loop.current_item.id}}'"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{salesforce_query_product.Id}}",
+                    "comparison": "is not empty"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "name": "Mapping to Salesforce: Create or Update Product",
+                "key": "salesforce_create_or_update_product_transform",
+                "metadata": {
+                    "script": "salesforce_create_or_update_product_transform.js",
+                    "mapping": [
+                        {
+                            "destination": "Name",
+                            "source": "{{loop.current_item.combined_title}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping"
+                    }
+                ],
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "salesforce_1",
+                "metadata": {
+                    "entity_name": "Product2",
+                    "method": "PATCH",
+                    "id": "{{salesforce_query_product.Id}}",
+                    "body": {
+                        "Name": "{{salesforce_create_or_update_product_transform.Name}}",
+                        "StockKeepingUnit": "{{loop.current_item.sku}}",
+                        "Description": "{{loop.complete.body_html}}",
+                        "ProductCode": "{{loop.current_item.barcode}}",
+                        "IsActive": "true",
+                        "Shopify_Variant_ID__c": "{{loop.current_item.id}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Name",
+                                "label": "Product Name",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "ProductCode",
+                                "label": "Product Code",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Description",
+                                "label": "Product Description",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IsActive",
+                                "label": "Active",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Family",
+                                "label": "Product Family",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "None",
+                                        "value": "None"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "ExternalDataSourceId",
+                                "label": "External Data Source ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "ExternalId",
+                                "label": "External ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "DisplayUrl",
+                                "label": "Display URL",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "QuantityUnitOfMeasure",
+                                "label": "Quantity Unit Of Measure",
+                                "type": "select",
+                                "source": "salesforce",
+                                "options": [
+                                    {
+                                        "label": "Each",
+                                        "value": "Each"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "StockKeepingUnit",
+                                "label": "Product SKU",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "Shopify_Variant_ID__c",
+                                "label": "Shopify Variant ID",
+                                "type": "text",
+                                "source": "salesforce"
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "pricebook_entry",
+                "action": "query",
+                "name": "Query Pricebook Entry",
+                "key": "salesforce_query_pricebook_entry",
+                "metadata": {
+                    "entity_name": "PricebookEntry",
+                    "method": "QUERY",
+                    "salesforce_query": "SELECT Id FROM PricebookEntry WHERE Product2Id='{{salesforce_1.id}}'"
+                },
+                "local_fields": [],
+                "weight": 5
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "pricebook_entry",
+                "action": "update",
+                "name": "Update Pricebook Entry",
+                "key": "salesforce_2",
+                "metadata": {
+                    "entity_name": "PricebookEntry",
+                    "method": "PATCH",
+                    "id": "{{salesforce_query_pricebook_entry.Id}}",
+                    "body": {
+                        "UnitPrice": "{{loop.current_item.price}}",
+                        "IsActive": "true"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "UnitPrice",
+                                "label": "List Price",
+                                "type": "text",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "IsActive",
+                                "label": "Active",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            },
+                            {
+                                "key": "UseStandardPrice",
+                                "label": "Use Standard Price",
+                                "type": "checkbox",
+                                "source": "salesforce"
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 6
+            }
+        ],
+        "storage": []
+    }
+}
