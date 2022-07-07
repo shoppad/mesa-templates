@@ -1,5 +1,5 @@
 {
-    "key": "shopify/order/send_to_salesforce_opportunity_and_opportunity_products_1",
+    "key": "shopify/product/send_to_salesforce_product_and_pricebook_entry_1",
     "name": "Send a new Shopify Product to a Salesforce Product and Pricebook entry",
     "version": "1.0.0",
     "description": "Set your business up for success by allowing Shopify and Salesforce to share details that are often tedious to manually transfer across platforms. This template sends Shopify products to Salesforce products and Pricebook entries each time the product is created or updated. You can now have all the key information of your products neatly organized to ensure that they are up to date, available, and appropriately priced for your customers.",
