@@ -7,9 +7,9 @@
     "templates": [
       "shopify/product/send_email_when_product_goes_out_of_stock",
       "shopify/order/send_high_risk_orders_to_sms",
-      "shopify/customer/tag_vip_customers",
       "shopify/order/add_line_item_properties_to_notes",
       "shopify/product/add_color_tag",
-      "shopify/theme/schedule_change"
+      "shopify/theme/schedule_change",
+      "shopify/order/send_order_report_card_email"
     ]
 }
