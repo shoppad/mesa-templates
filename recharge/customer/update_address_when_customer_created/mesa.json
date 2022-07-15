@@ -1,6 +1,6 @@
 {
-    "key": "recharge/customer/update_customer_details",
-    "name": "Update an address in Recharge when a customer is created in Shopify",
+    "key": "recharge/customer/update_address_when_customer_created",
+    "name": "Update an address in Recharge when a Shopify customer is created",
     "version": "1.0.0",
     "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will update an address in Recharge when a customer is created in Shopify and uses a different address. Now you can ensure your customer details match with minimal effort.",
     "video": "",
@@ -23,7 +23,7 @@
                 "metadata": {
                     "schedule": "@daily:0 8 * * *",
                     "enqueue_type": "schedule",
-                    "next_sync_date_time": "2022-05-11T08:00:00-04:00",
+                    "next_sync_date_time": "2022-07-13T08:00:00-04:00",
                     "datetime": null
                 },
                 "local_fields": [],
@@ -39,7 +39,7 @@
                 "entity": "customer",
                 "action": "list",
                 "name": "Get List of Customers within the past 24 hours",
-                "key": "shopify_customer",
+                "key": "shopify",
                 "metadata": {
                     "parameters": "created_at_min={{date:1 days ago}}&limit=250"
                 },
@@ -54,7 +54,7 @@
                 "name": "Filter: Checks if customers have been found",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify_customer}}",
+                    "a": "{{shopify}}",
                     "comparison": "is not empty"
                 },
                 "local_fields": [],
@@ -68,7 +68,7 @@
                 "name": "Loop over each customer",
                 "key": "loop",
                 "metadata": {
-                    "key": "{{shopify_customer}}"
+                    "key": "{{shopify}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -80,10 +80,10 @@
                 "type": "recharge",
                 "entity": "customer",
                 "action": "list",
-                "name": "List Customer",
-                "key": "recharge_customer",
+                "name": "List Customers",
+                "key": "recharge",
                 "metadata": {
-                    "parameters": "email={{loop.email}}"
+                    "parameters": "external_customer_id={{loop.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -96,9 +96,9 @@
                 "entity": "address",
                 "action": "list",
                 "name": "List Address",
-                "key": "recharge_address",
+                "key": "recharge_1",
                 "metadata": {
-                    "parameters": "customer_id={{recharge_customer[0].id}}"
+                    "parameters": "customer_id={{recharge[0].id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -108,40 +108,40 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter: Compare the recent Shopify information to ReCharge information",
+                "name": "Compare recent Shopify info to ReCharge info",
                 "key": "filter_1",
                 "metadata": {
-                    "a": "{{recharge_address.0.address1}}",
+                    "a": "{{recharge_1.0.address1}}",
                     "comparison": "does not equal",
                     "b": "{{loop.default_address.address1}}",
                     "additional": [
                         {
                             "operator": "or",
-                            "a": "{{recharge_address.0.address2}}",
+                            "a": "{{recharge_1.0.address2}}",
                             "comparison": "does not equal",
                             "b": "{{loop.default_address.address2}}"
                         },
                         {
                             "operator": "or",
-                            "a": "{{recharge_address.0.city}}",
+                            "a": "{{recharge_1.0.city}}",
                             "comparison": "does not equal",
                             "b": "{{loop.default_address.city}}"
                         },
                         {
                             "operator": "or",
-                            "a": "{{recharge_address.0.province}}",
+                            "a": "{{recharge_1.0.province}}",
                             "comparison": "does not equal",
                             "b": "{{loop.default_address.province}}"
                         },
                         {
                             "operator": "or",
-                            "a": "{{recharge_address.0.zip}}",
+                            "a": "{{recharge_1.0.zip}}",
                             "comparison": "does not equal",
                             "b": "{{loop.default_address.zip}}"
                         },
                         {
                             "operator": "or",
-                            "a": "{{recharge_address.0.country_code}}",
+                            "a": "{{recharge_1.0.country_code}}",
                             "comparison": "does not equal",
                             "b": "{{loop.default_address.country_code}}"
                         }
@@ -158,16 +158,20 @@
                 "entity": "address",
                 "action": "update",
                 "name": "Update Address",
-                "key": "recharge_address_1",
+                "key": "recharge_2",
                 "metadata": {
                     "path": {
-                        "address_id": "{{recharge_address.0.id}}"
+                        "address_id": "{{recharge_1.0.id}}"
                     },
                     "body": {
                         "address1": "{{loop.default_address.address1}}",
                         "address2": "{{loop.default_address.address2}}",
                         "city": "{{loop.default_address.city}}",
                         "country": "{{loop.default_address.country_code}}",
+                        "customer_id": "{{recharge_1.0.customer_id}}",
+                        "first_name": "{{loop.first_name}}",
+                        "last_name": "{{loop.last_name}}",
+                        "phone": "{% if loop.default_address.phone %}{% else %}No phone number provided{% endif %}",
                         "zip": "{{loop.default_address.zip}}",
                         "province": "{{loop.default_address.province}}"
                     }
