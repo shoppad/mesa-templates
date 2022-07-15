@@ -1,0 +1,90 @@
+{
+    "key": "shopify/order/send_file_to_dropbox",
+    "name": "Send files from a Shopify order to Dropbox ",
+    "version": "1.0.0",
+    "description": "Stay organized with the files your customers provide by automatically sending them to Dropbox when a Shopify order is created. It's less work for you and allows you to focus your attention on your customer rather than being distracted by busy work.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop_1",
+                "metadata": {
+                    "key": "{{loop.properties[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop_1.name}}",
+                    "comparison": "contains"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "dropbox",
+                "entity": "file",
+                "action": "save",
+                "name": "Save File",
+                "key": "dropbox",
+                "metadata": {
+                    "file_url": "{{loop_1.value}}",
+                    "file_path": "\/{{filename}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
+}
