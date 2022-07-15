@@ -21,8 +21,8 @@
                 "name": "Custom Code: Runs daily",
                 "key": "custom",
                 "metadata": {
-                    "schedule": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2022-07-12T17:00:00-04:00"
+                    "schedule": "@daily:0 0 * * *",
+                    "next_sync_date_time": "2022-07-16T00:00:00-04:00"
                 },
                 "local_fields": [],
                 "on_error": "default",
