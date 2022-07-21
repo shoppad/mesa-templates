@@ -1,6 +1,6 @@
 {
     "key": "send_quote",
-    "name": "Send a Product or Service Quote to Staff Email Address",
+    "name": "Send a product or service quote to a staff email address",
     "version": "1.0.0",
     "description": "Customize your sales experience by using quote forms for your customers anywhere on your Shopify store. Forms by Mesa is an easy way to collect data with a simple interface and powerful editor. Close more deals with inbound quote requests emailed directly to you and your teams.",
     "video": "",
@@ -10,7 +10,7 @@
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

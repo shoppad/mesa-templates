@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_postcard_to_customer_if_first_order",
-    "name": "Send a Postcard When a Customer Places Their First Order",
+    "name": "Send a postcard when a customer places their first order",
     "version": "1.0.0",
     "description": "First impressions count. When a customer makes their first purchase, you can send them a postcard to thank them and start the customer relationship on a good foot.",
     "video": "",
@@ -10,7 +10,7 @@
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

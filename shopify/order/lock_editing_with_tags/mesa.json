@@ -1,6 +1,6 @@
 {
     "key": "lock_editing_with_tags",
-    "name": "When Shopify Order is Created, Add Order Can Be Edited Tag and Update After 24 Hours to Order Cannot Be Edited Tag",
+    "name": "Add Order Can Be Edited tag and update after 24 hours to \"Order Cannot Be Edited\" tag when Shopify order is created",
     "version": "1.0.0",
     "description": "A customer may want to change their order after purchase. It could be that they made a mistake and chose the wrong color or size. With Mesa, each time an Order on Shopify is created, you can add an “Order Can Be Edited” tag automatically to let back office staff know. Once the order ships and it’s too late to make changes, Mesa updates the order for you by adding an “Order Cannot Be Edited” tag.",
     "video": "",

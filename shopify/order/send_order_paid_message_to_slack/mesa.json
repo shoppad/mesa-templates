@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_order_paid_message_to_slack",
-    "name": "Send Order Paid Message To Slack Channel",
+    "name": "Send a Slack message when a Shopify order is paid",
     "version": "1.0.0",
     "description": "Constantly checking for new Shopify orders is not an efficient process for you or your team. This template sends a message to a Slack channel when a Shopify order has been paid. You can now notify your logistics and other teams about new orders on the fly during a busy holiday season.",
     "video": "",

@@ -1,15 +1,15 @@
 {
     "key": "shopify/order/add_currency_to_order_tags",
-    "name": "Add Currency To Order Tags",
+    "name": "Add a currency tag to an order",
     "version": "1.0.0",
-    "description": "Add currency tag to Shopify order when order is created.",
+    "description": "Keep track of which countries hold your strongest supporters. This template adds a currency tag to your Shopify order as soon as the order is created. You can trace the exact currencies used at checkout to take note of where your Shopify’s biggest fans are.",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "shopify",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

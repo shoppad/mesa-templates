@@ -1,8 +1,8 @@
 {
     "key": "shopify/order/send_email_to_loyaltylion_customer_if_rewards_not_used",
-    "name": "Send Email to LoyaltyLion Customer if Rewards not Used",
+    "name": "Send an email to a LoyaltyLion customer if rewards are not used",
     "version": "1.0.0",
-    "description": "Sends an email notification to a LoyaltyLion user if they make an order and don't use any loyalty points.  See the Documentation for setup steps.",
+    "description": "Reward points can help build store loyalty and a long term relationship between the customer and the store. This template sends an email notification to a LoyaltyLion customer if they make an order but do not use any loyalty points. You can personalize the email to inform customers on how to take advantage of their unused rewards points.",
     "video": "",
     "tags": [
         "email",
@@ -11,6 +11,8 @@
     "source": "shopify",
     "destination": "email",
     "enabled": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {

@@ -1,15 +1,15 @@
 {
     "key": "shopify/order/add_loyaltylion_points",
-    "name": "Add Bonus Loyalty Points when Customer Completes an Order",
+    "name": "Add bonus loyalty points when a customer completes an order",
     "version": "1.0.0",
-    "description": "Add 100 bonus points to customer's profile on LoyaltyLion every time they complete a purchase.",
+    "description": "Recognizing repeat customers such as a simple gesture or an incentive goes a long way. This template adds 100 bonus points to a customer's profile on LoyaltyLion every time they complete a purchase. You can track and reward your customers instead of offering discounts automatically.",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "loyaltylion",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

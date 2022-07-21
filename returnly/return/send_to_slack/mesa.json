@@ -1,6 +1,6 @@
 {
     "key": "returnly/return/send_to_slack",
-    "name": "Send Slack Notification When A Return In Returnly Has Been Authorized",
+    "name": "Send a Slack message when a return in Returnly has been authorized",
     "version": "1.0.0",
     "description": "Once a return request from a customer is approved, you must take immediate action to resolve it. When a Returnly return is authorized, Mesa can instantly send a message to your support team’s Slack channel. They’ll instantly be in the loop of any customer requests, which will help solve returns and exchanges quickly and increase customer satisfaction.",
     "video": "",
@@ -9,7 +9,7 @@
     "source": "returnly",
     "destination": "slack",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

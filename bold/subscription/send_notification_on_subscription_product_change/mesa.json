@@ -1,6 +1,6 @@
 {
     "key": "bold/subscription/send_notification_on_subscription_product_change",
-    "name": "Send Slack Notification when Bold Subscription Products Change",
+    "name": "Send a Slack message when a Bold Subscriptions V1 products changes",
     "version": "1.0.0",
     "description": "Sends a Slack notification message when Bold Subscriptions have their products removed, added or changed.  See the Documentation for setup steps.",
     "video": "",
@@ -11,6 +11,8 @@
     "source": "bold",
     "destination": "slack",
     "enabled": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {

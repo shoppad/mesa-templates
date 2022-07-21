@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_discord_message_when_tagged",
-    "name": "Send a Discord Message when a Tagged Shopify Order is Purchased",
+    "name": "Send a Discord message when a tagged Shopify order is purchased",
     "version": "1.0.0",
     "description": "Send a Discord message when a Shopify Order is purchased with a specific product tag. This will come in handy if you're already using Discord; your team will receive notifications with any special instructions that a product might require.",
     "video": "",
