@@ -1,6 +1,6 @@
 {
     "key": "send_slack_message_inventory_low",
-    "name": "Send Slack Message to Channel When Inventory Runs Low",
+    "name": "Send a Slack message when inventory runs low",
     "version": "1.0.0",
     "description": "Stock-outs can take a hit to your brand reputation. Nothing is more frustrating for a customer to be ready to purchase one of your most popular products, only to find out that the product they want to purchase is out of stock. Even worse, they could decide to go to the competition instead. Send your team a slack message when inventory is low so you can immediately start reordering the item before out-of-stock messages appear to shoppers.",
     "video": "",
@@ -9,7 +9,7 @@
     "source": "shopify",
     "destination": "slack",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

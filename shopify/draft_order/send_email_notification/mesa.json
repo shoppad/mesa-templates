@@ -1,15 +1,15 @@
 {
     "key": "shopify/draft_order/send_email_notification",
-    "name": "Send Email Notification When Draft Order Is Created",
+    "name": "Receive an email when a draft order is created",
     "version": "1.0.0",
-    "description": "Send email notification from Shopify draft order when draft order is created.",
+    "description": "Being notified about any activity on your Shopify store is helpful for a store owner who may not always have time to monitor the store. This template sends an email notification when a Shopify draft order is created. Store owners will receive an email with a link to the recently created Shopify draft order.",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "email",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

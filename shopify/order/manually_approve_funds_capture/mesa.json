@@ -10,7 +10,7 @@
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

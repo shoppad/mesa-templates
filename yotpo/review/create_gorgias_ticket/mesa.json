@@ -1,6 +1,6 @@
 {
     "key": "create_gorgias_ticket",
-    "name": "Create a Gorgias Support Ticket When a Customer Leaves a Negative Yotpo Review",
+    "name": "Create a Gorgias support ticket when a customer leaves a negative Yotpo review",
     "version": "1.0.0",
     "description": "Gorgias is a customer service platform that tracks all of your customer feedback in one place. To get the most out of the software, you can automatically create a Gorgias Support Ticket With Mesa when a customer leaves a negative Yotpo review. It’s going to make it easier to follow up with them and understand the reasoning behind their dissatisfaction.",
     "video": "",
@@ -10,7 +10,7 @@
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

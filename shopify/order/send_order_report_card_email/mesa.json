@@ -2,7 +2,7 @@
     "key": "shopify/order/send_order_report_card_email",
     "name": "Daily Order Report Card",
     "version": "2.0.3",
-    "description": "Sends daily status \"report card\" email containing information on your Shopify orders for the past 24 hours.",
+    "description": "Stay on top of your business by receiving a daily status \"report card\" email containing information on your Shopify orders for the past 24 hours. Get this customizable report card every day that displays important stats like Total Orders, Orders over $100, Total Orders Paid, Total Order Pending, Total Order Fulfilled, the Most Popular Products Sold, and more!",
     "video": "",
     "readme": "",
     "tags": [
@@ -12,7 +12,7 @@
     "destination": "email",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

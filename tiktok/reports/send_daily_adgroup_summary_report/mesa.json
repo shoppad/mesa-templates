@@ -1,15 +1,15 @@
 {
     "key": "send_daily_tiktok_ad_group_report_to_google_sheets",
-    "name": "Send daily TikTok Ad Group summary report to Google Sheets",
+    "name": "Send a daily TikTok Ad Group report to Google Sheets",
     "version": "1.0.0",
-    "description": "",
+    "description": "Running social ad campaigns can quickly become unmanageable without the right tools. For TikTokers, this template automatically sends a daily TikTok Marketing Ad Group summary report to any assigned Google Sheets spreadsheet. Quickly track how your campaigns are doing and make the changes needed for a successful campaign.",
     "video": "",
     "tags": [],
     "source": "",
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

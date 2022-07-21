@@ -1,151 +1,151 @@
 {
-    "key": "start_return_with_gorgias_ticket",
-    "name": "Start a Return with Forms by Mesa and Open a New Gorgias Ticket",
-    "version": "1.0.0",
-    "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Add a form on a customer's order history page that easily allows them to initiate a return. Gorgias will then open a new ticket with the full order details and reason for return.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
-    "enabled": false,
-    "logging": false,
-    "debug": false,
-    "config": {
-        "inputs": [
+  "key": "start_return_with_gorgias_ticket",
+  "name": "Start a Return with Forms by Mesa and Open a New Gorgias Ticket",
+  "version": "1.0.0",
+  "description": "Forms by MESA is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Add a form on a customer's order history page that easily allows them to initiate a return. Gorgias will then open a new ticket with the full order details and reason for return.",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 0,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "form",
+        "name": "Form",
+        "key": "form",
+        "metadata": {
+          "form_data": [
             {
-                "schema": 2,
-                "trigger_type": "input",
-                "type": "form",
-                "name": "Form",
-                "key": "form",
-                "metadata": {
-                    "form_data": [
-                        {
-                            "type": "header",
-                            "subtype": "h1",
-                            "label": "Return Your Order"
-                        },
-                        {
-                            "type": "text",
-                            "required": false,
-                            "label": "Name&nbsp;",
-                            "className": "form-control",
-                            "name": "Name",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "text",
-                            "required": false,
-                            "label": "Email",
-                            "className": "form-control",
-                            "name": "email",
-                            "subtype": "text"
-                        },
-                        {
-                            "type": "paragraph",
-                            "subtype": "p",
-                            "label": "We're sorry that you are returning your order."
-                        },
-                        {
-                            "type": "radio-group",
-                            "required": false,
-                            "label": "Reason for your return",
-                            "inline": false,
-                            "name": "return_reason",
-                            "other": false,
-                            "values": [
-                                {
-                                    "label": "Incorrect Product or Size Ordered",
-                                    "value": "Incorrect Product or Size Ordered"
-                                },
-                                {
-                                    "label": "Product No Longer Needed",
-                                    "value": "Product No Longer Needed"
-                                },
-                                {
-                                    "label": "Product Does Not Match Description on Website ",
-                                    "value": "Product Does Not Match Description on Website "
-                                },
-                                {
-                                    "label": "Product Did Not Meet Expectations",
-                                    "value": "Product Did Not Meet Expectations"
-                                },
-                                {
-                                    "label": "Wrong Product or Size",
-                                    "value": "Wrong Product or Size"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "hidden",
-                            "name": "order-id",
-                            "value": "{{order.id}}"
-                        }
-                    ]
-                },
-                "local_fields": [],
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Order Retrieve",
-                "key": "shopify_order",
-                "metadata": {
-                    "order_id": "{{form.order-id}}"
-                },
-                "local_fields": [],
-                "weight": 0
+              "type": "header",
+              "subtype": "h1",
+              "label": "Return Your Order"
             },
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "gorgias",
-                "entity": "ticket",
-                "action": "create",
-                "name": "Ticket Create",
-                "key": "gorgias_ticket",
-                "metadata": {
-                    "entity_wrapper": "body",
-                    "body": {
-                        "channel": "api",
-                        "from_agent": "false",
-                        "messages": [
-                            {
-                                "body_html": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{form.return_reason}}",
-                                "body_text": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{form.return_reason}}",
-                                "channel": "email",
-                                "from_agent": "false",
-                                "subject": "Return",
-                                "via": "email",
-                                "receiver": {
-                                    "email": "{{form.email}}"
-                                },
-                                "source": {
-                                    "to": [
-                                        {
-                                            "address": "{{form.email}}"
-                                        }
-                                    ]
-                                }
-                            }
-                        ],
-                        "customer": {
-                            "email": "{{form.email}}"
-                        }
-                    }
+              "type": "text",
+              "required": false,
+              "label": "Name&nbsp;",
+              "className": "form-control",
+              "name": "Name",
+              "subtype": "text"
+            },
+            {
+              "type": "text",
+              "required": false,
+              "label": "Email",
+              "className": "form-control",
+              "name": "email",
+              "subtype": "text"
+            },
+            {
+              "type": "paragraph",
+              "subtype": "p",
+              "label": "We're sorry that you are returning your order."
+            },
+            {
+              "type": "radio-group",
+              "required": false,
+              "label": "Reason for your return",
+              "inline": false,
+              "name": "return_reason",
+              "other": false,
+              "values": [
+                {
+                  "label": "Incorrect Product or Size Ordered",
+                  "value": "Incorrect Product or Size Ordered"
                 },
-                "local_fields": [],
-                "weight": 1
+                {
+                  "label": "Product No Longer Needed",
+                  "value": "Product No Longer Needed"
+                },
+                {
+                  "label": "Product Does Not Match Description on Website ",
+                  "value": "Product Does Not Match Description on Website "
+                },
+                {
+                  "label": "Product Did Not Meet Expectations",
+                  "value": "Product Did Not Meet Expectations"
+                },
+                {
+                  "label": "Wrong Product or Size",
+                  "value": "Wrong Product or Size"
+                }
+              ]
+            },
+            {
+              "type": "hidden",
+              "name": "order-id",
+              "value": "{{order.id}}"
             }
-        ],
-        "storage": []
-    }
+          ]
+        },
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Order Retrieve",
+        "key": "shopify_order",
+        "metadata": {
+          "order_id": "{{form.order-id}}"
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "gorgias",
+        "entity": "ticket",
+        "action": "create",
+        "name": "Ticket Create",
+        "key": "gorgias_ticket",
+        "metadata": {
+          "entity_wrapper": "body",
+          "body": {
+            "channel": "api",
+            "from_agent": "false",
+            "messages": [
+              {
+                "body_html": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{form.return_reason}}",
+                "body_text": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{form.return_reason}}",
+                "channel": "email",
+                "from_agent": "false",
+                "subject": "Return",
+                "via": "email",
+                "receiver": {
+                  "email": "{{form.email}}"
+                },
+                "source": {
+                  "to": [
+                    {
+                      "address": "{{form.email}}"
+                    }
+                  ]
+                }
+              }
+            ],
+            "customer": {
+              "email": "{{form.email}}"
+            }
+          }
+        },
+        "local_fields": [],
+        "weight": 1
+      }
+    ],
+    "storage": []
+  }
 }

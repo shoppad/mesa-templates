@@ -1,8 +1,8 @@
 {
     "key": "pagestudio/page/send_to_another_store",
-    "name": "Send Page Studio Page to Another Store",
+    "name": "Send a Page Studio page to another store",
     "version": "1.0.0",
-    "description": "Sends Page Studio pages from one Shopify store to another Shopify store after a new page is created.",
+    "description": "Creating multiple stores for different geographic regions is not uncommon but having the same brand vibe and tone can be difficult among multiple stores. This template sends Page Studio pages from one Shopify store to another Shopify store after a new page is created. This allows your multiple stores to be in sync at all times.",
     "video": "",
     "tags": [
         "shopify"
@@ -10,6 +10,8 @@
     "source": "pagestudio",
     "destination": "pagestudio",
     "enabled": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {

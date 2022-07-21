@@ -1,6 +1,6 @@
 {
     "key": "low_score_email_staff",
-    "name": "Send an Email to Staff When a Low Delighted Score is Posted",
+    "name": "Send an email to staff when a low Delighted score is posted",
     "version": "1.0.0",
     "description": "When customers provide negative feedback, you must follow up with them and try to understand why. Mesa allows you to automatically send an email to staff when you receive a low Delighted score, so you can proceed to contact the customer and learn more about their negative review.",
     "video": "",
@@ -10,7 +10,7 @@
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

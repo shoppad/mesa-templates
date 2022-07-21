@@ -1,8 +1,8 @@
 {
     "key": "bold/subscription/send_notification_on_new_subscription",
-    "name": "Send SMS Notification when Bold Subscription is Created",
+    "name": "Send a SMS message via Twilio when a Bold Subscriptions V1 is created",
     "version": "1.0.0",
-    "description": "Sends a SMS notification when new Bold Subscriptions are created via the Twillio service.  See the Documentation for setup steps.",
+    "description": "eCommerce systems should always be in sync in order to prevent confusion and inconsistencies among your team. This template sends a SMS notification when a new Bold Subscriptions is created via Twilio. You can send a text message to yourself or your logistics team informing you about new Bold Subscription orders placed on your store.",
     "video": "",
     "tags": [
         "bold",
@@ -11,6 +11,8 @@
     "source": "bold",
     "destination": "twilio",
     "enabled": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {

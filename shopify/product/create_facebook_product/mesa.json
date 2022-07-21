@@ -1,8 +1,8 @@
 {
     "key": "shopify_product_create_facebook_product",
-    "name": "Create Facebook Product when Shopify Product is Created",
+    "name": "Create a Facebook product with a tagged Shopify product",
     "version": "1.0.0",
-    "description": "",
+    "description": "Automatically create Facebook Catalog products for any product generated on your Shopify store tagged with \"Facebook.\" With this template, you can sync products with Facebook and easily modify them. For example, you can use liquid tags to adjust the product description or even add a Mesa Image step to crop all photos before sending them to Facebook automatically.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -10,7 +10,7 @@
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

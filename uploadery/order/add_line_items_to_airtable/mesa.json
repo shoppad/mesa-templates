@@ -1,6 +1,6 @@
 {
     "key": "uploadery_order_add_line_items_to_airtable",
-    "name": "Add Uploadery Images and Line Items to Airtable",
+    "name": "Add Uploadery images and line items to Airtable",
     "version": "1.0.0",
     "description": "Airtable is great because it gives you all of the power and flexibility of Google Sheets, and lets you store files directly in your spreadsheet.  Use this template to easily manage every order with an Uploadery file upload and store the files and line item details in a spreadsheet to keep track of their progress. When each order is created, Mesa will add Uploadery Line Items to an Airtable table.",
     "video": "",
@@ -9,7 +9,7 @@
     "source": "uploadery",
     "destination": "airtable",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

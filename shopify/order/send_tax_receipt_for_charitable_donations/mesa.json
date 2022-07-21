@@ -2,14 +2,14 @@
     "key": "shopify/order/send_tax_receipt_for_charitable_donations",
     "name": "Send Tax Deduction Receipt for Charitable Donations",
     "version": "1.0.0",
-    "description": "Send shoppers an email receipt when they make a tax deductible charitable donation at checkout.",
+    "description": "Customers may want to receive a tax deduction receipt for their donation purchase. This template sends customers an email receipt when they make a tax deductible charitable donation at checkout. When a customer makes a donation to a tax-exempt nonprofit organization, they can deduct the full amount of their gift as a charitable contribution for federal income tax purposes.",
     "readme": "https://github.com/blob/master/shopify/order/send_tax_receipt_for_charitable_donations/README.md",
     "video": "",
     "tags": [],
     "source": "shopify",
     "destination": "email",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

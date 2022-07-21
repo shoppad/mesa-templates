@@ -1,8 +1,8 @@
 {
     "key": "shopify/order/send_international_orders_to_slack",
-    "name": "Send Shopify International Orders to Slack",
+    "name": "Send a Slack message when a Shopify international order is created",
     "version": "1.0.0",
-    "description": "Send a slack message whenever an international order is created.",
+    "description": "Shipping international orders can require extensive research and fulfillment time. This template sends a Slack message whenever an international order is created. You can let your logistics team know that an order requires special attention and extra time to fulfill!",
     "video": "",
     "readme": "## Setup\n- [Create a connected app in Slack](https://api.slack.com/apps/new).\n- Enable **Incoming Webhooks** from the settings page.\n- Click **Add New Webhook to Workspace**.\n- Select a channel that the app will post to and click **Authorize**.\n- Click **Copy** near your Webhook URL and paste the value in the `slack-webhook-url` Credential (located under the Credentials tab).\n- Save the slack channel name you wish to use (for example \"#order-paid\") as a Storage Item, with the key as `slack-channel`.\n- Enable the Automation in the right sidebar and click **Save**.\n\n## Optional Customizations\n- Change the country to filter by changing the the two-letter country code in the Filter Step. For example: **US** for the United States, **FR** for France, etc. [View a list of country codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Current_codes).",
     "tags": [
@@ -11,7 +11,7 @@
     "source": "shopify",
     "destination": "slack",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

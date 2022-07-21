@@ -1,6 +1,6 @@
 {
     "key": "infiniteoptions/order/send_discord_invite_via_email",
-    "name": "Send Discord invitations when an Infinite Options tagged product is purchased",
+    "name": "Send a Discord invitation when a product using Infinite Options is purchased",
     "version": "1.0.0",
     "description": "Merchants trying to build a community in Discord using Shopify will appreciate this template. Create new invitations if the customer has not received a Discord invite before the Mesa workflow while tagging at the same time. With Discord + Mesa, you can now connect on a whole new level and nurture like-minded customers.",
     "video": "",
@@ -10,7 +10,7 @@
     "destination": "",
     "seconds": 0,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

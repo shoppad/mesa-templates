@@ -1,15 +1,15 @@
 {
     "key": "shopify/order/subscribe_shoppers_to_klaviyo_list",
-    "name": "Subscribe Shoppers to Klaviyo List After First Order",
+    "name": "Subscribe shoppers to a Klaviyo list after their first order",
     "version": "1.0.0",
-    "description": "",
+    "description": "Customer retention is a major key to an eCommerce store's success. This template subscribes customers to a Klaviyo email list after they have placed their first order. You can send customers personalized emails after their first purchase. As an example, you can thank them for their purchase and provide them with a special discount.",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "klaviyo",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

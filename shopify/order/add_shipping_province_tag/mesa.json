@@ -1,15 +1,15 @@
 {
     "key": "shopify/order/add_shipping_province_tag",
-    "name": "Add Shipping Province Tag To Order",
+    "name": "Add a shipping province tag to an order",
     "version": "1.0.0",
-    "description": "Add shipping province/state tag to Shopify order when order is created.",
+    "description": "Keep track of exactly where your store’s orders are headed. This template instantly updates the order's tags with the province of where your orders are shipped. You now have a simple and effective way to monitor your Shopify’s shipping zones.",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "shopify",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [

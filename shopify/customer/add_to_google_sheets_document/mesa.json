@@ -1,8 +1,9 @@
 {
     "key": "shopify_customer_add_to_google_sheets_document",
-    "name": "Add Shopify Customer to Google Sheets Document",
+    "name": "Add a Shopify customer to Google Sheets",
+    "description": "WStaying organized while running a successful store can be difficult and grabbing information from each customer is time-consuming. This template sends customer details from Shopify to Google Sheets when a customer is updated. You can now keep track of all of your customers on one of the most popular collaborative hubs.",
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
