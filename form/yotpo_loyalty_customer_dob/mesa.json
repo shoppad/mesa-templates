@@ -92,7 +92,7 @@
                 "type": "yotpoloyalty",
                 "entity": "birthday",
                 "action": "set",
-                "name": "& Referrals Birthday Set",
+                "name": "Set Customer’s Birthday",
                 "key": "yotpoloyalty_birthday",
                 "metadata": {
                     "body": {
