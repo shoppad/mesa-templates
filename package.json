@@ -4,7 +4,8 @@
   "description": "Generate Mesa connectors automagically",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "mocha": "mocha",
+    "test:metadata": "node ./bin/metadata.js"
   },
   "author": "",
   "license": "ISC",
