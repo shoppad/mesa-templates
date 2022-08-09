@@ -21,9 +21,10 @@
                 "entity": "charge",
                 "action": "charge/created",
                 "name": "Charge Created",
-                "key": "recharge_charge",
+                "key": "recharge",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -37,39 +38,28 @@
                 "metadata": {
                     "a": "checkout",
                     "comparison": "in",
-                    "b": "{{recharge_charge.type}}"
+                    "b": "{{recharge.type}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "recharge",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
-                "key": "recharge_customer",
+                "key": "recharge_1",
                 "metadata": {
-                    "recharge_api": "GET /customers/{{customer_id}}",
-                    "customer_id": "{{recharge_charge.customer.id}}"
+                    "path": {
+                        "customer_id": "{{recharge.customer.id}}"
+                    }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "retrieve",
-                "name": "Retrieve Customer",
-                "key": "shopify_customer",
-                "metadata": {
-                    "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
-                },
-                "local_fields": [],
-                "weight": 2
             },
             {
                 "schema": 3,
@@ -78,12 +68,13 @@
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "shopify_order",
+                "key": "shopify",
                 "metadata": {
-                    "order_id": "{{recharge_charge.external_order_id.ecommerce}}"
+                    "order_id": "{{recharge.external_order_id.ecommerce}}"
                 },
                 "local_fields": [],
-                "weight": 3
+                "on_error": "default",
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -94,25 +85,26 @@
                 "metadata": {
                     "a": "free_gift_needed",
                     "comparison": "in",
-                    "b": "{{shopify_order.tags}}"
+                    "b": "{{shopify.tags}}"
                 },
                 "local_fields": [],
-                "weight": 4
+                "on_error": "default",
+                "weight": 3
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "recharge",
                 "entity": "subscription",
                 "action": "list",
-                "name": "List subscription",
-                "key": "recharge_subscription",
+                "name": "List subscriptions",
+                "key": "recharge_2",
                 "metadata": {
-                    "recharge_api": "GET /subscriptions",
-                    "parameters": "shopify_customer_id={{shopify_customer.id}}"
+                    "parameters": "customer_id={{recharge_1.id}}&address_id={{recharge.address_id}}"
                 },
                 "local_fields": [],
-                "weight": 5
+                "on_error": "default",
+                "weight": 4
             },
             {
                 "schema": 4,
@@ -121,18 +113,18 @@
                 "entity": "onetime",
                 "action": "create",
                 "name": "Create Onetime Product",
-                "key": "recharge_onetime_1",
+                "key": "recharge_3",
                 "metadata": {
                     "body": {
-                        "address_id": "{{recharge_subscription.0.address_id}}",
+                        "address_id": "{{recharge_2.0.address_id}}",
                         "price": "0",
-                        "next_charge_scheduled_at": "{{recharge_subscription.0.next_charge_scheduled_at}}",
+                        "next_charge_scheduled_at": "{{recharge_2.0.next_charge_scheduled_at}}",
                         "quantity": "1"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 6
+                "weight": 5
             }
         ],
         "storage": []

@@ -1,99 +1,105 @@
 {
     "key": "shopify_order_send_high_risk_orders_to_sms",
-    "name": "Send an SMS Message if a Customer Places a Fraudulent Order",
+    "name": "Receive an SMS message when someone creates a fraudulent order",
     "version": "1.0.0",
-    "description": "",
+    "description": "Protecting yourself from fraud is critical not only for the safety of your ecommerce store but for your customers as well. This template will automatically notify the store administrator with a text message when someone places a high-risk order, allowing time to investigate and respond immediately. Consider it an extra layer of protection that could save plenty of headaches in the future.",
     "video": "",
+    "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "slack",
-    "seconds": 0,
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "metadata": [],
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
                 "action": "list",
-                "name": "Get List Order Risk",
-                "key": "shopify_order_risk",
+                "name": "Get List of Order Risks",
+                "key": "shopify_1",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}"
+                    "order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_1}}",
+                    "comparison": "is not empty"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
-                    "key": "{{shopify_order_risk.risks}}"
+                    "key": "{{shopify_1}}"
                 },
                 "local_fields": [],
-                "weight": 1
+                "on_error": "default",
+                "weight": 2
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
-                "key": "filter",
+                "key": "filter_1",
                 "metadata": {
                     "a": "{{loop.recommendation}}",
                     "comparison": "equals",
                     "b": "cancel"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             },
             {
                 "schema": 2,
                 "trigger_type": "output",
-                "type": "shopify",
-                "entity": "shop",
-                "action": "list",
-                "name": "Retrieve Shop",
-                "key": "shopify_shop",
-                "metadata": [],
-                "local_fields": [],
-                "weight": 4
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
                 "type": "sms",
-                "is_premium": true,
                 "entity": "message",
                 "action": "send",
-                "name": "SMS Send Message",
-                "key": "sms_message",
+                "name": "Send Message",
+                "key": "sms",
                 "metadata": {
-                    "to": "{{shopify_shop.phone}}",
-                    "message": "Potentially fraudulent order {{shopify_order.name}}\n\nView order: https://{{shopify_shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
+                    "to": "{{context.shop.phone}}",
+                    "message": "Potentially fraudulent order {{shopify.name}}\n\nView order: https:\/\/{{context.shop.myshopify_domain\t}}\/admin\/orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
-                "weight": 5
+                "on_error": "default",
+                "weight": 4
             }
         ],
         "storage": []

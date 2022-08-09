@@ -21,7 +21,7 @@
                 "entity": "customer",
                 "action": "updated",
                 "name": "Customer Updated",
-                "key": "shopify_customer",
+                "key": "shopify",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
@@ -33,11 +33,11 @@
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter: Check if workflow ran already based on \"recharge-workflow\" tag",
-                "key": "filter_1",
+                "key": "filter",
                 "metadata": {
                     "a": "recharge-workflow",
                     "comparison": "not in",
-                    "b": "{{shopify_customer.tags}}"
+                    "b": "{{shopify.tags}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -48,11 +48,11 @@
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter: Checks for \"add-free-product\" in customer tags",
-                "key": "filter",
+                "key": "filter_1",
                 "metadata": {
                     "a": "add-free-product",
                     "comparison": "in",
-                    "b": "{{shopify_customer.tags}}"
+                    "b": "{{shopify.tags}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -62,12 +62,12 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "recharge",
-                "entity": "subscription",
+                "entity": "customer",
                 "action": "list",
-                "name": "List Subscription",
-                "key": "recharge_subscription",
+                "name": "List Customers",
+                "key": "recharge_2",
                 "metadata": {
-                    "parameters": "shopify_customer_id={{shopify_customer.id}}"
+                    "parameters": "external_customer_id={{shopify.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -77,21 +77,36 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "recharge",
+                "entity": "subscription",
+                "action": "list",
+                "name": "List subscriptions",
+                "key": "recharge",
+                "metadata": {
+                    "parameters": "customer_id={{recharge_2.0.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "recharge",
                 "entity": "onetime",
                 "action": "create",
-                "name": "Create (ALPHA) Onetime Product",
-                "key": "recharge_onetime",
+                "name": "Create Onetime Product",
+                "key": "recharge_1",
                 "metadata": {
                     "body": {
-                        "address_id": "{{recharge_subscription.0.address_id}}",
+                        "address_id": "{{recharge.0.address_id}}",
                         "price": "0",
-                        "next_charge_scheduled_at": "{{recharge_subscription.0.next_charge_scheduled_at}}",
+                        "next_charge_scheduled_at": "{{recharge.0.next_charge_scheduled_at}}",
                         "quantity": "1"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 3,
@@ -99,17 +114,17 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "tag_add",
-                "name": "Customer Add \"recharge-workflow\" Tag",
-                "key": "shopify_customer_1",
+                "name": "Customer Add Tag",
+                "key": "shopify_1",
                 "metadata": {
-                    "customer_id": "{{shopify_customer.id}}",
+                    "customer_id": "{{shopify.id}}",
                     "body": {
                         "tag": "recharge-workflow"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ],
         "storage": []
