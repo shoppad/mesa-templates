@@ -19,7 +19,7 @@
                 "trigger_type": "input",
                 "type": "recharge",
                 "entity": "charge",
-                "action": "charge\/created",
+                "action": "charge/created",
                 "name": "Charge Created",
                 "key": "recharge",
                 "metadata": [],
