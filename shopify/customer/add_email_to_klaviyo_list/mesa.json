@@ -6,8 +6,9 @@
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "klaviyo",
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -20,51 +21,65 @@
                 "entity": "customer",
                 "action": "created",
                 "name": "Customer Created",
-                "key": "shopify_customer",
+                "key": "shopify",
                 "metadata": [],
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify.email}}",
+                    "comparison": "is not empty"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "klaviyo",
                 "entity": "list",
                 "action": "subscribe",
-                "name": "Subscribe List",
-                "key": "klaviyo_list",
+                "name": "List Subscribe",
+                "key": "klaviyo",
                 "metadata": {
-                    "email": "{{shopify_customer.email}}",
+                    "email": "{{shopify.email}}",
                     "mapping": [
                         {
                             "destination": "id",
-                            "source": "{{shopify_customer.id}}"
+                            "source": "{{shopify.id}}"
                         },
                         {
                             "destination": "email",
-                            "source": "{{shopify_customer.email}}"
+                            "source": "{{shopify.email}}"
                         },
                         {
                             "destination": "first_name",
-                            "source": "{{shopify_customer.first_name}}"
+                            "source": "{{shopify.first_name}}"
                         },
                         {
                             "destination": "last_name",
-                            "source": "{{shopify_customer.last_name}}"
+                            "source": "{{shopify.last_name}}"
                         },
                         {
                             "destination": "phone",
-                            "source": "{{shopify_customer.phone}}"
+                            "source": "{{shopify.phone}}"
                         },
                         {
                             "destination": "tags",
-                            "source": "{{shopify_customer.tags}}"
+                            "source": "{{shopify.tags}}"
                         },
                         {
                             "destination": "notes",
-                            "source": "{{shopify_customer.note}}"
+                            "source": "{{shopify.note}}"
                         }
                     ]
                 },
@@ -76,7 +91,8 @@
                         "location": "mapping"
                     }
                 ],
-                "weight": 0
+                "on_error": "default",
+                "weight": 1
             }
         ],
         "storage": []
