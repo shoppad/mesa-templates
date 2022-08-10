@@ -72,7 +72,7 @@
                 "type": "discord",
                 "entity": "channel_message",
                 "action": "create",
-                "name": "Channel Message Create",
+                "name": "Create Channel Message",
                 "key": "discord_channel_message",
                 "metadata": {
                     "body": {

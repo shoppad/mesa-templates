@@ -34,7 +34,7 @@
                 "type": "klaviyo",
                 "entity": "track",
                 "action": "create",
-                "name": "Track event Create",
+                "name": "Create Track Event",
                 "key": "klaviyo_track",
                 "metadata": {
                     "event": "Infinite Options Order",
