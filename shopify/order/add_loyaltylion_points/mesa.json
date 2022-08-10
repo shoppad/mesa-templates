@@ -47,7 +47,7 @@
                 "type": "loyaltylion",
                 "entity": "customer",
                 "action": "add_points",
-                "name": "Add Points Customer",
+                "name": "Add Points to Customer",
                 "key": "loyaltylion_customer",
                 "metadata": {
                     "api_endpoint": "POST /v2/customers/{{merchant_id}}/points",
