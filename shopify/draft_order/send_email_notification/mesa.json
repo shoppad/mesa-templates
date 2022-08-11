@@ -6,54 +6,42 @@
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "email",
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "draft_order",
                 "action": "created",
                 "name": "Draft Order Created",
-                "key": "shopify_draft_order",
+                "key": "shopify",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "shop",
-                "action": "list",
-                "name": "Get List Shop",
-                "key": "shopify_shop",
-                "metadata": {
-                    "site": "current"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
-                "is_premium": true,
-                "name": "Email",
+                "name": "Send Email",
                 "key": "email",
                 "metadata": {
-                    "subject": "{{shopify_shop.name}} New draft order has been created.",
-                    "message": "New draft order has been created. See: https://{{shopify_shop.myshopify_domain}}/admin/draft_orders/{{shopify_draft_order.id}}",
-                    "to": "{{shopify_shop.email}}"
+                    "to": "{{context.shop.email}}",
+                    "subject": "{{context.shop.name}}, A new draft order has been created.",
+                    "message": "A new draft order {{shopify.name}} has been created. \nSee: https:\/\/{{context.shop.myshopify_domain}}\/admin\/draft_orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
-                "weight": 1
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "storage": []
