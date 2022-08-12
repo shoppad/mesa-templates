@@ -8,7 +8,7 @@
     "tags": [],
     "source": "",
     "destination": "",
-    "seconds": 0,
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -21,9 +21,9 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "metadata": [],
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -35,23 +35,26 @@
                 "entity": "order_risk",
                 "action": "list",
                 "name": "Get List of Order Risks",
-                "key": "shopify_order_risk",
+                "key": "shopify_1",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}"
+                    "order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Filter by order risks",
-                "key": "custom",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
                 "metadata": {
-                    "script": "custom.js"
+                    "a": "{{shopify_1}}",
+                    "comparison": "is not empty"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -61,7 +64,7 @@
                 "name": "Approval",
                 "key": "approval",
                 "metadata": {
-                    "message": "A possible fraudulent order was created. \n\n**Order Details:**\n\n- Order Number: {{shopify_order.order_number}}\n- Email: {{shopify_order.email}}\n\n**Fraudulent Details:**\n \n- Message: {{shopify_order_risk.risks[0].message}}\n- Score: {{shopify_order_risk.risks[0].score}}\n- Recommendation: {{shopify_order_risk.risks[0].recommendation}}\n- [More fraudulent details](https://{{context.shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}?showRiskAnalysis=true)",
+                    "message": "A possible fraudulent order was created. \n\n**Order Details:**\n\n- Order: {{shopify.name}}\n- Email: {{shopify.email}}\n\n**Fraudulent Details:**\n \n- Message: {{shopify_1[0].message}}\n- Score: {{shopify_1[0].score}}\n- Recommendation: {{shopify_1[0].recommendation}}\n- [More fraudulent details](https:\/\/{{context.shop.myshopify_domain}}\/admin\/orders\/{{shopify.id}}?showRiskAnalysis=true)",
                     "field": true,
                     "label_accept": "Submit",
                     "label_reject": "Ignore",
@@ -77,7 +80,23 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_transaction",
+                "action": "list",
+                "name": "Get List of Order Transactions",
+                "key": "shopify_2",
+                "metadata": {
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
             },
             {
                 "schema": 3,
@@ -86,29 +105,32 @@
                 "entity": "order_transaction",
                 "action": "create",
                 "name": "Create Order Transaction",
-                "key": "shopify_order_transaction",
+                "key": "shopify_4",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
+                    "order_id": "{{shopify.id}}",
                     "body": {
-                        "kind": "{{approval.field}}"
+                        "kind": "capture",
+                        "parent_id": "{{shopify_2[0].id}}"
                     }
                 },
                 "local_fields": [],
-                "weight": 3
+                "on_error": "default",
+                "weight": 4
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
-                "key": "filter",
+                "key": "filter_1",
                 "metadata": {
                     "a": "{{approval.field}}",
                     "comparison": "equals",
                     "b": "void"
                 },
                 "local_fields": [],
-                "weight": 4
+                "on_error": "default",
+                "weight": 5
             },
             {
                 "schema": 3,
@@ -117,12 +139,13 @@
                 "entity": "order",
                 "action": "cancel",
                 "name": "Cancel Order",
-                "key": "shopify_order_1",
+                "key": "shopify_3",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}"
+                    "order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
-                "weight": 5
+                "on_error": "default",
+                "weight": 6
             }
         ],
         "storage": []
