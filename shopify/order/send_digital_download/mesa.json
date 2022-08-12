@@ -1,6 +1,6 @@
 {
     "key": "send_digital_download",
-    "name": "Sell downloadable products from your store",
+    "name": "Sell downloadable products from your store ",
     "version": "1.0.0",
     "description": "Quickly sell downloadable products from your Shopify store without using another app. Offering downloadable products is a great way to grow your business or complement your physical products.",
     "video": "",
@@ -8,7 +8,7 @@
     "tags": [],
     "source": "",
     "destination": "",
-    "seconds": 0,
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -21,22 +21,24 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
+                    "key": "{{shopify.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -46,11 +48,12 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
+                    "a": "{{loop.fulfillment_service}}",
                     "comparison": "equals",
-                    "a": "{{shopify_order.line_items[0].fulfillment_service}}",
                     "b": "digital-download"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -60,11 +63,15 @@
                 "entity": "order_fulfillment",
                 "action": "create",
                 "name": "Create Order Fulfillment",
-                "key": "shopify_order_fulfillment",
+                "key": "shopify_1",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
+                    "order_id": "{{shopify.id}}",
                     "body": {
-                        "line_items ": "{{loop.id}}",
+                        "line_items": [
+                            {
+                                "id": "{{loop.id}}"
+                            }
+                        ],
                         "notify_customer": "false"
                     }
                 },
@@ -73,11 +80,6 @@
                         "key": "body",
                         "fields": [
                             {
-                                "key": "line_items ",
-                                "type": "custom",
-                                "allow_custom_fields": false
-                            },
-                            {
                                 "key": "notify_customer",
                                 "type": "custom",
                                 "allow_custom_fields": false
@@ -85,21 +87,22 @@
                         ]
                     }
                 ],
+                "on_error": "default",
                 "weight": 2
             },
             {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
-                "is_premium": true,
-                "name": "Email",
+                "name": "Send Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{shopify_order.email}}",
+                    "to": "{{shopify.email}}",
                     "subject": "Link to your Digital Download ",
-                    "message": "Hello {{shopify_order.customer.first_name}}! \n\nThank you for placing your order: {{shopify_order.name}}. \n\nYour order is ready for download at this link: "
+                    "message": "Hello {{shopify.customer.first_name}}!\n\nThank you for placing your order {{shopify.name}}.\n\nYour order is ready for download at this link: \n\nThanks!\n-{{context.shop.name}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             }
         ],
