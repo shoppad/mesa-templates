@@ -89,7 +89,8 @@
                 "name": "Custom Code",
                 "key": "custom",
                 "metadata": {
-                    "script": "custom.js"
+                    "script": "custom.js",
+                    "description": "Goes through every product variant and checks if the product has variants with inventory. If a product variant has inventory, the automation stops."
                 },
                 "local_fields": [],
                 "weight": 4
