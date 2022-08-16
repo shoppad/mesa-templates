@@ -170,7 +170,8 @@
                 "name": "Custom Code",
                 "key": "custom",
                 "metadata": {
-                    "script": "custom.js"
+                    "script": "custom.js",
+                    "description": "Goes through each fulfillment in the order and checks if each fulfillment is fulfilled and requires shipping. The automation stops if these conditions are not met."
                 },
                 "local_fields": [],
                 "weight": 3
