@@ -37,7 +37,7 @@
                 "name": "Getting Birthday Data",
                 "key": "custom",
                 "metadata": {
-                    "description": "We are converting the date string into an object with date values.",
+                    "description": "Converts the Birthday's option value into tokens.",
                     "script": "custom.js"
                 },
                 "local_fields": [],

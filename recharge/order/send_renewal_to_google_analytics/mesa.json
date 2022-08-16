@@ -49,7 +49,8 @@
                 "name": "Custom Code: Get Client ID from note attributes",
                 "key": "custom",
                 "metadata": {
-                    "script": "custom.js"
+                    "script": "custom.js",
+                    "description": "Gets the Client ID from the order's note attributes."
                 },
                 "local_fields": [],
                 "on_error": "default",
