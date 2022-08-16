@@ -6,8 +6,8 @@
     "video": "",
     "readme": "",
     "tags": [
-      "bold",
-      "slack"
+        "bold",
+        "slack"
     ],
     "source": "bold",
     "destination": "slack",
@@ -22,12 +22,12 @@
                 "trigger_type": "input",
                 "type": "bold",
                 "entity": "subscription",
-                "action": "subscription\/product_quantity_changed",
+                "action": "subscription/product_quantity_changed",
                 "name": "Subscription V1 Product Quantity Changed",
                 "key": "bold",
                 "metadata": {
-                  "topic": "subscription/product_quantity_changed",
-                  "host": ""
+                    "topic": "subscription/product_quantity_changed",
+                    "host": ""
                 },
                 "local_fields": [],
                 "on_error": "default",
