@@ -2,12 +2,13 @@
     "key": "shopify/order/add_shipping_province_tag",
     "name": "Add a shipping province tag to an order",
     "version": "1.0.0",
-    "description": "Keep track of exactly where your store’s orders are headed. This template instantly updates the order's tags with the province of where your orders are shipped. You now have a simple and effective way to monitor your Shopify’s shipping zones.",
+    "description": "Keep track of exactly where your store\u2019s orders are headed. This template instantly updates the order's tags with the province of where your orders are shipped. You now have a simple and effective way to monitor your Shopify\u2019s shipping zones.",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "shopify",
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -22,6 +23,7 @@
                 "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -31,17 +33,17 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
-                "action": "update",
-                "name": "Update Order",
-                "key": "shopify_order_1",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "tags": "{{shopify_order.tags}}, {{shopify_order.shipping_address.province_code}}"
-                    },
-                    "site": "current"
+                        "tag": "{{shopify_order.shipping_address.province_code}}"
+                    }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

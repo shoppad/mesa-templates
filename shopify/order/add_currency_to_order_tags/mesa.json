@@ -2,12 +2,13 @@
     "key": "shopify/order/add_currency_to_order_tags",
     "name": "Add a currency tag to an order",
     "version": "1.0.0",
-    "description": "Keep track of which countries hold your strongest supporters. This template adds a currency tag to your Shopify order as soon as the order is created. You can trace the exact currencies used at checkout to take note of where your Shopify’s biggest fans are.",
+    "description": "Keep track of which countries hold your strongest supporters. This template adds a currency tag to your Shopify order as soon as the order is created. You can trace the exact currencies used at checkout to take note of where your Shopify\u2019s biggest fans are.",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "shopify",
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -22,42 +23,28 @@
                 "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Retrieve Order",
-                "key": "shopify_order_2",
-                "metadata": {
-                    "order_id": "{{shopify_order.id}}",
-                    "site": "current"
-                },
-                "local_fields": [],
-                "weight": 0
-            },
-            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
-                "action": "update",
-                "name": "Update Order",
-                "key": "shopify_order_1",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "tags": "{{shopify_order_2.tags}}, {{shopify_order.currency}}"
-                    },
-                    "site": "current"
+                        "tag": "{{shopify_order.currency}}"
+                    }
                 },
                 "local_fields": [],
-                "weight": 1
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "storage": []
