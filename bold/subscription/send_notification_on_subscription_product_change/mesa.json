@@ -42,7 +42,7 @@
                 "name": "Send Message",
                 "key": "slack",
                 "metadata": {
-                    "message": "{{bold.subscription.first_name}}: {{bold.subscription.last_name}} - {{bold.subscription.customer_email}}\nLink: https:\/\/{{context.shop.domain}}\/admin\/apps\/recurring-orders\/s\/{{context.shop.name}}\/customers\/edit_customer?customer_id={{bold.subscription.shopify_customer_id}}&customer_email={{bold.subscription.customer_email}}\n{% if bold.products_added.size > 0 %}\n{{bold.products_added.size}} product(s) added.\n{% endif %}\n{% if bold.products_removed.size > 0 %}\n{{bold.products_removed.size}} product(s) removed.\n{% endif %}"
+                    "message": "Subscription product quantity update:\n\n{{bold.subscription.first_name}} {{bold.subscription.last_name}} - {{bold.subscription.customer_email}}\nLink: https:\/\/{{context.shop.domain}}\/admin\/apps\/recurring-orders\/s\/{{context.shop.name}}\/customers\/edit_customer?customer_id={{bold.subscription.shopify_customer_id}}&customer_email={{bold.subscription.customer_email}}\n{% if bold.products_added.size > 0 %}\n{{bold.products_added.size}} product(s) added.\n{% endif %}\n{% if bold.products_removed.size > 0 %}\n{{bold.products_removed.size}} product(s) removed.\n{% endif %}"
                 },
                 "local_fields": [],
                 "on_error": "default",
