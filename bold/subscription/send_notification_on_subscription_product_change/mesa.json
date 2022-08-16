@@ -2,61 +2,51 @@
     "key": "bold/subscription/send_notification_on_subscription_product_change",
     "name": "Send a Slack message when a Bold Subscriptions V1 products changes",
     "version": "1.0.0",
-    "description": "Sends a Slack notification message when Bold Subscriptions have their products removed, added or changed.  See the Documentation for setup steps.",
+    "description": "Keeping track of your products' inventory for re-occcuring subscriptions and online orders requires an extensive amount of time and effort. This template sends a Slack notification message when a Bold Subscriptions had its products removed, added or changed. This informs your team about any Bold Subscriptions orders that may be affected by product inventory issues.",
     "video": "",
+    "readme": "",
     "tags": [
         "bold",
         "slack"
     ],
     "source": "bold",
     "destination": "slack",
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "bold",
                 "entity": "subscription",
                 "action": "subscription/product_quantity_changed",
-                "name": "Bold Subscription Product Quantity Changed",
-                "key": "bold_subscription",
+                "name": "Subscription V1 Product Quantity Changed",
+                "key": "bold",
                 "metadata": {
                     "topic": "subscription/product_quantity_changed",
                     "host": ""
-                }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "outputs": [
             {
-                "trigger_type": "output",
-                "type": "transform",
-                "entity": "editor",
-                "action": "",
-                "name": "Notification Message",
-                "key": "transformeditor",
-                "metadata": {
-                    "script": "transform.js",
-                    "text": "Subscription product quantity update:\n{% assign shop = 'MYSHOP' %}\n{{bold_subscription.subscription.first_name}} {{bold_subscription.subscription.last_name}} - {{bold_subscription.subscription.customer_email}}\nLink: https://{{shop}}.myshopify.com/admin/apps/recurring-orders/s/{{shop}}/customers/edit_customer?customer_id={{bold_subscription.subscription.shopify_customer_id}}&customer_email={{bold_subscription.subscription.customer_email}}\n{% if bold_subscription.products_added.size > 0 %}\n{{bold_subscription.products_added.size}} product(s) added.\n{% endif %}\n{% if bold_subscription.products_removed.size > 0 %}\n{{bold_subscription.products_removed.size}} product(s) removed.\n{% endif %}"
-                },
-                "local_fields": [
-                    {
-                        "key": "text",
-                        "type": "editor"
-                    }
-                ]
-            },
-            {
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
-                "entity": null,
-                "action": null,
                 "name": "Send Message",
                 "key": "slack",
                 "metadata": {
-                    "message": "{{transformeditor.text}}"
-                }
+                    "message": "Subscription product quantity update:\n\n{{bold.subscription.first_name}} {{bold.subscription.last_name}} - {{bold.subscription.customer_email}}\nLink: https:\/\/{{context.shop.domain}}\/admin\/apps\/recurring-orders\/s\/{{context.shop.name}}\/customers\/edit_customer?customer_id={{bold.subscription.shopify_customer_id}}&customer_email={{bold.subscription.customer_email}}\n{% if bold.products_added.size > 0 %}\n{{bold.products_added.size}} product(s) added.\n{% endif %}\n{% if bold.products_removed.size > 0 %}\n{{bold.products_removed.size}} product(s) removed.\n{% endif %}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "storage": []
