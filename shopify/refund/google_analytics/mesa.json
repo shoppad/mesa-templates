@@ -50,7 +50,8 @@
                 "name": "Calculate Total Refund Amount",
                 "key": "custom",
                 "metadata": {
-                    "script": "custom.js"
+                    "script": "custom.js",
+                    "description": "Calculates the refund amount that gets sent to Google Analytics."
                 },
                 "local_fields": [],
                 "on_error": "default",

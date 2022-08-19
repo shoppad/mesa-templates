@@ -47,7 +47,8 @@
                 "name": "Custom",
                 "key": "custom",
                 "metadata": {
-                    "script": "custom.js"
+                    "script": "custom.js",
+                    "description": "Gets the product and variant titles related to the updated inventory level."
                 },
                 "local_fields": [],
                 "weight": 1
