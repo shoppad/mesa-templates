@@ -81,7 +81,7 @@
                 "name": "Send Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{context.shop.email}}",
+                    "to": "{{infiniteoptions.order.email}}",
                     "subject": "Welcome to our Discord community! - Discord Invite",
                     "message": "Hey {{shopify.first_name}},\n\nHere is your discord invite: https:\/\/discord.gg\/{{discord.code}}\n\nThanks!\n-{{context.shop.name}}"
                 },
