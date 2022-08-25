@@ -1,15 +1,16 @@
 {
     "key": "lock_editing_with_tags",
-    "name": "Add Order Can Be Edited tag and update after 24 hours to \"Order Cannot Be Edited\" tag when Shopify order is created",
+    "name": "Add \"Order Can Be Edited\" tag and update after 24 hours to \"Order Cannot Be Edited\" tag when Shopify order is created",
     "version": "1.0.0",
-    "description": "A customer may want to change their order after purchase. It could be that they made a mistake and chose the wrong color or size. With Mesa, each time an Order on Shopify is created, you can add an “Order Can Be Edited” tag automatically to let back office staff know. Once the order ships and it’s too late to make changes, Mesa updates the order for you by adding an “Order Cannot Be Edited” tag.",
+    "description": "A customer may want to change their order after purchase. It could be that they made a mistake and chose the wrong color or size. With Mesa, each time an Order on Shopify is created, you can add an \u201cOrder Can Be Edited\u201d tag automatically to let back office staff know. Once the order ships and it\u2019s too late to make changes, Mesa updates the order for you by adding an \u201cOrder Cannot Be Edited\u201d tag.",
     "video": "",
     "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "shopify",
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -20,8 +21,9 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -31,17 +33,33 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
-                "action": "update",
-                "name": "Update Order - Apply initial tag",
-                "key": "shopify_order_1",
+                "action": "tag_add",
+                "name": "Order Add Tag: Apply Order Can Be Edited tag",
+                "key": "shopify_1",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
+                    "order_id": "{{shopify.id}}",
                     "body": {
-                        "tags": "{{shopify_order.tags}}{{ if shopify_order.tags }},{{ endif }}Order Can Be Edited"
+                        "tag": "Order Can Be Edited"
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_3",
+                "metadata": {
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
             },
             {
                 "schema": 2,
@@ -50,25 +68,12 @@
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
-                    "amount": "1",
+                    "amount": "24",
                     "unit": "hours",
                     "test_bypass": false
                 },
                 "local_fields": [],
-                "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Retrieve Order - Get latest order data",
-                "key": "shopify_order_2",
-                "metadata": {
-                    "order_id": "{{delay.id}}"
-                },
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -76,17 +81,51 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
-                "action": "update",
-                "name": "Update Order - Apply new tag",
-                "key": "shopify_order_3",
+                "action": "retrieve",
+                "name": "Retrieve Order: Get latest order data",
+                "key": "shopify_2",
                 "metadata": {
-                    "order_id": "{{shopify_order_2.id}}",
+                    "order_id": "{{delay.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_remove",
+                "name": "Order Remove Tag: Remove Order Can Be Edited tag",
+                "key": "shopify_4",
+                "metadata": {
+                    "order_id": "{{shopify_2.id}}",
                     "body": {
-                        "tags": "{{ shopify_order_2.tags | replace: 'Order Can Be Edited', 'Order Cannot Be Edited' }}"
+                        "tag": "Order Can Be Edited"
                     }
                 },
                 "local_fields": [],
-                "weight": 3
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag: Apply Order Cannot Be Edited tag",
+                "key": "shopify_5",
+                "metadata": {
+                    "order_id": "{{shopify_2.id}}",
+                    "body": {
+                        "tag": "Order Cannot Be Edited"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
             }
         ],
         "storage": []
