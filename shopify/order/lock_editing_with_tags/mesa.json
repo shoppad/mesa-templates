@@ -34,7 +34,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "tag_add",
-                "name": "Order Add Tag - Apply initial tag",
+                "name": "Order Add Tag: Apply Order Can Be Edited tag",
                 "key": "shopify_1",
                 "metadata": {
                     "order_id": "{{shopify.id}}",
@@ -82,7 +82,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
-                "name": "Retrieve Order - Get latest order data",
+                "name": "Retrieve Order: Get latest order data",
                 "key": "shopify_2",
                 "metadata": {
                     "order_id": "{{delay.id}}"
@@ -97,7 +97,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "tag_remove",
-                "name": "Order Remove Tag",
+                "name": "Order Remove Tag: Remove Order Can Be Edited tag",
                 "key": "shopify_4",
                 "metadata": {
                     "order_id": "{{shopify_2.id}}",
@@ -115,7 +115,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "tag_add",
-                "name": "Order Add Tag",
+                "name": "Order Add Tag: Apply Order Cannot Be Edited tag",
                 "key": "shopify_5",
                 "metadata": {
                     "order_id": "{{shopify_2.id}}",
