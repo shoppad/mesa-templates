@@ -30,7 +30,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "mailchimp",
-                "name": "",
+                "name": "Add Email with Merge Variables to list",
                 "key": "mailchimp",
                 "metadata": {
                     "email_address": "{{shopify_customer.email}}",
