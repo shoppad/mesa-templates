@@ -18,11 +18,11 @@
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "product",
-                "action": "create-update",
-                "name": "Product Created or Updated",
+                "action": "update",
+                "name": "Product Updatedd",
                 "key": "shopify-product-created-or-updated",
                 "metadata": {
-                    "topic": "products/create+products/update"
+                    "topic": "products/update"
                 }
             }
         ],
