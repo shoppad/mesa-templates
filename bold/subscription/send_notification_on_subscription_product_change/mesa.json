@@ -37,6 +37,7 @@
         "outputs": [
             {
                 "schema": 4,
+                "version": "v2",
                 "trigger_type": "output",
                 "type": "slack",
                 "name": "Send Message",
