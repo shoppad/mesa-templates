@@ -4,10 +4,9 @@
     "version": "1.0.0",
     "description": "Google Analytics allows you to keep track of your store's traffic and advertisement return of investment. This template sends client ID data to Google Analytics when a Recharge successful order renewal is created. Your Google Analytics will now have crucial information pertaining to your Recharge orders.",
     "video": "",
-    "readme": "",
     "tags": [],
-    "source": "recharge",
-    "destination": "google-analytics",
+    "source": "",
+    "destination": "",
     "seconds": 60,
     "enabled": false,
     "logging": true,
@@ -19,27 +18,29 @@
                 "trigger_type": "input",
                 "type": "recharge",
                 "entity": "order",
-                "action": "order/processed",
+                "action": "order\/processed",
                 "name": "Order Processed",
-                "key": "recharge-order-processed",
+                "key": "recharge",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "shopify-retrieve-order",
+                "key": "shopify",
                 "metadata": {
-                    "order_id": "{{recharge-order-processed.external_order_id.ecommerce}}"
+                    "order_id": "{{recharge.external_order_id.ecommerce}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -57,53 +58,26 @@
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "googleanalytics",
                 "entity": "transaction",
                 "action": "create",
                 "name": "Create Transaction",
-                "key": "googleanalytics_transaction",
+                "key": "googleanalytics",
                 "metadata": {
-                    "mapping": [
-                        {
-                            "destination": "ti",
-                            "source": "{{shopify-retrieve-order.name}}"
-                        },
-                        {
-                            "destination": "tr",
-                            "source": "{{shopify-retrieve-order.total_price}}"
-                        },
-                        {
-                            "destination": "tt",
-                            "source": "{{shopify-retrieve-order.total_tax}}"
-                        },
-                        {
-                            "destination": "ts",
-                            "source": "{{shopify-retrieve-order.total_shipping_price_set.shop_money.amount}}"
-                        },
-                        {
-                            "destination": "cu",
-                            "source": "{{shopify-retrieve-order.currency}}"
-                        },
-                        {
-                            "destination": "ta",
-                            "source": "{{shopify-retrieve-order.source_name}}"
-                        },
-                        {
-                            "destination": "cid",
-                            "source": "{{custom.cid}}"
-                        }
-                    ]
+                    "body": {
+                        "ti": "{{shopify.name}}",
+                        "tr": "{{shopify.total_price}}",
+                        "tt": "{{shopify.total_tax}}",
+                        "ts": "{{shopify.total_shipping_price_set.shop_money.amount}}",
+                        "ta": "{{shopify.source_name}}",
+                        "cu": "{{shopify.currency}}",
+                        "cid": "{{custom.cid}}"
+                    },
+                    "script": "googleanalytics.js"
                 },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
-                    }
-                ],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
@@ -114,25 +88,36 @@
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
-                    "key": "{{shopify-retrieve-order.line_items[]}}"
+                    "key": "{{shopify.line_items[]}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": "4",
+                "schema": 4,
                 "trigger_type": "output",
-                "type": "api",
-                "entity": "no_auth",
-                "name": "API No Authentication",
-                "key": "api_no_auth",
+                "type": "googleanalytics",
+                "entity": "transaction_item",
+                "action": "attach",
+                "name": "Attach Items to Transaction",
+                "key": "googleanalytics_1",
                 "metadata": {
-                    "method": "post",
-                    "url": "https://www.google-analytics.com/collect",
-                    "content_type": "application/json",
-                    "custom_body_toggle": true,
-                    "custom_body": "v=1&tid={{Add Google Analytics ID}}&cid={{custom.cid}}&t=item&ti={{shopify-retrieve-order.name}}&in={{loop.title}}&ip={{loop.price}}&iq={{loop.quantity}}&ic={{loop.sku}}"
+                    "body": {
+                        "ti": "{{shopify.name}}",
+                        "cu": "{{shopify.currency}}",
+                        "cid": "{{custom.cid}}",
+                        "items": [
+                            {
+                                "in": "{{loop.title}}",
+                                "ip": "{{loop.price}}",
+                                "iq": "{{loop.quantity}}",
+                                "ic": "{{loop.sku}}",
+                                "iv": "{{loop.vendor}}"
+                            }
+                        ]
+                    },
+                    "script": "googleanalytics_1.js"
                 },
                 "local_fields": [],
                 "on_error": "default",
