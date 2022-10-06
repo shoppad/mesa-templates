@@ -19,7 +19,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "update",
-                "name": "Product Updatedd",
+                "name": "Product Updated",
                 "key": "shopify-product-created-or-updated",
                 "metadata": {
                     "topic": "products/update"
