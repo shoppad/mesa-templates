@@ -14,7 +14,7 @@ module.exports = new class {
   script = (payload, context) => {
 
     // Loop through transactions on the refund, and total up the refund amount
-    const refundPayload = context.steps['shopify_refund'];
+    const refundPayload = context.steps['shopify'];
     let refundAmount = 0;
     refundPayload.transactions.forEach(transaction => {
       refundAmount -= transaction.amount;
