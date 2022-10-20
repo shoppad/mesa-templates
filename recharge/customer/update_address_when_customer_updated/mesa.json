@@ -4,11 +4,10 @@
     "version": "1.0.0",
     "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will automatically update an address in Recharge when a customer in Shopify is updated.",
     "video": "",
-    "readme": "",
     "tags": [],
     "source": "schedule-by-mesa",
     "destination": "recharge",
-    "seconds": 60,
+    "seconds": 540,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -23,7 +22,7 @@
                 "metadata": {
                     "schedule": "@daily:0 0 * * *",
                     "enqueue_type": "schedule",
-                    "next_sync_date_time": "2022-07-08T00:00:00-04:00",
+                    "next_sync_date_time": "2022-10-19T00:00:00-07:00",
                     "datetime": null
                 },
                 "local_fields": [],
@@ -77,6 +76,21 @@
             {
                 "schema": 4,
                 "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check if the customer has an email address",
+                "key": "filter_3",
+                "metadata": {
+                    "a": "{{loop.email}}",
+                    "comparison": "does not equal",
+                    "b": "null"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
                 "type": "recharge",
                 "entity": "customer",
                 "action": "list",
@@ -87,7 +101,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 4,
@@ -101,7 +115,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             },
             {
                 "schema": 4,
@@ -116,7 +130,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             },
             {
                 "schema": 4,
@@ -163,7 +177,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 6
+                "weight": 7
             },
             {
                 "schema": 4,
@@ -193,7 +207,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 7
+                "weight": 8
             }
         ],
         "storage": []
