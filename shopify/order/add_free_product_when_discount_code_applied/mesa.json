@@ -1,0 +1,83 @@
+{
+    "key": "shopify/order/add_free_product_when_discount_code_applied",
+    "name": "Add a free product to an order when a specific discount code is applied",
+    "version": "1.0.0",
+    "description": "Encourage your customers to complete their purchase or make a repeat purchase by offering a discount code that will add a free gift to their order. After your customer completes their checkout, check if the order has a specific discount code applied, then add a free product to the order for fulfillment.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop over the order's discount codes",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify.discount_codes[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter for a specific discount code",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "equals",
+                    "a": "{{loop.code}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "line_item_add",
+                "name": "Add Line Item to Order",
+                "key": "shopify_1",
+                "metadata": {
+                    "body": {
+                        "quantity": "1",
+                        "discount_type": "Percentage",
+                        "discount_amount": "100",
+                        "allow_duplicates": true,
+                        "notify_customer": "false"
+                    },
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "key": "shopify/order/receive_sms_when_order_created",
+    "name": "Receive an SMS message when a new Shopify order is created",
+    "version": "1.0.0",
+    "description": "Stay on top of your business anywhere, anytime with the help of MESA. This template will send an SMS message to the store administrator when a new Shopify order is created. With the new order details at your fingertips, you'll be better prepared and always in the know of what's going on with your business.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "sms",
+                "entity": "message",
+                "action": "send",
+                "name": "Send Message to store owner",
+                "key": "sms",
+                "metadata": {
+                    "message": "A new order was placed: {{shopify.name}}\n\nClick here to view the order: https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}",
+                    "to": "{{context.shop.phone}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
