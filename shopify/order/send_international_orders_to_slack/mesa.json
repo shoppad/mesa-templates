@@ -54,7 +54,8 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 1,
+                "version": "v1"
             }
         ],
         "storage": []

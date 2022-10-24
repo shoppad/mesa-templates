@@ -37,7 +37,8 @@
                     "message": "Authorized return. Return ID: {{returnly_return.payload.data.id}}"
                 },
                 "local_fields": [],
-                "weight": 0
+                "weight": 0,
+                "version": "v1"
             }
         ],
         "storage": []
