@@ -87,7 +87,8 @@
                     "message": "**New Contact Form Submission**\nName: {{form.name}}\nEmail: {{form.email}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}"
                 },
                 "local_fields": [],
-                "weight": 1
+                "weight": 1,
+                "version": "v1"
             }
         ],
         "storage": []

@@ -172,7 +172,8 @@
                     "message": "New Return:\n\nOrder: {{shopify_order.name}}\nAmount: {{shopify_order.total_price}}\nReason: {{forms.reason}}"
                 },
                 "local_fields": [],
-                "weight": 3
+                "weight": 3,
+                "version": "v1"
             }
         ],
         "storage": []
