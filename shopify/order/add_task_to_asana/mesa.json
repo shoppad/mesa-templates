@@ -1,0 +1,53 @@
+{
+    "key": "shopify/order/add_task_to_asana",
+    "name": "Add a task in Asana when a Shopify order is created",
+    "version": "1.0.0",
+    "description": "Stay on top of new business and avoid backlogs by tracking, organizing, and managing your Shopify orders as they come in. This template will add a task in Asana when a customer places a Shopify order. You and your team can start fulfilling orders immediately rather than losing time with manual administrative tasks.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "asana",
+                "entity": "task",
+                "action": "create",
+                "name": "Create Task",
+                "key": "asana",
+                "metadata": {
+                    "body": {
+                        "data": {
+                            "html_notes": "<body>\nShopify order {{shopify.name}} has been created.\n\nThis order includes the following products:\n{% for line_item in shopify.line_items %}\nProduct Name: {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %} - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}\nView order: <a href=\"https://{{context.shop.domain}}/admin/orders/{{shopify.id}}\">Order #1035</a>\n</body>"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
