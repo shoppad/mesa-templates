@@ -39,7 +39,7 @@
                 "metadata": {
                     "body": {
                         "data": {
-                            "html_notes": "<body>\nShopify order {{shopify.name}} has been created.\n\nThis order includes the following products:\n{% for line_item in shopify.line_items %}\nProduct Name: {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %} - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}\nView order: <a href=\"https://{{context.shop.domain}}/admin/orders/{{shopify.id}}\">Order #1035</a>\n</body>"
+                            "html_notes": "<body>\nShopify order {{shopify.name}} has been created.\n\nThis order includes the following products:\n{% for line_item in shopify.line_items %}\nProduct Name: {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %} - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}\nView order: <a href=\"https://{{context.shop.domain}}/admin/orders/{{shopify.id}}\">Order {{shopify.name}}</a>\n</body>"
                         }
                     }
                 },
