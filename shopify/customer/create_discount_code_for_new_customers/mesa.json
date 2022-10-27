@@ -1,0 +1,163 @@
+{
+    "key": "shopify/customer/create_discount_code_for_new_customers",
+    "name": "Create a unique discount code for new customers",
+    "version": "1.0.0",
+    "description": "Boost sales and encourage repeat business by offering your new customers a discount code that they can apply to a future order. With this customizable template, you can create unique discount codes for each new customer to your business. Tag them as \"new\" when they become a new customer in Shopify, and they'll automatically receive an email with a discount code for 50% off a specific product within the next 14 days. It's a great way to create a sense of urgency and encourage customers to become repeat buyers.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "shopify",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "new",
+                    "comparison": "in",
+                    "b": "{{shopify.tags}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "price_rule",
+                "action": "create",
+                "name": "Create Price Rule",
+                "key": "shopify_1",
+                "metadata": {
+                    "body": {
+                        "title": "NEWCUSTOMER {{shopify.id}} {{date:now}}",
+                        "allocation_method": "across",
+                        "value": "-50",
+                        "value_type": "percentage",
+                        "target_type": "line_item",
+                        "customer_selection": "prerequisite",
+                        "starts_at": "{{date:now}}",
+                        "once_per_customer": "true",
+                        "target_selection": "entitled",
+                        "ends_at": "{{date:now +2 weeks}}",
+                        "prerequisite_customer_ids": [
+                            "{{shopify.id}}"
+                        ],
+                        "created_at": "{{date:now}}",
+                        "prerequisite_subtotal_range": {
+                            "greater_than_or_equal_to": "1.0"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "price_rule",
+                "action": "retrieve",
+                "name": "Retrieve Price Rule",
+                "key": "shopify_2",
+                "metadata": {
+                    "price_rule_id": "{{shopify_1.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "discount_code",
+                "action": "create",
+                "name": "Create Price Rule Discount Code",
+                "key": "shopify_3",
+                "metadata": {
+                    "price_rule_id": "{{shopify_2.id}}",
+                    "body": {
+                        "code": "NEWCUSTOMER{{shopify.id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_4",
+                "metadata": {
+                    "customer_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{shopify_3.code}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_5",
+                "metadata": {
+                    "product_id": "{{shopify_1.entitled_product_ids[0]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "key": "email",
+                "metadata": {
+                    "subject": "New Customer Discount",
+                    "message": "Here is your new discount code to use at checkout!\n<br><br>\n<strong>{{shopify_3.code}}</strong>\n<br><br>\nYou have received 50% off on the <a href=\"https://{{context.shop.domain}}/products/{{shopify_5.handle}}\">{{shopify_5.title}}</a> product.",
+                    "to": "{{shopify.email}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ],
+        "storage": []
+    }
+}
