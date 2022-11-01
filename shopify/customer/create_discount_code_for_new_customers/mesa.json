@@ -2,7 +2,7 @@
     "key": "shopify/customer/create_discount_code_for_new_customers",
     "name": "Create a unique discount code for new customers",
     "version": "1.0.0",
-    "description": "Boost sales and encourage repeat business by offering your new customers a discount code that they can apply to a future order. With this customizable template, you can create unique discount codes for each new customer to your business. Tag them as \"new\" when they become a new customer in Shopify, and they'll automatically receive an email with a discount code for 50% off a specific product within the next 14 days. It's a great way to create a sense of urgency and encourage customers to become repeat buyers.",
+    "description": "Boost sales and encourage repeat business by offering your new customers a discount code that they can apply to a future order. With this customizable template, you can create unique discount codes for each new customer to your business. When they become a new customer in Shopify, they'll automatically receive an email with a discount code for 20% off a specific product within the next 14 days. It's a great way to create a sense of urgency and encourage customers to become repeat buyers.",
     "video": "",
     "tags": [],
     "source": "",
@@ -29,21 +29,6 @@
         ],
         "outputs": [
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "new",
-                    "comparison": "in",
-                    "b": "{{shopify.tags}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
@@ -55,7 +40,7 @@
                     "body": {
                         "title": "NEWCUSTOMER {{shopify.id}} {{date:now}}",
                         "allocation_method": "across",
-                        "value": "-50",
+                        "value": "-20",
                         "value_type": "percentage",
                         "target_type": "line_item",
                         "customer_selection": "prerequisite",
@@ -74,7 +59,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 0
             },
             {
                 "schema": 3,
@@ -89,7 +74,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
                 "schema": 3,
@@ -107,7 +92,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
                 "schema": 3,
@@ -125,7 +110,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             },
             {
                 "schema": 3,
@@ -140,7 +125,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 4
             },
             {
                 "schema": 4,
@@ -150,12 +135,12 @@
                 "key": "email",
                 "metadata": {
                     "subject": "New Customer Discount",
-                    "message": "Here is your new discount code to use at checkout!\n<br><br>\n<strong>{{shopify_3.code}}</strong>\n<br><br>\nYou have received 50% off on the <a href=\"https://{{context.shop.domain}}/products/{{shopify_5.handle}}\">{{shopify_5.title}}</a> product.",
+                    "message": "Here is your new discount code to use at checkout!\n<br><br>\n<strong>{{shopify_3.code}}</strong>\n<br><br>\nYou have received 20% off on the <a href=\"https://{{context.shop.domain}}/products/{{shopify_5.handle}}\">{{shopify_5.title}}</a> product.",
                     "to": "{{shopify.email}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 6
+                "weight": 5
             }
         ],
         "storage": []
