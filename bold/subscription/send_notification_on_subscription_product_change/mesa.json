@@ -47,8 +47,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0,
-                "version": "v1"
+                "weight": 0
             }
         ],
         "storage": []
