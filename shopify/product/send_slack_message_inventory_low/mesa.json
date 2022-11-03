@@ -64,8 +64,7 @@
                     "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \nCurrent inventory quantity: {{shopify_inventory_level.available}}."
                 },
                 "local_fields": [],
-                "weight": 2,
-                "version": "v1"
+                "weight": 2
             }
         ],
         "storage": []

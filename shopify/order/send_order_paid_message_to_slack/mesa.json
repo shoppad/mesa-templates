@@ -38,8 +38,7 @@
                     "message": "Order paid for: {{shopify_order.name}}  :thumbsup:"
                 },
                 "local_fields": [],
-                "weight": 0,
-                "version": "v1"
+                "weight": 0
             }
         ],
         "storage": []

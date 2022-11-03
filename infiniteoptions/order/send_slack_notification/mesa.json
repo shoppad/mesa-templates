@@ -40,8 +40,7 @@
                     "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
                 },
                 "local_fields": [],
-                "weight": 0,
-                "version": "v1"
+                "weight": 0
             }
         ],
         "storage": []

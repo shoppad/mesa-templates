@@ -104,8 +104,7 @@
                     "message": "Order {{shopify_order.name}} was detected to be at a high risk for fraud. \n\nView the order: https://{{shopify_shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
                 },
                 "local_fields": [],
-                "weight": 5,
-                "version": "v1"
+                "weight": 5
             }
         ],
         "storage": []
