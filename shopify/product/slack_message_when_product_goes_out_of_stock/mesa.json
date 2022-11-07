@@ -7,7 +7,7 @@
     "tags": [],
     "source": "shopify",
     "destination": "email",
-    "seconds": 360,
+    "seconds": 60,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -39,17 +39,18 @@
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "variant",
-                "action": "retrieve",
-                "name": "Retrieve Variant",
-                "key": "shopify_variant",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
+                "key": "shopify",
                 "metadata": {
                     "variant_id": "{{loop.variant_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -59,7 +60,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify_variant.inventory_quantity}}",
+                    "a": "{{shopify.inventory_quantity}}",
                     "comparison": "equals",
                     "b": "0",
                     "script": "filter.js"
@@ -75,7 +76,7 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify_variant.product_id}}"
+                    "message": "This is an automated message to let you know that SKU {{shopify.sku}} is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify.product_id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
