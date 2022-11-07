@@ -76,7 +76,7 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "This is an automated message to let you know that SKU {{shopify.sku}} is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify.product_id}}"
+                    "message": "This is an automated message to let you know that SKU *{{shopify.sku}}* is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify.product_id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
