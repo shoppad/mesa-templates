@@ -1,0 +1,88 @@
+{
+    "key": "shopify/product/slack_message_when_product_goes_out_of_stock",
+    "name": "Send a Slack message when a product goes out of stock",
+    "version": "1.0.0",
+    "description": "Avoid inventory surprises with automatic product alerts. This template will send a Slack message when a product goes out of stock. With current details about your products at the ready, you can address stockouts as soon as they occur.",
+    "video": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "email",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_order",
+                "metadata": [],
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_order.line_items[]}}"
+                },
+                "local_fields": [],
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
+                "key": "shopify",
+                "metadata": {
+                    "variant_id": "{{loop.variant_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify.inventory_quantity}}",
+                    "comparison": "equals",
+                    "b": "0",
+                    "script": "filter.js"
+                },
+                "local_fields": [],
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "metadata": {
+                    "message": "This is an automated message to let you know that SKU *{{shopify.sku}}* is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify.product_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ],
+        "storage": []
+    }
+}

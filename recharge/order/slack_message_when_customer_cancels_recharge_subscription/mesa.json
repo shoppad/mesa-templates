@@ -1,0 +1,65 @@
+{
+    "key": "recharge/order/slack_message_when_customer_cancels_recharge_subscription",
+    "name": "Send a Slack message when a customer cancels their subscription in Recharge",
+    "version": "1.0.0",
+    "description": "Be alerted when a customer cancels their subscription so you can take a closer look at what potentially caused them to cancel in the first place and correct issues before they affect more customers. This template will send a Slack message when a customer cancels their subscription in Recharge.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "recharge",
+                "entity": "subscription",
+                "action": "subscription/cancelled",
+                "name": "Subscription Cancelled",
+                "key": "recharge",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "recharge_1",
+                "metadata": {
+                    "path": {
+                        "customer_id": "{{recharge.customer_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "metadata": {
+                    "message": "A customer has canceled their Recharge subscription.\n\nCustomer's Name: {{recharge_1.first_name}} {{recharge_1.last_name}}\nCancellation Reason: {{recharge.cancellation_reason}}\nView subscription: https://{{context.shop.name}}-sp.admin.rechargeapps.com/merchant/subscriptions/{{recharge.id}}/details"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
