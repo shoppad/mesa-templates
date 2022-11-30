@@ -1,8 +1,8 @@
 {
-    "key": "recharge/order/add_free_product_to_upcoming_order",
-    "name": "Add a free product to your customer's Recharge order",
+    "key": "add_free_product_to_first_subscription_order",
+    "name": "Add a free product to a customer's first Recharge order",
     "version": "1.0.0",
-    "description": "Let your customers know how much you appreciate their continued business while building brand loyalty by providing a free gift in their order. This template will add a free one-time product to a customer's current Recharge order after the order is created. Please note that this template is for those merchants using the Shopify-hosted checkout version of Recharge.",
+    "description": "Welcome new customers to your business with something special in their first subscription order. This template will add a free product to a customer's first Recharge order. It's a small token of appreciation that can leave a big impression on your customers.",
     "video": "",
     "tags": [],
     "source": "",
@@ -29,6 +29,24 @@
         ],
         "outputs": [
             {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "recharge",
+                "entity": "mesa_order_filter",
+                "action": "list",
+                "name": "Filter by Order Count of Subscription",
+                "key": "recharge_1",
+                "metadata": {
+                    "path": {
+                        "order_id": "{{recharge.external_order_id.ecommerce}}",
+                        "number_of_orders": "1"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
@@ -48,7 +66,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []
