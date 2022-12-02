@@ -95,7 +95,7 @@
                 "type": "recharge",
                 "entity": "address",
                 "action": "list",
-                "name": "List Address",
+                "name": "List Addresses",
                 "key": "recharge_1",
                 "metadata": {
                     "parameters": "customer_id={{recharge[0].id}}"

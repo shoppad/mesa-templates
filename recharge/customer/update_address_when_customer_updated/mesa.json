@@ -123,7 +123,7 @@
                 "type": "recharge",
                 "entity": "address",
                 "action": "list",
-                "name": "List Address",
+                "name": "List Addresses",
                 "key": "recharge_address",
                 "metadata": {
                     "parameters": "customer_id={{recharge_customer.0.id}}"
