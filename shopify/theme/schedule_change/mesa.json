@@ -1,15 +1,15 @@
 {
     "key": "schedule_change",
-    "name": "Schedule Shopify Theme Change on a Specific Date and Time",
+    "name": "Schedule a Shopify theme change on a specific date and time",
     "version": "1.0.0",
-    "description": "Mesa can schedule theme changes at different times, so your store design can, for example, fit better to specific dates and events (such as Thanksgiving, Christmas, Black Friday, New Year's Eve, more). Schedule automatic launches for product releases, store-wide promotions and sales and have everything revert back when your events end.",
+    "description": "MESA can schedule theme changes at different times, so your store design can, for example, fit better to specific dates and events (such as Thanksgiving, Christmas, Black Friday, New Year's Eve, and more). Schedule automatic launches for product releases, store-wide promotions, and sales and have everything revert back when your events end.",
     "video": "",
-    "readme": "",
     "tags": [],
-    "source": "schedule",
-    "destination": "shopify",
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -20,9 +20,13 @@
                 "name": "Schedule",
                 "key": "schedule",
                 "metadata": {
-                    "datetime": "2021-02-18T08:00:00.000Z"
+                    "schedule": null,
+                    "enqueue_type": "datetime",
+                    "next_sync_date_time": "2022-12-07T17:00:00-08:00",
+                    "datetime": "2022-12-25T00:00:00-08:00"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -34,9 +38,10 @@
                 "entity": "theme",
                 "action": "publish",
                 "name": "Publish Theme",
-                "key": "shopify_theme",
+                "key": "shopify",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
