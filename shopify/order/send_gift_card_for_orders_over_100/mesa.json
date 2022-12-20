@@ -1,0 +1,86 @@
+{
+    "key": "shopify/order/send_gift_card_for_orders_over_100",
+    "name": "Send a $20 gift card to a customer if they spend $100 or more",
+    "version": "1.0.0",
+    "description": "",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "hours",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify.total_line_items_price}}",
+                    "comparison": "greater than",
+                    "b": "100"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "govalo",
+                "entity": "card",
+                "action": "create",
+                "name": "Create Card",
+                "key": "govalo",
+                "metadata": {
+                    "body": {
+                        "firstName": "{{shopify.customer.first_name}}",
+                        "lastName": "{{shopify.customer.last_name}}",
+                        "email": "{{shopify.email}}",
+                        "note": "Thank you for being an awesome customer!",
+                        "value": "20",
+                        "eventType": "giftcard"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
