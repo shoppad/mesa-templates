@@ -1,8 +1,16 @@
 {
     "key": "shopify/product/add_color_tag",
-    "name": "Add Color Tag To Product",
+    "name": "Add a color tag to a product",
     "version": "2.0.0",
+    "description": "Color coding has never been easier! This template adds color tags directly to your Shopify product information each time the product is created or updated. Easily classify and sort your products through this popular organization method.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
     "enabled": false,
+    "logging": true,
+    "debug": false,
     "config": {
         "inputs": [
             {
@@ -10,10 +18,11 @@
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "product",
-                "action": "updated",
-                "name": "Product Updated",
-                "key": "shopify_product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -22,29 +31,37 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter: Does not have Color tag",
-                "key": "filter_1",
+                "name": "Filter",
+                "key": "filter",
                 "metadata": {
+                    "a": "Color:",
                     "comparison": "not in",
-                    "b": "{{shopify_product.tags}}",
-                    "a": "Color:"
+                    "b": "{{shopify.tags}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{shopify.images[0].src}}",
+                            "comparison": "is not empty"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "image",
-                "is_premium": true,
                 "entity": "colors",
                 "action": "identify",
-                "name": "Image Identify Colors",
-                "key": "image_colors",
+                "name": "Identify Colors",
+                "key": "image",
                 "metadata": {
-                    "image_url": "{{shopify_product.images[0].src}}"
+                    "image_url": "{{shopify.images[0].src}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -54,14 +71,15 @@
                 "entity": "product",
                 "action": "tag_add",
                 "name": "Product Add Tag",
-                "key": "shopify_product_1",
+                "key": "shopify_1",
                 "metadata": {
-                    "product_id": "{{shopify_product.id}}",
+                    "product_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "Color: {{ image_colors.colors | join: \", Color: \" }}\n"
+                        "tag": "Color: {{ image.colors | join: \", Color: \" }}"
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],
