@@ -51,7 +51,7 @@
                 "key": "filter",
                 "metadata": {
                     "a": "{{shopify.total_line_items_price}}",
-                    "comparison": "greater than",
+                    "comparison": "greater than equal",
                     "b": "100"
                 },
                 "local_fields": [],
