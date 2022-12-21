@@ -2,7 +2,7 @@
     "key": "gorgias/ticket/send_gift_card_when_order_delayed",
     "name": "Send a gift card to a customer if their order is delayed",
     "version": "1.0.0",
-    "description": "",
+    "description": "Shipping delays and broken merchandise can lead to customers having a negative experience with your business. Let your customers know you're listening and care about them by sending a small gift in exchange for their troubles. This template will send a gift card to a customer when their Gorgias support ticket is tagged, send-gift-card. It's a small but memorable way to turn a negative experience into a positive one.",
     "video": "",
     "tags": [],
     "source": "",
