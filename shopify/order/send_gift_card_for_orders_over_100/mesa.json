@@ -2,7 +2,7 @@
     "key": "shopify/order/send_gift_card_for_orders_over_100",
     "name": "Send a $20 gift card to a customer if they spend $100 or more",
     "version": "1.0.0",
-    "description": "",
+    "description": "Let your customers know how much you appreciate their business and encourage them to return with incentivizing their next purchase. This customizable template will send a $20 gift card to a customer if they spend $100 or more on your Shopify store. Prefer to change the gift card amount or the qualifying order amount? No problem. Both can be customized in this template to best fit your business.",
     "video": "",
     "tags": [],
     "source": "",
