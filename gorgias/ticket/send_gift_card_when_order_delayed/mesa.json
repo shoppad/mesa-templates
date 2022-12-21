@@ -1,0 +1,124 @@
+{
+    "key": "gorgias/ticket/send_gift_card_when_order_delayed",
+    "name": "Send a gift card to a customer if their order is delayed",
+    "version": "1.0.0",
+    "description": "Shipping delays and broken merchandise can lead to customers having a negative experience with your business. Let your customers know you're listening and care about them by sending a small gift in exchange for their troubles. This template will send a gift card to a customer when their Gorgias support ticket is tagged, send-gift-card. It's a small but memorable way to turn a negative experience into a positive one.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 60,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "gorgias",
+                "entity": "ticket",
+                "action": "list-created",
+                "name": "Ticket Created",
+                "key": "gorgias",
+                "operation_id": "ticket_created",
+                "metadata": {
+                    "entity_wrapper": "body.data",
+                    "poll": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2022-12-20T20:00:00-05:00"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "key": "delay",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "hours",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gorgias",
+                "entity": "ticket",
+                "action": "retrieve",
+                "name": "Retrieve Ticket",
+                "key": "gorgias_1",
+                "operation_id": "get_api_tickets_id",
+                "metadata": {
+                    "entity_wrapper": "body",
+                    "path": {
+                        "id": "{{delay.id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{gorgias_1.tags[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "equals",
+                    "a": "{{loop.name}}",
+                    "b": "order-delayed"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "govalo",
+                "entity": "card",
+                "action": "create",
+                "name": "Create Card",
+                "key": "govalo",
+                "operation_id": "post-card",
+                "metadata": {
+                    "body": {
+                        "firstName": "{{gorgias_1.customer.firstname}}",
+                        "lastName": "{{gorgias_1.customer.lastname}}",
+                        "email": "{{gorgias_1.customer.email}}",
+                        "note": "Here is a small gift of appreciation!",
+                        "value": "20",
+                        "eventType": "giftcard"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ],
+        "storage": []
+    }
+}
