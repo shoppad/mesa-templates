@@ -1,13 +1,13 @@
 {
-    "key": "add_to_etsy_listing",
+    "key": "shopify/product/add_to_etsy_listing",
     "name": "Add a listing on Etsy when a new product is created in Shopify",
     "version": "1.0.0",
-    "description": "When you create a new product on Shopify, Mesa will also turn it into a listing on Etsy without doing it yourself manually. You’ll save time, boost your product’s customer reach, and sell more stocks of the item.",
+    "description": "When you create a new product on Shopify, MESA will also turn it into a listing on Etsy without doing it yourself manually. You'll save time, boost your product's customer reach, and sell more stocks of the item.",
     "video": "",
-    "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "etsy",
+    "seconds": 300,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -21,7 +21,9 @@
                 "action": "created",
                 "name": "Product Created",
                 "key": "shopify_product",
+                "operation_id": "products_create",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -30,20 +32,22 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "etsy",
-                "entity": "listing",
+                "entity": "shoplisting",
                 "action": "create",
-                "name": "Create Listing",
-                "key": "etsy_listing",
+                "name": "Create Draft Listing",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "createDraftListing",
                 "metadata": {
                     "body": {
                         "quantity": "{{shopify_product.variants[0].inventory_quantity}}",
                         "title": "{{shopify_product.title}}",
                         "description": "{{shopify_product.body_html}}",
-                        "price": "{{shopify_product.variants[0].price}}",
-                        "state": "draft"
+                        "price": "{{shopify_product.variants[0].price}}"
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
