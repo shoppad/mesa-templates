@@ -89,7 +89,7 @@
                 "metadata": {
                     "comparison": "equals",
                     "a": "{{loop.name}}",
-                    "b": "order-delayed"
+                    "b": "send-gift-card"
                 },
                 "local_fields": [],
                 "on_error": "default",
