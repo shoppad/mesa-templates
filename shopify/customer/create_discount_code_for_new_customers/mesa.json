@@ -1,6 +1,6 @@
 {
-    "key": "shopify/customer/create_discount_code_for_new_customers",
-    "name": "Create a unique discount code for new customers",
+    "key": "shopify/customer/generate_product_discount_code_for_new_customers",
+    "name": "Create a unique discount code for new customers to apply towards a specific product",
     "version": "1.0.0",
     "description": "",
     "video": "",
