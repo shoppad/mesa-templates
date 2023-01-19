@@ -7,7 +7,7 @@
     "tags": [],
     "source": "",
     "destination": "",
-    "seconds": 60,
+    "seconds": 135,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -22,8 +22,7 @@
                 "metadata": {
                     "schedule": null,
                     "enqueue_type": "datetime",
-                    "next_sync_date_time": "2022-12-07T17:00:00-08:00",
-                    "datetime": "2022-12-25T00:00:00-08:00"
+                    "next_sync_date_time": "2023-01-19T10:00:00-08:00"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -39,6 +38,7 @@
                 "action": "publish",
                 "name": "Publish Theme",
                 "key": "shopify",
+                "operation_id": "put_themes_theme_id",
                 "metadata": [],
                 "local_fields": [],
                 "on_error": "default",
