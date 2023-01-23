@@ -1,0 +1,92 @@
+{
+    "key": "shopify/order/daily_export_to_google_sheets_2",
+    "name": "Schedule a daily export of orders into Google Sheets 2 of 2",
+    "version": "1.0.0",
+    "description": "Part 2 of 2: Manually tracking all of your daily exports is a time-consuming process, and there are probably better things you'd rather focus on in your schedule. Thanks to automation, Mesa can schedule a daily export of all orders into a Google Spreadsheet without you doing anything. It's going to save you so much time from having to update your Google Spreadsheet manually.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@daily:0 0 * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2023-01-24T00:00:00-08:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data_1",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "query": "SELECT * FROM \"Add table name here\" WHERE \"Created At\" > '{{date:yesterday}}';",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "googledrive",
+                "entity": "spreadsheet",
+                "action": "create",
+                "name": "Create Spreadsheet",
+                "key": "googledrive",
+                "operation_id": "spreadsheet_create",
+                "metadata": {
+                    "file_name": "Order Export for {{date:now}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "sheet",
+                "action": "write",
+                "name": "Create New Sheet",
+                "key": "googlesheets",
+                "operation_id": "spreadsheet_create",
+                "metadata": {
+                    "spreadsheet_id": "{{googledrive.spreadsheetId}}",
+                    "rows": "{{data_1}}",
+                    "make_labels": true,
+                    "append": false
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
