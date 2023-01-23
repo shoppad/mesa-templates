@@ -79,7 +79,8 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 2,
+                "version": "UA"
             },
             {
                 "schema": 4,
