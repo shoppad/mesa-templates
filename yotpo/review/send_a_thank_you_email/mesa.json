@@ -1,0 +1,50 @@
+{
+    "key": "yotpo/review/send_a_thank_you_email",
+    "name": "Send a thank you email when a review is created in Yotpo",
+    "version": "1.0.0",
+    "description": "Feedback from your customers is always appreciated. Let your customers know how much you value their time by sending them a message of thanks when the feedback is received. This customizable template will send a thank you email to your customer when they create a review in Yotpo.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "yotpo",
+                "entity": "review",
+                "action": "created",
+                "name": "Review Created",
+                "key": "yotpo",
+                "operation_id": "review_create",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "key": "email",
+                "metadata": {
+                    "to": "{{yotpo.customer_email}}",
+                    "subject": "Thank you for providing a review!",
+                    "message": "Hello {{yotpo.reviewer_display_name}},\n\nThank you so much for leaving a review. Your feedback is very important to us.\n\nThank you,\n{{context.shop.name}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "storage": []
+    }
+}
