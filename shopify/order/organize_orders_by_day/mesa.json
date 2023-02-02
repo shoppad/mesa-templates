@@ -1,8 +1,8 @@
 {
-    "key": "shopify/order/daily_export_to_google_sheets_1",
-    "name": "Schedule a daily export of orders into Google Sheets 1 of 2",
+    "key": "shopify/order/organize_orders_by_day",
+    "name": "Collect and organize your Shopify orders by their order date",
     "version": "1.0.0",
-    "description": "Part 1 of 2: Manually tracking all of your daily exports is a time-consuming process, and there are probably better things you'd rather focus on in your schedule. Thanks to automation, Mesa can schedule a daily export of all orders into a Google Spreadsheet without you doing anything. It's going to save you so much time from having to update your Google Spreadsheet manually.",
+    "description": "Organize your Shopify orders by their order date. This template collects the Shopify order information throughout the day and stores it in Data by MESA's table to make it easier to export this data to your favorite tools. We recommend adding the template 'Schedule a daily export of orders into Google Sheets' to export this data on a daily basis to Google Sheets.",
     "video": "",
     "tags": [],
     "source": "",
