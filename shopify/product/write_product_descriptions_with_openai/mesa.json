@@ -1,0 +1,79 @@
+{
+    "key": "shopify/product/write_product_descriptions_with_openai",
+    "name": "Use OpenAI to write your product descriptions",
+    "version": "1.0.0",
+    "description": "AI can generate descriptions that are both accurate and creative, saving time and effort compared to manual copywriting. This template will generate a product description using OpenAI when a product is created in Shopify. Take your product descriptions to the next level and stand out in a crowded market.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "openai",
+                "entity": "completion",
+                "action": "create",
+                "name": "Prompt",
+                "key": "openai",
+                "operation_id": "createCompletion",
+                "metadata": {
+                    "body": {
+                        "prompt": "Write a brief product description for a product called {{shopify.title}}",
+                        "model": "text-davinci-003",
+                        "max_tokens": "500",
+                        "temperature": "1",
+                        "top_p": "1",
+                        "n": "1",
+                        "stream": false,
+                        "echo": false,
+                        "best_of": "1"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "shopify_1",
+                "operation_id": "put_products_product_id",
+                "metadata": {
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "body_html": "{{openai.choices[0].text}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
