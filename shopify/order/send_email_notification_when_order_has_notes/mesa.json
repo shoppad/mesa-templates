@@ -11,6 +11,7 @@
     "enabled": false,
     "logging": false,
     "debug": false,
+    "wizard": true,
     "config": {
         "inputs": [
             {
@@ -62,9 +63,9 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{shopify_shop.email}}",
-                    "subject": "Order {{shopify_order.name}} created with notes",
-                    "message": "Hello {{shopify_shop.shop_owner}}\n\n{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} placed a new order with your store.\n\nNotes have been included in the order. They are the following:\n\n{{shopify_order.note}}\n\nView Order {{shopify_order.name}}: https://{{shopify_shop.domain}}/admin/orders/{{shopify_order.id}}"
+                    "to": "{{ template | label: 'Send To', description: 'By default the email will be sent to your Shopify stores email address. Enter your email address here to change that.', default: '{{shopify_shop.email}}' }}",
+                    "subject": "{{ template | label: 'Email Subject', default: 'Order {{shopify_order.name}} created with notes' }}",
+                    "message": "{{ template | description: 'Customize the message that is sent', default: 'Hello {{shopify_shop.shop_owner}}\n\n{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} placed a new order with your store.\n\nNotes have been included in the order. They are the following:\n\n{{shopify_order.note}}\n\nView Order {{shopify_order.name}}: https://{{shopify_shop.domain}}/admin/orders/{{shopify_order.id}}' }}"
                 },
                 "local_fields": [],
                 "weight": 2

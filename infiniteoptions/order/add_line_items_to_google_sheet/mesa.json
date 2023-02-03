@@ -3,6 +3,72 @@
     "name": "Add Infinite Options Line Items to Google Sheet",
     "version": "1.0.0",
     "enabled": false,
+    "wizard": {
+        "mode": "custom",
+        "fields": [
+            {
+                "name": "create_spreadsheet_name",
+                "target": "googlesheets_row.create_spreadsheet_name",
+                "label": "Spreadsheet Name",
+                "tokens": false,
+                "description": "Give your new Google spreadsheet a name."
+            },
+            {
+                "name": "fields",
+                "target": "googlesheets_row.mapping",
+                "options": [
+                    {
+                        "value": "Order URL"
+                    },
+                    {
+                        "value": "Order Name"
+                    },
+                    {
+                        "value": "Email"
+                    },
+                    {
+                        "value": "Shipping Name"
+                    },
+                    {
+                        "value": "Address"
+                    },
+                    {
+                        "value": "City"
+                    },
+                    {
+                        "value": "Province"
+                    },
+                    {
+                        "value": "Zip"
+                    },
+                    {
+                        "value": "Country"
+                    },
+                    {
+                        "value": "Product Name"
+                    },
+                    {
+                        "value": "Product SKU"
+                    },
+                    {
+                        "value": "Product Price"
+                    },
+                    {
+                        "value": "Custom Note"
+                    },
+                    {
+                        "value": "Delivery Date"
+                    },
+                    {
+                        "value": "Gift Note"
+                    }
+                ],
+                "type": "radios",
+                "label": "Spreadsheet Columns",
+                "required": true
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
