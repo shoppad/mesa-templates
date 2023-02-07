@@ -1,110 +1,112 @@
 {
     "key": "send_high_risk_orders_to_slack",
-    "name": "Forward High-Risk Orders to Slack for Manual Review",
+    "name": "Receive a Slack message when Shopify flags an order as high-risk",
     "version": "1.0.0",
-    "description": "Protecting yourself from fraud is critical for not only the safety of your eCommerce store but for your customers as well. Automatically identify high-risk orders and forward them to your team on Slack so you can investigate them yourself. It’s an extra layer of protection that could save plenty of headaches in the future.",
+    "description": "Protecting yourself from fraud is critical for not only the safety of your ecommerce store but for the safety of your customers. This template will send a Slack message when Shopify flags an order as high-risk and recommends that you cancel the order.",
     "video": "",
-    "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "slack",
+    "source": "",
+    "destination": "",
+    "seconds": 135,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
+                "operation_id": "orders_create",
                 "metadata": [],
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
                 "action": "list",
-                "name": "Get List Order Risk",
-                "key": "shopify_order_risk",
+                "name": "Get List of Order Risks",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id_risks",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}"
+                    "order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
-                "type": "loop",
-                "name": "Loop",
-                "key": "loop",
+                "type": "filter",
+                "name": "Filter: Check if the order has risks",
+                "key": "filter",
                 "metadata": {
-                    "key": "{{shopify_order_risk.risks}}"
+                    "a": "{{shopify_1.0.id}}",
+                    "comparison": "is not empty"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop over each risk",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_1}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter",
+                "name": "Filter: Check the order risk",
                 "key": "filter_1",
                 "metadata": {
                     "a": "{{loop.message}}",
                     "comparison": "equals",
-                    "b": "Shopify recommendation"
+                    "b": "Shopify recommendation",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{loop.recommendation}}",
+                            "comparison": "equals",
+                            "b": "cancel"
+                        }
+                    ]
                 },
                 "local_fields": [],
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{loop.recommendation}}",
-                    "comparison": "equals",
-                    "b": "cancel"
-                },
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "shop",
-                "action": "list",
-                "name": "Get List Shop",
-                "key": "shopify_shop",
-                "metadata": [],
-                "local_fields": [],
-                "weight": 4
-            },
-            {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
-                "version": "v2",
                 "name": "Send Message",
+                "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "Order {{shopify_order.name}} was detected to be at a high risk for fraud. \n\nView the order: https://{{shopify_shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
+                    "message": "Order {{shopify.name}} was detected to be at a high risk for fraud. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
-                "weight": 5
+                "on_error": "default",
+                "weight": 4
             }
         ],
         "storage": []
