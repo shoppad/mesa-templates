@@ -1,16 +1,15 @@
 {
     "key": "infiniteoptions/order/send_slack_notification",
-    "name": "Send a Slack Notification When an Infinite Options Product is Purchased",
+    "name": "Send a Slack notification when a product with options is purchased",
     "version": "1.0.0",
     "description": "Send a Slack message when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is handy for companies using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
     "video": "",
-    "readme": "",
     "tags": [],
     "source": "",
     "destination": "",
-    "seconds": 0,
+    "seconds": 135,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -21,25 +20,29 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "infiniteoptions_order",
+                "key": "infiniteoptions",
+                "operation_id": "order_created",
                 "metadata": {
                     "field_name": "Special_Notes"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
                 "name": "Send Message",
+                "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
+                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions.order.order_number}} \nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{infiniteoptions.order.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
