@@ -21,12 +21,30 @@
                 "action": "created",
                 "name": "Product Created",
                 "key": "shopify",
+                "operation_id": "products_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_3",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "product_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 4,
                 "trigger_type": "output",
@@ -40,14 +58,14 @@
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{shopify.images[0].src}}",
+                            "a": "{{shopify_3.images[0].src}}",
                             "comparison": "is not empty"
                         }
                     ]
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 2,
@@ -57,12 +75,13 @@
                 "action": "identify",
                 "name": "Identify Colors",
                 "key": "image",
+                "operation_id": "colors_identify",
                 "metadata": {
-                    "image_url": "{{shopify.images[0].src}}"
+                    "image_url": "{{shopify_3.images[0].src}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 3,
@@ -72,6 +91,7 @@
                 "action": "tag_add",
                 "name": "Product Add Tag",
                 "key": "shopify_1",
+                "operation_id": "post_mesa_products_product_id_tag",
                 "metadata": {
                     "product_id": "{{shopify.id}}",
                     "body": {
@@ -80,7 +100,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
         ],
         "storage": []
