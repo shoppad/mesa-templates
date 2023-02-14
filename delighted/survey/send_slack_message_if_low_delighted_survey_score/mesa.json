@@ -1,0 +1,64 @@
+{
+    "key": "delighted/survey/send_slack_message_if_low_delighted_survey_score",
+    "name": "Send a Slack message when a customer gives a low Delighted survey score",
+    "version": "1.0.0",
+    "description": "If a customer provides less than stellar feedback, you'll want to know about it as soon as possible so that you can reach out and try to resolve the issue that prompted the poor survey response. This customizable template will send a Slack message to the channel of your choice when a customer gives a low score on their Delighted survey. ",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "delighted",
+                "entity": "survey",
+                "action": "survey/response",
+                "name": "Survey Response",
+                "key": "delighted",
+                "operation_id": "survey_response_created_or_updated",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{delighted.score}}",
+                    "comparison": "less than",
+                    "b": "5"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "metadata": {
+                    "message": "{{delighted.person.name}} gave a Delighted score of: {{delighted.score}}\nCustomer's Comment: {{delighted.comment}}\nCustomer's Email: {{delighted.person.email}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
