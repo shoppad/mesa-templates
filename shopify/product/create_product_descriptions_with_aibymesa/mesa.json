@@ -1,0 +1,73 @@
+{
+    "key": "shopify/product/create_product_descriptions_with_aibymesa",
+    "name": "Write Shopify product descriptions with AI by MESA",
+    "version": "1.0.0",
+    "description": "Crafting compelling product descriptions can quickly become daunting if you're not in a creative mindset or if you just have a lot of other tasks on your plate. Use the power of AI to turn your writer's block into a seller's gain. This template will generate a product description using AI by MESA when a product is created in Shopify.",
+    "video": "",
+    "tags": [],
+    "source": "shopify",
+    "destination": "shopify",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "json": false,
+                    "temperature": "0.7",
+                    "body": {
+                        "prompt": "Write a brief product description for a product called {{shopify.title}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "shopify_1",
+                "operation_id": "put_products_product_id",
+                "metadata": {
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "body_html": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
