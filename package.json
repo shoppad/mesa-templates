@@ -19,5 +19,6 @@
   "bin": {
     "templates": "bin/index.js"
   },
+  "type": "module",
   "devDependencies": {}
 }
