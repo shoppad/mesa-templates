@@ -91,7 +91,7 @@
                 "name": "Filter: Check for active campaigns",
                 "key": "filter_1",
                 "metadata": {
-                    "a": "{{tiktok.page_info.total_number}}",
+                    "a": "{{tiktok.list.size}}",
                     "comparison": "greater than",
                     "b": "0"
                 },
