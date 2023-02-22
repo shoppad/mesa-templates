@@ -1,0 +1,138 @@
+{
+    "key": "pause_tiktok_ad_if_uptime_detects_issue",
+    "name": "Pause a TikTok ad or campaign if Uptime detects an issue with your Shopify store",
+    "version": "1.0.0",
+    "description": "Ensure a seamless shopping experience for your customers even when unexpected issues arise. When your Shopify store is experiencing a problem, minimize potential harm by reducing website traffic and temporarily preventing new customers from accessing the site. This template will automatically pause a TikTok ad or campaign whenever Uptime detects a problem with your Shopify store. By utilizing this tool, you can effectively manage any disruptions and restore your store's functionality as quickly as possible.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "email",
+                "entity": "message",
+                "action": "received",
+                "name": "Receive Email",
+                "key": "email",
+                "operation_id": "input_message_received",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check Subject Line and Partial outage text",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "contains",
+                    "a": "{{email.subject}}",
+                    "b": "Shopify Status Alert",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{email.html}}",
+                            "comparison": "contains",
+                            "b": "outage"
+                        },
+                        {
+                            "operator": "and",
+                            "a": "{{email.html}}",
+                            "comparison": "contains",
+                            "b": "Checkout"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "tiktok",
+                "entity": "campaign",
+                "action": "list",
+                "name": "List Campaigns",
+                "key": "tiktok",
+                "operation_id": "CampaignList",
+                "metadata": {
+                    "api_endpoint": "get \/campaign\/get",
+                    "query": {
+                        "filtering": "{\"status\":\"CAMPAIGN_STATUS_ENABLE\"}",
+                        "page": "100",
+                        "page_size": "1000"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "query",
+                        "fields": []
+                    }
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check for active campaigns",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{tiktok.page_info.total_number}}",
+                    "comparison": "greater than",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{tiktok.list[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "tiktok",
+                "entity": "campaign",
+                "action": "update-status",
+                "name": "Update Campaign Status",
+                "key": "tiktok_1",
+                "operation_id": "CampaignStatusUpdate",
+                "metadata": {
+                    "api_endpoint": "post \/campaign\/update\/status",
+                    "body": {
+                        "campaign_ids": "{{loop.campaign_id}}",
+                        "opt_status": "DISABLE"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ],
+        "storage": []
+    }
+}

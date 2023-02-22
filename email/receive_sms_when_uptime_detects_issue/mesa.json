@@ -1,0 +1,74 @@
+{
+    "key": "receive_sms_when_uptime_detects_issue",
+    "name": "Send an SMS message when Uptime detects an issue",
+    "version": "1.0.0",
+    "description": "Stay informed with real-time SMS notifications of Shopify store issues. This template will send an SMS message to the Shopify store owner when Uptime detects a problem with your Shopify store. Minimize impact and ensure smooth shopping experiences by quickly resolving any issues that arise.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "email",
+                "entity": "message",
+                "action": "received",
+                "name": "Receive Email",
+                "key": "email",
+                "operation_id": "input_message_received",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check Subject Line and Partial outage text",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{email.subject}}",
+                    "comparison": "contains",
+                    "b": "Shopify Status Alert",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{email.html}}",
+                            "comparison": "contains",
+                            "b": "Partial outage"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "sms",
+                "entity": "message",
+                "action": "send",
+                "name": "Send Message",
+                "key": "sms",
+                "operation_id": "message_send",
+                "metadata": {
+                    "message": "We've detected a Shopify platform status change which may affect your online store."
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}

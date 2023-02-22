@@ -1,0 +1,80 @@
+{
+    "key": "publish_new_theme_if_uptime_detects_issue",
+    "name": "Publish a different Shopify theme if Uptime detects an issue with your Shopify store",
+    "version": "1.0.0",
+    "description": "Issues that affect your Shopify store can happen suddenly, so it's crucial to take swift action when they do. This template will publish a backup Shopify theme if Uptime detects a problem with your Shopify store. With a backup plan in place, your customers can continue to shop without unforeseen issues affecting their shopping experience.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "email",
+                "entity": "message",
+                "action": "received",
+                "name": "Receive Email",
+                "key": "email",
+                "operation_id": "input_message_received",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check Subject Line and Partial outage text",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{email.subject}}",
+                    "comparison": "contains",
+                    "b": "Shopify Status Alert",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{email.html}}",
+                            "comparison": "contains",
+                            "b": "outage"
+                        },
+                        {
+                            "operator": "and",
+                            "a": "{{email.html}}",
+                            "comparison": "contains",
+                            "b": "Checkout"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "theme",
+                "action": "publish",
+                "name": "Publish Theme",
+                "key": "shopify",
+                "operation_id": "put_themes_theme_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/themes\/{{theme_id}}.json"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
