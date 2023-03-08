@@ -61,7 +61,7 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_fulfillment",
-                "action": "create",
+                "action": "custom_create",
                 "name": "Create Order Fulfillment",
                 "key": "shopify_1",
                 "metadata": {
