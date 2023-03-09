@@ -62,7 +62,8 @@
                 "key": "sms",
                 "operation_id": "message_send",
                 "metadata": {
-                    "message": "We've detected a Shopify platform status change which may affect your online store."
+                    "message": "We've detected a Shopify platform status change which may affect your online store.",
+                    "to": "{{context.shop.phone}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
