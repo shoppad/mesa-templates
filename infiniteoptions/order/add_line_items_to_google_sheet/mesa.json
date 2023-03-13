@@ -16,54 +16,62 @@
             {
                 "name": "fields",
                 "target": "googlesheets_row.mapping",
+                "description": "This template will automatically create a new row for every line item on orders that are placed. Select the columns you want to include in your spreadsheet.",
                 "options": [
                     {
-                        "value": "Order URL"
+                        "value": "Order URL",
+                        "description": "The URL to the order in the Shopify admin."
                     },
                     {
-                        "value": "Order Name"
+                        "value": "Order Name",
+                        "description": "The human-readable label for the order (example: #1001)."
                     },
                     {
-                        "value": "Email"
+                        "value": "Email",
+                        "description": "The email address of the customer that placed the order."
                     },
                     {
-                        "value": "Shipping Name"
+                        "value": "Shipping Name",
+                        "description": "The full name of the recipient of the Shipping Address."
                     },
                     {
-                        "value": "Address"
+                        "value": "Address",
+                        "description": "The street address of the Shipping Address."
                     },
                     {
-                        "value": "City"
+                        "value": "City",
+                        "description": "The city of the Shipping Address."
                     },
                     {
-                        "value": "Province"
+                        "value": "Province",
+                        "description": "The state/province of the Shipping Address."
                     },
                     {
-                        "value": "Zip"
+                        "value": "Zip",
+                        "description": "The zip code of the Shipping Address."
                     },
                     {
-                        "value": "Country"
+                        "value": "Country",
+                        "description": "The country of the Shipping Address."
                     },
                     {
-                        "value": "Product Name"
+                        "value": "Product Name",
+                        "description": "The name of the product purchased in this line item."
                     },
                     {
-                        "value": "Product SKU"
+                        "value": "Product SKU",
+                        "description": "The SKU of the product purchased in this line item."
                     },
                     {
-                        "value": "Product Price"
+                        "value": "Product Price",
+                        "description": "The price of the product purchased in this line item."
                     },
                     {
-                        "value": "Custom Note"
-                    },
-                    {
-                        "value": "Delivery Date"
-                    },
-                    {
-                        "value": "Gift Note"
+                        "value": "IO: Custom Note",
+                        "description": "The Custom Note field from your Infinite Options option set field."
                     }
                 ],
-                "type": "radios",
+                "type": "checkboxes",
                 "label": "Spreadsheet Columns",
                 "required": true
             }
