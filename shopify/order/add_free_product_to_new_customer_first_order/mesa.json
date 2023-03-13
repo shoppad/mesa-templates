@@ -22,18 +22,35 @@
         ],
         "outputs": [
             {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_customer",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
+                    "customer_id": "{{shopify_order.customer.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify_order.customer.orders_count}}",
+                    "a": "{{shopify_customer.orders_count}}",
                     "comparison": "equals",
                     "b": "1"
                 },
                 "local_fields": [],
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 3,
