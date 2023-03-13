@@ -8,6 +8,7 @@
     "enabled": false,
     "logging": false,
     "debug": false,
+    "wizard": true,
     "config": {
         "inputs": [
             {
@@ -49,12 +50,13 @@
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "product_id": "",
-                        "variant_id": "",
+                        "product_id": "{{ template | label: 'Product to add', description: 'Select the product to add as a free line item. In the next step you will select the variant you would like to use.', weight: 0}}",
+                        "variant_id": "{{ template | label: 'Variant of product to add', description: 'Select the product variant that should be used as the free line item', weight: 0}}",
                         "quantity": "1",
                         "discount_type": "Percentage",
                         "discount_amount": "100",
-                        "notify_customer": "false",
+                        "allow_duplicates": true,
+                        "notify_customer": true,
                         "order_note": "Add free product"
                     }
                 },
