@@ -17,7 +17,7 @@
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
-                "weight": 0
+                "weight": 0 
             }
         ],
         "outputs": [
@@ -58,7 +58,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "line_item_add",
-                "name": "Order Line Item Add",
+                "name": "Add Line Item to Order",
                 "key": "shopify_order_1",
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",

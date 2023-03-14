@@ -40,7 +40,7 @@
                 "operation_id": "get_customers_customer_id",
                 "metadata": {
                     "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
-                    "customer_id": "{{shopify_order.customer.id}}"
+                    "customer_id": "{{shopify.customer.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
