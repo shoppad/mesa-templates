@@ -140,13 +140,13 @@
                         },
                         {
                             "key": "Order Tags",
-                            "type": "varchar",
+                            "type": "text",
                             "value": "{{shopify.tags}}",
                             "disabled": "63092830fbb5514e47674b8e"
                         },
                         {
                             "key": "Order Notes",
-                            "type": "varchar",
+                            "type": "text",
                             "value": "{{shopify.note}}",
                             "disabled": "63092830fbb5514e47674b8e"
                         },
