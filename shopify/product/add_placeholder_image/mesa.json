@@ -69,6 +69,13 @@
                 "operation_id": "put_products_product_id",
                 "metadata": {
                     "api_endpoint": "put admin/products/{{product_id}}.json",
+                    "body": {
+                        "images": [
+                            {
+                                "src": ""
+                            }
+                        ]
+                    },
                     "product_id": "{{shopify_product.id}}"
                 },
                 "local_fields": [],
