@@ -52,7 +52,7 @@
                     "mapping": [
                         {
                             "destination": "email",
-                            "source": "{{shopify_order.email}}"
+                            "source": "{{delay.email}}"
                         }
                     ]
                 },
