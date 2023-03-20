@@ -1,16 +1,15 @@
 {
-    "key": "add_placeholder_image",
-    "name": "Add a Placeholder Image when Products are Created",
+    "key": "shopify/product/add_placeholder_image",
+    "name": "Add a placeholder image when a Shopify product is created",
     "version": "1.0.0",
     "description": "Adding multiple products to your store from a third-party service can be confusing. This template adds a placeholder image when products are created, allowing automatic updates to the product image.",
     "video": "",
-    "readme": "",
     "tags": [],
     "source": "",
     "destination": "",
-    "seconds": 0,
+    "seconds": 120,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -22,11 +21,30 @@
                 "action": "created",
                 "name": "Product Created",
                 "key": "shopify_product",
+                "operation_id": "products_create",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_retrieve_product",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify_product.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 4,
                 "trigger_type": "output",
@@ -34,11 +52,11 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "comparison": "equals",
-                    "a": "{{shopify_product.images[0].src}}"
+                    "comparison": "is empty",
+                    "a": "{{shopify_retrieve_product.images[0].src}}"
                 },
                 "local_fields": [],
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 3,
@@ -48,18 +66,13 @@
                 "action": "update",
                 "name": "Update Product",
                 "key": "shopify_product_1",
+                "operation_id": "put_products_product_id",
                 "metadata": {
-                    "product_id": "{{shopify_product.id}}",
-                    "body": {
-                        "images": [
-                            {
-                                "src": ""
-                            }
-                        ]
-                    }
+                    "api_endpoint": "put admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify_product.id}}"
                 },
                 "local_fields": [],
-                "weight": 1
+                "weight": 2
             }
         ],
         "storage": []
