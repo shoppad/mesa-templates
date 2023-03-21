@@ -1,47 +1,47 @@
 {
     "key": "shopify/product/send_email_when_product_goes_out_of_stock",
-    "name": "Send an Email when Product Goes Out of Stock",
+    "name": "Receive an email when a product goes out of stock",
     "version": "1.0.0",
-    "description": "",
+    "description": "It can be challenging to have up-to-the-minute information regarding your product\u2019s inventory levels. It's critical that if a product goes out of stock, you can be prepared to handle restocking and customer notifications promptly. This out of stock email template will send an email to the store owner when a product goes out of stock. Inventory surprises, be gone!",
     "video": "",
     "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "email",
+    "seconds": 360,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders/create"
-                },
-                "local_fields": null,
+                "operation_id": "orders_create",
+                "metadata": [],
                 "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "loop",
-                "entity": "",
-                "action": "",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 0
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "variant",
@@ -52,38 +52,35 @@
                     "api_endpoint": "GET admin/variants/{{variant_id}}.json",
                     "variant_id": "{{loop.variant_id}}"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 1
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "filter",
-                "entity": "",
-                "action": "",
-                "name": "Filter  ",
+                "name": "Filter",
                 "key": "filter",
                 "metadata": {
                     "a": "{{shopify_variant.inventory_quantity}}",
                     "comparison": "equals",
                     "b": "0"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 2
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
-                "is_premium": true,
-                "entity": null,
-                "action": null,
-                "name": "Email  ",
+                "name": "Email",
                 "key": "email",
                 "metadata": {
                     "to": "{{context.shop.email}}",
                     "subject": "Item out of stock: {{shopify_variant.sku}}",
-                    "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://{{context.shop.myshopify_domain}}/admin/products/{{shopify_variant. product_id}}"
+                    "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{shopify_variant.product_id}}"
                 },
-                "local_fields": null,
+                "local_fields": [],
                 "weight": 3
             }
         ],
