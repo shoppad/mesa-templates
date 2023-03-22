@@ -7,69 +7,96 @@
         "mode": "custom",
         "fields": [
             {
-                "name": "create_spreadsheet_name",
+                "key": "create_spreadsheet_name",
                 "target": "googlesheets_row.create_spreadsheet_name",
                 "label": "Spreadsheet Name",
                 "tokens": false,
                 "description": "Give your new Google spreadsheet a name."
             },
             {
-                "name": "fields",
-                "target": "googlesheets_row.mapping",
+                "key": "fields",
+                "target": "googlesheets_row.wizard_fields",
                 "description": "This template will automatically create a new row for every line item on orders that are placed. Select the columns you want to include in your spreadsheet.",
                 "options": [
                     {
-                        "value": "Order URL",
+                        "label": "Order URL",
+                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{infinite_options_order_created.order.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
-                        "value": "Order Name",
+                        "label": "Order Name",
+                        "value": "Order Name|{{infinite_options_order_created.order.name}}",
                         "description": "The human-readable label for the order (example: #1001)."
                     },
                     {
-                        "value": "Email",
+                        "label": "Email",
+                        "value": "Email|{{infinite_options_order_created.order.email}}",
                         "description": "The email address of the customer that placed the order."
                     },
                     {
-                        "value": "Shipping Name",
+                        "label": "Shipping Name",
+                        "value": "Shipping Name|{{infinite_options_order_created.order.shipping_address.first_name}} {{infinite_options_order_created.order.shipping_address.last_name}}",
                         "description": "The full name of the recipient of the Shipping Address."
                     },
                     {
-                        "value": "Address",
+                        "label": "Address",
+                        "value": "Address|{{infinite_options_order_created.order.shipping_address.address1}}",
                         "description": "The street address of the Shipping Address."
                     },
                     {
-                        "value": "City",
+                        "label": "City",
+                        "value": "City|{{infinite_options_order_created.order.shipping_address.city}}",
                         "description": "The city of the Shipping Address."
                     },
                     {
-                        "value": "Province",
+                        "label": "State/Province",
+                        "value": "State/Province|{{infinite_options_order_created.order.shipping_address.province}}",
                         "description": "The state/province of the Shipping Address."
                     },
                     {
-                        "value": "Zip",
+                        "label": "Zip/Postal Code",
+                        "value": "Zip|{{infinite_options_order_created.order.shipping_address.zip}}",
                         "description": "The zip code of the Shipping Address."
                     },
                     {
-                        "value": "Country",
+                        "label": "Country",
+                        "value": "Country|{{infinite_options_order_created.order.shipping_address.country}}",
                         "description": "The country of the Shipping Address."
                     },
                     {
-                        "value": "Product Name",
+                        "label": "Product Name",
+                        "value": "Product Name|{{loop.title}}",
                         "description": "The name of the product purchased in this line item."
                     },
                     {
-                        "value": "Product SKU",
+                        "label": "Product SKU",
+                        "value": "Product SKU|{{loop.sku}}",
                         "description": "The SKU of the product purchased in this line item."
                     },
                     {
-                        "value": "Product Price",
+                        "label": "Product Price",
+                        "value": "Product Price|{{loop.price}}",
                         "description": "The price of the product purchased in this line item."
                     },
                     {
-                        "value": "IO: Custom Note",
+                        "label": "IO: Custom Note",
+                        "value": "IO: Custom Note|{{loop.fields.infinite_options_1}}",
                         "description": "The Custom Note field from your Infinite Options option set field."
                     }
+                ],
+                "default": [
+                    "Order URL",
+                    "Order Name",
+                    "Email",
+                    "Shipping Name",
+                    "Address",
+                    "City",
+                    "State/Province",
+                    "Zip/Postal Code",
+                    "Country",
+                    "Product Name",
+                    "Product SKU",
+                    "Product Price"
                 ],
                 "type": "checkboxes",
                 "label": "Spreadsheet Columns",
@@ -121,21 +148,7 @@
                         "header_row": "first_row"
                     },
                     "body": {
-                        "fields": {
-                            "Order URL": "https://{{context.shop.domain}}/admin/orders/{{infinite_options_order_created.order.id}}",
-                            "Order Name": "{{infinite_options_order_created.order.name}}",
-                            "Email": "{{infinite_options_order_created.order.email}}",
-                            "Shipping Name": "{{infinite_options_order_created.order.shipping_address.first_name}} {{infinite_options_order_created.order.shipping_address.last_name}}",
-                            "Address": "{{infinite_options_order_created.order.shipping_address.address1}}",
-                            "City": "{{infinite_options_order_created.order.shipping_address.city}}",
-                            "Province": "{{infinite_options_order_created.order.shipping_address.province}}",
-                            "Zip": "{{infinite_options_order_created.order.shipping_address.zip}}",
-                            "Country": "{{infinite_options_order_created.order.shipping_address.country}}",
-                            "Product Name": "{{loop.title}}",
-                            "Product SKU": "{{loop.sku}}",
-                            "Product Price": "{{loop.price}}",
-                            "infinite_options_1": "{{loop.fields.infinite_options_1}}"
-                        }
+                        "fields": {}
                     }
                 },
                 "local_fields": [
@@ -146,80 +159,7 @@
                             {
                                 "key": "fields",
                                 "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "Order URL",
-                                        "label": "Order URL",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Order Name",
-                                        "label": "Order Name",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Email",
-                                        "label": "Email",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Shipping Name",
-                                        "label": "Shipping Name",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Address",
-                                        "label": "Address",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "City",
-                                        "label": "City",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Province",
-                                        "label": "Province",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Zip",
-                                        "label": "Zip",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Country",
-                                        "label": "Country",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product Name",
-                                        "label": "Product Name",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product SKU",
-                                        "label": "Product SKU",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product Price",
-                                        "label": "Product Price",
-                                        "type": "text",
-                                        "source": ""
-                                    }
-                                ]
+                                "fields": []
                             }
                         ]
                     }
