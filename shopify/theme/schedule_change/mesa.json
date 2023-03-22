@@ -22,7 +22,7 @@
                 "key": "schedule",
                 "metadata": {
                     "schedule": null,
-                    "datetime": "{{ template | label: 'Date and time to schedule the theme change', description: '', tokens: false, weight: 1, required: true}}",
+                    "datetime": "{{ template | label: 'Date and time to schedule the theme change', description: '', tokens: false, weight: 1}}",
                     "enqueue_type": "datetime",
                     "next_sync_date_time": "2023-01-19T10:00:00-08:00"
                 },
