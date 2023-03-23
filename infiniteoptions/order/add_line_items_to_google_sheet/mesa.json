@@ -1,7 +1,7 @@
 {
-    "key": "infiniteoptions_order_add_line_items_to_google_sheet_1",
+    "key": "infiniteoptions_order_add_line_items_to_google_sheet",
     "name": "Add Infinite Options Line Items to Google Sheet",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "enabled": false,
     "wizard": {
         "mode": "custom",
@@ -55,7 +55,7 @@
                     },
                     {
                         "label": "Zip/Postal Code",
-                        "value": "Zip|{{infinite_options_order_created.order.shipping_address.zip}}",
+                        "value": "Zip/Postal Code|{{infinite_options_order_created.order.shipping_address.zip}}",
                         "description": "The zip code of the Shipping Address."
                     },
                     {
@@ -77,30 +77,11 @@
                         "label": "Product Price",
                         "value": "Product Price|{{loop.price}}",
                         "description": "The price of the product purchased in this line item."
-                    },
-                    {
-                        "label": "IO: Custom Note",
-                        "value": "IO: Custom Note|{{loop.fields.infinite_options_1}}",
-                        "description": "The Custom Note field from your Infinite Options option set field."
                     }
                 ],
-                "default": [
-                    "Order URL",
-                    "Order Name",
-                    "Email",
-                    "Shipping Name",
-                    "Address",
-                    "City",
-                    "State/Province",
-                    "Zip/Postal Code",
-                    "Country",
-                    "Product Name",
-                    "Product SKU",
-                    "Product Price"
-                ],
+                "check_all": true,
                 "type": "checkboxes",
-                "label": "Spreadsheet Columns",
-                "required": true
+                "label": "Spreadsheet Columns"
             }
         ]
     },
