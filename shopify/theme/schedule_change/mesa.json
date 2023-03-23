@@ -42,7 +42,7 @@
                 "key": "shopify",
                 "operation_id": "put_themes_theme_id",
                 "metadata": {
-                    "theme_id": "{{ template | label: 'Publish this theme', description: '', weight: 0}}"
+                    "theme_id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0}}"
                 },
                 "local_fields": [],
                 "on_error": "default",

@@ -9,14 +9,15 @@
             {
                 "key": "create_spreadsheet_name",
                 "target": "googlesheets_row.path.create_spreadsheet_name",
-                "label": "Spreadsheet Name",
+                "label": "What do you want to name your spreadsheet?",
                 "tokens": false,
-                "description": "Give your new Google spreadsheet a name."
+                "description": "Give your new Google Spreadsheet a name."
             },
             {
                 "key": "fields",
                 "target": "googlesheets_row.wizard_fields",
-                "description": "This template will automatically create a new row for every line item on orders that are placed. Select the columns you want to include in your spreadsheet.",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
                     {
                         "label": "Order URL",
@@ -80,8 +81,7 @@
                     }
                 ],
                 "check_all": true,
-                "type": "checkboxes",
-                "label": "Spreadsheet Columns"
+                "type": "checkboxes"
             }
         ]
     },

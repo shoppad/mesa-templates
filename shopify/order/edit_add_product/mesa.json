@@ -34,7 +34,7 @@
                 "metadata": {
                     "a": "{{shopify_order.total_line_items_price}}",
                     "comparison": "greater than",
-                    "b": "100"
+                    "b": "{{ template | label: 'What is the minimum order amount?', description: 'How much does the customer need to spend in order to receive the free gift?', tokens: false, default: 100, placeholder: '' }}"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -50,8 +50,8 @@
                 "metadata": {
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "product_id": "{{ template | label: 'Product to add', description: 'Select the product to add as a free line item. In the next step you will select the variant you would like to use.', weight: 0}}",
-                        "variant_id": "{{ template | label: 'Variant of product to add', description: 'Select the product variant that should be used as the free line item', weight: 0}}",
+                        "product_id": "{{ template | label: 'Select your free product', description: 'Select the product to add as a free line item. In the next step you will select the variant you would like to use.', placeholder: '', weight: 0}}",
+                        "variant_id": "{{ template | label: 'Select the variant of the free product', description: 'If your product only has one variant, click Next.', placeholder: '', weight: 0}}",
                         "quantity": "1",
                         "discount_type": "Percentage",
                         "discount_amount": "100",

@@ -50,7 +50,7 @@
                 "metadata": {
                     "a": "{{shopify_customer.total_spent}}",
                     "comparison": "greater than",
-                    "b": "{{ template | label: 'Amount Spent', type: 'number', description: 'The lifetime spending threshold in dollars. Customers who have spent more than this amount will be tagged as VIPs.', default: 1500, tokens: false, placeholder: '' }}"
+                    "b": "{{ template | label: 'How much has the customer need to spend?', type: 'number', description: 'The lifetime spending threshold in dollars. Customers who have spent more than this amount will be tagged as VIPs.', default: 1500, tokens: false, placeholder: '' }}"
                 },
                 "local_fields": [],
                 "weight": 1
