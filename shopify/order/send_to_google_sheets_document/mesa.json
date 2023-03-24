@@ -3,7 +3,7 @@
     "name": "Send orders to Google Sheets ",
     "description": "",
     "version": "2.0.0",
-    "wizard": {
+    "setup": {
         "mode": "custom",
         "fields": [
             {
@@ -15,7 +15,7 @@
             },
             {
                 "key": "fields",
-                "target": "googlesheets_row.wizard_fields",
+                "target": "googlesheets_row.setup_fields",
                 "label": "What are your spreadsheet columns?",
                 "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
