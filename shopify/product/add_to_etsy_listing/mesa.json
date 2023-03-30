@@ -29,6 +29,23 @@
         ],
         "outputs": [
             {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify_product.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "etsy",
@@ -39,6 +56,7 @@
                 "key": "etsy",
                 "operation_id": "createDraftListing",
                 "metadata": {
+                    "api_endpoint": "post /v3/application/shops/{shop_id}/listings",
                     "body": {
                         "quantity": "{{shopify_product.variants[0].inventory_quantity}}",
                         "title": "{{shopify_product.title}}",
@@ -48,7 +66,33 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting_image",
+                "action": "create",
+                "name": "Upload Image on Listing",
+                "version": "v3",
+                "key": "etsy_1",
+                "operation_id": "uploadListingImage",
+                "metadata": {
+                    "api_endpoint": "post /v3/application/shops/{shop_id}/listings/{listing_id}/images",
+                    "path": {
+                        "listing_id": "{{etsy.listing_id}}"
+                    },
+                    "body": {
+                        "image": "{{shopify.images[0].src}}",
+                        "rank": "1",
+                        "overwrite": false,
+                        "is_watermarked": false
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
             }
         ],
         "storage": []
