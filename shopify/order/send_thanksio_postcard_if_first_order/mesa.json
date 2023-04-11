@@ -1,0 +1,101 @@
+{
+    "key": "shopify/order/send_thanksio_postcard_if_first_order",
+    "name": "Send a postcard when a customer places their first order",
+    "version": "1.0.0",
+    "description": "Let your customers know how much you value their business with a thank you note. This template will send a postcard from thanks.io after the customer makes their first purchase.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_1.orders_count}}",
+                    "comparison": "equals",
+                    "b": "1"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "thanks",
+                "entity": "postcard",
+                "action": "create",
+                "name": "Send Postcard",
+                "key": "thanks",
+                "operation_id": "4x6Postcard",
+                "metadata": {
+                    "api_endpoint": "post /send/postcard",
+                    "entity_wrapper": "body",
+                    "body": {
+                        "message": "Hello {{shopify.customer.first_name}},\n\nThank you for your first purchase on {{context.shop.name}}. We hope you love our product!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\nThank you,\n{{context.shop.name}} Team",
+                        "return_name": "{{context.shop.name}}",
+                        "return_address": "{{context.shop.address1}}",
+                        "return_address2": "{{context.shop.address2}}",
+                        "return_city": "{{context.shop.city}}",
+                        "return_postal_code": "{{context.shop.zip}}",
+                        "recipients": [
+                            {
+                                "name": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
+                                "address": "{{shopify.shipping_address.address1}}",
+                                "city": "{{shopify.shipping_address.city}}",
+                                "province": "{{shopify.shipping_address.province}}",
+                                "postal_code": "{{shopify.shipping_address.zip}}",
+                                "country": "{{shopify.shipping_address.country}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ],
+        "storage": []
+    }
+}
