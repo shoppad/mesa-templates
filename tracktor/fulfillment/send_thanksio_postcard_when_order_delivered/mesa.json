@@ -1,0 +1,87 @@
+{
+    "key": "tracktor/fulfillment/send_thanksio_postcard_when_order_delivered",
+    "name": "Send a postcard when an order is delivered",
+    "version": "1.0.0",
+    "description": "Let your customers know how much you value their business with a thank you note. This template will send a postcard from thanks.io when a Tracktor order fulfillment status changes to Delivered. It's a small gesture that can leave a big impression.",
+    "video": "",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
+    "enabled": false,
+    "logging": true,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment/delivered",
+                "name": "Fulfillment Status is Delivered",
+                "key": "tracktor",
+                "operation_id": "fulfillment_delivered",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{tracktor.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "thanks",
+                "entity": "postcard",
+                "action": "create",
+                "name": "Send Postcard",
+                "key": "thanks",
+                "operation_id": "4x6Postcard",
+                "metadata": {
+                    "api_endpoint": "post /send/postcard",
+                    "entity_wrapper": "body",
+                    "body": {
+                        "message": "Dear {{shopify.customer.first_name}}, \n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{context.shop.name}} Team",
+                        "return_name": "{{context.shop.name}}",
+                        "return_address": "{{context.shop.address1}}",
+                        "return_address2": "{{context.shop.address2}}",
+                        "return_city": "{{context.shop.city}}",
+                        "return_postal_code": "{{context.shop.zip}}",
+                        "recipients": [
+                            {
+                                "name": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
+                                "address": "{{shopify.shipping_address.address1}}",
+                                "city": "{{shopify.shipping_address.city}}",
+                                "province": "{{shopify.shipping_address.province}}",
+                                "postal_code": "{{shopify.shipping_address.zip}}",
+                                "country": "{{shopify.shipping_address.country}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "storage": []
+    }
+}
