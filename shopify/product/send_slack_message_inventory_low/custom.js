@@ -24,6 +24,7 @@ module.exports = new class {
           title
           product {
             title
+            id
           }
         }
       }
@@ -40,11 +41,15 @@ module.exports = new class {
 
     // Don't pass variant name if it's "Default Title", prefix with dash for view
     const variantName = response.data.inventoryItem.variant.title !== 'Default Title' ? ' - ' + response.data.inventoryItem.variant.title : '';
+    
+    // Get product ID
+    const productId = response.data.inventoryItem.variant.product.id.replace('gid:\/\/shopify\/Product\/', '');
 
     // We're done, call the next step!
     Mesa.output.next({
       product_title: response.data.inventoryItem.variant.product.title,
-      variant_title: variantName
+      variant_title: variantName,
+      product_id: productId
     });
   }
 }
