@@ -44,12 +44,26 @@
             {
                 "schema": 2,
                 "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Get List Shop",
+                "key": "shopify_shop",
+                "metadata": {
+                    "site": "current"
+                },
+                "local_fields": [],
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
                 "type": "email",
                 "is_premium": true,
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{ template | label: 'Where should we send the notification email?', default: '' }}",
+                    "to": "{{ template | label: 'Who should receive this email?', description: 'Enter the email address where we should send these notifications.', default: '' }}",
                     "subject": "Order {{shopify_order.name}} created with notes",
                     "message": "Hello {{shopify_shop.shop_owner}}\n\n{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} placed a new order with your store.\n\nNotes have been included in the order. They are the following:\n\n{{shopify_order.note}}\n\nView Order {{shopify_order.name}}: https://{{shopify_shop.domain}}/admin/orders/{{shopify_order.id}}"
                 },
