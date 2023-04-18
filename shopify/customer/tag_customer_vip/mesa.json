@@ -1,8 +1,7 @@
 {
     "key": "shopify/customer/tag_customer_vip",
-    "name": "Automatically tag customers after they hit a lifetime spending threshold",
+    "name": "Tag customers when they reach a lifetime spending milestone",
     "version": "1.0.0",
-    "description": "Automatically tag your customers as VIPs once they hit a lifetime spending milestone. Then you can be extra attentive to your top buyers by offering them exclusive merchandise, sending them personalized thank you emails, or even providing special discounts.",
     "video": "",
     "readme": "",
     "tags": [],
@@ -12,6 +11,7 @@
     "enabled": false,
     "logging": true,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -50,7 +50,7 @@
                 "metadata": {
                     "a": "{{shopify_customer.total_spent}}",
                     "comparison": "greater than",
-                    "b": "1500"
+                    "b": "{{ template | label: 'How much does the customer need to spend?', type: 'number', description: 'The lifetime spending threshold in dollars. Customers who have spent more than this amount will be tagged as VIPs.', default: 1500, tokens: false, placeholder: '' }}"
                 },
                 "local_fields": [],
                 "weight": 1

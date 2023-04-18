@@ -2,16 +2,89 @@
     "key": "send_to_google_sheets_document",
     "name": "Send orders to Google Sheets ",
     "description": "",
-    "version": 1,
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "google-sheets",
-    "seconds": 0,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
+    "version": "2.0.0",
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets_row.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets_row.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Order URL",
+                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}",
+                        "description": "The URL to the order in the Shopify admin."
+                    },
+                    {
+                        "label": "Order Name",
+                        "value": "Order Name|{{shopify_order.name}}",
+                        "description": "The human-readable label for the order (example: #1001)."
+                    },
+                    {
+                        "label": "Email",
+                        "value": "Email|{{shopify_order.email}}",
+                        "description": "The email address of the customer that placed the order."
+                    },
+                    {
+                        "label": "Shipping Name",
+                        "value": "Shipping Name|{{shopify_order.shipping_address.first_name}} {{shopify_order.shipping_address.last_name}}",
+                        "description": "The full name of the recipient of the Shipping Address."
+                    },
+                    {
+                        "label": "Address",
+                        "value": "Address|{{shopify_order.shipping_address.address1}}",
+                        "description": "The street address of the Shipping Address."
+                    },
+                    {
+                        "label": "City",
+                        "value": "City|{{shopify_order.shipping_address.city}}",
+                        "description": "The city of the Shipping Address."
+                    },
+                    {
+                        "label": "State/Province",
+                        "value": "State/Province|{{shopify_order.shipping_address.province}}",
+                        "description": "The state/province of the Shipping Address."
+                    },
+                    {
+                        "label": "Zip/Postal Code",
+                        "value": "Zip/Postal Code|{{shopify_order.shipping_address.zip}}",
+                        "description": "The zip code of the Shipping Address."
+                    },
+                    {
+                        "label": "Country",
+                        "value": "Country|{{shopify_order.shipping_address.country}}",
+                        "description": "The country of the Shipping Address."
+                    },
+                    {
+                        "label": "Product Name",
+                        "value": "Product Name|{{loop.title}}",
+                        "description": "The name of the product purchased in this line item."
+                    },
+                    {
+                        "label": "Product SKU",
+                        "value": "Product SKU|{{loop.sku}}",
+                        "description": "The SKU of the product purchased in this line item."
+                    },
+                    {
+                        "label": "Product Price",
+                        "value": "Product Price|{{loop.price}}",
+                        "description": "The price of the product purchased in this line item."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
@@ -47,7 +120,7 @@
                 "entity": "row",
                 "action": "create",
                 "name": "Create Row",
-                "key": "googlesheets_row_1",
+                "key": "googlesheets_row",
                 "metadata": {
                     "path": {
                         "mode": "create",
@@ -55,185 +128,9 @@
                         "sheet_name": "Sheet1"
                     },
                     "body": {
-                        "fields": {
-                            "Order ID": "{{shopify_order.id}}",
-                            "Order Name (number)": "{{shopify_order.name}}",
-                            "Order Email": "{{shopify_order.email}}",
-                            "Customer First Name": "{{shopify_order.customer.first_name}}",
-                            "Customer Last Name": "{{shopify_order.customer.last_name}}",
-                            "Customer Email": "{{shopify_order.customer.email}}",
-                            "Total Price": "{{shopify_order.total_price}}",
-                            "Shipping Address 1": "{{shopify_order.shipping_address.address1}}",
-                            "Shipping Address 2": "{{shopify_order.shipping_address.address2}}",
-                            "Shipping City": "{{shopify_order.shipping_address.city}}",
-                            "Shipping Zip": "{{shopify_order.shipping_address.zip}}",
-                            "Shipping Province": "{{shopify_order.shipping_address.province}}",
-                            "Shipping Country": "{{shopify_order.shipping_address.country}}",
-                            "Order Tags": "{{shopify_order.tags}}",
-                            "Order Notes": "{{shopify_order.note}}",
-                            "Product Title": "{{loop.title}}",
-                            "Product Variant": "{{loop.variant_title}}",
-                            "Product SKU": "{{loop.sku}}",
-                            "Product Price": "{{loop.price}}",
-                            "Product Quantity": "{{loop.quantity}}",
-                            "Line Item ID": "{{loop.id}}",
-                            "Created At": "{{shopify_order.created_at}}",
-                            "Admin Order URL": "https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}"
-                        }
+                        "fields": {}
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "fields",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "Order ID",
-                                        "label": "Order ID",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Order Name (number)",
-                                        "label": "Order Name (number)",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Order Email",
-                                        "label": "Order Email",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Customer First Name",
-                                        "label": "Customer First Name",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Customer Last Name",
-                                        "label": "Customer Last Name",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Customer Email",
-                                        "label": "Customer Email",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Total Price",
-                                        "label": "Total Price",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Shipping Address 1",
-                                        "label": "Shipping Address 1",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Shipping Address 2",
-                                        "label": "Shipping Address 2",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Shipping City",
-                                        "label": "Shipping City",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Shipping Zip",
-                                        "label": "Shipping Zip",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Shipping Province",
-                                        "label": "Shipping Province",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Shipping Country",
-                                        "label": "Shipping Country",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Order Tags",
-                                        "label": "Order Tags",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Order Notes",
-                                        "label": "Order Notes",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product Title",
-                                        "label": "Product Title",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product Variant",
-                                        "label": "Product Variant",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product SKU",
-                                        "label": "Product SKU",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product Price",
-                                        "label": "Product Price",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Product Quantity",
-                                        "label": "Product Quantity",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Line Item ID",
-                                        "label": "Line Item ID",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Created At",
-                                        "label": "Created At",
-                                        "type": "text",
-                                        "source": ""
-                                    },
-                                    {
-                                        "key": "Admin Order URL",
-                                        "label": "Admin Order URL",
-                                        "type": "text",
-                                        "source": ""
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
                 "weight": 1
             }
         ],

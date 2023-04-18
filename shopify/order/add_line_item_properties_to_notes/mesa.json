@@ -1,9 +1,10 @@
 {
     "key": "shopify/order/add_line_item_properties_to_notes",
-    "name": "Add Line Item Properties to Order Notes",
+    "name": "Add product options to Shopify order notes",
     "version": "2.0.0",
     "description": "In most cases, third party services rely on Shopify's Order Notes for extra details about the order which Shopify applications are not allowed to input details into. This template adds line item properties from Infinite Options or Uploadery to the Order Notes field so they can be easily read by third party services. You can now automatically add important information onto the order, making it easier on yourself and your third party service.",
     "enabled": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -27,10 +28,13 @@
                 "action": "note_update",
                 "name": "Order Note Update",
                 "key": "shopify_order_2",
+                "operation_id": "put_mesa_orders_order_id_note",
                 "metadata": {
+                    "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "note": "{% if shopify_order.note %}{{ shopify_order.note }}\n\n{% endif %}{% for line_item in shopify_order.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}"
+                        "note": "{% for line_item in shopify_order.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}",
+                        "append": true
                     }
                 },
                 "local_fields": [],

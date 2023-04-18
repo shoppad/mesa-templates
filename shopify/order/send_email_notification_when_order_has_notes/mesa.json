@@ -11,6 +11,7 @@
     "enabled": false,
     "logging": false,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -62,7 +63,7 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{shopify_shop.email}}",
+                    "to": "{{ template | label: 'Who should receive this email?', description: 'Enter the email address where we should send these notifications.', default: '' }}",
                     "subject": "Order {{shopify_order.name}} created with notes",
                     "message": "Hello {{shopify_shop.shop_owner}}\n\n{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} placed a new order with your store.\n\nNotes have been included in the order. They are the following:\n\n{{shopify_order.note}}\n\nView Order {{shopify_order.name}}: https://{{shopify_shop.domain}}/admin/orders/{{shopify_order.id}}"
                 },
