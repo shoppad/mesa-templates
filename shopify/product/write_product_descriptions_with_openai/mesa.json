@@ -40,7 +40,7 @@
                 "metadata": {
                     "body": {
                         "prompt": "Write a brief product description for a product called {{shopify.title}}",
-                        "model": "text-davinci-003",
+                        "model": "text-davinci-001",
                         "max_tokens": "500",
                         "temperature": "1",
                         "top_p": "1",

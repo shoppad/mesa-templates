@@ -1,15 +1,13 @@
 {
     "key": "shopify/draft_order/send_to_hubspot_deal",
-    "name": "Send Draft Order To HubSpot Deal",
+    "name": "Send a draft order to HubSpot Deals",
     "version": "1.0.0",
-    "description": "Send draft order from Shopify to HubSpot Deal when draft order is created.",
+    "description": "Draft orders can be thought of as potential deals; therefore, keeping track of draft orders and their progress is extremely important. This template sends a draft order from Shopify and converts it into a HubSpot deal when a draft order is created. This reduces the effort to ensure that all information across your systems are the same.",
     "video": "",
-    "readme": "",
-    "tags": [
-        "Draft-Order"
-    ],
-    "source": "shopify",
-    "destination": "hubspot",
+    "tags": [],
+    "source": "",
+    "destination": "",
+    "seconds": 135,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -22,8 +20,10 @@
                 "entity": "draft_order",
                 "action": "created",
                 "name": "Draft Order Created",
-                "key": "shopify_draft_order",
+                "key": "shopify",
+                "operation_id": "draft_orders_create",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -34,13 +34,15 @@
                 "type": "hubspot",
                 "entity": "deal",
                 "action": "create",
-                "name": "Hubspot Create Deal",
-                "key": "hubspot_deal",
+                "name": "Create Deal",
+                "key": "hubspot",
+                "operation_id": "deal_create",
                 "metadata": {
+                    "api_endpoint": "post \/crm\/v3\/objects\/deals",
                     "body": {
                         "properties": {
-                            "amount": "{{shopify_draft_order.total_price}}",
-                            "dealname": "{{shopify_draft_order.customer.first_name}} {{shopify_draft_order.customer.last_name}} {{shopify_draft_order.name}} Deal"
+                            "amount": "{{shopify.total_price}}",
+                            "dealname": "{{shopify.customer.first_name}} {{shopify.customer.last_name}} {{shopify.name}} Deal {{shopify.email}} {{shopify.id}}"
                         }
                     }
                 },

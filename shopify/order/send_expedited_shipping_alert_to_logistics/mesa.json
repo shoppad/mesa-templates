@@ -4,26 +4,26 @@
     "version": "1.0.0",
     "description": "Prioritizing orders that require expedited shipping is important for your team and the customer. This template tags an order with \"expedited shipping\" and sends an email to the store administrator if the order's shipping method is 2 days or next day. This ensures that you and your team are on top of things, especially during peak seasons.",
     "video": "",
-    "readme": "",
     "tags": [],
-    "source": "shopify",
-    "destination": "email-by-mesa",
-    "seconds": 180,
+    "source": "",
+    "destination": "",
+    "seconds": 135,
     "enabled": false,
     "logging": true,
     "debug": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
+                "operation_id": "orders_create",
                 "metadata": [],
-                "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -35,27 +35,35 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "2 day, next day",
+                    "a": "2 day",
                     "comparison": "in",
-                    "b": "{{shopify_order.shipping_lines[0].title}}",
-                    "script": "filter.js"
+                    "b": "{{shopify.shipping_lines[0].title}}",
+                    "additional": [
+                        {
+                            "operator": "or",
+                            "a": "next day",
+                            "comparison": "in",
+                            "b": "{{shopify.shipping_lines[0].title}}"
+                        }
+                    ]
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
-                "name": "Email",
+                "name": "Send Email",
                 "key": "email",
                 "metadata": {
                     "to": "{{context.shop.email}}",
-                    "subject": "New {{shopify_order.shipping_lines[0].title}} order received: {{shopify_order.name}}",
-                    "message": "Order {{shopify_order.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify_order.shipping_address.city}}, {{shopify_order.shipping_address.province}} {{shopify_order.shipping_address.country}}.\n\nView the order: https://{{context.shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
+                    "subject": "New {{shopify.shipping_lines[0].title}} order received: {{shopify.name}}",
+                    "message": "Order {{shopify.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify.shipping_address.city}}, {{shopify.shipping_address.province}} {{shopify.shipping_address.country}}.\n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -65,9 +73,11 @@
                 "entity": "order",
                 "action": "tag_add",
                 "name": "Order Add Tag",
-                "key": "shopify_order_1",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "order_id": "{{shopify.id}}",
                     "body": {
                         "tag": "Expedited shipping"
                     }

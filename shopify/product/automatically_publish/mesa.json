@@ -1,16 +1,15 @@
 {
-    "key": "automatically_publish",
-    "name": "Automatically Publish a Product if it has an Image and Description",
+    "key": "shopify/product/automatically_publish",
+    "name": "Automatically publish a product if it has an image and description",
     "version": "1.0.0",
-    "description": "You don’t want to make the mistake of publishing a product to your website if it doesn’t have any images or descriptions yet, which can make your website look unprofessional. With Mesa, you can make sure that your product appears on your website only if it’s complete with a description and a set of images.",
+    "description": "Stay on top of when products are ready to be published on your site with the help of MESA. This template will automatically publish a product if it is complete with both an image and a description. Keep the guesswork at bay and eliminate a manual step in your already busy day.",
     "video": "",
-    "readme": "",
     "tags": [],
     "source": "shopify",
     "destination": "shopify",
-    "seconds": 0,
+    "seconds": 180,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -22,11 +21,30 @@
                 "action": "created",
                 "name": "Product Created",
                 "key": "shopify_product",
+                "operation_id": "products_create",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_retrieve_product",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify_product.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 2,
                 "trigger_type": "output",
@@ -34,12 +52,12 @@
                 "name": "Filter - Check if there is a product image",
                 "key": "filter_1",
                 "metadata": {
-                    "a": "{{shopify_product.image}}",
+                    "a": "{{shopify_retrieve_product.image}}",
                     "comparison": "does not equal",
                     "b": "null"
                 },
                 "local_fields": [],
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 2,
@@ -48,12 +66,12 @@
                 "name": "Filter - Check if there is a description",
                 "key": "filter_2",
                 "metadata": {
-                    "a": "{{shopify_product.body_html}}",
+                    "a": "{{shopify_retrieve_product.body_html}}",
                     "comparison": "does not equal",
                     "b": "null"
                 },
                 "local_fields": [],
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 3,
@@ -62,13 +80,15 @@
                 "entity": "product",
                 "action": "update",
                 "name": "Update Product",
-                "key": "shopify_product_1",
+                "key": "shopify_update_product",
+                "operation_id": "put_products_product_id",
                 "metadata": {
+                    "api_endpoint": "put admin/products/{{product_id}}.json",
                     "product_id": "{{shopify_product.id}}",
                     "body": {
+                        "status": "active",
                         "published_at": "{{shopify_product.created_at}}",
-                        "published_scope": "web",
-                        "status": "active"
+                        "published_scope": "web"
                     }
                 },
                 "local_fields": [
@@ -84,16 +104,12 @@
                                 "key": "published_scope",
                                 "type": "custom",
                                 "allow_custom_fields": false
-                            },
-                            {
-                                "key": "status",
-                                "type": "custom",
-                                "allow_custom_fields": false
                             }
                         ]
                     }
                 ],
-                "weight": 2
+                "on_error": "default",
+                "weight": 3
             }
         ],
         "storage": []

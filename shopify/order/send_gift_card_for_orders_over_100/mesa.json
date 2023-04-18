@@ -50,7 +50,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify.total_line_items_price}}",
+                    "a": "{{delay.total_line_items_price}}",
                     "comparison": "greater than equal",
                     "b": "100"
                 },
@@ -68,9 +68,9 @@
                 "key": "govalo",
                 "metadata": {
                     "body": {
-                        "firstName": "{{shopify.customer.first_name}}",
-                        "lastName": "{{shopify.customer.last_name}}",
-                        "email": "{{shopify.email}}",
+                        "firstName": "{{delay.customer.first_name}}",
+                        "lastName": "{{delay.customer.last_name}}",
+                        "email": "{{delay.email}}",
                         "note": "Thank you for being an awesome customer!",
                         "value": "20",
                         "eventType": "giftcard"

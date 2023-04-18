@@ -107,7 +107,7 @@
                 "metadata": {
                     "to": "{{context.shop.email}}",
                     "subject": "Order {{shopify_order.name}} was canceled due to high risk",
-                    "message": "Order {{shopify_order.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https://{{context.shop.myshopify_domain}}/admin/orders/{{shopify_order.id}}"
+                    "message": "Order {{shopify_order.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify_order.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
