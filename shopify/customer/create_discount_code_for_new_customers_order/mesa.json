@@ -7,7 +7,7 @@
     "tags": [],
     "source": "",
     "destination": "",
-    "seconds": 60,
+    "seconds": 120,
     "enabled": false,
     "logging": true,
     "debug": false,
@@ -21,6 +21,7 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify",
+                "operation_id": "customers_create",
                 "metadata": [],
                 "local_fields": [],
                 "on_error": "default",
@@ -36,7 +37,9 @@
                 "action": "create",
                 "name": "Create Price Rule",
                 "key": "shopify_1",
+                "operation_id": "post_price_rules",
                 "metadata": {
+                    "api_endpoint": "post admin/price_rules.json",
                     "body": {
                         "title": "NEWCUSTOMER {{shopify.id}} {{date:now}}",
                         "allocation_method": "across",
@@ -69,7 +72,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Price Rule",
                 "key": "shopify_2",
+                "operation_id": "get_price_rules_price_rule_id",
                 "metadata": {
+                    "api_endpoint": "get admin/price_rules/{{price_rule_id}}.json",
                     "price_rule_id": "{{shopify_1.id}}"
                 },
                 "local_fields": [],
@@ -84,7 +89,9 @@
                 "action": "create",
                 "name": "Create Price Rule Discount Code",
                 "key": "shopify_3",
+                "operation_id": "post_price_rules_price_rule_id_discount_codes",
                 "metadata": {
+                    "api_endpoint": "post admin/price_rules/{{price_rule_id}}/discount_codes.json",
                     "price_rule_id": "{{shopify_2.id}}",
                     "body": {
                         "code": "NEWCUSTOMER{{shopify.id}}"
@@ -102,7 +109,9 @@
                 "action": "tag_add",
                 "name": "Customer Add Tag",
                 "key": "shopify_4",
+                "operation_id": "post_mesa_customers_customer_id_tag",
                 "metadata": {
+                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
                     "customer_id": "{{shopify.id}}",
                     "body": {
                         "tag": "{{shopify_3.code}}"
@@ -115,17 +124,33 @@
             {
                 "schema": 4,
                 "trigger_type": "output",
-                "type": "email",
-                "name": "Send Email",
-                "key": "email",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
                 "metadata": {
-                    "subject": "New Customer Discount",
-                    "message": "Here is your new discount code to use at checkout!\n<br><br>\n<strong>{{shopify_3.code}}</strong>\n<br><br>\nYou have received 20% off on your next order.",
-                    "to": "{{shopify.email}}"
+                    "a": "{{shopify.phone}}",
+                    "comparison": "is not empty"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "sms",
+                "entity": "message",
+                "action": "send",
+                "name": "Send Message",
+                "key": "sms",
+                "operation_id": "message_send",
+                "metadata": {
+                    "to": "{{shopify.phone}}",
+                    "message": "Here is your new discount code to use at checkout!\n\n{{shopify_3.code}}\n\nYou have received 20% off your next order."
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
             }
         ],
         "storage": []
