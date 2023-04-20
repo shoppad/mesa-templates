@@ -1,6 +1,6 @@
 {
     "key": "infiniteoptions/order/send_email",
-    "name": "Send an Email When an Infinite Options Product Is Purchased",
+    "name": "Receive an email when a customer purchases a product with options",
     "version": "1.0.0",
     "description": "Avoid surprises and ensure both you and your team are prepared for when an order is placed containing a product that requires special handling. MESA will automatically send an email to your store’s registered email address when an order with Infinite Options products is purchased",
     "video": "",
@@ -12,6 +12,7 @@
     "enabled": false,
     "logging": false,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

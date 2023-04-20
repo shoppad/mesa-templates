@@ -1,6 +1,6 @@
 {
     "key": "tracktor/fulfillment/delay_in_transit_email",
-    "name": "Send an email if a Tracktor package is delayed in transit",
+    "name": "Receive an email if a package is delayed",
     "version": "1.0.0",
     "description": "Send an email to the store owner when an order is in transit for 60+ hours",
     "video": "",
@@ -10,6 +10,7 @@
     "source": "tracktor",
     "destination": "email",
     "enabled": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

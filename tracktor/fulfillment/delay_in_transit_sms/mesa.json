@@ -1,8 +1,9 @@
 {
     "key": "tracktor/fulfillment/delay_in_transit_sms",
-    "name": "Send a text message if a Tracktor Package is delayed In Transit",
+    "name": "Receive an SMS message if a package is delayed while in transit",
     "version": "1.0.0",
     "enabled": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

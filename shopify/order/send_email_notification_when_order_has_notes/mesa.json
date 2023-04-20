@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_email_notification_when_order_has_notes",
-    "name": "Send Email Notification To Store Owner When Shopify Order Has Notes",
+    "name": "Receive an email when an order has notes",
     "version": "1.0.0",
     "description": "Send email notification when Shopify Order is created and has order notes.",
     "video": "",
