@@ -11,6 +11,7 @@
     "enabled": false,
     "logging": false,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

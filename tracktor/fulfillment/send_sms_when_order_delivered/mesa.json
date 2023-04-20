@@ -1,6 +1,6 @@
 {
     "key": "tracktor/fulfillment/send_sms_when_order_delivered",
-    "name": "Send an SMS message to your customer when their order arrives",
+    "name": "Send an SMS message to your customer when their order is delivered",
     "version": "1.0.0",
     "description": "When your customers purchase time-sensitive products such as ice cream or frozen meat, they will want to be available and notified immediately upon the package's arrival. This template sends an SMS text message when a customer's order is delivered. Your customers will do a little happy dance knowing their order hasn't been spoiling on their porch.",
     "video": "",
@@ -12,6 +12,7 @@
     "enabled": false,
     "logging": true,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

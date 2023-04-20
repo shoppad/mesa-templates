@@ -1,6 +1,6 @@
 {
     "key": "shopify/customer/tag_customers_with_edu_email",
-    "name": "Add Educational Discount Tag To Customer",
+    "name": "Add an educational discount tag to a customer",
     "version": "1.0.0",
     "description": "Add Educational Discount Tag to Shopify Customer when customer is created.",
     "video": "",
@@ -12,6 +12,7 @@
     "enabled": false,
     "logging": true,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

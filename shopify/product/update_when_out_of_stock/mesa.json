@@ -1,6 +1,6 @@
 {
-    "key": "update_when_out_of_stock",
-    "name": "Update a Product When the Inventory of its Variants Becomes Out of Stock",
+    "key": "shopify/product/update_when_out_of_stock",
+    "name": "Update a product when a variant goes out of stock",
     "version": "1.0.0",
     "description": "When the inventory of one of your product’s variants becomes out of stock, it’s important to update it to let customers know before they make the mistake of ordering it. However, keeping track of which product variants are currently available every time can take a toll on your schedule, which is why Mesa can do all the work for you.",
     "video": "",
@@ -12,6 +12,7 @@
     "enabled": false,
     "logging": false,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

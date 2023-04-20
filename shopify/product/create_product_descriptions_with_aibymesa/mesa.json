@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/create_product_descriptions_with_aibymesa",
-    "name": "Write Shopify product descriptions with AI by MESA",
+    "name": "Use AI by MESA to write Shopify product descriptions",
     "version": "1.0.0",
     "description": "Crafting compelling product descriptions can quickly become daunting if you're not in a creative mindset or if you just have a lot of other tasks on your plate. Use the power of AI to turn your writer's block into a seller's gain. This template will generate a product description using AI by MESA when a product is created in Shopify.",
     "video": "",
@@ -11,6 +11,7 @@
     "enabled": false,
     "logging": true,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
