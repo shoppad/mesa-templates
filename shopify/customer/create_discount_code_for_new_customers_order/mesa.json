@@ -146,7 +146,7 @@
                 "operation_id": "message_send",
                 "metadata": {
                     "to": "{{shopify.phone}}",
-                    "message": "Here is your new discount code to use at checkout!\n\n{{shopify_3.code}}\n\nYou have received 20% off your next order."
+                    "message": "Thank you for shopping with {{context.shop.name}}.\n\nTake 20% off your next order.\n\nUse online code: {{shopify_3.code}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
