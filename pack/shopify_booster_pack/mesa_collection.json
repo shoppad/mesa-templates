@@ -6,10 +6,10 @@
     "helpscout_article_id": "6286e37e8bf21a2e2b6d5ec0",
     "templates": [
       "shopify/product/send_email_when_product_goes_out_of_stock",
-      "shopify/order/send_high_risk_orders_to_sms",
       "shopify/order/add_line_item_properties_to_notes",
-      "shopify/product/add_color_tag",
       "shopify/theme/schedule_change",
-      "shopify/order/send_order_report_card_email"
+      "shopify/order/send_order_report_card_email",
+      "shopify/customer/tag_vip_customers",
+      "shopify/draft_order/remove_after_thirty_days"
     ]
 }
