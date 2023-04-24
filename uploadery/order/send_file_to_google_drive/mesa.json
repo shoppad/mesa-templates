@@ -1,8 +1,8 @@
 {
     "key": "uploadery/order/send_file_to_google_drive",
-    "name": "Send Uploadery File to Google Drive",
+    "name": "Send Uploadery files to Google Drive",
     "version": "1.0.0",
-    "description": "Save every Uploadery file from completed orders to Google Drive.",
+    "description": "Give your team easy access to customer files and facilitate collaboration by automatically sending files from customers to Google Drive. This template sends Uploadery files from a Shopify order to Google Drive when a customer places an order. Save time, improve your customer's experience, and enhance overall file management without the manual effort.",
     "video": "",
     "readme": "",
     "tags": [
@@ -10,8 +10,9 @@
     ],
     "source": "uploadery",
     "destination": "google-drive",
+    "seconds": 360,
     "enabled": false,
-    "logging": false,
+    "logging": true,
     "debug": false,
     "config": {
         "inputs": [
@@ -49,10 +50,11 @@
                 "action": "save",
                 "name": "Save File",
                 "key": "googledrive-save-file",
+                "operation_id": "file_save",
                 "metadata": {
                     "token": "",
                     "file_url": "{{loop.value}}",
-                    "file_name": "{{filename}}"
+                    "file_name": "{{uploadery-order-created.order.name}}  - {{filename}}"
                 },
                 "local_fields": [],
                 "weight": 1
