@@ -2,15 +2,9 @@
     "key": "shopify/product/add_and_remove_tags_on_new_products",
     "name": "Add a tag to a new product and then remove the tag after 30 days",
     "version": "1.0.0",
-    "description": "Organize and manage your newest products with the help of tags. This template will add the product tag \"New Arrival\" to a new product and then will remove the tag after 30 days.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
     "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -38,10 +32,10 @@
                 "key": "shopify_1",
                 "operation_id": "post_mesa_products_product_id_tag",
                 "metadata": {
-                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
+                    "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
                     "product_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "New Arrival"
+                        "tag": "{{ template | label: 'What tag will be added to the product?', description: '', default: 'New Arrival', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -58,7 +52,7 @@
                 "key": "shopify_2",
                 "operation_id": "get_products_product_id",
                 "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
                     "product_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
@@ -74,7 +68,7 @@
                 "metadata": {
                     "amount": "30",
                     "unit": "days",
-                    "test_bypass": false
+                    "test_bypass": true
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -90,17 +84,16 @@
                 "key": "shopify_3",
                 "operation_id": "delete_mesa_products_product_id_tag",
                 "metadata": {
-                    "api_endpoint": "delete mesa/products/{{product_id}}/tag.json",
+                    "api_endpoint": "delete mesa\/products\/{{product_id}}\/tag.json",
                     "product_id": "{{delay.id}}",
                     "body": {
-                        "tag": "New Arrival"
+                        "tag": "{{ template | label: 'What tag will be removed from the product?', description: 'This needs to be the same as the tag that is added.', default: 'New Arrival', tokens: false }}"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }
