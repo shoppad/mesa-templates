@@ -35,7 +35,7 @@
                     "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
                     "product_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be added to the product?', description: '', default: 'New Arrival', tokens: false }}"
+                        "tag": "{{ template | label: 'What tag will be added to the product?', description: 'Before hitting Next, make sure to copy the tag exactly for the next question.', default: 'New Arrival', tokens: false }}"
                     }
                 },
                 "local_fields": [],
