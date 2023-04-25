@@ -68,7 +68,7 @@
                 "metadata": {
                     "amount": "30",
                     "unit": "days",
-                    "test_bypass": true
+                    "test_bypass": false
                 },
                 "local_fields": [],
                 "on_error": "default",
