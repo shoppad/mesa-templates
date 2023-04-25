@@ -54,7 +54,7 @@
                 "metadata": {
                     "token": "",
                     "file_url": "{{loop.value}}",
-                    "file_name": "{{uploadery-order-created.order.name}}  - {{filename}}"
+                    "file_name": "{{uploadery-order-created.order.name}} - {{filename}}"
                 },
                 "local_fields": [],
                 "weight": 1
