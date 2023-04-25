@@ -1,0 +1,61 @@
+{
+    "key": "shopify/customer/add_new_customer_to_quickbooks",
+    "name": "Add a customer in Quickbooks when a new customer is created in Shopify",
+    "version": "1.0.0",
+    "description": "Ensure your customer information in Quickbooks is up to date as new customers make purchases on your Shopify store. This template will add a new customer in Quickbooks when a new customer is created in Shopify.",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "shopify",
+                "operation_id": "customers_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "quickbooks",
+                "operation_id": "CustomerPost3",
+                "metadata": {
+                    "api_endpoint": "post \/customer",
+                    "body": {
+                        "Notes": "{{shopify.note}}",
+                        "DisplayName": "{{shopify.first_name}} {{shopify.last_name}}",
+                        "BillAddr": {
+                            "Line1": "{{shopify.default_address.address1}} {{shopify.default_address.address2}}",
+                            "City": "{{shopify.default_address.city}}",
+                            "Country": "{{shopify.default_address.city}}",
+                            "CountrySubDivisionCode": "{{shopify.default_address.country_code}}",
+                            "PostalCode": "{{shopify.default_address.zip}}"
+                        },
+                        "PrimaryPhone": {
+                            "FreeFormNumber": "{{shopify.phone}}"
+                        },
+                        "PrimaryEmailAddr": {
+                            "Address": "{{shopify.email}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
