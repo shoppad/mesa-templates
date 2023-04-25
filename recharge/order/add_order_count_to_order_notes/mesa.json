@@ -2,15 +2,9 @@
     "key": "recharge/order/add_order_count_to_order_notes",
     "name": "Add a customer's Recharge order count to order notes",
     "version": "1.0.0",
-    "description": "Use order notes to keep track of a customer's Recharge order count. It's a great way to understand where your customers are in their subscription journey and can help you forecast and plan your inventory and sales. This template will count the number of Recharge orders a customer has had when a Recharge order is created and then add the count to the order notes.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
     "seconds": 120,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -18,7 +12,7 @@
                 "trigger_type": "input",
                 "type": "recharge",
                 "entity": "order",
-                "action": "order/created",
+                "action": "order\/created",
                 "name": "Order Created",
                 "key": "recharge",
                 "operation_id": "order_created",
@@ -39,10 +33,10 @@
                 "key": "recharge_1",
                 "operation_id": "order_filter",
                 "metadata": {
-                    "api_endpoint": "get /mesa/orders/{order_id}/filter.json",
+                    "api_endpoint": "get \/mesa\/orders\/{order_id}\/filter.json",
                     "path": {
                         "order_id": "{{recharge.external_order_id.ecommerce}}",
-                        "number_of_orders": "1"
+                        "number_of_orders": "{{ template | label: 'How many orders need to be in the subscription?', description: '', default: 1, type: 'number', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -59,10 +53,10 @@
                 "key": "shopify_1",
                 "operation_id": "put_mesa_orders_order_id_note",
                 "metadata": {
-                    "api_endpoint": "put mesa/orders/{{order_id}}/note.json",
+                    "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
                     "order_id": "{{recharge.external_order_id.ecommerce}}",
                     "body": {
-                        "note": "Recharge Order 1",
+                        "note": "{{ template | label: 'What note will be added to the order?', description: '', default: 'Recharge Order 1', tokens: false }}",
                         "append": true
                     }
                 },
@@ -70,7 +64,6 @@
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
