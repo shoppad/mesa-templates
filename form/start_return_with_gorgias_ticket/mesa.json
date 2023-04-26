@@ -112,6 +112,7 @@
                 "action": "create",
                 "name": "Ticket Create",
                 "key": "gorgias_ticket",
+                "version": "v2",
                 "metadata": {
                     "entity_wrapper": "body",
                     "body": {

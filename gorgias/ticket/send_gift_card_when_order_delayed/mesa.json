@@ -21,6 +21,7 @@
                 "action": "list-created",
                 "name": "Ticket Created",
                 "key": "gorgias",
+                "version": "v2",
                 "operation_id": "ticket_created",
                 "metadata": {
                     "entity_wrapper": "body.data",
@@ -56,6 +57,7 @@
                 "action": "retrieve",
                 "name": "Retrieve Ticket",
                 "key": "gorgias_1",
+                "version": "v2",
                 "operation_id": "get_api_tickets_id",
                 "metadata": {
                     "entity_wrapper": "body",
