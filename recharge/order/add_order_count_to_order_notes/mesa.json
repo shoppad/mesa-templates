@@ -1,6 +1,6 @@
 {
     "key": "recharge/order/add_order_count_to_order_notes",
-    "name": "Add a customer's Recharge order count to order notes",
+    "name": "Add a customer's Recharge order count to order notes when a customer is on a specific order within their subscription",
     "version": "1.0.0",
     "seconds": 120,
     "enabled": false,
@@ -36,7 +36,7 @@
                     "api_endpoint": "get \/mesa\/orders\/{order_id}\/filter.json",
                     "path": {
                         "order_id": "{{recharge.external_order_id.ecommerce}}",
-                        "number_of_orders": "{{ template | label: 'How many orders need to be in the subscription?', description: '', default: 1, type: 'number', tokens: false }}"
+                        "number_of_orders": "{{ template | label: 'At which order in the customer's subscription should the order note be added?', description: 'For example, if you wanted to add an order note on the fourth order in a customer's subscription, you would enter 4. MESA will look for this value each time an order is created and only add the note if the order count matches.', default: 1, type: 'number', tokens: false }}"
                     }
                 },
                 "local_fields": [],
