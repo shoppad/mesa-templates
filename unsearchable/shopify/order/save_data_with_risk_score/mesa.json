@@ -1,0 +1,118 @@
+{
+    "key": "unsearchable/shopify/order/save_data_with_risk_score",
+    "name": "Save Orders To Data With Risk Score",
+    "version": "1.0.0",
+    "description": "Save your orders along with Shopify's risk score to Data by MESA",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_risk",
+                "action": "list",
+                "name": "Get List of Order Risks",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id_risks",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}\/risks.json",
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "Number",
+                            "type": "numeric",
+                            "value": "{{shopify.number}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        },
+                        {
+                            "key": "Customer",
+                            "type": "varchar",
+                            "value": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        },
+                        {
+                            "key": "Customer Email",
+                            "type": "varchar",
+                            "value": "{{shopify.email}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        },
+                        {
+                            "key": "Order Date",
+                            "type": "date",
+                            "value": "{{shopify.created_at}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        },
+                        {
+                            "key": "Tags",
+                            "type": "varchar",
+                            "value": "{{shopify.tags}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        },
+                        {
+                            "key": "status",
+                            "type": "varchar",
+                            "value": "{{shopify.financial_status}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        },
+                        {
+                            "key": "Risk Recommendation",
+                            "type": "varchar",
+                            "value": "{{shopify_1.0.recommendation}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        },
+                        {
+                            "key": "Risk Score",
+                            "type": "numeric",
+                            "value": "{{shopify_1.0.score}}",
+                            "disabled": "643042e3c0b5934bb47f59e4"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{shopify.number}}",
+                        "a": "Number"
+                    },
+                    "table": "Orders"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
