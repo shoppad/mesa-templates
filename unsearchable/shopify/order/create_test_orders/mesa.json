@@ -1,0 +1,126 @@
+{
+    "key": "unsearchable/shopify/order/create_test_orders",
+    "name": "Create test orders",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@daily:1 0 * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2023-05-02T00:01:00-04:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "script": "transform.js",
+                    "mapping": [
+                        {
+                            "destination": "Number Of Orders",
+                            "source": "60"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "list",
+                "name": "Get List of Orders",
+                "key": "shopify_1",
+                "operation_id": "get_orders",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders.json"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{custom.array}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "create",
+                "name": "Create Order",
+                "key": "shopify",
+                "operation_id": "post_orders",
+                "metadata": {
+                    "api_endpoint": "post admin\/orders.json",
+                    "body": {
+                        "email": "{{shopify_1.0.customer.email}}",
+                        "line_items": [
+                            {
+                                "variant_id": "{{shopify_1.0.line_items[0].variant_id}}",
+                                "sku": "{{shopify_1.0.line_items[0].sku}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
