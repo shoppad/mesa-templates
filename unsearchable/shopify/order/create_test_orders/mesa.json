@@ -2,7 +2,7 @@
     "key": "unsearchable/shopify/order/create_test_orders",
     "name": "Create test orders",
     "version": "1.0.0",
-    "description": "",
+    "description": "Automate the generation of numerous test orders to evaluate the performance and efficiency of order fulfillment and related Shopify backend processes.",
     "seconds": 135,
     "enabled": false,
     "setup": false,
@@ -39,7 +39,7 @@
                     "mapping": [
                         {
                             "destination": "Number Of Orders",
-                            "source": "60"
+                            "source": "3"
                         }
                     ]
                 },
