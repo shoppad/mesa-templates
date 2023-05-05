@@ -2,7 +2,7 @@
     "key": "unsearchable/shopify/order/save_data_with_risk_score",
     "name": "Save Orders To Data With Risk Score",
     "version": "1.0.0",
-    "description": "Save your orders along with Shopify's risk score to Data by MESA",
+    "description": "",
     "seconds": 135,
     "enabled": false,
     "setup": false,

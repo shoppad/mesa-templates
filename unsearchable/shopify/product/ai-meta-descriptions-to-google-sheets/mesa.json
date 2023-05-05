@@ -1,0 +1,159 @@
+{
+    "key": "shopify_product_ai-meta-descriptions-to-google-sheets",
+    "name": "Generate AI Product Meta Descriptions And Save To Google Sheets",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
+                "name": "Retrieve Product Metafield",
+                "key": "shopify_2",
+                "operation_id": "get_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "get mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "global",
+                        "key": "description_tag"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "chatgpt",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "chatgpt",
+                "operation_id": "createChatCompletion",
+                "metadata": {
+                    "api_endpoint": "post \/chat\/completions",
+                    "body": {
+                        "model": "gpt-4",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": "Write an SEO optimized meta descripion that is a max of 160 characters for the following product:\n\nTitle: {{shopify.title}}\n\nDescription: {{ custom.body_text }}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Create Row",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet_name}",
+                    "path": {
+                        "mode": "select",
+                        "spreadsheet_id": "19yyO7Fjwnf1qsKVW5LvUBcIny5ox_3pW8RnfGkt-HdE",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
+                    "body": {
+                        "fields": {
+                            "ID": "{{shopify.id}}",
+                            "Name": "{{shopify.title}}",
+                            "Meta Description": "{{shopify_2.value}}",
+                            "Description": "{{shopify.body_html}}",
+                            "AI Meta Description": "{{chatgpt.choices[0].message.content}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "ID",
+                                        "label": "ID",
+                                        "type": "text",
+                                        "source": "googlesheets_19yyO7Fjwnf1qsKVW5LvUBcIny5ox_3pW8RnfGkt-HdE_Sheet1"
+                                    },
+                                    {
+                                        "key": "Name",
+                                        "label": "Name",
+                                        "type": "text",
+                                        "source": "googlesheets_19yyO7Fjwnf1qsKVW5LvUBcIny5ox_3pW8RnfGkt-HdE_Sheet1"
+                                    },
+                                    {
+                                        "key": "Meta Description",
+                                        "label": "Meta Description",
+                                        "type": "text",
+                                        "source": "googlesheets_19yyO7Fjwnf1qsKVW5LvUBcIny5ox_3pW8RnfGkt-HdE_Sheet1"
+                                    },
+                                    {
+                                        "key": "Description",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "AI Meta Description",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
