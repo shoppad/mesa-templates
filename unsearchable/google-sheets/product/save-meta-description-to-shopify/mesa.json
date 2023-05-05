@@ -1,0 +1,119 @@
+{
+    "key": "unsearchable/google-sheets/product/save-meta-description-to-shopify",
+    "name": "Save AI Product Meta Descriptions From Google Sheets To Shopify",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2023-05-05T10:00:00-04:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "list",
+                "name": "List Row",
+                "key": "googlesheets",
+                "operation_id": "record_list",
+                "metadata": {
+                    "api_endpoint": "get \/{spreadsheet_id}\/{sheet_name}",
+                    "path": {
+                        "spreadsheet_id": "19yyO7Fjwnf1qsKVW5LvUBcIny5ox_3pW8RnfGkt-HdE",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
+                    "query": {
+                        "range": "1:10"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{googlesheets}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "equals",
+                    "b": "Publish",
+                    "a": "{{loop.fields['Status']}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set Product Metafield",
+                "key": "shopify",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{loop.fields['ID']}}",
+                    "body": {
+                        "namespace": "global",
+                        "key": "description_tag",
+                        "type": "single_line_text_field",
+                        "value": "{{loop.fields['Meta Description']}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
