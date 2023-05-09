@@ -1,0 +1,176 @@
+{
+    "key": "new_workflow_46",
+    "name": "Generate New Collections with AI",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "collection",
+                "action": "updated",
+                "name": "Collection Updated",
+                "key": "shopify",
+                "operation_id": "collections_update",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify.collection_listing.title}}",
+                    "comparison": "equals",
+                    "b": "Best Selling Tesla Model Y Accessories"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify_1",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/products.json"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_1}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get collection names for product",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter out products that are already in the collection",
+                "key": "filter_2",
+                "metadata": {
+                    "a": "{{custom.collections}}",
+                    "comparison": "does not contain",
+                    "b": "{{shopify.collection_listing.title}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "chatgpt",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "chatgpt",
+                "operation_id": "createChatCompletion",
+                "metadata": {
+                    "api_endpoint": "post \/chat\/completions",
+                    "body": {
+                        "model": "gpt-4",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": "We are creating a new category and want to see if the following product falls under this category. Just reply Yes or No as a response without any period or punctuation.\n\nNew Category: {{shopify.collection_listing.title}}\n\nProduct: {{loop.title}}\n\nExisting Categories: {{custom.collections | join: \", \" }}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "GPT Classified Under Category",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{chatgpt.choices[0].message.content}}",
+                    "comparison": "equals",
+                    "b": "Yes"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approval",
+                "key": "approval",
+                "metadata": {
+                    "message": "AI Category: {{shopify.collection_listing.title}}\n\nProduct: {{loop.title}}\nExisting Categories: {{custom.collections | join: \", \" }}",
+                    "field": false,
+                    "label_accept": "Accept",
+                    "label_reject": "Reject"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collect",
+                "action": "create",
+                "name": "Collection Add Product",
+                "key": "shopify_2",
+                "operation_id": "post_collects",
+                "metadata": {
+                    "api_endpoint": "post admin\/collects.json",
+                    "body": {
+                        "collection_id": "{{shopify.collection_listing.collection_id}}",
+                        "product_id": "{{loop.id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 8
+            }
+        ]
+    }
+}
