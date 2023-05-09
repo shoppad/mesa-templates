@@ -65,7 +65,7 @@
                 "metadata": {
                     "a": "{{shopify_variant.inventory_quantity}}",
                     "comparison": "less than equal",
-                    "b": "{{ template | label: 'What should be the out of stock threshold?', description: 'When product inventory reaches this level (or below) the notification will trigger.', default: '0', tokens: false, placeholder: '' }}"
+                    "b": "{{ template | label: 'What should be the out of stock threshold?', description: 'When product inventory reaches this level (or below) the notification will trigger.', default: '0', tokens: false }}"
                 },
                 "local_fields": [],
                 "weight": 2
@@ -77,9 +77,9 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{ template | label: 'What email address should receive this notification?', default: '', tokens: false, placeholder: 'name@example.com' }}",
-                    "subject": "{{ template | label: 'Do you want to change the subject line?', description: 'This is set by default but can be adjusted if you prefer something different.', default: 'Item out of stock: {{shopify_variant.sku}}', placeholder: '' }}",
-                    "message": "{{ template | label: 'Do you want to change the email message?', description: 'The email message is set by default but can be adjusted if you prefer to add or omit any details.', default: 'This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{shopify_variant.product_id}}', placeholder: '' }}"
+                    "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email', default: '' }}",
+                    "subject": "{{ template | label: 'Do you want to change the subject line?', description: 'This is set by default but can be adjusted if you prefer something different.', default: 'Item out of stock: {{shopify_variant.sku}}' }}",
+                    "message": "{{ template | label: 'Do you want to change the email message?', description: 'The email message is set by default but can be adjusted if you prefer to add or omit any details.', default: 'This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{shopify_variant.product_id}}' }}"
                 },
                 "local_fields": [],
                 "weight": 3
