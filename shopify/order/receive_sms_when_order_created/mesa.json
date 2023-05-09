@@ -39,7 +39,7 @@
                 "key": "sms",
                 "metadata": {
                     "message": "A new order was placed: {{shopify.name}}\n\nClick here to view the order: https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}",
-                    "to": "{{context.shop.phone}}"
+                    "to": "{{ template | label: 'What phone number should receive this notification?', description: 'SMS by MESA currently only supports phone numbers from the United States or Canada.', type: 'string', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
