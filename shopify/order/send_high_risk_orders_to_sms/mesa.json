@@ -95,7 +95,7 @@
                 "name": "Send Message",
                 "key": "sms",
                 "metadata": {
-                    "to": "{{context.shop.phone}}",
+                    "to": "{{ template | label: 'What phone number should receive this notification?', description: 'SMS by MESA currently only supports phone numbers from the United States or Canada.', type: 'string', tokens: false, placeholder: '+1 415 555 2671' }}",
                     "message": "Potentially fraudulent order {{shopify.name}}\n\nView order: https:\/\/{{context.shop.myshopify_domain\t}}\/admin\/orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
