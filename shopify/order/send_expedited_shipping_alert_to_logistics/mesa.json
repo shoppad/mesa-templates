@@ -59,9 +59,9 @@
                 "name": "Send Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{context.shop.email}}",
-                    "subject": "New {{shopify.shipping_lines[0].title}} order received: {{shopify.name}}",
-                    "message": "Order {{shopify.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify.shipping_address.city}}, {{shopify.shipping_address.province}} {{shopify.shipping_address.country}}.\n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
+                    "to": "{{ template | label: 'What email address should receive this notification?', description: '', default: '', type: 'string', tokens: false, placeholder: '' }}",
+                    "subject": "{{ template | label: 'Do you want to change the subject line?', description: 'This is set by default but can be adjusted if you prefer something different.', default: 'New {{shopify.shipping_lines[0].title}} order received: {{shopify.name}}', type: 'string', tokens: true, placeholder: '' }}",
+                    "message": "{{ template | label: 'Do you want to change the email message?', description: 'The email message is set by default but can be adjusted if you prefer to add or omit any details.', default: 'Order {{shopify.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify.shipping_address.city}}, {{shopify.shipping_address.province}} {{shopify.shipping_address.country}}.\n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}', type: 'string', tokens: true, placeholder: '' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -80,7 +80,7 @@
                     "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
                     "order_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "Expedited shipping"
+                        "tag": "{{ template | label: 'What tag would you like to add to the order?', description: '', default: 'Expedited shipping', type: 'string', tokens: false, placeholder: '' }}"
                     }
                 },
                 "local_fields": [],
