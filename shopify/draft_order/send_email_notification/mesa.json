@@ -12,6 +12,7 @@
     "enabled": false,
     "logging": true,
     "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -35,9 +36,9 @@
                 "name": "Send Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{context.shop.email}}",
-                    "subject": "{{context.shop.name}}, A new draft order has been created.",
-                    "message": "A new draft order {{shopify.name}} has been created. \nSee: https:\/\/{{context.shop.myshopify_domain}}\/admin\/draft_orders\/{{shopify.id}}"
+                    "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email' }}",
+                    "subject": "{{ template | label: 'Do you want to change the subject line?', description: 'This is set by default but can be adjusted if you prefer something different.', default: '{{context.shop.name}}, A new draft order has been created.', type: 'string', tokens: false }}",
+                    "message": "{{ template | label: 'Do you want to change the email message?', description: 'The email message is set by default but can be adjusted if you prefer to add or omit any details.', default: 'A new draft order {{shopify.name}} has been created. \nSee: https:\/\/{{context.shop.myshopify_domain}}\/admin\/draft_orders\/{{shopify.id}}', type: 'string', tokens: true }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
