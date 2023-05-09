@@ -125,7 +125,7 @@
                     "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
                     "order_id": "{{shopify_2.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be added from the order?', description: 'The tag is set to 'Order Can Be Edited' by default. Change this tag if you prefer something different.', default: 'Order Cannot Be Edited', tokens: false }}"
+                        "tag": "{{ template | label: 'What tag will be added to the order?', description: 'The tag is set to 'Order Can Be Edited' by default. Change this tag if you prefer something different.', default: 'Order Cannot Be Edited', tokens: false }}"
                     }
                 },
                 "local_fields": [],
