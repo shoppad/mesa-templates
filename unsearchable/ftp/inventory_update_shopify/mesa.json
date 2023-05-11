@@ -1,0 +1,89 @@
+{
+    "key": "unsearchable_ftp_inventory_update_shopify",
+    "name": "Update product quantities from FTP upload",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "ftp",
+                "name": "Fetch FTP File",
+                "key": "ftp",
+                "metadata": {
+                    "file": "inventory.csv",
+                    "schedule": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{custom.rows}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "set",
+                "name": "Set Inventory Level",
+                "key": "shopify_1",
+                "operation_id": "post_inventory_levels_set",
+                "metadata": {
+                    "api_endpoint": "post admin\/inventory_levels\/set.json",
+                    "body": {
+                        "available": "{{ loop.Inventory }}",
+                        "location_id": "79286305089",
+                        "inventory_item_id": "{{ custom_1.inventory_item_id }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
