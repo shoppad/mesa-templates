@@ -1,0 +1,117 @@
+{
+    "key": "unsearchable\/shopify\/product\/send_image_to_img2text_api",
+    "name": "AI Product Image Alt Text",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "Webhook",
+                            "source": "https:\/\/webhooks.getmesa.com\/v1\/kalen-jordan-dev\/trigger-webhook\/6436b8031ace5d19ab72a251\/6436b80739d4257bcd257f32.json?apikey=GLqwQO8I9Q4eqSUtQar23AbSfaMjIXQ1DsVz5wi7"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": "4",
+                "trigger_type": "output",
+                "type": "api",
+                "entity": "api_key",
+                "name": "API Key",
+                "key": "api",
+                "operation_id": "api_key",
+                "metadata": {
+                    "method": "post",
+                    "url": "https:\/\/api.replicate.com\/v1\/predictions",
+                    "content_type": "application\/json",
+                    "custom_body_toggle": true,
+                    "custom_body": "{\"webhook\": \"{{transform.Webhook}}\",\"version\": \"50adaf2d3ad20a6f911a8a9e3ccf777b263b8596fbd2c8fc26e8888f8a0edbb5\", \"input\": {\"image\": \"{{shopify.image.src}}\"}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "product_id",
+                            "type": "numeric",
+                            "value": "{{shopify.id}}",
+                            "disabled": "6436b43332860061857979f9"
+                        },
+                        {
+                            "key": "product_image_id",
+                            "type": "numeric",
+                            "value": "{{shopify.image.id}}",
+                            "disabled": "6436b43332860061857979f9"
+                        },
+                        {
+                            "key": "webhook_id",
+                            "type": "varchar",
+                            "value": "{{api.id}}",
+                            "disabled": "6436b43332860061857979f9"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{shopify.image.id}}",
+                        "a": "product_image_id"
+                    },
+                    "table": "Product Image Webhooks"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}

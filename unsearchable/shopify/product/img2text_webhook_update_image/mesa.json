@@ -1,0 +1,80 @@
+{
+    "key": "unsearchable\/shopify\/product\/img2text_webhook_update_image",
+    "name": "Receive img2prompt web hook and update image alt text",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "webhook",
+                "name": "Webhook Received",
+                "key": "webhook",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "retrieve",
+                "name": "Retrieve Record",
+                "key": "data",
+                "operation_id": "get_database_table_mesa_id",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}\/{mesa_id}",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{webhook.id}}",
+                        "a": "webhook_id"
+                    },
+                    "table": "Product Image Webhooks"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_image",
+                "action": "update",
+                "name": "Update Product Image",
+                "key": "shopify",
+                "operation_id": "put_products_product_id_images_image_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/products\/{{product_id}}\/images\/{{image_id}}.json",
+                    "product_id": "{{data.product_id}}",
+                    "image_id": "{{data.product_image_id}}",
+                    "body": {
+                        "alt": "{{webhook.output}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "alt",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
