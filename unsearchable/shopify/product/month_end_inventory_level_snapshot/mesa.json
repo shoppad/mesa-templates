@@ -1,0 +1,154 @@
+{
+    "key": "unsearchable\/shopify\/product\/month_end_inventory_level_snapshot",
+    "name": "Month End Inventory Levels Snapshotting",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@monthly:0 0 1 * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2023-06-01T00:00:00-04:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify_1",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/products.json"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_1}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "list",
+                "name": "Get List of Product Variants",
+                "key": "shopify",
+                "operation_id": "get_products_product_id_variants",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}\/variants.json",
+                    "product_id": "{{loop.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop_1",
+                "metadata": {
+                    "key": "{{shopify}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop_1.current_item.sku}}",
+                    "comparison": "is not empty"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Inventory Level From SKU",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "{{loop_1.sku}}",
+                            "disabled": "645babf9867a3809e45c2eff"
+                        },
+                        {
+                            "key": "available",
+                            "type": "numeric",
+                            "value": "{{custom.available}}",
+                            "disabled": "645babf9867a3809e45c2eff"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop_1.sku}}",
+                        "a": "sku"
+                    },
+                    "table": "Inventory By SKU"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
