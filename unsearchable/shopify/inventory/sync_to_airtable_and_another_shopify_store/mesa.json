@@ -1,0 +1,175 @@
+{
+    "key": "unsearchable\/shopify\/inventory\/sync_to_airtable_and_another_shopify_store",
+    "name": "Sync inventory to airtable and another shopify store when an order happens",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "Base",
+                            "source": "app7LPICS6E4lRa8b"
+                        },
+                        {
+                            "destination": "Table",
+                            "source": "Variants"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Airtable - Find or create variant by SKU",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get inventory item id from SKU",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_item",
+                "action": "retrieve",
+                "name": "Retrieve Inventory Item",
+                "key": "shopify_1",
+                "operation_id": "get_inventory_items_inventory_item_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/inventory_items\/{{inventory_item_id}}.json",
+                    "inventory_item_id": "{{custom_1.inventory_item_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "list",
+                "name": "Get List of Inventory Levels",
+                "key": "shopify_2",
+                "operation_id": "get_inventory_levels",
+                "metadata": {
+                    "api_endpoint": "get admin\/inventory_levels.json",
+                    "parameters": "inventory_item_ids={{shopify_1.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Airtable: Update Record",
+                "key": "custom_2",
+                "metadata": {
+                    "script": "custom_2.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": "4",
+                "trigger_type": "output",
+                "type": "api",
+                "entity": "no_auth",
+                "name": "Send webhook to next automation to sync to other shopify store",
+                "key": "api",
+                "operation_id": "no_auth",
+                "metadata": {
+                    "method": "post",
+                    "url": "https:\/\/webhooks.getmesa.com\/v1\/kalen-plus\/trigger-webhook\/645e5ab00c12de362d39bbc2\/645e5ab496bb790d18746110.json?apikey=5HyfifuT0m30k33qJ192hae8sOz3TDg57mEGVRCE",
+                    "content_type": "application\/json",
+                    "custom_body_toggle": false,
+                    "body": {
+                        "data": [
+                            {
+                                "key": "sku",
+                                "value": "{{loop.sku}}"
+                            },
+                            {
+                                "key": "available",
+                                "value": "{{shopify_2[0].available}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 7
+            }
+        ]
+    }
+}
