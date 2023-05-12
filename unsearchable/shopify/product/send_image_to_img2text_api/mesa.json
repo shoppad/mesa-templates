@@ -1,6 +1,6 @@
 {
     "key": "unsearchable\/shopify\/product\/send_image_to_img2text_api",
-    "name": "AI Product Image Alt Text",
+    "name": "Send Image to Replicate.com img2prompt API to get alt text",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
