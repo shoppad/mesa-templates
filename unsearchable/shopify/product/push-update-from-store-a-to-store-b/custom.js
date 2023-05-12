@@ -14,6 +14,38 @@ module.exports = new class {
    */
   script = (payload, context) => {
 
+    const accessToken = Mesa.credential.get('kalen-plus_myshopify_com');
+    const shop = "kalen-plus.myshopify.com";
+
+    const query = `
+        query {
+          shop {
+            name
+            email
+          }
+        }
+      `;
+
+    const variables = {};
+
+    let post = Mesa.request.post(
+      `https://${shop}/admin/api/2022-07/graphql.json`,
+      {
+        query,
+        variables,
+      },
+      {
+        skipJsonWrap: true,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Access-Token": accessToken,
+        },
+      }
+    );
+
+    Mesa.log.info("post", post);
+
+    /*
     let query = `
       query getProductIdFromHandle($handle: String!) {
         productByHandle(handle: $handle) {
@@ -31,6 +63,7 @@ module.exports = new class {
     let globalProductId = r.data.productByHandle.id;
     payload.product_id = globalProductId.match(/\d+/)[0];
     Mesa.log.info("inventory item Id: ", payload.inventory_item_id);
+    */
 
     // We're done, call the next step!
     Mesa.output.next(payload);
