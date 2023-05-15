@@ -1,5 +1,5 @@
 {
-    "key": "unsearchable\/shopify\/product\/sync_to_airtable",
+    "key": "unsearchable\/shopify\/product\/sync_images_to_airtable",
     "name": "Sync product images to airtable",
     "version": "1.0.0",
     "description": "",
@@ -88,7 +88,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Airtable: Find Or Create Record",
                 "key": "custom",
                 "metadata": {
                     "script": "custom.js"
@@ -116,7 +116,10 @@
                     },
                     "body": {
                         "fields": {
-                            "Product Name": "{{custom.record.Name}}"
+                            "Product Name": "{{shopify.title}}",
+                            "Alt Text": "{{loop.current_item.alt}}",
+                            "Product Description": "{{shopify.body_html}}",
+                            "Product ID": "{{shopify.id}}"
                         }
                     }
                 },
@@ -129,6 +132,21 @@
                                 "fields": [
                                     {
                                         "key": "Product Name",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "Alt Text",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "Product Description",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    },
+                                    {
+                                        "key": "Product ID",
                                         "type": "custom",
                                         "allow_custom_fields": false
                                     }
@@ -144,7 +162,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Update Product Image",
                 "key": "custom_1",
                 "metadata": {
                     "script": "custom_1.js"

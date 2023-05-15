@@ -21,8 +21,8 @@ module.exports = new class {
       }
     }
 
-    let productId = payload.current_item.id;
-    let filterByFormula = `{Product ID} = '${productId}'`;
+    let productImageId = payload.current_item.id;
+    let filterByFormula = `{Product Image ID} = '${productImageId}'`;
     let base = context.steps.transform.Base;
     let table = context.steps.transform.Table;
     let url = 'https://api.airtable.com/v0/' + base + '/' + table + '?filterByFormula=' + encodeURIComponent(filterByFormula);
@@ -37,7 +37,7 @@ module.exports = new class {
         "records": [
           {
             "fields": {
-              "Product ID": productId,
+              "Product Image ID": productImageId,
             }
           }
         ]
