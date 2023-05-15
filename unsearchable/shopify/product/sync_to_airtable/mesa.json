@@ -1,0 +1,158 @@
+{
+    "key": "unsearchable\/shopify\/product\/sync_to_airtable",
+    "name": "Sync product images to airtable",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "key": "shopify",
+                "operation_id": "products_update",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_image",
+                "action": "list",
+                "name": "Get List of Product Image",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id_images",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}\/images.json",
+                    "product_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "Base",
+                            "source": "appOsYbWbfsaaEOEJ"
+                        },
+                        {
+                            "destination": "Table",
+                            "source": "tblz1gmqwJMlnwK9w"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify_1}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "airtable",
+                "entity": "record",
+                "action": "update",
+                "name": "Update Record",
+                "key": "airtable",
+                "operation_id": "update",
+                "metadata": {
+                    "api_endpoint": "patch \/{base}\/{table}\/{record_id}",
+                    "script": "custom.js",
+                    "path": {
+                        "base": "{{transform.Base}}",
+                        "table": "{{transform.Table}}",
+                        "record_id": "{{custom.record.id}}"
+                    },
+                    "body": {
+                        "fields": {
+                            "Product Name": "{{custom.record.Name}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "fields",
+                                "fields": [
+                                    {
+                                        "key": "Product Name",
+                                        "type": "custom",
+                                        "allow_custom_fields": false
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            }
+        ]
+    }
+}
