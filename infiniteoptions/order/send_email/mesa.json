@@ -38,8 +38,8 @@
                 "key": "email",
                 "metadata": {
                     "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email' }}",
-                    "subject": "{{ template | label: 'Do you want to change the subject line?', description: 'This is set by default but can be adjusted if you prefer something different.', default: 'New Infinite Options Order {{infiniteoptions_order.order.order_number}}' }}",
-                    "message": "{{ template | label: 'Do you want to change the email message?', description: 'The email message is set by default but can be adjusted if you prefer to add or omit any details.', default: 'Order Number: {{infiniteoptions_order.order.order_number}}\n\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}' }}"
+                    "subject": "New Infinite Options Order {{infiniteoptions_order.order.order_number}}",
+                    "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
                 },
                 "local_fields": [],
                 "weight": 0

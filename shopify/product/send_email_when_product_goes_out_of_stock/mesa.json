@@ -78,8 +78,8 @@
                 "key": "email",
                 "metadata": {
                     "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email', default: '' }}",
-                    "subject": "{{ template | label: 'Do you want to change the subject line?', description: 'This is set by default but can be adjusted if you prefer something different.', default: 'Item out of stock: {{shopify_variant.sku}}' }}",
-                    "message": "{{ template | label: 'Do you want to change the email message?', description: 'The email message is set by default but can be adjusted if you prefer to add or omit any details.', default: 'This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{shopify_variant.product_id}}' }}"
+                    "subject": "Item out of stock: {{shopify_variant.sku}}",
+                    "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{shopify_variant.product_id}}"
                 },
                 "local_fields": [],
                 "weight": 3
