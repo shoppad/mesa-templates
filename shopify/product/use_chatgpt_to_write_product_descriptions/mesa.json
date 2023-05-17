@@ -1,0 +1,73 @@
+{
+    "key": "shopify/product/use_chatgpt_to_write_product_descriptions",
+    "name": "Write product descriptions with ChatGPT",
+    "version": "1.0.0",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "chatgpt",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "chatgpt",
+                "operation_id": "createChatCompletion",
+                "metadata": {
+                    "api_endpoint": "post /chat/completions",
+                    "body": {
+                        "model": "gpt-3.5-turbo",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": "Your task is to write a brief product description for a product called {{shopify.title}} in HTML <p> elements."
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "shopify_1",
+                "operation_id": "put_products_product_id",
+                "metadata": {
+                    "api_endpoint": "put admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "body_html": "{{chatgpt.choices[0].message.content}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
