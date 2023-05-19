@@ -2,15 +2,8 @@
     "key": "shopify/order/update_tracktor_status_when_order_tag_added",
     "name": "Update Tracktor status when an order tag is added in Shopify",
     "version": "1.0.0",
-    "description": "Changes the Tracktor order status to \"Preparing your order\" when a \"made to order\" tag is added to the Shopify order.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "tracktor",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,7 +14,9 @@
                 "action": "updated",
                 "name": "Order Updated",
                 "key": "shopify_order",
+                "operation_id": "orders_updated",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -62,7 +57,9 @@
                 "action": "update",
                 "name": "Update Manual Status Order",
                 "key": "tracktor_order_1",
+                "operation_id": "UpdatethemanualtrackingstatusofanOrder",
                 "metadata": {
+                    "api_endpoint": "post /orders/{order_id}.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
                         "automatic_carrier_updates": "false",
@@ -73,7 +70,6 @@
                 "local_fields": [],
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
