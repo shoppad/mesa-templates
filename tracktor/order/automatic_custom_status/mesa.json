@@ -1,17 +1,9 @@
 {
-    "key": "automatic_custom_status",
-    "name": "Automatically update package tracking to a custom order status in Tracktor when an order is placed",
+    "key": "tracktor/order/automatic_custom_status",
+    "name": "Update tracking to a custom status",
     "version": "1.0.0",
-    "description": "Custom orders take more time to ship than standard orders since they have to go through specific procedures such as painting or special packaging before they’re sent to the customer. To make your life easier, Mesa can automatically update the order status to a custom status in Tracktor when a shopper places an order.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -35,9 +29,12 @@
                 "action": "update",
                 "name": "Update Manual Status Order",
                 "key": "tracktor_order",
+                "operation_id": "UpdatethemanualtrackingstatusofanOrder",
                 "metadata": {
+                    "api_endpoint": "post /orders/{order_id}.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
+                        "status": "{{ template | label: 'What custom status would you like to update to?', description: '', tokens: false }}",
                         "automatic_carrier_updates": "false",
                         "force": "true"
                     }
@@ -45,7 +42,6 @@
                 "local_fields": [],
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

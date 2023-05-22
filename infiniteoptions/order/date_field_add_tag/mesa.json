@@ -1,16 +1,9 @@
 {
-    "key": "date_field_add_tag",
-    "name": "Add a Tag to Orders Containing Infinite Options Line Items With Date Field",
+    "key": "infiniteoptions/order/date_field_add_tag",
+    "name": "Add a tag to orders containing product options with a date field",
     "version": "1.0.0",
-    "description": "Infinite Options is a Shopify app that allows you to create custom options for any product. With Mesa, you can add a tag to orders containing Infinite Options Line Items that include a date field. This will help organize your list of orders with dates.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "infiniteoptions",
-    "destination": "shopify",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,8 +14,9 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "infiniteoptions_order",
+                "operation_id": "order_created",
                 "metadata": {
-                    "field_name": "Date"
+                    "field_name": "{{ template | label: 'What is your Date option?', description: '', tokens: false }}"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -49,7 +43,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Order",
                 "key": "shopify_order_1",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
                     "order_id": "{{infiniteoptions_order.order.id}}"
                 },
                 "local_fields": [],
@@ -63,7 +59,9 @@
                 "action": "update",
                 "name": "Update Order",
                 "key": "shopify_order",
+                "operation_id": "put_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "put admin\/orders\/{{order_id}}.json",
                     "body": {
                         "tags": "{{shopify_order_1.tags}}, {{loop.name}}: {{loop.value}}"
                     },
@@ -72,7 +70,6 @@
                 "local_fields": [],
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
