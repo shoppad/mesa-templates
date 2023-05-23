@@ -2,23 +2,17 @@
     "key": "yotpo_loyalty_customer_dob",
     "name": "Save a customer's birthday to a Yotpo Loyalty customer",
     "version": "1.0.0",
-    "description": "An excellent way to engage customers is to offer special rewards on their birthday. Thankfully, Mesa allows you to save a customer’s data of birth via Mesa Forms so you don’t forget.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
+    "description": "An excellent way to engage with your customers is by offering special rewards on their birthday. This template will save a customer's birthday to Yotpo Loyalty when a customer submits a form response. Let your customers treat themselves on their birthday and build a little brand loyalty in the process.",
+    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "form",
-                "name": "Form",
+                "name": "Form Submitted",
                 "key": "form",
                 "metadata": {
                     "form_data": [
@@ -28,37 +22,11 @@
                             "label": "Submit your birthday to receive surprises!"
                         },
                         {
-                            "type": "number",
+                            "type": "date",
                             "required": true,
-                            "label": "Month",
-                            "placeholder": "Enter your birthday month.",
+                            "label": "Date of Birth",
                             "className": "form-control",
-                            "name": "birthday-month",
-                            "min": 1,
-                            "max": 12,
-                            "step": 1
-                        },
-                        {
-                            "type": "number",
-                            "required": true,
-                            "label": "Date",
-                            "placeholder": "Enter your birthday date.",
-                            "className": "form-control",
-                            "name": "birthday-date",
-                            "min": 1,
-                            "max": 31,
-                            "step": 1
-                        },
-                        {
-                            "type": "number",
-                            "required": true,
-                            "label": "Year",
-                            "placeholder": "Enter your birthday year.",
-                            "className": "form-control",
-                            "name": "birthday-year",
-                            "min": 1900,
-                            "max": 2100,
-                            "step": 1
+                            "name": "date"
                         },
                         {
                             "type": "hidden",
@@ -68,6 +36,7 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -78,12 +47,15 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "retrieve",
-                "name": "Customer Retrieve",
-                "key": "shopify_customer",
+                "name": "Retrieve Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_customer_id",
                 "metadata": {
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
                     "customer_id": "{{form.customer-id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -92,21 +64,22 @@
                 "type": "yotpoloyalty",
                 "entity": "birthday",
                 "action": "set",
-                "name": "Set Customer’s Birthday",
-                "key": "yotpoloyalty_birthday",
+                "name": "Set Customer\u2019s Birthday",
+                "key": "yotpoloyalty",
+                "operation_id": "set-customer-birthday",
                 "metadata": {
+                    "api_endpoint": "post \/api\/v2\/customer_birthdays",
                     "body": {
-                        "customer_email": "{{shopify_customer.email}}",
-                        "customer_id": "{{shopify_customer.id}}",
-                        "day": "{{form.birthday-date}}",
-                        "month": "{{form.birthday-month}}",
-                        "year": "{{form.birthday-year}}"
+                        "customer_email": "{{shopify.email}}",
+                        "day": "{%- assign inputs = form.date | split: \"-\" -%}\n{{inputs[2]}}",
+                        "month": "{%- assign inputs = form.date | split: \"-\" -%}\n{{inputs[1]}}",
+                        "year": "{%- assign inputs = form.date | split: \"-\" -%}\n{{inputs[0]}}"
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
