@@ -1,17 +1,9 @@
 {
     "key": "tracktor/fulfillment/delay_in_transit_twilio_sms",
-    "name": "Receive an SMS message if a package is delayed In Transit",
+    "name": "Receive a text message if an order is delayed in transit",
     "version": "1.0.0",
-    "description": "When shipping time-sensitive products, it's imperative to know when there are delays so you can be proactive in handling customer communications. This template sends an SMS message via Twilio to the store owner when an order has been in transit for 60+ hours. By being alerted automatically, you can avoid unwelcome surprises.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "fulfillment/in_transit",
                 "name": "Fulfillment Status is In Transit",
                 "key": "tracktor_fulfillment",
+                "operation_id": "fulfillment_in_transit",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -35,7 +29,7 @@
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
-                    "amount": "60",
+                    "amount": "{{ template | label: 'How many hours would you like to wait?', description: '', default: 60, type: 'number', tokens: false }}",
                     "unit": "hours",
                     "test_bypass": true
                 },
@@ -51,7 +45,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Fulfillment",
                 "key": "tracktor_fulfillment_1",
+                "operation_id": "RetrievethetrackingstatusofaFulfillment",
                 "metadata": {
+                    "api_endpoint": "get /fulfillments/{fulfillment_id}.json",
                     "fulfillment_id": "{{delay.fulfillment_id}}"
                 },
                 "local_fields": [],
@@ -81,14 +77,16 @@
                 "action": "send",
                 "name": "Send SMS",
                 "key": "twilio_sms",
+                "operation_id": "sms_send",
                 "metadata": {
-                    "message": "Order {{tracktor_fulfillment_1.order_name}} has been in transit for over 60 hours!"
+                    "message": "Order {{tracktor_fulfillment_1.order_name}} has been in transit for over 60 hours!",
+                    "from": "{{ template | label: 'What is the phone number from your Twilio account?', type: 'string', tokens: false }}",
+                    "to": "{{ template | label: 'What phone number should receive this notification?', type: 'string', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }

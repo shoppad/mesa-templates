@@ -1,17 +1,9 @@
 {
     "key": "tracktor/fulfillment/send_twilio_sms_when_order_delivered",
-    "name": "Send an SMS message to your customer when their order arrives",
+    "name": "Send your customer an SMS message when their order is delivered",
     "version": "1.0.0",
-    "description": "When your customers purchase time-sensitive products such as ice cream or frozen meat, they will want to be available and notified immediately upon the package's arrival. This template sends an SMS message via Twilio when a customer's order is delivered. Your customers will do a little happy dance knowing their order hasn't been spoiling on their porch.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "fulfillment/delivered",
                 "name": "Fulfillment Status is Delivered",
                 "key": "tracktor_fulfillment",
+                "operation_id": "fulfillment_delivered",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,7 +30,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Order",
                 "key": "shopify_order",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
                     "order_id": "{{tracktor_fulfillment.order_id}}"
                 },
                 "local_fields": [],
@@ -65,15 +61,16 @@
                 "action": "send",
                 "name": "Send SMS",
                 "key": "twilio_sms",
+                "operation_id": "sms_send",
                 "metadata": {
                     "message": "Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card. ",
-                    "to": "{{shopify_order.customer.phone}}"
+                    "to": "{{shopify_order.customer.phone}}",
+                    "from": "{{ template | label: 'What is the phone number from your Twilio account?', description: 'Include country code and no dashes or parenthesis. Example: +15017122661', type: 'string', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

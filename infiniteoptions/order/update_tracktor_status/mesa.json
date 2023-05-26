@@ -2,16 +2,8 @@
     "key": "infiniteoptions/order/update_tracktor_status",
     "name": "Update Tracktor status when an order has been customized with Infinite Options",
     "version": "1.0.0",
-    "description": "Update the status of an order in Tracktor when it has been customized with Infinite Options.",
-    "video": "",
-    "tags": [
-        "infiniteoptions"
-    ],
-    "source": "infiniteoptions",
-    "destination": "tracktor",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,6 +14,7 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "infiniteoptions_order",
+                "operation_id": "order_created",
                 "metadata": [],
                 "local_fields": [],
                 "weight": 0
@@ -36,16 +29,17 @@
                 "action": "update",
                 "name": "Update Manual Status Order",
                 "key": "tracktor_order",
+                "operation_id": "UpdatethemanualtrackingstatusofanOrder",
                 "metadata": {
+                    "api_endpoint": "post /orders/{order_id}.json",
                     "order_id": "{{infiniteoptions_order.order.id}}",
                     "body": {
-                        "status": ""
+                        "status": "{{ template | label: 'What is the custom order status that you would like to update to?', description: '', tokens: false }}"
                     }
                 },
                 "local_fields": [],
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
