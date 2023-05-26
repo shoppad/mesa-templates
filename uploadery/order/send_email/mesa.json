@@ -1,41 +1,40 @@
 {
-    "key": "uploadery/order/send-email",
-    "name": "Send Email When Uploadery Order is Created",
+    "key": "uploadery/order/send_email",
+    "name": "Send an email when an Uploadery order is created",
     "version": "1.0.0",
-    "description": "Send your designer an email with Uploadery files when a new Uploadery order is created.",
-    "video": "",
-    "tags": [
-        "uploadery"
-    ],
-    "source": "uploadery",
-    "destination": "email",
     "enabled": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "uploadery",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "uploadery-order-created"
+                "key": "uploadery-order-created",
+                "operation_id": "order_created",
+                "metadata": [],
+                "local_fields": [],
+                "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
-                "is_premium": true,
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "",
+                    "to": "{{ template | label: 'What email address should receive this notification?', type: 'string', tokens: false }}",
                     "subject": "New order with file upload created {{source.order.name}}",
-                    "message": "A new order was created with Uploadery fields:\n\nOrder {{source.order.name}}\nhttps://{{context.shop.domain}}/admin/orders/{{source.order.id}}\n\nUploadery line items:\n{% for line_item in source.line_items %}\n  - {{ line_item.title }} x {{ line_item.quantity }}\n{% for property in line_item.properties %}    - {{ property.name }}: {{ property.value }}\n{% endfor %}{% endfor %}\n",
-                    "from": ""
-                }
+                    "message": "A new order was created with Uploadery fields:\n\nOrder {{source.order.name}}\nhttps:\/\/{{context.shop.domain}}\/admin\/orders\/{{source.order.id}}\n\nUploadery line items:\n{% for line_item in source.line_items %}\n  - {{ line_item.title }} x {{ line_item.quantity }}\n{% for property in line_item.properties %}    - {{ property.name }}: {{ property.value }}\n{% endfor %}{% endfor %}\n"
+                },
+                "local_fields": [],
+                "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

@@ -1,17 +1,9 @@
 {
-    "key": "update_status_shipping_method",
+    "key": "tracktor/order/update_status_shipping_method",
     "name": "Update an order's status and send an email if Express shipping is enabled",
     "version": "1.0.0",
-    "description": "Customers may select special shipping options such as Express for their custom orders. MESA will automatically update the order's manual status in Tracktor and email the customer to let them know that the shipping option is enabled. Your customer will be ecstatic to know that their order from you will quickly be on its way.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -51,8 +45,13 @@
                 "action": "update",
                 "name": "Update Order's Manual Status",
                 "key": "tracktor_order",
+                "operation_id": "UpdatethemanualtrackingstatusofanOrder",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}"
+                    "api_endpoint": "post /orders/{order_id}.json",
+                    "order_id": "{{shopify_order.id}}",
+                    "body": {
+                        "status": "{{ template | label: 'What is your first custom order status?', description: '', tokens: false }}"
+                    }
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -73,7 +72,6 @@
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

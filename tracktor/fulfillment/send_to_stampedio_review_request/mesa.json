@@ -1,17 +1,9 @@
 {
-    "key": "send_to_stampedio_review_request",
+    "key": "tracktor/fulfillment/send_to_stampedio_review_request",
     "name": "Send a review request after an order has been delivered",
     "version": "1.0.0",
-    "description": "When a customer receives an order, it is beneficial to understand if their experience matched their expectation. Get an accurate review by requesting feedback when the experience is fresh in the customer's mind. This template will send a Stamped.io review request after a Tracktor fulfillment status changes to Delivered.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,6 +14,7 @@
                 "action": "fulfillment/delivered",
                 "name": "Fulfillment Status is Delivered",
                 "key": "tracktor_fulfillment",
+                "operation_id": "fulfillment_delivered",
                 "metadata": [],
                 "local_fields": [],
                 "on_error": "default",
@@ -37,7 +30,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Order",
                 "key": "shopify_order",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
                     "order_id": "{{tracktor_fulfillment.order_id}}"
                 },
                 "local_fields": [],
@@ -67,7 +62,9 @@
                 "action": "list",
                 "name": "List Review Request",
                 "key": "stampedio_review_request",
+                "operation_id": "GetReviewsRequests",
                 "metadata": {
+                    "api_endpoint": "get /v2/{storeHash}/survey/reviews",
                     "query": {
                         "search": "{{delay.id}}"
                     }
@@ -112,7 +109,9 @@
                 "action": "send",
                 "name": "Send Review Request",
                 "key": "stampedio_review_request_1",
+                "operation_id": "SendReviewRequest",
                 "metadata": {
+                    "api_endpoint": "post /v2/{storeHash}/survey/reviews/{id}/send",
                     "path": {
                         "id": "{{loop.id}}"
                     }
@@ -121,7 +120,6 @@
                 "on_error": "default",
                 "weight": 5
             }
-        ],
-        "storage": []
+        ]
     }
 }
