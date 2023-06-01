@@ -2,15 +2,8 @@
     "key": "infiniteoptions/order/send_slack_notification",
     "name": "Send a Slack notification when a product with options is purchased",
     "version": "1.0.0",
-    "description": "Send a Slack message when an Infinite Options product with the option \"Special_Notes\" is purchased. This template is handy for companies using Slack; your team will receive notifications when a product requires special handling (ex. gift wrapping, professional install, etc.)",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,9 +15,7 @@
                 "name": "Order Created",
                 "key": "infiniteoptions",
                 "operation_id": "order_created",
-                "metadata": {
-                    "field_name": "Special_Notes"
-                },
+                "metadata": [],
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
@@ -39,13 +30,13 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions.order.order_number}} \nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{infiniteoptions.order.id}}"
+                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions.order.order_number}} \nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{infiniteoptions.order.id}}",
+                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

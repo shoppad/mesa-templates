@@ -2,16 +2,8 @@
     "key": "tracktor/fulfillment/automatically_set_custom_status",
     "name": "Delay custom order status updates",
     "version": "1.0.0",
-    "description": "As a merchant, there may be custom steps, such as purchasing materials, painting, dying, etc., that you go through before fulfilling an order. MESA makes it possible to automatically delay Tracktor custom order status updates and send an email to the customer whenever the status changes. That way, the customer only receives their tracking number when the order is ready to be shipped.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -35,9 +29,9 @@
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
-                    "amount": "2",
+                    "amount": "{{ template | label: 'How many days would you like to wait before updating an order with a custom order status?', default: 2, type: 'number', tokens: false }}",
                     "unit": "days",
-                    "test_bypass": true
+                    "test_bypass": false
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -51,7 +45,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Order",
                 "key": "shopify_order_1",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
                     "order_id": "{{delay.id}}"
                 },
                 "local_fields": [],
@@ -81,8 +77,13 @@
                 "action": "update",
                 "name": "Update Order's Manual Status",
                 "key": "tracktor_order",
+                "operation_id": "UpdatethemanualtrackingstatusofanOrder",
                 "metadata": {
-                    "order_id": "{{shopify_order_1.id}}"
+                    "api_endpoint": "post /orders/{order_id}.json",
+                    "order_id": "{{shopify_order_1.id}}",
+                    "body": {
+                        "status": "{{ template | label: 'What custom order status would you like to update to?', tokens: false }}"
+                    }
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -103,7 +104,6 @@
                 "on_error": "default",
                 "weight": 4
             }
-        ],
-        "storage": []
+        ]
     }
 }
