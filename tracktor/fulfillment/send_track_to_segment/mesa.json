@@ -2,16 +2,8 @@
     "key": "tracktor/fulfillment/send_track_to_segment",
     "name": "Send a Tracktor fulfillment status update to Segment",
     "version": "1.0.0",
-    "description": "When fulfillment status updates in Tracktor occur, you'll want to ensure all your integrated systems have the latest information. Eliminate manual effort and the potential for user mistakes by keeping your systems in check. This template will automatically send Tracktor fulfillment status updates to a Segment track.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "fulfillment/all",
                 "name": "Fulfillment Status Updated",
                 "key": "tracktor_fulfillment",
+                "operation_id": "fulfillment_all",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,7 +30,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Order",
                 "key": "shopify_order",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
                     "order_id": "{{tracktor_fulfillment.order_id}}"
                 },
                 "local_fields": [],
@@ -51,7 +47,9 @@
                 "action": "send",
                 "name": "Track",
                 "key": "segment_track",
+                "operation_id": "post-track",
                 "metadata": {
+                    "api_endpoint": "post /track",
                     "body": {
                         "userId": "{{shopify_order.customer.id}}",
                         "event": "Fulfillment Status Update",
@@ -164,7 +162,6 @@
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

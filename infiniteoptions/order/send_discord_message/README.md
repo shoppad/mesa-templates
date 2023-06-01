@@ -1,4 +1,0 @@
-## Setup
-
-- In the `Infinite Options Order Created Action`, specify the field name of the Infinite Options field that should trigger Discord message. By default we use the Label on cart "Special_Notes". For information on how to locate the field name in Infinite Options, [check out our documentation](https://docs.theshoppad.com/article/122-why-are-option-selections-labeled-infiniteoptions1).
-- In the `Discord Channel Message Create`, Specify the channel id that will send the message. The channel ID can be found in the URL of the channel, https://discord.com/channels/{server_id}/{channel_id}. For more information how to located id's in Discord check out the discord documentation: [Where can I find my User/Server/Message ID?](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID)
