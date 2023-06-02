@@ -1,0 +1,142 @@
+{
+    "key": "etsy/order/send_to_google_sheets",
+    "name": "Send Etsy orders to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Receipt ID",
+                        "value": "Receipt ID|{{etsy.receipt_id}}",
+                        "description": "The numeric ID for the receipt associated to this transaction."
+                    },
+                    {
+                        "label": "Customer Name",
+                        "value": "Customer Name|{{etsy.name}}",
+                        "description": "The name for the recipient in the shipping address."
+                    },
+                    {
+                        "label": "Customer Email",
+                        "value": "Customer Email|{{etsy.buyer_email}}",
+                        "description": "The email address for the buyer of the listing."
+                    },
+                    {
+                        "label": "Total Price",
+                        "value": "Total Price|{{etsy.total_price.amount}}",
+                        "description": "A number equal to the sum of the individual listings' (price * quantity). Does not included tax or shipping costs."
+                    },
+                    {
+                        "label": "Shipping Address",
+                        "value": "Shipping Address|{{etsy.formatted_address}}",
+                        "description": "The formatted shipping address for the recipient in the shipping address."
+                    },
+                    {
+                        "label": "Product Title",
+                        "value": "Product Title|{{loop.title}}",
+                        "description": "The title of the listing purchased in this transaction."
+                    },
+                    {
+                        "label": "Product ID",
+                        "value": "Product ID|{{loop.product_id}}",
+                        "description": "The numeric ID for a specific product purchased from a listing."
+                    },
+                    {
+                        "label": "Product Quantity",
+                        "value": "Product Quantity|{{loop.quantity}}",
+                        "description": "The quantity of products purchased in this transaction."
+                    },
+                    {
+                        "label": "Product Price",
+                        "value": "Product Price|{{loop.price.amount}}",
+                        "description": "The price of the product."
+                    },
+                    {
+                        "label": "Store Manager Link",
+                        "value": "Store Manager Link|https://www.etsy.com/your/orders/sold/new?order_id={{etsy.receipt_id}}",
+                        "description": "The URL to the order in the Store Manager."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 5,
+                "trigger_type": "input",
+                "type": "etsy",
+                "entity": "receipt",
+                "action": "receipt-created-webhook",
+                "name": "Receipt Created",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "receipt-created-webhook",
+                "metadata": {
+                    "api_endpoint": "get /v3/application/shops/{shop_id}/receipts-webhook",
+                    "poll": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2023-05-01T14:00:00-07:00",
+                    "path": {
+                      "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}" 
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{etsy.transactions[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Create Row",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
+                    "path": {
+                        "mode": "create",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
+                    "body": {
+                        "fields": {}
+                    }
+                },
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
