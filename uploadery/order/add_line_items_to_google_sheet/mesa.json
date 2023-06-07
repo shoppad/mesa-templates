@@ -20,47 +20,47 @@
                 "options": [
                     {
                         "label": "Order URL",
-                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{infinite_options_order_created.order.id}}",
+                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{uploadery_order_created.order.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
                         "label": "Order Name",
-                        "value": "Order Name|{{infinite_options_order_created.order.name}}",
+                        "value": "Order Name|{{uploadery_order_created.order.name}}",
                         "description": "The human-readable label for the order (example: #1001)."
                     },
                     {
                         "label": "Email",
-                        "value": "Email|{{infinite_options_order_created.order.email}}",
+                        "value": "Email|{{uploadery_order_created.order.email}}",
                         "description": "The email address of the customer that placed the order."
                     },
                     {
                         "label": "Shipping Name",
-                        "value": "Shipping Name|{{infinite_options_order_created.order.shipping_address.first_name}} {{infinite_options_order_created.order.shipping_address.last_name}}",
+                        "value": "Shipping Name|{{uploadery_order_created.order.shipping_address.first_name}} {{uploadery_order_created.order.shipping_address.last_name}}",
                         "description": "The full name of the recipient of the Shipping Address."
                     },
                     {
                         "label": "Address",
-                        "value": "Address|{{infinite_options_order_created.order.shipping_address.address1}}",
+                        "value": "Address|{{uploadery_order_created.order.shipping_address.address1}}",
                         "description": "The street address of the Shipping Address."
                     },
                     {
                         "label": "City",
-                        "value": "City|{{infinite_options_order_created.order.shipping_address.city}}",
+                        "value": "City|{{uploadery_order_created.order.shipping_address.city}}",
                         "description": "The city of the Shipping Address."
                     },
                     {
                         "label": "State/Province",
-                        "value": "State/Province|{{infinite_options_order_created.order.shipping_address.province}}",
+                        "value": "State/Province|{{uploadery_order_created.order.shipping_address.province}}",
                         "description": "The state/province of the Shipping Address."
                     },
                     {
                         "label": "Zip/Postal Code",
-                        "value": "Zip/Postal Code|{{infinite_options_order_created.order.shipping_address.zip}}",
+                        "value": "Zip/Postal Code|{{uploadery_order_created.order.shipping_address.zip}}",
                         "description": "The zip code of the Shipping Address."
                     },
                     {
                         "label": "Country",
-                        "value": "Country|{{infinite_options_order_created.order.shipping_address.country}}",
+                        "value": "Country|{{uploadery_order_created.order.shipping_address.country}}",
                         "description": "The country of the Shipping Address."
                     },
                     {
