@@ -1,0 +1,71 @@
+{
+    "key": "save_orders_by_coupon_code",
+    "name": "Save Orders By Coupon Code",
+    "version": "1.0.0",
+    "description": "On order creation, save the coupon code used to Data by MESA for use in a daily email",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "number",
+                            "type": "numeric",
+                            "value": "{{shopify.number}}",
+                            "disabled": "64874f2aa8eda97a22586794"
+                        },
+                        {
+                            "key": "order_date",
+                            "type": "date",
+                            "value": "{{shopify.created_at}}",
+                            "disabled": "64874f2aa8eda97a22586794"
+                        },
+                        {
+                            "key": "coupon",
+                            "type": "varchar",
+                            "value": "{{shopify.discount_codes[0].code}}",
+                            "disabled": "64874f2aa8eda97a22586794"
+                        }
+                    ],
+                    "table": "Orders By Coupon Code",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{shopify.number}}",
+                        "a": "number"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}

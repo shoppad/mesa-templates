@@ -1,0 +1,67 @@
+{
+    "key": "daily_coupon_code_email",
+    "name": "Daily Coupon Code Email",
+    "version": "1.0.0",
+    "description": "On a daily schedule run a query on Data by MESA to grab the orders by coupon code and send an email out",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "enqueue_type": "schedule",
+                    "schedule": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2023-06-12T14:00:00-04:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}",
+                    "query": "SELECT coupon, COUNT(*) AS order_count FROM \"Orders By Coupon Code\" WHERE order_date >= CURRENT_DATE - INTERVAL '1 day' AND order_date < CURRENT_DATE GROUP BY coupon;",
+                    "table": "Orders By Coupon Code",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "key": "email",
+                "metadata": {
+                    "to": "kalen@getmesa.com",
+                    "subject": "Coupons used today",
+                    "message": "{% for item in data %} \n  {{ item.coupon }} - {{ item.order_count }}\n{% endfor %}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
