@@ -33,6 +33,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
+                "version": "v1",
                 "name": "Delay for 30 days",
                 "key": "delay",
                 "metadata": {
