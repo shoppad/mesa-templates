@@ -1,0 +1,74 @@
+{
+    "key": "new_workflow_1",
+    "name": "Generate AI Descriptions For Collections",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2023-06-15T06:00:00-07:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "smart_collection",
+                "action": "list",
+                "name": "Get List of Smart Collections",
+                "key": "shopify",
+                "operation_id": "get_smart_collections",
+                "metadata": {
+                    "api_endpoint": "get admin\/smart_collections.json",
+                    "parameters": "limit=1"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop over collections",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{ shopify }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "key": "set_product_is_in_cart_false_after_delay",
+    "name": "Set product is_in_cart to false after 1 hour delay",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "webhook",
+                "name": "Webhook Received",
+                "key": "webhook",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "version": "v1",
+                "key": "delay",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "hours",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set Product Metafield",
+                "key": "shopify",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "8262869221697",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "is_in_cart",
+                        "type": "boolean",
+                        "value": "false"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
