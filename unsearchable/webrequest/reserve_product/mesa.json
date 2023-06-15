@@ -1,6 +1,6 @@
 {
-    "key": "set_product_is_in_cart_false_after_delay",
-    "name": "Set product is_in_cart to false after 1 hour delay",
+    "key": "web_request_set_product_to_is_in_cart",
+    "name": "Web Request To Set Product To Is_in_Cart",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -9,12 +9,27 @@
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "input",
-                "type": "webhook",
-                "name": "Webhook Received",
-                "key": "webhook",
-                "metadata": [],
+                "type": "webrequest",
+                "name": "Request",
+                "key": "webrequest",
+                "metadata": {
+                    "headers": [
+                        {
+                            "key": "Content-Type",
+                            "value": "application\/json"
+                        },
+                        {
+                            "key": "Access-Control-Allow-Origin",
+                            "value": "*"
+                        },
+                        {
+                            "key": "Access-Control-Allow-Headers",
+                            "value": "Origin, Content-Type, X-Auth-Token, Accept"
+                        }
+                    ]
+                },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
@@ -22,20 +37,38 @@
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
-                "type": "delay",
-                "name": "Delay",
-                "version": "v1",
-                "key": "delay",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
+                "name": "Retrieve Product Metafield",
+                "key": "shopify",
+                "operation_id": "get_mesa_products_product_id_metafield",
                 "metadata": {
-                    "amount": "1",
-                    "unit": "hours",
-                    "test_bypass": true
+                    "api_endpoint": "get mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "8262869221697",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "is_in_cart"
+                    }
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "If product wasn't already in cart, schedule to remove it after delay",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
             },
             {
                 "schema": 3,
@@ -44,7 +77,7 @@
                 "entity": "product",
                 "action": "metafield_set",
                 "name": "Set Product Metafield",
-                "key": "shopify",
+                "key": "shopify_1",
                 "operation_id": "put_mesa_products_product_id_metafield",
                 "metadata": {
                     "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
@@ -53,12 +86,46 @@
                         "namespace": "custom",
                         "key": "is_in_cart",
                         "type": "boolean",
-                        "value": "false"
+                        "value": "true"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "editor",
+                "name": "Transform Editor",
+                "key": "transform",
+                "operation_id": "editor",
+                "metadata": {
+                    "text": "{\n    \"was_in_cart\": {{ shopify.value }}\n}",
+                    "script": "transform.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "text",
+                        "type": "editor"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
             }
         ]
     }
