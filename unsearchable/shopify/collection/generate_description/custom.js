@@ -17,7 +17,7 @@ module.exports = new class {
     let text = "";
 
     // Add your custom code here
-    for (let product of context.steps.shopify_1) {
+    for (let product of payload.products) {
       // strip html
       let description = product.body_html.replace(/<[^>]*>/g, '');
       text += product.title + "\n" + description + "\n\n";

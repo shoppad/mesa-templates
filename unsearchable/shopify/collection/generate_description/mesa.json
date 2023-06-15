@@ -1,6 +1,6 @@
 {
     "key": "new_workflow_1",
-    "name": "Generate AI Descriptions For Collections",
+    "name": "AI Collection Description",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -17,7 +17,7 @@
                 "metadata": {
                     "schedule": "@hourly:0 * * * *",
                     "enqueue_type": "schedule",
-                    "next_sync_date_time": "2023-06-15T06:00:00-07:00",
+                    "next_sync_date_time": "2023-06-15T12:00:00-07:00",
                     "datetime": null
                 },
                 "local_fields": [],
@@ -37,7 +37,7 @@
                 "operation_id": "get_smart_collections",
                 "metadata": {
                     "api_endpoint": "get admin\/smart_collections.json",
-                    "parameters": "limit=1"
+                    "parameters": "limit=1&handle=nike"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -57,17 +57,134 @@
                 "weight": 1
             },
             {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collection",
+                "action": "list",
+                "name": "Get List of Collections' Products",
+                "key": "shopify_1",
+                "operation_id": "get_collection_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
+                    "collection_id": "{{ loop.id }}",
+                    "parameters": "limit=5"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Make list of product title\/description for prompt",
                 "key": "custom",
                 "metadata": {
                     "script": "custom.js"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "prompt",
+                            "source": "Write a short paragraph limited to 60 words for the following collection page for an ecommerce site.\n\nCollection name: {{loop.title}}\n\nBackground information on the website:\nDon't be confused. With over 4,000 different styles of footwear products in stock alone, Project BLITZ is anything but a consignment shop. Over a decade in the making, Project BLITZ is the premier destination for all enthusiasts of the sneaker and street fashion cultures where sought out and rare coveted merchandise can be found. No knock off's or bootlegs here, every item sold in the Project BLITZ boutique is 100% authentic and is on hand in our inventory. From footwear to apparel to accessories; those hard-to-find rare gems and limited releases that you missed can be found in our store. Every brand and product is carefully curated in order for us to deliver our most rarest collections to you. Along with our extensive collection of products, Project BLITZ will also offer incentives and early release opportunities which means no more waking up early or having to wait in a line that wraps around the block. If you value your time, Project BLITZ is the perfect online destination for you.\n\nHere is a list of products that are included in the collection:\n\n{{ custom.text }}\n"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "chatgpt",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "chatgpt",
+                "operation_id": "createChatCompletion",
+                "metadata": {
+                    "api_endpoint": "post \/chat\/completions",
+                    "body": {
+                        "model": "gpt-4-0613",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": "{{transform.prompt}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approval",
+                "key": "approval",
+                "metadata": {
+                    "message": "Prompt: \n\n{{ transform.prompt }}\n\nOutput:\n\n{{chatgpt.choices[0].message.content}}",
+                    "field": false,
+                    "label_accept": "Accept",
+                    "label_reject": "Reject"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "smart_collection",
+                "action": "update",
+                "name": "Update Smart Collection",
+                "key": "shopify_2",
+                "operation_id": "put_smart_collections_smart_collection_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/smart_collections\/{{smart_collection_id}}.json",
+                    "smart_collection_id": "{{loop.id}}",
+                    "body": {
+                        "body_html": "{{chatgpt.choices[0].message.content}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "body_html",
+                                "type": "custom",
+                                "allow_custom_fields": false
+                            }
+                        ]
+                    }
+                ],
+                "on_error": "default",
+                "weight": 7
             }
         ]
     }
