@@ -1,0 +1,163 @@
+{
+    "key": "new_workflow_63",
+    "name": "Set Last Restocked Date On Products",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "updated",
+                "name": "Inventory Level Updated",
+                "key": "shopify",
+                "operation_id": "inventory_levels_update",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "inventory_item_id",
+                            "source": "{{shopify.inventory_item_id}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Product ID From Inventory item ID",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
+                "name": "Retrieve Product Metafield",
+                "key": "shopify_1",
+                "operation_id": "get_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "get mesa\/products\/{{product_id}}\/metafield.json",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "last_inventory_available"
+                    },
+                    "product_id": "{{ custom.product_id }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Sum inventory levels for all variants in product",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if current inventory levels are greater than last inventory levels",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{ custom_1.sum }}",
+                    "comparison": "greater than",
+                    "b": "{{shopify_1.value}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set the last restocked at date",
+                "key": "shopify_2",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{ custom.product_id }}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "last_restocked_at",
+                        "type": "date_time",
+                        "value": "{{shopify.updated_at}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set the last inventory available",
+                "key": "shopify_3",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{ custom.product_id }}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "last_inventory_available",
+                        "type": "number_integer",
+                        "value": "{{ custom_1.sum }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}

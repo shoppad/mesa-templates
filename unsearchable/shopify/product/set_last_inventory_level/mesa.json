@@ -1,0 +1,91 @@
+{
+    "key": "new_workflow_64",
+    "name": "Populate last inventory levels for new products",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "product_id",
+                            "source": "{{shopify.id}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Sum inventory levels for all variants in product",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set Product Metafield",
+                "key": "shopify_1",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "last_inventory_available",
+                        "type": "number_integer",
+                        "value": "{{ custom.sum }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
