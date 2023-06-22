@@ -1,0 +1,90 @@
+{
+    "key": "new_workflow_26",
+    "name": "Post purchase review email",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "version": "v1",
+                "key": "delay",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "generate",
+                "action": "create",
+                "name": "Generate Text",
+                "key": "ai",
+                "operation_id": "post-generate",
+                "metadata": {
+                    "api_endpoint": "post \/generate",
+                    "temperature": "0.7",
+                    "body": {
+                        "prompt": "Write a subject line specific to this product: {{shopify.line_items[0].name}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approval",
+                "key": "approval",
+                "metadata": {
+                    "message": "{{ai.response}}",
+                    "field": false,
+                    "label_accept": "Accept",
+                    "label_reject": "Reject"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "key": "email",
+                "metadata": {
+                    "to": "kalen@getmesa.com",
+                    "subject": "{{ai.response}}",
+                    "message": "Click here to review the product: insert url"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
