@@ -1,0 +1,194 @@
+{
+    "key": "tracktor_order_created_to_shopify_retrieve_order",
+    "name": "Email notification if delivery delayed",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "order\/ordered",
+                "name": "Order Created",
+                "key": "tracktor_order",
+                "operation_id": "order_ordered",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_order",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "GET admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{tracktor_order.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "version": "v1",
+                "key": "delay",
+                "operation_id": "delay",
+                "metadata": {
+                    "amount": "{{custom.num_days}}",
+                    "unit": "days",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "tracktor_order_1",
+                "operation_id": "RetrievethetrackingstatusesofanOrder",
+                "metadata": {
+                    "api_endpoint": "get \/orders\/{order_id}.json",
+                    "order_id": "{{delay.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Iterator",
+                "key": "iterator",
+                "operation_id": "loop",
+                "metadata": {
+                    "key": "{{tracktor_order_1.fulfillments}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{iterator.latest_status.key}}",
+                    "comparison": "does not equal",
+                    "b": "delivered"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_order_1",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{tracktor_order_1.order_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter (make sure order is not cancelled)",
+                "key": "filter_3",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify_order_1.cancelled_at}}",
+                    "comparison": "equals",
+                    "b": "null"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "order_id": "{{shopify_order_1.id}}",
+                    "body": {
+                        "tag": "Late Delivery"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email",
+                "key": "email",
+                "operation_id": "email",
+                "metadata": {
+                    "to": "{{delay.email}}",
+                    "subject": "Sorry your package is taking so long!",
+                    "message": "Hi {{delay.customer.first_name}},\n\nSorry for the delay. Here's a coupon code: ARGHFULFILLMENTISSUESAMIRITE\n\nThanks,\nThe team",
+                    "from": "hello@gladskin.com",
+                    "test_email_override": "helen@gladskin.com"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
