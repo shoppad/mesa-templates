@@ -18,6 +18,10 @@ module.exports = new class {
       inventory += variant.inventory_quantity
     }    
 
+    Mesa.trigger.setTaskExternalData({
+      label: "Inventory: " + inventory
+    });
+
     Mesa.output.next(inventory);
   }
 }

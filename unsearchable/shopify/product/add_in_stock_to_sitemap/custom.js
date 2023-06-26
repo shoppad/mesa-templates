@@ -18,6 +18,8 @@ module.exports = new class {
       inventory += variant.inventory_quantity
     }    
 
-    Mesa.output.next(inventory);
+    payload.inventory = inventory;
+
+    Mesa.output.next(payload);
   }
 }
