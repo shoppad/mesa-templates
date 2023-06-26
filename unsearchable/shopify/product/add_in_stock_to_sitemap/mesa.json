@@ -1,0 +1,79 @@
+{
+    "key": "new_workflow",
+    "name": "Shopify: Add in Stock Products to Sitemap",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "key": "shopify",
+                "operation_id": "products_update",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{custom}}",
+                    "comparison": "greater than",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set Product Metafield",
+                "key": "shopify_1",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "seo",
+                        "key": "hidden",
+                        "type": "number_integer",
+                        "value": "0"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
