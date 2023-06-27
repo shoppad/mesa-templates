@@ -1,0 +1,106 @@
+{
+    "key": "new_workflow_69",
+    "name": "Detect PO Boxes Before Shipping",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "prompt",
+                            "source": "Here is a shipping address:\n{{shopify.billing_address.address1}}\n\nIs it a PO box?\n\nJust respond Yes or No with nothing else"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "json": false,
+                    "temperature": "0.7",
+                    "body": {
+                        "prompt": "{{ transform.prompt }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{ai.response}}",
+                    "comparison": "equals",
+                    "b": "Yes"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "key": "email",
+                "metadata": {
+                    "to": "kalen@getmesa.com",
+                    "subject": "PO box detected",
+                    "message": "Order:\n{{shopify.id}}\n\nShipping Address:\n{{shopify.shipping_address.address1}}\n{{shopify.billing_address.address2}}\n{{shopify.shipping_address.city}}\n{{shopify.shipping_address.country}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
