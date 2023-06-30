@@ -1,0 +1,76 @@
+{
+    "key": "new_workflow_74",
+    "name": "Tag Order With UTM Codes",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get UTM Code From Order",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{custom.conversion.order.customerJourneySummary.lastVisit.utmParameters.campaign}}",
+                    "comparison": "equals",
+                    "b": "test"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "UTM Conversion"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
