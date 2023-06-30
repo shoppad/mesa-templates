@@ -17,7 +17,7 @@
                 "key": "fields",
                 "target": "googlesheets_row.setup_fields",
                 "label": "What are your spreadsheet columns?",
-                "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your spreadsheet.",
+                "description": "This template will automatically create a new row for every abandoned checkout. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
                     {
                         "label": "Abandoned Cart ID",
