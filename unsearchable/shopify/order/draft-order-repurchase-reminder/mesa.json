@@ -1,0 +1,95 @@
+{
+    "key": "new_workflow_12",
+    "name": "Create a draft order after 30 days to prompt customer to repurchase",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "version": "v1",
+                "key": "delay",
+                "metadata": {
+                    "amount": "30",
+                    "unit": "days",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "create",
+                "name": "Create Draft Order",
+                "key": "shopify_1",
+                "operation_id": "post_draft_orders",
+                "metadata": {
+                    "api_endpoint": "post admin\/draft_orders.json",
+                    "body": {
+                        "email": "{{delay.email}}",
+                        "line_items": [
+                            {
+                                "variant_id": "{{delay.line_items[0].variant_id}}",
+                                "quantity": "{{delay.line_items[0].quantity}}"
+                            }
+                        ],
+                        "customer": {
+                            "id": "{{delay.customer.id}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "draft_order_send_invoice",
+                "action": "create",
+                "name": "Create Draft Order Send Invoice",
+                "key": "shopify_2",
+                "operation_id": "post_draft_orders_draft_order_id_send_invoice",
+                "metadata": {
+                    "api_endpoint": "post admin\/draft_orders\/{{draft_order_id}}\/send_invoice.json",
+                    "draft_order_id": "{{shopify_1.id}}",
+                    "body": {
+                        "to": "{{delay.email}}",
+                        "from": "kalen.jordan@theshoppad.com",
+                        "subject": "Need more {{delay.line_items[0].title}}?",
+                        "custom_message": "Need to reorder?"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
