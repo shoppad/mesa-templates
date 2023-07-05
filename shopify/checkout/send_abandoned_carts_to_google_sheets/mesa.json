@@ -1,0 +1,167 @@
+{
+    "key": "shopify/checkout/send_abandoned_carts_to_google_sheets",
+    "name": "Send a list of abandoned carts to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets_row.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Sheets spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets_row.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every abandoned checkout. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Abandoned Cart ID",
+                        "value": "Abandoned Cart ID|{{loop.id}}",
+                        "description": "The ID of the abandoned cart."
+                    },
+                    {
+                        "label": "Customer First Name",
+                        "value": "Customer First Name|{{loop.customer.first_name}}",
+                        "description": "TThe customer's first name."
+                    },
+                    {
+                        "label": "Customer Last Name",
+                        "value": "Customer Last Name|{{loop.customer.last_name}}",
+                        "description": "The customer's last name."
+                    },
+                    {
+                        "label": "Customer Phone Number",
+                        "value": "Customer Phone Number|{{loop.customer.phone}}",
+                        "description": "The customer's phone number."
+                    },
+                    {
+                        "label": "Total Cart Price",
+                        "value": "Total Cart Price|{{loop.total_price}}",
+                        "description": "The total price of the abandoned cart."
+                    },
+                    {
+                        "label": "Products",
+                        "value": "Products|{% for line_item in loop.line_items  %} - {{line_item.title}} {% endfor %}",
+                        "description": "The products included in the abandoned cart."
+                    },
+                    {
+                        "label": "Abandoned Checkout URL",
+                        "value": "Abandoned Checkout URL|{{loop.abandoned_checkout_url}}",
+                        "description": "The recovery URL that's sent to a customer so they can recover their checkout."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "*/15 * * * *",
+                    "enqueue_type": "schedule",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "checkout",
+                "action": "list",
+                "name": "Get List of Abandoned Checkouts",
+                "key": "shopify",
+                "operation_id": "get_checkouts",
+                "metadata": {
+                    "api_endpoint": "get admin/checkouts.json",
+                    "parameters": "limit=250&created_at_min={{date:15 mins ago}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check for abandoned carts",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is not empty"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter: Check if abandoned cart is still not recovered",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{loop.closed_at}}",
+                    "comparison": "equals",
+                    "b": "null"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Create Row",
+                "key": "googlesheets_row",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
+                    "path": {
+                        "mode": "create",
+                        "spreadsheet_id": "",
+                        "sheet_name": "Sheet1",
+                        "header_row": "first_row"
+                    },
+                    "body": {
+                        "fields": {}
+                    }
+                },
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
