@@ -1,0 +1,64 @@
+{
+    "key": "shopify/order/add_customer_metafields_to_order_notes",
+    "name": "Add customer metafields to Shopify order notes",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "metafield",
+                "action": "list",
+                "name": "Get List of Metafields",
+                "key": "shopify_1",
+                "operation_id": "get_metafields",
+                "metadata": {
+                    "api_endpoint": "get admin/metafields.json",
+                    "parameters": "metafield[owner_id]={{shopify.customer.id}}&metafield[owner_resource]=customer"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "note_update",
+                "name": "Update Order Notes",
+                "key": "shopify_2",
+                "operation_id": "put_mesa_orders_order_id_note",
+                "metadata": {
+                    "api_endpoint": "put mesa/orders/{{order_id}}/note.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "note": "{% for metafield in shopify_1 %} - {{metafield.key | replace: \"_\", \" \"| capitalize}}: {{metafield.value}}\n{% endfor %}",
+                        "append": true
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
