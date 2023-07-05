@@ -12,13 +12,13 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
-    // We're done, call the next step!
-    this.airtableFindOrCreateVariantBySku(payload);
+    payload.record = this.airtableFindOrCreateVariantById(payload, context);
     Mesa.output.next(payload);
   }
 
-  airtableFindOrCreateVariantBySku = (payload) => { 
-    // Add your custom code here
+  airtableFindOrCreateVariantById = (product) => { 
+    let variant = payload.current_item;
+
     let options = {
       "headers": {
         "Content-Type": "application\/json",
@@ -26,32 +26,36 @@ module.exports = new class {
       }
     }
 
-    let sku = payload.current_item.sku;
-    let filterByFormula = `{SKU} = '${sku}'`;
-    let base = context.steps.transform.Base;
-    let table = context.steps.transform.Table;
+    let airtableProductId = context.steps.custom.record.id;
+    let filterByFormula = `{Variant ID} = '${variant.id}'`;
+    let base = context.steps.transform.base;
+    let table = 'Variants';
     let url = 'https://api.airtable.com/v0/' + base + '/' + table + '?filterByFormula=' + encodeURIComponent(filterByFormula);
 
     let results = Mesa.request.get(url, options);    
     Mesa.log.info("results", results);
 
+    let record = {};
     if (results.records.length > 0) {
-      payload.record = results.records[0];
+      record = results.records[0];
     } else {
       let data = {
         "records": [
           {
             "fields": {
-              "SKU": sku,
-            }
+              "Variant ID": variant.id,
+              "Title": variant.title,
+              "Product": [airtableProductId],
+              "Price": variant.price,
+            },
           }
-        ]
+        ],
       }
       let result = Mesa.request.post(url, data, options);
       Mesa.log.info('result', result);
-      payload.record = result.records[0];
+      record = result.records[0];
     }
 
-    return payload;
+    return record;
   }
 }
