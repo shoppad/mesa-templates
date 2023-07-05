@@ -69,7 +69,7 @@
                 "name": "Schedule",
                 "key": "schedule",
                 "metadata": {
-                    "schedule": "*/15 * * * *",
+                    "schedule": "@hourly:0 * * * *",
                     "enqueue_type": "schedule",
                     "datetime": null
                 },
@@ -90,7 +90,7 @@
                 "operation_id": "get_checkouts",
                 "metadata": {
                     "api_endpoint": "get admin/checkouts.json",
-                    "parameters": "limit=250&created_at_min={{date:15 mins ago}}"
+                    "parameters": "limit=250&created_at_min={{date:1 hour ago}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
