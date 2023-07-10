@@ -42,6 +42,10 @@ module.exports = new class {
 
     payload.monthsOnHand = available / (216 + slope);
 
+    Mesa.trigger.setTaskExternalData({
+      label: "SKU: " + payload.sku + ", Slope: " + slope + ", Months on hand: " + payload.monthsOnHand
+    });
+
     // We're done, call the next step!
     Mesa.output.next(payload);
   }
