@@ -32,7 +32,7 @@
                 "metadata": {
                   "amount": "{{ template | label: 'How many days would you like to wait?', description: '', default: 20, type: 'number', tokens: false, placeholder: '' }}",
                     "unit": "days",
-                    "test_bypass": false
+                    "test_bypass": true
                 },
                 "local_fields": [],
                 "on_error": "default",
