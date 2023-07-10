@@ -1,0 +1,103 @@
+{
+    "key": "new_workflow_7",
+    "name": "Save Inventory Levels",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2023-07-10T09:00:00-04:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/products.json"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{ shopify }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "list",
+                "name": "Get List of Product Variants",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id_variants",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}\/variants.json",
+                    "product_id": "{{ loop.id }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop_1",
+                "metadata": {
+                    "key": "{{ shopify_1 }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Inventory Level For Variant",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}

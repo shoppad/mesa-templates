@@ -18,7 +18,15 @@ module.exports = new class {
     let sku = context.steps.loop_1.current_item.sku;
     Mesa.log.info("sku: ", sku);
     
-    // Add your custom code here
+    let response = this.getAvailableInventoryForSku(sku);
+    payload.inventory_item_id = response.inventory_item_id;
+    payload.available = response.available;
+
+    // We're done, call the next step!
+    Mesa.output.next(newPayload);
+  }
+
+  getAvailableInventoryForSku = (sku) => {
     let query = `
       query ($query: String!) {
         productVariants(first: 3, query: $query) {
@@ -44,19 +52,18 @@ module.exports = new class {
     `;
 
     const r = ShopifyGraphql.send(query, {
-      "query": "sku:" + sku,
+    "query": "sku:" + sku,
     });
 
 
     Mesa.log.info("response: ", r);
 
     let fullInventoryId = r.data.productVariants.edges[0].node.inventoryItem.id;
-    
-    let newPayload = {};
-    newPayload.inventory_item_id = fullInventoryId.match(/\d+/)[0];
-    newPayload.available = r.data.productVariants.edges[0].node.inventoryItem.inventoryLevels.edges[0].node.available;
 
-    // We're done, call the next step!
-    Mesa.output.next(newPayload);
+    let response = {};
+    response.inventory_item_id = fullInventoryId.match(/\d+/)[0];
+    response.available = r.data.productVariants.edges[0].node.inventoryItem.inventoryLevels.edges[0].node.available;
+
+    return response;
   }
 }

@@ -14,6 +14,14 @@ module.exports = new class {
    */
   script = (payload, context) => {
 
+    Mesa.log.info("inventory item Id: ", payload.inventory_item_id);
+    payload.inventory_item_id = this.getInventoryItemIdFromSku(payload);
+
+    // We're done, call the next step!
+    Mesa.output.next(payload);
+  }
+
+  getInventoryItemIdFromSku = (payload) => {
     // Add your custom code here
     Mesa.log.info("sku: ", payload.current_item.SKU);
     
@@ -45,10 +53,8 @@ module.exports = new class {
     Mesa.log.info("response: ", r);
 
     let fullInventoryId = r.data.productVariants.edges[0].node.inventoryItem.id;
-    payload.inventory_item_id = fullInventoryId.match(/\d+/)[0];
-    Mesa.log.info("inventory item Id: ", payload.inventory_item_id);
+    let inventoryItemId = fullInventoryId.match(/\d+/)[0];
 
-    // We're done, call the next step!
-    Mesa.output.next(payload);
+    return inventoryItemId;
   }
 }
