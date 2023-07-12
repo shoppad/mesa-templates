@@ -1,0 +1,123 @@
+{
+    "key": "new_workflow_11",
+    "name": "Check For Coupon Code Abuse",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "data",
+                "entity": "record",
+                "action": "created",
+                "name": "Record Created",
+                "key": "data",
+                "operation_id": "record_created",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}\/created",
+                    "poll": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2023-07-12T14:00:00-05:00",
+                    "table": "Orders"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data_1",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}",
+                    "query": "SELECT TO_CHAR(\"Ordered At\", 'yyyy-mm-dd'), SUM(\"Total\") as total, SUM(\"Total Discounts\") as total_discounts,ROUND(SUM(\"Total Discounts\") \/  SUM(\"Total\"), 2) as percentage FROM \"Orders\" GROUP BY TO_CHAR(\"Ordered At\", 'yyyy-mm-dd') ORDER BY TO_CHAR(\"Ordered At\", 'yyyy-mm-dd') ",
+                    "table": "Orders",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "chatgpt",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "chatgpt",
+                "operation_id": "createChatCompletion",
+                "metadata": {
+                    "api_endpoint": "post \/chat\/completions",
+                    "body": {
+                        "model": "gpt-4",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": "Included is a JSON result showing order totals by day including their discount amounts. Is the discount rate higher than usual? Reply  only yes or no: \n{{ custom.json_results }}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{chatgpt.choices[0].message.content}}",
+                    "comparison": "equals",
+                    "b": "Yes"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "key": "email",
+                "metadata": {
+                    "to": "kalen.jordan@theshoppad.com",
+                    "subject": "Coupon code abuse trigger",
+                    "message": "Houston we have a problem."
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}

@@ -1,0 +1,81 @@
+{
+    "key": "new_workflow_10",
+    "name": "Save Order Discount Data",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "Name",
+                            "type": "varchar",
+                            "value": null,
+                            "disabled": "6409e8f730103643d228f2e6"
+                        },
+                        {
+                            "key": "Total",
+                            "type": "numeric",
+                            "value": "{{shopify.current_total_price}}",
+                            "disabled": "6409e8f730103643d228f2e6"
+                        },
+                        {
+                            "key": "Total Discounts",
+                            "type": "numeric",
+                            "value": "{{shopify.current_total_discounts}}",
+                            "disabled": "6409e8f730103643d228f2e6"
+                        },
+                        {
+                            "key": "Ordered At",
+                            "type": "date",
+                            "value": null,
+                            "disabled": "6409e8f730103643d228f2e6"
+                        },
+                        {
+                            "key": "ID",
+                            "type": "varchar",
+                            "value": "{{shopify.name}}",
+                            "disabled": "6409e8f730103643d228f2e6"
+                        }
+                    ],
+                    "table": "Orders",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
