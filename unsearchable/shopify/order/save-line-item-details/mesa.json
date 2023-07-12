@@ -1,0 +1,102 @@
+{
+    "key": "new_workflow_3",
+    "name": "Save Order Line Items",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "order_id",
+                            "type": "numeric",
+                            "value": "{{shopify.id}}",
+                            "disabled": "64a8155cfd4e19655e694b33"
+                        },
+                        {
+                            "key": "line_item_id",
+                            "type": "numeric",
+                            "value": "{{loop.id}}",
+                            "disabled": "64a8155cfd4e19655e694b33"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "{{loop.sku}}",
+                            "disabled": "64a8155cfd4e19655e694b33"
+                        },
+                        {
+                            "key": "variant_id",
+                            "type": "varchar",
+                            "value": "{{loop.variant_id}}",
+                            "disabled": "64a8155cfd4e19655e694b33"
+                        },
+                        {
+                            "key": "quantity",
+                            "type": "int8",
+                            "value": "{{loop.quantity}}",
+                            "disabled": "64a8155cfd4e19655e694b33"
+                        },
+                        {
+                            "key": "order_date",
+                            "type": "date",
+                            "value": "{{shopify.created_at}}",
+                            "disabled": "64a8155cfd4e19655e694b33"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop.id}}",
+                        "a": "line_item_id"
+                    },
+                    "table": "order_line_items"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
