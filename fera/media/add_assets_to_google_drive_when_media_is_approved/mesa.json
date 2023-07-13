@@ -1,0 +1,44 @@
+{
+    "key": "fera/media/add_assets_to_google_drive_when_media_is_approved",
+    "name": "Add assets to Google Drive when media is approved",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "fera",
+                "entity": "media_approve",
+                "action": "approved",
+                "name": "Media Approved",
+                "key": "fera",
+                "operation_id": "media_approve",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "googledrive",
+                "entity": "file",
+                "action": "save",
+                "name": "Save File",
+                "key": "googledrive",
+                "operation_id": "file_save",
+                "metadata": {
+                    "file_url": "{{fera.url}}",
+                    "file_name": "{{filename}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
