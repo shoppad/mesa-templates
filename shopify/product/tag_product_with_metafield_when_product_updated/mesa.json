@@ -1,0 +1,67 @@
+{
+    "key": "shopify/product/tag_product_with_metafield_when_product_created",
+    "name": "Tag a product with a metafield value",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
+                "name": "Retrieve Product Metafield",
+                "key": "shopify_1",
+                "operation_id": "get_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "get mesa/products/{{product_id}}/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "{{ template | label: 'What is the Key of your Product Metafield?', description: 'Go to the Settings page of your Shopify Admin. Click on Custom Data. View your product metafields and locate the key of the individual metafield.', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_add",
+                "name": "Product Add Metafield Value Tag",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{shopify_1.value}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
