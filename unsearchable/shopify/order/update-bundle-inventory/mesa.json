@@ -1,0 +1,233 @@
+{
+    "key": "new_workflow_9",
+    "name": "Bundle",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "Base",
+                            "source": "app7LPICS6E4lRa8b"
+                        },
+                        {
+                            "destination": "Table",
+                            "source": "Bundle Variants"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "mapping"
+                    }
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop over order items",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "airtable",
+                "entity": "record",
+                "action": "list",
+                "name": "Get variant bundle details",
+                "key": "airtable",
+                "operation_id": "list",
+                "metadata": {
+                    "api_endpoint": "get \/{base}\/{table}",
+                    "path": {
+                        "base": "{{ transform.Base }}",
+                        "table": "{{ transform.Table }}"
+                    },
+                    "query": {
+                        "filterByFormula": "{Variant SKU} = '{{loop.sku}}'"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Grab the Depends On Variant",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "sku_to_product_variant",
+                "name": "Get Depends On Variant Details from SKU",
+                "key": "shopify_2",
+                "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
+                "metadata": {
+                    "api_endpoint": "get mesa\/productVariants\/{{product_sku}}\/sku-lookup.json",
+                    "product_sku": "{{ custom_1.depends_on_sku }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "adjust",
+                "name": "Adjust Inventory Level",
+                "key": "shopify_1",
+                "operation_id": "post_inventory_levels_adjust",
+                "metadata": {
+                    "api_endpoint": "post admin\/inventory_levels\/adjust.json",
+                    "body": {
+                        "location_id": "79286305089",
+                        "inventory_item_id": "{{shopify_2.inventory_item_id}}",
+                        "available_adjustment": "{{ custom_1.depends_on_quantity | times: -1 | integer }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "airtable",
+                "entity": "record",
+                "action": "list",
+                "name": "Get other variants with same dependency",
+                "key": "airtable_1",
+                "operation_id": "list",
+                "metadata": {
+                    "api_endpoint": "get \/{base}\/{table}",
+                    "path": {
+                        "base": "{{ transform.Base }}",
+                        "table": "{{ transform.Table }}"
+                    },
+                    "query": {
+                        "filterByFormula": "AND(\n  {Depends On SKU} = \"{{ custom_1.depends_on_sku }}\",\n  {Variant SKU} != \"{{ loop.sku }}\"\n)"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop_1",
+                "metadata": {
+                    "key": "{{ airtable_1.records }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get variant sku",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "sku_to_product_variant",
+                "name": "Get Variant Details With Same Dependency",
+                "key": "shopify_3",
+                "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
+                "metadata": {
+                    "api_endpoint": "get mesa\/productVariants\/{{product_sku}}\/sku-lookup.json",
+                    "product_sku": "{{ custom.variant_sku }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "adjust",
+                "name": "Adjust Inventory Level",
+                "key": "shopify_4",
+                "operation_id": "post_inventory_levels_adjust",
+                "metadata": {
+                    "api_endpoint": "post admin\/inventory_levels\/adjust.json",
+                    "body": {
+                        "location_id": "79286305089",
+                        "inventory_item_id": "{{shopify_3.inventory_item_id}}",
+                        "available_adjustment": "{{ custom_1.depends_on_quantity | times: -1 | integer }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 10
+            }
+        ]
+    }
+}
