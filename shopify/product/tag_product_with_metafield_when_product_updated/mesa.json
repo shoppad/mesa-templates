@@ -1,5 +1,5 @@
 {
-    "key": "shopify/product/tag_product_with_metafield_when_product_updated",
+    "key": "shopify/product/tag_product_with_metafield_when_product_created",
     "name": "Tag a product with a metafield value",
     "version": "1.0.0",
     "enabled": false,
@@ -11,31 +11,16 @@
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "product",
-                "action": "updated",
-                "name": "Product Updated",
+                "action": "created",
+                "name": "Product Created",
                 "key": "shopify",
-                "operation_id": "products_update",
+                "operation_id": "products_create",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter: Check for mesa-auto-tag tag in product",
-                "key": "filter",
-                "metadata": {
-                    "comparison": "does not contain",
-                    "a": "{{shopify.tags}}",
-                    "b": "mesa-auto-tag"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
             {
                 "schema": 3,
                 "trigger_type": "output",
@@ -47,15 +32,15 @@
                 "operation_id": "get_mesa_products_product_id_metafield",
                 "metadata": {
                     "api_endpoint": "get mesa/products/{{product_id}}/metafield.json",
+                    "product_id": "{{shopify.id}}",
                     "body": {
                         "namespace": "custom",
-                        "key": "{{ template | label: 'What is the Key of your Product Metafield?', tokens: false }}"
-                    },
-                    "product_id": "{{shopify.id}}"
+                        "key": "{{ template | label: 'What is the Key of your Product Metafield?', description: 'Go to the Settings page of your Shopify Admin. Click on Custom Data. View your product metafields and locate the key of the individual metafield.', tokens: false }}"
+                    }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 0
             },
             {
                 "schema": 3,
@@ -75,27 +60,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "tag_add",
-                "name": "Product Add mesa-auto-tag Tag",
-                "key": "shopify_3",
-                "operation_id": "post_mesa_products_product_id_tag",
-                "metadata": {
-                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
-                    "product_id": "{{shopify.id}}",
-                    "body": {
-                        "tag": "mesa-auto-tag"
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 3
+                "weight": 1
             }
         ]
     }
