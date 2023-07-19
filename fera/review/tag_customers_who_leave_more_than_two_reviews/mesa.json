@@ -1,0 +1,98 @@
+{
+    "key": "fera/review/tag_customers_who_leave_more_than_two_reviews",
+    "name": "Tag customers when they leave more than 2 reviews",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "fera",
+                "entity": "review_create",
+                "action": "created",
+                "name": "Review Created",
+                "key": "fera",
+                "operation_id": "review_create",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "fera",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "fera_2",
+                "operation_id": "retrieve-customer",
+                "metadata": {
+                    "api_endpoint": "get /customers/{id}",
+                    "path": {
+                        "id": "{{fera.customer_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "greater than",
+                    "b": "{{ template | label: 'What is the minimum number of reviews that the customer must leave?', default: 2, type: 'number', tokens: false }}",
+                    "a": "{{fera_2.counts.reviews}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{fera.external_customer_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_customers_customer_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
+                    "customer_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What would you like to tag your customers?', default: 'engaged', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
