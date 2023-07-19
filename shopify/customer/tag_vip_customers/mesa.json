@@ -32,7 +32,7 @@
                 "key": "shopify_customer_1",
                 "operation_id": "get_customers_customer_id",
                 "metadata": {
-                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
                     "customer_id": "{{shopify_order.customer.id}}"
                 },
                 "local_fields": [],
@@ -47,7 +47,7 @@
                 "key": "filter",
                 "metadata": {
                     "a": "{{shopify_customer_1.total_spent}}",
-                    "comparison": "less than equal",
+                    "comparison": "greater than equal",
                     "b": "{{ template | label: 'How much does the customer need to spend?', description: 'The lifetime spending threshold in dollars. Customers who have spent more than this amount will be tagged as VIPs.', default: 500, type: 'number', tokens: false }}"
                 },
                 "local_fields": [],
@@ -63,7 +63,7 @@
                 "key": "shopify_customer",
                 "operation_id": "post_mesa_customers_customer_id_tag",
                 "metadata": {
-                    "api_endpoint": "post mesa\/customers\/{{customer_id}}\/tag.json",
+                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
                     "customer_id": "{{shopify_order.customer.id}}",
                     "body": {
                         "tag": "{{ template | label: 'What tag should we use?', description: '', default: 'VIP', tokens: false }}"
