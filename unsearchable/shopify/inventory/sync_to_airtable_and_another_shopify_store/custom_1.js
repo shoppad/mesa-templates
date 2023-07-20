@@ -15,7 +15,7 @@ module.exports = new class {
   script = (payload, context) => {
 
     // Add your custom code here
-    let sku = context.steps.loop.current_item.sku;
+    let sku = context.steps.loop.sku;
     
     // Add your custom code here
     let query = `
@@ -42,11 +42,10 @@ module.exports = new class {
     });
 
 
-    Mesa.log.info("response: ", r);
+    Mesa.log.debug("response: ", r);
 
     let fullInventoryId = r.data.productVariants.edges[0].node.inventoryItem.id;
     payload.inventory_item_id = fullInventoryId.match(/\d+/)[0];
-    Mesa.log.info("inventory item Id: ", payload.inventory_item_id);
 
     // We're done, call the next step!
     Mesa.output.next(payload);

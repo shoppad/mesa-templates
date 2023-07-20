@@ -15,7 +15,7 @@ module.exports = new class {
   script = (payload, context) => {
 
     // Add your custom code here
-    let sku = context.steps.loop_1.current_item.sku;
+    let sku = context.steps.loop_1.sku;
     Mesa.log.info("sku: ", sku);
     
     let response = this.getAvailableInventoryForSku(sku);

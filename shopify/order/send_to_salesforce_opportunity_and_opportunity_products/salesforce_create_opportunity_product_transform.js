@@ -15,16 +15,17 @@ module.exports = new class {
   script = (payload, context) => {
 
     // Adjust `payload` here to alter data before we transform it.
+    const currentItem = context.steps.loop;
 
     // Alter the payload data based on our transform rules
     const output = Transform.convert(context, payload);
 
     // Adjust `output` here to alter data after we transform it.
     // Add discounts
-    let totalDiscounts = parseFloat(payload.current_item.total_discount_set.shop_money.amount);
+    let totalDiscounts = parseFloat(currentItem.total_discount_set.shop_money.amount);
 
-    if (payload.current_item.discount_allocations && payload.current_item.discount_allocations) {
-      totalDiscounts = payload.current_item.discount_allocations.reduce((a, {amount}) => a + parseFloat(amount), 0);
+    if (currentItem.discount_allocations && currentItem.discount_allocations) {
+      totalDiscounts = currentItem.discount_allocations.reduce((a, {amount}) => a + parseFloat(amount), 0);
     }
 
     if (totalDiscounts && totalDiscounts > 0) {

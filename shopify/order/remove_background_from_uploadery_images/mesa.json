@@ -23,8 +23,12 @@
         ],
         "outputs": [
             {
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
@@ -41,7 +45,7 @@
                 "name": "Image: Remove Background",
                 "key": "image-remove-background",
                 "metadata": {
-                    "image_url": "{{current_item.value}}"
+                    "image_url": "{{loop.value}}"
                 },
                 "description": "Mesa Image allows you to maniplulate and process images. [Read more](https://docs.getmesa.com/article/767-mesa-image)."
             },

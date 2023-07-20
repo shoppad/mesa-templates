@@ -58,6 +58,9 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop over order items",
                 "key": "loop",
                 "metadata": {
@@ -168,6 +171,9 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "loop_1",
                 "metadata": {
