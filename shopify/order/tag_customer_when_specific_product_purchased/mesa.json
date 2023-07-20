@@ -43,7 +43,7 @@
                 "metadata": {
                     "a": "{{loop.title}}",
                     "comparison": "equals",
-                    "b": "{{ template | label: 'What is the product''s title you would like to check is in the order?', description: 'Please make sure the title has the correct capitalization.', tokens: false }}"
+                    "b": "{{ template | label: 'What product needs to be purchased to qualify for a customer tag?', description: 'Please ensure the title has the correct capitalization.', tokens: false, placeholder: 'Enter the product title' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
