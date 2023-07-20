@@ -1,0 +1,74 @@
+{
+    "key": "shopify/order/tag_customer_when_specific_product_purchased",
+    "name": "Tag a customer when they purchase a specific product",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "name": "Loop",
+                "key": "loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.title}}",
+                    "comparison": "equals",
+                    "b": "{{ template | label: 'What is the product''s title you would like to check is in the order?', description: 'Please make sure the title has the correct capitalization.', tokens: false }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_customers_customer_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
+                    "customer_id": "{{shopify.customer.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What is the tag you would like to add to the customer?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
