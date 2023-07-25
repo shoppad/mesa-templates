@@ -61,7 +61,7 @@
                         "shipping_profile_id": "{{ template | label: 'What is your Shipping Profile ID?', tokens: false }}"
                     },
                     "path": {
-                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false }}"
+                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -81,7 +81,7 @@
                 "metadata": {
                     "api_endpoint": "post /v3/application/shops/{shop_id}/listings/{listing_id}/images",
                     "path": {
-                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false }}",
+                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', tokens: false }}",
                         "listing_id": "{{etsy.listing_id}}"
                     },
                     "body": {
