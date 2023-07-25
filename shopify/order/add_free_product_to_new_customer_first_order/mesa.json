@@ -72,7 +72,7 @@
                         "discount_type": "Percentage",
                         "discount_amount": "100",
                         "allow_duplicates": true,
-                        "notify_customer": true,
+                        "notify_customer": false,
                         "order_note": "Add free product"
                     }
                 },
