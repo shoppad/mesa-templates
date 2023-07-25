@@ -2,15 +2,8 @@
     "key": "shopify/product/add_to_etsy_listing",
     "name": "Add a listing on Etsy when a new product is created in Shopify",
     "version": "1.0.0",
-    "description": "When you create a new product on Shopify, MESA will also turn it into a listing on Etsy without doing it yourself manually. You'll save time, boost your product's customer reach, and sell more stocks of the item.",
-    "video": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "etsy",
-    "seconds": 300,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -61,7 +54,14 @@
                         "quantity": "{{shopify_product.variants[0].inventory_quantity}}",
                         "title": "{{shopify_product.title}}",
                         "description": "{{shopify_product.body_html}}",
-                        "price": "{{shopify_product.variants[0].price}}"
+                        "price": "{{shopify_product.variants[0].price}}",
+                        "who_made": "{{ template | label: 'Who made the product?', tokens: false }}",
+                        "when_made": "{{ template | label: 'When was the product made', tokens: false }}",
+                        "taxonomy_id": "{{ template | label: 'Who is the Taxonomy ID?', tokens: false }}",
+                        "shipping_profile_id": "{{ template | label: 'What is your Shipping Profile ID?', tokens: false }}"
+                    },
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}"
                     }
                 },
                 "local_fields": [],
@@ -81,6 +81,7 @@
                 "metadata": {
                     "api_endpoint": "post /v3/application/shops/{shop_id}/listings/{listing_id}/images",
                     "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}",
                         "listing_id": "{{etsy.listing_id}}"
                     },
                     "body": {
@@ -94,7 +95,6 @@
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
