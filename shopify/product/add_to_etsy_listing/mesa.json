@@ -56,7 +56,7 @@
                         "description": "{{shopify_product.body_html}}",
                         "price": "{{shopify_product.variants[0].price}}",
                         "who_made": "{{ template | label: 'Who made the product?', tokens: false }}",
-                        "when_made": "{{ template | label: 'When was the product made??', tokens: false }}",
+                        "when_made": "{{ template | label: 'When was the product made?', tokens: false }}",
                         "taxonomy_id": "{{ template | label: 'Who is the Taxonomy ID?', tokens: false }}",
                         "shipping_profile_id": "{{ template | label: 'What is your Shipping Profile ID?', tokens: false }}"
                     },
