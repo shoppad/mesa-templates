@@ -56,12 +56,12 @@
                         "description": "{{shopify_product.body_html}}",
                         "price": "{{shopify_product.variants[0].price}}",
                         "who_made": "{{ template | label: 'Who made the product?', tokens: false }}",
-                        "when_made": "{{ template | label: 'When was the product made', tokens: false }}",
+                        "when_made": "{{ template | label: 'When was the product made?', tokens: false }}",
                         "taxonomy_id": "{{ template | label: 'Who is the Taxonomy ID?', tokens: false }}",
                         "shipping_profile_id": "{{ template | label: 'What is your Shipping Profile ID?', tokens: false }}"
                     },
                     "path": {
-                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}"
+                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -81,7 +81,7 @@
                 "metadata": {
                     "api_endpoint": "post /v3/application/shops/{shop_id}/listings/{listing_id}/images",
                     "path": {
-                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}",
+                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', tokens: false }}",
                         "listing_id": "{{etsy.listing_id}}"
                     },
                     "body": {
