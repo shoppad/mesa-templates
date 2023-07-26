@@ -44,7 +44,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -63,9 +63,9 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{delay.customerEmail}}",
-                    "subject": "Hi {{delay.author}} - is there something we can do better?",
-                    "message": "Hi {{delay.author}}\n\nWe noticed you left us a review recently - thank you! Is there anything we can do to make things better?\n\nThanks!",
+                    "to": "{{stampedio_review.customerEmail}}",
+                    "subject": "Hi {{stampedio_review.author}} - is there something we can do better?",
+                    "message": "Hi {{stampedio_review.author}}\n\nWe noticed you left us a review recently - thank you! Is there anything we can do to make things better?\n\nThanks!",
                     "test_email_override": "john+mesa-email-test@theshoppad.com"
                 },
                 "local_fields": [],

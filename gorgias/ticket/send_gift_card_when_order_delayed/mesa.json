@@ -38,7 +38,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -63,7 +63,7 @@
                 "metadata": {
                     "entity_wrapper": "body",
                     "path": {
-                        "id": "{{delay.id}}"
+                        "id": "{{gorgias.id}}"
                     }
                 },
                 "local_fields": [],

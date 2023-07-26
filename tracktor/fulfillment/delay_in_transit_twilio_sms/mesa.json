@@ -26,7 +26,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -49,7 +49,7 @@
                 "operation_id": "RetrievethetrackingstatusofaFulfillment",
                 "metadata": {
                     "api_endpoint": "get /fulfillments/{fulfillment_id}.json",
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
+                    "fulfillment_id": "{{tracktor_fulfillment.fulfillment_id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",

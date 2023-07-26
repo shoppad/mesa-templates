@@ -58,7 +58,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay 5 Days",
                 "key": "delay",
                 "metadata": {
@@ -78,7 +78,7 @@
                 "name": "Retrieve Order from Delay",
                 "key": "tracktor_order_1",
                 "metadata": {
-                    "order_id": "{{delay.id}}"
+                    "order_id": "{{shopify_order.id}}"
                 },
                 "local_fields": [],
                 "weight": 3

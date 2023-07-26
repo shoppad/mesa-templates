@@ -43,7 +43,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -67,7 +67,7 @@
                 "metadata": {
                     "api_endpoint": "get /v2/{storeHash}/survey/reviews",
                     "query": {
-                        "search": "{{delay.id}}"
+                        "search": "{{shopify_order.id}}"
                     }
                 },
                 "local_fields": [],
@@ -99,7 +99,7 @@
                 "metadata": {
                     "a": "{{loop.orderIdShopify}}",
                     "comparison": "equals",
-                    "b": "{{delay.id}}"
+                    "b": "{{shopify_order.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",

@@ -59,7 +59,7 @@
                 "trigger_type": "output",
                 "type": "delay",
                 "name": "Delay",
-                "version": "v1",
+                "version": "v2",
                 "key": "delay",
                 "operation_id": "delay",
                 "metadata": {
@@ -82,7 +82,7 @@
                 "operation_id": "RetrievethetrackingstatusesofanOrder",
                 "metadata": {
                     "api_endpoint": "get \/orders\/{order_id}.json",
-                    "order_id": "{{delay.id}}"
+                    "order_id": "{{custom.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -182,9 +182,9 @@
                 "key": "email",
                 "operation_id": "email",
                 "metadata": {
-                    "to": "{{delay.email}}",
+                    "to": "{{custom.email}}",
                     "subject": "Sorry your package is taking so long!",
-                    "message": "Hi {{delay.customer.first_name}},\n\nSorry for the delay. Here's a coupon code: ARGHFULFILLMENTISSUESAMIRITE\n\nThanks,\nThe team",
+                    "message": "Hi {{custom.customer.first_name}},\n\nSorry for the delay. Here's a coupon code: ARGHFULFILLMENTISSUESAMIRITE\n\nThanks,\nThe team",
                     "from": "hello@gladskin.com",
                     "test_email_override": "helen@gladskin.com"
                 },
