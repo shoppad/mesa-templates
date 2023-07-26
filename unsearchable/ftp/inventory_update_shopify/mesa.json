@@ -41,6 +41,8 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v1",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {

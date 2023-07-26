@@ -21,7 +21,7 @@ module.exports = new class {
       }
     }
 
-    let productId = context.steps.loop.current_item.id;
+    let productId = context.steps.loop.id;
     Mesa.log.info("context steps custom", context.steps.custom);
 
     let recordId = context.steps.custom.record.id;
@@ -34,7 +34,7 @@ module.exports = new class {
         "fields": {
             "Image": [
               {
-                "url": context.steps.loop.current_item.src,
+                "url": context.steps.loop.src,
               }
             ],
         }

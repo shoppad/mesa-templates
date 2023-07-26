@@ -84,7 +84,10 @@
                 "weight": 2
             },
             {
-                "schema": 4,
+                "schema": 5,
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "trigger_type": "output",
                 "type": "loop",
                 "name": "Loop",

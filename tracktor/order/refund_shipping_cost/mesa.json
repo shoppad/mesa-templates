@@ -84,9 +84,12 @@
                 "weight": 3
             },
             {
-                "schema": 2,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop Over Order Fulfillments",
                 "key": "loop",
                 "metadata": {
@@ -195,9 +198,12 @@
                 "weight": 11
             },
             {
-                "schema": 2,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop Over Order Transactions",
                 "key": "loop_1",
                 "metadata": {

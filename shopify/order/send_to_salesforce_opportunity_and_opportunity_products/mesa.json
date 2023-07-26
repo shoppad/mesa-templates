@@ -135,8 +135,12 @@
                 }
             },
             {
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
@@ -158,15 +162,15 @@
                         },
                         {
                             "destination": "UnitPrice",
-                            "source": "{{current_item.price}}"
+                            "source": "{{loop.price}}"
                         },
                         {
                             "destination": "Quantity",
-                            "source": "{{current_item.quantity}}"
+                            "source": "{{loop.quantity}}"
                         },
                         {
                             "destination": "Product2Id",
-                            "source": "{{current_item.salesforce_product_id}}"
+                            "source": "{{loop.salesforce_product_id}}"
                         }
                     ]
                 },

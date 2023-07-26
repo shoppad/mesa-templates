@@ -28,11 +28,12 @@
         ],
         "outputs": [
             {
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v1",
                 "name": "Loop",
                 "key": "loop",
-                "schema": 4,
                 "metadata": {
                     "key": "{{shopify-product-created-or-updated.variants[]}}"
                 },
@@ -48,7 +49,7 @@
                 "metadata": {
                     "entity_name": "Product2",
                     "method": "QUERY",
-                    "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{loop.current_item.id}}'"
+                    "salesforce_query": "SELECT Id FROM Product2 WHERE Shopify_Variant_ID__c='{{loop.id}}'"
                 }
             },
             {
@@ -61,15 +62,15 @@
                     "mapping": [
                         {
                             "destination": "Name",
-                            "source": "{{loop.current_item.combined_title}}"
+                            "source": "{{loop.combined_title}}"
                         },
                         {
                             "destination": "StockKeepingUnit",
-                            "source": "{{loop.current_item.sku}}"
+                            "source": "{{loop.sku}}"
                         },
                         {
                             "destination": "ProductCode",
-                            "source": "{{loop.current_item.barcode}}"
+                            "source": "{{loop.barcode}}"
                         },
                         {
                             "destination": "IsActive",
@@ -77,11 +78,11 @@
                         },
                         {
                             "destination": "Description",
-                            "source": "{{loop.complete.body_html}}"
+                            "source": "{{shopify-product-created-or-updated.body_html}}"
                         },
                         {
                             "destination": "Shopify_Variant_ID__c",
-                            "source": "{{loop.current_item.id}}"
+                            "source": "{{loop.id}}"
                         }
                     ]
                 },
@@ -141,7 +142,7 @@
                         },
                         {
                             "destination": "UnitPrice",
-                            "source": "{{loop.current_item.price}}"
+                            "source": "{{loop.price}}"
                         },
                         {
                             "destination": "Pricebook2Id",

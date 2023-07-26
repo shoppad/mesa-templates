@@ -43,9 +43,12 @@
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
@@ -73,9 +76,12 @@
                 "weight": 2
             },
             {
-                "schema": 4,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "loop_1",
                 "metadata": {
@@ -92,7 +98,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{loop_1.current_item.sku}}",
+                    "a": "{{loop_1.sku}}",
                     "comparison": "is not empty"
                 },
                 "local_fields": [],

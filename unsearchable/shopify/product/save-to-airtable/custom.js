@@ -17,7 +17,7 @@ module.exports = new class {
   }
 
   airtableFindOrCreateVariantById = (product) => { 
-    let variant = payload.current_item;
+    let variant = context.steps.loop;
 
     let options = {
       "headers": {

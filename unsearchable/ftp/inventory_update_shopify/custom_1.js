@@ -23,7 +23,7 @@ module.exports = new class {
 
   getInventoryItemIdFromSku = (payload) => {
     // Add your custom code here
-    Mesa.log.info("sku: ", payload.current_item.SKU);
+    Mesa.log.debug("sku: ", context.steps.loop.SKU);
     
     // Add your custom code here
     let query = `
@@ -46,7 +46,7 @@ module.exports = new class {
     `;
 
     const r = ShopifyGraphql.send(query, {
-      "query": "sku:" + payload.current_item.SKU,
+      "query": "sku:" + context.steps.loop.SKU,
     });
 
 

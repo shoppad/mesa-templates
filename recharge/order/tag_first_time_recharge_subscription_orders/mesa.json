@@ -30,9 +30,12 @@
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "iterator",
                 "metadata": {

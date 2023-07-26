@@ -72,9 +72,12 @@
                 "weight": 1
             },
             {
-                "schema": 4,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
+                "version": "v2",
+                "entity": "loop",
+                "operation_id": "loop_loop",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {
@@ -117,7 +120,7 @@
                     "body": {
                         "fields": {
                             "Product Name": "{{shopify.title}}",
-                            "Alt Text": "{{loop.current_item.alt}}",
+                            "Alt Text": "{{loop.alt}}",
                             "Product Description": "{{shopify.body_html}}",
                             "Product ID": "{{shopify.id}}"
                         }

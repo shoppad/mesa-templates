@@ -21,7 +21,7 @@ module.exports = new class {
       }
     }
 
-    let sku = payload.current_item.sku;
+    let sku = context.steps.loop_1.sku;
     let filterByFormula = `{SKU} = '${sku}'`;
     let base = context.steps.transform.Base;
     let table = context.steps.transform.Table;

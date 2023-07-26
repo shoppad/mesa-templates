@@ -21,7 +21,7 @@ module.exports = new class {
       }
     }
 
-    let productImageId = payload.current_item.id;
+    let productImageId = context.steps.loop.id;
     let filterByFormula = `{Product Image ID} = '${productImageId}'`;
     let base = context.steps.transform.Base;
     let table = context.steps.transform.Table;
