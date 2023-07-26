@@ -55,10 +55,10 @@
                         "title": "{{shopify_product.title}}",
                         "description": "{{shopify_product.body_html}}",
                         "price": "{{shopify_product.variants[0].price}}",
-                        "who_made": "{{ template | label: 'Who made the product?', tokens: false }}",
-                        "when_made": "{{ template | label: 'When was the product made?', tokens: false }}",
-                        "taxonomy_id": "{{ template | label: 'Who is the Taxonomy ID?', tokens: false }}",
-                        "shipping_profile_id": "{{ template | label: 'What is your Shipping Profile ID?', tokens: false }}"
+                        "who_made": "{{ template | label: 'Who made the product?', description: '', tokens: false }}",
+                        "when_made": "{{ template | label: 'When was the product made?', description: '', tokens: false }}",
+                        "taxonomy_id": "{{ template | label: 'What is the Taxonomy ID?', description: 'Select a product category.', tokens: false }}",
+                        "shipping_profile_id": "{{ template | label: 'What is your Shipping Profile ID?', description: 'Required when listing type is `physical`.', tokens: false }}"
                     },
                     "path": {
                         "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', tokens: false }}"
