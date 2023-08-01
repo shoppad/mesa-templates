@@ -45,7 +45,7 @@
                 "metadata": {
                     "customer_id": "{{shopify_order.customer.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag would you like to add to the customer?',  default: 'Educational', tokens: false }}"
+                        "tag": "{{ template | label: 'What tag would you like to add to the customer?',  default: 'education', tokens: false }}"
                     }
                 },
                 "local_fields": [],
