@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/send_file_to_dropbox",
-    "name": "Send files from a Shopify order to Dropbox ",
+    "name": "Send files from a Shopify order to Dropbox",
     "version": "1.0.0",
-    "description": "Stay organized with the files your customers provide by automatically sending them to Dropbox when a Shopify order is created. It's less work for you and allows you to focus your attention on your customer rather than being distracted by busy work.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -32,13 +26,16 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify.line_items[]}}"
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -48,13 +45,16 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop_1",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{loop.properties[]}}"
+                    "key": "{{loop.properties[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -68,7 +68,8 @@
                 "key": "filter",
                 "metadata": {
                     "a": "{{loop_1.name}}",
-                    "comparison": "contains"
+                    "comparison": "contains",
+                    "b": "{{ template | label: 'What is the line item property's name that appears along with the uploaded file's details in an order?', tokens: false, placeholder: 'File' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -82,15 +83,15 @@
                 "action": "save",
                 "name": "Save File",
                 "key": "dropbox",
+                "operation_id": "file_save",
                 "metadata": {
                     "file_url": "{{loop_1.value}}",
-                    "file_path": "\/{{filename}}"
+                    "file_path": "/{{filename}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }
