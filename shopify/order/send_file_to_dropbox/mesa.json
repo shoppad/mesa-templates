@@ -69,7 +69,7 @@
                 "metadata": {
                     "a": "{{loop_1.name}}",
                     "comparison": "contains",
-                    "b": "{{ template | label: 'What is the line item property's name that appears along with the uploaded file's details in an order?', tokens: false, placeholder: 'File' }}"
+                    "b": "{{ template | label: 'What is the name of the product option for the uploaded file?', tokens: false, placeholder: 'File' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
