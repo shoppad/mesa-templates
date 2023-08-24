@@ -1,0 +1,87 @@
+{
+    "key": "ftp/update_shopify_inventory_with_csv_file",
+    "name": "Update Shopify inventory levels from a CSV file on an FTP server",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "ftp",
+                "entity": "csv",
+                "name": "Fetch CSV File",
+                "key": "ftp",
+                "operation_id": "csv",
+                "metadata": {
+                    "file": "{{ template | label: 'What is the name of the CSV file?', tokens: false, placeholder: 'orders/Order*.csv' }}",
+                    "use_headers": true,
+                    "delimiter": ",",
+                    "move_file": false,
+                    "schedule": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{ftp}}",
+                    "filter": {
+                        "comparison": "equals"
+                    },
+                    "script": "loop.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js",
+                    "description": "Retrieve product variant details that match with the SKU via Shopify GraphQL. Add the Inventory Item ID to the payload that gets pass to the next step."
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "set",
+                "name": "Set Inventory Level",
+                "key": "shopify",
+                "operation_id": "post_inventory_levels_set",
+                "metadata": {
+                    "api_endpoint": "post admin/inventory_levels/set.json",
+                    "body": {
+                        "available": "{{loop.Inventory}}",
+                        "location_id": "{{ template | label: 'What is your store's location where the product''s inventory will be updated?', tokens: false }}",
+                        "inventory_item_id": "{{custom.inventory_item_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
