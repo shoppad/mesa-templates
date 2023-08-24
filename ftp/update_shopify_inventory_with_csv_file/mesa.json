@@ -74,7 +74,7 @@
                     "api_endpoint": "post admin/inventory_levels/set.json",
                     "body": {
                         "available": "{{loop.Inventory}}",
-                        "location_id": "{{ template | label: 'What is your store's location where the product''s inventory will be updated?', tokens: false }}",
+                        "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
                         "inventory_item_id": "{{custom.inventory_item_id}}"
                     }
                 },
