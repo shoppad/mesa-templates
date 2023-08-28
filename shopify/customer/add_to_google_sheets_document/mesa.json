@@ -1,6 +1,6 @@
 {
     "key": "shopify/customer/add_to_google_sheets_document",
-    "name": "Add a Shopify customer to Google Sheets ",
+    "name": "Add a Shopify customer to Google Sheets",
     "version": "1.0.0",
     "enabled": false,
     "setup": {
