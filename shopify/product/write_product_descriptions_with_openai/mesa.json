@@ -2,15 +2,8 @@
     "key": "shopify/product/write_product_descriptions_with_openai",
     "name": "Use OpenAI to write your product descriptions",
     "version": "1.0.0",
-    "description": "AI can generate descriptions that are both accurate and creative, saving time and effort compared to manual copywriting. This template will generate a product description using OpenAI when a product is created in Shopify. Take your product descriptions to the next level and stand out in a crowded market.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -23,6 +16,7 @@
                 "key": "shopify",
                 "operation_id": "products_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,6 +32,7 @@
                 "key": "openai",
                 "operation_id": "createCompletion",
                 "metadata": {
+                    "api_endpoint": "post /completions",
                     "body": {
                         "prompt": "Write a brief product description for a product called {{shopify.title}}",
                         "model": "text-davinci-001",
@@ -64,6 +59,7 @@
                 "key": "shopify_1",
                 "operation_id": "put_products_product_id",
                 "metadata": {
+                    "api_endpoint": "put admin/products/{{product_id}}.json",
                     "product_id": "{{shopify.id}}",
                     "body": {
                         "body_html": "{{openai.choices[0].text}}"
@@ -73,7 +69,6 @@
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
