@@ -158,6 +158,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
+                "version": "v2",
                 "is_premium": true,
                 "name": "Email to Customer for Refund Notice",
                 "key": "email",

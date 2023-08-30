@@ -48,6 +48,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
+                "version": "v2",
                 "name": "Email",
                 "key": "email",
                 "metadata": {

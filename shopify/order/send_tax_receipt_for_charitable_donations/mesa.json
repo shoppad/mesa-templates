@@ -46,6 +46,7 @@
             {
                 "trigger_type": "output",
                 "type": "email",
+                "version": "v2",
                 "is_premium": true,
                 "entity": null,
                 "action": null,
