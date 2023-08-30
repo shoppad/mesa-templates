@@ -77,7 +77,7 @@
             {
                 "trigger_type": "output",
                 "type": "email",
-                "version": "v2",
+                "version": "v1",
                 "is_premium": true,
                 "name": "Email",
                 "key": "email",
