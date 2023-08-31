@@ -1,10 +1,65 @@
 {
-    "key": "shopify_customer_add_to_google_sheets_document",
+    "key": "shopify/customer/add_to_google_sheets_document",
     "name": "Add a Shopify customer to Google Sheets",
-    "description": "WStaying organized while running a successful store can be difficult and grabbing information from each customer is time-consuming. This template sends customer details from Shopify to Google Sheets when a customer is updated. You can now keep track of all of your customers on one of the most popular collaborative hubs.",
+    "version": "1.0.0",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets_row.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets_row.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row whenever a new customer is created. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Customer ID",
+                        "value": "Customer ID|{{shopify_customer.id}}",
+                        "description": "The ID of the customer."
+                    },
+                    {
+                        "label": "Email",
+                        "value": "Email|{{shopify_customer.email}}",
+                        "description": "The email of the customer."
+                    },
+                    {
+                        "label": "First Name",
+                        "value": "First Name|{{shopify_customer.first_name}}",
+                        "description": "The first name of the customer."
+                    },
+                    {
+                        "label": "Last Name",
+                        "value": "Last Name|{{shopify_customer.last_name}}",
+                        "description": "The last name of the customer."
+                    },
+                    {
+                        "label": "Phone",
+                        "value": "Phone|{{shopify_customer.phone}}",
+                        "description": "The phone number of the customer."
+                    },
+                    {
+                        "label": "Tags",
+                        "value": "Tags|{{shopify_customer.tags}}",
+                        "description": "The tags of the customer."
+                    },
+                    {
+                        "label": "Note",
+                        "value": "Note|{{shopify_customer.note}}",
+                        "description": "A note about the customer."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
@@ -15,6 +70,7 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify_customer",
+                "operation_id": "customers_create",
                 "metadata": [],
                 "local_fields": [],
                 "weight": 0
@@ -28,8 +84,10 @@
                 "entity": "row",
                 "action": "create",
                 "name": "Add Row",
-                "key": "googlesheets_row_1",
+                "key": "googlesheets_row",
+                "operation_id": "record_create",
                 "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
                     "path": {
                         "mode": "create",
                         "spreadsheet_id": "",
@@ -37,69 +95,11 @@
                         "header_row": "first_row"
                     },
                     "body": {
-                        "fields": {
-                            "Customer ID": "{{shopify_customer.id}}",
-                            "Email": "{{shopify_customer.email}}",
-                            "First Name": "{{shopify_customer.first_name}}",
-                            "Last Name": "{{shopify_customer.last_name}}",
-                            "Phone": "{{shopify_customer.phone}}",
-                            "Tags": "{{shopify_customer.tags}}",
-                            "Note": "{{shopify_customer.note}}"
-                        }
+                        "fields": {}
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "fields",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "Customer ID",
-                                        "label": "Customer ID",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Email",
-                                        "label": "Email",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "First Name",
-                                        "label": "First Name",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Last Name",
-                                        "label": "Last Name",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Phone",
-                                        "label": "Phone",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Tags",
-                                        "label": "Tags",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Note",
-                                        "label": "Note",
-                                        "type": "text"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "weight": 0
+                "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
