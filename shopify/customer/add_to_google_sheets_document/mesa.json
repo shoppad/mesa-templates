@@ -17,7 +17,7 @@
                 "key": "fields",
                 "target": "googlesheets_row.setup_fields",
                 "label": "What are your spreadsheet columns?",
-                "description": "This template will automatically create a new row for the customer of the order. De-select the columns you do not want to include in your spreadsheet.",
+                "description": "This template will automatically create a new row whenever a new customer is created. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
                     {
                         "label": "Customer ID",
