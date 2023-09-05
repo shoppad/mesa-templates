@@ -1,0 +1,138 @@
+{
+    "key": "square/order/update_shopify_inventory",
+    "name": "Update inventory in Shopify when a Square order is created",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "square",
+                "entity": "order_created",
+                "action": "created",
+                "name": "Order Created",
+                "key": "square",
+                "operation_id": "order.created",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "square_1",
+                "operation_id": "RetrieveOrder",
+                "metadata": {
+                    "api_endpoint": "get /v2/orders/{order_id}",
+                    "path": {
+                        "order_id": "{{square.order_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{square_1.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_catalog_object",
+                "action": "retrieve",
+                "name": "Retrieve Catalog Object",
+                "key": "square_2",
+                "operation_id": "RetrieveCatalogObject",
+                "metadata": {
+                    "api_endpoint": "get /v2/catalog/object/{object_id}",
+                    "path": {
+                        "object_id": "{{loop.catalog_object_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "description": "Get Shopify Product's Inventory Item ID from Square Product's SKU via Shopify GraphQL.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_inventory",
+                "action": "retrieve",
+                "name": "Retrieve Inventory Count",
+                "key": "square_3",
+                "operation_id": "RetrieveInventoryCount",
+                "metadata": {
+                    "api_endpoint": "get /v2/inventory/{catalog_object_id}",
+                    "path": {
+                        "catalog_object_id": "{{loop.catalog_object_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "set",
+                "name": "Set Inventory Level",
+                "key": "shopify",
+                "operation_id": "post_inventory_levels_set",
+                "metadata": {
+                    "api_endpoint": "post admin/inventory_levels/set.json",
+                    "body": {
+                        "available": "{{square_3.0.quantity}}",
+                        "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.', tokens: false }}",
+                        "inventory_item_id": "{{custom.inventory_item_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 5
+            }
+        ]
+    }
+}
