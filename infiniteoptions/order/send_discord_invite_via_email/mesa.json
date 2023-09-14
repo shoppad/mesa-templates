@@ -16,7 +16,7 @@
                 "key": "infiniteoptions",
                 "operation_id": "order_created",
                 "metadata": {
-                    "field_name": "{{ template | label: 'What is your Discord option?', description: '', tokens: false }}"
+                    "field_name": "{{ template | label: 'What is the option that is included with the purchased product?', description: 'Leave this field empty if you want to include all product options.', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
