@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/add_currency_to_order_tags",
-    "name": "Add a currency tag to an order",
+    "name": "Add a currency tag to a Shopify order",
     "version": "1.0.0",
-    "description": "Keep track of which countries hold your strongest supporters. This template adds a currency tag to your Shopify order as soon as the order is created. You can trace the exact currencies used at checkout to take note of where your Shopify's biggest fans are.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "shopify",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,6 +14,7 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
                 "weight": 0
@@ -36,7 +29,9 @@
                 "action": "tag_add",
                 "name": "Order Add Tag",
                 "key": "shopify",
+                "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
                         "tag": "{{shopify_order.currency}}"
@@ -46,7 +41,6 @@
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

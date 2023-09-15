@@ -2,16 +2,8 @@
     "key": "shopify/order/add_fulfillment",
     "name": "Add fulfillment to line items that don't require shipping",
     "version": "1.0.0",
-    "description": "Consolidate fulfillment information and reduce clutter for your fulfillment service. This template instantly adds fulfillment to Shopify orders when an order is created with line-items that do not require shipping. With this workflow, you reduce the risk of fulfillment errors for your store.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,6 +14,7 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
                 "weight": 0
@@ -32,13 +25,16 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
+                    "key": "{{shopify_order.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
                 "weight": 0
@@ -65,9 +61,12 @@
                 "action": "custom_create",
                 "name": "Create Order Fulfillment",
                 "key": "shopify_order_fulfillment",
+                "operation_id": "post_mesa_orders_order_id_fulfillments",
                 "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/fulfillments.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
+                        "location_id": "{{ template | label: 'Where is the location to create the order fulfillment?', description: '', tokens: false }}",
                         "line_items": [
                             {
                                 "id": "{{loop.id}}",
@@ -101,7 +100,6 @@
                 ],
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/add_shipping_province_tag",
-    "name": "Add a shipping province tag to an order",
+    "name": "Tag a Shopify order with the shipping province or state",
     "version": "1.0.0",
-    "description": "Keep track of exactly where your store's orders are headed. This template instantly updates the order's tags with the province of where your orders are shipped. You now have a simple and effective way to monitor your Shopify's shipping zones.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "shopify",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,6 +14,7 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
                 "weight": 0
@@ -36,7 +29,9 @@
                 "action": "tag_add",
                 "name": "Order Add Tag",
                 "key": "shopify",
+                "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
                         "tag": "{{shopify_order.shipping_address.province_code}}"
@@ -46,7 +41,6 @@
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
