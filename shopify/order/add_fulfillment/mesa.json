@@ -66,7 +66,7 @@
                     "api_endpoint": "post mesa/orders/{{order_id}}/fulfillments.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "location_id": "{{ template | label: 'Where is the location to create the order fulfillment?', description: '', tokens: false }}",
+                        "location_id": "{{ template | label: 'To which location should we assign the order fulfillment?', description: '', tokens: false }}",
                         "line_items": [
                             {
                                 "id": "{{loop.id}}",
