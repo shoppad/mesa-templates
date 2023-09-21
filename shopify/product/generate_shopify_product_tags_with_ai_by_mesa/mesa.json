@@ -1,0 +1,67 @@
+{
+    "key": "shopify/product/generate_shopify_product_tags_with_ai_by_mesa",
+    "name": "Use AI by MESA to generate Shopify product tags",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "json": false,
+                    "temperature": "0.7",
+                    "body": {
+                        "prompt": "Write 2 to 3 comma-separated tags using no more than 2 words for each based on the following product information:\nTitle: {{shopify.title}}\nDescription: {{shopify.body_html}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_add",
+                "name": "Product Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
