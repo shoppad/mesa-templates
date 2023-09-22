@@ -1,0 +1,143 @@
+{
+    "key": "shopify/order/square_update_inventory",
+    "name": "Update inventory in Square when a Shopify order is created",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
+                "key": "shopify_1",
+                "operation_id": "get_variants_variant_id",
+                "metadata": {
+                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
+                    "variant_id": "{{loop.variant_id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "list",
+                "name": "Get List of Inventory Levels",
+                "key": "shopify_2",
+                "operation_id": "get_inventory_levels",
+                "metadata": {
+                    "api_endpoint": "get admin/inventory_levels.json",
+                    "query": {
+                        "mesa_option": "select",
+                        "limit": "1",
+                        "inventory_item_ids": "{{shopify_1.inventory_item_id}}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_catalog_search",
+                "action": "create",
+                "name": "Search Catalog",
+                "key": "square",
+                "operation_id": "SearchCatalogObjects",
+                "metadata": {
+                    "api_endpoint": "post /v2/catalog/search",
+                    "body": {
+                        "limit": "1",
+                        "object_types": [
+                            {
+                                "type": "ITEM_VARIATION"
+                            }
+                        ],
+                        "query": {
+                            "exact_query": {
+                                "attribute_name": "sku",
+                                "attribute_value": "{{shopify_1.sku}}"
+                            }
+                        }
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_inventory_change_batch_create",
+                "action": "create",
+                "name": "Update Inventory",
+                "key": "square_1",
+                "operation_id": "BatchChangeInventory",
+                "metadata": {
+                    "api_endpoint": "post /v2/inventory/changes/batch-create",
+                    "body": {
+                        "ignore_unchanged_counts": true,
+                        "changes": [
+                            {
+                                "type": "PHYSICAL_COUNT",
+                                "physical_count": {
+                                    "catalog_object_id": "{{square.0.id}}",
+                                    "state": "IN_STOCK",
+                                    "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', tokens: false }}",
+                                    "quantity": "{{shopify_2.0.available}}"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
