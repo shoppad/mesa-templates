@@ -65,7 +65,7 @@
                 "name": "Custom Code",
                 "key": "custom",
                 "metadata": {
-                    "description": "Get the absolute value of the discount code value.\n\n{{custom.price_rule.value}} is a variable that can be used in next steps.",
+                    "description": "Get the absolute value of the discount code value.\n\n{{custom.price_rule_value}} is a variable that can be used in next steps.",
                     "script": "custom.js"
                 },
                 "local_fields": [],
