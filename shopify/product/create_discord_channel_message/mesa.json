@@ -1,0 +1,89 @@
+{
+    "key": "shopify/product/create_discord_channel_message",
+    "name": "Create a channel message when a new product is created in Shopify",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "version": "v2",
+                "key": "delay",
+                "metadata": {
+                    "amount": "30",
+                    "unit": "minutes",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Create Channel Message",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-messages",
+                "metadata": {
+                    "api_endpoint": "post /channels/{channelId}/messages",
+                    "body": {
+                        "embed": {
+                            "title": "New Product Added",
+                            "description": "\ud83c\udf89 New Product \ud83c\udf89\n{{shopify_1.title}}\n\nView Product: https://{{context.shop.domain}}/products/{{shopify_1.handle}}",
+                            "timestamp": "{{shopify_1.published_at}}",
+                            "color": "15105570",
+                            "image": {
+                                "url": "{{shopify_1.images[0].src}}"
+                            }
+                        }
+                    },
+                    "path": {
+                        "channelId": "{{ template | label: 'What is your server''s channel ID?', description: 'To locate the Channel ID, login into Discord. Make sure you have Developer Mode enabled. If you don''t have Developer Mode enabled, go to your User Settings (gear icon).<br><br>On the left-hand sidebar, locate Advanced and toggle Developer Mode on.<br><br>Next, locate your server''s channel and right-click on the channel. Click on Copy ID and paste that value below. [Learn more.](https://docs.getmesa.com/article/1242-discord#channel-id)', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
