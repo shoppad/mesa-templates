@@ -1,0 +1,364 @@
+{
+  "key": "mesa_analytics_products",
+  "name": "Mesa Analytics: Products",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "product",
+        "action": "updated",
+        "name": "Shopify Product Updated",
+        "key": "shopify_product",
+        "metadata": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Product Record",
+        "key": "data_record",
+        "metadata": {
+          "create": "existing",
+          "table": "products",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{shopify_product.id}}",
+            "a": "product_id"
+          },
+          "columns": [
+            {
+              "key": "product_id",
+              "type": "varchar",
+              "value": "{{shopify_product.id}}",
+              "disabled": true
+            },
+            {
+              "key": "title",
+              "type": "varchar",
+              "value": "{{shopify_product.title}}",
+              "disabled": true
+            },
+            {
+              "key": "body_html",
+              "type": "text",
+              "value": "{{shopify_product.body_html}}",
+              "disabled": true
+            },
+            {
+              "key": "vendor",
+              "type": "varchar",
+              "value": "{{shopify_product.vendor}}",
+              "disabled": true
+            },
+            {
+              "key": "product_type",
+              "type": "varchar",
+              "value": "{{shopify_product.product_type}}",
+              "disabled": true
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{shopify_product.created_at}}",
+              "disabled": true
+            },
+            {
+              "key": "handle",
+              "type": "varchar",
+              "value": "{{shopify_product.handle}}",
+              "disabled": true
+            },
+            {
+              "key": "updated_at",
+              "type": "timestamptz",
+              "value": "{{shopify_product.updated_at}}",
+              "disabled": true
+            },
+            {
+              "key": "published_at",
+              "type": "timestamptz",
+              "value": "{{shopify_product.published_at}}",
+              "disabled": true
+            },
+            {
+              "key": "template_suffix",
+              "type": "varchar",
+              "value": "{{shopify_product.template_suffix}}",
+              "disabled": true
+            },
+            {
+              "key": "status",
+              "type": "varchar",
+              "value": "{{shopify_product.status}}",
+              "disabled": true
+            },
+            {
+              "key": "published_scope",
+              "type": "varchar",
+              "value": "{{shopify_product.published_scope}}",
+              "disabled": true
+            },
+            {
+              "key": "tags",
+              "type": "text",
+              "value": "{{shopify_product.tags}}",
+              "disabled": true
+            },
+            {
+              "key": "options_names",
+              "type": "varchar",
+              "value": "{% if shopify_product.options | count %}{{shopify_product.options | map: 'name' | join ','}}{% endif %}",
+              "disabled": true
+            },
+            {
+              "key": "image_src",
+              "type": "varchar",
+              "value": "{{shopify_product.image.src}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Loop",
+        "key": "loop",
+        "metadata": {
+          "key": "{{shopify_product.variants[]}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify_api",
+        "entity": "inventory_item",
+        "action": "retrieve",
+        "name": "Shopify Retrieve Inventory Item",
+        "key": "shopify_inventory_item",
+        "metadata": {
+          "inventory_item_id": "{{loop.inventory_item_id}}"
+        },
+        "local_fields": [],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Product Variant Record",
+        "key": "data_record_1",
+        "metadata": {
+          "create": "existing",
+          "table": "product_variants",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{loop.id}}",
+            "a": "variant_id"
+          },
+          "columns": [
+            {
+              "key": "variant_id",
+              "type": "varchar",
+              "value": "{{loop.id}}",
+              "disabled": true
+            },
+            {
+              "key": "product_id",
+              "type": "varchar",
+              "value": "{{loop.product_id}}",
+              "disabled": true
+            },
+            {
+              "key": "title",
+              "type": "varchar",
+              "value": "{{loop.title}}",
+              "disabled": true
+            },
+            {
+              "key": "price",
+              "type": "numeric",
+              "value": "{{loop.price}}",
+              "disabled": true
+            },
+            {
+              "key": "compare_at_price",
+              "type": "numeric",
+              "value": "{{loop.compare_at_price}}",
+              "disabled": true
+            },
+            {
+              "key": "cost",
+              "type": "numeric",
+              "value": "{{shopify_inventory_item.cost}}",
+              "disabled": true
+            },
+            {
+              "key": "sku",
+              "type": "varchar",
+              "value": "{{loop.sku}}",
+              "disabled": true
+            },
+            {
+              "key": "position",
+              "type": "varchar",
+              "value": "{{loop.position}}",
+              "disabled": true
+            },
+            {
+              "key": "inventory_policy",
+              "type": "varchar",
+              "value": "{{loop.inventory_policy}}",
+              "disabled": true
+            },
+            {
+              "key": "fulfillment_service",
+              "type": "varchar",
+              "value": "{{loop.fulfillment_service}}",
+              "disabled": true
+            },
+            {
+              "key": "inventory_management",
+              "type": "varchar",
+              "value": "{{loop.inventory_management}}",
+              "disabled": true
+            },
+            {
+              "key": "option1",
+              "type": "varchar",
+              "value": "{{loop.option1}}",
+              "disabled": true
+            },
+            {
+              "key": "option2",
+              "type": "varchar",
+              "value": "{{loop.option2}}",
+              "disabled": true
+            },
+            {
+              "key": "option3",
+              "type": "varchar",
+              "value": "{{loop.option3}}",
+              "disabled": true
+            },
+            {
+              "key": "options",
+              "type": "varchar",
+              "value": "{{loop.option1}},{{loop.option2}},{{loop.option3}}",
+              "disabled": true
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{loop.created_at}}",
+              "disabled": true
+            },
+            {
+              "key": "updated_at",
+              "type": "timestamptz",
+              "value": "{{loop.updated_at}}",
+              "disabled": true
+            },
+            {
+              "key": "taxable",
+              "type": "boolean",
+              "value": "{{loop.taxable}}",
+              "disabled": true
+            },
+            {
+              "key": "barcode",
+              "type": "varchar",
+              "value": "{{loop.barcode}}",
+              "disabled": true
+            },
+            {
+              "key": "grams",
+              "type": "numeric",
+              "value": "{{loop.grams}}",
+              "disabled": true
+            },
+            {
+              "key": "image_id",
+              "type": "varchar",
+              "value": "{{loop.image_id}}",
+              "disabled": true
+            },
+            {
+              "key": "weight",
+              "type": "numeric",
+              "value": "{{loop.weight}}",
+              "disabled": true
+            },
+            {
+              "key": "weight_unit",
+              "type": "varchar",
+              "value": "{{loop.weight_unit}}",
+              "disabled": true
+            },
+            {
+              "key": "inventory_item_id",
+              "type": "varchar",
+              "value": "{{loop.inventory_item_id}}",
+              "disabled": true
+            },
+            {
+              "key": "invetory_item_tracked",
+              "type": "boolean",
+              "value": "{{shopify_inventory_item.tracked}}",
+              "disabled": true
+            },
+            {
+              "key": "inventory_quantity",
+              "type": "int8",
+              "value": "{{loop.inventory_quantity}}",
+              "disabled": true
+            },
+            {
+              "key": "old_inventory_quantity",
+              "type": "int8",
+              "value": "{{loop.old_inventory_quantity}}",
+              "disabled": true
+            },
+            {
+              "key": "requires_shipping",
+              "type": "boolean",
+              "value": "{{loop.requires_shipping}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 3
+      }
+    ],
+    "storage": []
+  }
+}

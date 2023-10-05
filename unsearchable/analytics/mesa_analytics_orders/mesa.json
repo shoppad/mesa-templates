@@ -1,0 +1,949 @@
+{
+  "key": "mesa_analytics_orders",
+  "name": "MESA Analytics: Orders v2",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "order",
+        "action": "updated",
+        "name": "Shopify Order Updated",
+        "key": "shopify_order",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Order Record",
+        "key": "data_record",
+        "metadata": {
+          "create": "existing",
+          "table": "orders",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{shopify_order.id}}",
+            "a": "order_id"
+          },
+          "columns": [
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_order.id}}",
+              "disabled": false
+            },
+            {
+              "key": "customer_id",
+              "type": "varchar",
+              "value": "{{shopify_order.customer.id}}",
+              "disabled": false
+            },
+            {
+              "key": "app_id",
+              "type": "varchar",
+              "value": "{{shopify_order.app_id}}",
+              "disabled": false
+            },
+            {
+              "key": "browser_ip",
+              "type": "varchar",
+              "value": "{{shopify_order.browser_ip}}",
+              "disabled": false
+            },
+            {
+              "key": "buyer_accepts_marketing",
+              "type": "bool",
+              "value": "{{shopify_order.buyer_accepts_marketing}}",
+              "disabled": false
+            },
+            {
+              "key": "cancel_reason",
+              "type": "varchar",
+              "value": "{{shopify_order.cancel_reason}}",
+              "disabled": false
+            },
+            {
+              "key": "cancelled_at",
+              "type": "timestamptz",
+              "value": "{{shopify_order.cancelled_at}}",
+              "disabled": false
+            },
+            {
+              "key": "cart_token",
+              "type": "varchar",
+              "value": "{{shopify_order.cart_token}}",
+              "disabled": false
+            },
+            {
+              "key": "checkout_token",
+              "type": "varchar",
+              "value": "{{shopify_order.checkout_token}}",
+              "disabled": false
+            },
+            {
+              "key": "closed_at",
+              "type": "timestamptz",
+              "value": "{{shopify_order.closed_at}}",
+              "disabled": false
+            },
+            {
+              "key": "confirmed",
+              "type": "bool",
+              "value": "{{shopify_order.confirmed}}",
+              "disabled": false
+            },
+            {
+              "key": "contact_email",
+              "type": "varchar",
+              "value": "{{shopify_order.contact_email}}",
+              "disabled": false
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{shopify_order.created_at}}",
+              "disabled": false
+            },
+            {
+              "key": "currency",
+              "type": "varchar",
+              "value": "{{shopify_order.currency}}",
+              "disabled": false
+            },
+            {
+              "key": "current_subtotal_price",
+              "type": "numeric",
+              "value": "{{shopify_order.current_subtotal_price}}",
+              "disabled": false
+            },
+            {
+              "key": "current_total_discounts",
+              "type": "numeric",
+              "value": "{{shopify_order.current_total_discounts}}",
+              "disabled": false
+            },
+            {
+              "key": "current_total_price",
+              "type": "numeric",
+              "value": "{{shopify_order.current_total_price}}",
+              "disabled": false
+            },
+            {
+              "key": "current_total_tax",
+              "type": "numeric",
+              "value": "{{shopify_order.current_total_tax}}",
+              "disabled": false
+            },
+            {
+              "key": "customer_locale",
+              "type": "varchar",
+              "value": "{{shopify_order.customer_locale}}",
+              "disabled": false
+            },
+            {
+              "key": "device_id",
+              "type": "varchar",
+              "value": "{{shopify_order.device_id}}",
+              "disabled": false
+            },
+            {
+              "key": "discount_codes",
+              "type": "varchar",
+              "value": "{% if shopify_order.discount_codes | count %}{{shopify_order.discount_codes | map: 'code' | join: ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "email",
+              "type": "varchar",
+              "value": "{{shopify_order.email}}",
+              "disabled": false
+            },
+            {
+              "key": "financial_status",
+              "type": "varchar",
+              "value": "{{shopify_order.financial_status}}",
+              "disabled": false
+            },
+            {
+              "key": "fulfillment_status",
+              "type": "varchar",
+              "value": "{{shopify_order.fulfillment_status}}",
+              "disabled": false
+            },
+            {
+              "key": "gateway",
+              "type": "varchar",
+              "value": "{{shopify_order.gateway}}",
+              "disabled": false
+            },
+            {
+              "key": "landing_site",
+              "type": "text",
+              "value": "{{shopify_order.landing_site}}",
+              "disabled": false
+            },
+            {
+              "key": "landing_site_ref",
+              "type": "text",
+              "value": "{{shopify_order.landing_site_ref}}",
+              "disabled": false
+            },
+            {
+              "key": "location_id",
+              "type": "varchar",
+              "value": "{{shopify_order.location_id}}",
+              "disabled": false
+            },
+            {
+              "key": "name",
+              "type": "varchar",
+              "value": "{{shopify_order.name}}",
+              "disabled": false
+            },
+            {
+              "key": "note",
+              "type": "text",
+              "value": "{{shopify_order.note}}",
+              "disabled": false
+            },
+            {
+              "key": "note_attributes_names",
+              "type": "varchar",
+              "value": "{% if shopify_order.note_attributes | count %}{{shopify_order.note_attributes | map: 'name' | join: ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "note_attributes_values",
+              "type": "text",
+              "value": "{% if shopify_order.note_attributes | count %}{{shopify_order.note_attributes | map: 'value' | join: ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "number",
+              "type": "int8",
+              "value": "{{shopify_order.number}}",
+              "disabled": false
+            },
+            {
+              "key": "order_number",
+              "type": "varchar",
+              "value": "{{shopify_order.order_number}}",
+              "disabled": false
+            },
+            {
+              "key": "order_status_url",
+              "type": "varchar",
+              "value": "{{shopify_order.order_status_url}}",
+              "disabled": false
+            },
+            {
+              "key": "payment_gateway_names",
+              "type": "varchar",
+              "value": "{{shopify_order.payment_gateway_names | join: ','}}",
+              "disabled": false
+            },
+            {
+              "key": "phone",
+              "type": "varchar",
+              "value": "{{shopify_order.phone}}",
+              "disabled": false
+            },
+            {
+              "key": "presentment_currency",
+              "type": "varchar",
+              "value": "{{shopify_order.presentment_currency}}",
+              "disabled": false
+            },
+            {
+              "key": "processed_at",
+              "type": "timestamptz",
+              "value": "{{shopify_order.processed_at}}",
+              "disabled": false
+            },
+            {
+              "key": "processing_method",
+              "type": "varchar",
+              "value": "{{shopify_order.processing_method}}",
+              "disabled": false
+            },
+            {
+              "key": "reference",
+              "type": "varchar",
+              "value": "{{shopify_order.reference}}",
+              "disabled": false
+            },
+            {
+              "key": "referring_site",
+              "type": "text",
+              "value": "{{shopify_order.referring_site}}",
+              "disabled": false
+            },
+            {
+              "key": "source_identifier",
+              "type": "varchar",
+              "value": "{{shopify_order.source_identifier}}",
+              "disabled": false
+            },
+            {
+              "key": "source_name",
+              "type": "varchar",
+              "value": "{{shopify_order.source_name}}",
+              "disabled": false
+            },
+            {
+              "key": "source_url",
+              "type": "varchar",
+              "value": "{{shopify_order.source_url}}",
+              "disabled": false
+            },
+            {
+              "key": "subtotal_price",
+              "type": "numeric",
+              "value": "{{shopify_order.subtotal_price}}",
+              "disabled": false
+            },
+            {
+              "key": "tags",
+              "type": "text",
+              "value": "{{shopify_order.tags}}",
+              "disabled": false
+            },
+            {
+              "key": "tax_lines_titles",
+              "type": "varchar",
+              "value": "{% if shopify_order.tax_lines | count %}{{shopify_order.tax_lines | map: 'title' | join: ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "taxes_included",
+              "type": "bool",
+              "value": "{{shopify_order.taxes_included}}",
+              "disabled": false
+            },
+            {
+              "key": "test",
+              "type": "bool",
+              "value": "{{shopify_order.test}}",
+              "disabled": false
+            },
+            {
+              "key": "token",
+              "type": "varchar",
+              "value": "{{shopify_order.token}}",
+              "disabled": false
+            },
+            {
+              "key": "total_discounts",
+              "type": "numeric",
+              "value": "{{shopify_order.total_discounts}}",
+              "disabled": false
+            },
+            {
+              "key": "total_line_items_price",
+              "type": "numeric",
+              "value": "{{shopify_order.total_line_items_price}}",
+              "disabled": false
+            },
+            {
+              "key": "total_outstanding",
+              "type": "numeric",
+              "value": "{{shopify_order.total_outstanding}}",
+              "disabled": false
+            },
+            {
+              "key": "total_price",
+              "type": "numeric",
+              "value": "{{shopify_order.total_price}}",
+              "disabled": false
+            },
+            {
+              "key": "total_price_usd",
+              "type": "numeric",
+              "value": "{{shopify_order.total_price_usd}}",
+              "disabled": false
+            },
+            {
+              "key": "total_tax",
+              "type": "numeric",
+              "value": "{{shopify_order.total_tax}}",
+              "disabled": false
+            },
+            {
+              "key": "total_tip_received",
+              "type": "numeric",
+              "value": "{{shopify_order.total_tip_received}}",
+              "disabled": false
+            },
+            {
+              "key": "total_weight",
+              "type": "numeric",
+              "value": "{{shopify_order.total_weight}}",
+              "disabled": false
+            },
+            {
+              "key": "updated_at",
+              "type": "timestamptz",
+              "value": "{{shopify_order.updated_at}}",
+              "disabled": false
+            },
+            {
+              "key": "user_id",
+              "type": "varchar",
+              "value": "{{shopify_order.user_id}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_first_name",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.first_name}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_address1",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.address1}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_phone",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.phone}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_city",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.city}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_zip",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.zip}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_province",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.province}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_country",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.country}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_last_name",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.last_name}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_address2",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.address2}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_company",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.company}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_latitude",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.latitude}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_longitude",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.longitude}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_name",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.name}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_country_code",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.country_code}}",
+              "disabled": false
+            },
+            {
+              "key": "billing_address_province_code",
+              "type": "varchar",
+              "value": "{{shopify_order.billing_address.province_code}}",
+              "disabled": false
+            },
+            {
+              "key": "discount_applications_types",
+              "type": "varchar",
+              "value": "{% if shopify_order.discount_applications | count %}{{shopify_order.discount_applications | map: 'type' | join ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "discount_applications_value_types",
+              "type": "varchar",
+              "value": "{% if shopify_order.discount_applications | count %}{{shopify_order.discount_applications | map: 'value_type' | join ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "discount_applications_target_types",
+              "type": "varchar",
+              "value": "{% if shopify_order.discount_applications | count %}{{shopify_order.discount_applications | map: 'target_type' | join ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_first_name",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.first_name}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_address1",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.address1}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_phone",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.phone}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_city",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.city}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_zip",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.zip}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_province",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.province}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_country",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.country}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_last_name",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.last_name}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_address2",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.address2}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_company",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.company}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_latitude",
+              "type": "numeric",
+              "value": "{{shopify_order.shipping_address.latitude}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_longitude",
+              "type": "numeric",
+              "value": "{{shopify_order.shipping_address.longitude}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_name",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.name}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_country_code",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.country_code}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_address_province_code",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_address.province_code}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_id",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.id}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_carrier_identifier",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.carrier_identifier}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_code",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.code}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_delivery_category",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.delivery_category}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_discounted_price",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.discounted_price}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_phone",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.phone}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_price",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.price}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_requested_fulfillment_service_id",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.requested_fulfillment_service_id}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_source",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.source}}",
+              "disabled": false
+            },
+            {
+              "key": "shipping_line_title",
+              "type": "varchar",
+              "value": "{{shopify_order.shipping_line.0.title}}",
+              "disabled": false
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Loop over Line Items",
+        "key": "loop",
+        "metadata": {
+          "key": "{{shopify_order.line_items[]}}"
+        },
+        "local_fields": [],
+        "weight": 5
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Line Item Record",
+        "key": "data_record_1",
+        "metadata": {
+          "create": "existing",
+          "table": "line_items",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{loop.id}}",
+            "a": "line_item_id"
+          },
+          "columns": [
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_order.id}}",
+              "disabled": false
+            },
+            {
+              "key": "customer_id",
+              "type": "varchar",
+              "value": "{{shopify_order.customer.id}}",
+              "disabled": false
+            },
+            {
+              "key": "line_item_id",
+              "type": "varchar",
+              "value": "{{loop.id}}",
+              "disabled": false
+            },
+            {
+              "key": "sku",
+              "type": "varchar",
+              "value": "{{loop.sku}}",
+              "disabled": false
+            },
+            {
+              "key": "name",
+              "type": "varchar",
+              "value": "{{loop.name}}",
+              "disabled": false
+            },
+            {
+              "key": "grams",
+              "type": "numeric",
+              "value": "{{loop.grams}}",
+              "disabled": false
+            },
+            {
+              "key": "price",
+              "type": "numeric",
+              "value": "{{loop.price}}",
+              "disabled": false
+            },
+            {
+              "key": "title",
+              "type": "varchar",
+              "value": "{{loop.title}}",
+              "disabled": false
+            },
+            {
+              "key": "vendor",
+              "type": "varchar",
+              "value": "{{loop.vendor}}",
+              "disabled": false
+            },
+            {
+              "key": "taxable",
+              "type": "bool",
+              "value": "{{loop.taxable}}",
+              "disabled": false
+            },
+            {
+              "key": "quantity",
+              "type": "int8",
+              "value": "{{loop.quantity}}",
+              "disabled": false
+            },
+            {
+              "key": "gift_card",
+              "type": "bool",
+              "value": "{{loop.gift_card}}",
+              "disabled": false
+            },
+            {
+              "key": "tax_lines_titles",
+              "type": "varchar",
+              "value": "{% if loop.tax_lines | count %}{{loop.tax_lines | map: 'title' | join: ','}}{% endif %}",
+              "disabled": false
+            },
+            {
+              "key": "product_id",
+              "type": "varchar",
+              "value": "{{loop.product_id}}",
+              "disabled": false
+            },
+            {
+              "key": "variant_id",
+              "type": "varchar",
+              "value": "{{loop.variant_id}}",
+              "disabled": false
+            },
+            {
+              "key": "variant_title",
+              "type": "varchar",
+              "value": "{{loop.variant_title}}",
+              "disabled": false
+            },
+            {
+              "key": "total_discount",
+              "type": "numeric",
+              "value": "{{loop.total_discount}}",
+              "disabled": false
+            },
+            {
+              "key": "origin_location_id",
+              "type": "varchar",
+              "value": "{{loop.origin_location.id}}",
+              "disabled": false
+            },
+            {
+              "key": "origin_location_name",
+              "type": "varchar",
+              "value": "{{loop.origin_location.name}}",
+              "disabled": false
+            },
+            {
+              "key": "requires_shipping",
+              "type": "bool",
+              "value": "{{loop.requires_shipping}}",
+              "disabled": false
+            },
+            {
+              "key": "fulfillment_status",
+              "type": "varchar",
+              "value": "{{loop.fulfillment_status}}",
+              "disabled": false
+            },
+            {
+              "key": "fulfillment_service",
+              "type": "varchar",
+              "value": "{{loop.fulfillment_service}}",
+              "disabled": false
+            },
+            {
+              "key": "discount_allocations_amounts",
+              "type": "varchar",
+              "value": "{{loop.discount_allocations  | map: 'amount' | join: ','}}",
+              "disabled": false
+            },
+            {
+              "key": "fulfillable_quantity",
+              "type": "int8",
+              "value": "{{loop.fulfillable_quantity}}",
+              "disabled": false
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 8
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter",
+        "metadata": {
+          "a": "{{loop.properties[0].name}}",
+          "comparison": "is not empty"
+        },
+        "local_fields": [],
+        "weight": 10
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "iterator",
+        "name": "Loop over Line Item Properties",
+        "key": "loop_1",
+        "metadata": {
+          "key": "{{loop.properties}}"
+        },
+        "local_fields": [],
+        "weight": 11
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Filter",
+        "key": "filter_1",
+        "metadata": {
+          "a": "{{loop_1.name}}",
+          "comparison": "is not empty"
+        },
+        "local_fields": [],
+        "weight": 12
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Line Item Property Record",
+        "key": "data_record_2",
+        "metadata": {
+          "create": "existing",
+          "table": "line_item_properties",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "see advanced",
+            "a": ""
+          },
+          "where": "line_item_id = '{{loop.id}}' AND name = '{{loop_1.name}}'",
+          "columns": [
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_order.id}}",
+              "disabled": false
+            },
+            {
+              "key": "customer_id",
+              "type": "varchar",
+              "value": "{{shopify_order.customer.id}}",
+              "disabled": false
+            },
+            {
+              "key": "line_item_id",
+              "type": "varchar",
+              "value": "{{loop.id}}",
+              "disabled": false
+            },
+            {
+              "key": "name",
+              "type": "varchar",
+              "value": "{{loop_1.name}}",
+              "disabled": false
+            },
+            {
+              "key": "value",
+              "type": "text",
+              "value": "{{loop_1.value}}",
+              "disabled": false
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 14
+      }
+    ],
+    "storage": []
+  }
+}
