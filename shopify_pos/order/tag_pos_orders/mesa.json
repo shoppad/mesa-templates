@@ -1,5 +1,5 @@
 {
-    "key": "shopify_pos/order/tag_pos_orders ",
+    "key": "shopify_pos/order/tag_pos_orders",
     "name": "Tag Shopify POS orders",
     "version": "1.0.0",
     "enabled": false,
