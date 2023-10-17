@@ -1,0 +1,46 @@
+{
+    "key": "shopify_pos/order/tag_pos_orders",
+    "name": "Tag Shopify POS orders",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shopify-pos",
+                "entity": "order",
+                "action": "created",
+                "name": "POS Order Created",
+                "key": "shopify-pos",
+                "operation_id": "order_created",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+                    "order_id": "{{shopify-pos.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag will be added to POS orders?', default: 'POS', type: 'string', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
