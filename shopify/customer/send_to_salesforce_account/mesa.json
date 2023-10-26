@@ -2,50 +2,43 @@
     "key": "shopify/customer/send_to_salesforce_account",
     "name": "Send an updated or new Shopify Customer to a Salesforce account",
     "version": "1.0.0",
-    "description": "Copying information from each customer to a third party service is time consuming and staying organized while running a store can be difficult. This template sends a customer from Shopify to Salesforce Account whenever a customer is created or updated. You can now sync crucial information across your two major platforms.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Account"
-    ],
-    "source": "shopify",
-    "destination": "salesforce",
-    "seconds": 60,
+    "description": "Copying information from each customer to a third party service is time consuming and staying organized while running a store can be difficult. This template sends a customer from Shopify to Salesforce Accounts whenever a customer is created or updated.",
+    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "customer",
-                "action": "create-update",
+                "action": "updated",
                 "name": "Customer Created or Updated",
-                "key": "shopify-customer-created-or-updated",
-                "metadata": {
-                    "topic": "customers/create+customers/update"
-                },
-                "local_fields": [],
+                "key": "shopify",
+                "operation_id": "customers_update",
+                "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "account",
                 "action": "query",
                 "name": "Query Single Account",
-                "key": "salesforce-query-single-account",
+                "key": "salesforce",
+                "operation_id": "account_query",
                 "metadata": {
                     "entity_name": "Account",
                     "method": "QUERY",
-                    "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c='{{source.id}}'"
+                    "salesforce_query": "SELECT Id FROM Account WHERE Shopify_Customer_ID__c='{{shopify.id}}'"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -55,16 +48,17 @@
                 "entity": "account",
                 "action": "create_or_update",
                 "name": "Create or Update Account",
-                "key": "salesforce_account_1",
+                "key": "salesforce_1",
+                "operation_id": "account_create_or_update",
                 "metadata": {
                     "entity_name": "Account",
                     "method": "POST_OR_PATCH",
-                    "id": "{{salesforce-query-single-account.Id}}",
+                    "id": "{{salesforce.Id}}",
                     "body": {
-                        "Name": "{{shopify-customer-created-or-updated.first_name}} {{shopify-customer-created-or-updated.last_name}}",
-                        "Description": "{{shopify-customer-created-or-updated.note}}",
-                        "Shopify_Customer_ID__c": "{{shopify-customer-created-or-updated.id}}",
-                        "Email__c": "{{shopify-customer-created-or-updated.email}}"
+                        "Name": "{{shopify.first_name}} {{shopify.last_name}}",
+                        "Description": "{{shopify.note}}",
+                        "Shopify_Customer_ID__c": "{{shopify.id}}",
+                        "Email__c": "{{shopify.email}}"
                     }
                 },
                 "local_fields": [
@@ -96,8 +90,8 @@
                                         "value": "Customer - Channel"
                                     },
                                     {
-                                        "label": "Channel Partner / Reseller",
-                                        "value": "Channel Partner / Reseller"
+                                        "label": "Channel Partner \/ Reseller",
+                                        "value": "Channel Partner \/ Reseller"
                                     },
                                     {
                                         "label": "Installation Partner",
@@ -133,13 +127,13 @@
                             },
                             {
                                 "key": "BillingState",
-                                "label": "Billing State/Province",
+                                "label": "Billing State\/Province",
                                 "type": "text",
                                 "source": "salesforce"
                             },
                             {
                                 "key": "BillingPostalCode",
-                                "label": "Billing Zip/Postal Code",
+                                "label": "Billing Zip\/Postal Code",
                                 "type": "text",
                                 "source": "salesforce"
                             },
@@ -227,13 +221,13 @@
                             },
                             {
                                 "key": "ShippingState",
-                                "label": "Shipping State/Province",
+                                "label": "Shipping State\/Province",
                                 "type": "text",
                                 "source": "salesforce"
                             },
                             {
                                 "key": "ShippingPostalCode",
-                                "label": "Shipping Zip/Postal Code",
+                                "label": "Shipping Zip\/Postal Code",
                                 "type": "text",
                                 "source": "salesforce"
                             },
@@ -803,7 +797,6 @@
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
