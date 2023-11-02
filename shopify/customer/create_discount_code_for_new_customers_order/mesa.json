@@ -2,15 +2,8 @@
     "key": "shopify/customer/create_discount_code_for_new_customers_order",
     "name": "Create a unique discount code for new customers to apply towards their next order",
     "version": "1.0.0",
-    "description": "Welcome your newest customers and encourage repeat business by offering them a discount on their next order. With this customizable template, you can create unique discount codes for each new customer to your business. When they become a new customer in Shopify, they'll automatically receive an email with a discount code for 20% off the next order they place within 14 days.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 120,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -43,14 +36,14 @@
                     "body": {
                         "title": "NEWCUSTOMER {{shopify.id}} {{date:now}}",
                         "allocation_method": "across",
-                        "value": "-20",
-                        "value_type": "percentage",
+                        "value": "{{ template | label: 'What is the value of the discount?', description: 'It is set to 20% by default. Leave as is or update the value and value type to your preferred discount.', default: -20, type: 'number', tokens: false }}",
+                        "value_type": "{{ template | label: 'What is the value type of the discount?', description: '', tokens: false }}",
                         "target_type": "line_item",
                         "customer_selection": "prerequisite",
                         "starts_at": "{{date:now}}",
                         "once_per_customer": "true",
                         "target_selection": "all",
-                        "ends_at": "{{date:now +2 weeks}}",
+                        "ends_at": "{{ template | label: 'How long is the discount code valid?', description: 'It is set to 2 weeks by default. Leave as is or update the date value before continuing.', default: {{date:now +2weeks}}, tokens: false }}",
                         "prerequisite_customer_ids": [
                             "{{shopify.id}}"
                         ],
@@ -146,13 +139,12 @@
                 "operation_id": "message_send",
                 "metadata": {
                     "to": "{{shopify.phone}}",
-                    "message": "Thank you for shopping with {{context.shop.name}}.\n\nTake 20% off your next order.\n\nUse online code: {{shopify_3.code}}"
+                    "message": "{{ template | label: 'Do you have any changes you''d like to make to the SMS message?', description: 'If you changed your discount, you''ll want to make sure that''s reflected here.', default: 'Thank you for shopping with {{context.shop.name}}.\n\nTake 20% off your next order.\n\nUse online code: {{shopify_3.code}}' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 5
             }
-        ],
-        "storage": []
+        ]
     }
 }
