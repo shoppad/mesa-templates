@@ -2,16 +2,8 @@
     "key": "shopify/product/send_slack_message_inventory_low",
     "name": "Send a Slack message when inventory runs low",
     "version": "1.0.0",
-    "description": "Stock-outs can take a hit to your brand reputation. Nothing is more frustrating for a customer to be ready to purchase one of your most popular products, only to find out that the product they want to purchase is out of stock. Even worse, they could decide to go to the competition instead. Send your team a slack message when inventory is low so you can immediately start reordering the item before out-of-stock messages appear to shoppers.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "slack",
-    "seconds": 300,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -64,12 +56,12 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \n\nCurrent inventory quantity: {{shopify_inventory_level.available}}.\n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{custom.product_id}}"
+                    "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \n\nCurrent inventory quantity: {{shopify_inventory_level.available}}.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{custom.product_id}}",
+                    "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}"
                 },
                 "local_fields": [],
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
