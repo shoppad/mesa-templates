@@ -2,15 +2,8 @@
     "key": "shopify/product/slack_message_when_product_goes_out_of_stock",
     "name": "Send a Slack message when a product goes out of stock",
     "version": "1.0.0",
-    "description": "Avoid inventory surprises with automatic product alerts. This template will send a Slack message when a product goes out of stock. With current details about your products at the ready, you can address stockouts as soon as they occur.",
-    "video": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "email",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,7 +14,9 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -30,13 +25,16 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
+                    "key": "{{shopify_order.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
                 "weight": 0
@@ -49,7 +47,9 @@
                 "action": "retrieve_id",
                 "name": "Retrieve Product Variant",
                 "key": "shopify",
+                "operation_id": "get_variants_variant_id",
                 "metadata": {
+                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
                     "variant_id": "{{loop.variant_id}}"
                 },
                 "local_fields": [],
@@ -79,13 +79,13 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "This is an automated message to let you know that {% if shopify.sku != \"\" %}SKU *{{shopify.sku}}*{% else %}*{{loop.title}}*{% if shopify.option1 != \"Default Title\" %} *- {{shopify.option1}}*{% endif %}{% endif %} is now out of stock.\n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{shopify.product_id}}"
+                    "message": "This is an automated message to let you know that {% if shopify.sku != \"\" %}SKU *{{shopify.sku}}*{% else %}*{{loop.title}}*{% if shopify.option1 != \"Default Title\" %} *- {{shopify.option1}}*{% endif %}{% endif %} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{shopify.product_id}}",
+                    "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }
