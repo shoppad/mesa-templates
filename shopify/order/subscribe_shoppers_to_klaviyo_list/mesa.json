@@ -35,6 +35,7 @@
                 "action": "subscribe",
                 "name": "Subscribe List",
                 "key": "klaviyo_list",
+                "version": "v1",
                 "metadata": {
                     "email": "{{shopify_order.email}}",
                     "mapping": null,

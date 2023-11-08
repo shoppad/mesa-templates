@@ -65,6 +65,7 @@
                 "action": "create",
                 "name": "Create Track Event",
                 "key": "klaviyo_track",
+                "version": "v1",
                 "operation_id": "track_create",
                 "metadata": {
                     "event": "Tracktor Fulfillment Status In Transit",
