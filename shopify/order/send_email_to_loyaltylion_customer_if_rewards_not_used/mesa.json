@@ -92,7 +92,7 @@
             {
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "entity": "",
                 "action": "",
                 "name": "Delay  ",

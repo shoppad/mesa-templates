@@ -31,7 +31,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v1",
+                "version": "v2",
                 "name": "Loop",
                 "key": "loop",
                 "metadata": {

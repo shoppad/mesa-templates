@@ -28,7 +28,7 @@
                 "trigger_type": "output",
                 "type": "delay",
                 "name": "Delay",
-                "version": "v1",
+                "version": "v2",
                 "key": "delay",
                 "metadata": [],
                 "on_error": "default",

@@ -28,7 +28,7 @@
                 "trigger_type": "output",
                 "type": "delay",
                 "name": "Delay",
-                "version": "v1",
+                "version": "v2",
                 "key": "delay",
                 "metadata": {
                     "amount": "30",
@@ -51,15 +51,15 @@
                 "metadata": {
                     "api_endpoint": "post admin\/draft_orders.json",
                     "body": {
-                        "email": "{{delay.email}}",
+                        "email": "{{shopify.email}}",
                         "line_items": [
                             {
-                                "variant_id": "{{delay.line_items[0].variant_id}}",
-                                "quantity": "{{delay.line_items[0].quantity}}"
+                                "variant_id": "{{shopify.line_items[0].variant_id}}",
+                                "quantity": "{{shopify.line_items[0].quantity}}"
                             }
                         ],
                         "customer": {
-                            "id": "{{delay.customer.id}}"
+                            "id": "{{shopify.customer.id}}"
                         }
                     }
                 },
@@ -80,9 +80,9 @@
                     "api_endpoint": "post admin\/draft_orders\/{{draft_order_id}}\/send_invoice.json",
                     "draft_order_id": "{{shopify_1.id}}",
                     "body": {
-                        "to": "{{delay.email}}",
+                        "to": "{{shopify.email}}",
                         "from": "kalen.jordan@theshoppad.com",
-                        "subject": "Need more {{delay.line_items[0].title}}?",
+                        "subject": "Need more {{shopify.line_items[0].title}}?",
                         "custom_message": "Need to reorder?"
                     }
                 },
