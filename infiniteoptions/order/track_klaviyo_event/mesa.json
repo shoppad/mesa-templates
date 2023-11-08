@@ -36,6 +36,7 @@
                 "action": "create",
                 "name": "Create Track Event",
                 "key": "klaviyo_track",
+                "version": "v1",
                 "metadata": {
                     "event": "Infinite Options Order",
                     "email": "{{infiniteoptions_order.order.email}}",

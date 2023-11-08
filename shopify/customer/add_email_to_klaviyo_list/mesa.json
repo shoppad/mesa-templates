@@ -50,6 +50,7 @@
                 "action": "subscribe",
                 "name": "List Subscribe",
                 "key": "klaviyo",
+                "version": "v1",
                 "metadata": {
                     "email": "{{shopify.email}}",
                     "mapping": [
