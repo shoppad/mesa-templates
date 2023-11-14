@@ -438,7 +438,7 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
+                "version": "v1",
                 "entity": "loop",
                 "operation_id": "loop_loop",
                 "name": "Loop",
