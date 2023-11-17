@@ -1,16 +1,9 @@
 {
     "key": "shopify/customer/backorder_tag_to_klaviyo_email_list",
-    "name": "Add Shopify Customer to Klaviyo list when tagged with \"Backorder\"",
+    "name": "Add a customer with a backorder tag to a Klaviyo email list",
     "version": "1.0.0",
-    "description": "Sometimes, a customer may make an order in your store for a product that’s temporarily out of stock. When this issue arises, Mesa can add a Shopify Customer to a “backorder” Klaviyo email list, so you can notify them once you restock the item they’re looking for.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "klaviyo",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,7 +14,9 @@
                 "action": "updated",
                 "name": "Customer Updated",
                 "key": "shopify_customer",
+                "operation_id": "customers_update",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -47,8 +42,9 @@
                 "entity": "list",
                 "action": "subscribe",
                 "name": "Subscribe List",
-                "key": "klaviyo_list",
                 "version": "v1",
+                "key": "klaviyo_list",
+                "operation_id": "list_subscribe",
                 "metadata": {
                     "email": "{{shopify_customer.email}}",
                     "mapping": [
@@ -80,7 +76,8 @@
                             "destination": "notes",
                             "source": "{{shopify_customer.note}}"
                         }
-                    ]
+                    ],
+                    "list_id": "{{ template | label: 'What is the list that the customer should be added to in Klaviyo?', tokens: false }}"
                 },
                 "local_fields": [
                     {
@@ -92,7 +89,6 @@
                 ],
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
