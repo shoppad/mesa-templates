@@ -2,44 +2,37 @@
     "key": "shopify/order/subscribe_shoppers_to_klaviyo_list",
     "name": "Subscribe shoppers to a Klaviyo list after their first order",
     "version": "1.0.0",
-    "description": "Customer retention is a major key to an eCommerce store's success. This template subscribes customers to a Klaviyo email list after they have placed their first order. You can send customers personalized emails after their first purchase. As an example, you can thank them for their purchase and provide them with a special discount.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "klaviyo",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders/create"
-                },
-                "local_fields": null,
+                "operation_id": "orders_create",
+                "metadata": [],
                 "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "klaviyo",
                 "entity": "list",
                 "action": "subscribe",
                 "name": "Subscribe List",
-                "key": "klaviyo_list",
                 "version": "v1",
+                "key": "klaviyo_list",
+                "operation_id": "list_subscribe",
                 "metadata": {
                     "email": "{{shopify_order.email}}",
-                    "mapping": null,
-                    "list_id": ""
+                    "list_id": "{{ template | label: 'What is the list that the customer should be added to in Klaviyo?', tokens: false }}"
                 },
                 "local_fields": [
                     {
@@ -51,7 +44,6 @@
                 ],
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
