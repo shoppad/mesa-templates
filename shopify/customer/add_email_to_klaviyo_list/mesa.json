@@ -1,17 +1,9 @@
 {
-    "key": "add_email_to_klaviyo_list",
-    "name": "Add a customer's email address to a Klaviyo list when a Shopify customer has been created",
+    "key": "shopify/customer/add_email_to_klaviyo_list",
+    "name": "Add a Shopify customer's email address to a Klaviyo list",
     "version": "1.0.0",
-    "description": "Growing your email list on Klaviyo needs to be one of your priorities to maximize sales. Each time a customer is created on Shopify, Mesa can then instantly add their email address to your Klaviyo list, without doing everything manually yourself.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify",
+                "operation_id": "customers_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -49,8 +43,9 @@
                 "entity": "list",
                 "action": "subscribe",
                 "name": "List Subscribe",
-                "key": "klaviyo",
                 "version": "v1",
+                "key": "klaviyo",
+                "operation_id": "list_subscribe",
                 "metadata": {
                     "email": "{{shopify.email}}",
                     "mapping": [
@@ -82,7 +77,8 @@
                             "destination": "notes",
                             "source": "{{shopify.note}}"
                         }
-                    ]
+                    ],
+                    "list_id": "{{ template | label: 'What is the list that the customer should be added to in Klaviyo?', tokens: false }}"
                 },
                 "local_fields": [
                     {
@@ -95,7 +91,6 @@
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
