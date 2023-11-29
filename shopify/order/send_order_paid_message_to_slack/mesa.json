@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/send_order_paid_message_to_slack",
-    "name": "Send a Slack message when a Shopify order is paid",
+    "name": "Send a Slack message when a Shopify order is created",
     "version": "1.0.0",
-    "description": "Constantly checking for new Shopify orders is not an efficient process for you or your team. This template sends a message to a Slack channel when a Shopify order has been paid. You can now notify your logistics and other teams about new orders on the fly during a busy holiday season.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "paid",
                 "name": "Paid Order",
                 "key": "shopify_order",
+                "operation_id": "orders_paid",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -31,16 +25,16 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
-                "version": "v2",
                 "name": "Send Message",
+                "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "Order paid for: {{shopify_order.name}}  :thumbsup:"
+                    "message": "Order paid for: {{shopify_order.name}}  :thumbsup:",
+                    "channel": "{{ template | label: 'What is the Slack channel you would like to send the message to?', tokens: false }}"
                 },
                 "local_fields": [],
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
