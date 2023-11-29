@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/send_international_orders_to_slack",
-    "name": "Send a Slack message when a Shopify international order is created",
+    "name": "Send a Slack message when an international order is created in Shopify",
     "version": "1.0.0",
-    "description": "Shipping international orders can require extensive research and fulfillment time. This template sends a Slack message whenever an international order is created. You can let your logistics team know that an order requires special attention and extra time to fulfill!",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,9 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -47,17 +41,17 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
-                "version": "v2",
                 "name": "Send Message",
+                "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "New international order created: {{shopify.name}}\nTotal: {{shopify.total_price}}\n\n{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}\n{{shopify.shipping_address.address1}}{{shopify.shipping_address.address2}}\n{{shopify.shipping_address.city}} {{shopify.shipping_address.province}}, {{shopify.shipping_address.zip}}\n{{shopify.shipping_address.country}}"
+                    "message": "New international order created: {{shopify.name}}\nTotal: {{shopify.total_price}}\n\n{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}\n{{shopify.shipping_address.address1}}{{shopify.shipping_address.address2}}\n{{shopify.shipping_address.city}} {{shopify.shipping_address.province}}, {{shopify.shipping_address.zip}}\n{{shopify.shipping_address.country}}",
+                    "channel": "{{ template | label: 'What is the Slack channel you would like to send the message to?', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
