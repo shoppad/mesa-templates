@@ -1,6 +1,6 @@
 {
     "key": "shopify/customer/backorder_tag_to_klaviyo_email_list",
-    "name": "Subscribe shoppers to a Klaviyo list after their first order",
+    "name": "Add a customer with a backorder tag to a Klaviyo email list",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
