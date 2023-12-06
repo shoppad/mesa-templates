@@ -35,7 +35,7 @@
                     "json": false,
                     "temperature": "0.7",
                     "body": {
-                        "prompt": "Write 2 to 3 comma-separated tags using no more than 2 words for each based on the following product information:\nTitle: {{shopify.title}}\nDescription: {{shopify.body_html}}"
+                        "prompt": "Write 2 to 3 comma-separated tags using no more than 2 words for each based on the following product information:\nTitle: {{shopify.title}}\nDescription: {{shopify.body_html}} \n Format the tags so they are comma separated, not numerically separated."
                     }
                 },
                 "local_fields": [],
