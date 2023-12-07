@@ -2,56 +2,113 @@
     "key": "shopify/order/subscribe_shoppers_to_klaviyo_list",
     "name": "Subscribe shoppers to a Klaviyo list after their first order",
     "version": "1.0.0",
-    "description": "Customer retention is a major key to an eCommerce store's success. This template subscribes customers to a Klaviyo email list after they have placed their first order. You can send customers personalized emails after their first purchase. As an example, you can thank them for their purchase and provide them with a special discount.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "klaviyo",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders/create"
-                },
-                "local_fields": null,
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_1.orders_count}}",
+                    "comparison": "equals",
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{shopify.email}}",
+                            "comparison": "is not empty"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "klaviyo",
-                "entity": "list",
-                "action": "subscribe",
-                "name": "Subscribe List",
-                "key": "klaviyo_list",
-                "version": "v1",
+                "entity": "profile_subscription_bulk_create_job",
+                "action": "create",
+                "name": "Subscribe Profile",
+                "version": "v3",
+                "key": "klaviyo",
+                "operation_id": "subscribe_profiles",
                 "metadata": {
-                    "email": "{{shopify_order.email}}",
-                    "mapping": null,
-                    "list_id": ""
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
+                    "api_endpoint": "post /api/profile-subscription-bulk-create-jobs/",
+                    "body": {
+                        "data": {
+                            "type": "profile-subscription-bulk-create-job",
+                            "relationships": {
+                                "list": {
+                                    "data": {
+                                        "type": "list",
+                                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}"
+                                    }
+                                }
+                            },
+                            "attributes": {
+                                "profiles": {
+                                    "data": [
+                                        {
+                                            "type": "profile",
+                                            "attributes": {
+                                                "email": "{{shopify.email}}",
+                                                "subscriptions": {
+                                                    "email": {
+                                                        "marketing": {
+                                                            "consent": "SUBSCRIBED"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
                     }
-                ],
-                "weight": 0
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

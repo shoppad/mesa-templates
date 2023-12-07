@@ -16,14 +16,13 @@
                 "key": "shopify",
                 "operation_id": "customers_create",
                 "metadata": [],
-                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
@@ -37,57 +36,51 @@
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "klaviyo",
-                "entity": "list",
-                "action": "subscribe",
-                "name": "List Subscribe",
-                "version": "v1",
+                "entity": "profile_subscription_bulk_create_job",
+                "action": "create",
+                "name": "Subscribe Profile",
+                "version": "v3",
                 "key": "klaviyo",
-                "operation_id": "list_subscribe",
+                "operation_id": "subscribe_profiles",
                 "metadata": {
-                    "email": "{{shopify.email}}",
-                    "mapping": [
-                        {
-                            "destination": "id",
-                            "source": "{{shopify.id}}"
-                        },
-                        {
-                            "destination": "email",
-                            "source": "{{shopify.email}}"
-                        },
-                        {
-                            "destination": "first_name",
-                            "source": "{{shopify.first_name}}"
-                        },
-                        {
-                            "destination": "last_name",
-                            "source": "{{shopify.last_name}}"
-                        },
-                        {
-                            "destination": "phone",
-                            "source": "{{shopify.phone}}"
-                        },
-                        {
-                            "destination": "tags",
-                            "source": "{{shopify.tags}}"
-                        },
-                        {
-                            "destination": "notes",
-                            "source": "{{shopify.note}}"
+                    "api_endpoint": "post /api/profile-subscription-bulk-create-jobs/",
+                    "body": {
+                        "data": {
+                            "type": "profile-subscription-bulk-create-job",
+                            "relationships": {
+                                "list": {
+                                    "data": {
+                                        "type": "list",
+                                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}"
+                                    }
+                                }
+                            },
+                            "attributes": {
+                                "profiles": {
+                                    "data": [
+                                        {
+                                            "type": "profile",
+                                            "attributes": {
+                                                "email": "{{shopify.email}}",
+                                                "subscriptions": {
+                                                    "email": {
+                                                        "marketing": {
+                                                            "consent": "SUBSCRIBED"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
                         }
-                    ],
-                    "list_id": "{{ template | label: 'What is the list that the customer should be added to in Klaviyo?', tokens: false }}"
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "mapping"
                     }
-                ],
+                },
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 1
             }
