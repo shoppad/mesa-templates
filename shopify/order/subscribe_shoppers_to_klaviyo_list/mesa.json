@@ -47,7 +47,14 @@
                 "metadata": {
                     "a": "{{shopify_1.orders_count}}",
                     "comparison": "equals",
-                    "b": "1"
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{shopify.email}}",
+                            "comparison": "is not empty"
+                        }
+                    ]
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -83,14 +90,8 @@
                                             "type": "profile",
                                             "attributes": {
                                                 "email": "{{shopify.email}}",
-                                                "phone_number": "{{shopify.phone}}",
                                                 "subscriptions": {
                                                     "email": {
-                                                        "marketing": {
-                                                            "consent": "SUBSCRIBED"
-                                                        }
-                                                    },
-                                                    "sms": {
                                                         "marketing": {
                                                             "consent": "SUBSCRIBED"
                                                         }

@@ -65,14 +65,8 @@
                                             "type": "profile",
                                             "attributes": {
                                                 "email": "{{shopify.email}}",
-                                                "phone_number": "{{shopify.phone}}",
                                                 "subscriptions": {
                                                     "email": {
-                                                        "marketing": {
-                                                            "consent": "SUBSCRIBED"
-                                                        }
-                                                    },
-                                                    "sms": {
                                                         "marketing": {
                                                             "consent": "SUBSCRIBED"
                                                         }
