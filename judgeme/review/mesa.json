@@ -1,0 +1,47 @@
+{
+    "key": "judgeme/review/tag_a_shopify_customer",
+    "name": "Add a tag to a Shopify customer if they leave a review",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "judgeme",
+                "entity": "review_created",
+                "action": "created",
+                "name": "Review Created",
+                "key": "judgeme",
+                "operation_id": "review/created",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify",
+                "operation_id": "post_mesa_customers_customer_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
+                    "customer_id": "{{judgeme.reviewer.external_id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag would you like to add to the customer?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
