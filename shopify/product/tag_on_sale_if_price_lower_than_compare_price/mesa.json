@@ -30,7 +30,7 @@
                 "metadata": {
                     "a": "{{shopify.tags}}",
                     "comparison": "does not contain",
-                    "b": "{{ template | label: 'What tag would you like to add to products that are on sale?', description: 'Enter the name of the tag. Multiple tags can be separated by commas.', default: 'on sale', tokens: false }}"
+                    "b": "{{ template | label: 'What tag would you like to add to products that are on sale?', default: 'on sale', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
