@@ -22,6 +22,21 @@
         ],
         "outputs": [
             {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{shopify.tags}}",
+                    "comparison": "does not contain",
+                    "b": "{{ template | label: 'What tag would you like to add to products that are on sale?', description: 'Enter the name of the tag. Multiple tags can be separated by commas.', default: 'on sale', tokens: false }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
@@ -68,7 +83,7 @@
                     "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
                     "product_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag would you like to add to your sale products?', default: 'on sale', tokens: false }}"
+                        "tag": "{{ template | label: 'What tag would you like to add to products that are on sale?', description: 'Enter the name of the tag. Multiple tags can be separated by commas.', default: 'on sale', tokens: false }}"
                     }
                 },
                 "local_fields": [],
