@@ -1,0 +1,54 @@
+{
+    "key": "fera/media/post_to_pinterest_when_media_is_approved",
+    "name": "Post to Pinterest when media is approved",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "fera",
+                "entity": "media_approve",
+                "action": "approved",
+                "name": "Media Approved",
+                "key": "fera",
+                "operation_id": "media_approve",
+                "metadata": [],
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "pinterest",
+                "entity": "pin",
+                "action": "create",
+                "name": "Create Pin",
+                "key": "pinterest",
+                "operation_id": "pins/create",
+                "metadata": {
+                    "api_endpoint": "post /pins",
+                    "body": {
+                        "board_id": "{{ template | label: 'Which board should the pin be created on?', tokens: false }}",
+                        "media_source": {
+                            "source_type": "image_url",
+                            "url": "{{fera.url}}",
+                            "is_standard": true
+                        }
+                    },
+                    "query": {
+                        "ad_account_id": "{{ template | label: 'What is the Pinterest Ad Account?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
