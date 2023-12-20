@@ -35,7 +35,7 @@
                     "filter": {
                         "a": "{{shopify.line_items[].name}}",
                         "comparison": "contains",
-                        "b": "{{ template | label: 'What is the specific product purchased that you would like to check is in the order?', tokens: false, token_search: false }}"
+                        "b": "{{ template | label: 'What is the specific product purchased that you would like to check is in the order?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -50,7 +50,7 @@
                 "key": "filter",
                 "metadata": {
                     "a": "{{loop.count}}",
-                    "comparison": "less than equal",
+                    "comparison": "greater than equal",
                     "b": "1"
                 },
                 "local_fields": [],
