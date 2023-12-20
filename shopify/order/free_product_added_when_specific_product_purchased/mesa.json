@@ -1,0 +1,88 @@
+{
+    "key": "shopify/order/free_product_added_when_specific_product_purchased",
+    "name": "Add a free product when a specific product is purchased",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "count",
+                "name": "Number of matches",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_count",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "a": "{{shopify.line_items[].name}}",
+                        "comparison": "contains",
+                        "b": "{{ template | label: 'What is the specific product purchased that you would like to check is in the order?', tokens: false, token_search: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.count}}",
+                    "comparison": "less than equal",
+                    "b": "1"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "line_item_add",
+                "name": "Add Line Item to Order",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_add-line-item",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/add-line-item.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "product_id": "{{ template | label: 'What is the free product you would like to add?', tokens: false }}",
+                        "variant_id": "{{ template | label: 'What is the variant of the free product you would like to add?', tokens: false }}",
+                        "quantity": "1",
+                        "discount_type": "Percentage",
+                        "discount_amount": "100",
+                        "allow_duplicates": true,
+                        "notify_customer": "false"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
