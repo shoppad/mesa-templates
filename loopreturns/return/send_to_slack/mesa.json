@@ -1,0 +1,45 @@
+{
+    "key": "loopreturns/return/send_to_slack",
+    "name": "Send a Slack message when a return in Loop Returns has been authorized",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "loopreturns",
+                "entity": "return",
+                "action": "create",
+                "name": "Return Created or Updated",
+                "key": "loopreturns",
+                "operation_id": "return_created_updated",
+                "metadata": {
+                    "api_endpoint": "post /return",
+                    "webhook_code": "{{ template | label: 'Install the webhook URL' }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'To which Slack channel would you like to send the message?', tokens: false }}",
+                    "message": "Authorized return. Return ID: {{loopreturns.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
