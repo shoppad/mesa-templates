@@ -26,6 +26,20 @@
         ],
         "outputs": [
             {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{googleforms.email}}",
+                    "comparison": "is not empty"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
