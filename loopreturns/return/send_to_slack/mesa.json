@@ -17,7 +17,7 @@
                 "operation_id": "return_created_updated",
                 "metadata": {
                     "api_endpoint": "post /return",
-                    "host": "{{ template | label: 'Install the webhook URL', description: 'Create a corresponding webhook in Loop Returns and paste this value for the webhook URL. [Follow the documentation](https://docs.getmesa.com/article/1286-loop-returns#triggers).' }}"
+                    "host": "{{ template | label: 'Install the webhook URL', description: 'Create a corresponding webhook in Loop Returns and paste this value for the webhook URL. You will need to create 2 webhooks in Loop Returns for both Return created and Return updated and with the same copied URL. If you only create one webhook, MESA will not be able to trigger the workflow appropriately. [Follow the documentation](https://docs.getmesa.com/article/1286-loop-returns#triggers).' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
