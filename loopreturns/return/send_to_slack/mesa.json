@@ -17,7 +17,7 @@
                 "operation_id": "return_created_updated",
                 "metadata": {
                     "api_endpoint": "post /return",
-                    "webhook_code": "{{ template | label: 'Install the webhook URL' }}"
+                    "host": "{{ template | label: 'Install the webhook URL', description: 'Create a corresponding webhook in Loop Returns and paste this value for the webhook URL. [Follow the documentation](https://docs.getmesa.com/article/1286-loop-returns#triggers).' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
