@@ -16,7 +16,7 @@
                 "key": "square",
                 "operation_id": "customer.created",
                 "metadata": {
-                    "host": "{{ template | label: 'Install the webhook URL', description: 'Follow the [documentation](https://docs.getmesa.com/article/1846-square-payments).' }}"
+                    "host": "{{ template | label: 'Install the webhook URL', description: 'When selecting the event in Square, please select the customer.created event. Follow the [documentation](https://docs.getmesa.com/article/1846-square-payments).' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
