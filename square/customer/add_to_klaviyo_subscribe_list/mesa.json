@@ -1,0 +1,78 @@
+{
+    "key": "square/customer/add_to_klaviyo_subscribe_list",
+    "name": "Add new Square customers to a Klaviyo subscribe list",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "square",
+                "entity": "customer_created",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "square",
+                "operation_id": "customer.created",
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL', description: 'When selecting the event in Square, please select the customer.created event. Follow the [documentation](https://docs.getmesa.com/article/1846-square-payments#configure-square-triggers).' }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "profile_subscription_bulk_create_job",
+                "action": "create",
+                "name": "Subscribe Profile",
+                "version": "v3",
+                "key": "klaviyo",
+                "operation_id": "subscribe_profiles",
+                "metadata": {
+                    "api_endpoint": "post /api/profile-subscription-bulk-create-jobs/",
+                    "body": {
+                        "data": {
+                            "type": "profile-subscription-bulk-create-job",
+                            "relationships": {
+                                "list": {
+                                    "data": {
+                                        "type": "list",
+                                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}"
+                                    }
+                                }
+                            },
+                            "attributes": {
+                                "profiles": {
+                                    "data": [
+                                        {
+                                            "type": "profile",
+                                            "attributes": {
+                                                "email": "{{square.email_address}}",
+                                                "subscriptions": {
+                                                    "email": {
+                                                        "marketing": {
+                                                            "consent": "SUBSCRIBED"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
