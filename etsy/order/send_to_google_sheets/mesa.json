@@ -30,11 +30,6 @@
                         "description": "The name for the recipient in the shipping address."
                     },
                     {
-                        "label": "Customer Email",
-                        "value": "Customer Email|{{etsy.buyer_email}}",
-                        "description": "The email address for the buyer of the listing."
-                    },
-                    {
                         "label": "Total Price",
                         "value": "Total Price|{{etsy.total_price.amount}}",
                         "description": "A number equal to the sum of the individual listings' (price * quantity). Does not included tax or shipping costs."
@@ -89,8 +84,6 @@
                 "operation_id": "receipt-created-webhook",
                 "metadata": {
                     "api_endpoint": "get /v3/application/shops/{shop_id}/receipts-webhook",
-                    "poll": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2023-05-01T14:00:00-07:00",
                     "path": {
                       "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}" 
                     }
