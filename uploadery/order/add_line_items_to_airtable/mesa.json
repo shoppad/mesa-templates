@@ -1,16 +1,9 @@
 {
-    "key": "uploadery_order_add_line_items_to_airtable",
+    "key": "uploadery/order/add_line_items_to_airtable",
     "name": "Add Uploadery images and line items to Airtable",
     "version": "1.0.0",
-    "description": "Airtable is great because it gives you all of the power and flexibility of Google Sheets, and lets you store files directly in your spreadsheet.  Use this template to easily manage every order with an Uploadery file upload and store the files and line item details in a spreadsheet to keep track of their progress. When each order is created, Mesa will add Uploadery Line Items to an Airtable table.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "uploadery",
-    "destination": "airtable",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,7 +14,10 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "uploadery_order",
-                "metadata": [],
+                "operation_id": "order_created",
+                "metadata": {
+                    "field_name": "{{ template | label: 'What are the product options in the order?', tokens: false }}"
+                },
                 "local_fields": [],
                 "weight": 0
             }
@@ -31,13 +27,16 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{uploadery_order.line_items[]}}"
+                    "key": "{{uploadery_order.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
                 "weight": 0
@@ -46,16 +45,20 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "airtable",
-                "version": "v2",
                 "entity": "record",
                 "action": "create",
                 "name": "Add Record",
+                "version": "v2",
                 "key": "airtable_record",
+                "operation_id": "create",
                 "metadata": {
+                    "api_endpoint": "post \/{base}\/{table}",
                     "path": {
-                        "table": "Line Items"
+                        "base": "{{ template | label: 'What is your base in Airtable?', description: 'View this [Airtable Base](https://airtable.com/shrrhIj2VQ0yz5MfF) and click \"Copy Base\" at the top left corner. Then select the copied base below.', tokens: false }}",
+                        "table": "{{ template | label: 'What is the table of your base?', tokens: false }}"
                     },
                     "body": {
+                        "typecast": false,
                         "fields": {
                             "Email": "{{uploadery_order.order.email}}",
                             "Shipping Name": "{{uploadery_order.order.shipping_address.first_name}}{{uploadery_order.order.shipping_address.last_name}}",
@@ -68,7 +71,7 @@
                             "Product SKU": "{{loop.sku}}",
                             "Product Price": "{{loop.price}}",
                             "Order Name": "{{uploadery_order.order.name}}",
-                            "Order URL": "https://{{context.shop.domain}}/admin/orders/{{uploadery_order.order.id}}",
+                            "Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{uploadery_order.order.id}}",
                             "File": [
                                 {
                                     "url": "{{loop.fields.uploadery_1}}"
@@ -192,7 +195,6 @@
                 ],
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
