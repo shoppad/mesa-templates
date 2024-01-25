@@ -50,7 +50,7 @@
                     "api_endpoint": "post /{base}/{table}",
                     "path": {
                         "base": "{{ template | label: 'What is your Airtable base?', tokens: false }}",
-                        "table": "{{ template | label: 'What is table of your Airtable base?', tokens: false }}"
+                        "table": "{{ template | label: 'What is the table of your Airtable base?', tokens: false }}"
                     },
                     "body": {
                         "fields": {
