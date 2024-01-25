@@ -60,20 +60,19 @@
                     "body": {
                         "typecast": false,
                         "fields": {
-                            "Product Price": "{{loop.price}}",
-                            "Country": "{{infiniteoptions_order.order.shipping_address.country}}",
-                            "Product SKU": "{{loop.sku}}",
-                            "Email": "{{infiniteoptions_order.order.email}}",
-                            "Province": "{{infiniteoptions_order.order.shipping_address.province}}",
-                            "Additional Details": "{{loop.fields[\"Additional Details\"]}}",
-                            "Address": "{{infiniteoptions_order.order.shipping_address.address1}}",
-                            "Add Extras": "{{loop.fields[\"Add Extras\"]}}",
-                            "Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{infiniteoptions_order.order.id}}",
-                            "Shipping Name": "{{infiniteoptions_order.order.shipping_address.first_name}} {{infiniteoptions_order.order.shipping_address.last_name}}",
-                            "Zip": "{{infiniteoptions_order.order.shipping_address.zip}}",
+                            "Order URL": "https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}",
                             "Order Name": "{{infiniteoptions_order.order.name}}",
+                            "Email": "{{infiniteoptions_order.order.email}}",
+                            "Shipping Name": "{{infiniteoptions_order.order.shipping_address.first_name}} {{infiniteoptions_order.order.shipping_address.last_name}}",
+                            "Address": "{{infiniteoptions_order.order.shipping_address.address1}}",
                             "City": "{{infiniteoptions_order.order.shipping_address.city}}",
-                            "Product Name": "{{loop.title}}"
+                            "Province": "{{infiniteoptions_order.order.shipping_address.province}}",
+                            "Zip": "{{infiniteoptions_order.order.shipping_address.zip}}",
+                            "Country": "{{infiniteoptions_order.order.shipping_address.country}}",
+                            "Product Name": "{{loop.title}}",
+                            "Product SKU": "{{loop.sku}}",
+                            "Product Price": "{{loop.price}}",
+                            "infinite_options_1": "{{loop.fields.infinite_options_1}}"
                         }
                     }
                 },
@@ -87,21 +86,14 @@
                                 "type": "object",
                                 "fields": [
                                     {
-                                        "key": "Product Price",
-                                        "label": "Product Price",
-                                        "type": "text",
-                                        "source": "airtable",
-                                        "data_type": "number"
-                                    },
-                                    {
-                                        "key": "Country",
-                                        "label": "Country",
+                                        "key": "Order URL",
+                                        "label": "Order URL",
                                         "type": "text",
                                         "source": "airtable"
                                     },
                                     {
-                                        "key": "Product SKU",
-                                        "label": "Product SKU",
+                                        "key": "Order Name",
+                                        "label": "Order Name",
                                         "type": "text",
                                         "source": "airtable"
                                     },
@@ -112,14 +104,8 @@
                                         "source": "airtable"
                                     },
                                     {
-                                        "key": "Province",
-                                        "label": "Province",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Additional Details",
-                                        "label": "Additional Details",
+                                        "key": "Shipping Name",
+                                        "label": "Shipping Name",
                                         "type": "text",
                                         "source": "airtable"
                                     },
@@ -130,20 +116,14 @@
                                         "source": "airtable"
                                     },
                                     {
-                                        "key": "Add Extras",
-                                        "label": "Add Extras",
+                                        "key": "City",
+                                        "label": "City",
                                         "type": "text",
                                         "source": "airtable"
                                     },
                                     {
-                                        "key": "Order URL",
-                                        "label": "Order URL",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Shipping Name",
-                                        "label": "Shipping Name",
+                                        "key": "Province",
+                                        "label": "Province",
                                         "type": "text",
                                         "source": "airtable"
                                     },
@@ -155,20 +135,33 @@
                                         "data_type": "number"
                                     },
                                     {
-                                        "key": "Order Name",
-                                        "label": "Order Name",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "City",
-                                        "label": "City",
+                                        "key": "Country",
+                                        "label": "Country",
                                         "type": "text",
                                         "source": "airtable"
                                     },
                                     {
                                         "key": "Product Name",
                                         "label": "Product Name",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product SKU",
+                                        "label": "Product SKU",
+                                        "type": "text",
+                                        "source": "airtable"
+                                    },
+                                    {
+                                        "key": "Product Price",
+                                        "label": "Product Price",
+                                        "type": "text",
+                                        "source": "airtable",
+                                        "data_type": "number"
+                                    },
+                                    {
+                                        "key": "infinite_options_1",
+                                        "label": "infinite_options_1",
                                         "type": "text",
                                         "source": "airtable"
                                     }
