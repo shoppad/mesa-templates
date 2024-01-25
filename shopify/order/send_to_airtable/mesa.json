@@ -49,7 +49,7 @@
                 "metadata": {
                     "api_endpoint": "post /{base}/{table}",
                     "path": {
-                        "base": "{{ template | label: 'What is your Airtable base?', tokens: false }}",
+                        "base": "{{ template | label: 'What is your Airtable base?', description: 'View this [Airtable Base](https://airtable.com/shrsPzKQfNhZHrwVX) and click \"Copy Base\" at the top left corner. Then select the copied base below.', tokens: false }}",
                         "table": "{{ template | label: 'What is the table of your Airtable base?', tokens: false }}"
                     },
                     "body": {
