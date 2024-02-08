@@ -27,11 +27,6 @@ module.exports = new class {
       ];
     });
 
-    // Add to the end of the orders our dummy products
-    output.order_lines.push(output.discount);
-    output.order_lines.push(output.shipping);
-    output.order_lines.push(output.taxes);
-
     // We're done, call the next step!
     Mesa.output.next(output);
   }
