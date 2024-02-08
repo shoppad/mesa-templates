@@ -221,9 +221,6 @@
                         },
                         {
                             "property": "name"
-                        },
-                        {
-                            "property": "Tag"
                         }
                     ],
                     "entity_name_custom": "res.country.state"
@@ -246,8 +243,6 @@
                         "name": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}",
                         "display_name": "{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}",
                         "active": "TRUE",
-                        "customer": "TRUE",
-                        "supplier": "FALSE",
                         "employee": "FALSE",
                         "is_company": "FALSE",
                         "type": "delivery",
