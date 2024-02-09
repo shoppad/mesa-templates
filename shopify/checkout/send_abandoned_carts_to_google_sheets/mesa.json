@@ -149,14 +149,13 @@
                 "action": "create",
                 "name": "Create Row",
                 "key": "googlesheets_row",
+                "version": "v2",
                 "operation_id": "record_create",
                 "metadata": {
                     "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
                     "path": {
-                        "mode": "create",
                         "spreadsheet_id": "",
-                        "sheet_name": "Sheet1",
-                        "header_row": "first_row"
+                        "sheet_name": "Sheet1"
                     },
                     "body": {
                         "fields": {}

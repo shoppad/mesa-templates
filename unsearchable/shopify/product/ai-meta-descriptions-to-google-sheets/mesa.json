@@ -86,6 +86,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
+                "version": "v1",
                 "entity": "row",
                 "action": "create",
                 "name": "Create Row",

@@ -95,6 +95,7 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
                 "weight": 0
@@ -123,10 +124,11 @@
                 "entity": "row",
                 "action": "create",
                 "name": "Create Row",
+                "operation_id": "record_create",
                 "key": "googlesheets_row",
+                "version": "v2",
                 "metadata": {
                     "path": {
-                        "mode": "create",
                         "spreadsheet_id": "",
                         "sheet_name": "Sheet1"
                     },

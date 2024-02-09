@@ -12,6 +12,21 @@
     "enabled": false,
     "logging": false,
     "debug": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "embed_code",
+                "label": "Form Embed Code",
+                "type": "text",
+                "disabled": true,
+                "export": false,
+                "copy": true,
+                "target": "form.embed_code",
+                "description": "Place this embed code..."
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
@@ -77,6 +92,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
+                "version": "v1",
                 "entity": "row",
                 "action": "create",
                 "name": "Row Create",

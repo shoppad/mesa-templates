@@ -30,6 +30,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
+                "version": "v1",
                 "entity": "row",
                 "action": "list",
                 "name": "List Row",
