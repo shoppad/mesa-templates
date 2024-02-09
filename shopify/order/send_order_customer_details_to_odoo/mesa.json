@@ -333,54 +333,6 @@
                 "metadata": {
                     "mapping": [
                         {
-                            "destination": "discount.name",
-                            "source": "Discounts"
-                        },
-                        {
-                            "destination": "discount.price",
-                            "source": "-{{shopify_order.total_discounts}}"
-                        },
-                        {
-                            "destination": "discount.quantity",
-                            "source": "1"
-                        },
-                        {
-                            "destination": "discount.product_id",
-                            "source": "{{FILL THIS IN}}"
-                        },
-                        {
-                            "destination": "shipping.name",
-                            "source": "Shipping"
-                        },
-                        {
-                            "destination": "shipping.price",
-                            "source": "{{shopify_order.shipping_lines.0.price}}"
-                        },
-                        {
-                            "destination": "shipping.quantity",
-                            "source": "1"
-                        },
-                        {
-                            "destination": "shipping.product_id",
-                            "source": "{{FILL THIS IN}}"
-                        },
-                        {
-                            "destination": "taxes.name",
-                            "source": "Taxes"
-                        },
-                        {
-                            "destination": "taxes.price",
-                            "source": "{{shopify_order.total_tax}}"
-                        },
-                        {
-                            "destination": "taxes.quantity",
-                            "source": "1"
-                        },
-                        {
-                            "destination": "taxes.product_id",
-                            "source": "{{FILL THIS IN}}"
-                        },
-                        {
                             "destination": "order_lines",
                             "source": "[]"
                         },
