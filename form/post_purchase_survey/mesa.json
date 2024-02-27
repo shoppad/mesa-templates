@@ -130,36 +130,8 @@
                         "header_row": "first_row"
                     },
                     "body": {
-                        "fields": {
-                            "How did you hear about us?": "{{form.how-did-you-hear-about-us}}",
-                            "Other Feedback": "{{form.other-feedback}}"
-                        }
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "fields",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "How did you hear about us?",
-                                        "label": "How did you hear about us?",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Other Feedback",
-                                        "label": "Other Feedback",
-                                        "type": "text"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
                 "weight": 0
             }
         ],
