@@ -71,6 +71,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
+                "version": "v1",
                 "entity": "sheet",
                 "action": "write",
                 "name": "Create New Sheet",

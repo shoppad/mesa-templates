@@ -119,16 +119,15 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
+                "version": "v2",
                 "entity": "row",
                 "action": "create",
                 "name": "Create Row",
                 "key": "googlesheets_row",
                 "metadata": {
                     "path": {
-                        "mode": "create",
                         "spreadsheet_id": "",
-                        "sheet_name": "Sheet1",
-                        "header_row": "first_row"
+                        "sheet_name": "Sheet1"
                     },
                     "body": {
                         "fields": {}
