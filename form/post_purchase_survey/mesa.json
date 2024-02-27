@@ -24,6 +24,31 @@
                 "copy": true,
                 "target": "form.embed_code",
                 "description": "Place this embed code..."
+            },
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets_row.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets_row.setup_fields",
+                "label": "Should we include all form fields in the spreadsheet?",
+                "description": "This template will automatically create a new row for every form submission. De-select any columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "How did you hear about us?",
+                        "value": "How did you hear about us?|{{form.how-did-you-hear-about-us}}"
+                    },
+                    {
+                        "label": "Other Feedback",
+                        "value": "Other Feedback|{{form.other-feedback}}"
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
             }
         ]
     },
@@ -92,7 +117,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v1",
+                "version": "v2",
                 "entity": "row",
                 "action": "create",
                 "name": "Row Create",
