@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/send_to_airtable",
-    "name": "Send orders to Airtable",
+    "name": "Send Shopify orders to Airtable",
     "version": "1.0.0",
-    "description": "As a merchant, you have a lot to manage. Order details shouldn't be one of them. But what if you could quickly send order data from Shopify to Airtable every time a customer places an order? MESA makes it possible with this simple template. Gain peace of mind knowing that you can now track your orders and options on one of the most popular spreadsheet-database hybrids available.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "airtable",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -20,9 +12,11 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
-                "name": "Order Created",
+                "name": "Order Created", 
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
                 "weight": 0
             }
         ],
@@ -31,11 +25,11 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop Over order products",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{shopify_order.line_items[]}}"
                 },
@@ -46,14 +40,17 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "airtable",
-                "version": "v2",
                 "entity": "record",
                 "action": "create",
                 "name": "Add Record",
+                "version": "v2",
                 "key": "airtable_record",
+                "operation_id": "create",
                 "metadata": {
+                    "api_endpoint": "post /{base}/{table}",
                     "path": {
-                        "table": "Orders"
+                        "base": "{{ template | label: 'What is your Airtable base?', description: 'View this [Airtable Base](https://airtable.com/shrsPzKQfNhZHrwVX) and click \"Copy Base\" at the top left corner. Then select the copied base below.', tokens: false }}",
+                        "table": "{{ template | label: 'What is the table of your Airtable base?', tokens: false }}"
                     },
                     "body": {
                         "fields": {
@@ -243,7 +240,6 @@
                 ],
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
