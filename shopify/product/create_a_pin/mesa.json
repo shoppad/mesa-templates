@@ -16,11 +16,29 @@
                 "key": "shopify",
                 "operation_id": "products_create",
                 "metadata": [],
+                "local_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 4,
                 "trigger_type": "output",
@@ -33,12 +51,12 @@
                 "metadata": {
                     "api_endpoint": "post /pins",
                     "body": {
-                        "title": "{{shopify.title}}",
-                        "description": "{{shopify.body_html | strip_html}}",
+                        "title": "{{shopify_1.title}}",
+                        "description": "{{shopify_1.body_html | strip_html}}",
                         "board_id": "{{ template | label: 'Which board should the pin be created on?', tokens: false }}",
                         "media_source": {
                             "source_type": "image_url",
-                            "url": "{{shopify.images[0].src}}",
+                            "url": "{{shopify_1.images[0].src}}",
                             "is_standard": "true"
                         }
                     },
