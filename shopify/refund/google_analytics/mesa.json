@@ -3,14 +3,9 @@
     "name": "Track Shopify refunds in Google Analytics",
     "version": "1.0.0",
     "description": "It\u2019s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, MESA does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
+    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,6 +16,7 @@
                 "action": "created",
                 "name": "Refund Created",
                 "key": "shopify",
+                "operation_id": "refunds_create",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
@@ -35,7 +31,9 @@
                 "action": "retrieve",
                 "name": "Retrieve Order",
                 "key": "shopify_1",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
                     "order_id": "{{shopify.order_id}}"
                 },
                 "local_fields": [],
@@ -60,22 +58,41 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googleanalytics",
-                "entity": "transaction",
-                "action": "create",
-                "name": "Create Transaction",
-                "key": "googleanalytics",
+                "entity": "event",
+                "action": "refund",
+                "name": "Refund",
+                "version": "GA4",
+                "key": "googleanalytics4",
+                "operation_id": "refund-event",
                 "metadata": {
+                    "api_endpoint": "post \/refund",
                     "body": {
-                        "ti": "{{shopify_1.name}} - {{shopify.id}}",
-                        "tr": "{{custom.total_refund_amount}}"
+                        "client_id": "MESA",
+                        "user_id": "{{shopify_1.customer.id}}",
+                        "events": [
+                            {
+                                "name": "refund",
+                                "params": {
+                                    "currency": "{{shopify_1.currency}}",
+                                    "transaction_id": "{{shopify_1.id}}",
+                                    "value": "{{custom.total_refund_amount}}",
+                                    "items": [
+                                        {
+                                            "item_id": "{{shopify.refund_line_items[].line_item_id}}",
+                                            "currency": "{{shopify_1.currency}}",
+                                            "price": "{{shopify.refund_line_items[].subtotal}}",
+                                            "quantity": "{{shopify.refund_line_items[].quantity}}"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2,
-                "version": "UA"
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
