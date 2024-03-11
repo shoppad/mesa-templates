@@ -1,0 +1,100 @@
+{
+  "key": "shopify_product_increase_prices_when_order_placed",
+  "name": "Increase Your Product Prices Every Time An Order Is Placed",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Order Created",
+        "key": "shopify",
+        "operation_id": "orders_create",
+        "metadata": [],
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop Over Line Items",
+        "version": "v2",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{shopify.line_items[]}}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product_variant",
+        "action": "retrieve_id",
+        "name": "Retrieve Product Variant",
+        "key": "shopify_2",
+        "operation_id": "get_variants_variant_id",
+        "metadata": {
+          "api_endpoint": "get admin/variants/{{variant_id}}.json",
+          "variant_id": "{{loop.variant_id}}"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "variant_id"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product_variant",
+        "action": "update_id",
+        "name": "Update Product Variant",
+        "key": "shopify_1",
+        "operation_id": "put_variants_variant_id",
+        "metadata": {
+          "api_endpoint": "put admin/variants/{{variant_id}}.json",
+          "product_id": "{{loop.product_id}}",
+          "variant_id": "{{loop.variant_id}}",
+          "body": {
+            "price": "{{ shopify_2.price | plus: 1 }}"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "body.price"
+        ],
+        "on_error": "default",
+        "weight": 2
+      }
+    ]
+  }
+}
