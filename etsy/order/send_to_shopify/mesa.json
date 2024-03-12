@@ -1,0 +1,134 @@
+{
+  "key": "etsy_order_send_to_shopify",
+  "name": "Etsy Sync #1 - Import Order With Inventory Updates",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 5,
+        "trigger_type": "input",
+        "type": "etsy",
+        "entity": "receipt",
+        "action": "receipt-created-webhook",
+        "name": "Receipt Created",
+        "version": "v3",
+        "key": "etsy",
+        "operation_id": "receipt-created-webhook",
+        "metadata": {
+          "api_endpoint": "get /v3/application/shops/{shop_id}/receipts-webhook",
+          "poll": "@hourly:0 * * * *",
+          "next_sync_date_time": "2024-03-12T09:00:00-05:00",
+          "path": {
+            "shop_id": "27633960"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "path",
+          "path.shop_id",
+          "poll",
+          "next_sync_date_time"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Format Order Payload",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "script"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Create Order",
+        "key": "custom_1",
+        "metadata": {
+          "script": "custom_1.js"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "script"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop",
+        "version": "v2",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{custom.orderData.line_items}}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product_variant",
+        "action": "metafield_set",
+        "name": "Set Product Variant Metafield",
+        "key": "shopify",
+        "operation_id": "put_mesa_productvariants_product_variant_id_metafield",
+        "metadata": {
+          "api_endpoint": "put mesa/productVariants/{{product_variant_id}}/metafield.json",
+          "product_variant_id": "{{loop.variant_id}}",
+          "body": {
+            "namespace": "custom",
+            "key": "etsy_listing_id",
+            "type": "single_line_text_field",
+            "listType": "single_line_text_field",
+            "value": "{{loop.etsy_listing_id}}"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "product_variant_id",
+          "body",
+          "body.namespace",
+          "body.key",
+          "body.type",
+          "body.listType",
+          "body.value"
+        ],
+        "on_error": "default",
+        "weight": 3
+      }
+    ]
+  }
+}
