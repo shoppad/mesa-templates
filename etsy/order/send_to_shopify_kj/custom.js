@@ -16,7 +16,7 @@ module.exports = new class {
 
     for (let transaction of vars.etsy.transactions) {
       orderData.line_items.push({
-        variant_id: this.shopifyGraphqlVariantIdFromSku(transaction.sku),
+        variant_id: this.shopifyGqlVariantIdFromSku(transaction.sku),
         quantity: transaction.quantity,
         price: transaction.price.amount,
         title: transaction.title,
@@ -27,7 +27,7 @@ module.exports = new class {
     Mesa.output.next({"orderData": orderData});
   }
   
-  shopifyGraphqlVariantIdFromSku = (sku) => {
+  shopifyGqlVariantIdFromSku = (sku) => {
     let query = `
       query($query: String!) {
         productVariants(first: 1, query: $query) {

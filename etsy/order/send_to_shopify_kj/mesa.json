@@ -1,5 +1,5 @@
 {
-  "key": "etsy_order_send_to_shopify",
+  "key": "etsy_order_send_to_shopify_kj",
   "name": "Etsy Sync #1 - Import Order With Inventory Updates",
   "version": "1.0.0",
   "description": "",
