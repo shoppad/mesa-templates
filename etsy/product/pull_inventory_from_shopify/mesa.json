@@ -1,0 +1,223 @@
+{
+  "key": "etsy_product_pull_inventory_from_shopify",
+  "name": "Etsy Sync #2 - Push Inventory Updates To Etsy",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "inventory_level",
+        "action": "updated",
+        "name": "Inventory Level Updated",
+        "key": "shopify",
+        "operation_id": "inventory_levels_update",
+        "metadata": [],
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "inventory_item",
+        "action": "retrieve",
+        "name": "Retrieve Inventory Item",
+        "key": "shopify_1",
+        "operation_id": "get_inventory_items_inventory_item_id",
+        "metadata": {
+          "api_endpoint": "get admin/inventory_items/{{inventory_item_id}}.json",
+          "inventory_item_id": "{{shopify.inventory_item_id}}"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "inventory_item_id"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product_variant",
+        "action": "sku_to_product_variant",
+        "name": "Retrieve Product Variant Details from SKU",
+        "key": "shopify_2",
+        "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
+        "metadata": {
+          "api_endpoint": "get mesa/productVariants/{{product_sku}}/sku-lookup.json",
+          "product_sku": "{{shopify_1.sku}}"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "product_sku"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product_variant",
+        "action": "metafield_get",
+        "name": "Retrieve Variant Metafield",
+        "key": "shopify_3",
+        "operation_id": "get_mesa_productvariants_product_variant_id_metafield",
+        "metadata": {
+          "api_endpoint": "get mesa/productVariants/{{product_variant_id}}/metafield.json",
+          "product_variant_id": "{{shopify_2.product_variant_id}}",
+          "body": {
+            "namespace": "custom",
+            "key": "etsy_listing_id"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "product_variant_id",
+          "body",
+          "body.namespace",
+          "body.key"
+        ],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "etsy",
+        "entity": "shoplisting",
+        "action": "retrieve",
+        "name": "Retrieve Listing",
+        "version": "v3",
+        "key": "etsy",
+        "operation_id": "getListing",
+        "metadata": {
+          "api_endpoint": "get /v3/application/listings/{listing_id}",
+          "path": {
+            "listing_id": "{{shopify_3.value}}"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "path",
+          "path.listing_id"
+        ],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 4.1,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "If Inventory Is Positive",
+        "key": "filter",
+        "metadata": {
+          "a": "{{shopify.available}}",
+          "comparison": "greater than",
+          "b": "0",
+          "additional": [
+            {
+              "operator": "and",
+              "comparison": "equals"
+            }
+          ],
+          "script": "filter.js"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 4
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "etsy",
+        "entity": "shoplisting_inventory",
+        "action": "update",
+        "name": "Update Listing Inventory Quantity",
+        "version": "v3",
+        "key": "etsy_2",
+        "operation_id": "updateListingInventory",
+        "metadata": {
+          "api_endpoint": "put /v3/application/listings/{listing_id}/inventory",
+          "path": {
+            "listing_id": "{{etsy.listing_id}}"
+          },
+          "body": {
+            "products": [
+              {
+                "offerings": [
+                  {
+                    "price": "{{etsy.price.amount | divided_by: etsy.price.divisor }}",
+                    "quantity": "{{custom.inventory}}",
+                    "is_enabled": "true"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "body.products[].offerings[].quantity",
+          "body.products[].offerings[].price",
+          "body.products[].offerings[].is_enabled"
+        ],
+        "on_error": "default",
+        "weight": 5
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Else",
+        "key": "custom_1",
+        "metadata": {
+          "script": "custom_1.js"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 6
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "etsy",
+        "entity": "shoplisting",
+        "action": "update",
+        "name": "Set Listing Status To Sold Out",
+        "version": "v3",
+        "key": "etsy_1",
+        "operation_id": "updateListing",
+        "metadata": {
+          "api_endpoint": "patch /v3/application/shops/{shop_id}/listings/{listing_id}",
+          "path": {
+            "shop_id": "27633960",
+            "listing_id": "{{etsy.listing_id}}"
+          },
+          "body": {
+            "state": "inactive"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "body.state"
+        ],
+        "on_error": "default",
+        "weight": 7
+      }
+    ]
+  }
+}
