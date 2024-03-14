@@ -1,5 +1,5 @@
 {
-  "key": "shopify_order_tag_based_on_line_item_properties_kj",
+  "key": "shopify/order/tag_based_on_line_item_properties_kj",
   "name": "Tag Order Based On Line Item Properties",
   "version": "1.0.0",
   "description": "",
