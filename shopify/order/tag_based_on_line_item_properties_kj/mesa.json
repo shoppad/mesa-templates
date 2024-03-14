@@ -1,5 +1,5 @@
 {
-  "key": "shopify_order_tag_based_on_line_item_properties",
+  "key": "shopify_order_tag_based_on_line_item_properties_kj",
   "name": "Tag Order Based On Line Item Properties",
   "version": "1.0.0",
   "description": "",
@@ -30,7 +30,7 @@
         "trigger_type": "output",
         "type": "loop",
         "entity": "loop",
-        "name": "Loop",
+        "name": "Loop Over Line Items",
         "version": "v2",
         "key": "loop",
         "operation_id": "loop_loop",
@@ -41,13 +41,7 @@
           }
         },
         "local_fields": [],
-        "selected_fields": [
-          "key",
-          "filter",
-          "filter.a",
-          "filter.comparison",
-          "filter.b"
-        ],
+        "selected_fields": [],
         "on_error": "default",
         "weight": 0
       },
@@ -55,16 +49,59 @@
         "schema": 2,
         "trigger_type": "output",
         "type": "custom",
-        "name": "Custom Code",
+        "name": "Grab Line Item Properties By Name",
         "key": "custom",
         "metadata": {
-          "script": "custom.js"
+          "script": "custom.js",
+          "description": "."
         },
-        "selected_fields": [
-          "script"
-        ],
+        "local_fields": [],
+        "selected_fields": [],
         "on_error": "default",
         "weight": 1
+      },
+      {
+        "schema": 4.1,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Is Birthday Equal to Jan?",
+        "key": "filter",
+        "metadata": {
+          "a": "{{custom.birthday}}",
+          "comparison": "equals",
+          "b": "Jan",
+          "additional": [
+            {
+              "operator": "and",
+              "comparison": "equals"
+            }
+          ]
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "tag_add",
+        "name": "Tag Order As January Birthday",
+        "key": "shopify_1",
+        "operation_id": "post_mesa_orders_order_id_tag",
+        "metadata": {
+          "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+          "order_id": "{{shopify.id}}",
+          "body": {
+            "tag": "Birthday In January"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 3
       }
     ]
   }

@@ -1,24 +1,30 @@
 const Util = {
-  lineItemProperties: (lineItem) => {
+
+  /**
+   * Return the line item properties array as an object that's easier to reference
+   * 
+   * @param {*} lineItem 
+   * @returns 
+   */
+  lineItemPropertiesAsObject: (lineItem) => {
     let properties = lineItem.properties.reduce((accumulator, object) => {
       accumulator[object.name] = object.value;
       return accumulator;
     }, {});
   
-    // test
     return properties; 
   },
 
-  stepLabel: (string) => { 
+  /**
+   * Convenience function to not have to type that whole thing out every time
+   * @param {*} string 
+   */
+  stepLabel: (string) => {
     Mesa.trigger.setTaskExternalData({
       "label": string
     })
-
   },
 
 }
 
-/**
- * A Mesa Script exports a class with a script() method.
- */
 module.exports = Util;
