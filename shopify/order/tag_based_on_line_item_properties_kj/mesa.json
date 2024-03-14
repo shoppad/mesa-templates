@@ -1,0 +1,71 @@
+{
+  "key": "shopify_order_tag_based_on_line_item_properties",
+  "name": "Tag Order Based On Line Item Properties",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Order Created",
+        "key": "shopify",
+        "operation_id": "orders_create",
+        "metadata": [],
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop",
+        "version": "v2",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{shopify.line_items[]}}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Custom Code",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js"
+        },
+        "selected_fields": [
+          "script"
+        ],
+        "on_error": "default",
+        "weight": 1
+      }
+    ]
+  }
+}
