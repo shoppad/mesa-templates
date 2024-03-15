@@ -1,6 +1,6 @@
 {
   "key": "shopify/order/auto_fulfill_line_items_kj",
-  "name": "Auto Fulfill Membership Line Item",
+  "name": "Auto Fulfill Line Items By SKU",
   "version": "1.0.0",
   "description": "",
   "seconds": 135,
@@ -26,34 +26,6 @@
     ],
     "outputs": [
       {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "transform",
-        "entity": "mapping",
-        "name": "Variables",
-        "key": "transform",
-        "operation_id": "mapping",
-        "metadata": {
-          "mapping": [
-            {
-              "destination": "sku",
-              "source": "CS-HUNT"
-            }
-          ]
-        },
-        "local_fields": [
-          {
-            "key": "mapping",
-            "type": "mapping",
-            "tokens": "brackets",
-            "location": "mapping"
-          }
-        ],
-        "selected_fields": [],
-        "on_error": "default",
-        "weight": 0
-      },
-      {
         "schema": 5.1,
         "trigger_type": "output",
         "type": "loop",
@@ -77,7 +49,7 @@
           "filter.b"
         ],
         "on_error": "default",
-        "weight": 1
+        "weight": 0
       },
       {
         "schema": 4.1,
@@ -88,7 +60,7 @@
         "metadata": {
           "a": "{{loop.sku}}",
           "comparison": "equals",
-          "b": "{{transform.sku}}",
+          "b": "{{ template | label: 'The SKU you want to auto-fulfill' }}",
           "additional": [
             {
               "operator": "and",
@@ -109,7 +81,7 @@
           "additional[].b"
         ],
         "on_error": "default",
-        "weight": 2
+        "weight": 1
       },
       {
         "schema": 3,
@@ -123,7 +95,7 @@
         "metadata": {
           "api_endpoint": "post mesa/orders/{{order_id}}/fulfillments.json",
           "body": {
-            "location_id": "17081696327",
+            "location_id": "{{ template | label: 'The location you want to use for fulfillment' }}",
             "line_items": [
               {
                 "id": "{{loop.id}}",
@@ -143,7 +115,7 @@
           "body.line_items[].quantity"
         ],
         "on_error": "default",
-        "weight": 3
+        "weight": 2
       },
       {
         "schema": 3,
@@ -158,7 +130,7 @@
           "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
           "order_id": "{{shopify_2.id}}",
           "body": {
-            "tag": "Auto-Fulfilled Membership"
+            "tag": "{{ template | label: 'The tag you want to use for the orders that have been auto-fulfilled', default: 'Auto-Fulfilled' }}"
           }
         },
         "local_fields": [],
@@ -168,7 +140,7 @@
           "body.tag"
         ],
         "on_error": "default",
-        "weight": 4
+        "weight": 3
       }
     ]
   }
