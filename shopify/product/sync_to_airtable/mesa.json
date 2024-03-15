@@ -1,0 +1,256 @@
+{
+  "key": "shopify_product_sync_to_airtable",
+  "name": "Sync Products To Airtable",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "product",
+        "action": "created",
+        "name": "Product Created",
+        "key": "shopify",
+        "operation_id": "products_create",
+        "metadata": [],
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "airtable",
+        "entity": "record",
+        "action": "list",
+        "name": "List Record",
+        "version": "v2",
+        "key": "airtable",
+        "operation_id": "list",
+        "metadata": {
+          "api_endpoint": "get /{base}/{table}",
+          "path": {
+            "base": "appOPGLNn2a53I7Vu",
+            "table": "tblJzwhcC7fC6RZh6"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "path",
+          "path.base",
+          "path.table"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Airtable Product Fields",
+        "key": "transform",
+        "operation_id": "mapping",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "Product ID",
+              "source": "{{shopify.id}}"
+            },
+            {
+              "destination": "Title",
+              "source": "{{shopify.title}}"
+            },
+            {
+              "destination": "Images",
+              "source": "{{shopify.image.src}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "required"
+          }
+        ],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Upsert Product To Airtable",
+        "key": "custom",
+        "metadata": {
+          "field_name": "Product ID",
+          "field_value": "{{shopify.id}}",
+          "script": "custom.js",
+          "description": " "
+        },
+        "local_fields": [
+          {
+            "key": "field_name",
+            "label": "Name of ID Field",
+            "type": "string",
+            "tokens": false,
+            "required": true,
+            "default": "Product ID",
+            "location": "required"
+          },
+          {
+            "key": "field_value",
+            "label": "ID Value",
+            "type": "string",
+            "required": true,
+            "default": "{{shopify.id}}",
+            "location": "required"
+          }
+        ],
+        "selected_fields": [
+          "script"
+        ],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product_variant",
+        "action": "list",
+        "name": "Get List of Product Variants",
+        "key": "shopify_1",
+        "operation_id": "get_products_product_id_variants",
+        "metadata": {
+          "api_endpoint": "get admin/products/{{product_id}}/variants.json",
+          "product_id": "{{shopify.id}}"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "product_id"
+        ],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 5,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop",
+        "version": "v2",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{ shopify_1 }}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key"
+        ],
+        "on_error": "default",
+        "weight": 4
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Variant Payload",
+        "key": "transform_1",
+        "operation_id": "mapping",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "SKU",
+              "source": "{{loop.sku}}"
+            },
+            {
+              "destination": "Title",
+              "source": "{{loop.title}}"
+            },
+            {
+              "destination": "Variant ID",
+              "source": "{{loop.id}}"
+            },
+            {
+              "destination": "Product",
+              "source": "{{custom.id }}"
+            },
+            {
+              "destination": "Price",
+              "source": "{{loop.price}}"
+            },
+            {
+              "destination": "Compare At",
+              "source": "{{loop.compare_at_price}}"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "required"
+          }
+        ],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 5
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Upsert Variant",
+        "key": "custom_1",
+        "metadata": {
+          "description": "Use the airtable product id when updating the variant",
+          "script": "custom_1.js",
+          "field_name": "Variant ID",
+          "field_value": "{{loop.id}}"
+        },
+        "local_fields": [
+          {
+            "key": "field_name",
+            "label": "ID Field",
+            "type": "string",
+            "tokens": false,
+            "required": true,
+            "default": "Variant ID",
+            "location": "required"
+          },
+          {
+            "key": "field_value",
+            "label": "ID Value",
+            "type": "string",
+            "required": true,
+            "default": "{{loop.id}}",
+            "location": "required"
+          }
+        ],
+        "selected_fields": [
+          "description"
+        ],
+        "on_error": "default",
+        "weight": 6
+      }
+    ]
+  }
+}
