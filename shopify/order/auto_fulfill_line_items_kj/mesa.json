@@ -1,0 +1,175 @@
+{
+  "key": "shopify/order/auto_fulfill_line_items_kj",
+  "name": "Auto Fulfill Membership Line Item",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Order Created",
+        "key": "shopify_2",
+        "operation_id": "orders_create",
+        "metadata": [],
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Variables",
+        "key": "transform",
+        "operation_id": "mapping",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "sku",
+              "source": "CS-HUNT"
+            }
+          ]
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop Over Line Items",
+        "version": "v2",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{shopify_2.line_items[]}}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4.1,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Is It The Auto-Fulfillable SKU?",
+        "key": "filter",
+        "metadata": {
+          "a": "{{loop.sku}}",
+          "comparison": "equals",
+          "b": "{{transform.sku}}",
+          "additional": [
+            {
+              "operator": "and",
+              "a": "{{loop.fulfillment_status}}",
+              "comparison": "is empty"
+            }
+          ]
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "a",
+          "comparison",
+          "b",
+          "additional",
+          "additional[].operator",
+          "additional[].a",
+          "additional[].comparison",
+          "additional[].b"
+        ],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order_fulfillment",
+        "action": "custom_create",
+        "name": "Create Order Fulfillment",
+        "key": "shopify_3",
+        "operation_id": "post_mesa_orders_order_id_fulfillments",
+        "metadata": {
+          "api_endpoint": "post mesa/orders/{{order_id}}/fulfillments.json",
+          "body": {
+            "location_id": "17081696327",
+            "line_items": [
+              {
+                "id": "{{loop.id}}",
+                "quantity": "{{loop.quantity}}"
+              }
+            ]
+          },
+          "order_id": "{{shopify_2.id}}"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "order_id",
+          "body",
+          "body.location_id",
+          "body.line_items",
+          "body.line_items[].id",
+          "body.line_items[].quantity"
+        ],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "tag_add",
+        "name": "Order Add Tag",
+        "key": "shopify_1",
+        "operation_id": "post_mesa_orders_order_id_tag",
+        "metadata": {
+          "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+          "order_id": "{{shopify_2.id}}",
+          "body": {
+            "tag": "Auto-Fulfilled Membership"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "order_id",
+          "body",
+          "body.tag"
+        ],
+        "on_error": "default",
+        "weight": 4
+      }
+    ]
+  }
+}
