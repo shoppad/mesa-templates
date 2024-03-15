@@ -1,9 +1,9 @@
 {
   "key": "shopify/order/tag_based_on_line_item_properties_kj",
-  "name": "Tag Order Based On Line Item Properties",
+  "name": "Tag An Order Based On Its Line Item Properties",
   "version": "1.0.0",
-  "description": "",
-  "seconds": 135,
+  "description": "When it comes to handling custom orders, tagging them based on line items can make things a lot easier. This is especially true for products that require personalization, such as those with add-ons like engraving. By using this template, you can group these orders together and better manage each step of the fulfillment process. Essentially, it's all about having better visibility into your custom inventory, which helps reduce the risk of errors occurring.",
+  "seconds": "300",
   "enabled": false,
   "setup": true,
   "config": {
@@ -41,7 +41,13 @@
           }
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
         "on_error": "default",
         "weight": 0
       },
@@ -56,7 +62,10 @@
           "description": "."
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "description",
+          "script"
+        ],
         "on_error": "default",
         "weight": 1
       },
@@ -64,12 +73,12 @@
         "schema": 4.1,
         "trigger_type": "output",
         "type": "filter",
-        "name": "Is Birthday Equal to Jan?",
+        "name": "Does Line Item Property Pass Condition?",
         "key": "filter",
         "metadata": {
-          "a": "{{custom.birthday}}",
+          "a": "{{ template | label: 'The name of the line item variable?', description: 'It may be easier to grab this value after you run a test and see the line item property names', placeholder: 'e.g. {{custom.birthday}}' }}",
           "comparison": "equals",
-          "b": "Jan",
+          "b": "{{ template | label: 'The value of the line item variable?', placeholder: 'e.g. Jan' }}",
           "additional": [
             {
               "operator": "and",
@@ -78,7 +87,11 @@
           ]
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "a",
+          "comparison",
+          "b"
+        ],
         "on_error": "default",
         "weight": 2
       },
@@ -88,18 +101,22 @@
         "type": "shopify",
         "entity": "order",
         "action": "tag_add",
-        "name": "Tag Order As January Birthday",
+        "name": "Tag Order",
         "key": "shopify_1",
         "operation_id": "post_mesa_orders_order_id_tag",
         "metadata": {
           "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
           "order_id": "{{shopify.id}}",
           "body": {
-            "tag": "Birthday In January"
+            "tag": "{{ template | label: 'The tag you want to use?', tokens: false, placeholder: 'e.g. January Birthday' }}"
           }
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "order_id",
+          "body",
+          "body.tag"
+        ],
         "on_error": "default",
         "weight": 3
       }
