@@ -1,7 +1,7 @@
 const Mesa = require('vendor/Mesa.js');
 
 /**
- * Send a webhook to Store B with the delta
+ * A Mesa Script exports a class with a script() method.
  */
 module.exports = new class {
 
@@ -14,7 +14,7 @@ module.exports = new class {
   script = (payload, context) => {
     const vars = context.steps;
 
-    let url = 'https://webhooks.getmesa.com/v1/kalen-plus/trigger-webhook/65f88df955f638c5080a8072/65f88dfcb89e46b8a500a19f.json?apikey=5HyfifuT0m30k33qJ192hae8sOz3TDg57mEGVRCE';
+    let url = vars.transform.Webhook;
 
     Mesa.request.post(url, {
       "sku": vars.loop.sku,
