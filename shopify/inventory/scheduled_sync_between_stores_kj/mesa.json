@@ -1,0 +1,371 @@
+{
+  "key": "shopify/inventory/scheduled_sync_between_stores_kj",
+  "name": "Sync Inventory On Schedule (Store A)",
+  "version": "1.0.1",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "schedule",
+        "name": "Hourly Schedule",
+        "key": "schedule",
+        "metadata": {
+          "schedule": "@hourly:0 * * * *",
+          "enqueue_type": "schedule",
+          "next_sync_date_time": "2024-03-18T15:00:00-05:00",
+          "datetime": null
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "enqueue_type",
+          "schedule",
+          "next_sync_date_time"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Get Recently Updated Inventory Levels",
+        "key": "custom",
+        "metadata": {
+          "script": "custom.js",
+          "max": 1
+        },
+        "local_fields": [
+          {
+            "key": "max",
+            "label": "Maximum # Of Items To Return",
+            "type": "number",
+            "tokens": false,
+            "default": "1",
+            "location": "required"
+          }
+        ],
+        "selected_fields": [
+          "script"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop Over Inventory Items",
+        "version": "v2",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{custom.levels}}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop Over Inventory Levels",
+        "version": "v2",
+        "key": "loop_1",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{loop.inventoryLevels.nodes}}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "query",
+        "name": "Query",
+        "key": "data",
+        "operation_id": "get_database_table",
+        "metadata": {
+          "api_endpoint": "get /{database}/{table}",
+          "table": "inventory_levels",
+          "where_clause": {
+            "comparison": "equals"
+          },
+          "query": "SELECT available FROM \"inventory_levels\"\nWHERE level_id = '{{loop_1.id}}'\nORDER BY mesa_id DESC\nlimit 1"
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "table",
+          "where_clause",
+          "where_clause.a",
+          "where_clause.comparison",
+          "where_clause.b",
+          "query"
+        ],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Calculate Delta",
+        "key": "custom_1",
+        "metadata": {
+          "script": "custom_1.js"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 4
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "create",
+        "name": "Create Record",
+        "key": "data_1",
+        "operation_id": "post_database_table",
+        "metadata": {
+          "api_endpoint": "post /{database}/{table}",
+          "create": "existing",
+          "columns": [
+            {
+              "key": "level_id",
+              "type": "text",
+              "value": "{{loop_1.id}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "item_id",
+              "type": "numeric",
+              "value": "{{loop.id}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "location_id",
+              "type": "numeric",
+              "value": "{{loop_1.location.id}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "available",
+              "type": "numeric",
+              "value": "{{ loop_1.quantities[0].quantity }}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "level_updated_at",
+              "type": "timestamptz",
+              "value": "{{loop_1.updatedAt}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "delta",
+              "type": "numeric",
+              "value": "{{custom_1.delta}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "id",
+              "type": "varchar",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "sku",
+              "type": "varchar",
+              "value": "{{loop.sku}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "status",
+              "type": "varchar",
+              "value": "{{custom_1.status}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "run_time",
+              "type": "varchar",
+              "value": "{{custom.run_time}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "location_name",
+              "type": "varchar",
+              "value": "{{loop_1.location.name}}",
+              "disabled": "65f832fe50baf3892e0749c3"
+            }
+          ],
+          "table": "inventory_levels"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 5
+      },
+      {
+        "schema": 4.1,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "If Delta Is Found",
+        "key": "filter",
+        "metadata": {
+          "a": "{{custom_1.status}}",
+          "comparison": "equals",
+          "b": "Found Change",
+          "additional": [
+            {
+              "operator": "and",
+              "comparison": "equals"
+            }
+          ]
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 6
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Send Delta To Store B",
+        "key": "custom_3",
+        "metadata": {
+          "script": "custom_3.js"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 7
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update",
+        "name": "Update Record",
+        "key": "data_2",
+        "operation_id": "patch_database_table_mesa_id",
+        "metadata": {
+          "api_endpoint": "patch /{database}/{table}/{mesa_id}",
+          "columns": [
+            {
+              "key": "level_id",
+              "type": "text",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "item_id",
+              "type": "numeric",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "location_id",
+              "type": "numeric",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "available",
+              "type": "numeric",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "level_updated_at",
+              "type": "timestamptz",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "delta",
+              "type": "numeric",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "id",
+              "type": "varchar",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "sku",
+              "type": "varchar",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "status",
+              "type": "varchar",
+              "value": "Sent To Store B",
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "run_time",
+              "type": "varchar",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            },
+            {
+              "key": "location_name",
+              "type": "varchar",
+              "value": null,
+              "disabled": "65f832fe50baf3892e0749c3"
+            }
+          ],
+          "table": "inventory_levels",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{data_1.mesa_id}}",
+            "a": "mesa_id"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 8
+      }
+    ]
+  }
+}
