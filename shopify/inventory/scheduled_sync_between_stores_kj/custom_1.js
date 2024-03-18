@@ -1,8 +1,9 @@
-const Mesa = require('vendor/Mesa.js');
-
 /**
  * Calculate the inventory delta
  */
+const Mesa = require('vendor/Mesa.js');
+const Util = require('./Util.js');
+
 module.exports = new class {
 
   script = (payload, context) => {
@@ -10,6 +11,8 @@ module.exports = new class {
 
     let delta = this.delta(vars);
     let status = this.status(vars);
+
+    Util.stepLabel(`SKU ${vars.loop.sku}: Delta: ${delta}`);
     
     Mesa.output.next({
       "delta": delta,

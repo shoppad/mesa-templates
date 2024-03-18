@@ -19,9 +19,9 @@ module.exports = new class {
 
     Mesa.output.next({
       "levels": levels,
-      "run_time": this.runTime,
+      "run_time": runTime,
     });
-  }
+  } 
 
   getRunTime = () => {
     let now = new Date();
