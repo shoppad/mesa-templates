@@ -35,7 +35,7 @@
                     "filter": {
                         "a": "{{shopify.line_items[].name}}",
                         "comparison": "contains",
-                        "b": "{{ template | label: 'What is the specific product purchased that you would like to check is in the order?', tokens: false }}"
+                        "b": "{{ template | label: 'Which specific product would you like to verify is in the order?', description: 'Enter the product name exactly as it appears on your Shopify store.', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -70,7 +70,7 @@
                     "body": {
                         "to": "{{shopify.email}}",
                         "subject": "Product found in order {{shopify.name}}",
-                        "message": "{{ template | label: 'What content do you want to include in the email message?' }}"
+                        "message": "{{ template | label: 'What content would you like the email message to include?', description: 'You can add variables to your email message if you'd like the content of the email to be dynamic.' }}"
                     }
                 },
                 "local_fields": [],

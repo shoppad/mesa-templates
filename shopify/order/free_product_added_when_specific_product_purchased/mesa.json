@@ -35,7 +35,7 @@
                     "filter": {
                         "a": "{{shopify.line_items[].name}}",
                         "comparison": "contains",
-                        "b": "{{ template | label: 'What is the specific product purchased that you would like to check is in the order?', tokens: false }}"
+                        "b": "{{ template | label: 'Which product must the customer purchase to be eligible for the free item?', description: 'Enter the product name exactly as it appears on your Shopify store.', tokens: false, placeholder: '' }}"
                     }
                 },
                 "local_fields": [],
@@ -71,7 +71,7 @@
                     "order_id": "{{shopify.id}}",
                     "body": {
                         "product_id": "{{ template | label: 'What is the free product you would like to add?', tokens: false }}",
-                        "variant_id": "{{ template | label: 'What is the variant of the free product you would like to add?', tokens: false }}",
+                        "variant_id": "{{ template | label: 'What is the variant of the free product you would like to add?', description: 'Select ''Default Title'' if there are no additional variants.', tokens: false }}",
                         "quantity": "1",
                         "discount_type": "Percentage",
                         "discount_amount": "100",
