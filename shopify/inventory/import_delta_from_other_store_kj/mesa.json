@@ -133,55 +133,55 @@
               "key": "available",
               "type": "numeric",
               "value": "{{shopify_2.available}}",
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "level_updated_at",
               "type": "timestamptz",
               "value": null,
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "delta",
               "type": "numeric",
               "value": "{{webhook.delta}}",
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "sku",
               "type": "varchar",
               "value": "{{webhook.sku}}",
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "status",
               "type": "varchar",
               "value": "Applied From Store A",
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "run_time",
               "type": "varchar",
               "value": "{{webhook.run_time}}",
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "location_name",
               "type": "varchar",
               "value": "{{webhook.location}}",
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "product_id",
               "type": "varchar",
               "value": null,
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {
               "key": "variant_id",
               "type": "varchar",
               "value": null,
-              "disabled": "65f9bbd70d879bae4d0a06ec"
+              "disabled": "65f9bcc87cc915a57b0d0df5"
             }
           ],
           "table": "inventory_levels"

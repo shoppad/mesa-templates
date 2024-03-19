@@ -25,6 +25,17 @@ const Util = {
     })
   },
 
+  getMesaStorage(key, defaultValue) {
+    let value = null;
+    try {
+      value = Mesa.storage.get(key, defaultValue) ? Mesa.storage.get(key, defaultValue) : null;
+    } catch (e) {
+      // Will return null
+    }
+
+    return value;
+  }
+
 }
 
 module.exports = Util;

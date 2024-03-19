@@ -11,17 +11,22 @@ module.exports = new class {
     const vars = context.steps;
 
     let max = context.trigger.metadata.max;
-    let updatedAt = '2024-02-16T22:42:18Z';
+    // Looks like '2024-02-16T22:42:18Z';
+    // Create a new Date object for the current time
+    let now = new Date();
+    now.setTime(now.getTime() - (60 * 60 * 1000));
+    let updatedSince = now.toISOString();
     let runTime = this.getRunTime();
 
-    let cursor = Mesa.storage.get('page_cursor') ? Mesa.storage.get('page_cursor') : null;
+    let cursor = Util.getMesaStorage('page_cursor');
 
-    let [levels, pageInfo] = ShopifyUtil.inventoryLevelsUpdatedSince(updatedAt, max, cursor);
-    Mesa.storage.set('page_cursor', pageInfo.endCursor);
+    let [levels, pageInfo] = ShopifyUtil.inventoryLevelsUpdatedSince(updatedSince, max, cursor);
+    Mesa.storage.set('page_cursor', pageInfo.hasNextPage ? pageInfo.endCursor : null);
 
     let firstSku = levels.length > 0 ? levels[0].sku : '(none)';
     Util.stepLabel(`
       Items found: ${levels.length}, first sku: ${firstSku}, 
+      Updated Since: ${updatedSince},
       previous cursor: ${cursor ? cursor.slice(-8) : '(none)'}, 
       new cursor: ${pageInfo.endCursor ? pageInfo.endCursor.slice(-8) : '(none)'}, 
       has next page: ${pageInfo.hasNextPage}
