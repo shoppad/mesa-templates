@@ -14,8 +14,9 @@ module.exports = new class {
     let updatedAt = '2024-02-16T22:42:18Z';
     let runTime = this.getRunTime();
 
-    let levels = ShopifyUtil.inventoryLevelsUpdatedSince(updatedAt, max);
+    let [levels, pageInfo] = ShopifyUtil.inventoryLevelsUpdatedSince(updatedAt, max);
     Util.stepLabel("Items found: " + levels.length + ", run time: " + runTime);
+    Mesa.storage.set('page_cursor', pageInfo.endCursor);
 
     Mesa.output.next({
       "levels": levels,

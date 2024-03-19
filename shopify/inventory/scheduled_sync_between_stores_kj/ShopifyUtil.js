@@ -22,6 +22,10 @@ const ShopifyUtil = {
               }
             }
           }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
         }
       }        
     `;
@@ -31,7 +35,10 @@ const ShopifyUtil = {
       max:    max,
     });
 
-    return response.data.productVariants.nodes;
+    return [
+      response.data.productVariants.nodes,
+      response.data.productVariants.pageInfo
+    ];
   },
 }
 
