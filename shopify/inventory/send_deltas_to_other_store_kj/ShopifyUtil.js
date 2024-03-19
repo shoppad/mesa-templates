@@ -2,13 +2,17 @@ const ShopifyGraphql = require('vendor/ShopifyGraphql.js');
 
 const ShopifyUtil = { 
 
-  inventoryLevelsUpdatedSince: (updatedAt, max) => { 
+  inventoryLevelsUpdatedSince: (updatedAt, max, cursor) => { 
     const query = `#graphql
-      query inventoryItemsSince($query:String!, $max:Int!) {
-        productVariants(first: $max, query:$query) {
+      query inventoryItemsSince($query:String!, $max:Int!, $cursor:String) {
+        productVariants(first: $max, query:$query, after:$cursor) {
           nodes {
+            id
             sku
             updatedAt
+            product {
+              id
+            }
             inventoryItem {
               inventoryLevels(first:10) {
                 nodes {
@@ -31,8 +35,9 @@ const ShopifyUtil = {
     `;
 
     const response = ShopifyGraphql.send(query, {
-      query:  `updated_at:>'${updatedAt}'`,
+      query:  `-sku:'' AND updated_at:>'${updatedAt}'`,
       max:    max,
+      cursor: cursor,
     });
 
     return [

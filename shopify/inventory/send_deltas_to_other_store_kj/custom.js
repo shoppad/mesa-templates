@@ -14,12 +14,22 @@ module.exports = new class {
     let updatedAt = '2024-02-16T22:42:18Z';
     let runTime = this.getRunTime();
 
-    let [levels, pageInfo] = ShopifyUtil.inventoryLevelsUpdatedSince(updatedAt, max);
-    Util.stepLabel("Items found: " + levels.length + ", run time: " + runTime);
+    let cursor = Mesa.storage.get('page_cursor') ? Mesa.storage.get('page_cursor') : null;
+
+    let [levels, pageInfo] = ShopifyUtil.inventoryLevelsUpdatedSince(updatedAt, max, cursor);
     Mesa.storage.set('page_cursor', pageInfo.endCursor);
+
+    let firstSku = levels.length > 0 ? levels[0].sku : '(none)';
+    Util.stepLabel(`
+      Items found: ${levels.length}, first sku: ${firstSku}, 
+      previous cursor: ${cursor ? cursor.slice(-8) : '(none)'}, 
+      new cursor: ${pageInfo.endCursor ? pageInfo.endCursor.slice(-8) : '(none)'}, 
+      has next page: ${pageInfo.hasNextPage}
+    `);
 
     Mesa.output.next({
       "levels": levels,
+      "pageInfo": pageInfo,
       "run_time": runTime,
     });
   } 
@@ -46,6 +56,7 @@ FROM "inventory_levels"
 
 SELECT mesa_id, run_time, sku, location_name, available, delta, status
 FROM "inventory_levels" 
+ORDER BY mesa_id ASC
 
 DELETE
 FROM inventory_levels
