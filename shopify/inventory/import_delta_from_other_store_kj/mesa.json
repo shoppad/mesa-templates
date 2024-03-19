@@ -5,7 +5,7 @@
   "description": "",
   "seconds": 135,
   "enabled": false,
-  "setup": false,
+  "setup": true,
   "config": {
     "inputs": [
       {
@@ -36,7 +36,9 @@
           "product_sku": "{{webhook.sku}}"
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "product_sku"
+        ],
         "on_error": "ignore",
         "weight": 0
       },
@@ -105,7 +107,12 @@
           }
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "body",
+          "body.location_id",
+          "body.inventory_item_id",
+          "body.available_adjustment"
+        ],
         "on_error": "default",
         "weight": 3
       },
@@ -126,49 +133,69 @@
               "key": "available",
               "type": "numeric",
               "value": "{{shopify_2.available}}",
-              "disabled": "65f88df955f638c5080a8072"
+              "disabled": "65f9bbd70d879bae4d0a06ec"
             },
             {
               "key": "level_updated_at",
               "type": "timestamptz",
               "value": null,
-              "disabled": "65f88df955f638c5080a8072"
+              "disabled": "65f9bbd70d879bae4d0a06ec"
             },
             {
               "key": "delta",
               "type": "numeric",
               "value": "{{webhook.delta}}",
-              "disabled": "65f88df955f638c5080a8072"
+              "disabled": "65f9bbd70d879bae4d0a06ec"
             },
             {
               "key": "sku",
               "type": "varchar",
               "value": "{{webhook.sku}}",
-              "disabled": "65f88df955f638c5080a8072"
+              "disabled": "65f9bbd70d879bae4d0a06ec"
             },
             {
               "key": "status",
               "type": "varchar",
               "value": "Applied From Store A",
-              "disabled": "65f88df955f638c5080a8072"
+              "disabled": "65f9bbd70d879bae4d0a06ec"
             },
             {
               "key": "run_time",
               "type": "varchar",
               "value": "{{webhook.run_time}}",
-              "disabled": "65f88df955f638c5080a8072"
+              "disabled": "65f9bbd70d879bae4d0a06ec"
             },
             {
               "key": "location_name",
               "type": "varchar",
               "value": "{{webhook.location}}",
-              "disabled": "65f88df955f638c5080a8072"
+              "disabled": "65f9bbd70d879bae4d0a06ec"
+            },
+            {
+              "key": "product_id",
+              "type": "varchar",
+              "value": null,
+              "disabled": "65f9bbd70d879bae4d0a06ec"
+            },
+            {
+              "key": "variant_id",
+              "type": "varchar",
+              "value": null,
+              "disabled": "65f9bbd70d879bae4d0a06ec"
             }
           ],
           "table": "inventory_levels"
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "create",
+          "table",
+          "columns",
+          "columns[].key",
+          "columns[].type",
+          "columns[].value",
+          "columns[].disabled"
+        ],
         "on_error": "default",
         "weight": 4
       }
