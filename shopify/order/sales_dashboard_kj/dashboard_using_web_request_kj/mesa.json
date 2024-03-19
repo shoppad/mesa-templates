@@ -1,0 +1,73 @@
+{
+  "key": "shopify/order/sales_dashboard_kj_dashboard_using_web_request_kj",
+  "name": "Best Sellers Dashboard - Frontend",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "webhook",
+        "name": "Webhook Received",
+        "key": "webhook",
+        "metadata": [],
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "query",
+        "name": "Query",
+        "key": "data",
+        "operation_id": "get_database_table",
+        "metadata": {
+          "api_endpoint": "get /{database}/{table}",
+          "query": "SELECT sum(quantity) as quantity, sum(price) as revenue, string_agg(distinct product_title, ',') as title, string_agg(distinct image, ',') as image\nFROM \"order_line_items\" \nwhere image != ''\nGROUP BY product_id\nORDER BY sum(price) desc\n",
+          "table": "order_line_items",
+          "where_clause": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "query"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "editor",
+        "name": "Transform Editor",
+        "key": "transform",
+        "operation_id": "editor",
+        "metadata": {
+          "text": "<html>\n    <head>\n        <style type=\"text/css\">\n            td {\n              padding: 10px;\n              font-size: 20px;\n              vertical-align: middle;\n            }\n\n            .card {\n              margin-bottom: 20px;\n            }\n\n            .title {\n              font-size: 120%;\n            }\n\n            .image-wrapper {\n              position: relative;\n              height: 257px;\n            }\n\n            .image-wrapper img {\n              width: 250px;\n              max-height: 250px;\n            }\n\n\n            .image-wrapper .number {\n              position: absolute;\n              left: 20px;\n              top: 20px;\n              font-size: 40px;\n\n              -webkit-text-stroke: white;\n              -webkit-text-stroke-width: thin;\n              font-family: arial;\n              font-weight: bold;\n            }\n            \n            .revenue {\n              color: green;\n            }\n      </style>\n    </head>\n    <body>\n      <table width=\"100%\">\n        <tr>\n          {% for product in data %}\n            <td>\n              <div class=\"card\">\n                <div class=\"image-wrapper\">\n                  <img src=\"{{ product.image }}\">\n                  <span class=\"number\">{{ forloop.index }}</span>  \n                </div>\n\n                <div class=\"title\">{{ product.title }}</div>\n                <div class=\"revenue\">\n                  ${{ product.revenue | round: 0 | number_with_delimiter: delimiter: \",\" }} In Revenue\n                </div>\n                <div class=\"quantity\">\n                  {{ product.quantity }} Units Sold\n                </div>\n                <!-- <div class=\"change\">10%</div> -->\n              </div>\n            </td>\n\n            {% assign modulo_5 = forloop.index | modulo: 5 %}\n            {% if modulo_5 == 0 %}\n              </tr><tr>\n            {% endif %}\n\n          {% endfor %}  \n        </tr>\n      </table>\n    </body>\n</html>"
+        },
+        "local_fields": [
+          {
+            "key": "text",
+            "type": "editor",
+            "location": "required"
+          }
+        ],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "shopify/order/sales_dashboard_kj",
+  "name": "Create A Sales Dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "shopify",
+  "templates": [
+    "save_line_items_to_data_kj",
+    "dashboard_using_web_request_kj"
+  ]
+}

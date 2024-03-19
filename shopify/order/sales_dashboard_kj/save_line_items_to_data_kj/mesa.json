@@ -1,0 +1,159 @@
+{
+  "key": "shopify/order/sales_dashboard_kj/save_line_items_to_data_kj",
+  "name": "Best Sellers Dashboard - Save Line Items",
+  "version": "1.0.0",
+  "description": "",
+  "seconds": 135,
+  "enabled": false,
+  "setup": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Order Created",
+        "key": "shopify",
+        "operation_id": "orders_create",
+        "metadata": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop",
+        "version": "v2",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{shopify.line_items[]}}",
+          "filter": {
+            "comparison": "equals"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "key",
+          "filter",
+          "filter.a",
+          "filter.comparison",
+          "filter.b"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "product",
+        "action": "retrieve",
+        "name": "Retrieve Product",
+        "key": "shopify_1",
+        "operation_id": "get_products_product_id",
+        "metadata": {
+          "api_endpoint": "get admin/products/{{product_id}}.json",
+          "product_id": "{{loop.product_id}}"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Record",
+        "key": "data",
+        "operation_id": "post_database_table_upsert",
+        "metadata": {
+          "api_endpoint": "post /{database}/{table}/upsert",
+          "create": "existing",
+          "columns": [
+            {
+              "key": "id",
+              "type": "numeric",
+              "value": "{{loop.id}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            },
+            {
+              "key": "product_id",
+              "type": "numeric",
+              "value": "{{loop.product_id}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            },
+            {
+              "key": "sku",
+              "type": "varchar",
+              "value": "{{loop.sku}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            },
+            {
+              "key": "product_title",
+              "type": "varchar",
+              "value": "{{loop.title}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            },
+            {
+              "key": "ordered_at",
+              "type": "timestamptz",
+              "value": "{{shopify.created_at}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            },
+            {
+              "key": "quantity",
+              "type": "numeric",
+              "value": "{{loop.quantity}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            },
+            {
+              "key": "image",
+              "type": "varchar",
+              "value": "{{shopify_1.images[0].src}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            },
+            {
+              "key": "price",
+              "type": "numeric",
+              "value": "{{loop.price}}",
+              "disabled": "655dffe9c12f5b16bf58c873"
+            }
+          ],
+          "table": "order_line_items",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{loop.id}}",
+            "a": "id"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "create",
+          "table",
+          "where_clause",
+          "where_clause.a",
+          "where_clause.comparison",
+          "where_clause.b",
+          "columns",
+          "columns[].key",
+          "columns[].type",
+          "columns[].value",
+          "columns[].disabled"
+        ],
+        "on_error": "default",
+        "weight": 2
+      }
+    ]
+  }
+}
