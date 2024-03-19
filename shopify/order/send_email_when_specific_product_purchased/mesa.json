@@ -35,7 +35,7 @@
                     "filter": {
                         "a": "{{shopify.line_items[].name}}",
                         "comparison": "contains",
-                        "b": "{{ template | label: 'Which specific product would you like to verify is in the order?', description: 'Enter the product name exactly as it appears on your Shopify store.', tokens: false }}"
+                        "b": "{{ template | label: 'Which specific product would you like to verify is in the order?', description: 'Enter the product name exactly as it appears on your Shopify store.', tokens: false, placeholder: 'Enter the product title' }}"
                     }
                 },
                 "local_fields": [],
