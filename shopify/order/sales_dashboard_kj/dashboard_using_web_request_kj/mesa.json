@@ -39,20 +39,6 @@
         ],
         "on_error": "default",
         "weight": 0
-      },
-      {
-        "schema": 2,
-        "trigger_type": "input",
-        "type": "webhook",
-        "name": "Webhook Received",
-        "key": "webhook",
-        "metadata": [],
-        "local_fields": [],
-        "selected_fields": [
-          "host"
-        ],
-        "on_error": "default",
-        "weight": 1
       }
     ],
     "outputs": [
@@ -67,7 +53,7 @@
         "operation_id": "get_database_table",
         "metadata": {
           "api_endpoint": "get /{database}/{table}",
-          "query": "SELECT sum(quantity) as quantity, sum(price) as revenue, string_agg(distinct product_title, ',') as title, string_agg(distinct image, ',') as image\nFROM \"order_line_items\" \nwhere image != ''\nGROUP BY product_id\nORDER BY sum(price) desc\n",
+          "query": "SELECT sum(quantity) as quantity, sum(price) as revenue, \nstring_agg(distinct product_title, ',') as title, \nstring_agg(distinct image, ',') as image\nFROM \"order_line_items\" \nWHERE image != ''GROUP BY product_id\nORDER BY sum(price) desc",
           "table": "order_line_items",
           "where_clause": {
             "comparison": "equals"
