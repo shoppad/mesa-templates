@@ -35,7 +35,7 @@
                     "filter": {
                         "a": "{{shopify.line_items[].name}}",
                         "comparison": "contains",
-                        "b": "{{ template | label: 'Which product must the customer purchase to be eligible for the free item?', description: 'Enter the product name exactly as it appears on your Shopify store.', tokens: false, placeholder: '' }}"
+                        "b": "{{ template | label: 'Which product must the customer purchase to be eligible for the free item?', description: 'Enter the product name exactly as it appears on your Shopify store.', tokens: false, placeholder: 'Enter the product title' }}"
                     }
                 },
                 "local_fields": [],
