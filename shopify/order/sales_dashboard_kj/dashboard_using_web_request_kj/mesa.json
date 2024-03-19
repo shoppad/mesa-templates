@@ -9,6 +9,38 @@
   "config": {
     "inputs": [
       {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "webrequest",
+        "name": "Request",
+        "key": "webrequest",
+        "metadata": {
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/html"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": "Origin, Content-Type, X-Auth-Token, Accept"
+            }
+          ]
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "host",
+          "headers",
+          "headers[].key",
+          "headers[].value"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
         "schema": 2,
         "trigger_type": "input",
         "type": "webhook",
@@ -16,9 +48,11 @@
         "key": "webhook",
         "metadata": [],
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "host"
+        ],
         "on_error": "default",
-        "weight": 0
+        "weight": 1
       }
     ],
     "outputs": [
