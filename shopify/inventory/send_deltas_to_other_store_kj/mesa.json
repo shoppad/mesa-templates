@@ -67,7 +67,8 @@
         "key": "custom",
         "metadata": {
           "script": "custom.js",
-          "max": 20
+          "max": 20,
+          "description": " "
         },
         "local_fields": [
           {
@@ -173,7 +174,8 @@
         "name": "Calculate Delta",
         "key": "custom_1",
         "metadata": {
-          "script": "custom_1.js"
+          "script": "custom_1.js",
+          "description": " "
         },
         "local_fields": [],
         "selected_fields": [
@@ -305,7 +307,8 @@
         "name": "Send Delta To Store B",
         "key": "custom_3",
         "metadata": {
-          "script": "custom_3.js"
+          "script": "custom_3.js",
+          "description": " "
         },
         "local_fields": [],
         "selected_fields": [
@@ -410,7 +413,9 @@
         "type": "custom",
         "name": "Else",
         "key": "custom_2",
-        "metadata": [],
+        "metadata": {
+          "description": " "
+        },
         "local_fields": [],
         "selected_fields": [],
         "on_error": "default",
@@ -503,12 +508,6 @@
         ],
         "on_error": "default",
         "weight": 13
-      }
-    ],
-    "storage": [
-      {
-        "key": "page_cursor",
-        "value": ""
       }
     ]
   }
