@@ -38,8 +38,8 @@
                 "metadata": {
                     "api_endpoint": "get /{base}/{table}",
                     "path": {
-                        "base": "appOPGLNn2a53I7Vu",
-                        "table": "tblJzwhcC7fC6RZh6"
+                        "base": "{{ template | label: 'Pick your Airtable base' }}",
+                        "table": "{{ template | label: 'Pick a table from your Airtable base' }}"
                     }
                 },
                 "local_fields": [],
