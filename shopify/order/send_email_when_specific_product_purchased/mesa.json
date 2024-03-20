@@ -70,7 +70,7 @@
                     "body": {
                         "to": "{{shopify.email}}",
                         "subject": "Product found in order {{shopify.name}}",
-                        "message": "{{ template | label: 'What content would you like the email message to include?', description: 'You can add variables to your email message if you'd like the content of the email to be dynamic.' }}"
+                        "message": "{{ template | label: 'What content would you like the email message to include?', description: 'MESA will send this email to the email address of the customer who placed the order. Use variables if you''d like to make specific details dynamic.' }}"
                     }
                 },
                 "local_fields": [],
