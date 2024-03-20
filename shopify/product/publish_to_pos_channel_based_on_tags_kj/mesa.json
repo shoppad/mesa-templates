@@ -1,0 +1,147 @@
+{
+    "key": "shopify/product/publish_to_pos_channel_based_on_tags_kj",
+    "name": "Publish Or Unpublish To POS Channel From Product Tags Changed Webhook",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "webhook",
+                "name": "Webhook Received",
+                "key": "webhook",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [
+                    "host"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Publications",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get POS Publication ID",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Is Product Published To POS?",
+                "key": "custom_2",
+                "metadata": {
+                    "script": "custom_2.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "If Publish To POS Is In Tags",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{webhook.tags}}",
+                    "comparison": "contains",
+                    "b": "Publish To POS",
+                    "script": "filter.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Publish to POS",
+                "key": "custom_3",
+                "metadata": {
+                    "script": "custom_3.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Else",
+                "key": "custom_4",
+                "metadata": {
+                    "script": "custom_4.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Unpublish From POS",
+                "key": "custom_5",
+                "metadata": {
+                    "script": "custom_5.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
