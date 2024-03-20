@@ -1,0 +1,82 @@
+{
+    "key": "shopify/order/send_email_when_specific_product_purchased",
+    "name": "Send an email when a specific product is purchased",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "count",
+                "name": "Number of matches",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_count",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "a": "{{shopify.line_items[].name}}",
+                        "comparison": "contains",
+                        "b": "{{ template | label: 'Which specific product would you like to verify is in the order?', description: 'Enter the product name exactly as it appears on your Shopify store.', tokens: false, placeholder: 'Enter the product title' }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.count}}",
+                    "comparison": "greater than equal",
+                    "b": "1"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "/send-email",
+                "metadata": {
+                    "api_endpoint": "post /send-email",
+                    "body": {
+                        "to": "{{shopify.email}}",
+                        "subject": "Product found in order {{shopify.name}}",
+                        "message": "{{ template | label: 'What content would you like the email message to include?', description: 'MESA will send this email to the email address of the customer who placed the order. Use variables if you''d like to make specific details dynamic.' }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
