@@ -1,9 +1,9 @@
 {
   "key": "shopify/product/sync_to_airtable_kj",
-  "name": "Sync Products To Airtable",
+  "name": "Sync Shopify products to Airtable",
   "version": "1.0.0",
-  "description": "",
-  "seconds": 135,
+  "description": "Syncing your Shopify products with Airtable provides various benefits such as flexible inventory management and customized reporting. With the use of this template, you can ensure that the details of each order are always reflected in Airtable whenever an order is placed or updated. This will save you time, as you won't have to copy and paste data from one platform to another manually.",
+  "seconds": 300,
   "enabled": false,
   "setup": true,
   "config": {
