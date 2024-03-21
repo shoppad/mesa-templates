@@ -1,0 +1,124 @@
+{
+    "key": "shopify/product/tag_and_untag_bestsellers/save_data",
+    "name": "Tag Best Sellers - Save Data",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "id",
+                            "type": "numeric",
+                            "value": "{{loop.id}}",
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        },
+                        {
+                            "key": "product_id",
+                            "type": "numeric",
+                            "value": "{{loop.product_id}}",
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "{{loop.sku}}",
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        },
+                        {
+                            "key": "product_title",
+                            "type": "varchar",
+                            "value": null,
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        },
+                        {
+                            "key": "ordered_at",
+                            "type": "timestamptz",
+                            "value": "{{shopify.created_at}}",
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        },
+                        {
+                            "key": "quantity",
+                            "type": "numeric",
+                            "value": "{{loop.quantity}}",
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        },
+                        {
+                            "key": "image",
+                            "type": "varchar",
+                            "value": null,
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        },
+                        {
+                            "key": "price",
+                            "type": "numeric",
+                            "value": "{{loop.price}}",
+                            "disabled": "65fc2e1139ad1e5c220f29ef"
+                        }
+                    ],
+                    "table": "order_line_items",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop.id}}",
+                        "a": "id"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}

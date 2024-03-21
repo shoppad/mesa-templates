@@ -1,0 +1,67 @@
+{
+    "key": "shopify/product/tag_and_untag_bestsellers/do_tagging",
+    "name": "Tag Best Sellers - Do The Tagging",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2024-03-21T09:00:00-05:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get /{database}/{table}",
+                    "query": "SELECT    sum(quantity) as quantity,    sum(price) as revenue,    max(product_id) as product_id,   max(ordered_at) as ordered_at,   string_agg(distinct product_title, ',') as title FROM \"order_line_items\"  WHERE ordered_at BETWEEN CURRENT_DATE - INTERVAL '6 months' AND CURRENT_DATE GROUP BY product_id ORDER BY sum(quantity) desc",
+                    "table": "order_line_items",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "logs",
+                "name": "Log Data",
+                "key": "logs",
+                "metadata": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
