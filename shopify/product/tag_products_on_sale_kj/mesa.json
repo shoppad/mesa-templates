@@ -1,0 +1,129 @@
+{
+    "key": "shopify/product/tag_products_on_sale_kj",
+    "name": "Add sale tag if variant compare at price is different",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "key": "shopify",
+                "operation_id": "products_update",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "list",
+                "name": "Get List of Product Variants",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id_variants",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}/variants.json",
+                    "product_id": "{{shopify.id}}",
+                    "query": {
+                        "mesa_option": "everything"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v1",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{ shopify_1 }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "comparison": "is not empty",
+                    "a": "{{ loop.compare_at_price }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{ loop.price | minus: loop.compare_at_price | abs }}",
+                            "comparison": "greater than",
+                            "b": "1"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_add",
+                "name": "Product Add Tag",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "Sale"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.tag"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
