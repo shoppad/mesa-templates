@@ -93,7 +93,9 @@
                 "type": "logs",
                 "name": "Log Data",
                 "key": "logs",
-                "metadata": [],
+                "metadata": {
+                    "message": "{{ template | label: 'Write an activity log message' }}"
+                },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
