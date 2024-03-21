@@ -21,12 +21,48 @@
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "period",
+                            "source": "6 MONTHS"
+                        },
+                        {
+                            "destination": "limit",
+                            "source": "{{ template | label: 'Pick the max number of best sellers' }}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 4,
                 "trigger_type": "output",
@@ -38,7 +74,7 @@
                 "operation_id": "get_database_table",
                 "metadata": {
                     "api_endpoint": "get /{database}/{table}",
-                    "query": "SELECT    sum(quantity) as quantity,    sum(price) as revenue,    max(product_id) as product_id,   max(ordered_at) as ordered_at,   string_agg(distinct product_title, ',') as title FROM \"order_line_items\"  WHERE ordered_at BETWEEN CURRENT_DATE - INTERVAL '{{ template | label: 'Pick your Airtable base' }}' AND CURRENT_DATE GROUP BY product_id ORDER BY sum(quantity) desc",
+                    "query": "SELECT    \n  sum(quantity) as quantity,    \n  sum(price) as revenue,    \n  max(product_id) as product_id,   \n  max(ordered_at) as ordered_at,   \n  string_agg(distinct product_title, ',') as title \nFROM \"order_line_items\" \nWHERE ordered_at BETWEEN CURRENT_DATE - INTERVAL '{{transform.period}}' AND CURRENT_DATE \nGROUP BY product_id \nORDER BY sum(quantity) desc\nLIMIT {{transform.limit}}",
                     "table": "order_line_items",
                     "where_clause": {
                         "comparison": "equals"
@@ -49,7 +85,7 @@
                     "query"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -58,9 +94,10 @@
                 "name": "Log Data",
                 "key": "logs",
                 "metadata": [],
+                "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
         ]
     }
