@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/tag_products_on_sale_kj",
-    "name": "Add sale tag if variant compare at price is different",
+    "name": "Tag product as on sale by looking at Compare At price",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -36,10 +36,7 @@
                 "operation_id": "get_products_product_id_variants",
                 "metadata": {
                     "api_endpoint": "get admin/products/{{product_id}}/variants.json",
-                    "product_id": "{{shopify.id}}",
-                    "query": {
-                        "mesa_option": "everything"
-                    }
+                    "product_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -54,7 +51,7 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop",
+                "name": "Loop Over Variants",
                 "version": "v1",
                 "key": "loop",
                 "operation_id": "loop_loop",
@@ -80,9 +77,9 @@
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{ loop.price | minus: loop.compare_at_price | abs }}",
-                            "comparison": "greater than",
-                            "b": "1"
+                            "a": "{{ loop.price }}",
+                            "comparison": "less than",
+                            "b": "{{ loop.compare_at_price }}"
                         }
                     ]
                 },
@@ -112,7 +109,7 @@
                     "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
                     "product_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "Sale"
+                        "tag": "On Sale"
                     }
                 },
                 "local_fields": [],
