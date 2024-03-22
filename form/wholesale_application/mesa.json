@@ -1,24 +1,67 @@
 {
-    "key": "wholesale_application",
-    "name": "Send Wholesale Applications to Google Sheets",
+    "key": "form/wholesale_application",
+    "name": "Send wholesale applications to Google Sheets",
     "version": "1.0.0",
-    "description": "Create wholesale application forms to expand your network and seamlessly send them to Google Sheets. Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Never miss another form submission again.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for each response from the wholesale application form via Forms by MESA. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Business Name",
+                        "value": "Business Name|{{form.business_name}}",
+                        "description": "The name of the business."
+                    },
+                    {
+                        "label": "Business Contact Name",
+                        "value": "Business Contact Name|{{form.business_contact_name}}",
+                        "description": "The name of the contact at the business."
+                    },
+                    {
+                        "label": "Business Contact Phone",
+                        "value": "Business Contact Phone|{{form.business_contact_phone}}",
+                        "description": "The phone number of the contact at the business."
+                    },
+                    {
+                        "label": "Business Contact Email",
+                        "value": "Business Contact Email|{{form.business_contact_email}}",
+                        "description": "The email address of the contact at the business."
+                    },
+                    {
+                        "label": "Business Website URL",
+                        "value": "Business Website URL|{{form.business_website_url}}",
+                        "description": "The website URL of the business."
+                    },
+                    {
+                        "label": "Additional Details",
+                        "value": "Additional Details|{{form.additional_details}}",
+                        "description": "The additional details provided by the business."
+                    }  
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "form",
-                "name": "Form",
+                "name": "Form Submitted",
                 "key": "form",
                 "metadata": {
                     "form_data": [
@@ -76,9 +119,12 @@
                             "subtype": "textarea",
                             "rows": 5
                         }
-                    ]
+                    ],
+                    "embed_code": "{{ template | label: 'Add the Form Embed Code', description: 'Let''s add the form to your Order Status page. You can choose a different page if you prefer. Click the copy button next to the Form Embed Code field, then go to your Shopify admin in a separate tab. In Settings > Checkout, scroll to the Order status page scripts and paste the code. [Learn more.](https://template-docs.getmesa.com/article/1424-send-wholesale-applications-to-google-sheets)' }}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -87,76 +133,26 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v1",
                 "entity": "row",
                 "action": "create",
-                "name": "Row Create",
-                "key": "googlesheets_row",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
                 "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
                     "path": {
                         "mode": "create",
-                        "spreadsheet_id": "",
-                        "sheet_name": "Sheet1",
                         "header_row": "first_row"
                     },
                     "body": {
-                        "fields": {
-                            "Business Name": "{{form.business_name}}",
-                            "Business Contact Name": "{{form.business_contact_name}}",
-                            "Business Contact Phone": "{{form.business_contact_phone}}",
-                            "Business Contact Email": "{{form.business_contact_email}}",
-                            "Business Website URL": "{{form.business_website_url}}",
-                            "Additional Details": "{{form.additional_details}}"
-                        }
+                        "fields": {}
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "fields",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "Business Name",
-                                        "label": "Business Name",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Contact Name",
-                                        "label": "Business Contact Name",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Contact Phone",
-                                        "label": "Business Contact Phone",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Contact Email",
-                                        "label": "Business Contact Email",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Business Website URL",
-                                        "label": "Business Website URL",
-                                        "type": "text"
-                                    },
-                                    {
-                                        "key": "Additional Details",
-                                        "label": "Additional Details",
-                                        "type": "text"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
