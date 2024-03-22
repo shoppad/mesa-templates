@@ -1,23 +1,16 @@
 {
-    "key": "form_customer_dob",
+    "key": "form/customer_dob",
     "name": "Save a customer's birthday to notes",
     "version": "1.0.0",
-    "description": "Create a form hosted within a Shopify customer's profile page that saves their date of birth to the Customer Notes field.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "form",
-    "destination": "shopify",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "form",
-                "name": "Form",
+                "name": "Form Submitted",
                 "key": "form",
                 "metadata": {
                     "form_data": [
@@ -29,7 +22,7 @@
                         {
                             "type": "paragraph",
                             "subtype": "p",
-                            "label": "Enter your birthday to receive a special gift :)<div><br></div>"
+                            "label": "Enter your birthday to receive a special gift :)<div><br><\/div>"
                         },
                         {
                             "type": "date",
@@ -43,9 +36,12 @@
                             "name": "customer-id",
                             "value": "{{customer.id}}"
                         }
-                    ]
+                    ],
+                    "embed_code": "{{ template | label: 'Add the Form Embed Code', description: 'Click the copy button next to the Form Embed Code field. In a separate tab, navigate to your Shopify admin. Click Online Store, select your current theme, then click Edit Code in the Actions drop-down menu. Under Templates, click the customers/account.liquid file and paste your copied form code after the </table> code. [Learn more.](https://template-docs.getmesa.com/article/1371-save-customers-birthday-to-notes)' }}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -58,16 +54,19 @@
                 "action": "update",
                 "name": "Update Customer",
                 "key": "shopify_customer",
+                "operation_id": "put_customers_customer_id",
                 "metadata": {
+                    "api_endpoint": "put admin/customers/{{customer_id}}.json",
                     "customer_id": "{{form.customer-id}}",
                     "body": {
                         "note": "{{form.dob}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
