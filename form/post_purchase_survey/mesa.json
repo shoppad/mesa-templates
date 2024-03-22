@@ -1,50 +1,33 @@
 {
-    "key": "post_purchase_survey",
-    "name": "Add a Post-Purchase Survey Form and Send Results to Google Sheets",
+    "key": "form/post_purchase_survey",
+    "name": "Add a post-purchase survey form and send results to Google Sheets",
     "version": "1.0.0",
-    "description": "Gain customer insights that will optimize your store's shopping experience and increase conversion rates. Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Customize your survey questions using Forms by Mesa and it's easy to use builder.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
-    "enabled": false,
-    "logging": false,
-    "debug": false,
+    "enabled": true,
     "setup": {
         "mode": "custom",
         "fields": [
             {
-                "key": "embed_code",
-                "label": "Form Embed Code",
-                "type": "text",
-                "disabled": true,
-                "export": false,
-                "copy": true,
-                "target": "form.embed_code",
-                "description": "Place this embed code..."
-            },
-            {
                 "key": "create_spreadsheet_name",
-                "target": "googlesheets_row.path.create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
                 "label": "What do you want to name your spreadsheet?",
                 "tokens": false,
                 "description": "Give your new Google Spreadsheet a name."
             },
             {
                 "key": "fields",
-                "target": "googlesheets_row.setup_fields",
-                "label": "Should we include all form fields in the spreadsheet?",
-                "description": "This template will automatically create a new row for every form submission. De-select any columns you do not want to include in your spreadsheet.",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for each response from the post-purchase survey via Forms by MESA. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
                     {
                         "label": "How did you hear about us?",
-                        "value": "How did you hear about us?|{{form.how-did-you-hear-about-us}}"
+                        "value": "How did you hear about us?|{{form.how-did-you-hear-about-us}}",
+                        "description": "The referral from the customer."
                     },
                     {
                         "label": "Other Feedback",
-                        "value": "Other Feedback|{{form.other-feedback}}"
+                        "value": "Other Feedback|{{form.other-feedback}}",
+                        "description": "The customer's feedback."
                     }
                 ],
                 "check_all": true,
@@ -58,7 +41,7 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "form",
-                "name": "Form",
+                "name": "Form Submitted",
                 "key": "form",
                 "metadata": {
                     "form_data": [
@@ -70,7 +53,7 @@
                         {
                             "type": "radio-group",
                             "required": false,
-                            "label": "<p data-pm-slice=\"1 1 [\" list\",{},\"list_item\",{\"indent\":1,\"type\":\"bulleted\"}]\"=\"\">How did you hear about us?</p>",
+                            "label": "<p data-pm-slice=\"1 1 [\" list\",{},\"list_item\",{\"indent\":1,\"type\":\"bulleted\"}]\"=\"\">How did you hear about us?<\/p>",
                             "inline": false,
                             "name": "how-did-you-hear-about-us",
                             "other": true,
@@ -106,9 +89,12 @@
                             "subtype": "textarea"
                         }
                     ],
-                    "captcha": "hCaptcha-checkbox"
+                    "captcha": "hCaptcha-checkbox",
+                    "embed_code": "{{ template | label: 'Add the Form Embed Code', description: 'Click the copy button next to the Form Embed Code field, then go to your Shopify admin in a separate tab. In Settings > Checkout, scroll to the Order status page scripts and paste the code. [Learn more.](https://template-docs.getmesa.com/article/1444-add-post-purchase-survey-form-and-send-results-to-google-sheets)' }}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -117,12 +103,14 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v2",
                 "entity": "row",
-                "action": "create",
+                "action": "Add Row",
+                "version": "v2",
                 "name": "Row Create",
-                "key": "googlesheets_row",
+                "key": "googlesheets",
+                "operation_id": "record_create",
                 "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
                     "path": {
                         "mode": "create",
                         "spreadsheet_id": "",
@@ -130,11 +118,13 @@
                         "header_row": "first_row"
                     },
                     "body": {
+                        "fields": {}
                     }
                 },
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
