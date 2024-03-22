@@ -1,0 +1,7 @@
+[
+  {
+    "key": "logs",
+    "field": "metadata.message",
+    "value": "{{ template | label: 'Write an activity log message' }}"
+  }
+]
