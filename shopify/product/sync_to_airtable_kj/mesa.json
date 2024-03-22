@@ -31,7 +31,7 @@
                 "type": "airtable",
                 "entity": "record",
                 "action": "list",
-                "name": "List Record",
+                "name": "Get Products",
                 "version": "v2",
                 "key": "airtable",
                 "operation_id": "list",
@@ -39,7 +39,7 @@
                     "api_endpoint": "get /{base}/{table}",
                     "path": {
                         "base": "{{ template | label: 'Pick your Airtable base' }}",
-                        "table": "{{ template | label: 'Pick a table from your Airtable base' }}"
+                        "table": "{{ template | label: 'Pick the Products table from your Airtable base' }}"
                     }
                 },
                 "local_fields": [],
@@ -50,6 +50,28 @@
                 ],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "airtable",
+                "entity": "record",
+                "action": "list",
+                "name": "Get Variants",
+                "version": "v2",
+                "key": "airtable_1",
+                "operation_id": "list",
+                "metadata": {
+                    "api_endpoint": "get /{base}/{table}",
+                    "path": {
+                        "base": "{{ template | label: 'Pick your Airtable base (again).' }}",
+                        "table": "{{ template | label: 'Pick the Variants table from your Airtable base' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
             },
             {
                 "schema": 2,
@@ -85,7 +107,7 @@
                 ],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 2,
@@ -101,8 +123,17 @@
                 },
                 "local_fields": [
                     {
+                        "key": "table_name",
+                        "label": "Table Name",
+                        "type": "string",
+                        "tokens": false,
+                        "required": true,
+                        "default": "Products",
+                        "location": "required"
+                    },
+                    {
                         "key": "field_name",
-                        "label": "Name of ID Field",
+                        "label": "ID Field",
                         "type": "string",
                         "tokens": false,
                         "required": true,
@@ -122,7 +153,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 3,
@@ -142,7 +173,7 @@
                     "product_id"
                 ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 5,
@@ -164,7 +195,7 @@
                     "key"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             },
             {
                 "schema": 3,
@@ -212,7 +243,7 @@
                 ],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             },
             {
                 "schema": 2,
@@ -249,7 +280,7 @@
                     "description"
                 ],
                 "on_error": "default",
-                "weight": 6
+                "weight": 7
             }
         ]
     }

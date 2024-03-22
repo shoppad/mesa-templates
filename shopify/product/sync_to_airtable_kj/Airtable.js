@@ -1,5 +1,16 @@
 const Airtable = {
 
+  credentialKey: (context) => {
+    Mesa.log.info("metadata", output.metadata); 
+    for (let output of context.automation.outputs) {
+      if (output.type == 'airtable') {
+        return output.metadata.path.base;
+      }
+    }
+    
+    return null;
+  },
+
   baseId: (context) => {
     for (let output of context.automation.outputs) {
       if (output.type == 'airtable') {
@@ -10,21 +21,18 @@ const Airtable = {
     return null;
   },
 
-  upsert: (baseId, table, idField, idValue, fields) => {
+  upsert: (credentialKey, baseId, table, idField, idValue, fields) => {
 
-    Mesa.log.info("in upsert");
     let options = {
       "headers": {
         "Content-Type": "application\/json",
-        "Authorization": "Bearer " + Mesa.credential.get('airtable'),
+        "Authorization": "Bearer " + Mesa.credential.get(credentialKey),
       }
     }
 
     let filterByFormula = `{${idField}} = '${idValue}'`;
     let url = 'https://api.airtable.com/v0/' + baseId + '/' + table + '?filterByFormula=' + encodeURIComponent(filterByFormula);
-
-    let results = Mesa.request.get(url, options);    
-    // Mesa.log.info("airtable upsert get results", results);
+    let results = Mesa.request.get(url, options);
 
     let record = {};
     let data = {};
