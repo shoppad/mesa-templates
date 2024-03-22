@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/tag_and_untag_bestsellers/save_data",
-    "name": "Tag Best Sellers - Save Data",
+    "name": "Tag Best Sellers - #1 Save Data",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -79,7 +79,7 @@
                         {
                             "key": "product_title",
                             "type": "varchar",
-                            "value": null,
+                            "value": "{{loop.title}}",
                             "disabled": "65fc2e1139ad1e5c220f29ef"
                         },
                         {

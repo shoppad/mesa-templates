@@ -1,5 +1,5 @@
 const Mesa = require('vendor/Mesa.js');
-const ShopifyUtil = require('./ShopifyUtil.js');
+
 /**
  * A Mesa Script exports a class with a script() method.
  */
@@ -14,9 +14,10 @@ module.exports = new class {
   script = (payload, context) => {
     const vars = context.steps;
 
-    const {tag, max} = context.trigger.metadata;
-    let products = ShopifyUtil.queryProductsByTag(tag, max);
+    // Add your custom code here
+    // Line items from a Shopify Order Created trigger would be available as something like `vars.shopify.line_items`
 
-    Mesa.output.next(products);
+    // We're done, call the next step!
+    Mesa.output.next(payload);
   }
 }

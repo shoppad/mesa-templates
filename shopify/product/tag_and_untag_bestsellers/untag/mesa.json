@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/tag_and_untag_bestsellers/untag",
-    "name": "Tag Best Sellers - Untag",
+    "name": "Tag Best Sellers - #2 Untag",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -17,7 +17,8 @@
                 "metadata": {
                     "schedule": "@daily:0 0 * * *",
                     "enqueue_type": "schedule",
-                    "next_sync_date_time": "2024-03-23T00:00:00-05:00"
+                    "next_sync_date_time": "2024-03-23T00:00:00-05:00",
+                    "datetime": null
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -34,13 +35,36 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Query Products By Tag",
+                "name": "Get Shopify Products By Tag",
                 "key": "shopify_get_products_by_tag",
                 "metadata": {
-                    "script": "shopify_get_products_by_tag.js"
+                    "script": "shopify_get_products_by_tag.js",
+                    "tag": "Best Seller",
+                    "max": "20"
                 },
-                "local_fields": [],
-                "selected_fields": [],
+                "local_fields": [
+                    {
+                        "key": "tag",
+                        "label": "Tag",
+                        "type": "string",
+                        "tokens": true,
+                        "required": true,
+                        "placeholder": "Pick a value",
+                        "location": "required"
+                    },
+                    {
+                        "key": "max",
+                        "label": "Max Products",
+                        "type": "string",
+                        "tokens": true,
+                        "required": true,
+                        "placeholder": "e.g. 20",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -54,7 +78,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{data}}",
+                    "key": "{{shopify_get_products_by_tag}}",
                     "filter": {
                         "comparison": "equals"
                     }
@@ -75,23 +99,19 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
-                "action": "tag_add",
-                "name": "Product Add Tag",
+                "action": "tag_remove",
+                "name": "Product Remove Tag",
                 "key": "shopify",
-                "operation_id": "post_mesa_products_product_id_tag",
+                "operation_id": "delete_mesa_products_product_id_tag",
                 "metadata": {
-                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
-                    "product_id": "{{loop.product_id}}",
+                    "api_endpoint": "delete mesa/products/{{product_id}}/tag.json",
+                    "product_id": "{{loop.id}}",
                     "body": {
                         "tag": "Best Seller"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "product_id",
-                    "body",
-                    "body.tag"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             }
