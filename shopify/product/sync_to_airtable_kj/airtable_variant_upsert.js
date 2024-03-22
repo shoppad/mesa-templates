@@ -15,10 +15,11 @@ module.exports = new class {
    */
   script = (payload, context) => {
     let vars = context.steps;
-    let variant = vars.loop;
+    const {table_name, field_name, field_value} = context.trigger.metadata;
 
+    let credentialKey = Airtable.credentialKey(context);
     let baseId = Airtable.baseId(context);
-    let record = Airtable.upsert(baseId, 'Variants', "Variant ID", variant.id, payload);
+    let record = Airtable.upsert(credentialKey, baseId, table_name, field_name, field_value, payload);
     Util.stepLabel(`Upserted Variant ${record.fields.Title} (#${record.id})`);
     Mesa.output.next(record);
   }

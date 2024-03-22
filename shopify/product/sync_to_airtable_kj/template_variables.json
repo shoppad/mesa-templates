@@ -2,21 +2,6 @@
   {
     "key": "airtable",
     "field": "metadata.path.base",
-    "value": "{{ template | label: 'Pick your Airtable base' }}"
-  },
-  {
-    "key": "airtable",
-    "field": "metadata.path.table",
-    "value": "{{ template | label: 'Pick the Products table from your Airtable base' }}"
-  },
-  {
-    "key": "airtable_1",
-    "field": "metadata.path.base",
-    "value": "{{ template | label: 'Pick your Airtable base (again)' }}"
-  },
-  {
-    "key": "airtable_1",
-    "field": "metadata.path.table",
-    "value": "{{ template | label: 'Pick the Variants table from your Airtable base' }}"
+    "value": "{{ template | label: 'Pick your Airtable base', description: 'We're assuming you have a Products table and Variants table in there.' }}"
   }
 ]

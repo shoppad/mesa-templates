@@ -1,10 +1,9 @@
 const Airtable = {
 
   credentialKey: (context) => {
-    Mesa.log.info("metadata", output.metadata); 
     for (let output of context.automation.outputs) {
       if (output.type == 'airtable') {
-        return output.metadata.path.base;
+        return output.metadata.token;
       }
     }
     
@@ -23,10 +22,13 @@ const Airtable = {
 
   upsert: (credentialKey, baseId, table, idField, idValue, fields) => {
 
+    let credential = JSON.parse(Mesa.credential.get(credentialKey));
+    let accessToken = credential.access_token;
+
     let options = {
       "headers": {
         "Content-Type": "application\/json",
-        "Authorization": "Bearer " + Mesa.credential.get(credentialKey),
+        "Authorization": "Bearer " + accessToken,
       }
     }
 
