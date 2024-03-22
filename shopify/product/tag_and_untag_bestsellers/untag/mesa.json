@@ -1,0 +1,100 @@
+{
+    "key": "shopify/product/tag_and_untag_bestsellers/untag",
+    "name": "Tag Best Sellers - Untag",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@daily:0 0 * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2024-03-23T00:00:00-05:00"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Query Products By Tag",
+                "key": "shopify_get_products_by_tag",
+                "metadata": {
+                    "script": "shopify_get_products_by_tag.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{data}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_add",
+                "name": "Product Add Tag",
+                "key": "shopify",
+                "operation_id": "post_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
+                    "product_id": "{{loop.product_id}}",
+                    "body": {
+                        "tag": "Best Seller"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.tag"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
