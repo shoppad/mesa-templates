@@ -1,0 +1,126 @@
+{
+    "key": "shopify/product/search_and_discovery_metafields",
+    "name": "Search & Discovery Metafields",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "key": "shopify",
+                "operation_id": "products_update",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
+                "name": "Retrieve Search Boost Metafield",
+                "key": "shopify_1",
+                "operation_id": "get_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "get mesa/products/{{product_id}}/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "shopify--discovery--product_search_boost",
+                        "key": "queries"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.namespace",
+                    "body.key"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
+                "name": "Retrieve Product Metafield",
+                "key": "shopify_3",
+                "operation_id": "get_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "get mesa/products/{{product_id}}/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "subtitle"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Add New Value To List Of Boosts",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Update Search Boost Metafield",
+                "key": "shopify_2",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa/products/{{product_id}}/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "shopify--discovery--product_search_boost",
+                        "key": "queries",
+                        "type": "list",
+                        "listType": "single_line_text_field",
+                        "value": "{{ custom | join: \",\" }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.namespace",
+                    "body.key",
+                    "body.type",
+                    "body.listType",
+                    "body.value"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
