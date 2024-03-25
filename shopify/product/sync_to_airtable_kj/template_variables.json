@@ -2,6 +2,6 @@
   {
     "key": "airtable",
     "field": "metadata.path.base",
-    "value": "{{ template | label: 'Pick your Airtable base', description: 'We're assuming you have a Products table and Variants table in there.' }}"
+    "value": "{{ template | label: 'Pick your Airtable base', description: 'We're assuming you have a Products table and Variants table in there. Here is a <a href=\"https://www.getmesa.com/templates/create-a-best-sellers-dashboard\" target=_blank >template</a> you can use to get started.' }}"
   }
 ]
