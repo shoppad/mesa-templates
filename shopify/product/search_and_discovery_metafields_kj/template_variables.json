@@ -1,0 +1,12 @@
+[
+  {
+    "key": "shopify_3",
+    "field": "metadata.body.namespace",
+    "value": "{{ template | label: 'Pick the namespace for your metafield.' }}"
+  },
+  {
+    "key": "shopify_3",
+    "field": "metadata.body.key",
+    "value": "{{ template | label: 'Pick the key for your metafield.' }}"
+  }
+]

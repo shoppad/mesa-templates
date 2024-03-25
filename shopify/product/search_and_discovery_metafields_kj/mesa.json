@@ -65,8 +65,8 @@
                     "api_endpoint": "get mesa/products/{{product_id}}/metafield.json",
                     "product_id": "{{shopify.id}}",
                     "body": {
-                        "namespace": "custom",
-                        "key": "subtitle"
+                        "namespace": "{{ template | label: 'Pick the namespace for your metafield.' }}",
+                        "key": "{{ template | label: 'Pick the key for your metafield.' }}"
                     }
                 },
                 "local_fields": [],
