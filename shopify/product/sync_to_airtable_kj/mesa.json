@@ -38,7 +38,7 @@
                 "metadata": {
                     "api_endpoint": "get /{base}/{table}",
                     "path": {
-                        "base": "{{ template | label: 'Pick your Airtable base', description: 'We're assuming you have a Products table and Variants table in there. Here is a <a href=\"https://www.getmesa.com/templates/create-a-best-sellers-dashboard\" target=_blank >template</a> you can use to get started.' }}",
+                        "base": "{{ template | label: 'Pick your Airtable base', description: 'We're assuming you have a Products table and Variants table in there. Here is a <a href=\"https://airtable.com/appOPGLNn2a53I7Vu/shr8h1sX5iTlMWdRI/tbllZEf9JLZ8t1l8t/viwa1G966zx7Xz99B?blocks=hide\" target=_blank >template</a> you can use to get started.' }}",
                         "table": "Products"
                     }
                 },
