@@ -31,6 +31,54 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "metafield_get",
+                "name": "Retrieve Product Metafield",
+                "key": "shopify_3",
+                "operation_id": "get_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "get mesa/products/{{product_id}}/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "{{ template | label: 'Pick the namespace for your metafield.' }}",
+                        "key": "{{ template | label: 'Pick the key for your metafield.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.namespace"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "If Value Isn't Empty",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{shopify_3.value}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "b": "0"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
                 "name": "Retrieve Search Boost Metafield",
                 "key": "shopify_1",
                 "operation_id": "get_mesa_products_product_id_metafield",
@@ -50,29 +98,7 @@
                     "body.key"
                 ],
                 "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "metafield_get",
-                "name": "Retrieve Product Metafield",
-                "key": "shopify_3",
-                "operation_id": "get_mesa_products_product_id_metafield",
-                "metadata": {
-                    "api_endpoint": "get mesa/products/{{product_id}}/metafield.json",
-                    "product_id": "{{shopify.id}}",
-                    "body": {
-                        "namespace": "{{ template | label: 'Pick the namespace for your metafield.' }}",
-                        "key": "{{ template | label: 'Pick the key for your metafield.' }}"
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 2,
@@ -84,9 +110,11 @@
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 3,
@@ -119,7 +147,7 @@
                     "body.value"
                 ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }

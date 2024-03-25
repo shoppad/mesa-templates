@@ -14,7 +14,8 @@ module.exports = new class {
   script = (payload, context) => {
     const vars = context.steps;
 
-    let boostValues = JSON.parse(vars.shopify_1.value);
+    let boostValues = JSON.parse(vars.shopify_1.value) ? JSON.parse(vars.shopify_1.value) : [];
+
     let newValue = vars.shopify_3.value;
     boostValues.push(newValue);
 
