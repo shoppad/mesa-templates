@@ -1,0 +1,97 @@
+{
+    "key": "shopify/b2b/update_tax_exemption_on_company_location_from_customer_tag_kj",
+    "name": "Update Tax Exempt Status On Company Location From Customer Tag",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2024-03-26T10:00:00-04:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-plus",
+                "entity": "company",
+                "action": "retrieve",
+                "name": "Retrieve Company",
+                "key": "shopify-plus",
+                "operation_id": "retrieve_company",
+                "metadata": {
+                    "api_endpoint": "get /company/id",
+                    "body": {
+                        "id": "183468080"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-plus",
+                "entity": "company_contact",
+                "action": "retrieve",
+                "name": "Retrieve Company Contact",
+                "key": "shopify-plus_1",
+                "operation_id": "retrieve_company_contact",
+                "metadata": {
+                    "api_endpoint": "get /company_contact/id"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-plus",
+                "entity": "company_location",
+                "action": "update",
+                "name": "Update Company Location",
+                "key": "shopify-plus_2",
+                "operation_id": "update_company_location",
+                "metadata": {
+                    "api_endpoint": "put /company_location"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "logs",
+                "name": "Log Data",
+                "key": "logs",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
