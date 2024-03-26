@@ -9,17 +9,15 @@
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
-                "type": "schedule",
-                "name": "Schedule",
-                "key": "schedule",
-                "metadata": {
-                    "schedule": "@hourly:0 * * * *",
-                    "enqueue_type": "schedule",
-                    "next_sync_date_time": "2024-03-26T10:00:00-04:00",
-                    "datetime": null
-                },
+                "type": "shopify",
+                "entity": "customer",
+                "action": "updated",
+                "name": "Customer Updated",
+                "key": "shopify",
+                "operation_id": "customers_update",
+                "metadata": [],
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
@@ -28,19 +26,13 @@
         ],
         "outputs": [
             {
-                "schema": 4,
+                "schema": 2,
                 "trigger_type": "output",
-                "type": "shopify-plus",
-                "entity": "company",
-                "action": "retrieve",
-                "name": "Retrieve Company",
-                "key": "shopify-plus",
-                "operation_id": "retrieve_company",
+                "type": "custom",
+                "name": "Grab Exemption Tags",
+                "key": "custom_2",
                 "metadata": {
-                    "api_endpoint": "get /company/id",
-                    "body": {
-                        "id": "183468080"
-                    }
+                    "script": "custom_2.js"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -48,16 +40,19 @@
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "shopify-plus",
-                "entity": "company_contact",
-                "action": "retrieve",
-                "name": "Retrieve Company Contact",
-                "key": "shopify-plus_1",
-                "operation_id": "retrieve_company_contact",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Exemption Tags",
+                "version": "v2",
+                "key": "loop_1",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "api_endpoint": "get /company_contact/id"
+                    "key": "{{custom_2}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -65,20 +60,72 @@
                 "weight": 1
             },
             {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Locations Customer Is Assigned To",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Company Locations",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{custom}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify-plus",
                 "entity": "company_location",
-                "action": "update",
-                "name": "Update Company Location",
-                "key": "shopify-plus_2",
-                "operation_id": "update_company_location",
+                "action": "retrieve",
+                "name": "Retrieve Company Location",
+                "key": "shopify-plus",
+                "operation_id": "retrieve_company_location",
                 "metadata": {
-                    "api_endpoint": "put /company_location"
+                    "api_endpoint": "get /company_location/id",
+                    "body": {
+                        "id": "{{loop.companyLocation.id}}"
+                    }
                 },
+                "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Update Location's Tax Exempt Status",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
             },
             {
                 "schema": 4,
@@ -90,7 +137,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 6
             }
         ]
     }
