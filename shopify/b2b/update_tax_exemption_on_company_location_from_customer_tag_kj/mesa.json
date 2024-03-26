@@ -126,18 +126,6 @@
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 5
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "logs",
-                "name": "Log Data",
-                "key": "logs",
-                "metadata": [],
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 6
             }
         ]
     }
