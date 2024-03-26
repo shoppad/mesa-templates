@@ -38,7 +38,7 @@
                 "metadata": {
                     "api_endpoint": "get /{base}/{table}",
                     "path": {
-                        "base": "{{ template | label: 'Copy and select your Airtable base', description: 'You'll need a base with both a Products and a Variants table. To save time you can use the base we set up. Click on the  <a href=\"https://airtable.com/appOPGLNn2a53I7Vu/shr8h1sX5iTlMWdRI/tbllZEf9JLZ8t1l8t/viwa1G966zx7Xz99B?blocks=hide\" target=_blank >Airtable template</a> and make a copy. In the dropdown below, select the copied base. Erase the example data and begin syncing your data.' }}",
+                        "base": "{{ template | label: 'Copy and select your Airtable base', description: 'You'll need a base with both a Products and a Variants table. To save time, you can use the base we set up. Click on the [Airtable template](https://airtable.com/appOPGLNn2a53I7Vu/shr8h1sX5iTlMWdRI/tbllZEf9JLZ8t1l8t/viwa1G966zx7Xz99B?blocks=hide) and make a copy. In the dropdown below, select the copied base. Erase the example data and begin syncing your data.' }}",
                         "table": "Products"
                     }
                 },
