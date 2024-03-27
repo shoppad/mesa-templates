@@ -1,0 +1,192 @@
+{
+    "key": "shopify/inventory/notify_days_on_hand_kj/save_data",
+    "name": "Save Inventory Levels",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2024-03-27T08:00:00-05:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin/products.json",
+                    "parameters": "limit=100"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "parameters"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v1",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{ shopify }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "list",
+                "name": "Get List of Product Variants",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id_variants",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}/variants.json",
+                    "product_id": "{{ loop.id }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v1",
+                "key": "loop_1",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{ shopify_1 }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Inventory Level For Variant",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "variant_id",
+                            "type": "numeric",
+                            "value": "{{ loop_1.id }}",
+                            "disabled": "66040fb4f5abfcc895078a81"
+                        },
+                        {
+                            "key": "available",
+                            "type": "numeric",
+                            "value": "{{ custom.available }}",
+                            "disabled": "66040fb4f5abfcc895078a81"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "{{ loop_1.sku }}",
+                            "disabled": "66040fb4f5abfcc895078a81"
+                        },
+                        {
+                            "key": "months_on_hand",
+                            "type": "numeric",
+                            "value": null,
+                            "disabled": "66040fb4f5abfcc895078a81"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{ loop_1.id }}",
+                        "a": "variant_id"
+                    },
+                    "table": "variant_inventory"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "create",
+                    "table",
+                    "where_clause",
+                    "where_clause.a",
+                    "where_clause.comparison",
+                    "where_clause.b",
+                    "columns",
+                    "columns[].key",
+                    "columns[].type",
+                    "columns[].value",
+                    "columns[].disabled"
+                ],
+                "on_error": "default",
+                "weight": 5
+            }
+        ]
+    }
+}
