@@ -34,7 +34,7 @@
                 "metadata": {
                     "a": "{{shopify.current_total_price}}",
                     "comparison": "greater than",
-                    "b": "{{ template | label: 'Select the minimum order total for high value orders' }}",
+                    "b": "{{ template | label: 'Select the minimum order total for high value orders', default: 100, type: 'number' }}",
                     "additional": [
                         {
                             "operator": "and",
@@ -44,7 +44,16 @@
                     "script": "filter.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b",
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -65,7 +74,11 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -79,7 +92,9 @@
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -100,7 +115,11 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
