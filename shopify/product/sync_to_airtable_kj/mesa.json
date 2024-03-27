@@ -200,7 +200,7 @@
                         },
                         {
                             "destination": "Product",
-                            "source": "{{custom.id }}"
+                            "source": "{{airtable_product_upsert.id }}"
                         },
                         {
                             "destination": "Price",
