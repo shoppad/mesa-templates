@@ -5,7 +5,7 @@
     "description": "",
     "seconds": 135,
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -36,7 +36,8 @@
                 "name": "Grab Exemption Tags",
                 "key": "custom_2",
                 "metadata": {
-                    "script": "custom_2.js"
+                    "script": "custom_2.js",
+                    "description": "This will grab any customer tags that are in the format specified here:\nhttps://shopify.dev/docs/api/admin-graphql/2024-01/mutations/companyLocationAssignTaxExemptions\n\ni.e. CA_BC_COMMERCIAL_FISHERY_EXEMPTION, CA_BC_CONTRACTOR_EXEMPTION, etc."
                 },
                 "local_fields": [],
                 "selected_fields": [],
