@@ -34,7 +34,7 @@
                 "metadata": {
                     "a": "{{shopify.current_total_price}}",
                     "comparison": "greater than",
-                    "b": "10",
+                    "b": "{{ template | label: 'Select the minimum order total for high value orders' }}",
                     "additional": [
                         {
                             "operator": "and",
