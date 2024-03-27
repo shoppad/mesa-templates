@@ -1,0 +1,162 @@
+{
+    "key": "shopify/inventory/notify_days_on_hand_kj/forecast",
+    "name": "Forecast Inventory",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2024-03-27T08:00:00-05:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get /{database}/{table}",
+                    "table": "variant_inventory",
+                    "where_clause": {
+                        "comparison": "equals"
+                    },
+                    "query": "SELECT * FROM \"variant_inventory\"  WHERE available < 8000 ORDER BY available DESC LIMIT 3"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "table",
+                    "where_clause",
+                    "where_clause.a",
+                    "where_clause.comparison",
+                    "where_clause.b",
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v1",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{ data }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Calculate months on hand",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data_1",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "variant_id",
+                            "type": "numeric",
+                            "value": null,
+                            "disabled": "66040faaddf927262d00a6f3"
+                        },
+                        {
+                            "key": "available",
+                            "type": "numeric",
+                            "value": null,
+                            "disabled": "66040faaddf927262d00a6f3"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": null,
+                            "disabled": "66040faaddf927262d00a6f3"
+                        },
+                        {
+                            "key": "months_on_hand",
+                            "type": "numeric",
+                            "value": "{{ custom.monthsOnHand }}",
+                            "disabled": "66040faaddf927262d00a6f3"
+                        }
+                    ],
+                    "table": "variant_inventory",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{ loop.variant_id }}",
+                        "a": "variant_id"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "create",
+                    "table",
+                    "where_clause",
+                    "where_clause.a",
+                    "where_clause.comparison",
+                    "where_clause.b",
+                    "columns",
+                    "columns[].key",
+                    "columns[].type",
+                    "columns[].value",
+                    "columns[].disabled"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
