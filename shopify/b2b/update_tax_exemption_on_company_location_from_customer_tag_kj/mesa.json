@@ -14,12 +14,16 @@
                 "type": "shopify",
                 "entity": "customer",
                 "action": "updated",
-                "name": "Customer Updated",
+                "name": "Customer Tags Changed",
                 "key": "shopify",
                 "operation_id": "customers_update",
-                "metadata": [],
+                "metadata": {
+                    "includeFields": "id,tags"
+                },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "includeFields"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
