@@ -22,7 +22,7 @@ module.exports = new class {
       SELECT REGR_SLOPE(total, month) FROM
       (
         SELECT (EXTRACT(YEAR FROM order_date) - 2023) * 12 + EXTRACT(MONTH FROM order_date) AS month, COUNT(*) AS total
-        FROM order_line_items
+        FROM forecast_line_items
         WHERE variant_id = '${variantId}'
         AND order_date < date_trunc('MONTH', CURRENT_DATE)
         GROUP BY month ORDER BY month

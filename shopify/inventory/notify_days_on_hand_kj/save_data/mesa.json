@@ -1,6 +1,6 @@
 {
     "key": "shopify/inventory/notify_days_on_hand_kj/save_data",
-    "name": "Save Inventory Levels",
+    "name": "Days On Hand Notification - Save Data",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -9,64 +9,101 @@
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
-                "type": "schedule",
-                "name": "Schedule",
-                "key": "schedule",
-                "metadata": {
-                    "schedule": "@hourly:0 * * * *",
-                    "enqueue_type": "schedule",
-                    "next_sync_date_time": "2024-03-27T08:00:00-05:00",
-                    "datetime": null
-                },
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
                 "local_fields": [],
-                "selected_fields": [
-                    "enqueue_type",
-                    "schedule",
-                    "next_sync_date_time"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "list",
-                "name": "Get List of Products",
-                "key": "shopify",
-                "operation_id": "get_products",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Line Items",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "api_endpoint": "get admin/products.json",
-                    "parameters": "limit=100"
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "parameters"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 5,
+                "schema": 4,
                 "trigger_type": "output",
-                "type": "loop",
-                "entity": "loop",
-                "name": "Loop",
-                "version": "v1",
-                "key": "loop",
-                "operation_id": "loop_loop",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update Or Create Line Item",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
                 "metadata": {
-                    "key": "{{ shopify }}"
+                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "id",
+                            "type": "varchar",
+                            "value": "{{loop.id}}",
+                            "disabled": "660411d380ba9dbec90b1294"
+                        },
+                        {
+                            "key": "order_id",
+                            "type": "varchar",
+                            "value": "{{shopify.id}}",
+                            "disabled": "660411d380ba9dbec90b1294"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "{{loop.sku}}",
+                            "disabled": "660411d380ba9dbec90b1294"
+                        },
+                        {
+                            "key": "variant_id",
+                            "type": "varchar",
+                            "value": "{{loop.variant_id}}",
+                            "disabled": "660411d380ba9dbec90b1294"
+                        },
+                        {
+                            "key": "quantity",
+                            "type": "numeric",
+                            "value": "{{loop.quantity}}",
+                            "disabled": "660411d380ba9dbec90b1294"
+                        },
+                        {
+                            "key": "order_date",
+                            "type": "timestamptz",
+                            "value": "{{shopify.created_at}}",
+                            "disabled": "660411d380ba9dbec90b1294"
+                        }
+                    ],
+                    "table": "forecast_line_items",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop.id}}",
+                        "a": "id"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -75,55 +112,18 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product_variant",
-                "action": "list",
-                "name": "Get List of Product Variants",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
                 "key": "shopify_1",
-                "operation_id": "get_products_product_id_variants",
+                "operation_id": "get_variants_variant_id",
                 "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}/variants.json",
-                    "product_id": "{{ loop.id }}"
+                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
+                    "variant_id": "{{loop.variant_id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "product_id"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
-            },
-            {
-                "schema": 5,
-                "trigger_type": "output",
-                "type": "loop",
-                "entity": "loop",
-                "name": "Loop",
-                "version": "v1",
-                "key": "loop_1",
-                "operation_id": "loop_loop",
-                "metadata": {
-                    "key": "{{ shopify_1 }}"
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "key"
-                ],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Get Inventory Level For Variant",
-                "key": "custom",
-                "metadata": {
-                    "script": "custom.js"
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "script"
-                ],
-                "on_error": "default",
-                "weight": 4
             },
             {
                 "schema": 4,
@@ -131,8 +131,8 @@
                 "type": "data",
                 "entity": "record",
                 "action": "update_create",
-                "name": "Update or Create Record",
-                "key": "data",
+                "name": "Update or Create Inventory",
+                "key": "data_1",
                 "operation_id": "post_database_table_upsert",
                 "metadata": {
                     "api_endpoint": "post /{database}/{table}/upsert",
@@ -141,51 +141,51 @@
                         {
                             "key": "variant_id",
                             "type": "numeric",
-                            "value": "{{ loop_1.id }}",
-                            "disabled": "66040fb4f5abfcc895078a81"
+                            "value": "{{loop.variant_id}}",
+                            "disabled": "660411d380ba9dbec90b1294"
                         },
                         {
                             "key": "available",
                             "type": "numeric",
-                            "value": "{{ custom.available }}",
-                            "disabled": "66040fb4f5abfcc895078a81"
+                            "value": "{{shopify_1.inventory_quantity}}",
+                            "disabled": "660411d380ba9dbec90b1294"
                         },
                         {
                             "key": "sku",
                             "type": "varchar",
-                            "value": "{{ loop_1.sku }}",
-                            "disabled": "66040fb4f5abfcc895078a81"
+                            "value": "{{loop.sku}}",
+                            "disabled": "660411d380ba9dbec90b1294"
                         },
                         {
                             "key": "months_on_hand",
                             "type": "numeric",
                             "value": null,
-                            "disabled": "66040fb4f5abfcc895078a81"
+                            "disabled": "660411d380ba9dbec90b1294"
+                        },
+                        {
+                            "key": "product_id",
+                            "type": "varchar",
+                            "value": "{{loop.product_id}}",
+                            "disabled": "660411d380ba9dbec90b1294"
+                        },
+                        {
+                            "key": "product_title",
+                            "type": "varchar",
+                            "value": "{{loop.title}}",
+                            "disabled": "660411d380ba9dbec90b1294"
                         }
                     ],
+                    "table": "forecast_inventory",
                     "where_clause": {
                         "comparison": "equals",
-                        "b": "{{ loop_1.id }}",
+                        "b": "{{loop.variant_id}}",
                         "a": "variant_id"
-                    },
-                    "table": "variant_inventory"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "create",
-                    "table",
-                    "where_clause",
-                    "where_clause.a",
-                    "where_clause.comparison",
-                    "where_clause.b",
-                    "columns",
-                    "columns[].key",
-                    "columns[].type",
-                    "columns[].value",
-                    "columns[].disabled"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 3
             }
         ]
     }

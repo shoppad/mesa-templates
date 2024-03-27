@@ -1,6 +1,6 @@
 {
     "key": "shopify/inventory/notify_days_on_hand_kj/forecast",
-    "name": "Forecast Inventory",
+    "name": "Days On Hand Notification - Forecast",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -42,11 +42,11 @@
                 "operation_id": "get_database_table",
                 "metadata": {
                     "api_endpoint": "get /{database}/{table}",
-                    "table": "variant_inventory",
+                    "table": "forecast_inventory",
                     "where_clause": {
                         "comparison": "equals"
                     },
-                    "query": "SELECT * FROM \"variant_inventory\"  WHERE available < 8000 ORDER BY available DESC LIMIT 3"
+                    "query": "SELECT * FROM \"forecast_inventory\"  WHERE available < 8000 ORDER BY available DESC LIMIT 3"
                 },
                 "local_fields": [],
                 "selected_fields": [
