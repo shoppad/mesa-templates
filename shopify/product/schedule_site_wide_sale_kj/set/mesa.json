@@ -17,8 +17,7 @@
                 "metadata": {
                     "schedule": null,
                     "enqueue_type": "datetime",
-                    "datetime": "2024-05-01T00:00:00-05:00",
-                    "next_sync_date_time": "2024-03-28T08:00:00-05:00"
+                    "datetime": "{{ template | label: 'Select a date to schedule the site-wide discount for' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -124,7 +123,7 @@
                     "product_id": "{{loop.id}}",
                     "variant_id": "{{loop_1.id}}",
                     "body": {
-                        "price": "{{loop_1.price | times: 0.8 }}",
+                        "price": "{{loop_1.price | times: {{ template | label: 'Select a discount amount', default: 0.8 }} }}",
                         "compare_at_price": "{{loop_1.price}}"
                     }
                 },

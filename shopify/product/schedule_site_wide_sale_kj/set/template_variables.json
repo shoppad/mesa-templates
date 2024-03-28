@@ -1,0 +1,7 @@
+[
+  {
+    "key": "schedule",
+    "field": "metadata.datetime",
+    "value": "{{ template | label: 'Select a date to schedule the site-wide discount for' }}"
+  }
+]
