@@ -17,8 +17,7 @@
                 "metadata": {
                     "schedule": null,
                     "enqueue_type": "datetime",
-                    "datetime": "2024-05-01T00:00:00-05:00",
-                    "next_sync_date_time": "2024-03-28T08:00:00-05:00"
+                    "datetime": "2024-05-01T00:00:00-05:00"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -43,7 +42,7 @@
                 "metadata": {
                     "api_endpoint": "get admin/products.json",
                     "query": {
-                        "limit": "1"
+                        "limit": "{{ template | label: 'Select a number of products to update', default: 1, description: 'We recommend setting this to 1 initially so that you can run a test on 1 product and then reverse it. Then if that works, you can remove the limit and schedule the sale and the next time it runs, it will run for up to 250 products.' }}"
                     }
                 },
                 "local_fields": [],
