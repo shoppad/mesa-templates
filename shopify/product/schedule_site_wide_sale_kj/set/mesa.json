@@ -140,8 +140,10 @@
                     "comparison": "is empty",
                     "additional": [
                         {
-                            "operator": "and",
-                            "comparison": "equals"
+                            "operator": "or",
+                            "a": "{{loop_1.compare_at_price}}",
+                            "comparison": "equals",
+                            "b": "0"
                         }
                     ]
                 },
@@ -172,7 +174,7 @@
                     "product_id": "{{loop.id}}",
                     "variant_id": "{{loop_1.id}}",
                     "body": {
-                        "price": "{{0.8 }}",
+                        "price": "{{loop_1.price | times: custom.discount_amount }}",
                         "compare_at_price": "{{loop_1.price}}"
                     }
                 },

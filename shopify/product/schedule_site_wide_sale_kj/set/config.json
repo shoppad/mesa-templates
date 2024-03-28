@@ -1,0 +1,26 @@
+{
+  "template_variables": [
+    {
+      "key": "schedule",
+      "field": "metadata.datetime",
+      "value": "{{ template | label: 'Select a date to schedule the site-wide discount for' }}"
+    },
+    {
+      "key": "shopify",
+      "field": "metadata.query.limit",
+      "value": "{{ template | label: 'Select a number of products to update', default: 1, description: 'We recommend setting this to 1 initially so that you can run a test on 1 product and then reverse it. Then if that works, you can remove the limit and schedule the sale and the next time it runs, it will run for up to 250 products.' }}"
+    }
+  ],
+  "setup": {
+    "mode": "custom",
+    "fields": [
+        {
+            "key": "discount_amount",
+            "target": "custom.discount_amount",
+            "label": "What is the discount amount?",
+            "tokens": false,
+            "description": "For 20% off, use 0.8. For 30% off, use 0.7"
+        }
+    ]
+  }
+}
