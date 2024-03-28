@@ -1,0 +1,175 @@
+{
+    "key": "shopify/product/schedule_site_wide_sale_kj/reset",
+    "name": "Schedule reset of site wide sale for all products",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": null,
+                    "enqueue_type": "datetime",
+                    "datetime": "2024-05-01T00:00:00-05:00",
+                    "next_sync_date_time": "2024-03-28T08:00:00-05:00"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "datetime",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin/products.json",
+                    "query": {
+                        "limit": "1"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.limit"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Products",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Variants",
+                "version": "v2",
+                "key": "loop_1",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{loop.variants[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "If Compare At Price Is Empty",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop_1.compare_at_price}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "update_id",
+                "name": "Update Product Variant",
+                "key": "shopify_1",
+                "operation_id": "put_variants_variant_id",
+                "metadata": {
+                    "api_endpoint": "put admin/variants/{{variant_id}}.json",
+                    "product_id": "{{loop.id}}",
+                    "variant_id": "{{loop_1.id}}",
+                    "body": {
+                        "price": "{{loop_1.compare_at_price }}",
+                        "compare_at_price": "{{custom.empty}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.price",
+                    "body.compare_at_price"
+                ],
+                "on_error": "default",
+                "weight": 5
+            }
+        ]
+    }
+}
