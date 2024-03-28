@@ -1,0 +1,14 @@
+{
+  "key": "shopify/product/schedule_site_wide_sale_kj",
+  "name": "Schedule site wide sale",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "shopify",
+  "templates": [
+    "shopify/product/schedule_site_wide_sale_kj/set",
+    "shopify/product/schedule_site_wide_sale_kj/reset"
+  ]
+}
