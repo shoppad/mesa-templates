@@ -5,7 +5,18 @@
     "description": "",
     "seconds": 135,
     "enabled": false,
-    "setup": true,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "discount_amount",
+                "target": "custom.discount_amount",
+                "label": "What is the discount amount?",
+                "tokens": false,
+                "description": "For 20% off, use 0.8. For 30% off, use 0.7"
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
@@ -20,12 +31,30 @@
                     "datetime": "{{ template | label: 'Select a date to schedule the site-wide discount for' }}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Discount Amount",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 3,
                 "trigger_type": "output",
@@ -46,7 +75,7 @@
                     "query.limit"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 5.1,
@@ -64,9 +93,15 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 5.1,
@@ -84,9 +119,15 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4.1,
@@ -105,9 +146,17 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 3,
@@ -123,7 +172,7 @@
                     "product_id": "{{loop.id}}",
                     "variant_id": "{{loop_1.id}}",
                     "body": {
-                        "price": "{{loop_1.price | times: {{ template | label: 'Select a discount amount', default: 0.8 }} }}",
+                        "price": "{{0.8 }}",
                         "compare_at_price": "{{loop_1.price}}"
                     }
                 },
@@ -133,7 +182,7 @@
                     "body.compare_at_price"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ]
     }
