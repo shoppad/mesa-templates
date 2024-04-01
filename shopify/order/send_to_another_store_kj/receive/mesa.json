@@ -34,7 +34,7 @@
                     "mapping": [
                         {
                             "destination": "name",
-                            "source": "#B{{webhook.order_number}}"
+                            "source": "#A{{webhook.order_number}}"
                         }
                     ]
                 },
