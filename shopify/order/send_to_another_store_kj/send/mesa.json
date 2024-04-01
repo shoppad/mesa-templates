@@ -40,11 +40,12 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Send Order Details Via Webhook To Other Store",
                 "key": "custom",
                 "metadata": {
                     "script": "custom.js"
                 },
+                "local_fields": [],
                 "selected_fields": [
                     "script"
                 ],

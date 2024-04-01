@@ -1,0 +1,14 @@
+{
+  "key": "shopify/order/send_to_another_store_kj",
+  "name": "Send orders to another Shopify store",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "shopify",
+  "templates": [
+    "shopify/order/send_to_another_store_kj/send",
+    "shopify/order/send_to_another_store_kj/receive"
+  ]
+}
