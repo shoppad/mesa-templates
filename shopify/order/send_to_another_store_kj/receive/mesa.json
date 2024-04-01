@@ -23,15 +23,116 @@
         ],
         "outputs": [
             {
-                "schema": 4,
+                "schema": 3,
                 "trigger_type": "output",
-                "type": "logs",
-                "name": "Log Data",
-                "key": "logs",
-                "metadata": [],
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "name",
+                            "source": "#B{{webhook.order_number}}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Look For Existing Order By Source ID",
+                "key": "custom_2",
+                "metadata": {
+                    "script": "custom_2.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "If Order Hasn't Been Imported Already",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{custom_2[0].id}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Prepare Order Data",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Create Order",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+                    "order_id": "{{custom_1.order.id}}",
+                    "body": {
+                        "tag": "source-id-{{webhook.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
             }
         ]
     }
