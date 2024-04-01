@@ -1,0 +1,56 @@
+{
+    "key": "shopify/order/send_to_another_store_kj/send",
+    "name": "Send orders to another store",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "webhook_url",
+                "target": "custom.webhook_url",
+                "label": "Install the Receive workflow on the other store and enter the webhook url",
+                "description": "When you install the 'Receive Orders From Another Store' workflow in your other store, the Webhook trigger that thte workflow starts with will have a url that you can copy in here.",
+                "tokens": false
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}

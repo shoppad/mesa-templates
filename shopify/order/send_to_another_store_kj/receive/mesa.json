@@ -1,0 +1,38 @@
+{
+    "key": "shopify/order/send_to_another_store_kj/receive",
+    "name": "Receive order from another store",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "webhook",
+                "name": "Webhook Received",
+                "key": "webhook",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "logs",
+                "name": "Log Data",
+                "key": "logs",
+                "metadata": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
