@@ -280,10 +280,14 @@ const ShopifyUtil = {
     `;
 
     const response = ShopifyGraphql.send(query, {
-      "query": "sku:" + productSku,
+      "query": "sku:" + sku,
     }, {}, 'admin/api/2023-10/graphql.json');
 
     let variant = response.data.productVariants.nodes[0];
+    if (! variant) {
+      return [null, null];
+    }
+
     return [variant.id, variant.product.id];
   },
 
@@ -304,8 +308,7 @@ const ShopifyUtil = {
       "limit": limit
     }, {}, 'admin/api/2023-10/graphql.json');
 
-    let variant = response.data.productVariants.nodes[0];
-    return [variant.id, variant.product.id];
+    return response.data.orders.nodes;
   }
 }
 

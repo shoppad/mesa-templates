@@ -284,6 +284,10 @@ const ShopifyUtil = {
     }, {}, 'admin/api/2023-10/graphql.json');
 
     let variant = response.data.productVariants.nodes[0];
+    if (! variant) {
+      return [null, null];
+    }
+
     return [variant.id, variant.product.id];
   },
 
