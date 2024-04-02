@@ -14,6 +14,10 @@ module.exports = new class {
   script = (payload, context) => {
     const vars = context.steps;
 
+    let output = context.automation.outputs.find(object => object.key == 'send_webhook');
+    let webhookUrl = output.metadata.webhook_url;
+    Mesa.request.post(webhookUrl, vars.shopify);
+
     let url = vars.transform.Webhook;
 
     Mesa.request.post(url, {

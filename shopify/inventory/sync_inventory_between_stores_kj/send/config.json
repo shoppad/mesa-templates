@@ -1,0 +1,14 @@
+{
+  "setup": {
+    "mode": "custom",
+    "fields": [
+        {
+            "key": "webhook_url",
+            "target": "send_webhook.webhook_url",
+            "label": "Enter the webhook url for the other store",
+            "tokens": false,
+            "description": "Install the Receive workflow in the other store, and then copy and paste the Webhook URL from there to here."
+        }
+    ]
+  }
+}

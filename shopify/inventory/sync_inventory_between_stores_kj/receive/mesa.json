@@ -1,6 +1,6 @@
 {
   "key": "shopify/inventory/sync_inventory_between_stores_kj/receive",
-  "name": "Import Inventory Delta From Other Store",
+  "name": "Receive Inventory Changes From Other Store",
   "version": "1.0.0",
   "description": "",
   "seconds": 135,
