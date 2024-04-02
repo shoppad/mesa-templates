@@ -13,7 +13,7 @@
                 "name": "Schedule",
                 "key": "scheduler",
                 "metadata": {
-                    "datetime": "{{ template | label: 'When would you like to schedule this workflow?', tokens: false, placeholder: '' }}",
+                    "datetime": "{{ template | label: 'When would you like to schedule the product price change?', description: '', tokens: false, placeholder: '' }}",
                     "schedule": null,
                     "enqueue_type": "datetime"
                 },
@@ -33,7 +33,7 @@
                 "operation_id": "put_variants_variant_id",
                 "metadata": {
                     "api_endpoint": "put admin/variants/{{variant_id}}.json",
-                    "product_id": "{{ template | label: 'What product are you scheduling the price change for?', tokens: false, placeholder: '' }}",
+                    "product_id": "{{ template | label: 'What product are you scheduling the price change for?', description: 'Select the product from the dropdown or enter the product ID.', tokens: false, placeholder: '' }}",
                     "variant_id": "{{ template | label: 'Which product variant will be receiving this price change?', description: 'Select **Default Title** for single-variant products. To change multiple variants, add a Shopify Update Product Variant step to your workflow for each variant. This can be done in the builder after you complete your initial setup.', tokens: false, placeholder: '' }}",
                     "body": {
                         "price": "{{ template | label: 'What is the new price of the product variant?', tokens: false, placeholder: '' }}"
