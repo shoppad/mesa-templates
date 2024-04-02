@@ -1,6 +1,6 @@
 {
     "key": "shopify/inventory/sync_inventory_between_stores_kj/send",
-    "name": "Send Inventory Changes To Other Store On Hourly Schedule",
+    "name": "Inventory Sync: Send Changes To Other Store",
     "version": "1.0.1",
     "description": "",
     "seconds": 135,
@@ -338,7 +338,7 @@
                         {
                             "key": "status",
                             "type": "varchar",
-                            "value": "Sent To Store B",
+                            "value": "Sent To Other Store",
                             "disabled": "65f832fe50baf3892e0749c3"
                         },
                         {

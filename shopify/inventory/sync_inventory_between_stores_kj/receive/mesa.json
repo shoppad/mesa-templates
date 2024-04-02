@@ -1,6 +1,6 @@
 {
   "key": "shopify/inventory/sync_inventory_between_stores_kj/receive",
-  "name": "Receive Inventory Changes From Other Store",
+  "name": "Inventory Sync: Receive Changes From Other Store",
   "version": "1.0.0",
   "description": "",
   "seconds": 135,
@@ -156,7 +156,7 @@
             {
               "key": "status",
               "type": "varchar",
-              "value": "Applied From Store A",
+              "value": "Applied From {{webhook.shop_name}}",
               "disabled": "65f9bcc87cc915a57b0d0df5"
             },
             {

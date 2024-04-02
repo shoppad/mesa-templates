@@ -16,12 +16,14 @@ module.exports = new class {
 
     let output = context.automation.outputs.find(object => object.key == 'send_webhook');
     let webhookUrl = output.metadata.webhook_url;
-    Mesa.request.post(webhookUrl, vars.shopify);
 
-    let url = vars.transform.Webhook;
+    Mesa.trigger.setTaskExternalData({
+      "label": "Sent to: " + webhookUrl
+    });
 
-    Mesa.request.post(url, {
+    Mesa.request.post(webhookUrl, {
       "sku": vars.loop.sku,
+      "shop_name": context.shop.name,
       "location": vars.loop_1.location.name,
       "delta": vars.custom_1.delta,
       "run_time": vars.custom.run_time,
