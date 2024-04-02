@@ -2,16 +2,8 @@
     "key": "shopify/product/scheduled_product_price_change",
     "name": "Schedule a product price change",
     "version": "1.0.0",
-    "description": "Efficiently update your Shopify product's prices without the need for manual adjustments. This template allows you to instantly set the prices of a collection of products on any given date. With this workflow, you can effortlessly schedule specific price drops and price increases for your chosen group of products.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "schedule",
-    "destination": "shopify",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,10 +13,9 @@
                 "name": "Schedule",
                 "key": "scheduler",
                 "metadata": {
-                    "datetime": "2022-07-20T16:00:00.000Z",
+                    "datetime": "{{ template | label: 'When would you like to schedule this workflow?', tokens: false, placeholder: '' }}",
                     "schedule": null,
-                    "enqueue_type": "datetime",
-                    "next_sync_date_time": "2022-02-04T16:00:00-08:00"
+                    "enqueue_type": "datetime"
                 },
                 "local_fields": [],
                 "weight": 0
@@ -38,12 +29,23 @@
                 "entity": "product_variant",
                 "action": "update_id",
                 "name": "Update Product Variant",
-                "key": "shopify_product_variant_1",
-                "metadata": [],
+                "key": "shopify",
+                "operation_id": "put_variants_variant_id",
+                "metadata": {
+                    "api_endpoint": "put admin/variants/{{variant_id}}.json",
+                    "product_id": "{{ template | label: 'What product are you scheduling the price change for?', tokens: false, placeholder: '' }}",
+                    "variant_id": "{{ template | label: 'Which product variant will be receiving this price change?', description: 'Select **Default Title** for single-variant products. To change multiple variants, add a Shopify Update Product Variant step to your workflow for each variant. This can be done in the builder after you complete your initial setup.', tokens: false, placeholder: '' }}",
+                    "body": {
+                        "price": "{{ template | label: 'What is the new price of the product variant?', tokens: false, placeholder: '' }}"
+                    }
+                },
                 "local_fields": [],
+                "selected_fields": [
+                  "body.price"
+                ],
+                "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
