@@ -1,0 +1,14 @@
+{
+  "key": "shopify/inventory/sync_inventory_between_stores_kj",
+  "name": "Sync inventory between Shopify stores",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "shopify",
+  "templates": [
+    "shopify/inventory/sync_inventory_between_stores_kj/send",
+    "shopify/inventory/sync_inventory_between_stores_kj/receive"
+  ]
+}

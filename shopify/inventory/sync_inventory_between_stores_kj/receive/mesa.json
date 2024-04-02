@@ -1,5 +1,5 @@
 {
-  "key": "shopify/inventory/import_delta_from_other_store_kj",
+  "key": "shopify/inventory/sync_inventory_between_stores_kj/receive",
   "name": "Import Inventory Delta From Other Store",
   "version": "1.0.0",
   "description": "",

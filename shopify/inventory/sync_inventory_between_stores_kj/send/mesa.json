@@ -1,5 +1,5 @@
 {
-  "key": "shopify/inventory/send_deltas_to_other_store_kj",
+  "key": "shopify/inventory/sync_inventory_between_stores_kj/send",
   "name": "Send Inventory Changes To Other Store On Hourly Schedule",
   "version": "1.0.1",
   "description": "",
