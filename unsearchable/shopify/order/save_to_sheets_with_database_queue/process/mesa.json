@@ -20,7 +20,10 @@
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,11 +41,7 @@
                 "metadata": {
                     "api_endpoint": "get /{database}/{table}",
                     "query": "SELECT * FROM order_queue WHERE status = 'pending' LIMIT 200",
-                    "table": "order_queue",
-                    "where_clause": {
-                        "comparison": "equals",
-                        "b": "pending"
-                    }
+                    "table": "order_queue"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -67,7 +66,13 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -85,7 +90,9 @@
                     "order_id": "{{loop.id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "order_id"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -105,7 +112,13 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -122,8 +135,8 @@
                 "metadata": {
                     "api_endpoint": "post /{spreadsheet_id}/{sheet}",
                     "path": {
-                        "spreadsheet_id": "1zGa0Lge4xGmOsMvKewdA6Ip9ojwCLx1rD1LR-CKlOx4",
-                        "sheet": "Orders"
+                        "spreadsheet_id": "{{ template | label: 'Select a Google Sheet spreadsheet' }}",
+                        "sheet": "{{ template | label: 'Select a sheet within your Google Sheet spreadsheet' }}"
                     },
                     "columns": [
                         "Order URL",
@@ -251,7 +264,12 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.spreadsheet_id",
+                    "path.sheet",
+                    "columns"
+                ],
                 "on_error": "ignore",
                 "weight": 4
             },
@@ -271,13 +289,13 @@
                             "key": "id",
                             "type": "varchar",
                             "value": null,
-                            "disabled": "660d4b2c3a0dabd5bc0cce11"
+                            "disabled": "660d91e2bed90675ab05e57a"
                         },
                         {
                             "key": "status",
                             "type": "varchar",
                             "value": "done",
-                            "disabled": "660d4b2c3a0dabd5bc0cce11"
+                            "disabled": "660d91e2bed90675ab05e57a"
                         }
                     ],
                     "table": "order_queue",
@@ -288,7 +306,18 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "table",
+                    "where_clause",
+                    "where_clause.a",
+                    "where_clause.comparison",
+                    "where_clause.b",
+                    "columns",
+                    "columns[].key",
+                    "columns[].type",
+                    "columns[].value",
+                    "columns[].disabled"
+                ],
                 "on_error": "default",
                 "weight": 5
             }

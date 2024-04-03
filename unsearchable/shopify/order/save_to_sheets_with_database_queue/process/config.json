@@ -1,0 +1,14 @@
+{
+  "template_variables": [
+    {
+      "key": "googlesheets",
+      "field": "metadata.path.spreadsheet_id",
+      "value": "{{ template | label: 'Select a Google Sheet spreadsheet' }}"
+    },
+    {
+      "key": "googlesheets",
+      "field": "metadata.path.sheet",
+      "value": "{{ template | label: 'Select a sheet within your Google Sheet spreadsheet' }}"
+    }
+  ]
+}
