@@ -5,7 +5,7 @@
     "description": "",
     "seconds": 135,
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
