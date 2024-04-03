@@ -1,0 +1,14 @@
+{
+  "key": "unsearchable/shopify/order/save_to_sheets_with_database_queue",
+  "name": "Send orders to Google Sheets using database queue",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "shopify",
+  "templates": [
+    "unsearchable/shopify/order/save_to_sheets_with_database_queue/save",
+    "unsearchable/shopify/order/save_to_sheets_with_database_queue/process"
+  ]
+}

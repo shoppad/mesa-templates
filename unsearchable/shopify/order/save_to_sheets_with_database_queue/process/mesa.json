@@ -1,0 +1,297 @@
+{
+    "key": "unsearchable/shopify/order/save_to_sheets_with_database_queue/process",
+    "name": "Orders To Sheets With Database Queue: Process",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get /{database}/{table}",
+                    "query": "SELECT * FROM order_queue WHERE status = 'pending' LIMIT 200",
+                    "table": "order_queue",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "pending"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Orders",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{data}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{loop.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Line Items",
+                "version": "v2",
+                "key": "loop_1",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "1zGa0Lge4xGmOsMvKewdA6Ip9ojwCLx1rD1LR-CKlOx4",
+                        "sheet": "Orders"
+                    },
+                    "columns": [
+                        "Order URL",
+                        "Order Name",
+                        "Email",
+                        "Shipping Name",
+                        "Address",
+                        "City",
+                        "State/Province",
+                        "Zip/Postal Code",
+                        "Country",
+                        "Product Name",
+                        "Product SKU",
+                        "Product Price",
+                        "Updated"
+                    ],
+                    "body": {
+                        "columns": {
+                            "A": "{{shopify.order_status_url}}",
+                            "B": "{{shopify.name}}",
+                            "C": "{{shopify.email}}",
+                            "D": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
+                            "E": "{{shopify.shipping_address.address1}}",
+                            "F": "{{shopify.shipping_address.city}}",
+                            "G": "{{shopify.shipping_address.province}}",
+                            "H": "{{shopify.shipping_address.zip}}",
+                            "I": "{{shopify.shipping_address.country}}",
+                            "J": "{{loop_1.name}}",
+                            "K": "{{loop_1.sku}}",
+                            "L": "{{loop_1.price}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "columns",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "A",
+                                        "label": "Order URL",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "B",
+                                        "label": "Order Name",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "C",
+                                        "label": "Email",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "D",
+                                        "label": "Shipping Name",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "E",
+                                        "label": "Address",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "F",
+                                        "label": "City",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "G",
+                                        "label": "State/Province",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "H",
+                                        "label": "Zip/Postal Code",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "I",
+                                        "label": "Country",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "J",
+                                        "label": "Product Name",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "K",
+                                        "label": "Product SKU",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "L",
+                                        "label": "Product Price",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "M",
+                                        "label": "Updated",
+                                        "type": "text",
+                                        "location": "required"
+                                    }
+                                ],
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "ignore",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update",
+                "name": "Update Record",
+                "key": "data_1",
+                "operation_id": "patch_database_table_mesa_id",
+                "metadata": {
+                    "api_endpoint": "patch /{database}/{table}/{mesa_id}",
+                    "columns": [
+                        {
+                            "key": "id",
+                            "type": "varchar",
+                            "value": null,
+                            "disabled": "660d4b2c3a0dabd5bc0cce11"
+                        },
+                        {
+                            "key": "status",
+                            "type": "varchar",
+                            "value": "done",
+                            "disabled": "660d4b2c3a0dabd5bc0cce11"
+                        }
+                    ],
+                    "table": "order_queue",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop.mesa_id}}",
+                        "a": "mesa_id"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            }
+        ]
+    }
+}

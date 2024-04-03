@@ -1,0 +1,64 @@
+{
+    "key": "unsearchable/shopify/order/save_to_sheets_with_database_queue/save",
+    "name": "Orders To Sheets With Database Queue: Save",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify_1",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "create",
+                "name": "Create Record",
+                "key": "data",
+                "operation_id": "post_database_table",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}",
+                    "create": "existing",
+                    "new_table": "",
+                    "columns": [
+                        {
+                            "key": "id",
+                            "type": "varchar",
+                            "value": "{{shopify_1.id}}",
+                            "disabled": "660c6122d10e932bfd0ddd2d"
+                        },
+                        {
+                            "key": "status",
+                            "type": "varchar",
+                            "value": "pending",
+                            "disabled": "660c6122d10e932bfd0ddd2d"
+                        }
+                    ],
+                    "table": "order_queue"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
