@@ -17,19 +17,18 @@ module.exports = new class {
     let {a: aUnsorted, b: bUnsorted, comparison} = context.trigger.metadata;
 
     // Need to order these
-    const a = aUnsorted.split(',').sort().join(',');
+    const a = aUnsorted.split(',').sort()
     const b = bUnsorted.split(',').sort().join(',');
 
-    if (Filter.process(a, b, comparison)) {
-      // Passed the filter, call the next step and pass the original payload
-      Mesa.log.debug(`Conditions passed: ${a} ${comparison} ${b}`);
-      Mesa.output.next(payload);
-    }
-    else {
-      // Did not pass the filter, stop execution by doing nothing
-      // Alternatively add code here if you would like something to happen when the conditions do not pass
-      throw new Error(`Conditions (${a} ${comparison} ${b}) did not pass, stopping execution`);
-    }
+    a.forEach((sku)=> {
+      if (!Filter.process(sku, b, comparison)) {
+        throw new Error(`Conditions (${a} ${comparison} ${b}) did not pass, stopping execution`);
+      }
+    })
+
+    // Passed the filter, call the next step and pass the original payload
+    Mesa.log.debug(`Conditions passed: ${a} ${comparison} ${b}`);
+    Mesa.output.next(payload);
   }
 
 }
