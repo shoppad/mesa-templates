@@ -1,6 +1,6 @@
 {
     "key": "shopify/gift_card/send_balance_to_klaviyo",
-    "name": "Weekly Gift Card Balance Klaviyo Flow",
+    "name": "Save Gift Card Balances To Data",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -12,10 +12,10 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "schedule",
-                "name": "Weekly Schedule",
+                "name": "Schedule",
                 "key": "schedule",
                 "metadata": {
-                    "schedule": "@weekly:0 0 * * 0",
+                    "schedule": "@daily:0 0 * * *",
                     "enqueue_type": "schedule",
                     "datetime": null
                 },

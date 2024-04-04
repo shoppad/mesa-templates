@@ -19,8 +19,9 @@ module.exports = new class {
     let limit = vars.transform.limit;
     let minUpdatedAt = Util.getMesaStorage('min_updated_at');
     let initialMinUpdatedAt = minUpdatedAt;
+    let query = encodeURIComponent('balance:>0');
 
-    let url = `/admin/gift_cards/search.json?order=updated_at ASC&limit=${limit}`;
+    let url = `/admin/gift_cards/search.json?query=${query}&order=updated_at ASC&limit=${limit}`;
     if (minUpdatedAt) {
       url += `&updated_at_min=${minUpdatedAt}`;
     } else {
