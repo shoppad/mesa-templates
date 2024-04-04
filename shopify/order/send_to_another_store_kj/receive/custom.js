@@ -21,6 +21,11 @@ module.exports = new class {
     delete order.customer.id;
     delete order.customer.default_address.customer_id;
 
+    // Can't have tax lines on both the line items and the order
+    if (order.line_items[0].tax_lines.length > 0) {
+      delete order.tax_lines;
+    }
+
     // One or more of these cause a 422 error when present - haven't drilled down into
     // which it is.
     delete order.source_identifier
@@ -44,6 +49,10 @@ module.exports = new class {
       this.handleLineItem(lineItem);
     }
 
+    for (let fulfillment of order.fulfillments) {
+      this.handleFulfillment(fulfillment);
+    }
+
     Mesa.output.next(order);
   }
 
@@ -53,5 +62,21 @@ module.exports = new class {
     let [variantId, productId] = ShopifyUtil.variantIdFromSku(lineItem.sku);
     lineItem.variant_id = variantId;
     lineItem.product_id = productId;
+  }
+
+  // This isn't working yet
+  handleFulfillment = (fulfillment) => { 
+    // Testing overriding the location id doesn't seem to work
+    // fulfillment.location_id = 64686358573;
+
+    delete fulfillment.id;
+    delete fulfillment.order_id;
+
+    for (let lineItem of fulfillment.line_items) {
+      delete lineItem.id;
+      let [variantId, productId] = ShopifyUtil.variantIdFromSku(lineItem.sku);
+      lineItem.variant_id = variantId;
+      lineItem.product_id = productId;  
+    }
   }
 }

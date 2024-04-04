@@ -14,7 +14,7 @@ module.exports = new class {
   script = (payload, context) => {
     const vars = context.steps;
 
-    let webhookUrl = context.automation.outputs[0].metadata.webhook_url;
+    let webhookUrl = vars.transform.webhook_url;
     Mesa.request.post(webhookUrl, vars.shopify);
 
     Mesa.trigger.setTaskExternalData({

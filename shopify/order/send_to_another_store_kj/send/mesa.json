@@ -5,18 +5,7 @@
     "description": "",
     "seconds": 135,
     "enabled": false,
-    "setup": {
-        "mode": "custom",
-        "fields": [
-            {
-                "key": "webhook_url",
-                "target": "custom.webhook_url",
-                "label": "Install the Receive workflow on the other store and enter the webhook url",
-                "description": "When you install the 'Receive Orders From Another Store' workflow in your other store, the Webhook trigger that thte workflow starts with will have a url that you can copy in here.",
-                "tokens": false
-            }
-        ]
-    },
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -37,6 +26,33 @@
         ],
         "outputs": [
             {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Setup",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "webhook_url"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
@@ -50,7 +66,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ]
     }
