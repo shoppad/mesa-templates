@@ -183,7 +183,7 @@
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Is Loop Done?",
+                "name": "Loop Done And More Gift Cards To Import?",
                 "key": "filter",
                 "metadata": {
                     "a": "{{loop.key}}",
@@ -192,28 +192,21 @@
                     "additional": [
                         {
                             "operator": "and",
-                            "comparison": "equals"
+                            "a": "{{fetch_gift_cards.size}}",
+                            "comparison": "equals",
+                            "b": "{{transform.limit}}"
                         }
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 5
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "logs",
-                "name": "Log Data",
-                "key": "logs",
-                "metadata": {
-                    "message": "test"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 6
             },
             {
                 "schema": 2,
@@ -222,12 +215,12 @@
                 "name": "Run This Workflow Again",
                 "key": "custom",
                 "metadata": {
-                    "script": null
+                    "script": "custom.js"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 7
+                "weight": 6
             }
         ]
     }
