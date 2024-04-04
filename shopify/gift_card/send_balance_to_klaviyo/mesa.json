@@ -5,7 +5,7 @@
     "description": "",
     "seconds": 135,
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -20,7 +20,10 @@
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,7 +41,7 @@
                     "mapping": [
                         {
                             "destination": "limit",
-                            "source": "3"
+                            "source": "250"
                         }
                     ]
                 },
@@ -59,14 +62,144 @@
                 "trigger_type": "output",
                 "type": "custom",
                 "name": "Get Batch Of Gift Cards",
-                "key": "custom",
+                "key": "fetch_gift_cards",
                 "metadata": {
-                    "script": "custom.js"
+                    "script": "fetch_gift_cards.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{fetch_gift_cards}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{loop.customer_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "id",
+                            "type": "varchar",
+                            "value": "{{loop.id}}",
+                            "disabled": "660e9ffbebaa25bb3d06a6f3"
+                        },
+                        {
+                            "key": "initial_value",
+                            "type": "numeric",
+                            "value": "{{loop.initial_value}}",
+                            "disabled": "660e9ffbebaa25bb3d06a6f3"
+                        },
+                        {
+                            "key": "balance",
+                            "type": "varchar",
+                            "value": "{{loop.balance}}",
+                            "disabled": "660e9ffbebaa25bb3d06a6f3"
+                        },
+                        {
+                            "key": "customer_id",
+                            "type": "varchar",
+                            "value": "{{loop.customer_id}}",
+                            "disabled": "660e9ffbebaa25bb3d06a6f3"
+                        },
+                        {
+                            "key": "customer_email",
+                            "type": "varchar",
+                            "value": "{{shopify.email}}",
+                            "disabled": "660e9ffbebaa25bb3d06a6f3"
+                        },
+                        {
+                            "key": "created_at",
+                            "type": "timestamptz",
+                            "value": "{{loop.created_at}}",
+                            "disabled": "660e9ffbebaa25bb3d06a6f3"
+                        },
+                        {
+                            "key": "updated_at",
+                            "type": "timestamptz",
+                            "value": "{{loop.updated_at}}",
+                            "disabled": "660e9ffbebaa25bb3d06a6f3"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop.id}}",
+                        "a": "id"
+                    },
+                    "table": "gift_cards"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Is Loop Done?",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.key}}",
+                    "comparison": "equals",
+                    "b": "fetch_gift_cards.{{fetch_gift_cards.size | minus: 1}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
             },
             {
                 "schema": 4,
@@ -74,11 +207,27 @@
                 "type": "logs",
                 "name": "Log Data",
                 "key": "logs",
-                "metadata": [],
+                "metadata": {
+                    "message": "test"
+                },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 6
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Run This Workflow Again",
+                "key": "custom",
+                "metadata": {
+                    "script": null
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
             }
         ]
     }

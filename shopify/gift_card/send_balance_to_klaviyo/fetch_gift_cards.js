@@ -18,8 +18,18 @@ module.exports = new class {
 
     let limit = vars.transform.limit;
     let minUpdatedAt = Util.getMesaStorage('min_updated_at');
-    let response = Shopify.get(`/admin/gift_cards/search.json?limit=${limit}&order=updated_at ASC&updated_at_max=${minUpdatedAt}`);
-    let giftCards = response.gift_cards;
+    let initialMinUpdatedAt = minUpdatedAt;
+
+    let url = `/admin/gift_cards/search.json?order=updated_at ASC&limit=${limit}`;
+    if (minUpdatedAt) {
+      url += `&updated_at_min=${minUpdatedAt}`;
+    } else {
+      // url += '&updated_at_max=20'
+    }
+    url += '&created_at_max=2099-01-01';
+
+    let response = Shopify.get(url);
+    let giftCards = response.gift_cards; 
 
     if (giftCards.length) {
       let lastGiftCard = giftCards[giftCards.length - 1];
@@ -28,6 +38,7 @@ module.exports = new class {
       // minUpdatedAt stays the same 
     }
 
+    Util.stepLabel(`Initial min updated at: ${initialMinUpdatedAt}, New: ${minUpdatedAt}, Rows: ${giftCards.length}`);
     Mesa.storage.set('min_updated_at', minUpdatedAt);
 
     Mesa.output.next(giftCards);
