@@ -15,7 +15,7 @@
                 "name": "Schedule",
                 "key": "schedule",
                 "metadata": {
-                    "schedule": "@hourly:0 * * * *",
+                    "schedule": "@weekly:0 0 * * 0",
                     "enqueue_type": "schedule",
                     "datetime": null
                 },
