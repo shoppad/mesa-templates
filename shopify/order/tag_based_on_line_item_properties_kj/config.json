@@ -1,0 +1,19 @@
+{
+  "template_variables": [
+    {
+      "key": "filter_1",
+      "field": "metadata.b",
+      "value": "{{ template | label: 'The name of the line item variable?' }}"
+    },
+    {
+      "key": "filter",
+      "field": "metadata.b",
+      "value": "{{ template | label: 'The value for the line item variable?' }}"
+    },
+    {
+      "key": "shopify_1",
+      "field": "metadata.body.tag",
+      "value": "{{ template | label: 'The tag you want to use?', tokens: false, placeholder: 'e.g. January Birthday' }}"
+    }    
+  ]
+}
