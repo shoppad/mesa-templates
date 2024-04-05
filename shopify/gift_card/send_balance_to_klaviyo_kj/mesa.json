@@ -1,0 +1,218 @@
+{
+    "key": "shopify/gift_card/send_balance_to_klaviyo_kj",
+    "name": "Trigger Klaviyo Flow For Gift Card Balances",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "limit",
+                            "source": "1"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Pagination",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get /{database}/{table}",
+                    "table": "gift_cards",
+                    "where_clause": {
+                        "comparison": "equals"
+                    },
+                    "query": "SELECT * FROM gift_cards\nWHERE mesa_id > {{custom_1.mesa_id}}\nORDER BY mesa_id ASC\nLIMIT {{transform.limit}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Save Pagination",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{data}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "logs",
+                "name": "Log Data",
+                "key": "logs",
+                "metadata": {
+                    "message": "Customer #{{loop.mesa_id}}: {{loop.customer_email}}- Balance: {{loop.balance}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "event",
+                "action": "create",
+                "name": "Create Event",
+                "version": "v3",
+                "key": "klaviyo",
+                "operation_id": "mesa_create_event",
+                "metadata": {
+                    "api_endpoint": "post /mesa/api/events/",
+                    "body": {
+                        "mode": "create",
+                        "properties": [
+                            {
+                                "key": "balance",
+                                "value": "{{loop.balance}}"
+                            }
+                        ],
+                        "profile": {
+                            "email": "{{loop.customer_email}}"
+                        },
+                        "metric": {
+                            "name": "Gift Card Balance Alert"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Is Loop Done?",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.key}}",
+                    "comparison": "equals",
+                    "b": "data.{{data.size | minus: 1}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Run This Workflow Again",
+                "key": "custom_2",
+                "metadata": {
+                    "script": "custom_2.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            }
+        ]
+    }
+}
