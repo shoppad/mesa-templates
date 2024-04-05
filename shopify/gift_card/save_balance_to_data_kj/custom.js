@@ -14,7 +14,7 @@ module.exports = new class {
   script = (payload, context) => {
     const vars = context.steps;
 
-    Mesa.automation.send('shopify__gift_card__send_balance_to_klaviyo');
+    Mesa.automation.send(context.automation.key);
 
     Mesa.output.next(payload);
   }
