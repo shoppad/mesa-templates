@@ -1,0 +1,100 @@
+{
+    "key": "tracktor/fulfillment/klaviyo_event_when_delivered",
+    "name": "Send message in Klaviyo when an order is delivered",
+    "version": "1.0.0",
+    "description": "When Tracktor recognizes that a package has been delivered, this template will fire an event over to Klaviyo, which will allow you to send an email or SMS to your customer related to the delivery.",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment/delivered",
+                "name": "Fulfillment Status is Delivered",
+                "key": "tracktor",
+                "operation_id": "fulfillment_delivered",
+                "metadata": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_order",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{tracktor.order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "order_id"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "event",
+                "action": "create",
+                "name": "Create Event",
+                "version": "v3",
+                "key": "klaviyo",
+                "operation_id": "mesa_create_event",
+                "metadata": {
+                    "api_endpoint": "post /mesa/api/events/",
+                    "body": {
+                        "mode": "create",
+                        "properties": [
+                            {
+                                "key": "order_name",
+                                "value": "{{shopify_order.name}}"
+                            },
+                            {
+                                "key": "fulfillment_id",
+                                "value": "{{tracktor.fulfillment_id}}"
+                            },
+                            {
+                                "key": "fulfillment_status",
+                                "value": "{{tracktor.fulfillment_status}}"
+                            }
+                        ],
+                        "profile": {
+                            "email": "{{shopify_order.email}}"
+                        },
+                        "metric": {
+                            "name": "Order Delivered"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.mode",
+                    "body.profile",
+                    "body.profile.email",
+                    "body.metric",
+                    "body.metric.name",
+                    "body.properties",
+                    "body.properties[].key",
+                    "body.properties[].value"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
