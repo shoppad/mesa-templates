@@ -1,0 +1,116 @@
+{
+    "key": "shopify/order/remove_line_item_properties_kj",
+    "name": "Remove Line Item Properties On An Order",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "filter": {
+                        "comparison": "equals"
+                    },
+                    "key": "{{shopify.line_items[]}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Quantity Is Greater Than Zero",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{loop.current_quantity}}",
+                    "comparison": "greater than",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Remove Line Item",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "line_item_add",
+                "name": "Add Line Item to Order",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_add-line-item",
+                "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/add-line-item.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "product_id": "{{loop.product_id}}",
+                        "variant_id": "{{loop.variant_id}}",
+                        "quantity": "{{loop.quantity}}",
+                        "discount_type": "Fixed Amount",
+                        "discount_amount": "{{loop.discount_allocations[0].amount}}",
+                        "allow_duplicates": true,
+                        "notify_customer": true
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.discount_type",
+                    "body.discount_amount"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
