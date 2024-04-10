@@ -1,0 +1,9 @@
+{
+  "template_variables": [
+    {
+      "key": "email",
+      "field": "metadata.body.to",
+      "value": "{{ template | label: 'Enter the email address of the recipient for the alert' }}"
+    }
+  ]
+}

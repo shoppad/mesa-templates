@@ -1,0 +1,129 @@
+{
+    "key": "shopify/inventory/email_alert_when_entire_collection_out_of_stock_kj",
+    "name": "Email Alert When All Products In Collection Out Of Stock",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "variant",
+                "action": "out_of_stock",
+                "name": "Variant Out of Stock",
+                "key": "shopify",
+                "operation_id": "variants_out_of_stock",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "smart_collection",
+                "action": "list",
+                "name": "Get List of Smart Collections",
+                "key": "shopify_1",
+                "operation_id": "get_smart_collections",
+                "metadata": {
+                    "api_endpoint": "get admin/smart_collections.json",
+                    "query": {
+                        "product_id": "{{shopify.product_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.product_id"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify_1}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Count In-Stock Variants In Collection",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{custom.count}}",
+                    "comparison": "equals",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "/send-email",
+                "metadata": {
+                    "api_endpoint": "post /send-email",
+                    "body": {
+                        "to": "{{ template | label: 'Enter the email address of the recipient for the alert' }}",
+                        "subject": "All Products In Collection OOS: {{loop.title}}",
+                        "message": "Most recent SKU in collection to go OOS: {{shopify.sku}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
