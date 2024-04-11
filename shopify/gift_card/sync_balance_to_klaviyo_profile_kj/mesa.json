@@ -1,0 +1,356 @@
+{
+    "key": "shopify/gift_card/sync_balance_to_klaviyo_profile_kj",
+    "name": "Sync Gift Card Balance To Klaviyo Profile",
+    "version": "1.0.0",
+    "description": "In this workflow template, we pull in gift card balances over the API and save them into Data by MESA. This can be useful for several different use cases, including firing off a Klaviyo flow to send gift card balances to customers.",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@daily:0 0 * * *",
+                    "enqueue_type": "schedule",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "limit",
+                            "source": "1"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Get Batch Of Gift Cards",
+                "key": "fetch_gift_cards",
+                "metadata": {
+                    "script": "fetch_gift_cards.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{fetch_gift_cards}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{loop.customer_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "customer_id"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Update or Create Record",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "id",
+                            "type": "varchar",
+                            "value": "{{loop.id}}",
+                            "disabled": "661024663b6a3665a106f5b9"
+                        },
+                        {
+                            "key": "initial_value",
+                            "type": "numeric",
+                            "value": "{{loop.initial_value}}",
+                            "disabled": "661024663b6a3665a106f5b9"
+                        },
+                        {
+                            "key": "balance",
+                            "type": "varchar",
+                            "value": "{{loop.balance}}",
+                            "disabled": "661024663b6a3665a106f5b9"
+                        },
+                        {
+                            "key": "customer_id",
+                            "type": "varchar",
+                            "value": "{{loop.customer_id}}",
+                            "disabled": "661024663b6a3665a106f5b9"
+                        },
+                        {
+                            "key": "customer_email",
+                            "type": "varchar",
+                            "value": "{{shopify.email}}",
+                            "disabled": "661024663b6a3665a106f5b9"
+                        },
+                        {
+                            "key": "created_at",
+                            "type": "timestamptz",
+                            "value": "{{loop.created_at}}",
+                            "disabled": "661024663b6a3665a106f5b9"
+                        },
+                        {
+                            "key": "updated_at",
+                            "type": "timestamptz",
+                            "value": "{{loop.updated_at}}",
+                            "disabled": "661024663b6a3665a106f5b9"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop.id}}",
+                        "a": "id"
+                    },
+                    "table": "gift_cards"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "create",
+                    "table",
+                    "where_clause",
+                    "where_clause.a",
+                    "where_clause.comparison",
+                    "where_clause.b",
+                    "columns",
+                    "columns[].key",
+                    "columns[].type",
+                    "columns[].value",
+                    "columns[].disabled"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data_1",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get /{database}/{table}",
+                    "query": "SELECT SUM(CAST(balance AS numeric)) AS total_balance\nFROM gift_cards\nWHERE customer_email = '{{shopify.email}}'",
+                    "table": "gift_cards",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "profile",
+                "action": "list",
+                "name": "Get Klaviyo Profile ID From Email",
+                "version": "v3",
+                "key": "klaviyo_2",
+                "operation_id": "get_profiles",
+                "metadata": {
+                    "api_endpoint": "get /api/profiles/",
+                    "query": {
+                        "filter": "equals(email,'{{shopify.email}}')"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.filter"
+                ],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "profile",
+                "action": "update",
+                "name": "Update Profile",
+                "version": "v3",
+                "key": "klaviyo",
+                "operation_id": "update_profile",
+                "metadata": {
+                    "api_endpoint": "patch /api/profiles/{id}/",
+                    "body": {
+                        "data": {
+                            "type": "profile",
+                            "id": "{{klaviyo_2.0.id}}",
+                            "attributes": {
+                                "properties": {
+                                    "gift_card_balance": "{{data_1.0.total_balance}}"
+                                }
+                            }
+                        }
+                    },
+                    "path": {
+                        "id": "{{klaviyo_2.0.id}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "data",
+                                "fields": [
+                                    {
+                                        "key": "attributes",
+                                        "fields": [
+                                            {
+                                                "key": "properties",
+                                                "fields": [
+                                                    {
+                                                        "key": "gift_card_balance",
+                                                        "type": "custom",
+                                                        "allow_custom_fields": false,
+                                                        "location": "required",
+                                                        "convertOnSave": false
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Loop Done And More Gift Cards To Import?",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.key}}",
+                    "comparison": "equals",
+                    "b": "fetch_gift_cards.{{fetch_gift_cards.size | minus: 1}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{fetch_gift_cards.size}}",
+                            "comparison": "equals",
+                            "b": "{{transform.limit}}"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Run This Workflow Again",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
