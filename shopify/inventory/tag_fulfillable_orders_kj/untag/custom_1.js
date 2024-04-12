@@ -1,5 +1,4 @@
 const Mesa = require('vendor/Mesa.js');
-const ShopifyUtil = require('./ShopifyUtil.js');
 
 /**
  * A Mesa Script exports a class with a script() method.
@@ -15,8 +14,8 @@ module.exports = new class {
   script = (payload, context) => {
     const vars = context.steps;
 
-    let orders = ShopifyUtil.ordersByTag('Fulfillable', 250);
+    Mesa.automation.send('shopify__inventory__tag_fulfillable_orders_kj__tag');
 
-    Mesa.output.next(orders);
+    Mesa.output.next(payload);
   }
 }

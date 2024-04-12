@@ -1,6 +1,6 @@
 {
     "key": "shopify/inventory/tag_fulfillable_orders_kj/untag",
-    "name": "Untag Fulfillable Orders",
+    "name": "Reset Fulfillable Orders Tags",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -30,7 +30,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Get Orders Tagged As Fulfillable",
                 "key": "custom",
                 "metadata": {
                     "script": "custom.js"
@@ -39,6 +39,107 @@
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Clear The Assigned Inventory Table",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get /{database}/{table}",
+                    "query": "DELETE FROM assigned_inventory",
+                    "table": "assigned_inventory",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Orders",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{custom}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_remove",
+                "name": "Order Remove Tag",
+                "key": "shopify",
+                "operation_id": "deletemesa-order-order_id-tag",
+                "metadata": {
+                    "api_endpoint": "delete mesa/orders/{{order_id}}/tag.json",
+                    "order_id": "{{loop.id}}",
+                    "body": {
+                        "tag": "Fulfillable"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 3
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Loop done?",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.key}}",
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "b": "custom.{{custom | size | minus: 1}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Run Workflow: Tag Fulfillable Orders",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
             }
         ]
     }
