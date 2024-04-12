@@ -1,0 +1,14 @@
+{
+  "key": "shopify/inventory/tag_fulfillable_orders_kj",
+  "name": "Test: Shopify: Legacy and new tokens",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "tags": [],
+  "source": "shopify",
+  "destination": "shopify",
+  "templates": [
+    "shopify/inventory/tag_fulfillable_orders_kj/untag",
+    "shopify/inventory/tag_fulfillable_orders_kj/tag"
+  ]
+}
