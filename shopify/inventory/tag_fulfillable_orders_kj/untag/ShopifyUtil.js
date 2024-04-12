@@ -291,7 +291,7 @@ const ShopifyUtil = {
     return [variant.id, variant.product.id];
   },
 
-  ordersByTag: (tag, limit = 250) => {
+  ordersByTag: (tag, limit) => {
     let query = `#graphql
       query($query: String!, $limit: Int!) {
         orders(first: $limit, query: $query) {
@@ -378,7 +378,7 @@ const ShopifyUtil = {
   variantOnHandInventoryLevels: (variantId) => {
     let query = `#graphql
       {
-        productVariant(id: "gid://shopify/ProductVariant/44944574775617") {
+        productVariant(id: "gid://shopify/ProductVariant/${variantId}") {
           legacyResourceId
           sku
           inventoryItem {

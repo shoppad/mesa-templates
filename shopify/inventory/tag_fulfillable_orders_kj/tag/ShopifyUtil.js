@@ -378,7 +378,7 @@ const ShopifyUtil = {
   variantOnHandInventoryLevels: (variantId) => {
     let query = `#graphql
       {
-        productVariant(id: "gid://shopify/ProductVariant/44944574775617") {
+        productVariant(id: "gid://shopify/ProductVariant/${variantId}") {
           legacyResourceId
           sku
           inventoryItem {

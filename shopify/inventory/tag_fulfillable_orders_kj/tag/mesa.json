@@ -1,6 +1,6 @@
 {
     "key": "shopify/inventory/tag_fulfillable_orders_kj/tag",
-    "name": "New workflow",
+    "name": "Tag Fulfillable Orders",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
@@ -38,7 +38,7 @@
                 "metadata": {
                     "api_endpoint": "get admin/orders.json",
                     "query": {
-                        "limit": "1",
+                        "limit": "30",
                         "status": "any",
                         "fulfillment_status": "unfulfilled"
                     }
@@ -57,7 +57,7 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop",
+                "name": "Loop Over Orders",
                 "version": "v2",
                 "key": "loop",
                 "operation_id": "loop_loop",
@@ -73,13 +73,22 @@
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom Code",
-                "key": "custom",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Lookup Order In Assigned Inventory",
+                "key": "data_2",
+                "operation_id": "get_database_table",
                 "metadata": {
-                    "script": "custom.js"
+                    "api_endpoint": "get /{database}/{table}",
+                    "table": "assigned_inventory",
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop.id}}",
+                        "a": "order_id"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -87,17 +96,20 @@
                 "weight": 2
             },
             {
-                "schema": 3,
+                "schema": 4.1,
                 "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product_variant",
-                "action": "retrieve_id",
-                "name": "Retrieve Product Variant",
-                "key": "shopify_2",
-                "operation_id": "get_variants_variant_id",
+                "type": "filter",
+                "name": "If Order Hasn't Been Assigned Yet",
+                "key": "filter_1",
                 "metadata": {
-                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
-                    "variant_id": "{{loop.line_items[0].variant_id}}"
+                    "a": "{{data_2.0.mesa_id}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -105,24 +117,180 @@
                 "weight": 3
             },
             {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Get Assigned Inventory By Variant",
+                "key": "data_1",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get /{database}/{table}",
+                    "query": "{% assign variant_ids = \"\" %} \n\n{% for item in loop.line_items %}\n  {% if forloop.first %}\n    {% assign variant_ids = variant_ids | append: \"'\" | append: item.variant_id | append: \"'\" %}\n  {% else %}\n    {% assign variant_ids = variant_ids | append: \", '\" | append: item.variant_id | append: \"'\" %}\n  {% endif %}\n{% endfor %}\n\nSELECT variant_id, SUM(quantity) AS quantity FROM \"assigned_inventory\" \nWHERE variant_id IN ({{ variant_ids }})\nGROUP BY variant_id",
+                    "table": "assigned_inventory",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "See If All Variants Are Fulfillable",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "If Fulfillable",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{custom.is_fulfillable}}",
+                    "comparison": "equals",
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "inventory_level",
-                "action": "list",
-                "name": "Get List of Inventory Levels",
-                "key": "shopify_1",
-                "operation_id": "get_inventory_levels",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_3",
+                "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
-                    "api_endpoint": "get admin/inventory_levels.json",
-                    "query": {
-                        "inventory_item_ids": "{{shopify_2.inventory_item_id}}"
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+                    "order_id": "{{loop.id}}",
+                    "body": {
+                        "tag": "Fulfillable"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 7
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Line Items",
+                "version": "v2",
+                "key": "loop_1",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{loop.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Assign Inventory",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "product_title",
+                            "type": "varchar",
+                            "value": "{{loop_1.title}}",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "variant_id",
+                            "type": "varchar",
+                            "value": "{{loop_1.variant_id}}",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "quantity",
+                            "type": "numeric",
+                            "value": "{{loop_1.quantity}}",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "{{loop_1.sku}}",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "order_id",
+                            "type": "numeric",
+                            "value": "{{loop.id}}",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "line_item",
+                            "type": "numeric",
+                            "value": "{{loop_1.id}}",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        }
+                    ],
+                    "where_clause": {
+                        "comparison": "equals",
+                        "b": "{{loop_1.id}}",
+                        "a": "line_item"
+                    },
+                    "table": "assigned_inventory"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 10
             }
         ]
     }
