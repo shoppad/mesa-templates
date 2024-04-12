@@ -51,6 +51,69 @@
                 "trigger_type": "output",
                 "type": "data",
                 "entity": "record",
+                "action": "create",
+                "name": "Create Record",
+                "key": "data_1",
+                "operation_id": "post_database_table",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "product_title",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66193b3f72a2c443ec03a4bb"
+                        },
+                        {
+                            "key": "variant_id",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66193b3f72a2c443ec03a4bb"
+                        },
+                        {
+                            "key": "quantity",
+                            "type": "numeric",
+                            "value": "1",
+                            "disabled": "66193b3f72a2c443ec03a4bb"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66193b3f72a2c443ec03a4bb"
+                        },
+                        {
+                            "key": "order_id",
+                            "type": "numeric",
+                            "value": "1",
+                            "disabled": "66193b3f72a2c443ec03a4bb"
+                        },
+                        {
+                            "key": "line_item",
+                            "type": "numeric",
+                            "value": "1",
+                            "disabled": "66193b3f72a2c443ec03a4bb"
+                        },
+                        {
+                            "key": "order_name",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66193b3f72a2c443ec03a4bb"
+                        }
+                    ],
+                    "table": "assigned_inventory"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
                 "action": "query",
                 "name": "Clear The Assigned Inventory Table",
                 "key": "data",
@@ -68,7 +131,7 @@
                     "query"
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 5.1,
@@ -94,7 +157,7 @@
                     "filter.b"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 3,
@@ -119,7 +182,7 @@
                     "body.tag"
                 ],
                 "on_error": "replay",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 4.1,
@@ -150,7 +213,7 @@
                     "additional[].b"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             },
             {
                 "schema": 2,
@@ -166,7 +229,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             }
         ]
     }

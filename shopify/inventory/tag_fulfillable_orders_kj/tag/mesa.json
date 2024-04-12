@@ -51,77 +51,6 @@
                 "weight": 0
             },
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "data",
-                "entity": "record",
-                "action": "create",
-                "name": "Create Assigned Inventory Table",
-                "key": "data",
-                "operation_id": "post_database_table",
-                "metadata": {
-                    "api_endpoint": "post /{database}/{table}",
-                    "create": "existing",
-                    "columns": [
-                        {
-                            "key": "product_title",
-                            "type": "varchar",
-                            "value": "1",
-                            "disabled": "66193b4fe17f29cc1806faac"
-                        },
-                        {
-                            "key": "variant_id",
-                            "type": "varchar",
-                            "value": "1",
-                            "disabled": "66193b4fe17f29cc1806faac"
-                        },
-                        {
-                            "key": "quantity",
-                            "type": "numeric",
-                            "value": "1",
-                            "disabled": "66193b4fe17f29cc1806faac"
-                        },
-                        {
-                            "key": "sku",
-                            "type": "varchar",
-                            "value": "1",
-                            "disabled": "66193b4fe17f29cc1806faac"
-                        },
-                        {
-                            "key": "order_id",
-                            "type": "numeric",
-                            "value": "1",
-                            "disabled": "66193b4fe17f29cc1806faac"
-                        },
-                        {
-                            "key": "line_item",
-                            "type": "numeric",
-                            "value": "1",
-                            "disabled": "66193b4fe17f29cc1806faac"
-                        },
-                        {
-                            "key": "order_name",
-                            "type": "varchar",
-                            "value": "1",
-                            "disabled": "66193b4fe17f29cc1806faac"
-                        }
-                    ],
-                    "table": "assigned_inventory"
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "create",
-                    "table",
-                    "columns",
-                    "columns[].key",
-                    "columns[].type",
-                    "columns[].value",
-                    "columns[].disabled"
-                ],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
                 "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
@@ -145,7 +74,7 @@
                     "filter.b"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -174,7 +103,7 @@
                     "where_clause.b"
                 ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
                 "schema": 4.1,
@@ -203,7 +132,7 @@
                     "additional[].b"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -227,7 +156,7 @@
                     "query"
                 ],
                 "on_error": "default",
-                "weight": 5
+                "weight": 4
             },
             {
                 "schema": 2,
@@ -243,7 +172,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 6
+                "weight": 5
             },
             {
                 "schema": 4.1,
@@ -274,7 +203,7 @@
                     "additional[].b"
                 ],
                 "on_error": "default",
-                "weight": 7
+                "weight": 6
             },
             {
                 "schema": 3,
@@ -299,7 +228,7 @@
                     "body.tag"
                 ],
                 "on_error": "default",
-                "weight": 8
+                "weight": 7
             },
             {
                 "schema": 2,
@@ -315,7 +244,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 9
+                "weight": 8
             }
         ]
     }
