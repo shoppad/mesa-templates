@@ -11,14 +11,10 @@
             {
                 "schema": 2,
                 "trigger_type": "input",
-                "type": "schedule",
-                "name": "Schedule",
-                "key": "schedule",
-                "metadata": {
-                    "schedule": "@hourly:0 * * * *",
-                    "enqueue_type": "schedule",
-                    "datetime": null
-                },
+                "type": "webhook",
+                "name": "Webhook Received",
+                "key": "webhook",
+                "metadata": [],
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
@@ -38,7 +34,7 @@
                 "metadata": {
                     "api_endpoint": "get admin/orders.json",
                     "query": {
-                        "limit": "30",
+                        "limit": "100",
                         "status": "any",
                         "fulfillment_status": "unfulfilled"
                     }
@@ -51,6 +47,63 @@
                 ],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "create",
+                "name": "Create Assigned Inventory Table",
+                "key": "data",
+                "operation_id": "post_database_table",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "product_title",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "variant_id",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "quantity",
+                            "type": "numeric",
+                            "value": "1",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "sku",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "order_id",
+                            "type": "numeric",
+                            "value": "1",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        },
+                        {
+                            "key": "line_item",
+                            "type": "numeric",
+                            "value": "1",
+                            "disabled": "66184c6ac052ba37710ef182"
+                        }
+                    ],
+                    "table": "assigned_inventory"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
             },
             {
                 "schema": 5.1,
@@ -70,7 +123,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -93,7 +146,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4.1,
@@ -114,7 +167,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 4,
@@ -138,7 +191,7 @@
                     "query"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             },
             {
                 "schema": 2,
@@ -152,7 +205,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             },
             {
                 "schema": 4.1,
@@ -174,7 +227,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 6
+                "weight": 7
             },
             {
                 "schema": 3,
@@ -195,102 +248,21 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 7
+                "weight": 8
             },
             {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Assign Inventory In Database",
                 "key": "custom_1",
                 "metadata": {
                     "script": "custom_1.js"
-                },
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 8
-            },
-            {
-                "schema": 5.1,
-                "trigger_type": "output",
-                "type": "loop",
-                "entity": "loop",
-                "name": "Loop Over Line Items",
-                "version": "v2",
-                "key": "loop_1",
-                "operation_id": "loop_loop",
-                "metadata": {
-                    "key": "{{loop.line_items[]}}",
-                    "filter": {
-                        "comparison": "equals"
-                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 9
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "data",
-                "entity": "record",
-                "action": "update_create",
-                "name": "Assign Inventory",
-                "key": "data",
-                "operation_id": "post_database_table_upsert",
-                "metadata": {
-                    "api_endpoint": "post /{database}/{table}/upsert",
-                    "create": "existing",
-                    "columns": [
-                        {
-                            "key": "product_title",
-                            "type": "varchar",
-                            "value": "{{loop_1.title}}",
-                            "disabled": "66184c6ac052ba37710ef182"
-                        },
-                        {
-                            "key": "variant_id",
-                            "type": "varchar",
-                            "value": "{{loop_1.variant_id}}",
-                            "disabled": "66184c6ac052ba37710ef182"
-                        },
-                        {
-                            "key": "quantity",
-                            "type": "numeric",
-                            "value": "{{loop_1.quantity}}",
-                            "disabled": "66184c6ac052ba37710ef182"
-                        },
-                        {
-                            "key": "sku",
-                            "type": "varchar",
-                            "value": "{{loop_1.sku}}",
-                            "disabled": "66184c6ac052ba37710ef182"
-                        },
-                        {
-                            "key": "order_id",
-                            "type": "numeric",
-                            "value": "{{loop.id}}",
-                            "disabled": "66184c6ac052ba37710ef182"
-                        },
-                        {
-                            "key": "line_item",
-                            "type": "numeric",
-                            "value": "{{loop_1.id}}",
-                            "disabled": "66184c6ac052ba37710ef182"
-                        }
-                    ],
-                    "where_clause": {
-                        "comparison": "equals",
-                        "b": "{{loop_1.id}}",
-                        "a": "line_item"
-                    },
-                    "table": "assigned_inventory"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 10
             }
         ]
     }
