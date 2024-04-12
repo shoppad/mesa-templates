@@ -25,6 +25,10 @@ const Util = {
     })
   },
 
+  escapeSQL: (string) => {
+    return string.replace(/'/g, "''");
+  },
+
   getMesaStorage(key, defaultValue = null) {
     let value = null;
     try {

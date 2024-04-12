@@ -20,7 +20,11 @@
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,7 +40,9 @@
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -80,7 +86,13 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -101,7 +113,11 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "replay",
                 "weight": 3
             },
@@ -123,7 +139,16 @@
                     "b": "custom.{{custom | size | minus: 1}}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -137,7 +162,9 @@
                     "script": "custom_1.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 5
             }

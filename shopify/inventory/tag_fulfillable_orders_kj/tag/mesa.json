@@ -16,7 +16,9 @@
                 "key": "webhook",
                 "metadata": [],
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "host"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -34,8 +36,8 @@
                 "metadata": {
                     "api_endpoint": "get admin/orders.json",
                     "query": {
-                        "limit": "100",
-                        "status": "any",
+                        "limit": "{{ template | label: 'How many orders to process at once?', description: 'We recommend setting this to something low initially to run a test, and then setting to 250 when you are ready to make it live.', default: 10 }}",
+                        "status": "open",
                         "fulfillment_status": "unfulfilled"
                     }
                 },
@@ -65,43 +67,57 @@
                             "key": "product_title",
                             "type": "varchar",
                             "value": "1",
-                            "disabled": "66184c6ac052ba37710ef182"
+                            "disabled": "66193b4fe17f29cc1806faac"
                         },
                         {
                             "key": "variant_id",
                             "type": "varchar",
                             "value": "1",
-                            "disabled": "66184c6ac052ba37710ef182"
+                            "disabled": "66193b4fe17f29cc1806faac"
                         },
                         {
                             "key": "quantity",
                             "type": "numeric",
                             "value": "1",
-                            "disabled": "66184c6ac052ba37710ef182"
+                            "disabled": "66193b4fe17f29cc1806faac"
                         },
                         {
                             "key": "sku",
                             "type": "varchar",
                             "value": "1",
-                            "disabled": "66184c6ac052ba37710ef182"
+                            "disabled": "66193b4fe17f29cc1806faac"
                         },
                         {
                             "key": "order_id",
                             "type": "numeric",
                             "value": "1",
-                            "disabled": "66184c6ac052ba37710ef182"
+                            "disabled": "66193b4fe17f29cc1806faac"
                         },
                         {
                             "key": "line_item",
                             "type": "numeric",
                             "value": "1",
-                            "disabled": "66184c6ac052ba37710ef182"
+                            "disabled": "66193b4fe17f29cc1806faac"
+                        },
+                        {
+                            "key": "order_name",
+                            "type": "varchar",
+                            "value": "1",
+                            "disabled": "66193b4fe17f29cc1806faac"
                         }
                     ],
                     "table": "assigned_inventory"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "create",
+                    "table",
+                    "columns",
+                    "columns[].key",
+                    "columns[].type",
+                    "columns[].value",
+                    "columns[].disabled"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -121,7 +137,13 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -144,7 +166,13 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "table",
+                    "where_clause",
+                    "where_clause.a",
+                    "where_clause.comparison",
+                    "where_clause.b"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -165,7 +193,15 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -203,7 +239,9 @@
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 6
             },
@@ -225,7 +263,16 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 7
             },
@@ -246,7 +293,11 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "default",
                 "weight": 8
             },
@@ -260,7 +311,9 @@
                     "script": "custom_1.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 9
             }

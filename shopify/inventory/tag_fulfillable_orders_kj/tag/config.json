@@ -1,0 +1,9 @@
+{
+  "template_variables": [
+    {
+      "key": "shopify",
+      "field": "metadata.query.limit",
+      "value": "{{ template | label: 'How many orders to process at once?', description: 'We recommend setting this to something low initially to run a test, and then setting to 250 when you are ready to make it live.', default: 10 }}"
+    }
+  ]
+}
