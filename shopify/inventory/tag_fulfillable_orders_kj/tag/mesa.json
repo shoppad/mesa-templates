@@ -1,0 +1,129 @@
+{
+    "key": "shopify/inventory/tag_fulfillable_orders_kj/tag",
+    "name": "New workflow",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "list",
+                "name": "Get List of Orders",
+                "key": "shopify",
+                "operation_id": "get_orders",
+                "metadata": {
+                    "api_endpoint": "get admin/orders.json",
+                    "query": {
+                        "limit": "1",
+                        "status": "any",
+                        "fulfillment_status": "unfulfilled"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.status",
+                    "query.limit",
+                    "query.fulfillment_status"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
+                "key": "shopify_2",
+                "operation_id": "get_variants_variant_id",
+                "metadata": {
+                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
+                    "variant_id": "{{loop.line_items[0].variant_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "list",
+                "name": "Get List of Inventory Levels",
+                "key": "shopify_1",
+                "operation_id": "get_inventory_levels",
+                "metadata": {
+                    "api_endpoint": "get admin/inventory_levels.json",
+                    "query": {
+                        "inventory_item_ids": "{{shopify_2.inventory_item_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
