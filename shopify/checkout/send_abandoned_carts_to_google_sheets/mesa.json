@@ -152,10 +152,9 @@
                 "version": "v2",
                 "operation_id": "record_create",
                 "metadata": {
-                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
                     "path": {
                         "spreadsheet_id": "",
-                        "sheet_name": "Sheet1"
+                        "sheet": "Sheet1"
                     },
                     "body": {
                         "fields": {}
