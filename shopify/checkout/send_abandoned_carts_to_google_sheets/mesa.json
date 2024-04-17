@@ -154,7 +154,7 @@
                 "metadata": {
                     "path": {
                         "spreadsheet_id": "",
-                        "sheet": "Sheet1"
+                        "sheet_name": "Sheet1"
                     },
                     "body": {
                         "fields": {}
