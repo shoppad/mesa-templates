@@ -68,7 +68,7 @@
                 "metadata": {
                     "api_endpoint": "post /channels/{channelId}/invites",
                     "path": {
-                        "channelId": "{{ template | label: 'What is your Discord''s Channel ID?', description: 'Right-click on your Discord Channel ID, click Copy Channel ID, then paste that value here. [Read more if you need help finding this value.](https://docs.getmesa.com/article/1242-discord#channel-id)', tokens: false }}"
+                        "channelId": "{{ template | label: 'What is your Discord''s Channel ID?', description: '', tokens: false }}"
                     }
                 },
                 "local_fields": [],
