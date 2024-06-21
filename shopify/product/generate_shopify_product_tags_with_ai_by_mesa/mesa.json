@@ -29,6 +29,7 @@
                 "action": "create",
                 "name": "Prompt",
                 "key": "ai",
+                "version": "v1",
                 "operation_id": "post-prompt",
                 "metadata": {
                     "api_endpoint": "post /prompt",

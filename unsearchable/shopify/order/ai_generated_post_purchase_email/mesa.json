@@ -42,6 +42,7 @@
                 "action": "create",
                 "name": "Generate Text",
                 "key": "ai",
+                "version": "v1",
                 "operation_id": "post-generate",
                 "metadata": {
                     "api_endpoint": "post \/generate",
