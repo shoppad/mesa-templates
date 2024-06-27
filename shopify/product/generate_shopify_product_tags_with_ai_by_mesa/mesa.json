@@ -15,7 +15,12 @@
                 "name": "Product Created",
                 "key": "shopify",
                 "operation_id": "products_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -28,18 +33,19 @@
                 "entity": "prompt",
                 "action": "create",
                 "name": "Prompt",
+                "version": "v2",
                 "key": "ai",
-                "version": "v1",
                 "operation_id": "post-prompt",
                 "metadata": {
-                    "api_endpoint": "post /prompt",
-                    "json": false,
-                    "temperature": "0.7",
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
                     "body": {
-                        "prompt": "Write 2 to 3 comma-separated tags using no more than 2 words for each based on the following product information:\nTitle: {{shopify.title}}\nDescription: {{shopify.body_html}} \n Format the tags so they are comma separated, not numerically separated."
+                        "role": "user",
+                        "content": "Write 2 to 3 comma-separated tags using no more than 2 words for each based on the following product information:\nTitle: {{shopify.title}}\nDescription: {{shopify.body_html}} \nFormat the tags so they are comma separated, not numerically separated."
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
