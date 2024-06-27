@@ -23,7 +23,12 @@
                 "name": "Product Created",
                 "key": "shopify",
                 "operation_id": "products_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,17 +41,19 @@
                 "entity": "prompt",
                 "action": "create",
                 "name": "Prompt",
+                "version": "v2",
                 "key": "ai",
-                "version": "v1",
                 "operation_id": "post-prompt",
                 "metadata": {
-                    "json": false,
-                    "temperature": "0.7",
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
                     "body": {
-                        "prompt": "Write a brief product description for a product called {{shopify.title}}"
+                        "role": "user",
+                        "content": "Write a brief product description for a product called {{shopify.title}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
