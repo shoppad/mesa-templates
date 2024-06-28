@@ -46,7 +46,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "airtable",
-                "version": "v2",
+                "version": "v3",
                 "entity": "record",
                 "action": "create",
                 "name": "Add Record",

@@ -32,7 +32,7 @@
                 "entity": "record",
                 "action": "list",
                 "name": "Get Products",
-                "version": "v2",
+                "version": "v3",
                 "key": "airtable",
                 "operation_id": "list",
                 "metadata": {
