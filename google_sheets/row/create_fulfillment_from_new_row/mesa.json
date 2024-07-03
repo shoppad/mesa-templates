@@ -75,22 +75,21 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "list",
-                "name": "Get List of Unfulfilled Orders",
+                "name": "Get Unfulfilled Order",
                 "key": "shopify",
                 "operation_id": "get_orders",
                 "metadata": {
                     "api_endpoint": "get admin\/orders.json",
                     "query": {
-                        "limit": "250",
-                        "status": "open",
-                        "fulfillment_status": "unfulfilled"
-                    }
+                        "limit": "1",
+                        "status": "any"
+                    },
+                    "parameters": "name={{googlesheets.data[\"Order Name (Number)\"]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
                     "query.limit",
-                    "query.status",
-                    "query.fulfillment_status"
+                    "parameters"
                 ],
                 "on_error": "default",
                 "weight": 0
@@ -173,7 +172,7 @@
                     "body": {
                         "tracking_company": "{{googlesheets.data[\"Tracking Company\"]}}",
                         "tracking_number": "{{googlesheets.data[\"Tracking Number\"]}}",
-                        "location_id": "{{ template | label: 'What is your store''s location of the order fulfillment?', tokens: false }}"
+                        "location_id": "{{ template | label: 'What location would you like to create an order fulfillment with?', description: 'Please make sure your products are available at this location.', tokens: false }}"
                     }
                 },
                 "local_fields": [],
