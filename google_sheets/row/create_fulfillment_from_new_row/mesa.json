@@ -84,7 +84,7 @@
                         "limit": "1",
                         "status": "any"
                     },
-                    "parameters": "name={{googlesheets.data[\"Order Name (Number)\"]}}"
+                    "parameters": "name={{googlesheets.data[\"Order Name (Number)\"]}}&fulfillment_status=unfulfilled"
                 },
                 "local_fields": [],
                 "selected_fields": [
