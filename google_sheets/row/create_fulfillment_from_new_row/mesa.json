@@ -1,0 +1,188 @@
+{
+    "key": "googlesheets/row/create_fulfillment_from_new_row",
+    "name": "Create an order fulfillment from a new row in Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new spreadsheet with the following columns. Please keep all columns selected to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Order Name (Number)",
+                        "value": "Order Name (Number)",
+                        "description": "The name for the order (example: #1001)."
+                    },
+                    {
+                        "label": "Tracking Company",
+                        "value": "Tracking Company",
+                        "description": "The company that is shipping the order."
+                    },
+                    {
+                        "label": "Tracking Number",
+                        "value": "Tracking Number",
+                        "description": "The tracking number for the order."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "created",
+                "name": "Row Created",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_created",
+                "metadata": {
+                    "api_endpoint": "get /{spreadsheet_id}/{sheet}",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "",
+                        "query_type": "all",
+                        "comparison": "="
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "list",
+                "name": "Get Unfulfilled Order",
+                "key": "shopify",
+                "operation_id": "get_orders",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders.json",
+                    "query": {
+                        "limit": "1",
+                        "status": "any"
+                    },
+                    "parameters": "name={{googlesheets.data[\"Order Name (Number)\"]}}&fulfillment_status=unfulfilled"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.limit",
+                    "parameters"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{googlesheets.data[\"Order Name (Number)\"]}}",
+                    "comparison": "in",
+                    "b": "{{loop.name}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{loop}}",
+                            "comparison": "is not empty"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{loop.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_fulfillment",
+                "action": "custom_create",
+                "name": "Create Order Fulfillment",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_orders_order_id_fulfillments",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/fulfillments.json",
+                    "order_id": "{{shopify_1.id}}",
+                    "body": {
+                        "tracking_company": "{{googlesheets.data[\"Tracking Company\"]}}",
+                        "tracking_number": "{{googlesheets.data[\"Tracking Number\"]}}",
+                        "location_id": "{{ template | label: 'What location would you like to create an order fulfillment with?', description: 'Please make sure your products are available at this location.', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.tracking_company",
+                    "body.tracking_number"
+                ],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
