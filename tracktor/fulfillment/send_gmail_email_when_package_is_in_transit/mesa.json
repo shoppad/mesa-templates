@@ -1,0 +1,68 @@
+{
+    "key": "tracktor/fulfillment/send_gmail_email_when_package_is_in_transit",
+    "name": "Send an email via Gmail when a package is \"In Transit\"",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment/in_transit",
+                "name": "Fulfillment Status is In Transit",
+                "key": "tracktor",
+                "operation_id": "fulfillment_in_transit",
+                "metadata": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "tracktor_1",
+                "operation_id": "RetrievethetrackingstatusesofanOrder",
+                "metadata": {
+                    "api_endpoint": "get /orders/{order_id}.json",
+                    "order_id": "{{tracktor.order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gmail",
+                "entity": "gmail_v1_user_message_send",
+                "action": "create",
+                "name": "Send Email",
+                "key": "gmail",
+                "operation_id": "gmail-users-messages-send",
+                "metadata": {
+                    "api_endpoint": "post /gmail/v1/users/{userId}/messages/send",
+                    "body": {
+                        "to": "{{tracktor_1.order_email}}",
+                        "subject": "{{ template | label: 'What is the subject of your email?', description: '', default: 'Order {{tracktor_1.order_name}} is on your way!' }}",
+                        "message": "{{ template | label: 'What is the message of your email?', description: '', default: 'Hello {{tracktor_1.customer_first_name}}!\n\nThanks for your patience as your order is on its way to you!\n\n- {{context.shop.name}}' }}",
+                        "from": "{{ template | label: 'What is the email address that the email is sent from?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
