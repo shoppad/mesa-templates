@@ -1,0 +1,144 @@
+{
+    "key": "shopify/order/send_orders_to_a_data_table_builder",
+    "name": "Send Shopify orders to a database",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "create",
+                "name": "Create Record",
+                "key": "data",
+                "operation_id": "post_database_table",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "Order URL",
+                            "type": "varchar",
+                            "value": "https://{{context.shop.domain}}/admin/orders/{{shopify.id}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Order Name",
+                            "type": "varchar",
+                            "value": "{{shopify.name}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Email",
+                            "type": "varchar",
+                            "value": "{{shopify.email}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Shipping Name",
+                            "type": "varchar",
+                            "value": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Address",
+                            "type": "text",
+                            "value": "{{shopify.shipping_address.address1}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "City",
+                            "type": "varchar",
+                            "value": "{{shopify.shipping_address.city}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "State/Province",
+                            "type": "varchar",
+                            "value": "{{shopify.shipping_address.province}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Zip/Postal Code",
+                            "type": "varchar",
+                            "value": "{{shopify.shipping_address.zip}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Country",
+                            "type": "varchar",
+                            "value": "{{shopify.shipping_address.country}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Product Name",
+                            "type": "varchar",
+                            "value": "{{loop.title}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Product SKU",
+                            "type": "varchar",
+                            "value": "{{loop.sku}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        },
+                        {
+                            "key": "Product Price",
+                            "type": "numeric",
+                            "value": "{{loop.price}}",
+                            "disabled": "669a7166daa0ff12ce0edf42"
+                        }
+                    ],
+                    "table": "Shopify Orders"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
