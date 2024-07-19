@@ -1,57 +1,59 @@
 {
     "key": "shopify/customer/add_to_google_sheets_document",
-    "name": "Add a Shopify customer to Google Sheets",
+    "name": "Add a Shopify customer to Google Sheets ",
     "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
     "enabled": false,
     "setup": {
         "mode": "custom",
         "fields": [
             {
                 "key": "create_spreadsheet_name",
-                "target": "googlesheets_row.path.create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
                 "label": "What do you want to name your spreadsheet?",
                 "tokens": false,
                 "description": "Give your new Google Spreadsheet a name."
             },
             {
                 "key": "fields",
-                "target": "googlesheets_row.setup_fields",
+                "target": "googlesheets.setup_fields",
                 "label": "What are your spreadsheet columns?",
                 "description": "This template will automatically create a new row whenever a new customer is created. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
                     {
                         "label": "Customer ID",
-                        "value": "Customer ID|{{shopify_customer.id}}",
+                        "value": "Customer ID|{{shopify.id}}",
                         "description": "The ID of the customer."
                     },
                     {
                         "label": "Email",
-                        "value": "Email|{{shopify_customer.email}}",
+                        "value": "Email|{{shopify.email}}",
                         "description": "The email of the customer."
                     },
                     {
                         "label": "First Name",
-                        "value": "First Name|{{shopify_customer.first_name}}",
+                        "value": "First Name|{{shopify.first_name}}",
                         "description": "The first name of the customer."
                     },
                     {
                         "label": "Last Name",
-                        "value": "Last Name|{{shopify_customer.last_name}}",
+                        "value": "Last Name|{{shopify.last_name}}",
                         "description": "The last name of the customer."
                     },
                     {
                         "label": "Phone",
-                        "value": "Phone|{{shopify_customer.phone}}",
+                        "value": "Phone|{{shopify.phone}}",
                         "description": "The phone number of the customer."
                     },
                     {
                         "label": "Tags",
-                        "value": "Tags|{{shopify_customer.tags}}",
+                        "value": "Tags|{{shopify.tags}}",
                         "description": "The tags of the customer."
                     },
                     {
                         "label": "Note",
-                        "value": "Note|{{shopify_customer.note}}",
+                        "value": "Note|{{shopify.note}}",
                         "description": "A note about the customer."
                     }
                 ],
@@ -63,16 +65,21 @@
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "customer",
                 "action": "created",
                 "name": "Customer Created",
-                "key": "shopify_customer",
+                "key": "shopify",
                 "operation_id": "customers_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -81,25 +88,22 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v1",
                 "entity": "row",
                 "action": "create",
                 "name": "Add Row",
-                "key": "googlesheets_row",
+                "version": "v2",
+                "key": "googlesheets",
                 "operation_id": "record_create",
                 "metadata": {
-                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
                     "path": {
-                        "mode": "create",
                         "spreadsheet_id": "",
-                        "sheet_name": "Sheet1",
-                        "header_row": "first_row"
-                    },
-                    "body": {
-                        "fields": {}
+                        "sheet": "Sheet1"
                     }
                 },
-                "weight": 1
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 0
             }
         ]
     }
