@@ -1,5 +1,5 @@
 {
-    "key": "shopify/order/send_orders_to_a_data_table_builder",
+    "key": "shopify/order/send_orders_to_a_data_table",
     "name": "Send Shopify orders to a database",
     "version": "1.0.0",
     "enabled": false,
