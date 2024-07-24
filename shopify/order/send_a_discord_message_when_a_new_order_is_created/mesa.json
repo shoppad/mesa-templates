@@ -1,0 +1,56 @@
+{
+    "key": "shopify/order/send_a_discord_message_when_a_new_order_is_created",
+    "name": "Send a Discord message when a Shopify order is created",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Create Channel Message",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-messages",
+                "metadata": {
+                    "api_endpoint": "post /channels/{channelId}/messages",
+                    "path": {
+                        "channelId": "{{ template | label: 'What is the channel you would like to send the message?', tokens: false }}"
+                    },
+                    "body": {
+                        "content": "{{ template | label: 'What is the content of the message?', default: '💰 A new order was received from {{shopify.billing_address.name}}. Order ID: {{shopify.id}}, Order Number: {{shopify.order_number}}, Total Price: $ {{shopify.current_total_price}}' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
