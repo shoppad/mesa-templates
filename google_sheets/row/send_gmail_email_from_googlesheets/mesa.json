@@ -1,0 +1,132 @@
+{
+    "key": "google_sheets/row/send_gmail_email_from_googlesheets",
+    "name": "Send an email from a new row in Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new spreadsheet with the following columns. Please keep all columns selected to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Recipient Email Address",
+                        "value": "Recipient Email Address",
+                        "description": "The recipient email address."
+                    },
+                    {
+                        "label": "Subject",
+                        "value": "Subject",
+                        "description": "The email's subject."
+                    },
+                    {
+                        "label": "Email Body",
+                        "value": "Email Body",
+                        "description": "The email's body."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "created",
+                "name": "Row Created",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_created",
+                "metadata": {
+                    "api_endpoint": "get /{spreadsheet_id}/{sheet}",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "",
+                        "query_type": "all",
+                        "comparison": "="
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{googlesheets.data[\"Recipient Email Address\"]}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{googlesheets.data.Subject}}",
+                            "comparison": "is not empty"
+                        },
+                        {
+                            "operator": "and",
+                            "a": "{{googlesheets.data[\"Email Body\"]}}",
+                            "comparison": "is not empty"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gmail",
+                "entity": "gmail_v1_user_message_send",
+                "action": "create",
+                "name": "Send Email",
+                "key": "gmail",
+                "operation_id": "gmail-users-messages-send",
+                "metadata": {
+                    "api_endpoint": "post /gmail/v1/users/{userId}/messages/send",
+                    "body": {
+                        "to": "{{googlesheets.data[\"Recipient Email Address\"]}}",
+                        "subject": "{{googlesheets.data.Subject}}",
+                        "message": "{{googlesheets.data[\"Email Body\"]}}",
+                        "from": "{{ template | label: 'What is the email address that the email is sent from?', tokens: false, weight: 1}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
