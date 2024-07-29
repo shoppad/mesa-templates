@@ -17,7 +17,7 @@
                 "key": "fields",
                 "target": "googlesheets.setup_fields",
                 "label": "What are your spreadsheet columns?",
-                "description": "This template will automatically create a new spreadsheet with the following columns. Please keep all columns selected to include in your spreadsheet.",
+                "description": "This template will automatically make a new spreadsheet with these columns. Please keep all the columns selected to include them in your spreadsheet. If you want more columns, add them to your new spreadsheet, return to your workflow, and sync your updates. [Learn more](https://docs.getmesa.com/apps/google-sheets/add-row)",
                 "options": [
                     {
                         "label": "Recipient Email Address",
