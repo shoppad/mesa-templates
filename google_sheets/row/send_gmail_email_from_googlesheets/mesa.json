@@ -1,6 +1,6 @@
 {
     "key": "google_sheets/row/send_gmail_email_from_googlesheets",
-    "name": "Send an email from a new row in Google Sheets",
+    "name": "Send an email from Gmail when a Google Sheet row is added",
     "version": "1.0.0",
     "enabled": false,
     "setup": {
