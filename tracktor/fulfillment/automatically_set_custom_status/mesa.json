@@ -26,7 +26,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -49,7 +49,7 @@
                 "operation_id": "get_orders_order_id",
                 "metadata": {
                     "api_endpoint": "get admin/orders/{{order_id}}.json",
-                    "order_id": "{{delay.id}}"
+                    "order_id": "{{shopify_order.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
