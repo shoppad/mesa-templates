@@ -96,6 +96,7 @@
                 "key": "uploadery_order_created",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -113,6 +114,7 @@
                     "key": "{{uploadery_order_created.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -133,6 +135,7 @@
                         "fields": {}
                     }
                 },
+                "on_error": "replay",
                 "weight": 1
             }
         ],

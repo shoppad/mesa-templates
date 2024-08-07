@@ -24,6 +24,7 @@
                     "topic": "orders/create"
                 },
                 "local_fields": null,
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -41,6 +42,7 @@
                     "b": "0"
                 },
                 "local_fields": null,
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -58,6 +60,7 @@
                     "message": "Dear {{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}, \n\nThank you for your gift of ${{shopify_order.total_tip_received}}, received on {{shopify_order.created_at}}.\n\nYour donation is to a tax-exempt nonprofit organization under Section 501(c)3 of the Internal Revenue Code. You can deduct the full amount of your gift as a charitable contribution for federal income tax purposes. No goods or services were provided in exchange for your contribution.\n\nSincerely,\n{{context.shop.name}}"
                 },
                 "local_fields": null,
+                "on_error": "default",
                 "weight": 1
             }
         ],

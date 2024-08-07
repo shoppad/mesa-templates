@@ -86,6 +86,7 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -102,6 +103,7 @@
                     "order_id": "{{form.order-id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -144,6 +146,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
         ],

@@ -17,6 +17,7 @@
                 "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -37,6 +38,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -51,6 +53,7 @@
                     "b": "false"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -98,6 +101,7 @@
                         ]
                     }
                 ],
+                "on_error": "default",
                 "weight": 2
             }
         ]

@@ -24,6 +24,7 @@
                 "operation_id": "products_create",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -56,6 +57,7 @@
                     "a": "{{shopify_retrieve_product.images[0].src}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -79,6 +81,7 @@
                     "product_id": "{{shopify_product.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],

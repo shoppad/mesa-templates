@@ -17,6 +17,7 @@
                 "operation_id": "order_created",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -34,6 +35,7 @@
                     "key": "{{uploadery-order-created.fields[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -50,6 +52,7 @@
                     "file_url": "{{loop.value}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
         ]

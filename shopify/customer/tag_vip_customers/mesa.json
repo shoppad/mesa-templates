@@ -18,6 +18,7 @@
                 "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -51,6 +52,7 @@
                     "b": "{{ template | label: 'How much does the customer need to spend?', description: 'The lifetime spending threshold in dollars. Customers who have spent more than this amount will be tagged as VIPs.', default: 500, type: 'number', tokens: false }}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {

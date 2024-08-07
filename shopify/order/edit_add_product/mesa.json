@@ -21,6 +21,7 @@
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -37,6 +38,7 @@
                     "b": "{{ template | label: 'What is the minimum order amount?', description: 'How much does the customer need to spend in order to receive the free gift?', tokens: false, default: 100, placeholder: '' }}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -61,6 +63,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
         ],

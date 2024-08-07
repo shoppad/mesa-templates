@@ -16,6 +16,7 @@
                 "key": "tracktor_fulfillment_status",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -33,6 +34,7 @@
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -47,6 +49,7 @@
                     "fulfillment_id": "{{delay.fulfillment_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -61,6 +64,7 @@
                     "b": "{{tracktor_fulfillment.status.delivered.label}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -77,6 +81,7 @@
                     "message": "Order {{tracktor_fulfillment.order_name}} has been in transit for over 60 hours!"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             }
         ],

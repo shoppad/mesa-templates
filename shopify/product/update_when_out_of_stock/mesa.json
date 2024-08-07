@@ -25,6 +25,7 @@
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -42,6 +43,7 @@
                     "key": "{{shopify_order.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -56,6 +58,7 @@
                     "variant_id": "{{loop.variant_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -70,6 +73,7 @@
                     "b": "0"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -84,6 +88,7 @@
                     "product_id": "{{loop.product_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             },
             {
@@ -97,6 +102,7 @@
                     "description": "Goes through every product variant and checks if the product has variants with inventory. If a product variant has inventory, the automation stops."
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 4
             },
             {
@@ -123,6 +129,7 @@
                         "fields": []
                     }
                 ],
+                "on_error": "default",
                 "weight": 5
             }
         ],

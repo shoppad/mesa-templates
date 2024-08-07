@@ -270,7 +270,7 @@
                     "path.sheet",
                     "columns"
                 ],
-                "on_error": "ignore",
+                "on_error": "replay",
                 "weight": 4
             },
             {

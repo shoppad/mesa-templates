@@ -23,6 +23,7 @@
                 "key": "returnly_return",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -38,6 +39,7 @@
                     "message": "Authorized return. Return ID: {{returnly_return.payload.data.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

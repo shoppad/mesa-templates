@@ -17,6 +17,7 @@
                 "operation_id": "inventory_levels_update",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -33,6 +34,7 @@
                     "b": "3"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -46,6 +48,7 @@
                     "description": "Gets the product and variant titles related to the updated inventory level."
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -60,6 +63,7 @@
                     "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ]

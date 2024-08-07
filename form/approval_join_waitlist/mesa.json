@@ -39,6 +39,7 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -57,6 +58,7 @@
                     "alert_emails": ""
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -71,6 +73,7 @@
                     "product_id": ""
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -87,6 +90,7 @@
                     "message": "Hey there, \n\nThanks for signing up on our waitlist! {{shopify_product.title}} has become available. Get it while stock lasts: https://{{context.shop.domain}}/products/{{shopify_product.handle}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],

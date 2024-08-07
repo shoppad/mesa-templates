@@ -24,6 +24,7 @@
                     "topic": "orders/create"
                 },
                 "local_fields": null,
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -40,6 +41,7 @@
                     "parameters": "email={{shopify_order.email}}&limit=1"
                 },
                 "local_fields": null,
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -71,6 +73,7 @@
                         "location": "mapping"
                     }
                 ],
+                "on_error": "default",
                 "weight": 1
             }
         ],

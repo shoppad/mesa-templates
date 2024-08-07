@@ -58,6 +58,7 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -74,6 +75,7 @@
                     "customer_id": "{{form.customer-id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -92,6 +94,7 @@
                     "customer_id": "{{shopify_customer.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
         ],

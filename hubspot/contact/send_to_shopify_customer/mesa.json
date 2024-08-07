@@ -28,6 +28,7 @@
                     "last_sync_date_time": ""
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -44,6 +45,7 @@
                     "parameters": "query=email:{{hubspot_contact.properties.email}}&fields=id,email"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -56,6 +58,7 @@
                     "script": "custom_filter.js"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -74,6 +77,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -106,6 +110,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 4
             }
         ],

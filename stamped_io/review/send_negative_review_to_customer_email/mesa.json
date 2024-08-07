@@ -22,6 +22,7 @@
                 "name": "Review Created",
                 "key": "stampedio_review",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -38,6 +39,7 @@
                     "b": "3"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -53,6 +55,7 @@
                     "test_bypass": true
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -70,6 +73,7 @@
                     "test_email_override": "john+mesa-email-test@theshoppad.com"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],

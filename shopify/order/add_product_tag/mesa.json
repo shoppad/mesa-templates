@@ -23,6 +23,7 @@
                 "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -40,6 +41,7 @@
                     "key": "{{shopify_order.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -54,6 +56,7 @@
                     "product_id": "{{loop.product_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -68,6 +71,7 @@
                     "order_id": "{{shopify_order.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -85,6 +89,7 @@
                     "order_id": "{{shopify_order.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             }
         ],

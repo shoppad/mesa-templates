@@ -24,6 +24,7 @@
                     "topic": "checkouts/create"
                 },
                 "local_fields": null,
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -41,6 +42,7 @@
                     "message": "Hi {{shopify_checkout.customer.first_name}}! We noticed that you left a few items in your cart, so we saved them for you. Click here to complete your purchase: {{shopify_checkout.abandoned_checkout_url}}"
                 },
                 "local_fields": null,
+                "on_error": "default",
                 "weight": 0
             }
         ],

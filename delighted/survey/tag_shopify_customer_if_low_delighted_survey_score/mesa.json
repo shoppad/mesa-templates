@@ -27,6 +27,7 @@
                 "key": "delighted_survey",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -43,6 +44,7 @@
                     "b": "5"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -57,6 +59,7 @@
                     "parameters": "query=email:{{delighted_survey.person.email}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -71,6 +74,7 @@
                     "b": "{{delighted_survey.person.email}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {

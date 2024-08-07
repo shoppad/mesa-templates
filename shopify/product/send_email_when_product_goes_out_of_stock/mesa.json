@@ -25,6 +25,7 @@
                 "key": "shopify_order",
                 "operation_id": "orders_create",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -42,6 +43,7 @@
                     "key": "{{shopify_order.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -57,6 +59,7 @@
                     "variant_id": "{{loop.variant_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -71,6 +74,7 @@
                     "b": "{{ template | label: 'What should be the out of stock threshold?', description: 'When product inventory reaches this level (or below) the notification will trigger.', default: '0', tokens: false }}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -86,6 +90,7 @@
                     "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{shopify_variant.product_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             }
         ],

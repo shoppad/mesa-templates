@@ -23,6 +23,7 @@
                 "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -39,6 +40,7 @@
                     "b": "null"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -53,6 +55,7 @@
                     "site": "current"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -69,6 +72,7 @@
                     "message": "Hello {{shopify_shop.shop_owner}}\n\n{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} placed a new order with your store.\n\nNotes have been included in the order. They are the following:\n\n{{shopify_order.note}}\n\nView Order {{shopify_order.name}}: https://{{shopify_shop.domain}}/admin/orders/{{shopify_order.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],

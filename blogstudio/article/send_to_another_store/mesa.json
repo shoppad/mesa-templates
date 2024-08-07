@@ -25,6 +25,7 @@
                     "last_sync_date_time": "2021-01-08T11:59:18-08:00"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -48,6 +49,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

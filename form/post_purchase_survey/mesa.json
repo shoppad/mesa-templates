@@ -122,7 +122,7 @@
                     }
                 },
                 "selected_fields": [],
-                "on_error": "default",
+                "on_error": "replay",
                 "weight": 0
             }
         ]

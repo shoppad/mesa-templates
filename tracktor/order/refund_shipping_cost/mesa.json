@@ -23,6 +23,7 @@
                 "name": "Order Created",
                 "key": "tracktor_order",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -39,6 +40,7 @@
                     "order_id": "{{tracktor_order.order_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -52,6 +54,7 @@
                     "comparison": "equals"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -67,6 +70,7 @@
                     "test_bypass": true
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -81,6 +85,7 @@
                     "order_id": "{{delay.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             },
             {
@@ -96,6 +101,7 @@
                     "key": "{{tracktor_order_1.fulfillments[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 4
             },
             {
@@ -110,6 +116,7 @@
                     "b": "delivered"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 5
             },
             {
@@ -124,6 +131,7 @@
                     "order_id": "{{tracktor_order_1.order_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 6
             },
             {
@@ -138,6 +146,7 @@
                     "b": "null"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 7
             },
             {
@@ -152,6 +161,7 @@
                     "b": "null"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 8
             },
             {
@@ -168,6 +178,7 @@
                     "message": "Hi {{delay.customer.first_name}},\n\n{{context.shop.name}} team here. We're reaching out to say we're sorry your order is taking longer than expected to arrive. We know how frustrating it is to wait on a package. Mail carriers are working extra hard right now and we're hoping it reaches you as quickly as possible, but because you paid for two day expedited shipping and your delivery will miss that window, we've already refunded you for your shipping cost. \n\nIf it looks like your package has been stalled in the same place for longer than three business days or if you have any questions, don't hesitate to reply to this email. We're happy to help! \n\nWarmly,\n{{context.shop.name}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 9
             },
             {
@@ -182,6 +193,7 @@
                     "order_id": "{{tracktor_order_1.order_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 10
             },
             {
@@ -196,6 +208,7 @@
                     "order_id": "{{tracktor_order_1.order_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 11
             },
             {
@@ -211,6 +224,7 @@
                     "key": "{{shopify_order_transaction.transactions[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 12
             },
             {
@@ -225,6 +239,7 @@
                     "b": "sale"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 13
             },
             {
@@ -253,6 +268,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 14
             }
         ],
