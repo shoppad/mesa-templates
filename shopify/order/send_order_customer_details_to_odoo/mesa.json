@@ -430,7 +430,6 @@
                         "price_total": "{{loop.price | times: loop.quantity}}",
                         "product_id": "{{transformmapping.product_id}}",
                         "product_uom_qty": "{{loop.quantity}}",
-                        "product_qty": "{{loop.quantity}}",
                         "price_tax": "0",
                         "tax_id": "{{loop.tax_id}}"
                     }
