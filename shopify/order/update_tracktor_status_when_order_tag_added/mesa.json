@@ -17,6 +17,7 @@
                 "operation_id": "orders_updated",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -33,6 +34,7 @@
                     "b": "{{shopify_order.tags}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -47,6 +49,7 @@
                     "b": "null"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -68,6 +71,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ]

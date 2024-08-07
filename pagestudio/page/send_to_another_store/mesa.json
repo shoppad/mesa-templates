@@ -24,6 +24,7 @@
                 "key": "pagestudio_page",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -47,6 +48,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

@@ -24,6 +24,7 @@
                 "name": "Customer Created",
                 "key": "shopify_customer",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -47,6 +48,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -85,6 +87,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],

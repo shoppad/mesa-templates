@@ -19,6 +19,7 @@
                     "field_name": "{{ template | label: 'What is the option that is included with the purchased product?', description: '', tokens: false }}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -43,6 +44,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ]

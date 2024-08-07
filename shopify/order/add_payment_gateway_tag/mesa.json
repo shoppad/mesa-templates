@@ -23,6 +23,7 @@
                 "name": "Order Created",
                 "key": "shopify_order",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -40,6 +41,7 @@
                     "site": "current"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -58,6 +60,7 @@
                     "site": "current"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
         ],

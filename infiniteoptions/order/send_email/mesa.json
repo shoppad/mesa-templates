@@ -25,6 +25,7 @@
                 "key": "infiniteoptions_order",
                 "metadata": {},
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -43,6 +44,7 @@
                     "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

@@ -26,6 +26,7 @@
                 "key": "infinite_options_order_created",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -43,6 +44,7 @@
                     "key": "{{infinite_options_order_created.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -70,6 +72,7 @@
                     "description": "Locates the parent product associated with the bundled line item"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -185,6 +188,7 @@
                         ]
                     }
                 ],
+                "on_error": "replay",
                 "weight": 3
             }
         ],

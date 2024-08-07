@@ -25,6 +25,7 @@
                     "topic": "orders/create"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -41,6 +42,7 @@
                     "unit": "days"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -75,6 +77,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
         ],

@@ -22,6 +22,7 @@
                 "key": "json",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -34,6 +35,7 @@
                 "key": "shopify_flow",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

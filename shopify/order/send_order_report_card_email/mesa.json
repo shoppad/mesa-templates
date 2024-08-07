@@ -16,6 +16,7 @@
                     "schedule": "@daily:0 8 * * *"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -32,6 +33,7 @@
                     "parameters": "status=any&limit=250&created_at_min={{date:24 hours ago}}&created_at_max={{date:now}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -82,6 +84,7 @@
                         "location": "mapping"
                     }
                 ],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -99,6 +102,7 @@
                     "from": "MESA <contact@getmesa.com>"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],

@@ -22,6 +22,7 @@
                 "name": "Customer Created",
                 "key": "shopify_customer",
                 "metadata": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -81,6 +82,7 @@
                         "location": "mapping"
                     }
                 ],
+                "on_error": "default",
                 "weight": 0
             }
         ],

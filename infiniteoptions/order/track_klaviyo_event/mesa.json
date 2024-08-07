@@ -24,6 +24,7 @@
                 "key": "infiniteoptions_order",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -95,6 +96,7 @@
                         "location": "mapping"
                     }
                 ],
+                "on_error": "default",
                 "weight": 0
             }
         ],

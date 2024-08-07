@@ -17,6 +17,7 @@
                 "operation_id": "orders_paid",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -33,6 +34,7 @@
                     "channel": "{{ template | label: 'What is the Slack channel you would like to send the message to?', tokens: false }}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ]

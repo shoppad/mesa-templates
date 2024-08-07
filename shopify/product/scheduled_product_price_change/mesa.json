@@ -18,6 +18,7 @@
                     "enqueue_type": "datetime"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

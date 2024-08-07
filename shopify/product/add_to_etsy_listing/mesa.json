@@ -17,6 +17,7 @@
                 "operation_id": "products_create",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

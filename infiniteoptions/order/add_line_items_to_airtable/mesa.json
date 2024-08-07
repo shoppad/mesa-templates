@@ -24,6 +24,7 @@
                 "key": "infiniteoptions_order",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -41,6 +42,7 @@
                     "key": "{{infiniteoptions_order.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -168,6 +170,7 @@
                         ]
                     }
                 ],
+                "on_error": "default",
                 "weight": 1
             }
         ],

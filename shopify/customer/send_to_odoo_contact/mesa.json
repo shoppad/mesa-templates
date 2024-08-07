@@ -27,6 +27,7 @@
                 "key": "shopify_customer",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -63,6 +64,7 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -102,6 +104,7 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -141,6 +144,7 @@
                         "fields": []
                     }
                 ],
+                "on_error": "default",
                 "weight": 2
             }
         ],

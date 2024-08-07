@@ -98,6 +98,7 @@
                 "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -115,6 +116,7 @@
                     "key": "{{shopify_order.line_items[]}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -136,6 +138,7 @@
                         "fields": {}
                     }
                 },
+                "on_error": "replay",
                 "weight": 1
             }
         ],

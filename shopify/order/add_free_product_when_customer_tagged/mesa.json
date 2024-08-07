@@ -24,6 +24,7 @@
                 "key": "recharge_subscription",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -41,6 +42,7 @@
                     "customer_id": "{{recharge_subscription.customer_id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -55,6 +57,7 @@
                     "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -69,6 +72,7 @@
                     "b": "{{shopify_customer.tags}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             },
             {
@@ -84,6 +88,7 @@
                     "parameters": "shopify_customer_id={{shopify_customer.id}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 3
             },
             {

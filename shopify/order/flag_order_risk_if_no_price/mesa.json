@@ -24,6 +24,7 @@
                 "key": "shopify-order-created",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -40,6 +41,7 @@
                     "b": "0.01"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {

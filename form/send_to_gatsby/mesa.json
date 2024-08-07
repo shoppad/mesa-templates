@@ -49,6 +49,7 @@
                     ]
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -71,6 +72,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],

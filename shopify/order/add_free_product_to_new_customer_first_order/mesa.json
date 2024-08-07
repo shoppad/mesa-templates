@@ -18,6 +18,7 @@
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0 
             }
         ],
@@ -51,6 +52,7 @@
                     "b": "1"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             },
             {
@@ -77,6 +79,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 2
             }
         ],

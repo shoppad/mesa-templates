@@ -16,6 +16,7 @@
                 "key": "shopify_order",
                 "metadata": [],
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -32,6 +33,7 @@
                     "b": "{{shopify_order.email}}"
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -49,6 +51,7 @@
                     }
                 },
                 "local_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
         ],
