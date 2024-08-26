@@ -1,0 +1,44 @@
+{
+    "key": "googleforms/response/send_responses_to_slack",
+    "name": "Send Google Forms responses to Slack",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googleforms",
+                "entity": "googleforms_received",
+                "action": "create",
+                "name": "Google Forms Submitted",
+                "key": "googleforms",
+                "operation_id": "/webhook",
+                "metadata": {
+                    "api_endpoint": "post /webhook"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
