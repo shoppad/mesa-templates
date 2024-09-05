@@ -2,7 +2,7 @@
     "key": "shopify/order/schedule_daily_export_of_orders_into_google_sheets",
     "name": "Schedule a daily export of orders into Google Sheets",
     "version": "1.0.0",
-    "description": "",
+    "description": "Organize and streamline your data while eliminating manual effort by scheduling a daily export of your Shopify orders into Google Sheets. This template requires that the template 'Collect and organize your Shopify orders by their order date' is connected to your store.",
     "seconds": 135,
     "enabled": false,
     "setup": false,
