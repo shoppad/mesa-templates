@@ -2,15 +2,8 @@
     "key": "shopify/order/schedule_daily_export_of_orders_into_google_sheets",
     "name": "Schedule a daily export of orders into Google Sheets",
     "version": "1.0.0",
-    "description": "Organize and streamline your data while eliminating manual effort by scheduling a daily export of your Shopify orders into Google Sheets. This template requires that the template 'Collect and organize your Shopify orders by their order date' is connected to your store.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -23,10 +16,11 @@
                 "metadata": {
                     "schedule": "@daily:0 0 * * *",
                     "enqueue_type": "schedule",
-                    "next_sync_date_time": "2023-01-24T00:00:00-08:00",
+                    "next_sync_date_time": "2024-09-06T00:00:00-07:00",
                     "datetime": null
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -39,55 +33,68 @@
                 "entity": "record",
                 "action": "query",
                 "name": "Query",
-                "key": "data_1",
+                "key": "data",
                 "operation_id": "get_database_table",
                 "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}",
                     "query": "SELECT * FROM \"Add table name here\" WHERE \"Created At\" > '{{date:yesterday}}';",
                     "where_clause": {
                         "comparison": "equals"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "googledrive",
-                "entity": "spreadsheet",
-                "action": "create",
-                "name": "Create Spreadsheet",
-                "key": "googledrive",
-                "operation_id": "spreadsheet_create",
-                "metadata": {
-                    "file_name": "Order Export for {{date:now}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v1",
-                "entity": "sheet",
-                "action": "write",
-                "name": "Create New Sheet",
+                "entity": "spreadsheet",
+                "action": "create",
+                "name": "Create New Spreadsheet",
+                "version": "v2",
                 "key": "googlesheets",
                 "operation_id": "spreadsheet_create",
                 "metadata": {
-                    "spreadsheet_id": "{{googledrive.spreadsheetId}}",
-                    "rows": "{{data_1}}",
-                    "make_labels": true,
-                    "append": false
+                    "api_endpoint": "post \/",
+                    "body": {
+                        "title": "Order Export for {{date:now}}"
+                    }
                 },
                 "local_fields": [],
-                "on_error": "default",
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "bulk_add",
+                "name": "Bulk Add Rows",
+                "version": "v2",
+                "key": "googlesheets_1",
+                "operation_id": "record_bulk_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}\/bulk",
+                    "path": {
+                        "spreadsheet_id": "{{googlesheets.spreadsheet_id}}",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "data": "{{data}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
