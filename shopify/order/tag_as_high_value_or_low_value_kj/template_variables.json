@@ -1,7 +1,0 @@
-[
-  {
-    "key": "filter",
-    "field": "metadata.b",
-    "value": "{{ template | label: 'Select the minimum order total for high value orders', default: 100, type: 'number' }}"
-  }
-]
