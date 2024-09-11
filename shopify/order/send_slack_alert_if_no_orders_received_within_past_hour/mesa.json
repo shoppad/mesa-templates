@@ -1,6 +1,6 @@
 {
-    "key": "shopify/order/send_slack_alert_if_no_orders_received_within_a_time_period",
-    "name": "Send a Slack message if no Shopify order was received in a timeframe",
+    "key": "shopify/order/send_slack_alert_if_no_orders_received_within_past_hour",
+    "name": "Send a Slack message if no Shopify order was received in the past hour",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
