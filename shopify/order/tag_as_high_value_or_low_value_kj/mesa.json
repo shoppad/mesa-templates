@@ -2,8 +2,6 @@
     "key": "shopify/order/tag_as_high_value_or_low_value_kj",
     "name": "Tag order as high value or low value",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
@@ -17,7 +15,10 @@
                 "name": "Order Created",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
@@ -26,110 +27,108 @@
         ],
         "outputs": [
             {
-                "schema": 4.1,
+                "schema": 5,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "If Order Is High Value",
-                "key": "filter",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule",
+                "key": "paths_1",
+                "operation_id": "paths_path",
                 "metadata": {
-                    "a": "{{shopify.current_total_price}}",
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.total_price}}",
                     "comparison": "greater than",
-                    "b": "{{ template | label: 'Select the minimum order total for high value orders', default: 100, type: 'number' }}",
+                    "b": "{{ template | label: 'What is the minimum total amount for a high-value order?', description: 'When you receive an order valued at this amount or higher, MESA will tag the order as High Value.', default: 100, type: 'number', tokens: false }}",
                     "additional": [
                         {
                             "operator": "and",
                             "comparison": "equals"
                         }
-                    ],
-                    "script": "filter.js"
+                    ]
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "additional",
-                    "additional[].operator",
-                    "additional[].a",
-                    "additional[].comparison",
-                    "additional[].b",
-                    "script"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "tag_add",
-                "name": "Tag Order: High Value",
+                "name": "Order Add \"High Value\" Tag",
                 "key": "shopify_1",
                 "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
-                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "trigger_parent_key": "paths_1",
                     "order_id": "{{shopify.id}}",
                     "body": {
                         "tag": "High Value"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "order_id",
-                    "body",
-                    "body.tag"
-                ],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Else",
-                "key": "custom",
-                "metadata": {
-                    "script": "custom.js"
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "script"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 3,
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.total_price}}",
+                    "comparison": "less than",
+                    "b": "{{ template | label: 'What is the maximum total amount for a low-value order?', description: 'When you receive an order valued at this amount or lower, MESA will tag the order as Low Value.', default: 100, type: 'number', tokens: false }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "tag_add",
-                "name": "Tag Order: Low Value",
+                "name": "Order Add \"Low Value\" Tag",
                 "key": "shopify_2",
                 "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
-                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "trigger_parent_key": "paths_2",
                     "order_id": "{{shopify.id}}",
                     "body": {
                         "tag": "Low Value"
                     }
                 },
-                "local_fields": [],
-                "selected_fields": [
-                    "order_id",
-                    "body",
-                    "body.tag"
-                ],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "End If",
-                "key": "custom_1",
-                "metadata": [],
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
