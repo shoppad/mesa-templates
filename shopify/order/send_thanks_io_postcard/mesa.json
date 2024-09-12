@@ -34,7 +34,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -57,7 +57,7 @@
                     "body": {
                         "front_image_url": "https://blog.theshoppad.com/wp-content/uploads/Shipping_Handling_Profitability-300x169.png",
                         "handwriting_style": "1",
-                        "message": "Dear {{delay.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{delay.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n- The {{context.shop.name}} Team",
+                        "message": "Dear {{shopify_order.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{shopify_order.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n- The {{context.shop.name}} Team",
                         "return_name": "{{context.shop.name}}",
                         "return_address": "{{context.shop.address1}}",
                         "return_address2": "{{context.shop.address2}}",
@@ -66,12 +66,12 @@
                         "return_postal_code": "{{context.shop.zip}}",
                         "recipients": [
                             {
-                                "name": "{{delay.shipping_address.first_name}} {{delay.shipping_address.last_name}}",
-                                "address": "{{delay.shipping_address.address1}}",
-                                "city": "{{delay.shipping_address.city}}",
-                                "province": "{{delay.shipping_address.province}}",
-                                "postal_code": "{{delay.shipping_address.zip}}",
-                                "country": "{{delay.shipping_address.country}}"
+                                "name": "{{shopify_order.shipping_address.first_name}} {{shopify_order.shipping_address.last_name}}",
+                                "address": "{{shopify_order.shipping_address.address1}}",
+                                "city": "{{shopify_order.shipping_address.city}}",
+                                "province": "{{shopify_order.shipping_address.province}}",
+                                "postal_code": "{{shopify_order.shipping_address.zip}}",
+                                "country": "{{shopify_order.shipping_address.country}}"
                             }
                         ]
                     }

@@ -63,7 +63,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -86,7 +86,7 @@
                 "operation_id": "delete_mesa_products_product_id_tag",
                 "metadata": {
                     "api_endpoint": "delete mesa\/products\/{{product_id}}\/tag.json",
-                    "product_id": "{{delay.id}}",
+                    "product_id": "{{shopify_2.id}}",
                     "body": {
                         "tag": "{{ template | label: 'What tag will be removed from the product?', description: 'This needs to be the same as the tag that is added.', default: 'New Arrival', tokens: false }}"
                     }

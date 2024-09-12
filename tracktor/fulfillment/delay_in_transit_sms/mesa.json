@@ -25,7 +25,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
+                "version": "v2",
                 "name": "Delay",
                 "key": "delay",
                 "metadata": {
@@ -46,7 +46,7 @@
                 "name": "Retrieve Fulfillment",
                 "key": "tracktor_fulfillment",
                 "metadata": {
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
+                    "fulfillment_id": "{{tracktor_fulfillment_status.fulfillment_id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
