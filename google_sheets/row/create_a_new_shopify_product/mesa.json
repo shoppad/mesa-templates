@@ -1,0 +1,182 @@
+{
+    "key": "google_sheets/row/create_a_new_shopify_product",
+    "name": "Create Shopify products from new rows in Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new spreadsheet with the following columns.",
+                "options": [
+                    {
+                        "label": "Title",
+                        "value": "Title",
+                        "description": "The product title."
+                    },
+                    {
+                        "label": "Description (Body HTML)",
+                        "value": "Description (Body HTML)",
+                        "description": "The product description."
+                    },
+                    {
+                        "label": "Vendor",
+                        "value": "Vendor",
+                        "description": "The product vendor."
+                    },
+                    {
+                      "label": "Product Type",
+                      "value": "Product Type",
+                      "description": "The product type."
+                    },
+                    {
+                      "label": "Tags",
+                      "value": "Tags",
+                      "description": "The product tags."
+                    },
+                    {
+                      "label": "Variant Title",
+                      "value": "Variant Title",
+                      "description": "The product variant title."
+                    },
+                    {
+                      "label": "Variant Price",
+                      "value": "Variant Price",
+                      "description": "The product variant price."
+                    },
+                    {
+                      "label": "Variant Compare At Price",
+                      "value": "Variant Compare At Price",
+                      "description": "The product variant compare at price."
+                    },
+                    {
+                      "label": "Variant Barcode",
+                      "value": "Variant Barcode",
+                      "description": "The product variant barcode."
+                    },
+                    {
+                      "label": "Variant Sku",
+                      "value": "Variant Sku",
+                      "description": "The product variant sku."
+                    },
+                    {
+                      "label": "Variant Inventory Item ID",
+                      "value": "Variant Inventory Item ID",
+                      "description": "The product variant inventory item id."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "created",
+                "name": "Row Created",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_created",
+                "metadata": {
+                    "api_endpoint": "get \/{spreadsheet_id}\/{sheet}",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "",
+                        "query_type": "all",
+                        "comparison": "="
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{googlesheets.data.Title}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "create",
+                "name": "Create Product",
+                "key": "shopify",
+                "operation_id": "post_products",
+                "metadata": {
+                    "api_endpoint": "post admin\/products.json",
+                    "body": {
+                        "body_html": "{{googlesheets.data[\"Description (Body HTML)\"]}}",
+                        "product_type": "{{googlesheets.data[\"Product Type\"]}}",
+                        "tags": "{{googlesheets.data.Tags}}",
+                        "title": "{{googlesheets.data.Title}}",
+                        "vendor": "{{googlesheets.data.Vendor}}",
+                        "variants": [
+                            {
+                                "barcode": "{{googlesheets.data[\"Variant Barcode\"]}}",
+                                "compare_at_price": "{{googlesheets.data[\"Variant Compare At Price\"]}}",
+                                "inventory_item_id": "{{googlesheets.data[\"Variant Inventory Item ID\"]}}",
+                                "option1": "{{googlesheets.data[\"Variant Title\"]}}",
+                                "price": "{{googlesheets.data[\"Variant Price\"]}}",
+                                "sku": "{{googlesheets.data[\"Variant Sku\"]}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.title",
+                    "body.body_html",
+                    "body.vendor",
+                    "body.product_type",
+                    "body.tags",
+                    "body.variants[].option1",
+                    "body.variants[].barcode",
+                    "body.variants[].compare_at_price",
+                    "body.variants[].price",
+                    "body.variants[].sku",
+                    "body.variants[].inventory_item_id"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
