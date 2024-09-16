@@ -381,18 +381,19 @@
                 "weight": 9
             },
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v1",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{transform_mapping_2.order_lines[]}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 10
             },
