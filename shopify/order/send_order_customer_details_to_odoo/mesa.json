@@ -390,7 +390,8 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{transform_mapping_2.order_lines[]}}"
+                    "key": "{{transform_mapping_2.order_lines[]}}",
+                    "script": "loop.js"
                 },
                 "local_fields": [],
                 "selected_fields": [],
