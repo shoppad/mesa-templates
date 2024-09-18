@@ -29,6 +29,7 @@
                 "action": "search_read",
                 "name": "List Product Variant",
                 "key": "odoo_product_product",
+                "version": "v1",
                 "metadata": {
                     "entity_name": "product.product",
                     "method": "search_read",
@@ -79,6 +80,7 @@
                 "action": "search_read",
                 "name": "List Customer",
                 "key": "odoo_res_partner",
+                "version": "v1",
                 "metadata": {
                     "entity_name": "res.partner",
                     "method": "search_read",
@@ -158,6 +160,7 @@
                 "action": "search_read",
                 "name": "List Custom Model - Country",
                 "key": "odoo_custom",
+                "version": "v1",
                 "metadata": {
                     "method": "search_read",
                     "entity_name_custom": "res.country",
@@ -192,6 +195,7 @@
                 "action": "search_read",
                 "name": "List Custom Model - State",
                 "key": "odoo_custom_1",
+                "version": "v1",
                 "metadata": {
                     "method": "search_read",
                     "query": [
@@ -231,6 +235,7 @@
                 "action": "create",
                 "name": "Customer Create",
                 "key": "odoo_res_partner_1",
+                "version": "v1",
                 "metadata": {
                     "entity_name": "res.partner",
                     "method": "create",
@@ -296,6 +301,7 @@
                 "action": "create",
                 "name": "Create Order",
                 "key": "odoo_sale_order",
+                "version": "v1",
                 "metadata": {
                     "entity_name": "sale.order",
                     "method": "create",
@@ -433,6 +439,7 @@
                 "action": "create",
                 "name": "Create Order Line",
                 "key": "odoo_sale_order_line",
+                "version": "v1",
                 "metadata": {
                     "entity_name": "sale.order.line",
                     "method": "create",
