@@ -1,8 +1,7 @@
 {
     "key": "shopify/product/add_and_remove_tags_on_new_products",
-    "name": "Add a tag to a new product and then remove the tag after 30 days",
+    "name": "Tag a new product and then remove the tag after 30 days",
     "version": "1.0.0",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
@@ -16,14 +15,19 @@
                 "name": "Product Created",
                 "key": "shopify",
                 "operation_id": "products_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
@@ -39,11 +43,12 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
@@ -56,6 +61,7 @@
                     "product_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -63,20 +69,22 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "30",
                     "unit": "days",
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
@@ -86,12 +94,13 @@
                 "operation_id": "delete_mesa_products_product_id_tag",
                 "metadata": {
                     "api_endpoint": "delete mesa\/products\/{{product_id}}\/tag.json",
-                    "product_id": "{{delay.id}}",
+                    "product_id": "{{shopify_2.id}}",
                     "body": {
                         "tag": "{{ template | label: 'What tag will be removed from the product?', description: 'This needs to be the same as the tag that is added.', default: 'New Arrival', tokens: false }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             }
