@@ -2,85 +2,124 @@
     "key": "tracktor/fulfillment/delay_in_transit_email",
     "name": "Receive an email if a package is delayed",
     "version": "1.0.0",
-    "description": "Send an email to the store owner when an order is in transit for 60+ hours",
-    "video": "",
-    "tags": [
-        "tracktor"
-    ],
-    "source": "tracktor",
-    "destination": "email",
     "enabled": false,
     "setup": true,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment/in_transit",
-                "name": "Fulfillment Status In Transit",
-                "key": "tracktor_fulfillment_status"
+                "action": "fulfillment\/in_transit",
+                "name": "Fulfillment Status is In Transit",
+                "key": "tracktor",
+                "operation_id": "fulfillment_in_transit",
+                "metadata": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
-                    "amount": 60,
-                    "unit": "hours"
-                }
+                    "amount": "60",
+                    "unit": "hours",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
             },
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "tracktor",
                 "entity": "fulfillment",
                 "action": "retrieve",
                 "name": "Retrieve Fulfillment",
-                "key": "tracktor_fulfillment",
+                "key": "tracktor_1",
+                "operation_id": "RetrievethetrackingstatusofaFulfillment",
                 "metadata": {
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
-                }
+                    "api_endpoint": "get \/fulfillments\/{fulfillment_id}.json",
+                    "fulfillment_id": "{{tracktor.fulfillment_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
             },
             {
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{tracktor_fulfillment.latest_status.label}}",
+                    "a": "{{tracktor_1.latest_status.label}}",
                     "comparison": "does not equal",
-                    "b": "{{tracktor_fulfillment.status.delivered.label}}"
-                }
+                    "b": "{{tracktor_1.status.delivered.label}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
             },
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "tracktor",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "tracktor_order",
+                "key": "tracktor_2",
+                "operation_id": "RetrievethetrackingstatusesofanOrder",
                 "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
-                }
+                    "api_endpoint": "get \/orders\/{order_id}.json",
+                    "order_id": "{{tracktor_1.order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
             },
             {
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
-                "version": "v1",
-                "is_premium": true,
-                "name": "Email",
+                "name": "Send Email",
+                "version": "v2",
                 "key": "email",
+                "operation_id": "\/send-email",
                 "metadata": {
-                    "to": "{{context.shop.email}}",
-                    "subject": "Order {{tracktor_fulfillment.order_name}} Delayed in Transit",
-                    "message": "Order Number: {{tracktor_fulfillment.order_name}} \nCarrier: {{tracktor_fulfillment.carrier.name}}\nTracking: {{tracktor_fulfillment.tracking_number}}"
-                }
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{context.shop.email}}",
+                        "subject": "Order {{tracktor_1.order_name}} Delayed in Transit",
+                        "message": "Order Number: {{tracktor_1.order_name}} \nCarrier: {{tracktor_1.carrier.name}}\nTracking: {{tracktor_1.tracking_number}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
             }
-        ],
-        "storage": []
+        ]
     }
 }
