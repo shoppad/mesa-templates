@@ -57,7 +57,7 @@
                     "api_endpoint": "post \/send\/postcard",
                     "entity_wrapper": "body",
                     "body": {
-                        "message": "Dear {{shopify.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{delay.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{context.shop.name}} Team",
+                        "message": "Dear {{shopify.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{shopify.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{context.shop.name}} Team",
                         "handwriting_style": "1",
                         "return_name": "{{context.shop.name}}",
                         "return_address": "{{context.shop.address1}}",
