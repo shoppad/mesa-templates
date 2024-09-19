@@ -13,10 +13,10 @@
                 "entity": "fulfillment",
                 "action": "fulfillment/in_transit",
                 "name": "Fulfillment Status is In Transit",
-                "key": "tracktor_fulfillment",
+                "key": "tracktor",
                 "operation_id": "fulfillment_in_transit",
                 "metadata": [],
-                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -26,15 +26,17 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "{{ template | label: 'How many hours would you like to wait?', description: '', default: 60, type: 'number', tokens: false }}",
                     "unit": "hours",
-                    "test_bypass": true
+                    "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -45,28 +47,37 @@
                 "entity": "fulfillment",
                 "action": "retrieve",
                 "name": "Retrieve Fulfillment",
-                "key": "tracktor_fulfillment_1",
+                "key": "tracktor_1",
                 "operation_id": "RetrievethetrackingstatusofaFulfillment",
                 "metadata": {
-                    "api_endpoint": "get /fulfillments/{fulfillment_id}.json",
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
+                    "api_endpoint": "get \/fulfillments\/{fulfillment_id}.json",
+                    "fulfillment_id": "{{tracktor.fulfillment_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
+                    "a": "{{tracktor_1.latest_status.label}}",
                     "comparison": "does not equal",
-                    "a": "{{tracktor_fulfillment_1.latest_status.label}}",
-                    "b": "{{tracktor_fulfillment_1.status.delivered.label}}"
+                    "b": "{{tracktor_1.status.delivered.label}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
@@ -77,7 +88,7 @@
                 "entity": "sms",
                 "action": "send",
                 "name": "Send SMS",
-                "key": "twilio_sms",
+                "key": "twilio",
                 "operation_id": "sms_send",
                 "metadata": {
                     "message": "Order {{tracktor_fulfillment_1.order_name}} has been in transit for over 60 hours!",
@@ -85,6 +96,11 @@
                     "to": "{{ template | label: 'What phone number should receive this notification?', type: 'string', tokens: false }}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "message",
+                    "to",
+                    "from"
+                ],
                 "on_error": "default",
                 "weight": 3
             }
