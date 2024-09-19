@@ -11,12 +11,12 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment/pre_transit",
-                "name": "Fulfillment Created",
-                "key": "tracktor_fulfillment",
-                "operation_id": "fulfillment_pre_transit",
+                "action": "fulfillment\/in_transit",
+                "name": "Fulfillment Status is In Transit",
+                "key": "tracktor",
+                "operation_id": "fulfillment_in_transit",
                 "metadata": [],
-                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -26,15 +26,17 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
-                  "amount": "{{ template | label: 'How many days would you like to wait?', description: '', default: 20, type: 'number', tokens: false, placeholder: '' }}",
+                    "amount": "{{ template | label: 'How many days would you like to wait?', description: '', default: 20, type: 'number', tokens: false, placeholder: '' }}",
                     "unit": "days",
-                    "test_bypass": true
+                    "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -45,28 +47,37 @@
                 "entity": "fulfillment",
                 "action": "retrieve",
                 "name": "Retrieve Fulfillment",
-                "key": "tracktor_fulfillment_1",
+                "key": "tracktor_1",
                 "operation_id": "RetrievethetrackingstatusofaFulfillment",
                 "metadata": {
-                    "api_endpoint": "get /fulfillments/{fulfillment_id}.json",
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
+                    "api_endpoint": "get \/fulfillments\/{fulfillment_id}.json",
+                    "fulfillment_id": "{{tracktor.fulfillment_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{tracktor_fulfillment_1.latest_status.key}}",
+                    "a": "{{tracktor_1.latest_status.label}}",
                     "comparison": "does not equal",
-                    "b": "delivered"
+                    "b": "{{tracktor_1.status.delivered.label}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
@@ -77,29 +88,35 @@
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "tracktor_order",
+                "key": "tracktor_2",
                 "operation_id": "RetrievethetrackingstatusesofanOrder",
                 "metadata": {
-                    "api_endpoint": "get /orders/{order_id}.json",
-                    "order_id": "{{tracktor_fulfillment_1.order_id}}"
+                    "api_endpoint": "get \/orders\/{order_id}.json",
+                    "order_id": "{{tracktor_1.order_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 4,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
-                "version": "v1",
-                "name": "Email",
+                "name": "Send Email",
+                "version": "v2",
                 "key": "email",
+                "operation_id": "\/send-email",
                 "metadata": {
-                    "to": "{{tracktor_order.order_email}}",
-                    "subject": "Sorry your package is taking so long!",
-                    "message": "Hi {{tracktor_order.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_order.order_name}} are taking so long to arrive:\n{% for line_item in tracktor_fulfillment_1.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page: {{tracktor_fulfillment_1.tracking_url}}\n\nPlease feel free to reach out by responding to this email if you have any questions. Thanks!\n- {{context.shop.name}}"
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{tracktor_2.order_email}}",
+                        "subject": "Sorry your package is taking so long!",
+                        "message": "Hi {{tracktor_2.customer_full_name}},\n\nWe just wanted to reach out and apologize that the following items in your order {{tracktor_2.order_name}} are taking so long to arrive:\n{% for line_item in tracktor_1.line_items %}\n  - {{ line_item.name }} x {{ line_item.quantity }}\n{% endfor %}\nYou can find your latest order details on our tracking page: {{tracktor_1.tracking_url}}\n\nPlease feel free to reach out by responding to this email if you have any questions. \n\nThanks!\n- {{context.shop.name}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
             }
