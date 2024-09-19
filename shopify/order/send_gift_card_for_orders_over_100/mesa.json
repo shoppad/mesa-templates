@@ -2,15 +2,8 @@
     "key": "shopify/order/send_gift_card_for_orders_over_100",
     "name": "Send a $20 gift card to a customer if they spend $100 or more",
     "version": "1.0.0",
-    "description": "Let your customers know how much you appreciate their business and encourage them to return with incentivizing their next purchase. This customizable template will send a $20 gift card to a customer if they spend $100 or more on your Shopify store. Prefer to change the gift card amount or the qualifying order amount? No problem. Both can be customized in this template to best fit your business.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -21,8 +14,13 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify",
-                "metadata": [],
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -32,30 +30,40 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "1",
                     "unit": "hours",
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{delay.total_line_items_price}}",
+                    "a": "{{shopify.total_line_items_price}}",
                     "comparison": "greater than equal",
-                    "b": "100"
+                    "b": "100",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -67,21 +75,23 @@
                 "action": "create",
                 "name": "Create Card",
                 "key": "govalo",
+                "operation_id": "post-card",
                 "metadata": {
+                    "api_endpoint": "post \/cards",
                     "body": {
-                        "firstName": "{{delay.customer.first_name}}",
-                        "lastName": "{{delay.customer.last_name}}",
-                        "email": "{{delay.email}}",
+                        "firstName": "{{shopify.customer.first_name}}",
+                        "lastName": "{{shopify.customer.last_name}}",
+                        "email": "{{shopify.email}}",
                         "note": "Thank you for being an awesome customer!",
                         "value": "20",
                         "eventType": "giftcard"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
