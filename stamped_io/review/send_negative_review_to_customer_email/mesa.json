@@ -2,15 +2,8 @@
     "key": "stamped_io/review/send_negative_review_to_customer_email",
     "name": "Send an email to a customer when a negative Stamped.io review is received",
     "version": "1.0.0",
-    "description": "When a customer drops a negative review, it’s essential to follow up with them quickly and connect with them to understand why. With Mesa, when a customer sends a negative review via Stamped.io, send a follow-up email after the fact to understand what went wrong. Not only will it help you solve more customer issues, but you’ll save time from manually sending an email to each unhappy customer you get.",
-    "video": "",
-    "readme": "## Customizations available: Merchant can customize the review rating which constitutes a negative review, (defaults to 3 out of 5 stars) and merchant can configure a delay (or remove) between the review being received and the email being sent, so customer doesn't get the email immediately (defaults to 1 hour).",
-    "tags": [],
-    "source": "stampedio",
-    "destination": "custom",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -20,25 +13,36 @@
                 "entity": "review",
                 "action": "created",
                 "name": "Review Created",
-                "key": "stampedio_review",
+                "key": "stampedio",
+                "operation_id": "review_created",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{stampedio_review.reviewRating}}",
+                    "a": "{{stampedio.reviewRating}}",
                     "comparison": "less than equal",
-                    "b": "3"
+                    "b": "3",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -46,37 +50,43 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "1",
                     "unit": "hours",
-                    "test_bypass": true
+                    "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
-                "version": "v1",
-                "is_premium": true,
-                "name": "Email",
+                "name": "Send Email",
+                "version": "v2",
                 "key": "email",
+                "operation_id": "\/send-email",
                 "metadata": {
-                    "to": "{{delay.customerEmail}}",
-                    "subject": "Hi {{delay.author}} - is there something we can do better?",
-                    "message": "Hi {{delay.author}}\n\nWe noticed you left us a review recently - thank you! Is there anything we can do to make things better?\n\nThanks!",
-                    "test_email_override": "john+mesa-email-test@theshoppad.com"
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{stampedio.customerEmail}}",
+                        "subject": "Hi {{stampedio.author}} - is there something we can do better?",
+                        "message": "Hi {{stampedio.author}}\n\nWe noticed you left us a review recently - thank you! Is there anything we can do to make things better?\n\nThanks!"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.advanced_options.test_email_override"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
