@@ -93,7 +93,8 @@
                     "key": "{{stampedio.results[]}}",
                     "filter": {
                         "comparison": "equals"
-                    }
+                    },
+                    "script": "loop.js"
                 },
                 "local_fields": [],
                 "selected_fields": [],
