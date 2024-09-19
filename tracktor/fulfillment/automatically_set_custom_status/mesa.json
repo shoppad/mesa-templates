@@ -13,10 +13,14 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -26,47 +30,58 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "{{ template | label: 'How many days would you like to wait?', description: '', default: 2, type: 'number', tokens: false, placeholder: '' }}",
                     "unit": "days",
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "shopify_order_1",
+                "key": "shopify_1",
                 "operation_id": "get_orders_order_id",
                 "metadata": {
-                    "api_endpoint": "get admin/orders/{{order_id}}.json",
-                    "order_id": "{{delay.id}}"
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{shopify_order_1.fulfillment_status}}",
+                    "a": "{{shopify_1.fulfillment_status}}",
                     "comparison": "equals",
-                    "b": "null"
+                    "b": "null",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
@@ -77,32 +92,40 @@
                 "entity": "order",
                 "action": "update",
                 "name": "Update Order's Manual Status",
-                "key": "tracktor_order",
+                "key": "tracktor",
                 "operation_id": "UpdatethemanualtrackingstatusofanOrder",
                 "metadata": {
-                    "api_endpoint": "post /orders/{order_id}.json",
-                    "order_id": "{{shopify_order_1.id}}",
+                    "api_endpoint": "post \/orders\/{order_id}.json",
+                    "order_id": "{{shopify_1.id}}",
                     "body": {
                         "status": "{{ template | label: 'What custom order status would you like to update to?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.status"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 4,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
-                "version": "v1",
-                "name": "Email",
+                "name": "Send Email",
+                "version": "v2",
                 "key": "email",
+                "operation_id": "\/send-email",
                 "metadata": {
-                    "to": "{{shopify_order_1.email}}",
-                    "subject": "Your order is being prepared for shipment.",
-                    "message": "Hello {{shopify_order_1.customer.first_name}}!\n\nThanks for your patience as our team is getting your order ready for shipment. You will receive a Shipping Confirmation once the order is shipped.\n\nIf you wanted to check on your order's status, you can click here: {{tracktor_order.tracking_url}}\n\nThanks!\n- {{context.shop.name}}"
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{shopify_1.email}}",
+                        "subject": "Your order is being prepared for shipment.",
+                        "message": "Hello {{shopify_1.customer.first_name}}!\n\nThanks for your patience as our team is getting your order ready for shipment. You will receive a Shipping Confirmation once the order is shipped.\n\nIf you wanted to check on your order's status, you can click here: {{tracktor.tracking_url}}\n\nThanks!\n- {{context.shop.name}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
             }
