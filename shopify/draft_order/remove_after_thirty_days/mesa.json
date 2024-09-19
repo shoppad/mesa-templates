@@ -2,17 +2,8 @@
     "key": "shopify/draft_order/remove_after_thirty_days",
     "name": "Remove draft orders after thirty days",
     "version": "1.0.0",
-    "description": "Keep the draft orders on your online store tidy and current with the help of MESA. This template removes draft orders that have been sitting on your Shopify store for more than 30 days. Now you can keep draft order clutter at bay automatically!",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "shopify",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -22,9 +13,14 @@
                 "entity": "draft_order",
                 "action": "created",
                 "name": "Draft Order Created",
-                "key": "shopify_draft_order",
-                "metadata": [],
+                "key": "shopify",
+                "operation_id": "draft_orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -34,34 +30,38 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
-                "name": "Delay for 30 days",
+                "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "30",
                     "unit": "days",
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "draft_order",
                 "action": "delete",
                 "name": "Delete Draft Order",
-                "key": "shopify_draft_order_1",
+                "key": "shopify_1",
+                "operation_id": "delete_draft_orders_draft_order_id",
                 "metadata": {
-                    "draft_order_id": "{{delay.id}}"
+                    "api_endpoint": "delete admin\/draft_orders\/{{draft_order_id}}.json",
+                    "draft_order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

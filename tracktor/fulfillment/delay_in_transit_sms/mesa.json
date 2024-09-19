@@ -12,10 +12,11 @@
                 "type": "tracktor",
                 "entity": "fulfillment",
                 "action": "fulfillment/in_transit",
-                "name": "Fulfillment Status In Transit",
-                "key": "tracktor_fulfillment_status",
+                "name": "Fulfillment Status is In Transit",
+                "key": "tracktor",
+                "operation_id": "fulfillment_in_transit",
                 "metadata": [],
-                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -25,45 +26,58 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "60",
                     "unit": "hours",
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "tracktor",
                 "entity": "fulfillment",
                 "action": "retrieve",
                 "name": "Retrieve Fulfillment",
-                "key": "tracktor_fulfillment",
+                "key": "tracktor_1",
+                "operation_id": "RetrievethetrackingstatusofaFulfillment",
                 "metadata": {
-                    "fulfillment_id": "{{delay.fulfillment_id}}"
+                    "api_endpoint": "get \/fulfillments\/{fulfillment_id}.json",
+                    "fulfillment_id": "{{tracktor.fulfillment_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{tracktor_fulfillment.latest_status.label}}",
+                    "a": "{{tracktor_1.latest_status.label}}",
                     "comparison": "does not equal",
-                    "b": "{{tracktor_fulfillment.status.delivered.label}}"
+                    "b": "{{tracktor_1.status.delivered.label}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
@@ -71,20 +85,20 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "sms",
-                "is_premium": true,
                 "entity": "message",
                 "action": "send",
-                "name": "SMS Message Send",
-                "key": "sms_message",
+                "name": "Send Message",
+                "key": "sms",
+                "operation_id": "message_send",
                 "metadata": {
                     "to": "{{context.shop.phone}}",
-                    "message": "Order {{tracktor_fulfillment.order_name}} has been in transit for over 60 hours!"
+                    "message": "Order {{tracktor_1.order_name}} has been in transit for over 60 hours!"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }

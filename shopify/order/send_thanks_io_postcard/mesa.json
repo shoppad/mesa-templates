@@ -1,30 +1,26 @@
 {
     "key": "shopify/order/send_thanks_io_postcard",
-    "name": "Send a Postcard with Thanks.io 10 Days After Order is Created",
+    "name": "Send a postcard after an order is created",
     "version": "1.0.0",
-    "description": "Give a personal touch by mailing your customers a handwritten postcard without lifting a finger.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "thanks",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
+                "operation_id": "orders_create",
                 "metadata": {
-                    "topic": "orders/create"
+                    "frequency": "every",
+                    "includeFields": []
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -34,53 +30,64 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "10",
-                    "unit": "days"
+                    "unit": "days",
+                    "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 3,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "thanks",
                 "entity": "postcard",
                 "action": "create",
                 "name": "Send Postcard",
-                "key": "thanks_postcard",
+                "key": "thanks",
+                "operation_id": "4x6Postcard",
                 "metadata": {
+                    "api_endpoint": "post \/send\/postcard",
+                    "entity_wrapper": "body",
                     "body": {
-                        "front_image_url": "https://blog.theshoppad.com/wp-content/uploads/Shipping_Handling_Profitability-300x169.png",
+                        "message": "Dear {{shopify.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{shopify.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{context.shop.name}} Team",
                         "handwriting_style": "1",
-                        "message": "Dear {{delay.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{delay.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n- The {{context.shop.name}} Team",
                         "return_name": "{{context.shop.name}}",
                         "return_address": "{{context.shop.address1}}",
                         "return_address2": "{{context.shop.address2}}",
                         "return_city": "{{context.shop.city}}",
-                        "return_state": "{{context.shop.province}}",
                         "return_postal_code": "{{context.shop.zip}}",
                         "recipients": [
                             {
-                                "name": "{{delay.shipping_address.first_name}} {{delay.shipping_address.last_name}}",
-                                "address": "{{delay.shipping_address.address1}}",
-                                "city": "{{delay.shipping_address.city}}",
-                                "province": "{{delay.shipping_address.province}}",
-                                "postal_code": "{{delay.shipping_address.zip}}",
-                                "country": "{{delay.shipping_address.country}}"
+                                "name": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
+                                "address": "{{shopify.shipping_address.address1}}",
+                                "city": "{{shopify.shipping_address.city}}",
+                                "province": "{{shopify.shipping_address.province}}",
+                                "postal_code": "{{shopify.shipping_address.zip}}",
+                                "country": "{{shopify.shipping_address.country}}"
                             }
                         ]
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.message",
+                    "body.return_name",
+                    "body.return_address",
+                    "body.return_address2",
+                    "body.return_city",
+                    "body.return_postal_code"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

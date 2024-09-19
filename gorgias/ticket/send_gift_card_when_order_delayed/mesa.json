@@ -2,15 +2,8 @@
     "key": "gorgias/ticket/send_gift_card_when_order_delayed",
     "name": "Send a gift card to a customer if their order is delayed",
     "version": "1.0.0",
-    "description": "Shipping delays and broken merchandise can lead to customers having a negative experience with your business. Let your customers know you're listening and care about them by sending a small gift in exchange for their troubles. This template will send a gift card to a customer when their Gorgias support ticket is tagged, send-gift-card. It's a small but memorable way to turn a negative experience into a positive one.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -20,15 +13,17 @@
                 "entity": "ticket",
                 "action": "list-created",
                 "name": "Ticket Created",
-                "key": "gorgias",
                 "version": "v2",
+                "key": "gorgias",
                 "operation_id": "ticket_created",
                 "metadata": {
-                    "entity_wrapper": "body.data",
+                    "api_endpoint": "put \/api\/views\/0\/items?",
                     "poll": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2022-12-20T20:00:00-05:00"
-                },
+                  "next_sync_date_time": "2024-09-18T20:00:00-05:00"                },
                 "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,15 +33,17 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "1",
                     "unit": "hours",
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -57,49 +54,46 @@
                 "entity": "ticket",
                 "action": "retrieve",
                 "name": "Retrieve Ticket",
-                "key": "gorgias_1",
                 "version": "v2",
-                "operation_id": "get_api_tickets_id",
+                "key": "gorgias_1",
+                "operation_id": "retrieve_ticket",
                 "metadata": {
-                    "entity_wrapper": "body",
+                    "api_endpoint": "get \/api\/tickets\/{id}\/",
                     "path": {
-                        "id": "{{delay.id}}"
+                        "id": "{{gorgias.id}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{gorgias_1.tags[]}}"
+                    "script": "loop.js",
+                    "key": "{{gorgias_1.tags[]}}",
+                    "filter": {
+                        "a": "{{loop.name}}",
+                        "comparison": "equals",
+                        "b": "send-gift-card"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
                 "weight": 2
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "comparison": "equals",
-                    "a": "{{loop.name}}",
-                    "b": "send-gift-card"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 3
             },
             {
                 "schema": 4,
@@ -111,6 +105,8 @@
                 "key": "govalo",
                 "operation_id": "post-card",
                 "metadata": {
+                    "api_endpoint": "post \/cards",
+                    "trigger_parent_key": "loop",
                     "body": {
                         "firstName": "{{gorgias_1.customer.firstname}}",
                         "lastName": "{{gorgias_1.customer.lastname}}",
@@ -121,10 +117,10 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }

@@ -1,16 +1,9 @@
 {
-    "key": "send_to_delighted_nps_survey",
+    "key": "shopify/order/send_to_delighted_nps_survey",
     "name": "Send a Delighted NPS survey to a customer after they place an order",
     "version": "1.0.0",
-    "description": "Measuring your net promoter score (NPS) provides many rewards. Not only is it a solid criteria of your store’s product and service quality, but it can help you identify potential brand advocates. Automatically send your customers a NPS survey after their purchase and gather feedback on their experience.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "delighted",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -20,8 +13,15 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
-                "metadata": [],
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             }
         ],
@@ -30,15 +30,18 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "5",
                     "unit": "days",
                     "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 0
             },
             {
@@ -48,12 +51,14 @@
                 "entity": "people",
                 "action": "send",
                 "name": "Send (Create or Update) People",
-                "key": "delighted_people",
+                "key": "delighted",
+                "operation_id": "post_people",
                 "metadata": {
+                    "api_endpoint": "POST \/v1\/people.json",
                     "mapping": [
                         {
                             "destination": "email",
-                            "source": "{{delay.email}}"
+                            "source": "{{shopify.email}}"
                         }
                     ]
                 },
@@ -62,12 +67,13 @@
                         "key": "mapping",
                         "type": "mapping",
                         "tokens": "brackets",
-                        "location": "mapping"
+                        "location": "required"
                     }
                 ],
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

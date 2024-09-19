@@ -13,29 +13,30 @@
                 "entity": "fulfillment",
                 "action": "fulfillment/delivered",
                 "name": "Fulfillment Status is Delivered",
-                "key": "tracktor_fulfillment",
+                "key": "tracktor",
                 "operation_id": "fulfillment_delivered",
                 "metadata": [],
-                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "shopify_order",
+                "key": "shopify",
                 "operation_id": "get_orders_order_id",
                 "metadata": {
-                    "api_endpoint": "get admin/orders/{{order_id}}.json",
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{tracktor.order_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -43,15 +44,17 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "delay",
-                "version": "v1",
                 "name": "Delay",
+                "version": "v2",
                 "key": "delay",
+                "operation_id": "delay",
                 "metadata": {
                     "amount": "1",
                     "unit": "days",
-                    "test_bypass": true
+                    "test_bypass": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -62,46 +65,63 @@
                 "entity": "review_request",
                 "action": "list",
                 "name": "List Review Request",
-                "key": "stampedio_review_request",
+                "key": "stampedio",
                 "operation_id": "GetReviewsRequests",
                 "metadata": {
-                    "api_endpoint": "get /v2/{storeHash}/survey/reviews",
+                    "api_endpoint": "get \/v2\/{storeHash}\/survey\/reviews",
                     "query": {
-                        "search": "{{delay.id}}"
+                        "search": "{{shopify.id}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "query.search"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{stampedio_review_request.results[]}}"
+                    "key": "{{stampedio.results[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    },
+                    "script": "loop.js"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
+                    "trigger_parent_key": "loop",
                     "a": "{{loop.orderIdShopify}}",
                     "comparison": "equals",
-                    "b": "{{delay.id}}"
+                    "b": "{{shopify.id}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
             },
@@ -112,15 +132,17 @@
                 "entity": "review_request",
                 "action": "send",
                 "name": "Send Review Request",
-                "key": "stampedio_review_request_1",
+                "key": "stampedio_1",
                 "operation_id": "SendReviewRequest",
                 "metadata": {
-                    "api_endpoint": "post /v2/{storeHash}/survey/reviews/{id}/send",
+                    "api_endpoint": "post \/v2\/{storeHash}\/survey\/reviews\/{id}\/send",
+                    "trigger_parent_key": "loop",
                     "path": {
                         "id": "{{loop.id}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 5
             }
