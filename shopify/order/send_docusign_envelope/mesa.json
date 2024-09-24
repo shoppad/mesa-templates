@@ -1,0 +1,131 @@
+{
+    "key": "shopify/order/send_docusign_envelope",
+    "name": "Send a Docusign envelope for new Shopify orders",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "docusign",
+                "entity": "v2_1_account_envelope",
+                "action": "create",
+                "name": "Creates an envelope",
+                "key": "docusign",
+                "operation_id": "Envelopes_PostEnvelopes",
+                "metadata": {
+                    "api_endpoint": "post /v2.1/accounts/{accountId}/envelopes",
+                    "path": {
+                        "server": "{{ template | label: 'What is the data center location?', tokens: false }}",
+                        "accountId": "{{ template | label: 'What is the account ID?', tokens: false }}"
+                    },
+                    "body": {
+                        "status": "created",
+                        "templateId": "{{ template | label: 'What is the template ID?', description: 'To locate the template ID, go to the Templates page in Docusign > locate the template > click the template title and open the template details view > copy the template ID link and paste it here. [Learn more.](https://docs.getmesa.com/apps/docusign)', tokens: false }}",
+                        "recipientViewRequest": {
+                            "email": "{{shopify.email}}",
+                            "returnUrl": "{{ template | label: 'What is the return URL?', description: '(Required) The URL to which the user should be redirected after the signing session has ended.\n\nMaximum Length: 470 characters. If the return Url exceeds this limit, the user is redirected to a truncated URL. Be sure to include https:// in the URL or redirecting might fail on some browsers.', tokens: false }}",
+                            "authenticationMethod": "{{ template | label: 'What is the authentication method?', default: 'Email', tokens: false }}",
+                            "userName": "{{shopify.email}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.status",
+                    "body.templateId"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "docusign",
+                "entity": "v2_1_account_envelope_recipient",
+                "action": "update",
+                "name": "Updates the Recipients for an Envelope",
+                "key": "docusign_1",
+                "operation_id": "Recipients_PutRecipients",
+                "metadata": {
+                    "api_endpoint": "put /v2.1/accounts/{accountId}/envelopes/{envelopeId}/recipients",
+                    "path": {
+                        "server": "{{ template | label: 'What is the data center location?', tokens: false }}",
+                        "accountId": "{{ template | label: 'What is the account ID?', tokens: false }}",
+                        "envelopeId": "{{docusign.envelopeId}}"
+                    },
+                    "body": {
+                        "signers": [
+                            {
+                                "email": "{{shopify.email}}",
+                                "firstName": "{{shopify.customer.first_name}}",
+                                "lastName": "{{shopify.customer.last_name}}",
+                                "name": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
+                                "recipientId": "{{ template | label: 'What is the recipient ID?', description: 'A label used to link recipients to specific parts of a document. For example, the first recipient in an envelope is often assigned a recipient ID of 1. [Learn more.](https://docs.getmesa.com/apps/docusign)', tokens: false }}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.signers[].email",
+                    "body.signers[].firstName",
+                    "body.signers[].lastName",
+                    "body.signers[].name",
+                    "body.signers[].recipientId"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "docusign",
+                "entity": "v2_1_account_envelope",
+                "action": "update",
+                "name": "Send, Modify a Draft Envelope, Void In-Process Envelope, or Purge Documents\/Envelope Metadata",
+                "key": "docusign_2",
+                "operation_id": "Envelopes_PutEnvelope",
+                "metadata": {
+                    "api_endpoint": "put /v2.1/accounts/{accountId}/envelopes/{envelopeId}",
+                    "path": {
+                        "server": "{{ template | label: 'What is the data center location?', tokens: false }}",
+                        "accountId": "{{ template | label: 'What is the account ID?', tokens: false }}",
+                        "envelopeId": "{{docusign.envelopeId}}"
+                    },
+                    "body": {
+                        "status": "sent"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.status"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
