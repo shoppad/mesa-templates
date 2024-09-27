@@ -1,0 +1,77 @@
+{
+    "key": "shopify/collection/write_descriptions_using_ai",
+    "name": "Write Shopify collection descriptions using AI",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "collection",
+                "action": "created",
+                "name": "Collection Created",
+                "key": "shopify",
+                "operation_id": "collections_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "Your task is to write a long collection description for a collection called {{shopify.title}} in HTML <p> elements. Do not include bold text, highlighted text, and \"```html\"."
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "smart_collection",
+                "action": "update",
+                "name": "Update Smart Collection",
+                "key": "shopify_1",
+                "operation_id": "put_smart_collections_smart_collection_id",
+                "metadata": {
+                    "api_endpoint": "put admin/smart_collections/{{smart_collection_id}}.json",
+                    "smart_collection_id": "{{shopify.id}}",
+                    "body": {
+                        "body_html": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.body_html"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
