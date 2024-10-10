@@ -1,77 +1,213 @@
 {
-    "key": "shopify/collection/write_descriptions_using_ai",
-    "name": "Write Shopify collection descriptions using AI",
-    "version": "1.0.0",
-    "enabled": false,
-    "setup": true,
-    "config": {
-        "inputs": [
-            {
-                "schema": 3,
-                "trigger_type": "input",
-                "type": "shopify",
-                "entity": "collection",
-                "action": "created",
-                "name": "Collection Created",
-                "key": "shopify",
-                "operation_id": "collections_create",
-                "metadata": {
-                    "frequency": "every",
-                    "includeFields": []
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 0
-            }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "ai",
-                "entity": "prompt",
-                "action": "create",
-                "name": "Prompt",
-                "version": "v2",
-                "key": "ai",
-                "operation_id": "post-prompt",
-                "metadata": {
-                    "api_endpoint": "post /prompt",
-                    "temperature": "1",
-                    "body": {
-                        "role": "user",
-                        "content": "Your task is to write a long collection description for a collection called {{shopify.title}} in HTML <p> elements. Do not include bold text, highlighted text, and \"```html\"."
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "smart_collection",
-                "action": "update",
-                "name": "Update Smart Collection",
-                "key": "shopify_1",
-                "operation_id": "put_smart_collections_smart_collection_id",
-                "metadata": {
-                    "api_endpoint": "put admin/smart_collections/{{smart_collection_id}}.json",
-                    "smart_collection_id": "{{shopify.id}}",
-                    "body": {
-                        "body_html": "{{ai.response}}"
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "body.body_html"
-                ],
-                "on_error": "default",
-                "weight": 1
-            }
-        ]
-    }
+  "key": "write_shopify_collection_descriptions_using_ai",
+  "name": "Write Shopify collection descriptions using AI",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": true,
+  "config": {
+      "inputs": [
+          {
+              "schema": 3,
+              "trigger_type": "input",
+              "type": "shopify",
+              "entity": "collection",
+              "action": "created",
+              "name": "Collection Created",
+              "key": "shopify",
+              "operation_id": "collections_create",
+              "metadata": {
+                  "frequency": "every",
+                  "includeFields": []
+              },
+              "local_fields": [],
+              "selected_fields": [],
+              "on_error": "default",
+              "weight": 0
+          }
+      ],
+      "outputs": [
+          {
+              "schema": 3.1,
+              "trigger_type": "output",
+              "type": "shopify",
+              "entity": "collection",
+              "action": "retrieve",
+              "name": "Retrieve Collection",
+              "key": "shopify_1",
+              "operation_id": "get_collection",
+              "metadata": {
+                  "api_endpoint": "get admin\/collections\/{{collection_id}}.json",
+                  "collection_id": "{{shopify.id}}"
+              },
+              "local_fields": [],
+              "selected_fields": [],
+              "on_error": "default",
+              "weight": 0
+          },
+          {
+              "schema": 5,
+              "trigger_type": "output",
+              "type": "paths",
+              "entity": "paths",
+              "name": "Paths",
+              "key": "paths",
+              "operation_id": "paths_paths",
+              "metadata": [],
+              "local_fields": [],
+              "selected_fields": [],
+              "on_error": "default",
+              "weight": 1
+          },
+          {
+              "schema": 5,
+              "trigger_type": "output",
+              "type": "paths",
+              "entity": "path",
+              "name": "Path 1 Rule",
+              "key": "paths_1",
+              "operation_id": "paths_path",
+              "metadata": {
+                  "trigger_manager_key": "paths",
+                  "a": "{{shopify_1.collection_type}}",
+                  "comparison": "equals",
+                  "additional": [
+                      {
+                          "operator": "and",
+                          "comparison": "equals"
+                      }
+                  ],
+                  "b": "smart"
+              },
+              "local_fields": [],
+              "selected_fields": [],
+              "on_error": "default",
+              "weight": 2
+          },
+          {
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "ai",
+              "entity": "prompt",
+              "action": "create",
+              "name": "Prompt",
+              "version": "v2",
+              "key": "ai",
+              "operation_id": "post-prompt",
+              "metadata": {
+                  "api_endpoint": "post \/prompt",
+                  "trigger_parent_key": "paths_1",
+                  "temperature": "0.5",
+                  "body": {
+                      "role": "user",
+                      "content": "Your task is to write a long collection description for a collection called {{shopify.title}} in HTML <p> elements. Do not include bold text, highlighted text, and \"```html\". Keep under 2 paragraphs."
+                  }
+              },
+              "local_fields": [],
+              "selected_fields": [
+                  "temperature"
+              ],
+              "on_error": "default",
+              "weight": 3
+          },
+          {
+              "schema": 3.1,
+              "trigger_type": "output",
+              "type": "shopify",
+              "entity": "smart_collection",
+              "action": "update",
+              "name": "Update Smart Collection",
+              "key": "shopify_3",
+              "operation_id": "put_smart_collections_smart_collection_id",
+              "metadata": {
+                  "api_endpoint": "put admin\/smart_collections\/{{smart_collection_id}}.json",
+                  "trigger_parent_key": "paths_1",
+                  "smart_collection_id": "{{shopify.id}}",
+                  "body": {
+                      "body_html": "{{ai.response}}"
+                  }
+              },
+              "local_fields": [],
+              "selected_fields": [
+                  "body.body_html"
+              ],
+              "on_error": "default",
+              "weight": 4
+          },
+          {
+              "schema": 5,
+              "trigger_type": "output",
+              "type": "paths",
+              "entity": "path",
+              "name": "Path 2 Rule",
+              "key": "paths_2",
+              "operation_id": "paths_path",
+              "metadata": {
+                  "trigger_manager_key": "paths",
+                  "comparison": "equals",
+                  "additional": [
+                      {
+                          "operator": "and",
+                          "comparison": "equals"
+                      }
+                  ],
+                  "a": "{{shopify_1.collection_type}}",
+                  "b": "custom"
+              },
+              "local_fields": [],
+              "selected_fields": [],
+              "on_error": "default",
+              "weight": 5
+          },
+          {
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "ai",
+              "entity": "prompt",
+              "action": "create",
+              "name": "Prompt",
+              "version": "v2",
+              "key": "ai_1",
+              "operation_id": "post-prompt",
+              "metadata": {
+                  "api_endpoint": "post \/prompt",
+                  "trigger_parent_key": "paths_2",
+                  "temperature": "0.5",
+                  "body": {
+                      "role": "user",
+                      "content": "Your task is to write a long collection description for a collection called {{shopify.title}} in HTML <p> elements. Do not include bold text, highlighted text, and \"```html\". Keep under 2 paragraphs."
+                  }
+              },
+              "local_fields": [],
+              "selected_fields": [
+                  "temperature"
+              ],
+              "on_error": "default",
+              "weight": 6
+          },
+          {
+              "schema": 3.1,
+              "trigger_type": "output",
+              "type": "shopify",
+              "entity": "custom_collection",
+              "action": "update",
+              "name": "Update Custom Collection",
+              "key": "shopify_2",
+              "operation_id": "put_custom_collections_custom_collection_id",
+              "metadata": {
+                  "api_endpoint": "put admin\/custom_collections\/{{custom_collection_id}}.json",
+                  "trigger_parent_key": "paths_2",
+                  "custom_collection_id": "{{shopify.id}}",
+                  "body": {
+                      "body_html": "{{ai_1.response}}"
+                  }
+              },
+              "local_fields": [],
+              "selected_fields": [
+                  "body.body_html"
+              ],
+              "on_error": "default",
+              "weight": 7
+          }
+      ]
+  }
 }
