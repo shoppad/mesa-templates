@@ -2,8 +2,6 @@
     "key": "uploadery/order/send_email",
     "name": "Send an email when an Uploadery order is created",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
