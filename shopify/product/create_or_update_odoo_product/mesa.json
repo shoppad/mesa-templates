@@ -199,34 +199,6 @@
                                 "location": "required"
                             },
                             {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
                                 "x-odoo-store": true,
                                 "x-odoo-type": "selection",
@@ -251,6 +223,30 @@
                                 ],
                                 "required": true,
                                 "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id"
                             },
                             {
                                 "type": "integer",
@@ -1228,34 +1224,6 @@
                                 "location": "required"
                             },
                             {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
@@ -1280,6 +1248,30 @@
                                 ],
                                 "required": true,
                                 "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id"
                             },
                             {
                                 "type": "number",
@@ -2197,34 +2189,6 @@
                                 "location": "required"
                             },
                             {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
@@ -2249,6 +2213,30 @@
                                 ],
                                 "required": true,
                                 "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id"
                             },
                             {
                                 "type": "number",
@@ -3145,34 +3133,6 @@
                                 "location": "required"
                             },
                             {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
                                 "x-odoo-store": true,
                                 "x-odoo-type": "selection",
@@ -3197,6 +3157,30 @@
                                 ],
                                 "required": true,
                                 "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id"
                             },
                             {
                                 "type": "integer",
@@ -4030,34 +4014,6 @@
                                 "location": "required"
                             },
                             {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id",
-                                "required": true,
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
                                 "x-odoo-store": true,
                                 "x-odoo-type": "selection",
@@ -4082,6 +4038,30 @@
                                 ],
                                 "required": true,
                                 "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id"
                             },
                             {
                                 "type": "integer",
