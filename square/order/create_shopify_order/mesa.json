@@ -16,7 +16,7 @@
                 "key": "square",
                 "operation_id": "order.created",
                 "metadata": {
-                    "host": "{{ template | label: 'Copy this webhook URL', description: 'Set up the webhook in your Square Developer Dashboard. [Learn more.](https://docs.getmesa.com/apps/square#authentication)' }}"
+                    "host": "{{ template | label: 'Install the webhook URL', description: '(1) Open the [Square Developer Dashboard](https://developer.squareup.com/apps), sign in, and create a new app called \"MESA\" by clicking the gray plus button under Applications. (2) Navigate to Webhooks > Subscriptions, switch to Production mode, add a subscription with MESA''s Webhook URL, name it, and choose \"order.created\" under events. [Learn more about this setup.](https://docs.getmesa.com/article/1846-square-payments#configure-square-triggers)' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [
