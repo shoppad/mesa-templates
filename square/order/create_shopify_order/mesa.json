@@ -15,7 +15,9 @@
                 "name": "Order Created",
                 "key": "square",
                 "operation_id": "order.created",
-                "metadata": [],
+                "metadata": {
+                    "host": "{{ template | label: 'Copy this webhook URL', description: 'Set up the webhook in your Square Developer Dashboard. [Learn more.](https://docs.getmesa.com/apps/square#authentication)' }}"
+                },
                 "local_fields": [],
                 "selected_fields": [
                     "host",
