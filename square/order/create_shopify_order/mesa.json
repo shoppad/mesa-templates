@@ -1,0 +1,143 @@
+{
+    "key": "square_order_create_shopify_order",
+    "name": "Create a Shopify order when a Square order is created [WIP]",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 6,
+                "trigger_type": "input",
+                "type": "square",
+                "entity": "order_created",
+                "action": "created",
+                "name": "Order Created",
+                "key": "square",
+                "operation_id": "order.created",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [
+                    "host",
+                    "topic"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "square_1",
+                "operation_id": "RetrieveCustomer",
+                "metadata": {
+                    "api_endpoint": "get \/v2\/customers\/{customer_id}",
+                    "path": {
+                        "customer_id": "{{square.customer_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.customer_id"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "create",
+                "name": "Create Order",
+                "key": "shopify",
+                "operation_id": "post_orders",
+                "metadata": {
+                    "api_endpoint": "post admin\/orders.json",
+                    "body": {
+                        "email": "{{square_1.customer.email_address}}",
+                        "fulfillment_status": "fulfilled",
+                        "inventory_behaviour": "bypass",
+                        "source_name": "Square",
+                        "discount_codes": [
+                            {
+                                "amount": "{{square.total_discount_money.amount}}",
+                                "type": "fixed_amount"
+                            }
+                        ],
+                        "line_items": [
+                            {
+                                "quantity": "{{square.line_items[].quantity}}",
+                                "title": "{{square.line_items[].name}}",
+                                "price": "{{square.line_items[].base_price_money.amount}}"
+                            }
+                        ],
+                        "billing_address": {
+                            "address1": "{{square_1.customer.address.address_line_1}}",
+                            "address2": "{{square_1.customer.address.address_line_2}}",
+                            "city": "{{square_1.customer.address.locality}}",
+                            "company": "{{square_1.customer.company_name}}",
+                            "country": "{{square_1.customer.address.country}}",
+                            "first_name": "{{square_1.customer.given_name}}",
+                            "last_name": "{{square_1.customer.family_name}}",
+                            "phone": "{{square_1.customer.phone_number}}",
+                            "province": "{{square_1.customer.address.administrative_district_level_1}}",
+                            "zip": "{{square_1.customer.address.postal_code}}"
+                        },
+                        "shipping_address": {
+                            "address1": "{{square_1.customer.address.address_line_1}}",
+                            "address2": "{{square_1.customer.address.address_line_2}}",
+                            "city": "{{square_1.customer.address.locality}}",
+                            "company": "{{square_1.customer.company_name}}",
+                            "country": "{{square_1.customer.address.country}}",
+                            "first_name": "{{square_1.customer.given_name}}",
+                            "last_name": "{{square_1.customer.family_name}}",
+                            "phone": "{{square_1.customer.phone_number}}",
+                            "province": "{{square_1.customer.address.administrative_district_level_1}}",
+                            "zip": "{{square_1.customer.address.postal_code}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.email",
+                    "body.fulfillment_status",
+                    "body.shipping_address.first_name",
+                    "body.shipping_address.last_name",
+                    "body.shipping_address.phone",
+                    "body.shipping_address.address1",
+                    "body.shipping_address.address2",
+                    "body.shipping_address.city",
+                    "body.shipping_address.country",
+                    "body.shipping_address.company",
+                    "body.shipping_address.province",
+                    "body.shipping_address.zip",
+                    "body.billing_address.address1",
+                    "body.billing_address.address2",
+                    "body.billing_address.city",
+                    "body.billing_address.company",
+                    "body.billing_address.country",
+                    "body.billing_address.first_name",
+                    "body.billing_address.last_name",
+                    "body.billing_address.phone",
+                    "body.billing_address.province",
+                    "body.billing_address.zip",
+                    "body.source_name",
+                    "body.line_items[].title",
+                    "body.line_items[].quantity",
+                    "body.line_items[].price",
+                    "body.discount_codes[].amount",
+                    "body.discount_codes[].type"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
