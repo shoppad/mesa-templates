@@ -1,6 +1,6 @@
 {
-    "key": "square_order_create_shopify_order",
-    "name": "Create a Shopify order when a Square order is created [WIP]",
+    "key": "square/order/create_shopify_order",
+    "name": "Create a Shopify order when a Square order is created",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
