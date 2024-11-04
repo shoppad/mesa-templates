@@ -1,0 +1,134 @@
+{
+    "key": "shopify/order/email_discord_invitation_to_a_new_customer",
+    "name": "Email Discord invites to new Shopify customers",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "discord:invite",
+                    "comparison": "not in",
+                    "b": "{{shopify_1.tags}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_invite",
+                "action": "create",
+                "name": "Create Channel Invite",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-invites",
+                "metadata": {
+                    "api_endpoint": "post \/channels\/{channelId}\/invites",
+                    "path": {
+                        "channelId": "{{ template | label: 'What is your Discord''s Channel ID?', description: '', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{shopify_1.email}}",
+                        "subject": "Welcome to our Discord community! - Discord Invite",
+                        "message": "Hey {{shopify_1.first_name}},\n\nHere is your discord invite: https:\/\/discord.gg\/{{discord.code}}\n\nThanks!\n- {{context.shop.name}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_customers_customer_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/customers\/{{customer_id}}\/tag.json",
+                    "customer_id": "{{shopify_1.id}}",
+                    "body": {
+                        "tag": "discord:invite"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
