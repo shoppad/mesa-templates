@@ -15,7 +15,7 @@
                 "key": "ftp",
                 "operation_id": "csv",
                 "metadata": {
-                    "file": "{{ template | label: 'What is the name of the CSV file?', tokens: false, placeholder: 'orders/Order*.csv' }}",
+                    "file": "{{ template | label: 'What is the name of the CSV file?', description: 'The path to the file on the FTP server, you can use '*' wildcards to match portions of the path. Note: the file must be a valid CSV to be read./n/nIt is required that you have columns SKU and Inventory in your CSV file.', tokens: false, placeholder: 'orders/Order*.csv' }}",
                     "use_headers": true,
                     "delimiter": ",",
                     "move_file": false,
