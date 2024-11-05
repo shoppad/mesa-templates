@@ -1,0 +1,160 @@
+{
+    "key": "scraper/send_slack_message_for_shopify_status_page_issues",
+    "name": "Send Slack alerts for Shopify server status issues",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "*\/15 * * * *",
+                    "enqueue_type": "schedule"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "scraper",
+                "entity": "scrape",
+                "action": "create",
+                "name": "Scrape a webpage",
+                "key": "scraper",
+                "operation_id": "scrape",
+                "metadata": {
+                    "api_endpoint": "get \/markdown",
+                    "query": {
+                        "url": "www.shopifystatus.com"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query",
+                    "query.url"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Look for service errors",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "If there are known issues respond with \"true\" otherwise respond \"false\" : \n\n{{scraper.markdown}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{ai.response}}",
+                    "comparison": "equals",
+                    "b": "true",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Extract services with issues",
+                "version": "v2",
+                "key": "ai_1",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "Tell me which services are experiencing an issue: {{scraper.markdown}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "An issue was found on https:\/\/www.shopifystatus.com\/\n\nServices: {{ai_1.response}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "channel",
+                    "message"
+                ],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
