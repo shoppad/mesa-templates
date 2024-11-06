@@ -1,0 +1,102 @@
+{
+    "key": "ftp/update_shopify_product_prices_with_csv",
+    "name": "Update Shopify product price from CSV file on FTP server",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "ftp",
+                "entity": "csv",
+                "name": "Fetch CSV File",
+                "key": "ftp",
+                "operation_id": "csv",
+                "metadata": {
+                    "file": "{{ template | label: 'What is the name of the CSV file?', description: 'The path to the file on the FTP server, you can use '*' wildcards to match portions of the path. Note: the file must be a valid CSV to be read.\n\nIt is required that you have columns Product ID, Variant ID, and Variant Price in your CSV file.', tokens: false, placeholder: 'shopify-product-prices.csv' }}",
+                    "use_headers": true,
+                    "delimiter": ",",
+                    "move_file": false,
+                    "schedule": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{ftp}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "update_id",
+                "name": "Update Product Variant",
+                "key": "shopify_1",
+                "operation_id": "put_variants_variant_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/variants\/{{variant_id}}.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop[\"Product ID\"]}}",
+                    "variant_id": "{{loop[\"Variant ID\"]}}",
+                    "body": {
+                        "price": "{{loop[\"Variant Price\"]}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.price"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
