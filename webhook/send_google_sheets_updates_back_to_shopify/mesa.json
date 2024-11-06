@@ -1,0 +1,150 @@
+{
+    "key": "webhook/send_google_sheets_updates_back_to_shopify",
+    "name": "Update existing Shopify products from Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googlesheets",
+                "entity": "appscript",
+                "action": "updated",
+                "name": "Row Updated (Advanced)",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "appscript_record_updated",
+                "metadata": {
+                    "api_endpoint": "get \/appscript\/updated",
+                    "install_code": "{{ template | label: 'Install the webhook code' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify_1",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/products.json",
+                    "query": {
+                        "ids": "{{googlesheets.data[\"Product ID\"]}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.ids"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "filter": {
+                        "a": "{{shopify_1.[].id}}",
+                        "comparison": "equals",
+                        "b": "{{googlesheets.data[\"Product ID\"]}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    },
+                    "key": "{{shopify_1}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "shopify",
+                "operation_id": "put_products_product_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/products\/{{product_id}}.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop.id}}",
+                    "body": {
+                        "body_html": "{{googlesheets.data.Description}}",
+                        "product_type": "{{googlesheets.data[\"Product Type\"]}}",
+                        "title": "{{googlesheets.data[\"Product Title\"]}}",
+                        "vendor": "{{googlesheets.data.Vendor}}",
+                        "options": [
+                            {
+                                "name": "{{googlesheets.data[\"Variant Title\"]}}"
+                            }
+                        ],
+                        "variants": [
+                            {
+                                "compare_at_price": "{{googlesheets.data[\"Compare At Price\"]}}",
+                                "price": "{{googlesheets.data.Price}}",
+                                "sku": "{{googlesheets.data.SKU}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.title",
+                    "body.options[].name",
+                    "body.variants[].sku",
+                    "body.variants[].price",
+                    "body.variants[].compare_at_price",
+                    "body.body_html",
+                    "body.product_type",
+                    "body.vendor",
+                    "body.tags"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "return",
+                    "map"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
