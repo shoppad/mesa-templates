@@ -100,6 +100,12 @@
                             "disabled": "63092830fbb5514e47674b8e"
                         },
                         {
+                          "key": "Total Discount",
+                          "type": "numeric",
+                          "value": "{{shopify.current_total_discounts}}",
+                          "disabled": "63092830fbb5514e47674b8e"
+                        },
+                        {
                             "key": "Total Weight",
                             "type": "numeric",
                             "value": "{{shopify.total_weight}}",
