@@ -2,15 +2,8 @@
     "key": "shopify/order/organize_orders_by_day",
     "name": "Collect and organize your Shopify orders by their order date",
     "version": "1.0.0",
-    "description": "Organize your Shopify orders by their order date. This template collects the Shopify order information throughout the day and stores it in Data by MESA's table to make it easier to export this data to your favorite tools. We recommend adding the template 'Schedule a daily export of orders into Google Sheets' to export this data on a daily basis to Google Sheets.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -22,7 +15,12 @@
                 "name": "Order Created",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -32,16 +30,21 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop over each product in the order",
+                "version": "v2",
                 "key": "loop",
                 "operation_id": "loop",
                 "metadata": {
-                    "key": "{{shopify.line_items[]}}"
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "key"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -55,6 +58,7 @@
                 "key": "data",
                 "operation_id": "post_database_table",
                 "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}",
                     "create": "create",
                     "columns": [
                         {
@@ -207,13 +211,21 @@
                             "value": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}",
                             "disabled": "63092830fbb5514e47674b8e"
                         }
-                    ]
+                    ],
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "create",
+                    "columns",
+                    "columns[].key",
+                    "columns[].type",
+                    "columns[].value",
+                    "columns[].disabled"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
