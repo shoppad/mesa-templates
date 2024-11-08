@@ -57,7 +57,7 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Format order total by day including discounts",
                 "key": "custom",
                 "operation_id": "custom",
                 "metadata": {
@@ -75,7 +75,7 @@
                 "type": "ai",
                 "entity": "prompt",
                 "action": "create",
-                "name": "Prompt",
+                "name": "Compare discount rates to identify coupon abuse",
                 "version": "v2",
                 "key": "ai",
                 "operation_id": "post-prompt",
@@ -84,7 +84,7 @@
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "{{ template | label: 'What is the AI prompt to determine coupon code abuse?', description: 'Prompt defaults to check if the overall discount percentage of total sales is more than 10% - this value can be changed if the percentage is different for their business.', default: 'Included is a JSON result showing order totals by day including their discount amounts. Compare the discount rate against the usual average discount rate (assume 10% if unspecified). Is the discount rate higher than usual? Reply only Yes or No: \n{{ custom.json_results }}', type: 'number' }}"
+                        "content": "{{ template | label: 'What is the AI prompt to determine coupon code abuse?', description: 'Prompt defaults to check if the overall discount percentage of total sales is more than 10% - this value can be changed if the percentage is different for your business.', default: 'Included is a JSON result showing order totals by day including the discount amounts. Compare the discount rate against the usual average discount rate (assume 10% if unspecified). Is the discount rate higher than usual? Reply only Yes or No: \n{{ custom.json_results }}', type: 'number' }}"
                     }
                 },
                 "local_fields": [],
@@ -98,7 +98,7 @@
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter",
+                "name": "Was coupon abuse detected?",
                 "key": "filter",
                 "operation_id": "filter",
                 "metadata": {
