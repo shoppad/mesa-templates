@@ -1,0 +1,125 @@
+{
+    "key": "shopify/customer/tag_as_male_or_female_using_ai",
+    "name": "AI-Powered Gender Tagging for Shopify Customers",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "shopify",
+                "operation_id": "customers_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "generate",
+                "action": "create",
+                "name": "Generate Text",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-generate",
+                "metadata": {
+                    "api_endpoint": "post \/generate",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "I'd like to know whether this customer is male or female based on their name: {{shopify.first_name}} {{shopify.last_name}}\n\nRespond with a one word answer to be one of the following: Uncertain, Male, Female "
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{ai.response}}",
+                    "comparison": "equals",
+                    "b": "Male",
+                    "additional": [
+                        {
+                            "operator": "or",
+                            "a": "{{ai.response}}",
+                            "comparison": "equals",
+                            "b": "Female"
+                        },
+                        {
+                            "operator": "or",
+                            "a": "{{ai.response}}",
+                            "comparison": "equals",
+                            "b": "Uncertain"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_customers_customer_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/customers\/{{customer_id}}\/tag.json",
+                    "customer_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "customer_id",
+                    "body",
+                    "body.tag"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
