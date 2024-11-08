@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/organize_orders_by_day",
-    "name": "Collect and organize your Shopify orders by their order date",
+    "name": "Organize Shopify Orders by Order Date",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
