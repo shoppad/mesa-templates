@@ -1,0 +1,155 @@
+{
+    "key": "shopify/product/set_meta_title_and_description_when_product_created",
+    "name": "Auto-Generate SEO Meta Titles & Descriptions for New Shopify Products",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Generate Product Meta Title",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt-product-meta-title",
+                "metadata": {
+                    "api_endpoint": "post \/prompt\/product-meta-title",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'What is the AI prompt to generate the product meta title?', description: 'Adjust the text [brand] and [industry] to your brand and industry.', default: 'Think like an eCommerce SEO expert and generate a product page meta title for from the brand [brand] from the [industry] industry for this product: {{shopify.title}}. Format the title without quotation marks.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Generate Product Meta Description",
+                "version": "v2",
+                "key": "ai_1",
+                "operation_id": "post-prompt-product-meta-description",
+                "metadata": {
+                    "api_endpoint": "post \/prompt\/product-meta-description",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'What is the AI prompt to generate the product meta description?', description: 'Adjust the text [brand] and [industry] to your brand and industry.', default: 'Think like an eCommerce SEO expert and generate a product page meta description for {{shopify.body_html}} from brand [brand] from the [industry] industry. Limit the description to 300 characters or less.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set Product Meta Title Metafield",
+                "key": "shopify_1",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "global",
+                        "key": "title_tag",
+                        "type": "single_line_text_field",
+                        "listType": "single_line_text_field",
+                        "value": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.namespace",
+                    "body.key",
+                    "body.type",
+                    "body.listType",
+                    "body.value"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_set",
+                "name": "Set Product Meta Description Metafield",
+                "key": "shopify_2",
+                "operation_id": "put_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "global",
+                        "key": "description_tag",
+                        "type": "single_line_text_field",
+                        "listType": "single_line_text_field",
+                        "value": "{{ai_1.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.namespace",
+                    "body.key",
+                    "body.type",
+                    "body.listType",
+                    "body.value"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
