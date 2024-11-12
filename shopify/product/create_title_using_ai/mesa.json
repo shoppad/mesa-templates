@@ -60,7 +60,7 @@
                     "message": "Response is ready: {{ai.response}}",
                     "label_accept": "Accept",
                     "label_reject": "Reject",
-                    "alert_emails": "{{ template | label: 'What is the email address to notify you when a response is ready to be review?', description: 'Add an email address to receive a notification when a response is ready to be reviewed.' }}"
+                    "alert_emails": "{{ template | label: 'Which email should we notify when a product title is ready for review?', description: 'You can remove your email address or the optional approval step in the workflow builder once you''ve completed the template setup.' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
