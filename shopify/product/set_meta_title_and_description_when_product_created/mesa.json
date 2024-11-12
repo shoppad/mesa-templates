@@ -43,7 +43,7 @@
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "{{ template | label: 'What is the AI prompt to generate the product meta title?', description: 'Adjust the text [brand] and [industry] to your brand and industry.', default: 'Think like an eCommerce SEO expert and generate a product page meta title for from the brand [brand] from the [industry] industry for this product: {{shopify.title}}. Format the title without quotation marks.' }}"
+                        "content": "{{ template | label: 'What is your brand and industry?', description: 'Replace [brand] and [industry] with your business''s name and industry details.', default: 'Think like an eCommerce SEO expert and generate a product page meta title for from the brand [brand] from the [industry] industry for this product: {{shopify.title}}. Format the title without quotation marks.' }}"
                     }
                 },
                 "local_fields": [],
@@ -71,7 +71,7 @@
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "{{ template | label: 'What is the AI prompt to generate the product meta description?', description: 'Adjust the text [brand] and [industry] to your brand and industry.', default: 'Think like an eCommerce SEO expert and generate a product page meta description for {{shopify.body_html}} from brand [brand] from the [industry] industry. Limit the description to 300 characters or less.' }}"
+                        "content": "{{ template | label: 'Please add your brand and industry once more.', description: 'Replace [brand] and [industry] with your business''s name and industry details.', default: 'Think like an eCommerce SEO expert and generate a product page meta description for {{shopify.body_html}} from brand [brand] from the [industry] industry. Limit the description to 300 characters or less.' }}"
                     }
                 },
                 "local_fields": [],
