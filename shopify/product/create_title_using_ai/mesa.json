@@ -1,0 +1,95 @@
+{
+    "key": "shopify/product/create_title_using_ai",
+    "name": "Generate AI-Powered Shopify Product Titles Automatically",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Generate Product Title",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt-product-title",
+                "metadata": {
+                    "api_endpoint": "post \/prompt\/product-title",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'What is your target audience?', description: 'Swap out the variable if you don''t want to create the title from the description. Replace [target audience, e.g. home decor enthusiasts, fitness buffs] with your target audience.', default: 'Behave like an eCommerce merchandising specialist and draft a product title for {{shopify.body_html}}. The title should be concise, include relevant keywords, and appeal to [target audience, e.g. home decor enthusiasts, fitness buffs]. Aim for 8-12 words. Format the title without quotation marks.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approve or Decline the AI Response",
+                "key": "approval",
+                "operation_id": "approval",
+                "metadata": {
+                    "message": "Response is ready: {{ai.response}}",
+                    "label_accept": "Accept",
+                    "label_reject": "Reject",
+                    "alert_emails": "{{ template | label: 'What is the email address to notify you when a response is ready to be review?', description: 'Add an email address to receive a notification when a response is ready to be reviewed.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "key": "shopify_1",
+                "operation_id": "put_products_product_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/products\/{{product_id}}.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "title": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.title"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
