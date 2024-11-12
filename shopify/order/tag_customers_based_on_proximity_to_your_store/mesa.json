@@ -43,7 +43,7 @@
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "{{ template | label: 'What is the AI prompt to check the proximity of your store?', description: 'The AI prompt defaults to 25 miles but you can adjust it. You will replace the text [Your store''s zip code] to your zip code.', default: 'If the {{shopify.shipping_address.zip}} is within 25 miles of my physical store at [Your store''s zip code], respond with yes or no' }}"
+                        "content": "{{ template | label: 'What is your store''s zip / province code?', description: 'Replace [Your store''s zip code] with your store''s zip code. The prompt defaults to finding customers within 25 miles, but you can adjust this distance as needed.', default: 'If the {{shopify.shipping_address.zip}} is within 25 miles of my physical store at [Your store''s zip code], respond with yes or no' }}"
                     }
                 },
                 "local_fields": [],
@@ -97,7 +97,7 @@
                     "api_endpoint": "post mesa\/customers\/{{customer_id}}\/tag.json",
                     "customer_id": "{{shopify.customer.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be added to the customer?', description: 'The tag defaults to \"Local Customer\" but you can change that.', default: 'Local Customer', tokens: false }}"
+                        "tag": "{{ template | label: 'What tag will be added to the customer?', description: 'The default tag is \"Local Customer,\" but you can change it here if you''d like a different one.', default: 'Local Customer', tokens: false }}"
                     }
                 },
                 "local_fields": [],
