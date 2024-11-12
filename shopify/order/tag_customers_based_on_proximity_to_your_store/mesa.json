@@ -43,7 +43,7 @@
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "{{ template | label: 'What is your store''s zip / province code?', description: 'Replace [Your store''s zip code] with your store''s zip code. The prompt defaults to finding customers within 25 miles, but you can adjust this distance as needed.', default: 'If the {{shopify.shipping_address.zip}} is within 25 miles of my physical store at [Your store''s zip code], respond with yes or no' }}"
+                        "content": "{{ template | label: 'What is your store''s zip / province code?', description: 'Replace [Your store''s zip code] with your store''s zip code. The prompt defaults to finding customers within 25 miles, but you can adjust this distance as needed.', default: 'Is the {{shopify.shipping_address.zip}} within 25 miles of my physical store at [Your store''s zip code]? Respond only with yes or no. Do not add a period after the response.' }}"
                     }
                 },
                 "local_fields": [],
