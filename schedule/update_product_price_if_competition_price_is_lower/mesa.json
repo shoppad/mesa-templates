@@ -1,0 +1,209 @@
+{
+    "key": "schedule/update_product_price_if_competition_price_is_lower",
+    "name": "Update the Product Price when a Competitor's Price Drops Below Yours",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "scraper",
+                "entity": "scrape",
+                "action": "create",
+                "name": "Scrape Webpage",
+                "key": "scraper",
+                "operation_id": "scrape",
+                "metadata": {
+                    "api_endpoint": "get \/markdown",
+                    "query": {
+                        "url": "{{ template | label: 'Enter the product page URL that MESA will be comparing your product price against.', description: 'Copy and paste the URL exactly.', placeholder: 'https:\/\/www.competitor.com\/product\/example-product-name' }}"
+
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query",
+                    "query.url"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'This AI prompt will check if your competitor''s price is currently on sale.', description: 'While changes aren''t required, you can update the prompt if you''d like.', default: 'Determine if the product is on sale from this markdown: {{scraper.markdown}}. Respond with \"yes\" or \"no\". Do not use a period.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{ai.response}}",
+                    "comparison": "equals",
+                    "b": "yes",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai_1",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'This AI prompt will extract the sale price.', description: 'While changes aren''t required, you can update the prompt if you''d like.', default: 'What is the first of two prices listed before \"Sale _\u2022_\" in the markdown: {{scraper.markdown}}. Respond with only a number with number type.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "product_id": "{{ template | label: 'Which of your products would you like to compare prices with?' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{ai_1.response}}",
+                    "comparison": "less than",
+                    "b": "{{shopify_1.variants[0].price}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'Which Slack channel should the message be sent to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "A lower price has been found for {{shopify_1.title}}\n\nSale price: {{ai_1.response}}\n\nCompetitor's Website: {{scraper.url}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "channel",
+                    "message"
+                ],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
