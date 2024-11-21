@@ -1,0 +1,95 @@
+{
+    "key": "shopify/order/move_fulfillment_location_when_order_is_tagged",
+    "name": "Auto-Assign Fulfillment Locations for Tagged Shopify Orders",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.tags}}",
+                    "comparison": "contains",
+                    "b": "{{ template | label: 'What is the tag on the order?', tokens: false, placeholder: 'Shopify POS' }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "fulfillment_order",
+                "action": "list",
+                "name": "Retrieve Order's Fulfillment Orders",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id_fulfillment_orders",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}\/fulfillment_orders.json",
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "fulfillment_order",
+                "action": "move",
+                "name": "Move Fulfillment Order",
+                "key": "shopify_3",
+                "operation_id": "post_fulfillment_orders_fulfillment_order_id_move",
+                "metadata": {
+                    "api_endpoint": "post admin\/fulfillment_orders\/{{fulfillment_order_id}}\/move.json",
+                    "fulfillment_order_id": "{{shopify_1.0.id}}",
+                    "body": {
+                        "fulfillment_order": {
+                            "new_location_id": "{{ template | label: 'What is the location ID?', tokens: false }}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
