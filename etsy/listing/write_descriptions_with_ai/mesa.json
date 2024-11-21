@@ -1,0 +1,108 @@
+{
+    "key": "etsy/listing/write_descriptions_with_ai",
+    "name": "Generate AI-Powered Etsy Listing Descriptions Automatically",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 5,
+                "trigger_type": "input",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "list-created",
+                "name": "Active Listing Created",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "findAllListingsActiveCreated",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/create",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Write a Product Description",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "Write a brief product description for a product called {{etsy.title}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approve or Decline the AI Response",
+                "key": "approval",
+                "operation_id": "approval",
+                "metadata": {
+                    "message": "Response ready for review: {{ai.response}}",
+                    "label_accept": "Accept",
+                    "label_reject": "Reject",
+                    "alert_emails": "{{ template | label: 'Which email should we notify when a product title is ready for review?', description: 'You can remove your email address or the optional approval step in the workflow builder once you''ve completed the template setup.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "update",
+                "name": "Update Listing",
+                "version": "v3",
+                "key": "etsy_1",
+                "operation_id": "updateListing",
+                "metadata": {
+                    "api_endpoint": "patch \/v3\/application\/shops\/{shop_id}\/listings\/{listing_id}",
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}",
+                        "listing_id": "{{etsy.listing_id}}"
+                    },
+                    "body": {
+                        "description": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.description"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
