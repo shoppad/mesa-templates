@@ -1,6 +1,6 @@
 {
-    "key": "etsy/listing/generate_titles_with_ai",
-    "name": "Create Optimized Etsy Listing Titles with AI",
+    "key": "etsy/listing/write_descriptions_with_ai",
+    "name": "Generate AI-Powered Etsy Listing Descriptions Automatically",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
