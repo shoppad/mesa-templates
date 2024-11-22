@@ -45,7 +45,7 @@
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "Behave like an eCommerce merchandising specialist and draft a product title for {{etsy.description}}. The title should be concise, include relevant keywords, and appeal to [target audience, e.g. home decor enthusiasts, fitness buffs]. Aim for 8-12 words. Format the title without quotation marks."
+                        "content": "{{ template | label: 'Who is your target audience?', description: 'Replace [target audience, e.g. home decor enthusiasts, fitness buffs] with your target audience.', default: 'Behave like an eCommerce merchandising specialist and draft a product title for {{etsy.description}}. The title should be concise, include relevant keywords, and appeal to [target audience, e.g. home decor enthusiasts, fitness buffs]. Aim for 8-12 words. Format the title without quotation marks.' }}"
                     }
                 },
                 "local_fields": [],
