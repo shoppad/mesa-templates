@@ -1,0 +1,450 @@
+{
+    "key": "square/order/generate_sales_order_in_katana",
+    "name": "Create Katana Sales Orders Automatically from Square Orders",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 6,
+                "trigger_type": "input",
+                "type": "square",
+                "entity": "order_created",
+                "action": "created",
+                "name": "Order Created",
+                "key": "square",
+                "operation_id": "order.created",
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL', description: '(1) Open the [Square Developer Dashboard](https://developer.squareup.com/apps), sign in, and create a new app called \"MESA\" by clicking the gray plus button under Applications. (2) Navigate to Webhooks > Subscriptions, switch to Production mode, add a subscription with MESA''s Webhook URL, name it, and choose \"order.created\" under events. [Learn more about this setup.](https://docs.getmesa.com/apps/square)' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "host",
+                    "topic"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "square_1",
+                "operation_id": "RetrieveCustomer",
+                "metadata": {
+                    "api_endpoint": "get \/v2\/customers\/{customer_id}",
+                    "path": {
+                        "customer_id": "{{square.customer_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.customer_id"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{square.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_catalog_object",
+                "action": "retrieve",
+                "name": "Retrieve Catalog Object",
+                "key": "square_2",
+                "operation_id": "RetrieveCatalogObject",
+                "metadata": {
+                    "api_endpoint": "get \/v2\/catalog\/object\/{object_id}",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "object_id": "{{loop.catalog_object_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.object_id"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": "map",
+                    "map": "{{square_2.object.item_variation_data.sku}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "return",
+                    "map"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "customer",
+                "action": "list",
+                "name": "Get List of Customers",
+                "key": "katana",
+                "operation_id": "getAllCustomers",
+                "metadata": {
+                    "api_endpoint": "get \/customers",
+                    "query": {
+                        "email": "{{square_1.customer.email_address}}",
+                        "limit": "1"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.email",
+                    "query.limit"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - Has Existing Customer",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{katana}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Katana Get List of Variants by SKUs",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "trigger_parent_key": "paths_1",
+                    "description": "Get Katana product variants that match with Square product SKUs.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "description",
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "sales_order",
+                "action": "create",
+                "name": "Create Sales Order",
+                "key": "katana_2",
+                "operation_id": "createSalesOrder",
+                "metadata": {
+                    "api_endpoint": "post \/sales_orders",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "order_no": "1",
+                        "customer_id": "{{katana.0.id}}",
+                        "order_created_date": "{{square.created_at}}",
+                        "currency": "{{square.total_money.currency}}",
+                        "sales_order_rows": [
+                            {
+                                "quantity": "{{square.line_items[].quantity}}",
+                                "variant_id": "{{custom.skus_list_katana[].id}}",
+                                "price_per_unit": "{{square.line_items[].base_price_money.amount}}",
+                                "total_discount": "{{square.total_discount_money.amount}}"
+                            }
+                        ],
+                        "addresses": [
+                            {
+                                "entity_type": "shipping",
+                                "first_name": "{{square_1.customer.given_name}}",
+                                "last_name": "{{square_1.customer.family_name}}",
+                                "company": "{{square_1.customer.company_name}}",
+                                "phone": "{{square_1.customer.phone_number}}",
+                                "line_1": "{{square_1.customer.address.address_line_1}}",
+                                "line_2": "{{square_1.customer.address.address_line_2}}",
+                                "city": "{{square_1.customer.address.locality}}",
+                                "state": "{{square_1.customer.address.administrative_district_level_1}}",
+                                "zip": "{{square_1.customer.address.postal_code}}",
+                                "country": "{{square_1.customer.address.country}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.order_created_date",
+                    "body.currency",
+                    "body.addresses[].entity_type",
+                    "body.addresses[].first_name",
+                    "body.addresses[].last_name",
+                    "body.addresses[].company",
+                    "body.addresses[].phone",
+                    "body.addresses[].line_1",
+                    "body.addresses[].line_2",
+                    "body.addresses[].city",
+                    "body.addresses[].state",
+                    "body.addresses[].zip",
+                    "body.addresses[].country"
+                ],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - Is New Customer",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{katana}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "katana_3",
+                "operation_id": "createCustomer",
+                "metadata": {
+                    "api_endpoint": "post \/customers",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "name": "{{square_1.customer.given_name}} {{square_1.customer.family_name}}",
+                        "first_name": "{{square_1.customer.given_name}}",
+                        "last_name": "{{square_1.customer.family_name}}",
+                        "company": "{{square_1.customer.company_name}}",
+                        "email": "{{square_1.customer.email_address}}",
+                        "phone": "{{square_1.customer.phone_number}}",
+                        "addresses": [
+                            {
+                                "entity_type": "shipping",
+                                "first_name": "{{square_1.customer.given_name}}",
+                                "last_name": "{{square_1.customer.family_name}}",
+                                "company": "{{square_1.customer.company_name}}",
+                                "phone": "{{square_1.customer.phone_number}}",
+                                "line_1": "{{square_1.customer.address.address_line_1}}",
+                                "line_2": "{{square_1.customer.address.address_line_2}}",
+                                "city": "{{square_1.customer.address.locality}}",
+                                "state": "{{square_1.customer.address.administrative_district_level_1}}",
+                                "zip": "{{square_1.customer.address.postal_code}}",
+                                "country": "{{square_1.customer.address.country}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.company",
+                    "body.email",
+                    "body.phone",
+                    "body.first_name",
+                    "body.last_name",
+                    "body.addresses[].entity_type",
+                    "body.addresses[].first_name",
+                    "body.addresses[].last_name",
+                    "body.addresses[].company",
+                    "body.addresses[].phone",
+                    "body.addresses[].line_1",
+                    "body.addresses[].line_2",
+                    "body.addresses[].city",
+                    "body.addresses[].state",
+                    "body.addresses[].zip",
+                    "body.addresses[].country"
+                ],
+                "on_error": "default",
+                "weight": 10
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Katana Get List of Variants by SKUs",
+                "key": "custom_1",
+                "operation_id": "custom",
+                "metadata": {
+                    "trigger_parent_key": "paths_2",
+                    "description": "Get Katana product variants that match with Square product SKUs.",
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "description",
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 11
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "sales_order",
+                "action": "create",
+                "name": "Create Sales Order",
+                "key": "katana_5",
+                "operation_id": "createSalesOrder",
+                "metadata": {
+                    "api_endpoint": "post \/sales_orders",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "order_no": "1",
+                        "customer_id": "{{katana_3.id}}",
+                        "order_created_date": "{{square.created_at}}",
+                        "currency": "{{square.total_discount_money.currency}}",
+                        "sales_order_rows": [
+                            {
+                                "quantity": "{{square.line_items[].quantity}}",
+                                "variant_id": "{{custom_1.skus_list_katana[].id}}",
+                                "price_per_unit": "{{square.line_items[].base_price_money.amount}}",
+                                "total_discount": "{{square.total_discount_money.amount}}"
+                            }
+                        ],
+                        "addresses": [
+                            {
+                                "entity_type": "shipping",
+                                "first_name": "{{square_1.customer.given_name}}",
+                                "last_name": "{{square_1.customer.family_name}}",
+                                "company": "{{square_1.customer.company_name}}",
+                                "phone": "{{square_1.customer.phone_number}}",
+                                "line_1": "{{square_1.customer.address.address_line_1}}",
+                                "line_2": "{{square_1.customer.address.address_line_2}}",
+                                "city": "{{square_1.customer.address.locality}}",
+                                "state": "{{square_1.customer.address.administrative_district_level_1}}",
+                                "zip": "{{square_1.customer.address.postal_code}}",
+                                "country": "{{square_1.customer.address.country}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.order_created_date",
+                    "body.currency",
+                    "body.addresses[].entity_type",
+                    "body.addresses[].first_name",
+                    "body.addresses[].last_name",
+                    "body.addresses[].company",
+                    "body.addresses[].phone",
+                    "body.addresses[].line_1",
+                    "body.addresses[].line_2",
+                    "body.addresses[].city",
+                    "body.addresses[].state",
+                    "body.addresses[].zip",
+                    "body.addresses[].country"
+                ],
+                "on_error": "default",
+                "weight": 12
+            }
+        ]
+    }
+}
