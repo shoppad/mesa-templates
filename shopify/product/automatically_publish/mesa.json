@@ -140,7 +140,7 @@
                         "shopify_entity_id": "product",
                         "input": [
                             {
-                                "publicationId": "{{ template | label: 'What sales channel would you like to publish the product on?', tokens: false }}"
+                                "publicationId": "{{ template | label: 'What sales channel would you like to publish the product on?', placeholder: '', description: '', tokens: false }}"
                             }
                         ]
                     }

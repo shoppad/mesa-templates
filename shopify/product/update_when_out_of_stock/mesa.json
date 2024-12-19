@@ -134,7 +134,7 @@
                         "shopify_entity_id": "product",
                         "input": [
                             {
-                                "publicationId": "{{ template | label: 'What sales channel would you like to unpublish the product from?', tokens: false }}"
+                                "publicationId": "{{ template | label: 'What sales channel would you like to unpublish the product from?', placeholder: '', description: '', tokens: false }}"
                             }
                         ]
                     }
