@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_high_risk_orders_to_slack",
-    "name": "Receive a Slack message when Shopify flags an order as high-risk",
+    "name": "Receive Slack Alerts for High-Risk Shopify Orders",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -15,85 +15,87 @@
                 "name": "Order Created",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
-                "action": "list",
-                "name": "Get List of Order Risks",
+                "action": "retrieve",
+                "name": "Get List of Order's Risks",
                 "key": "shopify_1",
-                "operation_id": "get_orders_order_id_risks",
+                "operation_id": "get_orders_order_id_risks_graphql",
                 "metadata": {
-                    "api_endpoint": "get admin/orders/{{order_id}}/risks.json",
-                    "order_id": "{{shopify.id}}"
+                    "api_endpoint": "get graphql\/orders_risks\/id.json",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter: Check if the order has risks",
-                "key": "filter",
+                "type": "loop",
+                "entity": "count",
+                "name": "Check for high risk assessments",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
                 "metadata": {
-                    "a": "{{shopify_1.0.id}}",
-                    "comparison": "is not empty"
+                    "key": "{{shopify_1.assessments[]}}",
+                    "filter": {
+                        "a": "{{shopify_1.assessments[].riskLevel}}",
+                        "comparison": "equals",
+                        "b": "HIGH",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 5,
-                "trigger_type": "output",
-                "type": "loop",
-                "entity": "loop",
-                "name": "Loop over each risk",
-                "version": "v2",
-                "key": "loop",
-                "operation_id": "loop_loop",
-                "metadata": {
-                    "key": "{{shopify_1}}",
-                    "filter": {
-                        "comparison": "equals"
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter: Check the order risk",
-                "key": "filter_1",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{loop.message}}",
-                    "comparison": "equals",
-                    "b": "Shopify recommendation",
+                    "a": "{{loop.count}}",
+                    "comparison": "greater than",
+                    "b": "0",
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{loop.recommendation}}",
-                            "comparison": "equals",
-                            "b": "cancel"
+                            "comparison": "equals"
                         }
                     ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -102,13 +104,15 @@
                 "name": "Send Message",
                 "version": "v2",
                 "key": "slack",
+                "operation_id": "slack",
                 "metadata": {
                     "message": "Order {{shopify.name}} was detected to be at a high risk for fraud. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}",
                     "channel": "{{ template | label: 'What is the Slack channel you would like to send the message to?', tokens: false }}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             }
         ]
     }

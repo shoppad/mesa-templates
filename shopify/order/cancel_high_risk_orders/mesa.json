@@ -1,18 +1,9 @@
 {
     "key": "shopify/order/cancel_high_risk_orders",
-    "name": "Cancel high-risk orders",
+    "name": "Automatically Cancel High-Risk Orders and Notify Customer",
     "version": "1.0.0",
-    "description": "Stop fraud in its tracks with the help of Shopify's fraud algorithm. This template will cancel the order automatically if detected as high-risk and send an email to the customer notifying them of the cancellation. In addition, this template will send an email to the store owner to make them aware of the risky transaction; and so the inventory can be updated appropriately.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
-    "enabled": false,
-    "logging": true,
-    "debug": false,
-    "setup": true,
+    "enabled": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -22,103 +13,108 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
-                "metadata": [],
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
-                "action": "list",
-                "name": "Get List of Order Risks",
-                "key": "shopify_order_risk",
+                "action": "retrieve",
+                "name": "Get List of Order's Risks",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id_risks_graphql",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}"
+                    "api_endpoint": "get graphql\/orders_risks\/id.json",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 5,
-                "trigger_type": "output",
-                "type": "loop",
-                "version": "v2",
-                "entity": "loop",
-                "operation_id": "loop_loop",
-                "name": "Loop",
-                "key": "loop",
-                "metadata": {
-                    "key": "{{shopify_order_risk}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{loop.message}}",
+                    "a": "{{shopify_1.recommendation}}",
                     "comparison": "equals",
-                    "b": "Shopify recommendation",
+                    "b": "CANCEL",
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{loop.recommendation}}",
-                            "comparison": "equals",
-                            "b": "cancel"
+                            "comparison": "equals"
                         }
                     ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "cancel",
                 "name": "Cancel Order",
-                "key": "shopify_order_1",
+                "key": "shopify_2",
+                "operation_id": "post_orders_order_id_cancel",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
+                    "api_endpoint": "post admin\/orders\/{{order_id}}\/cancel.json",
+                    "order_id": "{{shopify.id}}",
                     "body": {
                         "reason": "fraud",
                         "email": "true"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.reason",
+                    "body.email"
+                ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
-                "schema": 4,
+                "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
-                "version": "v1",
-                "name": "Email",
+                "name": "Send Email",
+                "version": "v2",
                 "key": "email",
+                "operation_id": "\/send-email",
                 "metadata": {
-                    "to": "{{context.shop.email}}",
-                    "subject": "Order {{shopify_order.name}} was canceled due to high risk",
-                    "message": "Order {{shopify_order.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify_order.id}}"
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{context.shop.email}}",
+                        "subject": "Order {{shopify.name}} was canceled due to high risk",
+                        "message": "Order {{shopify.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }
