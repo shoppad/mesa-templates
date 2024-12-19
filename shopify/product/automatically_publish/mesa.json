@@ -1,16 +1,8 @@
 {
     "key": "shopify/product/automatically_publish",
-    "name": "Automatically publish a product if it has an image and description",
+    "name": "Automatically Publish Shopify Products with Image and Description",
     "version": "1.0.0",
-    "description": "Stay on top of when products are ready to be published on your site with the help of MESA. This template will automatically publish a product if it is complete with both an image and a description. Keep the guesswork at bay and eliminate a manual step in your already busy day.",
-    "video": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "shopify",
-    "seconds": 180,
     "enabled": false,
-    "logging": true,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -21,101 +13,143 @@
                 "entity": "product",
                 "action": "created",
                 "name": "Product Created",
-                "key": "shopify_product",
+                "key": "shopify",
                 "operation_id": "products_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "product",
-                "action": "retrieve",
-                "name": "Retrieve Product",
-                "key": "shopify_retrieve_product",
-                "operation_id": "get_products_product_id",
+                "entity": "product_image",
+                "action": "list",
+                "name": "Get List of Product Image",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id_images",
                 "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}.json",
-                    "product_id": "{{shopify_product.id}}"
+                    "api_endpoint": "get admin\/products\/{{product_id}}\/images.json",
+                    "product_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter - Check if there is a product image",
-                "key": "filter_1",
+                "type": "loop",
+                "entity": "count",
+                "name": "Number of matches: Check for featured image",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
                 "metadata": {
-                    "a": "{{shopify_retrieve_product.image}}",
-                    "comparison": "does not equal",
-                    "b": "null"
+                    "key": "{{shopify_1}}",
+                    "filter": {
+                        "a": "{{shopify_1[].position}}",
+                        "comparison": "equals",
+                        "b": "1",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter - Check if there is a description",
-                "key": "filter_2",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{shopify_retrieve_product.body_html}}",
-                    "comparison": "does not equal",
-                    "b": "null"
+                    "a": "{{loop.count}}",
+                    "comparison": "greater than equal",
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{shopify.body_html}}",
+                            "comparison": "is not empty"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
                 "action": "update",
                 "name": "Update Product",
-                "key": "shopify_update_product",
+                "key": "shopify_2",
                 "operation_id": "put_products_product_id",
                 "metadata": {
-                    "api_endpoint": "put admin/products/{{product_id}}.json",
-                    "product_id": "{{shopify_product.id}}",
+                    "api_endpoint": "put admin\/products\/{{product_id}}.json",
+                    "product_id": "{{shopify.id}}",
                     "body": {
-                        "status": "active",
-                        "published_at": "{{shopify_product.created_at}}",
-                        "published_scope": "web"
+                        "status": "active"
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "fields": [
-                            {
-                                "key": "published_at",
-                                "type": "custom",
-                                "allow_custom_fields": false
-                            },
-                            {
-                                "key": "published_scope",
-                                "type": "custom",
-                                "allow_custom_fields": false
-                            }
-                        ]
-                    }
+                "local_fields": [],
+                "selected_fields": [
+                    "body.status"
                 ],
                 "on_error": "default",
                 "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "publishable",
+                "action": "publish",
+                "name": "Publish Product or Collection",
+                "key": "shopify_3",
+                "operation_id": "post_graphql_publishable_id_publish",
+                "metadata": {
+                    "api_endpoint": "post graphql\/publishable\/id.json",
+                    "body": {
+                        "id": "{{shopify.id}}",
+                        "shopify_entity_id": "product",
+                        "input": [
+                            {
+                                "publicationId": "{{ template | label: 'What sales channel would you like to publish the product on?', placeholder: '', description: '', tokens: false }}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
             }
-        ],
-        "storage": []
+        ]
     }
 }
