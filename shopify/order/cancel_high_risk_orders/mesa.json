@@ -2,7 +2,7 @@
     "key": "shopify/order/cancel_high_risk_orders",
     "name": "Automatically Cancel High-Risk Orders and Notify Customer",
     "version": "1.0.0",
-    "enabled": false,
+    "enabled": true,
     "setup": false,
     "config": {
         "inputs": [
