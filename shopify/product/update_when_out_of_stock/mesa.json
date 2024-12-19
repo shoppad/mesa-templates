@@ -1,17 +1,8 @@
 {
     "key": "shopify/product/update_when_out_of_stock",
-    "name": "Update a product when a variant goes out of stock",
+    "name": "Automatically Update Product Status When Variant Goes Out of Stock",
     "version": "1.0.0",
-    "description": "When the inventory of one of your product’s variants becomes out of stock, it’s important to update it to let customers know before they make the mistake of ordering it. However, keeping track of which product variants are currently available every time can take a toll on your schedule, which is why Mesa can do all the work for you.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -19,120 +10,140 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "entity": "order",
-                "action": "created",
-                "name": "Order Created",
-                "key": "shopify_order",
-                "metadata": [],
+                "entity": "variant",
+                "action": "out_of_stock",
+                "name": "Variant Out of Stock",
+                "key": "shopify",
+                "operation_id": "variants_out_of_stock",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
-                "trigger_type": "output",
-                "type": "loop",
-                "version": "v2",
-                "entity": "loop",
-                "operation_id": "loop_loop",
-                "name": "Loop",
-                "key": "loop",
-                "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product_variant",
-                "action": "retrieve_id",
-                "name": "Retrieve By Variant ID Product Variant",
-                "key": "shopify_product_variant",
-                "metadata": {
-                    "variant_id": "{{loop.variant_id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{shopify_product_variant.variant.inventory_quantity}}",
-                    "comparison": "less than equal",
-                    "b": "0"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve Product",
-                "key": "shopify_product_1",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
                 "metadata": {
-                    "product_id": "{{loop.product_id}}"
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "product_id": "{{shopify.product_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom Code",
-                "key": "custom",
+                "type": "loop",
+                "entity": "count",
+                "name": "Number of matches",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
                 "metadata": {
-                    "script": "custom.js",
-                    "description": "Goes through every product variant and checks if the product has variants with inventory. If a product variant has inventory, the automation stops."
+                    "key": "{{shopify_1.variants[]}}",
+                    "filter": {
+                        "a": "{{shopify_1.variants[].inventory_quantity}}",
+                        "comparison": "greater than",
+                        "b": "0",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{loop.count}}",
+                    "comparison": "less than equal",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
                 "action": "update",
                 "name": "Update Product",
-                "key": "shopify_product",
+                "key": "shopify_2",
+                "operation_id": "put_products_product_id",
                 "metadata": {
-                    "product_id": "{{shopify_product_1.id}}",
+                    "api_endpoint": "put admin\/products\/{{product_id}}.json",
+                    "product_id": "{{shopify_1.id}}",
                     "body": {
-                        "title": "{{shopify_product_1.title}} - OUT OF STOCK",
-                        "body_html": "{{shopify_product_1.body_html}}<br><br>This product is currently out of stock, please check back soon!</br></br>",
-                        "tags": "{{shopify_product_1.tags}}, Inventory = 0",
-                        "published_at": "null",
-                        "published_scope": "unavailable"
+                        "body_html": "{{shopify_1.body_html}} This product is currently out of stock, please check back soon!"
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "fields": []
-                    }
+                "local_fields": [],
+                "selected_fields": [
+                    "body.body_html"
                 ],
                 "on_error": "default",
-                "weight": 5
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "publishable",
+                "action": "unpublish",
+                "name": "Unpublish Product or Collection",
+                "key": "shopify_3",
+                "operation_id": "post_graphql_publishable_id_unpublish",
+                "metadata": {
+                    "api_endpoint": "post graphql\/publishable\/id.json",
+                    "body": {
+                        "id": "{{shopify_1.id}}",
+                        "shopify_entity_id": "product",
+                        "input": [
+                            {
+                                "publicationId": "{{ template | label: 'What sales channel would you like to unpublish the product from?', tokens: false }}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
             }
-        ],
-        "storage": []
+        ]
     }
 }
