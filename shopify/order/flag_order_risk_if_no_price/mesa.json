@@ -1,73 +1,86 @@
 {
     "key": "shopify/order/flag_order_risk_if_no_price",
-    "name": "Flag order as risky if total price is 0",
+    "name": "Automatically Flag $0 Orders as Risky in Shopify",
     "version": "1.0.0",
-    "description": "Intercept orders from being placed on your Shopify store that are potentially fraudulent. This template creates an “order risk” flag when a new order has a total price of 0. With this method, you are able to stay on top of orders that pose risks of chargebacks for your store.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "shopify",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify-order-created",
-                "metadata": [],
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
+                    "a": "{{shopify.total_price}}",
                     "comparison": "less than",
-                    "a": "{{shopify-order-created.total_price}}",
-                    "b": "0.01"
+                    "b": "0.01",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
                 "action": "create",
                 "name": "Create Order Risk",
-                "key": "shopify_order_risk_1",
+                "key": "shopify_1",
+                "operation_id": "post_orders_order_id_risks_graphql",
                 "metadata": {
-                    "order_id": "{{shopify-order-created.id}}",
+                    "api_endpoint": "post graphql\/order_risk_assessment.json",
+                    "argument": "$input: OrderRiskAssessmentCreateInput!",
+                    "variables": "orderRiskAssessmentInput: $input",
+                    "graphql_name": "orderRiskAssessmentCreate",
                     "body": {
-                        "message": "This order has a total price of 0",
-                        "recommendation": "cancel",
-                        "score": "1.0",
-                        "source": "External",
-                        "cause_cancel": "false",
-                        "display": "true"
+                        "input": {
+                            "orderId": "{{shopify.id}}",
+                            "riskLevel": "HIGH",
+                            "facts": [
+                                {
+                                    "description": "This order has a total price of 0",
+                                    "sentiment": "NEGATIVE"
+                                }
+                            ]
+                        }
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

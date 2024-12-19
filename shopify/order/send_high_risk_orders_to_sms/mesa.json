@@ -1,17 +1,8 @@
 {
     "key": "shopify_order_send_high_risk_orders_to_sms",
-    "name": "Receive an SMS message when someone creates a fraudulent order",
+    "name": "Get SMS Alerts for High-Risk Orders in Shopify",
     "version": "1.0.0",
-    "description": "Protecting yourself from fraud is critical not only for the safety of your ecommerce store but for your customers as well. This template will automatically notify the store administrator with a text message when someone places a high-risk order, allowing time to investigate and respond immediately. Consider it an extra layer of protection that could save plenty of headaches in the future.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -23,71 +14,60 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify",
-                "metadata": [],
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
-                "action": "list",
-                "name": "Get List of Order Risks",
+                "action": "retrieve",
+                "name": "Get List of Order's Risks",
                 "key": "shopify_1",
+                "operation_id": "get_orders_order_id_risks_graphql",
                 "metadata": {
-                    "order_id": "{{shopify.id}}"
+                    "api_endpoint": "get graphql\/orders_risks\/id.json",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{shopify_1}}",
-                    "comparison": "is not empty"
+                    "a": "{{shopify_1.recommendation}}",
+                    "comparison": "equals",
+                    "b": "CANCEL",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
-            },
-            {
-                "schema": 5,
-                "trigger_type": "output",
-                "type": "loop",
-                "version": "v2",
-                "entity": "loop",
-                "operation_id": "loop_loop",
-                "name": "Loop",
-                "key": "loop",
-                "metadata": {
-                    "key": "{{shopify_1}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter_1",
-                "metadata": {
-                    "a": "{{loop.recommendation}}",
-                    "comparison": "equals",
-                    "b": "cancel"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 3
             },
             {
                 "schema": 2,
@@ -97,15 +77,16 @@
                 "action": "send",
                 "name": "Send Message",
                 "key": "sms",
+                "operation_id": "message_send",
                 "metadata": {
                     "to": "{{ template | label: 'What phone number should receive this notification?', description: 'SMS by MESA currently only supports phone numbers from the United States or Canada.', type: 'string', tokens: false, placeholder: '+1 415 555 2671' }}",
-                    "message": "Potentially fraudulent order {{shopify.name}}\n\nView order: https:\/\/{{context.shop.myshopify_domain\t}}\/admin\/orders\/{{shopify.id}}"
+                    "message": "Potentially fraudulent order {{shopify.name}}\n\nView order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/manually_approve_funds_capture",
-    "name": "Manually capture funds for risky orders",
+    "name": "Manually Capture Funds for Risky Shopify Orders",
     "version": "1.0.0",
-    "description": "Protecting your customers and stopping fraud before it happens is essential for any online store. With this template, merchants can capture funds or cancel and void an order based on specific fraud characteristics. Now you can easily avoid the cost of refunds and chargebacks.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -22,38 +14,65 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify",
-                "metadata": [],
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_risk",
-                "action": "list",
-                "name": "Get List of Order Risks",
+                "action": "retrieve",
+                "name": "Get List of Order's Risks",
                 "key": "shopify_1",
+                "operation_id": "get_orders_order_id_risks_graphql",
                 "metadata": {
-                    "order_id": "{{shopify.id}}"
+                    "api_endpoint": "get graphql\/orders_risks\/id.json",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter: Check for order risks",
+                "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{shopify_1}}",
-                    "comparison": "is not empty"
+                    "a": "{{shopify_1.recommendation}}",
+                    "comparison": "equals",
+                    "b": "INVESTIGATE",
+                    "additional": [
+                        {
+                            "operator": "or",
+                            "a": "{{shopify_1.recommendation}}",
+                            "comparison": "equals",
+                            "b": "CANCEL"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -63,11 +82,12 @@
                 "type": "approval",
                 "name": "Approval",
                 "key": "approval",
+                "operation_id": "approval",
                 "metadata": {
+                    "message": "A possible fraudulent order was created. \n\n**Order Details:**\n\n- Order: {{shopify.name}}\n- Email: {{shopify.email}}\n- https:\/\/{{context.shop.myshopify_domain}}\/admin\/orders\/{{shopify.id}}",
                     "field": true,
                     "label_accept": "Submit",
                     "label_reject": "Ignore",
-                    "message": "A possible fraudulent order was created. \n\n**Order Details:**\n\n- Order: {{shopify.name}}\n- Email: {{shopify.email}}\n\n**Fraudulent Details:**\n \n- Message: {{shopify_1[0].message}}\n- Score: {{shopify_1[0].score}}\n- Recommendation: {{shopify_1[0].recommendation}}\n- [More fraudulent details](https:\/\/{{context.shop.myshopify_domain}}\/admin\/orders\/{{shopify.id}}?showRiskAnalysis=true)",
                     "field_options": [
                         {
                             "label": "Void",
@@ -80,48 +100,65 @@
                     ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "label_accept",
+                    "label_reject"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_transaction",
                 "action": "list",
                 "name": "Get List of Order Transactions",
                 "key": "shopify_2",
+                "operation_id": "get_orders_order_id_transactions",
                 "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}\/transactions.json",
                     "order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter: Check for authorized transactions",
                 "key": "filter_1",
+                "operation_id": "filter",
                 "metadata": {
                     "a": "{{shopify_2[0].kind}}",
                     "comparison": "equals",
-                    "b": "authorization"
+                    "b": "authorization",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order_transaction",
                 "action": "create",
                 "name": "Create Order Transaction",
                 "key": "shopify_3",
+                "operation_id": "post_orders_order_id_transactions",
                 "metadata": {
+                    "api_endpoint": "post admin\/orders\/{{order_id}}\/transactions.json",
                     "order_id": "{{shopify.id}}",
                     "body": {
                         "amount": "{{shopify_2[0].amount}}",
@@ -130,40 +167,53 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.amount"
+                ],
                 "on_error": "default",
                 "weight": 5
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter: Check for void Approval",
+                "name": "Filter",
                 "key": "filter_2",
+                "operation_id": "filter",
                 "metadata": {
                     "a": "{{approval.field}}",
                     "comparison": "equals",
-                    "b": "void"
+                    "b": "void",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 6
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "cancel",
                 "name": "Cancel Order",
                 "key": "shopify_4",
+                "operation_id": "post_orders_order_id_cancel",
                 "metadata": {
+                    "api_endpoint": "post admin\/orders\/{{order_id}}\/cancel.json",
                     "order_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 7
             }
-        ],
-        "storage": []
+        ]
     }
 }
