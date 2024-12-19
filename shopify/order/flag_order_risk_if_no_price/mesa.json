@@ -3,7 +3,7 @@
     "name": "Automatically Flag $0 Orders as Risky in Shopify",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
