@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_to_google_sheets_document",
-    "name": "Send orders to Google Sheets ",
+    "name": "Send Shopify Orders to Google Sheets",
     "description": "",
     "version": "2.0.0",
     "setup": {
