@@ -1,5 +1,5 @@
 {
-    "key": "send_to_google_sheets_document",
+    "key": "shopify/order/send_to_google_sheets_document",
     "name": "Send orders to Google Sheets ",
     "description": "",
     "version": "2.0.0",
@@ -8,60 +8,60 @@
         "fields": [
             {
                 "key": "create_spreadsheet_name",
-                "target": "googlesheets_row.path.create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
                 "label": "What do you want to name your spreadsheet?",
                 "tokens": false,
                 "description": "Give your new Google Spreadsheet a name."
             },
             {
                 "key": "fields",
-                "target": "googlesheets_row.setup_fields",
+                "target": "googlesheets.setup_fields",
                 "label": "What are your spreadsheet columns?",
                 "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
                     {
                         "label": "Order URL",
-                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}",
+                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{shopify.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
                         "label": "Order Name",
-                        "value": "Order Name|{{shopify_order.name}}",
+                        "value": "Order Name|{{shopify.name}}",
                         "description": "The human-readable label for the order (example: #1001)."
                     },
                     {
                         "label": "Email",
-                        "value": "Email|{{shopify_order.email}}",
+                        "value": "Email|{{shopify.email}}",
                         "description": "The email address of the customer that placed the order."
                     },
                     {
                         "label": "Shipping Name",
-                        "value": "Shipping Name|{{shopify_order.shipping_address.first_name}} {{shopify_order.shipping_address.last_name}}",
+                        "value": "Shipping Name|{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
                         "description": "The full name of the recipient of the Shipping Address."
                     },
                     {
                         "label": "Address",
-                        "value": "Address|{{shopify_order.shipping_address.address1}}",
+                        "value": "Address|{{shopify.shipping_address.address1}}",
                         "description": "The street address of the Shipping Address."
                     },
                     {
                         "label": "City",
-                        "value": "City|{{shopify_order.shipping_address.city}}",
+                        "value": "City|{{shopify.shipping_address.city}}",
                         "description": "The city of the Shipping Address."
                     },
                     {
                         "label": "State/Province",
-                        "value": "State/Province|{{shopify_order.shipping_address.province}}",
+                        "value": "State/Province|{{shopify.shipping_address.province}}",
                         "description": "The state/province of the Shipping Address."
                     },
                     {
                         "label": "Zip/Postal Code",
-                        "value": "Zip/Postal Code|{{shopify_order.shipping_address.zip}}",
+                        "value": "Zip/Postal Code|{{shopify.shipping_address.zip}}",
                         "description": "The zip code of the Shipping Address."
                     },
                     {
                         "label": "Country",
-                        "value": "Country|{{shopify_order.shipping_address.country}}",
+                        "value": "Country|{{shopify.shipping_address.country}}",
                         "description": "The country of the Shipping Address."
                     },
                     {
@@ -94,41 +94,55 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop over each product in the order",
+                "version": "v3",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "googlesheets",
                 "entity": "row",
                 "action": "create",
-                "name": "Create Row",
-                "operation_id": "record_create",
-                "key": "googlesheets_row",
+                "name": "Add Row",
                 "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
                 "metadata": {
                     "path": {
                         "spreadsheet_id": "",
@@ -136,12 +150,33 @@
                     },
                     "body": {
                         "fields": {}
-                    }
+                    },
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "trigger_parent_key": "loop"
                 },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "replay",
                 "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
