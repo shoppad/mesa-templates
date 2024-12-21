@@ -22,28 +22,39 @@
                     "schedule": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "use_headers",
+                    "delimiter"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{ftp}}",
                     "filter": {
-                        "comparison": "equals"
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     },
                     "script": "loop.js"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -53,16 +64,19 @@
                 "type": "custom",
                 "name": "Custom Code",
                 "key": "custom",
+                "operation_id": "custom",
                 "metadata": {
-                    "script": "custom.js",
-                    "description": "Retrieve product variant details that match with the SKU via Shopify GraphQL. Add the Inventory Item ID to the payload that gets pass to the next step."
+                    "trigger_parent_key": "loop",
+                    "description": "Retrieve product variant details that match with the SKU via Shopify GraphQL. Add the Inventory Item ID to the payload that gets pass to the next step.",
+                    "script": "custom.js"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "inventory_level",
@@ -72,6 +86,7 @@
                 "operation_id": "post_inventory_levels_set",
                 "metadata": {
                     "api_endpoint": "post admin/inventory_levels/set.json",
+                    "trigger_parent_key": "loop",
                     "body": {
                         "available": "{{loop.Inventory}}",
                         "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
@@ -79,8 +94,27 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
             }
         ]
     }
