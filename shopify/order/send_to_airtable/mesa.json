@@ -3,7 +3,143 @@
     "name": "Send Shopify orders to Airtable",
     "version": "1.0.0",
     "enabled": false,
-    "setup": true,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_table_name",
+                "target": "airtable.path.create_table_name",
+                "label": "What do you want to name your table?",
+                "tokens": false,
+                "description": "Give your new table a name."
+            },
+            {
+                "key": "fields",
+                "target": "airtable.setup_fields",
+                "label": "What are your table columns?",
+                "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your table.",
+                "options": [
+                    {
+                        "label": "Order ID",
+                        "value": "Order ID|{{shopify.id}}",
+                        "description": "The unique identifier for the order"
+                    },
+                    {
+                        "label": "Order Name (number)",
+                        "value": "Order Name (number)|{{shopify.name}}",
+                        "description": "The order number"
+                    },
+                    {
+                        "label": "Order Email",
+                        "value": "Order Email|{{shopify.email}}",
+                        "description": "The email address associated with the order"
+                    },
+                    {
+                        "label": "Customer First Name",
+                        "value": "Customer First Name|{{shopify.customer.first_name}}",
+                        "description": "The first name of the customer"
+                    },
+                    {
+                        "label": "Customer Last Name",
+                        "value": "Customer Last Name|{{shopify.customer.last_name}}",
+                        "description": "The last name of the customer"
+                    },
+                    {
+                        "label": "Customer Email",
+                        "value": "Customer Email|{{shopify.customer.email}}",
+                        "description": "The email address of the customer"
+                    },
+                    {
+                        "label": "Total Price",
+                        "value": "Total Price|{{shopify.total_price}}",
+                        "description": "The total price of the order"
+                    },
+                    {
+                        "label": "Shipping Address 1",
+                        "value": "Shipping Address 1|{{shopify.shipping_address.address1}}",
+                        "description": "The first line of the shipping address"
+                    },
+                    {
+                        "label": "Shipping City",
+                        "value": "Shipping City|{{shopify.shipping_address.city}}",
+                        "description": "The city of the shipping address"
+                    },
+                    {
+                        "label": "Shipping Address 2",
+                        "value": "Shipping Address 2|{{shopify.shipping_address.address2}}",
+                        "description": "The second line of the shipping address"
+                    },
+                    {
+                        "label": "Shipping Zip",
+                        "value": "Shipping Zip|{{shopify.shipping_address.zip}}",
+                        "description": "The zip code of the shipping address"
+                    },
+                    {
+                        "label": "Shipping Province",
+                        "value": "Shipping Province|{{shopify.shipping_address.province}}",
+                        "description": "The province of the shipping address"
+                    },
+                    {
+                        "label": "Shipping Country",
+                        "value": "Shipping Country|{{shopify.shipping_address.country}}",
+                        "description": "The country of the shipping address"
+                    },
+                    {
+                        "label": "Order Tags",
+                        "value": "Order Tags|{{shopify.tags}}",
+                        "description": "The tags associated with the order"
+                    },
+                    {
+                        "label": "Order Notes",
+                        "value": "Order Notes|{{shopify.note}}",
+                        "description": "The notes associated with the order"
+                    },
+                    {
+                        "label": "Product Title",
+                        "value": "Product Title|{{loop.title}}",
+                        "description": "The title of the product"
+                    },
+                    {
+                        "label": "Product Variant",
+                        "value": "Product Variant|{{loop.variant_title}}",
+                        "description": "The variant of the product"
+                    },
+                    {
+                        "label": "Product SKU",
+                        "value": "Product SKU|{{loop.sku}}",
+                        "description": "The SKU of the product"
+                    },
+                    {
+                        "label": "Product Price",
+                        "value": "Product Price|{{loop.price}}",
+                        "description": "The price of the product"
+                    },
+                    {
+                        "label": "Product Quantity",
+                        "value": "Product Quantity|{{loop.quantity}}",
+                        "description": "The quantity of the product"
+                    },
+                    {
+                        "label": "Line Item ID",
+                        "value": "Line Item ID|{{loop.id}}",
+                        "description": "The unique identifier for the line item"
+                    },
+                    {
+                        "label": "Created At",
+                        "value": "Created At|{{shopify.created_at}}",
+                        "description": "The date and time the order was created"
+                    },
+                    {
+                        "label": "Admin Order URL",
+                        "value": "Admin Order URL|https://{{context.shop.domain}}/admin/orders/{{shopify.id}}",
+                        "description": "The URL to view the order in the Shopify admin"
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
@@ -13,28 +149,42 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop Over order products",
-                "version": "v2",
+                "name": "Loop over order products",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -46,15 +196,13 @@
                 "action": "create",
                 "name": "Add Record",
                 "version": "v3",
-                "key": "airtable_record",
+                "key": "airtable",
                 "operation_id": "create",
                 "metadata": {
-                    "api_endpoint": "post /{base}/{table}",
-                    "path": {
-                        "base": "{{ template | label: 'What is your Airtable base?', description: 'View this [Airtable Base](https://airtable.com/shrsPzKQfNhZHrwVX) and click \"Copy Base\" at the top left corner. Then select the copied base below.', tokens: false }}",
-                        "table": "{{ template | label: 'What is the table of your Airtable base?', tokens: false }}"
-                    },
+                    "api_endpoint": "post \/{base}\/{table}",
+                    "trigger_parent_key": "loop",
                     "body": {
+                        "typecast": false,
                         "fields": {
                             "Order ID": "{{shopify_order.id}}",
                             "Order Name (number)": "{{shopify_order.name}}",
@@ -64,8 +212,8 @@
                             "Customer Email": "{{shopify_order.customer.email}}",
                             "Total Price": "{{shopify_order.total_price}}",
                             "Shipping Address 1": "{{shopify_order.shipping_address.address1}}",
-                            "Shipping City": "{{shopify_order.shipping_address.city}}",
                             "Shipping Address 2": "{{shopify_order.shipping_address.address2}}",
+                            "Shipping City": "{{shopify_order.shipping_address.city}}",
                             "Shipping Zip": "{{shopify_order.shipping_address.zip}}",
                             "Shipping Province": "{{shopify_order.shipping_address.province}}",
                             "Shipping Country": "{{shopify_order.shipping_address.country}}",
@@ -78,170 +226,36 @@
                             "Product Quantity": "{{loop.quantity}}",
                             "Line Item ID": "{{loop.id}}",
                             "Created At": "{{shopify_order.created_at}}",
-                            "Admin Order URL": "https://{{context.shop.domain}}/admin/orders/{{shopify_order.id}}"
+                            "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
                         }
+                    },
+                    "path": {
+                        "base": "{{ template | label: 'Which base would you like to use to create a table?', description: 'Select a base.', tokens: false }}",
+                        "table": ""
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "fields",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "Order ID",
-                                        "label": "Order ID",
-                                        "type": "text",
-                                        "source": "airtable",
-                                        "data_type": "number"
-                                    },
-                                    {
-                                        "key": "Order Name (number)",
-                                        "label": "Order Name (number)",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Order Email",
-                                        "label": "Order Email",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Customer First Name",
-                                        "label": "Customer First Name",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Customer Last Name",
-                                        "label": "Customer Last Name",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Customer Email",
-                                        "label": "Customer Email",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Total Price",
-                                        "label": "Total Price",
-                                        "type": "text",
-                                        "source": "airtable",
-                                        "data_type": "number"
-                                    },
-                                    {
-                                        "key": "Shipping Address 1",
-                                        "label": "Shipping Address 1",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Shipping City",
-                                        "label": "Shipping City",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Shipping Address 2",
-                                        "label": "Shipping Address 2",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Shipping Zip",
-                                        "label": "Shipping Zip",
-                                        "type": "text",
-                                        "source": "airtable",
-                                        "data_type": "number"
-                                    },
-                                    {
-                                        "key": "Shipping Province",
-                                        "label": "Shipping Province",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Shipping Country",
-                                        "label": "Shipping Country",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Order Tags",
-                                        "label": "Order Tags",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Order Notes",
-                                        "label": "Order Notes",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Product Title",
-                                        "label": "Product Title",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Product Variant",
-                                        "label": "Product Variant",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Product SKU",
-                                        "label": "Product SKU",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Product Price",
-                                        "label": "Product Price",
-                                        "type": "text",
-                                        "source": "airtable",
-                                        "data_type": "number"
-                                    },
-                                    {
-                                        "key": "Product Quantity",
-                                        "label": "Product Quantity",
-                                        "type": "text",
-                                        "source": "airtable",
-                                        "data_type": "number"
-                                    },
-                                    {
-                                        "key": "Line Item ID",
-                                        "label": "Line Item ID",
-                                        "type": "text",
-                                        "source": "airtable",
-                                        "data_type": "number"
-                                    },
-                                    {
-                                        "key": "Created At",
-                                        "label": "Created At",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    },
-                                    {
-                                        "key": "Admin Order URL",
-                                        "label": "Admin Order URL",
-                                        "type": "text",
-                                        "source": "airtable"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
             }
         ]
     }
