@@ -125,7 +125,7 @@
                 "operation_id": "slack",
                 "metadata": {
                     "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
-                    "message": "{{ template | label: 'What is your Gorgias Inbox ID?', description: 'Go to your Gorgias account. Click Inbox. In the URL, copy the numbers after /apps/views and replace the text ADD INBOX ID.', default: '*Gorgias Support Ticket URL*\nhttps:\/\/{{context.shop.name}}.gorgias.com\/app\/views\/ADD INBOX ID\/{{gorgias.id}}\n\n*AI Angry Confidence Score*\n{{custom.ai_response.confidence_score}}\n\n*AI Explanation*\n{{custom.ai_response.explanation}}\n\n*Support Ticket Message*\n{{gorgias_1.0.stripped_text}}' }}"
+                    "message": "{{ template | label: 'What is your Gorgias Inbox ID?', description: 'Go to your Gorgias account. Click Inbox. In the URL, copy the numbers after /apps/views and replace the text ADD INBOX ID.', default: '*Gorgias Support Ticket URL*\nhttps:\/\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}.gorgias.com\/app\/views\/ADD INBOX ID\/{{gorgias.id}}\n\n*AI Angry Confidence Score*\n{{custom.ai_response.confidence_score}}\n\n*AI Explanation*\n{{custom.ai_response.explanation}}\n\n*Support Ticket Message*\n{{gorgias_1.0.stripped_text}}' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
