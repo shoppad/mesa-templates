@@ -1,0 +1,137 @@
+{
+    "key": "gorgias/ticket/forward_support_ticket_to_slack_if_ai_detects_an_angry_message",
+    "name": "Escalate an angry Gorgias support ticket to Slack",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "gorgias",
+                "entity": "ticket",
+                "action": "list-created",
+                "name": "Ticket Created",
+                "version": "v2",
+                "key": "gorgias",
+                "operation_id": "ticket_created",
+                "metadata": {
+                    "api_endpoint": "put \/api\/views\/0\/items?",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gorgias",
+                "entity": "ticket_message",
+                "action": "list",
+                "name": "Get List of Ticket's Messages",
+                "version": "v2",
+                "key": "gorgias_1",
+                "operation_id": "list_message",
+                "metadata": {
+                    "api_endpoint": "get \/api\/tickets\/{ticket_id}\/messages",
+                    "path": {
+                        "ticket_id": "{{gorgias.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "0",
+                    "body": {
+                        "role": "user",
+                        "content": "Analyze the following email text to determine if the tone expresses anger. Evaluate specific language patterns, words, phrases, and sentence structures that might indicate frustration, dissatisfaction, or irritation. Provide a confidence score between 1 to 5 for the likelihood that the email is angry, along with a brief explanation of key indicators. Output the format with the confidence score and brief explanation of key indicators in a JSON string. Do not include the JSON formatting (```json).\n\n{{gorgias_1.0.stripped_text}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "description": "Convert AI response to a JSON array.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{custom.ai_response.confidence_score}}",
+                    "comparison": "greater than equal",
+                    "b": "{{ template | label: 'Set the filter for anger detection', description: 'A confidence score of 1 to 5 is applied to detect anger in email tone—5 indicates high confidence in anger, and 1 indicates low confidence. By default, MESA flags emails with a score of 3 or higher for review. If you prefer to change this value, you can adjust this threshold between 1 and 5.', default: 3, type: 'number', tokens: false }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "script": "filter.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "{{ template | label: 'What is your Gorgias Inbox ID?', description: 'Go to your Gorgias account. Click Inbox. In the URL, copy the numbers after /apps/views and replace the text ADD INBOX ID.', default: '*Gorgias Support Ticket URL*\nhttps:\/\/{{context.shop.name}}.gorgias.com\/app\/views\/ADD INBOX ID\/{{gorgias.id}}\n\n*AI Angry Confidence Score*\n{{custom.ai_response.confidence_score}}\n\n*AI Explanation*\n{{custom.ai_response.explanation}}\n\n*Support Ticket Message*\n{{gorgias_1.0.stripped_text}}' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
