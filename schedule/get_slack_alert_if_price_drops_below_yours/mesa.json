@@ -92,7 +92,7 @@
                 "operation_id": "get_products_product_id",
                 "metadata": {
                     "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "product_id": "{{ template | label: 'Which of your products would you like to compare prices with?' }}"
+                    "product_id": "{{ template | label: 'Which of your products would you like to compare prices with?', description: 'Choose a product from the dropdown menu or enter a custom product ID.' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [
