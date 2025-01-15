@@ -1,5 +1,5 @@
 {
-    "key": "product/created/add_tag_with_sku_pattern",
+    "key": "shopify/product/add_tag_with_sku_pattern",
     "name": "Add Shopify Product Tags Using SKU Pattern Rules",
     "version": "1.0.0",
     "enabled": false,
