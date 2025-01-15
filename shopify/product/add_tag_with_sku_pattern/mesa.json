@@ -1,0 +1,273 @@
+{
+    "key": "product/created/add_tag_with_sku_pattern",
+    "name": "Add Shopify Product Tags Using SKU Pattern Rules",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Tags Mapping To SKU Patterns",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "Panda",
+                            "source": "PANDA-"
+                        },
+                        {
+                            "destination": "Towel",
+                            "source": "TOWEL"
+                        }
+                    ],
+                    "script": "transform.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Create array of patterns to loop over",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop over variants",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.variants[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop over patterns",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{custom.array}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Check regex match of pattern and sku",
+                "key": "custom_1",
+                "operation_id": "custom",
+                "metadata": {
+                    "trigger_parent_key": "loop_2",
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "If it matches",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop_2",
+                    "a": "{{custom_1.is_match}}",
+                    "comparison": "equals",
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "trigger_parent_key": "loop_2",
+                    "product_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop_2",
+                    "a": "{{shopify_1.tags}}",
+                    "comparison": "does not contain",
+                    "b": "{{loop_2.tag}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_add",
+                "name": "Product Add Tag",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
+                    "trigger_parent_key": "loop_2",
+                    "product_id": "{{shopify_1.id}}",
+                    "body": {
+                        "tag": "{{loop_2.tag}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_2",
+                    "trigger_parent_key": "loop_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 10
+            }
+        ]
+    }
+}
