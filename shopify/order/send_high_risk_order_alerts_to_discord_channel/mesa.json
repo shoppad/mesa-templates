@@ -1,0 +1,127 @@
+{
+    "key": "shopify/order/send_high_risk_order_alerts_to_discord_channel",
+    "name": "Send High-Risk Shopify Orders Message to Discord",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_risk",
+                "action": "retrieve",
+                "name": "Get List of Order's Risks",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id_risks_graphql",
+                "metadata": {
+                    "api_endpoint": "get graphql\/orders_risks\/id.json",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "count",
+                "name": "Check for high risk assessments",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
+                "metadata": {
+                    "key": "{{shopify_1.assessments[]}}",
+                    "filter": {
+                        "a": "{{shopify_1.assessments[].riskLevel}}",
+                        "comparison": "equals",
+                        "b": "HIGH",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{loop.count}}",
+                    "comparison": "greater than",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Create Channel Message",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-messages",
+                "metadata": {
+                    "api_endpoint": "post \/channels\/{channelId}\/messages",
+                    "path": {
+                        "channelId": "{{ template | label: 'What is your server''s channel ID?', description: '', tokens: false }}"
+                    },
+                    "body": {
+                        "content": "Order {{shopify.name}} was detected to be at a high risk for fraud. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}

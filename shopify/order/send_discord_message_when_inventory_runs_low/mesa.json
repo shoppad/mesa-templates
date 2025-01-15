@@ -1,0 +1,95 @@
+{
+    "key": "shopify/order/send_discord_message_when_inventory_runs_low",
+    "name": "Send Shopify Low Stock Message to Discord",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "updated",
+                "name": "Inventory Level Updated",
+                "key": "shopify",
+                "operation_id": "inventory_levels_update",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.available}}",
+                    "comparison": "less than equal",
+                    "b": "3",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "description": "Gets the product and variant titles related to the updated inventory level.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Create Channel Message",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-messages",
+                "metadata": {
+                    "api_endpoint": "post \/channels\/{channelId}\/messages",
+                    "path": {
+                        "channelId": "{{ template | label: 'What is your server''s channel ID?', description: '', tokens: false }}"
+                    },
+                    "body": {
+                        "content": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{custom.product_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
