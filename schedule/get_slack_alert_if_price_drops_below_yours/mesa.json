@@ -92,7 +92,7 @@
                 "operation_id": "get_products_product_id",
                 "metadata": {
                     "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "product_id": "9667128328483"
+                    "product_id": "{{ template | label: 'Which of your products would you like to compare prices with?' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -139,7 +139,7 @@
                 "operation_id": "slack",
                 "metadata": {
                     "channel": "{{ template | label: 'Which Slack channel should the message be sent to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
-                    "message": "A lower price has been found for {{shopify_1.title}}\n\nCompetitor's price: {{ai_1.response}}\n\nCompetitor's Website: {{scraper.url}}"
+                    "message": "A lower price has been found for {{shopify_1.title}}\n\nCompetitor's price: {{ai.response}}\n\nCompetitor's Website: {{scraper.url}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
