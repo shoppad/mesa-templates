@@ -1,0 +1,154 @@
+{
+    "key": "schedule/get_slack_alert_if_price_drops_below_yours",
+    "name": "Receive Slack Alerts for Any Competitor Price Drop",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@hourly:0 * * * *",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2025-01-15T10:00:00-08:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "scraper",
+                "entity": "scrape",
+                "action": "create",
+                "name": "Scrape Webpage",
+                "key": "scraper",
+                "operation_id": "scrape",
+                "metadata": {
+                    "api_endpoint": "get \/markdown",
+                    "query": {
+                        "url": "{{ template | label: 'Enter the product page URL that MESA will be comparing your product price against', description: 'Copy and paste the URL exactly.', placeholder: 'https:\/\/www.competitor.com\/product\/example-product-name' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query",
+                    "query.url"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "0.5",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'This AI prompt will check if your competitor''s price is currently on sale', description: 'While changes aren''t required, you can update the prompt if you''d like.', default: 'Determine the price of the product {{scraper.markdown}}. Consider if there are any active sales or promotions is reducing the product price and factor that into the product price. Respond with the latest price. Exclude the discount if it''s unclear if the product is eligible for the discount. Exclude dollar sign. Don''t put a period after the price. Only respond with the current price' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "product_id": "9667128328483"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{ai.response}}",
+                    "comparison": "less than",
+                    "b": "{{shopify_1.variants[0].price}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'Which Slack channel should the message be sent to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "A lower price has been found for {{shopify_1.title}}\n\nCompetitor's price: {{ai_1.response}}\n\nCompetitor's Website: {{scraper.url}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "channel",
+                    "message"
+                ],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
