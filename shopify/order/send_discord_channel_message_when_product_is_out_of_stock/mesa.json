@@ -81,7 +81,7 @@
                 "metadata": {
                     "trigger_parent_key": "loop",
                     "a": "{{shopify_1.inventory_quantity}}",
-                    "comparison": "equals",
+                    "comparison": "less than equal",
                     "b": "0",
                     "additional": [
                         {
