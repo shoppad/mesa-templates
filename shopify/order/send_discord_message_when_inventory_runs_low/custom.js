@@ -13,6 +13,8 @@ module.exports = new class {
    * @param {object} context Additional context about this task
    */
   script = (payload, context) => {
+    // Retrieve the Variables Available to this step
+    const vars = context.steps;
 
     /**
      * Variant query graphql body
@@ -31,7 +33,7 @@ module.exports = new class {
     }`;
 
     const response = ShopifyGraphql.send(productQuery, {
-      id: ShopifyGraphql.buildShopifyId('inventoryItem', payload.inventory_item_id),
+      id: ShopifyGraphql.buildShopifyId('inventoryItem', vars.shopify.inventory_item_id),
     });
 
     // Make sure we've got what we need (this is probably overkill / graphQL may ensure query vals are not undefined)
