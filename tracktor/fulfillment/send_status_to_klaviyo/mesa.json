@@ -1,0 +1,143 @@
+{
+    "key": "tracktor/fulfillment/send_status_to_klaviyo",
+    "name": "Send Shopify In-Transit Fulfillment Updates to Klaviyo",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "fulfillment",
+                "action": "fulfillment\/in_transit",
+                "name": "Fulfillment Status is In Transit",
+                "key": "tracktor",
+                "operation_id": "fulfillment_in_transit",
+                "metadata": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{tracktor.order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "profile",
+                "action": "list",
+                "name": "Get List of Profiles",
+                "version": "v3",
+                "key": "klaviyo",
+                "operation_id": "get_profiles",
+                "metadata": {
+                    "api_endpoint": "get \/api\/profiles\/",
+                    "query": {
+                        "filter": "equals(email,\"{{shopify_1.email}}\")"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.filter"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{klaviyo.0.id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "event",
+                "action": "create",
+                "name": "Create Event",
+                "version": "v3",
+                "key": "klaviyo_1",
+                "operation_id": "mesa_create_event",
+                "metadata": {
+                    "api_endpoint": "post \/mesa\/api\/events\/",
+                    "body": {
+                        "mode": "select",
+                        "profile_id": "{{klaviyo.0.id}}",
+                        "properties": [
+                            {
+                                "key": "order_id",
+                                "value": "{{shopify.id}}"
+                            },
+                            {
+                                "key": "order_name",
+                                "value": "{{shopify.name}}"
+                            }
+                        ],
+                        "metric": {
+                            "name": "Tracktor: Fulfillment Status In Transit"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
