@@ -1,0 +1,162 @@
+{
+    "key": "gorgias/ticket/send_closed_support_tickets_to_database",
+    "name": "Save Closed Gorgias Support Tickets to a Database",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "gorgias",
+                "entity": "ticket",
+                "action": "list-updated",
+                "name": "Ticket Updated",
+                "version": "v2",
+                "key": "gorgias",
+                "operation_id": "ticket_updated",
+                "metadata": {
+                    "api_endpoint": "put \/api\/views\/0\/items?",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{gorgias.status}}",
+                    "b": "closed"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gorgias",
+                "entity": "ticket_message",
+                "action": "list",
+                "name": "Get List of Ticket's Messages",
+                "version": "v2",
+                "key": "gorgias_1",
+                "operation_id": "list_message",
+                "metadata": {
+                    "api_endpoint": "get \/api\/tickets\/{ticket_id}\/messages",
+                    "path": {
+                        "ticket_id": "{{gorgias.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{gorgias_1}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "create",
+                "name": "Create Record",
+                "key": "data",
+                "operation_id": "post_database_table",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}",
+                    "trigger_parent_key": "loop",
+                    "create": "existing",
+                    "columns": [
+                        {
+                            "key": "Support Ticket ID",
+                            "type": "numeric",
+                            "value": "{{loop.ticket_id}}",
+                            "disabled": "6763980e750eded2960218ff"
+                        },
+                        {
+                            "key": "Message",
+                            "type": "text",
+                            "value": "{{loop.stripped_text}}",
+                            "disabled": "6763980e750eded2960218ff"
+                        },
+                        {
+                            "key": "Closed Date",
+                            "type": "timestamptz",
+                            "value": "{{gorgias.closed_datetime | date: \"%Y-%m-%d %H:%M\"}}",
+                            "disabled": "6763980e750eded2960218ff"
+                        }
+                    ],
+                    "table": "Closed Gorgias Support Tickets"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
