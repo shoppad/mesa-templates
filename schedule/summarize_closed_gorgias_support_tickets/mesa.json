@@ -1,0 +1,113 @@
+{
+    "key": "schedule/summarize_closed_gorgias_support_tickets",
+    "name": "Receive a Weekly Summary of Closed Gorgias Support Tickets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@weekly:0 0 * * 0",
+                    "enqueue_type": "schedule"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "key": "data_1",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}",
+                    "query": "SELECT * FROM \"Closed Gorgias Support Tickets\" WHERE \"Closed Date\" >= '{{ \"now -1 week\" | date: \"%Y-%m-%d %H:%M\" }}' AND \"Closed Date\" <= '{{ \"now\" | date: \"%Y-%m-%d %H:%M\" }}';",
+                    "table": "Closed Gorgias Support Tickets",
+                    "where_clause": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "script": "custom.js",
+                    "description": "Format the messages from support tickets so an external system like AI can understand."
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "Your task is analyze the text from support tickets and identify key trends, customer insights or concerns:\n{{custom.support_ticket_messages_string}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{ template | label: 'What is your email address?', tokens: false }}",
+                        "subject": "Weekly Summary",
+                        "message": "AI Insights:\n{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
