@@ -1,0 +1,64 @@
+{
+    "key": "webrequest/show_inventory_levels_by_location",
+    "name": "Show Inventory Levels By Location On Your Product Page",
+    "version": "1.0.0",
+    "description": "Display real-time inventory counts from each warehouse or retail location directly on your Shopify product pages. This workflow pulls current stock levels from your connected locations and presents them in a clear format, letting shoppers see exactly where items are available. The location-specific inventory data updates as stock levels change, giving customers accurate availability information before they purchase.",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "webrequest",
+                "name": "Request",
+                "key": "webrequest",
+                "metadata": {
+                    "headers": [
+                        {
+                            "key": "Content-Type",
+                            "value": "application\/json"
+                        },
+                        {
+                            "key": "Access-Control-Allow-Origin",
+                            "value": "*"
+                        },
+                        {
+                            "key": "Access-Control-Allow-Headers",
+                            "value": "Origin, Content-Type, X-Auth-Token, Accept"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "host",
+                    "headers",
+                    "headers[].key",
+                    "headers[].value"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js",
+                    "description": "Obtain the available inventory level quantity by location name"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
