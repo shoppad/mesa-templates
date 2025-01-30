@@ -1,0 +1,62 @@
+{
+    "key": "webrequest/show_inventory_levels_by_location",
+    "name": "Show Inventory Levels By Location On Your Product Page",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "webrequest",
+                "name": "Request",
+                "key": "webrequest",
+                "metadata": {
+                    "headers": [
+                        {
+                            "key": "Content-Type",
+                            "value": "application\/json"
+                        },
+                        {
+                            "key": "Access-Control-Allow-Origin",
+                            "value": "*"
+                        },
+                        {
+                            "key": "Access-Control-Allow-Headers",
+                            "value": "Origin, Content-Type, X-Auth-Token, Accept"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "host",
+                    "headers",
+                    "headers[].key",
+                    "headers[].value"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom_1",
+                "metadata": {
+                    "script": "custom_1.js",
+                    "description": "Obtain the available inventory level quantity by location name"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
