@@ -3,7 +3,7 @@
     "name": "Show Inventory Levels By Location On Your Product Page",
     "version": "1.0.0",
     "enabled": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
