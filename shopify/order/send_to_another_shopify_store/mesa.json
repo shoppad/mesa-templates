@@ -1,0 +1,174 @@
+{
+    "key": "shopify/order/send_to_another_shopify_store",
+    "name": "Send Orders From One Shopify Store To Another",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "create",
+                "name": "Create Order",
+                "key": "shopify_1",
+                "operation_id": "post_orders",
+                "metadata": {
+                    "api_endpoint": "post admin\/orders.json",
+                    "body": {
+                        "currency": "{{shopify.currency}}",
+                        "email": "{{shopify.email}}",
+                        "inventory_behaviour": "bypass",
+                        "name": "{{shopify.name}}",
+                        "note": "{{shopify.note}}",
+                        "presentment_currency": "{{shopify.presentment_currency}}",
+                        "source_identifier": "{{shopify.source_identifier}}",
+                        "subtotal_price": "{{shopify.subtotal_price}}",
+                        "tags": "Imported order, {{shopify.tags}}",
+                        "taxes_included": "{{shopify.taxes_included}}",
+                        "total_discounts": "{{shopify.total_discounts}}",
+                        "total_line_items_price": "{{shopify.total_line_items_price}}",
+                        "total_tax": "{{shopify.total_tax}}",
+                        "total_weight": "{{shopify.total_weight}}",
+                        "discount_codes": [
+                            {
+                                "code": "{{shopify.discount_codes[].code}}",
+                                "amount": "{{shopify.discount_codes[].amount}}",
+                                "type": "{{shopify.discount_codes[].type}}"
+                            }
+                        ],
+                        "line_items": [
+                            {
+                                "variant_id": "{{shopify.line_items[].variant_id}}",
+                                "quantity": "{{shopify.line_items[].quantity}}",
+                                "title": "{{shopify.line_items[].title}}",
+                                "sku": "{{shopify.line_items[].sku}}",
+                                "price": "{{shopify.line_items[].price}}"
+                            }
+                        ],
+                        "shipping_lines": [
+                            {
+                                "price": "{{shopify.shipping_lines[].price}}",
+                                "title": "{{shopify.shipping_lines[].title}}",
+                                "discounted_price": "{{shopify.shipping_lines[].discounted_price}}"
+                            }
+                        ],
+                        "billing_address": {
+                            "address1": "{{shopify.billing_address.address1}}",
+                            "address2": "{{shopify.billing_address.address2}}",
+                            "city": "{{shopify.billing_address.city}}",
+                            "company": "{{shopify.billing_address.company}}",
+                            "country": "{{shopify.billing_address.country}}",
+                            "default": "{{shopify.billing_address.default}}",
+                            "first_name": "{{shopify.billing_address.first_name}}",
+                            "last_name": "{{shopify.billing_address.last_name}}",
+                            "name": "{{shopify.billing_address.name}}",
+                            "province": "{{shopify.billing_address.province}}",
+                            "zip": "{{shopify.billing_address.zip}}"
+                        },
+                        "customer": {
+                            "email": "{{shopify.customer.email}}",
+                            "first_name": "{{shopify.customer.first_name}}",
+                            "last_name": "{{shopify.customer.last_name}}",
+                            "note": "{{shopify.customer.note}}"
+                        },
+                        "shipping_address": {
+                            "address1": "{{shopify.shipping_address.address1}}",
+                            "address2": "{{shopify.shipping_address.address2}}",
+                            "city": "{{shopify.shipping_address.city}}",
+                            "company": "{{shopify.shipping_address.company}}",
+                            "country": "{{shopify.shipping_address.country}}",
+                            "default": "{{shopify.shipping_address.default}}",
+                            "first_name": "{{shopify.shipping_address.first_name}}",
+                            "last_name": "{{shopify.shipping_address.last_name}}",
+                            "name": "{{shopify.shipping_address.name}}",
+                            "phone": "{{shopify.shipping_address.phone}}",
+                            "province": "{{shopify.shipping_address.province}}",
+                            "zip": "{{shopify.shipping_address.zip}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.currency",
+                    "body.email",
+                    "body.name",
+                    "body.note",
+                    "body.presentment_currency",
+                    "body.source_identifier",
+                    "body.subtotal_price",
+                    "body.tags",
+                    "body.taxes_included",
+                    "body.total_discounts",
+                    "body.total_line_items_price",
+                    "body.total_tax",
+                    "body.total_weight",
+                    "body.billing_address.address1",
+                    "body.billing_address.address2",
+                    "body.billing_address.city",
+                    "body.billing_address.country",
+                    "body.billing_address.company",
+                    "body.billing_address.default",
+                    "body.billing_address.first_name",
+                    "body.billing_address.last_name",
+                    "body.billing_address.name",
+                    "body.billing_address.province",
+                    "body.billing_address.zip",
+                    "body.customer.email",
+                    "body.customer.first_name",
+                    "body.customer.last_name",
+                    "body.customer.note",
+                    "body.line_items[].variant_id",
+                    "body.line_items[].quantity",
+                    "body.line_items[].title",
+                    "body.line_items[].sku",
+                    "body.shipping_address.address1",
+                    "body.shipping_address.address2",
+                    "body.shipping_address.city",
+                    "body.shipping_address.company",
+                    "body.shipping_address.country",
+                    "body.shipping_address.default",
+                    "body.shipping_address.first_name",
+                    "body.shipping_address.last_name",
+                    "body.shipping_address.name",
+                    "body.shipping_address.phone",
+                    "body.shipping_address.province",
+                    "body.shipping_address.zip",
+                    "body.line_items[].price",
+                    "body.discount_codes[].code",
+                    "body.discount_codes[].amount",
+                    "body.discount_codes[].type",
+                    "body.shipping_lines[].price",
+                    "body.shipping_lines[].title",
+                    "body.shipping_lines[].discounted_price"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
