@@ -1,5 +1,5 @@
 {
-    "key": "shopify/orders/send_to_another_shopify_store",
+    "key": "shopify/order/send_to_another_shopify_store",
     "name": "Send Orders From One Shopify Store To Another",
     "version": "1.0.0",
     "enabled": false,
@@ -16,7 +16,8 @@
                 "key": "shopify",
                 "operation_id": "orders_create",
                 "metadata": {
-                    "frequency": "every"
+                    "frequency": "every",
+                    "includeFields": []
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -67,6 +68,13 @@
                                 "title": "{{shopify.line_items[].title}}",
                                 "sku": "{{shopify.line_items[].sku}}",
                                 "price": "{{shopify.line_items[].price}}"
+                            }
+                        ],
+                        "shipping_lines": [
+                            {
+                                "price": "{{shopify.shipping_lines[].price}}",
+                                "title": "{{shopify.shipping_lines[].title}}",
+                                "discounted_price": "{{shopify.shipping_lines[].discounted_price}}"
                             }
                         ],
                         "billing_address": {
@@ -153,7 +161,10 @@
                     "body.line_items[].price",
                     "body.discount_codes[].code",
                     "body.discount_codes[].amount",
-                    "body.discount_codes[].type"
+                    "body.discount_codes[].type",
+                    "body.shipping_lines[].price",
+                    "body.shipping_lines[].title",
+                    "body.shipping_lines[].discounted_price"
                 ],
                 "on_error": "default",
                 "weight": 0
