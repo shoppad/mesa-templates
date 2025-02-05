@@ -57,7 +57,7 @@
                         "discount_codes": [
                             {
                                 "code": "{{shopify.discount_codes[].code}}",
-                                "amount": "{{shopify.discount_codes[].amount}}",
+                                "amount": "{{shopify.discount_applications[].value}}",
                                 "type": "{{shopify.discount_codes[].type}}"
                             }
                         ],
@@ -67,7 +67,14 @@
                                 "quantity": "{{shopify.line_items[].quantity}}",
                                 "title": "{{shopify.line_items[].title}}",
                                 "sku": "{{shopify.line_items[].sku}}",
-                                "price": "{{shopify.line_items[].price}}"
+                                "price": "{{shopify.line_items[].price}}",
+                                "applied_discount": {
+                                    "title": "{{shopify.line_items[].applied_discount.title}}",
+                                    "description": "{{shopify.line_items[].applied_discount.description}}",
+                                    "value_type": "{{shopify.line_items[].applied_discount.value_type}}",
+                                    "value": "{{shopify.line_items[].applied_discount.value}}",
+                                    "amount": "{{shopify.line_items[].applied_discount.amount}}"
+                                }
                             }
                         ],
                         "shipping_lines": [
@@ -164,7 +171,12 @@
                     "body.discount_codes[].type",
                     "body.shipping_lines[].price",
                     "body.shipping_lines[].title",
-                    "body.shipping_lines[].discounted_price"
+                    "body.shipping_lines[].discounted_price",
+                    "body.line_items[].applied_discount.title",
+                    "body.line_items[].applied_discount.description",
+                    "body.line_items[].applied_discount.value",
+                    "body.line_items[].applied_discount.value_type",
+                    "body.line_items[].applied_discount.amount"
                 ],
                 "on_error": "default",
                 "weight": 0
