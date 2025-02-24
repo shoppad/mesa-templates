@@ -1,0 +1,111 @@
+{
+    "key": "shopify/order/add_weather_forecast_tag",
+    "name": "Tag Orders with the Weather Forecast",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "weather",
+                "entity": "forecast",
+                "action": "list",
+                "name": "Retrieve Weather Forecast",
+                "key": "weather",
+                "operation_id": "forecast-weather",
+                "metadata": {
+                    "api_endpoint": "get \/forecast.json",
+                    "query": {
+                        "q": "{{shopify.shipping_address.zip}}",
+                        "days": "3"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query",
+                    "query.q",
+                    "query.days"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "tag",
+                            "source": "{%- assign forecast = \"\" -%}\n{%- for day in weather.forecast.forecastday -%}\n  {%- assign rounded_mintemp = day.day.mintemp_f | round -%}\n  {%- assign rounded_maxtemp = day.day.maxtemp_f | round -%}\n  {%- assign forecast = forecast | append: \"D\" | append: forloop.index | append: \":\"  | append: rounded_mintemp | append: \"-\" | append: rounded_maxtemp | append: \" \" -%}\n{%- endfor -%}\n{{ forecast }}"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{transform.tag}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.tag"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
