@@ -1,18 +1,9 @@
 {
     "key": "hubspot_contact_send_to_shopify_customer",
-    "name": "Send HubSpot Contact To Shopify Customer",
+    "name": "Sync HubSpot Contacts to Shopify Customers Automatically",
     "version": "1.0.0",
-    "description": "Keeping track of orders in multiple systems requires accuracy and time. This template sends a contact from HubSpot to Shopify customer whenever a contact is created. This reduces the effort to ensure that all information across your systems are the same.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Customer"
-    ],
-    "source": "hubspot",
-    "destination": "shopify",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -21,99 +12,210 @@
                 "type": "hubspot",
                 "entity": "contact",
                 "action": "list-updated",
-                "name": "Hubspot Contact Updated",
-                "key": "hubspot_contact",
+                "name": "Contact Updated",
+                "key": "hubspot",
+                "operation_id": "contact_list-updated",
                 "metadata": {
-                    "poll": "0 * * * *",
-                    "last_sync_date_time": ""
+                    "api_endpoint": "post \/contacts\/lists",
+                    "poll": "@hourly:0 * * * *",
+                    "next_sync_date_time": "2025-02-24T16:00:00-08:00"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer_search",
                 "action": "list",
-                "name": "Get List Customer Search",
-                "key": "shopify_customer_search",
+                "name": "Search Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_search",
                 "metadata": {
-                    "parameters": "query=email:{{hubspot_contact.properties.email}}&fields=id,email"
+                    "api_endpoint": "get admin\/customers\/search.json",
+                    "parameters": "query=email:{{hubspot.properties.email}}&fields=id,email"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "parameters"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom: Filter Shopify Customer by Exact Email Match",
-                "key": "custom_filter",
+                "type": "loop",
+                "entity": "map",
+                "name": "Map: Filter Shopify Customer by Exact Email Match",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_map",
                 "metadata": {
-                    "script": "custom_filter.js"
+                    "key": "{{shopify[]}}",
+                    "map_field": "{{shopify[].id}}",
+                    "filter": {
+                        "a": "{{shopify[].email}}",
+                        "comparison": "equals",
+                        "b": "{{hubspot.properties.email}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 5,
                 "trigger_type": "output",
-                "type": "shopify",
-                "entity": "customer",
-                "action": "create",
-                "name": "Create Customer",
-                "key": "shopify_customer_create",
-                "metadata": {
-                    "body": {
-                        "email": "{{hubspot_contact.properties.email}}",
-                        "first_name": "{{hubspot_contact.properties.firstname}}",
-                        "last_name": "{{hubspot_contact.properties.lastname}}"
-                    }
-                },
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 2,
+                "schema": 5,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom: Terminate flow after Shopify Create Customer",
-                "key": "custom_terminate",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
                 "metadata": {
-                    "script": "custom.js"
+                    "trigger_manager_key": "paths",
+                    "a": "{{loop.items.0}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
                 "action": "update",
                 "name": "Update Customer",
-                "key": "shopify_customer_update",
+                "key": "shopify_1",
+                "operation_id": "put_customers_customer_id",
                 "metadata": {
-                    "customer_id": "{{custom_filter.id}}",
+                    "api_endpoint": "put admin\/customers\/{{customer_id}}.json",
+                    "trigger_parent_key": "paths_1",
+                    "customer_id": "{{loop.items.0}}",
                     "body": {
-                        "email": "{{hubspot_contact.properties.email}}",
-                        "first_name": "{{hubspot_contact.properties.firstname}}",
-                        "last_name": "{{hubspot_contact.properties.lastname}}"
+                        "email": "{{hubspot.properties.email}}",
+                        "first_name": "{{hubspot.properties.firstname}}",
+                        "last_name": "{{hubspot.properties.lastname}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name"
+                ],
                 "on_error": "default",
                 "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{loop.items.0}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "shopify_2",
+                "operation_id": "post_customers",
+                "metadata": {
+                    "api_endpoint": "post admin\/customers.json",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "email": "{{hubspot.properties.email}}",
+                        "first_name": "{{hubspot.properties.firstname}}",
+                        "last_name": "{{hubspot.properties.lastname}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name"
+                ],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
             }
-        ],
-        "storage": []
+        ]
     }
 }
