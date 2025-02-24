@@ -12,6 +12,7 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "ftp",
+                "version": "v1",
                 "name": "Fetch FTP File",
                 "key": "ftp",
                 "metadata": {

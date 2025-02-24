@@ -14,6 +14,7 @@
             {
                 "trigger_type": "input",
                 "type": "ftp",
+                "version": "v1",
                 "method": "sftp",
                 "name": "FTP Fulfillments",
                 "key": "in-ftp-fulfillments",
