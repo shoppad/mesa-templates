@@ -2,8 +2,6 @@
     "key": "tracktor/fulfillment/klaviyo_event_when_delivered_kj",
     "name": "Send a message in Klaviyo when an order is delivered",
     "version": "1.0.0",
-    "description": "When Tracktor recognizes that a package has been delivered, this template will fire an event over to Klaviyo, which will allow you to send an email or SMS to your customer related to the delivery.",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
