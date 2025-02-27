@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/add_task_to_asana",
-    "name": "Add a task in Asana when a Shopify order is created",
+    "name": "Create an Asana Task for Each New Shopify Order",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -36,13 +36,19 @@
                     "body": {
                         "data": {
                             "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
-                            "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
                             "name": "Order {{shopify.name}}",
-                            "html_notes": "<body>Shopify order {{shopify.name}} has been created.\n\nThis order includes the following products:\n{% for line_item in shopify.line_items %}Quantity: {{line_item.quantity}}\nProduct Name: {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %} - {{property.name}}: {{property.value}}\n{% endfor %}{% endfor %}\nView order: <a href=\"https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}\">Order {{shopify.name}}<\/a>\nCustomer Information:\n{{shopify.billing_address.company}}, {{shopify.billing_address.name}}, {{shopify.email}}, {{shopify.phone}}\nShipping Address:\n{{shopify.shipping_address.address1}}, {{shopify.shipping_address.address2}}, {{shopify.shipping_address.city}}, {{shopify.shipping_address.country}}, {{shopify.shipping_address.province}}, {{shopify.shipping_address.zip}}\nBilling Address:\n{{shopify.billing_address.address1}}, {{shopify.billing_address.address2}}, {{shopify.billing_address.city}}, {{shopify.billing_address.province}}, {{shopify.billing_address.country}}, {{shopify.billing_address.zip}}<\/body>"
+                            "html_notes": "<body>Shopify order {{shopify.name}} has been created.\n\nThis order includes the following products:\n{% for line_item in shopify.line_items %}Quantity: {{line_item.quantity}}\nProduct Name: {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %} - {{property.name}}: {{property.value}}\n{% endfor %}{% endfor %}\nView order: <a href=\"https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}\">Order {{shopify.name}}<\/a>\nCustomer Information:\n{{shopify.billing_address.company}}, {{shopify.billing_address.name}}, {{shopify.email}}, {{shopify.phone}}\nShipping Address:\n{{shopify.shipping_address.address1}}, {{shopify.shipping_address.address2}}, {{shopify.shipping_address.city}}, {{shopify.shipping_address.country}}, {{shopify.shipping_address.province}}, {{shopify.shipping_address.zip}}\nBilling Address:\n{{shopify.billing_address.address1}}, {{shopify.billing_address.address2}}, {{shopify.billing_address.city}}, {{shopify.billing_address.province}}, {{shopify.billing_address.country}}, {{shopify.billing_address.zip}}<\/body>",
+                            "project": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}"
                         }
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.data.workspace",
+                    "body.data.name",
+                    "body.data.html_notes",
+                    "body.data.project"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
