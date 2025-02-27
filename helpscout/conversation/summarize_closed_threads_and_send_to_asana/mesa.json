@@ -45,7 +45,14 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -69,7 +76,12 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional"
+               ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -90,7 +102,10 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.conversationId"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -118,7 +133,12 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "map_field",
+                    "filter",
+                    "filter.additional"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -142,7 +162,12 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -166,7 +191,12 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "temperature",
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
                 "on_error": "default",
                 "weight": 5
             },
@@ -185,18 +215,18 @@
                     "body": {
                         "data": {
                             "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
-                            "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
                             "name": "{{ai_1.response}}",
-                            "notes": "Helpscout Summary: {{ai.response}}\nTicket #: {{helpscout.number}}\nCustomer email: {{helpscout.createdBy.email}}\nDate closed: {{helpscout.closedAt}}"
+                            "notes": "Helpscout Summary: {{ai.response}}\nTicket #: {{helpscout.number}}\nCustomer email: {{helpscout.createdBy.email}}\nDate closed: {{helpscout.closedAt}}",
+                            "project": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}"
                         }
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
                     "body.data.workspace",
-                    "body.data.projects",
                     "body.data.name",
-                    "body.data.notes"
+                    "body.data.notes",
+                    "body.data.project"
                 ],
                 "on_error": "default",
                 "weight": 6
