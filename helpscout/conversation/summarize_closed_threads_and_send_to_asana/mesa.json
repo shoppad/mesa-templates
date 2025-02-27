@@ -186,7 +186,7 @@
                         "data": {
                             "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
                             "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
-                            "name": "{{ai_3.response}}",
+                            "name": "{{ai_1.response}}",
                             "notes": "Helpscout Summary: {{ai.response}}\nTicket #: {{helpscout.number}}\nCustomer email: {{helpscout.createdBy.email}}\nDate closed: {{helpscout.closedAt}}"
                         }
                     }
