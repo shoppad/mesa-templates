@@ -1,0 +1,224 @@
+{
+    "key": "helpscout/conversation/summarize_closed_threads_and_send_to_asana",
+    "name": "Summarize Closed Help Scout Conversations and Send to Asana",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "helpscout",
+                "entity": "conversation",
+                "action": "status",
+                "name": "Conversation Status Changed",
+                "key": "helpscout",
+                "operation_id": "convo_status",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop through tags",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{helpscout.tags[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check for \"closed\" status",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "a": "{{helpscout.status}}",
+                    "comparison": "equals",
+                    "b": "closed",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "helpscout",
+                "entity": "conversation_thread",
+                "action": "list",
+                "name": "Get List of Conversation's Threads",
+                "key": "helpscout_1",
+                "operation_id": "get-_v2_conversations_threads",
+                "metadata": {
+                    "api_endpoint": "get \/v2\/conversations\/{conversationId}\/threads",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "conversationId": "{{helpscout.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "map",
+                "name": "Map",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_map",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{helpscout_1.threads[]}}",
+                    "map_field": "{{helpscout_1.threads[].body}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Generate Summary",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "trigger_parent_key": "loop",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "Here is a customer support thread. They are separated by commas. Can you provide a summary? Don't include technical details. {{loop_2.comma_separated}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Generate Title",
+                "version": "v2",
+                "key": "ai_1",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "trigger_parent_key": "loop",
+                    "temperature": "1",
+                    "body": {
+                        "role": "user",
+                        "content": "Here is a customer support thread. They are separated by commas. Can you provide a title? Don't preface it with \"Title:\" {{loop_2.comma_separated}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "asana",
+                "entity": "task",
+                "action": "create",
+                "name": "Create Task",
+                "key": "asana",
+                "operation_id": "createTask",
+                "metadata": {
+                    "api_endpoint": "post \/tasks",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "data": {
+                            "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
+                            "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
+                            "name": "{{ai_3.response}}",
+                            "notes": "Helpscout Summary: {{ai.response}}\nTicket #: {{helpscout.number}}\nCustomer email: {{helpscout.createdBy.email}}\nDate closed: {{helpscout.closedAt}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.data.workspace",
+                    "body.data.projects",
+                    "body.data.name",
+                    "body.data.notes"
+                ],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            }
+        ]
+    }
+}
