@@ -3,7 +3,7 @@
     "name": "Create an Asana Task for Each New Shopify Order",
     "version": "1.0.0",
     "enabled": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -45,9 +45,9 @@
                 "local_fields": [],
                 "selected_fields": [
                     "body.data.workspace",
+                    "body.data.projects"
                     "body.data.name",
-                    "body.data.html_notes",
-                    "body.data.project"
+                    "body.data.html_notes"
                 ],
                 "on_error": "default",
                 "weight": 0
