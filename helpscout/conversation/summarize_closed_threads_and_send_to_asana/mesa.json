@@ -24,39 +24,6 @@
         ],
         "outputs": [
             {
-                "schema": 5.1,
-                "trigger_type": "output",
-                "type": "loop",
-                "entity": "loop",
-                "name": "Loop through tags",
-                "version": "v3",
-                "key": "loop",
-                "operation_id": "loop_loop",
-                "metadata": {
-                    "key": "{{helpscout.tags[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter",
-                    "filter.a",
-                    "filter.comparison",
-                    "filter.b",
-                    "filter.additional"
-                ],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
@@ -64,7 +31,6 @@
                 "key": "filter",
                 "operation_id": "filter",
                 "metadata": {
-                    "trigger_parent_key": "loop",
                     "a": "{{helpscout.status}}",
                     "comparison": "equals",
                     "b": "closed",
@@ -83,7 +49,7 @@
                     "additional"
                ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 0
             },
             {
                 "schema": 4,
@@ -107,7 +73,7 @@
                     "path.conversationId"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
                 "schema": 5.1,
@@ -116,10 +82,9 @@
                 "entity": "map",
                 "name": "Map",
                 "version": "v3",
-                "key": "loop_2",
+                "key": "loop",
                 "operation_id": "loop_map",
                 "metadata": {
-                    "trigger_parent_key": "loop",
                     "key": "{{helpscout_1.threads[]}}",
                     "map_field": "{{helpscout_1.threads[].body}}",
                     "filter": {
@@ -140,7 +105,7 @@
                     "filter.additional"
                 ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -154,7 +119,6 @@
                 "operation_id": "post-prompt",
                 "metadata": {
                     "api_endpoint": "post \/prompt",
-                    "trigger_parent_key": "loop",
                     "temperature": "1",
                     "body": {
                         "role": "user",
@@ -169,7 +133,7 @@
                     "body.content"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -183,11 +147,10 @@
                 "operation_id": "post-prompt",
                 "metadata": {
                     "api_endpoint": "post \/prompt",
-                    "trigger_parent_key": "loop",
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "Here is a customer support thread. They are separated by commas. Can you provide a title? Don't preface it with \"Title:\" {{loop_2.comma_separated}}"
+                        "content": "Here is a customer support thread. They are separated by commas. Can you provide a title? Don't preface it with \"Title:\" {{loop.comma_separated}}"
                     }
                 },
                 "local_fields": [],
@@ -198,7 +161,7 @@
                     "body.content"
                 ],
                 "on_error": "default",
-                "weight": 5
+                "weight": 4
             },
             {
                 "schema": 4,
@@ -229,25 +192,7 @@
                     "body.data.projects"
                 ],
                 "on_error": "default",
-                "weight": 6
-            },
-            {
-                "schema": 5.1,
-                "trigger_type": "output",
-                "type": "loop",
-                "entity": "end",
-                "name": "Loop End",
-                "version": "v3",
-                "key": "loop_1",
-                "operation_id": "loop_end",
-                "metadata": {
-                    "trigger_manager_key": "loop",
-                    "trigger_parent_key": "loop"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 7
+                "weight": 5
             }
         ]
     }
