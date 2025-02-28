@@ -15,7 +15,9 @@
                 "name": "Order Created",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every"
+                },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
