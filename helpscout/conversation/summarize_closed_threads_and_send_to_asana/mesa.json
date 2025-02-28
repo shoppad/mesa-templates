@@ -214,8 +214,8 @@
                     "trigger_parent_key": "loop",
                     "body": {
                         "data": {
-                            "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
-                            "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
+                            "workspace": "{{ template | label: 'What is the Asana workspace?', description: '', tokens: false, placeholder: '' }}",
+                            "projects": "{{ template | label: 'What is the Asana project?', description: '', tokens: false, placeholder: '' }}",
                             "name": "{{ai_1.response}}",
                             "notes": "Helpscout Summary: {{ai.response}}\nTicket #: {{helpscout.number}}\nCustomer email: {{helpscout.createdBy.email}}\nDate closed: {{helpscout.closedAt}}"
                         }
