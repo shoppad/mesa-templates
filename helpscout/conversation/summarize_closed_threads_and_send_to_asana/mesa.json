@@ -62,7 +62,6 @@
                 "operation_id": "get-_v2_conversations_threads",
                 "metadata": {
                     "api_endpoint": "get \/v2\/conversations\/{conversationId}\/threads",
-                    "trigger_parent_key": "loop",
                     "path": {
                         "conversationId": "{{helpscout.id}}"
                     }
@@ -174,7 +173,6 @@
                 "operation_id": "createTask",
                 "metadata": {
                     "api_endpoint": "post \/tasks",
-                    "trigger_parent_key": "loop",
                     "body": {
                         "data": {
                             "workspace": "{{ template | label: 'What is the Asana workspace?', description: '', tokens: false, placeholder: '' }}",
