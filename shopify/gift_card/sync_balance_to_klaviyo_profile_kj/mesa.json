@@ -1,9 +1,7 @@
 {
     "key": "shopify/gift_card/sync_balance_to_klaviyo_profile_kj",
-    "name": "Sync Gift Card Balance To Klaviyo Profile",
+    "name": "Sync Shopify Gift Card Balances to Klaviyo Profiles",
     "version": "1.0.0",
-    "description": "In this workflow template, we pull in gift card balances over the API and save them into Data by MESA. This can be useful for several different use cases, including firing off a Klaviyo flow to send gift card balances to customers.",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
@@ -14,10 +12,10 @@
                 "type": "schedule",
                 "name": "Schedule",
                 "key": "schedule",
+                "operation_id": "schedule",
                 "metadata": {
                     "schedule": "@daily:0 0 * * *",
-                    "enqueue_type": "schedule",
-                    "datetime": null
+                    "enqueue_type": "schedule"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -30,48 +28,26 @@
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "transform",
-                "entity": "mapping",
-                "name": "Transform Mapping",
-                "key": "transform",
-                "operation_id": "mapping",
+                "type": "shopify",
+                "entity": "gift_card",
+                "action": "list",
+                "name": "Get List of Gift Cards",
+                "key": "shopify",
+                "operation_id": "get_gift_cards",
                 "metadata": {
-                    "mapping": [
-                        {
-                            "destination": "limit",
-                            "source": "1"
-                        }
-                    ]
-                },
-                "local_fields": [
-                    {
-                        "key": "mapping",
-                        "type": "mapping",
-                        "tokens": "brackets",
-                        "location": "required"
+                    "api_endpoint": "get admin/gift_cards.json",
+                    "query": {
+                        "limit": 8000
                     }
-                ],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Get Batch Of Gift Cards",
-                "key": "fetch_gift_cards",
-                "metadata": {
-                    "script": "fetch_gift_cards.js"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "script"
+                    "query.limit"
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 0
             },
             {
                 "schema": 5.1,
@@ -79,45 +55,44 @@
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{fetch_gift_cards}}",
+                    "key": "{{shopify}}",
                     "filter": {
-                        "comparison": "equals"
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter",
-                    "filter.a",
-                    "filter.comparison",
-                    "filter.b"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
-                "key": "shopify",
+                "key": "shopify_1",
                 "operation_id": "get_customers_customer_id",
                 "metadata": {
-                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
+                    "trigger_parent_key": "loop",
                     "customer_id": "{{loop.customer_id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "customer_id"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -129,75 +104,88 @@
                 "key": "data",
                 "operation_id": "post_database_table_upsert",
                 "metadata": {
-                    "api_endpoint": "post /{database}/{table}/upsert",
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "trigger_parent_key": "loop",
                     "create": "existing",
                     "columns": [
                         {
-                            "key": "id",
-                            "type": "varchar",
+                            "key": "Gift Card ID",
+                            "type": "numeric",
                             "value": "{{loop.id}}",
-                            "disabled": "661024663b6a3665a106f5b9"
+                            "disabled": "67c8caffd6cf40974d0ed799"
                         },
                         {
-                            "key": "initial_value",
+                            "key": "Initial Value",
                             "type": "numeric",
                             "value": "{{loop.initial_value}}",
-                            "disabled": "661024663b6a3665a106f5b9"
+                            "disabled": "67c8caffd6cf40974d0ed799"
                         },
                         {
-                            "key": "balance",
-                            "type": "varchar",
+                            "key": "Balance",
+                            "type": "numeric",
                             "value": "{{loop.balance}}",
-                            "disabled": "661024663b6a3665a106f5b9"
+                            "disabled": "67c8caffd6cf40974d0ed799"
                         },
                         {
-                            "key": "customer_id",
-                            "type": "varchar",
-                            "value": "{{loop.customer_id}}",
-                            "disabled": "661024663b6a3665a106f5b9"
+                            "key": "Customer ID",
+                            "type": "numeric",
+                            "value": "{{shopify_1.id}}",
+                            "disabled": "67c8caffd6cf40974d0ed799"
                         },
                         {
-                            "key": "customer_email",
-                            "type": "varchar",
-                            "value": "{{shopify.email}}",
-                            "disabled": "661024663b6a3665a106f5b9"
+                            "key": "Customer Email",
+                            "type": "text",
+                            "value": "{{shopify_1.email}}",
+                            "disabled": "67c8caffd6cf40974d0ed799"
                         },
                         {
-                            "key": "created_at",
+                            "key": "Customer Name",
+                            "type": "text",
+                            "value": "{{shopify_1.first_name}} {{shopify_1.last_name}}",
+                            "disabled": "67c8caffd6cf40974d0ed799"
+                        },
+                        {
+                            "key": "Created At",
                             "type": "timestamptz",
                             "value": "{{loop.created_at}}",
-                            "disabled": "661024663b6a3665a106f5b9"
+                            "disabled": "67c8caffd6cf40974d0ed799"
                         },
                         {
-                            "key": "updated_at",
+                            "key": "Updated At",
                             "type": "timestamptz",
                             "value": "{{loop.updated_at}}",
-                            "disabled": "661024663b6a3665a106f5b9"
+                            "disabled": "67c8caffd6cf40974d0ed799"
+                        },
+                        {
+                            "key": "Expires On",
+                            "type": "timestamptz",
+                            "value": "{{loop.expires_on}}",
+                            "disabled": "67c8caffd6cf40974d0ed799"
+                        },
+                        {
+                            "key": "Disabled At",
+                            "type": "timestamptz",
+                            "value": "{{loop.disabled_at}}",
+                            "disabled": "67c8caffd6cf40974d0ed799"
+                        },
+                        {
+                            "key": "Admin Gift Card URL",
+                            "type": "text",
+                            "value": "https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/gift_cards\/{{loop.id}}",
+                            "disabled": "67c8caffd6cf40974d0ed799"
                         }
                     ],
                     "where_clause": {
                         "comparison": "equals",
                         "b": "{{loop.id}}",
-                        "a": "id"
+                        "a": "Gift Card ID"
                     },
-                    "table": "gift_cards"
+                    "table": "Shopify Gift Cards"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "create",
-                    "table",
-                    "where_clause",
-                    "where_clause.a",
-                    "where_clause.comparison",
-                    "where_clause.b",
-                    "columns",
-                    "columns[].key",
-                    "columns[].type",
-                    "columns[].value",
-                    "columns[].disabled"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -209,19 +197,20 @@
                 "key": "data_1",
                 "operation_id": "get_database_table",
                 "metadata": {
-                    "api_endpoint": "get /{database}/{table}",
-                    "query": "SELECT SUM(CAST(balance AS numeric)) AS total_balance\nFROM gift_cards\nWHERE customer_email = '{{shopify.email}}'",
-                    "table": "gift_cards",
+                    "api_endpoint": "get \/{database}\/{table}",
+                    "trigger_parent_key": "loop",
                     "where_clause": {
                         "comparison": "equals"
-                    }
+                    },
+                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_1.email}}'\n  AND \"Disabled At\" IS NOT NULL",
+                    "table": "Shopify Gift Cards"
                 },
                 "local_fields": [],
                 "selected_fields": [
                     "query"
                 ],
                 "on_error": "default",
-                "weight": 5
+                "weight": 4
             },
             {
                 "schema": 4,
@@ -229,20 +218,44 @@
                 "type": "klaviyo",
                 "entity": "profile",
                 "action": "list",
-                "name": "Get Klaviyo Profile ID From Email",
+                "name": "Get Klaviyo Profile from Email",
                 "version": "v3",
-                "key": "klaviyo_2",
+                "key": "klaviyo",
                 "operation_id": "get_profiles",
                 "metadata": {
-                    "api_endpoint": "get /api/profiles/",
+                    "api_endpoint": "get \/api\/profiles\/",
+                    "trigger_parent_key": "loop",
                     "query": {
-                        "filter": "equals(email,'{{shopify.email}}')"
+                        "filter": "equals(email,'{{shopify_1.email}}')"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
                     "query.filter"
                 ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "a": "{{klaviyo.0.id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 6
             },
@@ -254,23 +267,24 @@
                 "action": "update",
                 "name": "Update Profile",
                 "version": "v3",
-                "key": "klaviyo",
+                "key": "klaviyo_1",
                 "operation_id": "update_profile",
                 "metadata": {
-                    "api_endpoint": "patch /api/profiles/{id}/",
+                    "api_endpoint": "patch \/api\/profiles\/{id}\/",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "id": "{{klaviyo.0.id}}"
+                    },
                     "body": {
                         "data": {
                             "type": "profile",
-                            "id": "{{klaviyo_2.0.id}}",
+                            "id": "{{klaviyo.0.id}}",
                             "attributes": {
                                 "properties": {
-                                    "gift_card_balance": "{{data_1.0.total_balance}}"
+                                    "Gift Card Balance": "{{data_1[0][\"Total Balance\"]}}"
                                 }
                             }
                         }
-                    },
-                    "path": {
-                        "id": "{{klaviyo_2.0.id}}"
                     }
                 },
                 "local_fields": [
@@ -287,7 +301,7 @@
                                                 "key": "properties",
                                                 "fields": [
                                                     {
-                                                        "key": "gift_card_balance",
+                                                        "key": "Gift Card Balance",
                                                         "type": "custom",
                                                         "allow_custom_fields": false,
                                                         "location": "required",
@@ -307,49 +321,22 @@
                 "weight": 7
             },
             {
-                "schema": 4.1,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Loop Done And More Gift Cards To Import?",
-                "key": "filter",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
                 "metadata": {
-                    "a": "{{loop.key}}",
-                    "comparison": "equals",
-                    "b": "fetch_gift_cards.{{fetch_gift_cards.size | minus: 1}}",
-                    "additional": [
-                        {
-                            "operator": "and",
-                            "a": "{{fetch_gift_cards.size}}",
-                            "comparison": "equals",
-                            "b": "{{transform.limit}}"
-                        }
-                    ]
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "additional[].operator",
-                    "additional[].a",
-                    "additional[].comparison",
-                    "additional[].b"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 8
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Run This Workflow Again",
-                "key": "custom",
-                "metadata": {
-                    "script": "custom.js"
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "script"
-                ],
-                "on_error": "default",
-                "weight": 9
             }
         ]
     }
