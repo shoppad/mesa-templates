@@ -1,0 +1,53 @@
+{
+    "key": "shopify/order/send_slack_notification",
+    "name": "Send Shopify Order Details to Slack",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "*New Order*\nOrder Number: {{shopify.name}}\nCustomer: {{shopify.customer.first_name}} {{shopify.customer.last_name}}\n\n*Products*\n{% for product in shopify.line_items %}\nProduct: {{product.title}}\n Qty: {{product.quantity}}\n Price: {{product.price}}\n{% for property in product.properties %}\n  {{ property.name }}: {{property.value}}\n{% endfor %}\n {% endfor %}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "channel",
+                    "message"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
