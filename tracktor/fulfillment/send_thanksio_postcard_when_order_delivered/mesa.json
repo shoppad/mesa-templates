@@ -1,6 +1,6 @@
 {
     "key": "tracktor/fulfillment/send_thanksio_postcard_when_order_delivered",
-    "name": "Send a postcard when an order is delivered",
+    "name": "Send a Thank-You Postcard When a Shopify Order is Delivered",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
