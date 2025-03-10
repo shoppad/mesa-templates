@@ -55,7 +55,7 @@
                         "message": "Dear {{shopify.customer.first_name}}, \n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{context.shop.name}} Team",
                         "size": "{{ template | label: 'What is the size of the postcard?', description: '', tokens: false }}",
                         "front_image_url": "{{ template | label: 'What is the Image URL for the front of the postcard?', description: 'Enter the full URL to the image to use on the front of your postcard.', type: 'string', tokens: false }}",
-                        "handwriting_style": "{{ template | label: 'What is the handwriting style of the postcard?', description: '', tokens: false }}",
+                        "handwriting_style": "{{ template | label: 'Select a handwriting style for your postcard.', description: '[Preview](https://help.thanks.io/handwriting-styles-for-message-templates) the current styles available.', tokens: false }}",
                         "return_name": "{{context.shop.name}}",
                         "return_address": "{{context.shop.address1}}",
                         "return_address2": "{{context.shop.address2}}",
