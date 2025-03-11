@@ -1,0 +1,68 @@
+{
+    "key": "etsy/listing/create_pinterest_pin",
+    "name": "Create a Pinterest Pin from a New Etsy Listing",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 5,
+                "trigger_type": "input",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "list-created",
+                "name": "Active Listing Created",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "findAllListingsActiveCreated",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/create",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "pinterest",
+                "entity": "pin",
+                "action": "create",
+                "name": "Create Pin",
+                "key": "pinterest",
+                "operation_id": "pins\/create",
+                "metadata": {
+                    "api_endpoint": "post \/pins",
+                    "body": {
+                        "title": "{{etsy.title}}",
+                        "description": "{{etsy.description}}",
+                        "board_id": "{{ template | label: 'Which board should the pin be created on?', tokens: false }}",
+                        "media_source": {
+                            "source_type": "image_url",
+                            "url": "{{etsy.url}}",
+                            "is_standard": true
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.media_source.is_standard",
+                    "body.title",
+                    "body.description"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
