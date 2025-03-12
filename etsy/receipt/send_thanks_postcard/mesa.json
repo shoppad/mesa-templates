@@ -20,7 +20,7 @@
                     "api_endpoint": "get \/v3\/application\/shops\/{shop_id}\/receipts-webhook",
                     "poll": "@hourly:0 * * * *",
                     "path": {
-                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}"
+                        "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}"
                     }
                 },
                 "local_fields": [],
@@ -44,8 +44,8 @@
                     "entity_wrapper": "body",
                     "body": {
                         "message": "Dear {{etsy.name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying our products.\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{context.shop.name}} Team",
-                        "size": "{{ template | label: 'What is the size of the postcard?', description: '', tokens: false }}",
-                        "front_image_url": "{{ template | label: 'What is the Image URL for the front of the postcard?', description: 'Enter the full URL to the image to use on the front of your postcard.', type: 'string', tokens: false }}",
+                        "size": "{{ template | label: 'Select a postcard size.', description: '', tokens: false }}",
+                        "front_image_url": "{{ template | label: 'Add an image to your postcard.', description: 'Enter the full URL of the image you want to use on the front of your postcard. Make sure the URL is publicly accessible.', type: 'string', tokens: false }}",
                         "handwriting_style": "{{ template | label: 'Select a handwriting style for your postcard.', description: '[Preview](https://help.thanks.io/handwriting-styles-for-message-templates) the current styles available.', tokens: false }}",
                         "return_name": "{{context.shop.name}}",
                         "return_address": "{{context.shop.address1}}",
