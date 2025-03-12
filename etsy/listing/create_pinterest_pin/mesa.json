@@ -35,6 +35,27 @@
             {
                 "schema": 4,
                 "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting_image",
+                "action": "list",
+                "name": "Get List of Listing Images",
+                "version": "v3",
+                "key": "etsy_1",
+                "operation_id": "getListingImages",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/{listing_id}\/images",
+                    "path": {
+                        "listing_id": "{{etsy.listing_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
                 "type": "pinterest",
                 "entity": "pin",
                 "action": "create",
@@ -49,7 +70,7 @@
                         "board_id": "{{ template | label: 'Which board should the pin be created on?', tokens: false }}",
                         "media_source": {
                             "source_type": "image_url",
-                            "url": "{{etsy.url}}",
+                            "url": "{{etsy_1.results[0].url_fullxfull}}",
                             "is_standard": true
                         }
                     }
@@ -61,7 +82,7 @@
                     "body.description"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ]
     }
