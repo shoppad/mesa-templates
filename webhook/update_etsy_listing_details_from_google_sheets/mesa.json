@@ -1,0 +1,128 @@
+{
+    "key": "webhook/update_etsy_listing_details_from_google_sheets",
+    "name": "Update Etsy Listing Price from Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googlesheets",
+                "entity": "appscript",
+                "action": "updated",
+                "name": "Row Updated (Advanced)",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "appscript_record_updated",
+                "metadata": {
+                    "api_endpoint": "get \/appscript\/updated",
+                    "install_code": "{{ template | label: 'Install the webhook code' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "install_code",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "retrieve",
+                "name": "Retrieve Listing",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "getListing",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/{listing_id}",
+                    "path": {
+                        "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}",
+                        "listing_id": "{{googlesheets.data[\"Listing ID\"]}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.listing_id"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "update",
+                "name": "Update Listing",
+                "version": "v3",
+                "key": "etsy_1",
+                "operation_id": "updateListing",
+                "metadata": {
+                    "api_endpoint": "patch \/v3\/application\/shops\/{shop_id}\/listings\/{listing_id}",
+                    "path": {
+                        "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}",
+                        "listing_id": "{{etsy.listing_id}}"
+                    },
+                    "body": {
+                        "title": "{{googlesheets.data[\"Listing Title\"]}}",
+                        "description": "{{googlesheets.data.Description}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.description",
+                    "body.title"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting_inventory",
+                "action": "update",
+                "name": "Update Listing Inventory",
+                "version": "v3",
+                "key": "etsy_2",
+                "operation_id": "updateListingInventory",
+                "metadata": {
+                    "api_endpoint": "put \/v3\/application\/listings\/{listing_id}\/inventory",
+                    "path": {
+                        "listing_id": "{{etsy.listing_id}}"
+                    },
+                    "body": {
+                        "products": [
+                            {
+                                "sku": "{{googlesheets.data.SKU}}",
+                                "offerings": [
+                                    {
+                                        "price": "{{googlesheets.data.Price}}",
+                                        "quantity": "{{etsy.quantity}}",
+                                        "is_enabled": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.products[].offerings[].price",
+                    "body.products[].offerings[].quantity",
+                    "body.products[].offerings[].is_enabled"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
