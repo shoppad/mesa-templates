@@ -1,0 +1,57 @@
+{
+    "key": "infiniteoptions/order/save_product_options_to_shopify_order_notes",
+    "name": "Save Infinite Options Selections to Shopify Order Notes",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "input",
+                "type": "infiniteoptions",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "infiniteoptions",
+                "operation_id": "order_created",
+                "metadata": {
+                    "field_name": "all_infinite_options_options"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "note_update",
+                "name": "Update Order Notes",
+                "key": "shopify",
+                "operation_id": "put_mesa_orders_order_id_note",
+                "metadata": {
+                    "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
+                    "order_id": "{{infiniteoptions.order.id}}",
+                    "body": {
+                        "note": "{% for line_item in infiniteoptions.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}",
+                        "append": true
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.note",
+                    "body.append"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
