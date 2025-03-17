@@ -20,7 +20,9 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -48,7 +50,14 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -163,6 +172,12 @@
                             "disabled": "67d22de5036652c1d400e8ad"
                         },
                         {
+                            "key": "Product Vendor",
+                            "type": "text",
+                            "value": "{{loop.vendor}}",
+                            "disabled": "67d847184ad4c8da260d0ee7"
+                        },
+                        {
                             "key": "Product Quantity",
                             "type": "numeric",
                             "value": "{{loop.quantity}}",
@@ -178,7 +193,15 @@
                     "table": "Shopify Orders"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "create",
+                    "table",
+                    "columns",
+                    "columns[].key",
+                    "columns[].type",
+                    "columns[].value",
+                    "columns[].disabled"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
