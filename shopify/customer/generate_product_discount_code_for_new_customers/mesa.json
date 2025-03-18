@@ -175,7 +175,7 @@
                 "operation_id": "message_send",
                 "metadata": {
                     "to": "{{shopify.phone}}",
-                    "message": "{{ template | label: 'Do you have any changes you''d like to make to the SMS message?', description: 'If you changed your discount, you''ll want to make sure that''s reflected here.', default: Thank you for shopping with {{context.shop.name}}.\n\nTake 20% off on the {{shopify_5.title}}.\n\nUse online code: {{shopify_3.code}}' }}"
+                    "message": "{{ template | label: 'Do you have any changes you''d like to make to the SMS message?', description: 'If you changed your discount, you''ll want to make sure that''s reflected here.', default: 'Thank you for shopping with {{context.shop.name}}.\n\nTake 20% off on the {{shopify_5.title}}.\n\nUse online code: {{shopify_3.code}}' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [
