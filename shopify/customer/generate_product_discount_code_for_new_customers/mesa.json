@@ -1,6 +1,6 @@
 {
     "key": "shopify/customer/generate_product_discount_code_for_new_customers",
-    "name": "Create a unique discount code for new customers to apply towards a specific product",
+    "name": "Generate Unique Discount Codes for New Shopify Customers on Specific Products",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -15,7 +15,10 @@
                 "name": "Customer Created",
                 "key": "shopify",
                 "operation_id": "customers_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 0
@@ -34,23 +37,23 @@
                 "metadata": {
                     "api_endpoint": "post admin/price_rules.json",
                     "body": {
-                        "title": "NEWCUSTOMER {{shopify.id}} {{date:now}}",
+                        "title": "NEWCUSTOMER {{shopify.id}} {{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
                         "allocation_method": "across",
                         "value": "{{ template | label: 'What is the value of the discount?', description: 'It is set to 20% by default. Leave as is or update the value and value type to your preferred discount.', default: -20, type: 'number', tokens: false }}",
                         "value_type": "{{ template | label: 'What is the value type of the discount?', description: '', tokens: false }}",
                         "target_type": "line_item",
                         "customer_selection": "prerequisite",
-                        "starts_at": "{{date:now}}",
+                        "starts_at": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
                         "once_per_customer": "true",
                         "target_selection": "entitled",
-                        "ends_at": "{{ template | label: 'How long is the discount code valid?', description: 'It is set to 2 weeks by default. Leave as is or update the date value before continuing.', default: {{date:now +2weeks}}, tokens: false }}",
+                        "ends_at": "{{ template | label: 'How long is the discount code valid?', description: 'It is set to 14 days (2 weeks) by default. Leave as is or update the date variable before continuing.', default: '{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | add_time: 14, \"days\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}' }}",
                         "entitled_product_ids": [
                           "{{ template | label: 'What product can a customer apply their discount towards?', description: 'You''ll need to enter the Entitled Product ID. To find this, navigate to your Shopify admin in a separate tab. Go to the Products page and view an individual product. Locate the page''s URL. Copy the set of numbers after /products/ and paste that here.', tokens: false }}"
                         ],
                         "prerequisite_customer_ids": [
                             "{{shopify.id}}"
                         ],
-                        "created_at": "{{date:now}}",
+                        "created_at": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
                         "prerequisite_subtotal_range": {
                             "greater_than_or_equal_to": "1.0"
                         }
@@ -74,6 +77,9 @@
                     "price_rule_id": "{{shopify_1.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "price_rule_id"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -94,6 +100,11 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "price_rule_id",
+                    "body",
+                    "body.code"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -114,6 +125,11 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "customer_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -162,6 +178,10 @@
                     "message": "{{ template | label: 'Do you have any changes you''d like to make to the SMS message?', description: 'If you changed your discount, you''ll want to make sure that''s reflected here.', default: Thank you for shopping with {{context.shop.name}}.\n\nTake 20% off on the {{shopify_5.title}}.\n\nUse online code: {{shopify_3.code}}' }}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "to",
+                    "message"
+                ],
                 "on_error": "default",
                 "weight": 6
             }
