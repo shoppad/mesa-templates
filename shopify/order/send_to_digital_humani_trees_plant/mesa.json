@@ -1,20 +1,9 @@
 {
-    "key": "shopify_order_send_to_digital_humani_trees_plant",
-    "name": "Plant a tree with Digital Humani when Shopify Order is over $10",
+    "key": "shopify/order/send_to_digital_humani_trees_plant",
+    "name": "Plant a Tree for Every Order Over $10 in Your Shopify Store",
     "version": "1.0.0",
-    "description": "",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "order",
-        "shopify"
-    ],
-    "source": "shopify",
-    "destination": "digitalhumani",
-    "seconds": 60,
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -69,24 +58,26 @@
                 "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "note_update",
                 "name": "Update Order Notes",
                 "key": "shopify_order_update_notes",
+                "operation_id": "put_mesa_orders_order_id_note",
                 "metadata": {
+                   "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
-                        "note": "{% if shopify_order.note %}\n{{shopify_order.note}}\n\n{% endif %}{{date:M j Y H:i:s}}: Submitted Digital Humani tree planting request. Total trees: {{digitalhumani_trees.treeCount}}. Request ID: {{digitalhumani_trees.uuid}}"
+                        "note": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | date: \"%B %e, %Y\"}}: Submitted Digital Humani tree planting request. Total trees: {{digitalhumani_trees.treeCount}}. Request ID: {{digitalhumani_trees.uuid}}",
+                        "append": true
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
