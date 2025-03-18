@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_slack_alert_if_no_orders_received_within_past_hour",
-    "name": "Send a Slack message if no Shopify order was received in the past hour",
+    "name": "Send Slack Alert if No Shopify Orders Are Received Within an Hour",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -15,11 +15,14 @@
                 "operation_id": "schedule",
                 "metadata": {
                     "schedule": "@hourly:0 * * * *",
-                    "enqueue_type": "schedule",
-                    "next_sync_date_time": "2024-09-11T09:00:00-07:00"
+                    "enqueue_type": "schedule"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,11 +41,12 @@
                     "api_endpoint": "get admin/orders.json",
                     "query": {
                         "status": "any",
-                        "created_at_min": "{{date:1 hour ago}}"
+                        "created_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"hours\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
+                    "query.status",
                     "query.created_at_min"
                 ],
                 "on_error": "default",
@@ -66,7 +70,11 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -83,7 +91,9 @@
                     "message": "No orders have been placed on {{context.shop.name}} in the past 1 hour."
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "message"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
