@@ -1,6 +1,6 @@
 {
     "key": "recharge/customer/update_address_when_customer_created",
-    "name": "Update an address in Recharge when a Shopify customer is created",
+    "name": "Sync Address in Recharge When a New Shopify Customer is Created",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
