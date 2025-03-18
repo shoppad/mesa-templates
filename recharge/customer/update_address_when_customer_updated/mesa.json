@@ -1,6 +1,6 @@
 {
     "key": "recharge/customer/update_address_when_customer_updated",
-    "name": "Send an updated address to Recharge when a Shopify customer is updated",
+    "name": "Automatically Update Address in Recharge When Shopify Customer is Updated",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
