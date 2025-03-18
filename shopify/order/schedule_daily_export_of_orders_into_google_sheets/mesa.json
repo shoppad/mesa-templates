@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/schedule_daily_export_of_orders_into_google_sheets",
-    "name": "Schedule a daily export of orders into Google Sheets",
+    "name": "Schedule Daily Shopify Order Exports to Google Sheets",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
@@ -15,9 +15,7 @@
                 "operation_id": "schedule",
                 "metadata": {
                     "schedule": "@daily:0 0 * * *",
-                    "enqueue_type": "schedule",
-                    "next_sync_date_time": "2024-09-06T00:00:00-07:00",
-                    "datetime": null
+                    "enqueue_type": "schedule"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -62,7 +60,7 @@
                 "metadata": {
                     "api_endpoint": "post \/",
                     "body": {
-                        "title": "Order Export for {{date:now}}"
+                        "title": "Order Export for {{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
                     }
                 },
                 "local_fields": [],
