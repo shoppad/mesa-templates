@@ -1,6 +1,6 @@
 {
     "key": "shopify/checkout/send_abandoned_carts_to_google_sheets",
-    "name": "Send a list of abandoned carts to Google Sheets",
+    "name": "Export Abandoned Carts to Google Sheets",
     "version": "1.0.0",
     "enabled": false,
     "setup": {
@@ -70,8 +70,7 @@
                 "key": "schedule",
                 "metadata": {
                     "schedule": "@hourly:0 * * * *",
-                    "enqueue_type": "schedule",
-                    "datetime": null
+                    "enqueue_type": "schedule"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -88,9 +87,9 @@
                 "name": "Get List of Abandoned Checkouts",
                 "key": "shopify",
                 "operation_id": "get_checkouts",
-                "metadata": {
-                    "api_endpoint": "get admin/checkouts.json",
-                    "parameters": "limit=250&created_at_min={{date:1 hour ago}}"
+                "query": {
+                    "limit": "250",
+                    "created_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"hours\"}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
