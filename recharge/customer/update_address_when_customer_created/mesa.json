@@ -2,16 +2,8 @@
     "key": "recharge/customer/update_address_when_customer_created",
     "name": "Update an address in Recharge when a Shopify customer is created",
     "version": "1.0.0",
-    "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will update an address in Recharge when a customer is created in Shopify and uses a different address. Now you can ensure your customer details match with minimal effort.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -22,9 +14,7 @@
                 "key": "schedule",
                 "metadata": {
                     "schedule": "@daily:0 8 * * *",
-                    "enqueue_type": "schedule",
-                    "next_sync_date_time": "2022-07-13T08:00:00-04:00",
-                    "datetime": null
+                    "enqueue_type": "schedule"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -33,7 +23,7 @@
         ],
         "outputs": [
             {
-                "schema": 3,
+               "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
@@ -41,7 +31,11 @@
                 "name": "Get List of Customers within the past 24 hours",
                 "key": "shopify",
                 "metadata": {
-                    "parameters": "created_at_min={{date:1 days ago}}&limit=250"
+                    "api_endpoint": "get admin\/customers.json",
+                    "query": {
+                        "limit": "250",
+                        "updated_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\"}}"
+                    }
                 },
                 "local_fields": [],
                 "on_error": "default",
