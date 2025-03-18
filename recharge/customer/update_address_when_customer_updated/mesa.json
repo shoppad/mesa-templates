@@ -1,16 +1,9 @@
 {
     "key": "recharge/customer/update_address_when_customer_updated",
-    "name": "Send an updated address to Recharge when a Shopify customer is updated",
+    "name": "Automatically Update Address in Recharge When Shopify Customer is Updated",
     "version": "1.0.0",
-    "description": "Manually updating customer information in two places is time-consuming and potentially troublesome if details are updated late or entered wrong. Avoid unnecessary work and data discrepancies with the help of MESA. This template will automatically update an address in Recharge when a customer in Shopify is updated.",
-    "video": "",
-    "tags": [],
-    "source": "schedule-by-mesa",
-    "destination": "recharge",
-    "seconds": 540,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -21,9 +14,7 @@
                 "key": "schedule",
                 "metadata": {
                     "schedule": "@daily:0 0 * * *",
-                    "enqueue_type": "schedule",
-                    "next_sync_date_time": "2022-10-19T00:00:00-07:00",
-                    "datetime": null
+                    "enqueue_type": "schedule"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -32,7 +23,7 @@
         ],
         "outputs": [
             {
-                "schema": 3,
+               "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
@@ -40,9 +31,17 @@
                 "name": "Get List of Customers updated within the past 24 hours",
                 "key": "shopify_customer",
                 "metadata": {
-                    "parameters": "updated_at_min={{date:1 days ago}}&limit=250"
+                    "api_endpoint": "get admin\/customers.json",
+                    "query": {
+                        "limit": "250",
+                        "updated_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\"}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "query.updated_at_min",
+                    "query.limit"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -54,9 +53,19 @@
                 "key": "filter",
                 "metadata": {
                     "comparison": "is not empty",
-                    "a": "{{shopify_customer}}"
+                    "a": "{{shopify_customer}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -64,15 +73,21 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop over each customer",
+                "version": "v2",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_customer}}"
+                    "key": "{{shopify_customer}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "key"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -85,9 +100,21 @@
                 "metadata": {
                     "a": "{{loop.email}}",
                     "comparison": "does not equal",
-                    "b": "null"
+                    "b": "null",
+                    "trigger_parent_key": "loop",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -99,10 +126,16 @@
                 "action": "list",
                 "name": "List Customers",
                 "key": "recharge_customer",
+                "operation_id": "get-customers",
                 "metadata": {
-                    "parameters": "email={{loop.email}}"
+                    "api_endpoint": "get \/customers",
+                    "parameters": "email={{loop.email}}",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "parameters"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -114,9 +147,20 @@
                 "key": "filter_2",
                 "metadata": {
                     "a": "{{recharge_customer}}",
-                    "comparison": "is not empty"
+                    "comparison": "is not empty",
+                    "trigger_parent_key": "loop",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison"
+                ],
                 "on_error": "default",
                 "weight": 5
             },
@@ -128,10 +172,16 @@
                 "action": "list",
                 "name": "List Addresses",
                 "key": "recharge_address",
+                "operation_id": "get-addresses",
                 "metadata": {
-                    "parameters": "customer_id={{recharge_customer.0.id}}"
+                    "api_endpoint": "get \/addresses",
+                    "parameters": "customer_id={{recharge_customer.0.id}}",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "parameters"
+                ],
                 "on_error": "default",
                 "weight": 6
             },
@@ -176,9 +226,20 @@
                         }
                     ],
                     "a": "{{recharge_address.0.address1}}",
-                    "b": "{{loop.default_address.address1}}"
+                    "b": "{{loop.default_address.address1}}",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 7
             },
@@ -190,7 +251,9 @@
                 "action": "update",
                 "name": "Update Address",
                 "key": "recharge_address_1",
+                "operation_id": "put-addresses-address_id",
                 "metadata": {
+                    "api_endpoint": "put \/addresses\/{address_id}",
                     "path": {
                         "address_id": "{{recharge_address.0.id}}"
                     },
@@ -206,13 +269,27 @@
                         "zip": "{{loop.default_address.zip}}",
                         "province": "{{loop.default_address.province}}"
                     },
-                    "parameters": "{{recharge_address.addresses.0.id}}"
+                    "parameters": "{{recharge_address.addresses.0.id}}",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.address_id",
+                    "parameters",
+                    "body",
+                    "body.address1",
+                    "body.address2",
+                    "body.city",
+                    "body.first_name",
+                    "body.last_name",
+                    "body.phone",
+                    "body.province",
+                    "body.zip"
+                ],
                 "on_error": "default",
                 "weight": 8
             }
-        ],
-        "storage": []
+        ]
     }
 }
