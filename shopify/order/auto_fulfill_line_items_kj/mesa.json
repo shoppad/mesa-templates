@@ -1,147 +1,150 @@
 {
-  "key": "shopify/order/auto_fulfill_line_items_kj",
-  "name": "Auto Fulfill Line Items By SKU",
-  "version": "1.0.0",
-  "description": "",
-  "seconds": 135,
-  "enabled": false,
-  "setup": true,
-  "config": {
-    "inputs": [
-      {
-        "schema": 3,
-        "trigger_type": "input",
-        "type": "shopify",
-        "entity": "order",
-        "action": "created",
-        "name": "Order Created",
-        "key": "shopify_2",
-        "operation_id": "orders_create",
-        "metadata": [],
-        "local_fields": [],
-        "selected_fields": [],
-        "on_error": "default",
-        "weight": 0
-      }
-    ],
-    "outputs": [
-      {
-        "schema": 5.1,
-        "trigger_type": "output",
-        "type": "loop",
-        "entity": "loop",
-        "name": "Loop Over Line Items",
-        "version": "v2",
-        "key": "loop",
-        "operation_id": "loop_loop",
-        "metadata": {
-          "key": "{{shopify_2.line_items[]}}",
-          "filter": {
-            "comparison": "equals"
-          }
-        },
-        "local_fields": [],
-        "selected_fields": [
-          "key",
-          "filter",
-          "filter.a",
-          "filter.comparison",
-          "filter.b"
-        ],
-        "on_error": "default",
-        "weight": 0
-      },
-      {
-        "schema": 4.1,
-        "trigger_type": "output",
-        "type": "filter",
-        "name": "Is It The Auto-Fulfillable SKU?",
-        "key": "filter",
-        "metadata": {
-          "a": "{{loop.sku}}",
-          "comparison": "equals",
-          "b": "{{ template | label: 'The SKU you want to auto-fulfill' }}",
-          "additional": [
+    "key": "shopify/order/auto_fulfill_line_items_kj",
+    "name": "Automatically Fulfill Shopify Line Items by SKU",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
             {
-              "operator": "and",
-              "a": "{{loop.fulfillment_status}}",
-              "comparison": "is empty"
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
             }
-          ]
-        },
-        "local_fields": [],
-        "selected_fields": [
-          "a",
-          "comparison",
-          "b",
-          "additional",
-          "additional[].operator",
-          "additional[].a",
-          "additional[].comparison",
-          "additional[].b"
         ],
-        "on_error": "default",
-        "weight": 1
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order_fulfillment",
-        "action": "custom_create",
-        "name": "Create Order Fulfillment",
-        "key": "shopify_3",
-        "operation_id": "post_mesa_orders_order_id_fulfillments",
-        "metadata": {
-          "api_endpoint": "post mesa/orders/{{order_id}}/fulfillments.json",
-          "body": {
-            "location_id": "{{ template | label: 'The location you want to use for fulfillment' }}",
-            "line_items": [
-              {
-                "id": "{{loop.id}}",
-                "quantity": "{{loop.quantity}}"
-              }
-            ]
-          },
-          "order_id": "{{shopify_2.id}}"
-        },
-        "local_fields": [],
-        "selected_fields": [
-          "order_id",
-          "body",
-          "body.location_id",
-          "body.line_items",
-          "body.line_items[].id",
-          "body.line_items[].quantity"
-        ],
-        "on_error": "default",
-        "weight": 2
-      },
-      {
-        "schema": 3,
-        "trigger_type": "output",
-        "type": "shopify",
-        "entity": "order",
-        "action": "tag_add",
-        "name": "Order Add Tag",
-        "key": "shopify_1",
-        "operation_id": "post_mesa_orders_order_id_tag",
-        "metadata": {
-          "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
-          "order_id": "{{shopify_2.id}}",
-          "body": {
-            "tag": "{{ template | label: 'The tag you want to use for the orders that have been auto-fulfilled', default: 'Auto-Fulfilled' }}"
-          }
-        },
-        "local_fields": [],
-        "selected_fields": [
-          "order_id",
-          "body",
-          "body.tag"
-        ],
-        "on_error": "default",
-        "weight": 3
-      }
-    ]
-  }
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Line Items",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                  ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Is It The Auto-Fulfillable SKU?",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "a": "{{loop.sku}}",
+                    "comparison": "equals",
+                    "b": "{{ template | label: 'The SKU you want to auto-fulfill' }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{loop.fulfillment_status}}",
+                            "comparison": "is empty"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order_fulfillment",
+                "action": "custom_create",
+                "name": "Create Order Fulfillment",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_fulfillments",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/fulfillments.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "location_id": "{{ template | label: 'The location you want to use for fulfillment' }}",
+                        "line_items": [
+                            {
+                                "id": "{{loop.id}}",
+                                "quantity": "{{loop.quantity}}"
+                            }
+                        ]
+                    },
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.location_id",
+                    "body.line_items",
+                    "body.line_items[].id",
+                    "body.line_items[].quantity"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
 }
