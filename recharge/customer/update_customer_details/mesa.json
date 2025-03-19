@@ -39,7 +39,7 @@
                 "name": "Get customers that were updated within the past 24 hours",
                 "key": "shopify",
                 "metadata": {
-                    "parameters": "updated_at_min={{date:1 days ago}}&limit=250"
+                    "parameters": "updated_at_min={{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}&limit=250"
                 },
                 "local_fields": [],
                 "on_error": "default",
