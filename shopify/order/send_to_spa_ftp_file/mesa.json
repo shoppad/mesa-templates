@@ -51,7 +51,7 @@
                 "method": "ftp",
                 "host": "",
                 "port": "22",
-                "file": "orders-{{date:YmdHis}}.txt",
+                "file": "orders-{{\"now\" | date: \"%Y%m%d%H%M%S\"}}.txt",
                 "username": "",
                 "password": "ftp-password"
             }

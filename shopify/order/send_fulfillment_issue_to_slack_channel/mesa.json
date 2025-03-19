@@ -31,7 +31,7 @@
                 "schedule": "0 9 * * *",
                 "logging": "error",
                 "custom_connection": true,
-                "parameters": "limit=-1&created_at_max={{date:7 days ago}}"
+                "parameters": "limit=-1&created_at_max={{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 7, \"days\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
             },
             {
                 "schema": 2,
