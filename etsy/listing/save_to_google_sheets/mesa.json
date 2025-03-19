@@ -1,0 +1,128 @@
+{
+    "key": "etsy/listing/save_to_google_sheets",
+    "name": "Save Etsy Product Listings to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for each product listing. It is recommended to keep all columns selected.",
+                "options": [
+                    {
+                        "label": "Listing ID",
+                        "value": "Listing ID|{{etsy_1.listing_id}}",
+                        "description": "The listing ID."
+                    },
+                    {
+                        "label": "Listing Title",
+                        "value": "Listing Title|{{etsy_1.title}}",
+                        "description": "The listing title."
+                    },
+                    {
+                        "label": "Description",
+                        "value": "Description|{{etsy_1.description}}",
+                        "description": "The listing description."
+                    },
+                    {
+                        "label": "SKU",
+                        "value": "SKU|{{etsy_1.skus[0]}}",
+                        "description": "The listing SKU."
+                    },
+                    {
+                        "label": "Price",
+                        "value": "Price|{{etsy_1.price.amount | divided_by: 100}}",
+                        "description": "The listing price."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 5,
+                "trigger_type": "input",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "list-created",
+                "name": "Active Listing Created",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "findAllListingsActiveCreated",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/create",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "retrieve",
+                "name": "Retrieve Listing",
+                "version": "v3",
+                "key": "etsy_1",
+                "operation_id": "getListing",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/{listing_id}",
+                    "path": {
+                        "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}",
+                        "listing_id": "{{etsy.listing_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "fields": {}
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 1
+            }
+        ]
+    }
+}
