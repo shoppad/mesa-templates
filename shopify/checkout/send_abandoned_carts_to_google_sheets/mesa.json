@@ -89,7 +89,7 @@
                 "operation_id": "get_checkouts",
                 "query": {
                     "limit": "250",
-                    "created_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"hours\"}}"
+                    "created_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"hours\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
                 },
                 "local_fields": [],
                 "on_error": "default",

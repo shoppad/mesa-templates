@@ -46,7 +46,7 @@
                         "starts_at": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
                         "once_per_customer": "true",
                         "target_selection": "entitled",
-                        "ends_at": "{{ template | label: 'How long is the discount code valid?', description: 'It is set to 14 days (2 weeks) by default. Leave as is or update the date variable before continuing.', default: '{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | add_time: 14, \"days\"}}' }}",
+                        "ends_at": "{{ template | label: 'How long is the discount code valid?', description: 'It is set to 14 days (2 weeks) by default. Leave as is or update the date variable before continuing.', default: '{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | add_time: 14, \"days\"}}' | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
                         "entitled_product_ids": [
                           "{{ template | label: 'What product can a customer apply their discount towards?', description: 'You''ll need to enter the Entitled Product ID. To find this, navigate to your Shopify admin in a separate tab. Go to the Products page and view an individual product. Locate the page''s URL. Copy the set of numbers after /products/ and paste that here.', tokens: false }}"
                         ],

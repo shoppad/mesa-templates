@@ -34,7 +34,7 @@
                     "api_endpoint": "get admin\/customers.json",
                     "query": {
                         "limit": "250",
-                        "updated_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\"}}"
+                        "updated_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
                     }
                 },
                 "local_fields": [],
