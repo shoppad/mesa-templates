@@ -1,0 +1,88 @@
+{
+    "key": "wonderment/fulfillment/send_sms_when_shipment_order_is_delivered",
+    "name": "Send Delivery Confirmation Texts with Wonderment Tracking",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "wonderment",
+                "entity": "shipment",
+                "name": "Shipment's Status is Delivered",
+                "key": "wonderment",
+                "operation_id": "shipment_delivered",
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL.' }}",
+                    "webhook_token": "{{ template | label: 'Add the webhook token.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{wonderment.orderID}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.customer.phone}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "sms",
+                "entity": "message",
+                "action": "send",
+                "name": "Send Message",
+                "key": "sms",
+                "operation_id": "message_send",
+                "metadata": {
+                    "to": "{{shopify.customer.phone}}",
+                    "message": "{{ template | label: 'What are the contents of the SMS message?', default: 'Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
