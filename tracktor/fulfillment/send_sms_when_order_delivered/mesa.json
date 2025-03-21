@@ -59,7 +59,7 @@
                 "key": "sms_message",
                 "metadata": {
                     "to": "{{shopify_order.customer.phone}}",
-                    "message": "Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card. "
+                    "message": "{{ template | label: 'What are the contents of the SMS message?', default: 'Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card.' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
