@@ -1,51 +1,67 @@
 {
-    "key": "tracktor/fulfillment/send_sms_when_order_delivered",
-    "name": "Send SMS Notification to Customers Upon Order Delivery",
+    "key": "wonderment/fulfillment/send_sms_when_shipment_order_is_delivered",
+    "name": "Send Delivery Confirmation Texts with Wonderment Tracking",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "input",
-                "type": "tracktor",
-                "entity": "fulfillment",
-                "action": "fulfillment/delivered",
-                "name": "Fulfillment Status is Delivered",
-                "key": "tracktor_fulfillment",
-                "metadata": [],
+                "type": "wonderment",
+                "entity": "shipment",
+                "name": "Shipment's Status is Delivered",
+                "key": "wonderment",
+                "operation_id": "shipment_delivered",
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL.' }}",
+                    "webhook_token": "{{ template | label: 'Add the webhook token.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "shopify_order",
+                "key": "shopify",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{wonderment.orderID}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
+                    "a": "{{shopify.customer.phone}}",
                     "comparison": "is not empty",
-                    "a": "{{shopify_order.customer.phone}}"
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -55,17 +71,18 @@
                 "type": "sms",
                 "entity": "message",
                 "action": "send",
-                "name": "SMS Send Message",
-                "key": "sms_message",
+                "name": "Send Message",
+                "key": "sms",
+                "operation_id": "message_send",
                 "metadata": {
-                    "to": "{{shopify_order.customer.phone}}",
+                    "to": "{{shopify.customer.phone}}",
                     "message": "{{ template | label: 'What are the contents of the SMS message?', default: 'Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card.' }}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
