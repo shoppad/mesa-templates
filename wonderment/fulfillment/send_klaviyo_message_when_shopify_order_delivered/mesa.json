@@ -1,0 +1,89 @@
+{
+    "key": "wonderment/fulfillment/send_klaviyo_message_when_shopify_order_delivered",
+    "name": "Send a Klaviyo Message When a Shopify Order is Delivered",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "wonderment",
+                "entity": "shipment",
+                "name": "Shipment's Status is Delivered",
+                "key": "wonderment",
+                "operation_id": "shipment_delivered",
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL.' }}",
+                    "webhook_token": "{{ template | label: 'Add the webhook token.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{wonderment.orderID}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "event",
+                "action": "create",
+                "name": "Create Event",
+                "version": "v3",
+                "key": "klaviyo",
+                "operation_id": "mesa_create_event",
+                "metadata": {
+                    "api_endpoint": "post \/mesa\/api\/events\/",
+                    "body": {
+                        "mode": "create",
+                        "properties": [
+                            {
+                                "key": "order_name",
+                                "value": "{{shopify.name}}"
+                            },
+                            {
+                                "key": "order_id",
+                                "value": "{{wonderment.orderID}}"
+                            },
+                            {
+                                "key": "order_status",
+                                "value": "{{wonderment.status}}"
+                            }
+                        ],
+                        "profile": {
+                            "email": "{{shopify.email}}"
+                        },
+                        "metric": {
+                            "name": "Order Delivered"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
