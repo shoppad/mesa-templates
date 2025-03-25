@@ -76,7 +76,7 @@
                 "operation_id": "message_send",
                 "metadata": {
                     "to": "{{shopify.customer.phone}}",
-                    "message": "{{ template | label: 'What are the contents of the SMS message?', default: 'Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card.' }}"
+                    "message": "{{ template | label: 'What would you like the SMS message to say?', description: 'Messages are limited to 160 characters. To send longer messages or texts outside of the US or Canada, use the Twilio app.', default: 'Good news, {{shopify.shipping_address.first_name}}, your order has been delivered! 🎉 Thanks for shopping with us!' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
