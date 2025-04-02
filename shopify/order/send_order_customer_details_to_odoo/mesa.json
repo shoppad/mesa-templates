@@ -1,6 +1,6 @@
 {
-    "key": "shopify/order/send_order_customer_details_to_odoo",
-    "name": "Send Shopify order and customer details to Odoo",
+    "key": "shopify_order_send_order_customer_details_to_odoo",
+    "name": "Automatically Sync Shopify Order and Customer Details to Odoo",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
@@ -101,6 +101,7 @@
                 "type": "paths",
                 "entity": "paths",
                 "name": "Paths",
+                "version": "v2",
                 "key": "paths",
                 "operation_id": "paths_paths",
                 "metadata": [],
@@ -115,6 +116,7 @@
                 "type": "paths",
                 "entity": "path",
                 "name": "No existing customer",
+                "version": "v2",
                 "key": "paths_1",
                 "operation_id": "paths_path",
                 "metadata": {
@@ -2205,6 +2207,7 @@
                 "type": "paths",
                 "entity": "path",
                 "name": "Has existing customer",
+                "version": "v2",
                 "key": "paths_2",
                 "operation_id": "paths_path",
                 "metadata": {
@@ -4298,6 +4301,7 @@
                 "type": "paths",
                 "entity": "path",
                 "name": "Create the order",
+                "version": "v2",
                 "key": "paths_3",
                 "operation_id": "paths_path",
                 "metadata": {
@@ -5437,21 +5441,24 @@
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
                     "trigger_parent_key": "paths_3",
                     "key": "{{shopify.line_items[]}}",
                     "filter": {
-                        "comparison": "equals"
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 10
             },
@@ -6328,6 +6335,40 @@
                 ],
                 "on_error": "default",
                 "weight": 12
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 13
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_4",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 14
             }
         ]
     }
