@@ -38,7 +38,7 @@
                         "channelId": "{{ template | label: 'What is your Discord''s Channel ID?', description: '', tokens: false }}"
                     },
                     "body": {
-                        "content": "**{{mantle.name}}** just uninstalled the app <https:\/\/{{mantle.shopify.myshopifyDomain}}>\nAccount Name: {{mantle.name}} \nEmail Address: {{mantle.email}}\nPlan: {{ mantle.shopify.planName }}"
+                        "content": "**{{mantle.name}}** just uninstalled the app <https:\/\/{{mantle.shopify.myshopifyDomain}}>\nAccount Holder Name: {{mantle.name}} \nEmail Address: {{mantle.email}}\nShopify Plan: {{ mantle.shopify.planName }}"
                     }
                 },
                 "local_fields": [],
