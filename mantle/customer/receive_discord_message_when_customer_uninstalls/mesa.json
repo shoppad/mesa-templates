@@ -1,0 +1,53 @@
+{
+    "key": "mantle/customer/receive_discord_message_when_customer_uninstalls",
+    "name": "Receive a Discord Message When a Customer Uninstalls Your Shopify App",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_uninstalled",
+                "action": "uninstalled",
+                "name": "Customer Uninstalled",
+                "key": "mantle",
+                "operation_id": "post_customers_uninstalled",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Create Channel Message",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-messages",
+                "metadata": {
+                    "api_endpoint": "post \/channels\/{channelId}\/messages",
+                    "path": {
+                        "channelId": "{{ template | label: 'What is your Discord''s Channel ID?', description: '', tokens: false }}"
+                    },
+                    "body": {
+                        "content": "\ud83c\udf89\ud83c\udf89 **{{mantle.name}}** just uninstalled the app!   <https:\/\/{{mantle.shopify.myshopifyDomain}}>{% if mantle.shopify.planName and mantle.appInstallation.trialExpiresAt %}{% assign current_date = 'now' | date: '%s' %}{% assign trial_expires_at = mantle.appInstallation.trialExpiresAt | date: '%s' %}{% assign seconds_remaining = trial_expires_at | minus: current_date %}{% assign days_remaining = seconds_remaining | divided_by: 86400.0 | ceil %}\nPlan: {{ mantle.shopify.planName }}                    \nTrial ends: {% if days_remaining <= 0 %}today{% else %}in {{ days_remaining }} days{% endif %}{% elsif mantle.billingStatus == \"trialing\" %}{% if mantle.appInstallation.trialExpiresAt %}{% assign current_date = 'now' | date: '%s' %}{% assign trial_expires_at = mantle.appInstallation.trialExpiresAt | date: '%s' %}{% assign seconds_remaining = trial_expires_at | minus: current_date %}{% assign days_remaining = seconds_remaining | divided_by: 86400.0 | ceil %}\nCurrently on trial                    Trial ends: {% if days_remaining <= 0 %}today{% else %}in {{ days_remaining }} days{% endif %}{% else %}\nCurrently on trial{% endif %}{% endif %}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
