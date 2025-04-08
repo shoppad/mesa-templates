@@ -1,0 +1,79 @@
+{
+    "key": "skill_send_email",
+    "name": "Skill: Send Email",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "MCP Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "email",
+                                "description": "email address",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "subject",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "body",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].type"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{ask.email}}",
+                        "subject": "{{ask.subject}}",
+                        "message": "{{ask.body}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}

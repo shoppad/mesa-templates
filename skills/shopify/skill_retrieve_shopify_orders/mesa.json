@@ -1,0 +1,130 @@
+{
+    "key": "skill_retrieve_shopify_orders",
+    "name": "Skill: Retrieve Shopify Orders",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "iso format",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "iso format",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].type"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "list",
+                "name": "Get List of Orders",
+                "key": "shopify",
+                "operation_id": "get_orders",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders.json",
+                    "query": {
+                        "limit": "250",
+                        "status": "any",
+                        "created_at_min": "{{ask.start_date}}",
+                        "created_at_max": "{{ask.end_date}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.created_at_min",
+                    "query.created_at_max",
+                    "query.limit"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_1",
+                    "trigger_parent_key": "loop_1",
+                    "return": "map",
+                    "map": "order_name: {{loop_1.name}}\nid: {{loop_1.id}}\nsubtotal: {{loop_1.subtotal_price}}\ntotal:{{loop_1.total_price}}\ncustomer: {{loop_1.customer.first_name}} {{loop_1.customer.last_name}} {{loop_1.customer.email}} \n\n\nline items\n{% for line_item in loop_1.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }} x{{ line_item.quantity }} {{ loop.currency }} {{ line_item.price }}\\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\\n{% endfor %}\\n{% endfor %}\n\n"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "return",
+                    "map"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}

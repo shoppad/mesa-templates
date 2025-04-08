@@ -1,0 +1,80 @@
+{
+    "key": "skill_retrieve_shopify_customers",
+    "name": "Skill: Retrieve Shopify Customers",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "iso format",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "iso format",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].type"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "list",
+                "name": "Get List of Customers",
+                "key": "shopify",
+                "operation_id": "get_customers",
+                "metadata": {
+                    "api_endpoint": "get admin\/customers.json",
+                    "query": {
+                        "limit": "250",
+                        "created_at_min": "{{ask.start_date}}",
+                        "created_at_max": "{{ask.end_date}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.limit",
+                    "query.created_at_min",
+                    "query.created_at_max"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
