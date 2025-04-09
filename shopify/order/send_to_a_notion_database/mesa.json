@@ -1,0 +1,202 @@
+{
+  "key": "shopify/order/send_to_a_notion_database",
+  "name": "Send Shopify orders to Notion database",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": {
+    "mode": "custom",
+    "fields": [
+      {
+        "key": "page",
+        "target": "notion.path.page",
+        "label": "What page would you like to use to create a database?",
+        "custom": true,
+        "type": "typeahead",
+        "description": "Select a page. Search by the name of the page if you do not see it in the dropdown."
+      },
+      {
+        "key": "create_database_name",
+        "target": "notion.path.create_database_name",
+        "label": "What do you want to name your database?",
+        "tokens": false,
+        "description": "Give your new database a name."
+      },
+      {
+        "key": "fields",
+        "target": "notion.setup_fields",
+        "label": "What are your database properties?",
+        "description": "This template will automatically create a new page for every line item in the order. De-select the properties you do not want to include in your database.",
+        "options": [
+          {
+            "label": "Order URL",
+            "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{shopify.id}}",
+            "description": "The URL to the order in the Shopify admin."
+          },
+          {
+              "label": "Order Name",
+              "value": "Order Name|{{shopify.name}}",
+              "description": "The human-readable label for the order (example: #1001)."
+          },
+          {
+              "label": "Email",
+              "value": "Email|{{shopify.email}}",
+              "description": "The email address of the customer that placed the order."
+          },
+          {
+              "label": "Shipping Name",
+              "value": "Shipping Name|{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
+              "description": "The full name of the recipient of the Shipping Address."
+          },
+          {
+              "label": "Address",
+              "value": "Address|{{shopify.shipping_address.address1}}",
+              "description": "The street address of the Shipping Address."
+          },
+          {
+              "label": "City",
+              "value": "City|{{shopify.shipping_address.city}}",
+              "description": "The city of the Shipping Address."
+          },
+          {
+              "label": "State/Province",
+              "value": "State/Province|{{shopify.shipping_address.province}}",
+              "description": "The state/province of the Shipping Address."
+          },
+          {
+              "label": "Zip/Postal Code",
+              "value": "Zip/Postal Code|{{shopify.shipping_address.zip}}",
+              "description": "The zip code of the Shipping Address."
+          },
+          {
+              "label": "Country",
+              "value": "Country|{{shopify.shipping_address.country}}",
+              "description": "The country of the Shipping Address."
+          },
+          {
+              "label": "Product Name",
+              "value": "Product Name|{{loop.title}}",
+              "description": "The name of the product purchased in this line item."
+          },
+          {
+              "label": "Product SKU",
+              "value": "Product SKU|{{loop.sku}}",
+              "description": "The SKU of the product purchased in this line item."
+          },
+          {
+              "label": "Product Price",
+              "value": "Product Price|{{loop.price}}",
+              "description": "The price of the product purchased in this line item."
+          }
+        ],
+        "check_all": true,
+        "type": "checkboxes"
+      }
+    ]
+  },
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "order",
+        "action": "created",
+        "name": "Order Created",
+        "key": "shopify",
+        "operation_id": "orders_create",
+        "metadata": {
+          "frequency": "every",
+          "includeFields": []
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "loop",
+        "name": "Loop",
+        "version": "v3",
+        "key": "loop",
+        "operation_id": "loop_loop",
+        "metadata": {
+          "key": "{{shopify.line_items[]}}",
+          "filter": {
+            "comparison": "equals",
+            "additional": [
+              {
+                "operator": "and",
+                "comparison": "equals"
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "notion",
+        "entity": "v1_page",
+        "action": "create",
+        "name": "Add Page to Database",
+        "key": "notion",
+        "operation_id": "Create_a_Page_with_Content",
+        "metadata": {
+          "api_endpoint": "post /v1/pages/",
+          "trigger_parent_key": "loop",
+          "body": {
+            "fields": {
+              "Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}",
+              "Order Name": "{{shopify.order.name}}",
+              "Email": "{{shopify.email}}",
+              "Shipping Name": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
+              "Address": "{{shopify.shipping_address.address1}}",
+              "City": "{{shopify.shipping_address.city}}",
+              "State/Province": "{{shopify.shipping_address.province}}",
+              "Zip/Postal Code": "{{shopify.shipping_address.zip}}",
+              "Country": "{{shopify.shipping_address.country}}",
+              "Product Name": "{{loop.title}}",
+              "Product SKU": "{{loop.sku}}",
+              "Product Price": "{{loop.price}}"
+            }
+          },
+          "path": {
+            "page": "",
+            "database": ""
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 5.1,
+        "trigger_type": "output",
+        "type": "loop",
+        "entity": "end",
+        "name": "Loop End",
+        "version": "v3",
+        "key": "loop_1",
+        "operation_id": "loop_end",
+        "metadata": {
+          "trigger_manager_key": "loop",
+          "trigger_parent_key": "loop"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 2
+      }
+    ]
+  }
+}
