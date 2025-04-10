@@ -1,40 +1,53 @@
 {
     "key": "uploadery/order/send_file_to_dropbox",
-    "name": "Send Uploadery files to Dropbox",
+    "name": "Automatically Send Shopify Order Upload Files to Dropbox",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "input",
                 "type": "uploadery",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "uploadery-order-created",
+                "key": "uploadery",
                 "operation_id": "order_created",
-                "metadata": [],
+                "metadata": {
+                    "field_name": "all_uploadery_upload_fields"
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v3",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{uploadery-order-created.fields[]}}"
+                    "key": "{{uploadery.fields[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -45,15 +58,35 @@
                 "entity": "file",
                 "action": "save",
                 "name": "Save File",
-                "key": "dropbox-save-file",
+                "key": "dropbox",
                 "operation_id": "file_save",
                 "metadata": {
-                    "file_path": "/{{filename}}",
-                    "file_url": "{{loop.value}}"
+                    "trigger_parent_key": "loop",
+                    "file_url": "{{loop.value}}",
+                    "file_path": "\/{{filename}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
             }
         ]
     }
