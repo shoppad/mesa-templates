@@ -1,6 +1,6 @@
 {
-    "key": "skill_send_email",
-    "name": "Skill: Send Email",
+    "key": "mcp_email_send",
+    "name": "Send Email",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
