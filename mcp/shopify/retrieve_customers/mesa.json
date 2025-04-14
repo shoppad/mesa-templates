@@ -1,6 +1,6 @@
 {
-    "key": "skill_retrieve_shopify_customers",
-    "name": "Skill: Retrieve Shopify Customers",
+    "key": "mcp_shopify_retrieve_customers",
+    "name": "Retrieve Shopify Customers",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,

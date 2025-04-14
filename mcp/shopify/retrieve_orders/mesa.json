@@ -1,6 +1,6 @@
 {
-    "key": "skill_retrieve_shopify_orders",
-    "name": "Skill: Retrieve Shopify Orders",
+    "key": "mcp_shopify_retrieve_orders",
+    "name": "Retrieve Shopify Orders",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
