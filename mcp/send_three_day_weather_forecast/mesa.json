@@ -1,0 +1,62 @@
+{
+    "key": "mcp/send_three_day_weather_forecast",
+    "name": "Send a 3-Day Weather Forecast",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "json": "{{ template | label: 'Enter this in your AI client like Claude Desktop or Cursor.' }}",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "Location",
+                                "description": "A US Zipcode, UK Postal Code, Canada Postal Code, IP Address, Latitude\/Longitude (decimal degree) or a city name.",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "weather",
+                "entity": "forecast",
+                "action": "list",
+                "name": "Retrieve Weather Forecast",
+                "key": "weather",
+                "operation_id": "forecast-weather",
+                "metadata": {
+                    "api_endpoint": "get \/forecast.json",
+                    "query": {
+                        "q": "{{ask.Location}}",
+                        "days": "3"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
