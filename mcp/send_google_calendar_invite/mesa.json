@@ -94,7 +94,7 @@
                 "operation_id": "calendar.events.insert",
                 "metadata": {
                     "api_endpoint": "post \/calendars\/{calendarId}\/events",
-                    "event_default_duration": "{{ template | label: 'What is the event default duration?', default: 30, type: 'number', tokens: false }}",
+                    "event_default_duration": "{{ template | label: 'What''s the default time set for an event?', description: 'How long the event should last (in minutes). This is only used if no end time is provided.', default: 30, type: 'number', tokens: false }}",
                     "body": {
                         "summary": "{{ask.Title}}",
                         "transparency": "opaque",
@@ -120,7 +120,7 @@
                         }
                     },
                     "path": {
-                        "calendarId": "{{ template | label: 'What is the calendar ID?' }}"
+                        "calendarId": "{{ template | label: 'Which calendar should events go on?', description: 'Enter a calendar ID or choose from the list of available calendars in the dropdown. You can also create a new one by typing a name and selecting “**Create New Calendar**” from the list.' }}"
                     }
                 },
                 "local_fields": [],
