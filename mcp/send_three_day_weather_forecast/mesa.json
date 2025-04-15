@@ -17,7 +17,7 @@
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
-                    "json": "{{ template | label: 'Enter this in your AI client like Claude Desktop or Cursor.' }}",
+                    "json": "{{ template | label: 'Set up Claude or other AI tools to connect with your MESA MCP server.', description: '[Learn more](https://docs.getmesa.com/tools/mcp) about getting started if this is your first time connecting to your MESA MCP server.\n\n**Note**: You only need to complete this setup once, regardless of how many workflows you connect to MCP. If you''ve already set it up, you can skip this step.' }}",
                     "body": {
                         "parameters": [
                             {
