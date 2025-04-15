@@ -1,0 +1,133 @@
+{
+    "key": "mcp/send_google_calendar_invite",
+    "name": "Send a Google Calendar Invite",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "json": "{{ template | label: 'Set up Claude or other AI tools to connect with your MESA MCP server.', description: '[Learn more](https://docs.getmesa.com/tools/mcp) about getting started if this is your first time connecting to your MESA MCP server.\n\n**Note**: You only need to complete this setup once, regardless of how many workflows you connect to MCP. If you''ve already set it up, you can skip this step.' }}",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "Title",
+                                "description": "Title of the event.",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "Event Start Date Time",
+                                "description": "The time, as a combined date-time value (formatted according to RFC3339). A time zone offset is required unless a time zone is explicitly specified in Time Zone. ISO datetime (ex: \"2024-03-13T22:02:00-07:00\") also accepted.",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "Event End Date Time",
+                                "description": "The time, as a combined date-time value (formatted according to RFC3339). A time zone offset is required unless a time zone is explicitly specified in Time Zone. ISO datetime (ex: \"2024-03-13T22:02:00-07:00\") also accepted.",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "emails",
+                                "description": "A comma separated list of attendee's email address, if available. This field must be present when adding an attendee. It must be a valid email address as per RFC5322. Required when adding an attendee.",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Separate multiple email addresses",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "emails",
+                            "source": "{{ask.emails}}"
+                        }
+                    ],
+                    "script": "transform.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlecalendar",
+                "entity": "calendar_event",
+                "action": "create",
+                "name": "Create Event",
+                "key": "googlecalendar",
+                "operation_id": "calendar.events.insert",
+                "metadata": {
+                    "api_endpoint": "post \/calendars\/{calendarId}\/events",
+                    "event_default_duration": "{{ template | label: 'What is the event default duration?', default: 30, type: 'number', tokens: false }}",
+                    "body": {
+                        "summary": "{{ask.Title}}",
+                        "transparency": "opaque",
+                        "visibility": "default",
+                        "attendees": [
+                            {
+                                "email": "{{transform.emails[].email}}",
+                                "optional": false,
+                                "resource": false
+                            }
+                        ],
+                        "start": {
+                            "dateTime": "{{ask[\"Event Start Date Time\"]}}"
+                        },
+                        "end": {
+                            "dateTime": "{{ask[\"Event End Date Time\"]}}"
+                        },
+                        "creator": {
+                            "self": false
+                        },
+                        "organizer": {
+                            "self": false
+                        }
+                    },
+                    "path": {
+                        "calendarId": "{{ template | label: 'What is the calendar ID?' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
