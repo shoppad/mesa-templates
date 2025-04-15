@@ -1,0 +1,68 @@
+{
+    "key": "mcp_slack_send",
+    "name": "Send Slack Message",
+    "version": "1.0.0",
+    "description": "Send a slack message from an MCP trigger.",
+    "seconds": 0,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "message",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].type",
+                    "body.parameters[].required"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'Which Slack channel should the message be sent to?', tokens: false }}",
+                    "message": "{{ask.message}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "channel",
+                    "message"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
