@@ -1,0 +1,517 @@
+{
+    "key": "odoo/order/send_order_and_customer_details_to_shopify",
+    "name": "Send Odoo Order and Customer Details to Shopify",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "odoo",
+                "entity": "sale.order",
+                "action": "list-created",
+                "name": "Order Created",
+                "version": "v2",
+                "key": "odoo",
+                "operation_id": "sale.order_created",
+                "metadata": {
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "sale.order",
+                "action": "read",
+                "name": "Retrieve Order",
+                "version": "v2",
+                "key": "odoo_1",
+                "operation_id": "sale.order_read",
+                "metadata": {
+                    "api_endpoint": "get \/order\/{id}",
+                    "path": {
+                        "id": "{{odoo.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "res.partner",
+                "action": "read",
+                "name": "Retrieve Customer",
+                "version": "v2",
+                "key": "odoo_2",
+                "operation_id": "res.partner_read",
+                "metadata": {
+                    "api_endpoint": "get \/customer\/{id}",
+                    "path": {
+                        "id": "{{odoo_1.partner_id.0}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "sale.order.line",
+                "action": "search_read",
+                "name": "List Order Lines",
+                "version": "v2",
+                "key": "odoo_3",
+                "operation_id": "sale.order.line_search_read",
+                "metadata": {
+                    "api_endpoint": "get \/order_line",
+                    "body": {
+                        "search_query": [
+                            {
+                                "property": "order_id",
+                                "operator": "=",
+                                "value": "{{odoo_1.name}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.search_query[].property",
+                    "body.search_query[].operator",
+                    "body.search_query[].value"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Odoo Order Lines",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{odoo_3}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "product.product",
+                "action": "read",
+                "name": "Retrieve Product Variant",
+                "version": "v2",
+                "key": "odoo_4",
+                "operation_id": "product.product_read",
+                "metadata": {
+                    "api_endpoint": "get \/product_variant\/{id}",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "id": "{{loop.product_id.0}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End & Create List Of Odoo Product Variants",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": "map",
+                    "map": "{{odoo_4}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "return",
+                    "map"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code - Format Odoo Order Lines",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "description": "Extract customer's state\/province and street2. Add default_code (SKU) to Odoo Order Lines. Match Shopify Variants to Odoo Order Lines.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "list",
+                "name": "Get Customer By Email",
+                "key": "shopify",
+                "operation_id": "get_customers",
+                "metadata": {
+                    "api_endpoint": "get admin\/customers.json",
+                    "parameters": "email={{odoo_2.email}}",
+                    "query": {
+                        "limit": "1"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "parameters",
+                    "query.limit"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - No Existing Customer",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "shopify_1",
+                "operation_id": "post_customers",
+                "metadata": {
+                    "api_endpoint": "post admin\/customers.json",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "email": "{{odoo_2.email}}",
+                        "first_name": "{{odoo_2.complete_name | split: \" \" | first}}",
+                        "last_name": "{{odoo_2.complete_name | split: \" \" | last}}",
+                        "note": "{{odoo_2.comment}}",
+                        "addresses": [
+                            {
+                                "address1": "{{odoo_2.street}}",
+                                "address2": "{{custom.customer.street2}}",
+                                "city": "{{odoo_2.city}}",
+                                "country": "{{odoo_2.country_code}}",
+                                "name": "{{odoo_2.name}}",
+                                "phone": "{{odoo_2.phone}}",
+                                "province": "{{custom.customer.state}}",
+                                "zip": "{{odoo_2.zip}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.email",
+                    "body.note",
+                    "body.addresses[].address1",
+                    "body.addresses[].address2",
+                    "body.addresses[].city",
+                    "body.addresses[].country",
+                    "body.addresses[].name",
+                    "body.addresses[].phone",
+                    "body.addresses[].zip",
+                    "body.first_name",
+                    "body.last_name",
+                    "body.addresses[].province"
+                ],
+                "on_error": "default",
+                "weight": 10
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - Has Existing Customer",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 11
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "update",
+                "name": "Update Customer",
+                "key": "shopify_2",
+                "operation_id": "put_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/customers\/{{customer_id}}.json",
+                    "customer_id": "{{shopify.0.id}}",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "email": "{{odoo_2.email}}",
+                        "first_name": "{{odoo_2.complete_name | split: \" \" | first}}",
+                        "last_name": "{{odoo_2.complete_name | split: \" \" | last}}",
+                        "note": "{{odoo_2.comment}}",
+                        "addresses": [
+                            {
+                                "address1": "{{odoo_2.street}}",
+                                "address2": "{{custom.customer.street2}}",
+                                "city": "{{odoo_2.city}}",
+                                "country": "{{odoo_2.country_code}}",
+                                "name": "{{odoo_2.name}}",
+                                "phone": "{{odoo_2.phone}}",
+                                "province": "{{custom.customer.state}}",
+                                "zip": "{{odoo_2.zip}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name",
+                    "body.note",
+                    "body.addresses[].address1",
+                    "body.addresses[].address2",
+                    "body.addresses[].city",
+                    "body.addresses[].name",
+                    "body.addresses[].zip",
+                    "body.addresses[].country",
+                    "body.addresses[].phone",
+                    "body.addresses[].province"
+                ],
+                "on_error": "default",
+                "weight": 12
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - Create Order",
+                "version": "v2",
+                "key": "paths_4",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "true",
+                    "b": "true"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 13
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "create",
+                "name": "Create Order",
+                "key": "shopify_3",
+                "operation_id": "post_orders",
+                "metadata": {
+                    "api_endpoint": "post admin\/orders.json",
+                    "trigger_parent_key": "paths_4",
+                    "body": {
+                        "currency": "{{odoo_1.currency_id.1}}",
+                        "email": "{{odoo_2.email}}",
+                        "inventory_behaviour": "bypass",
+                        "name": "{{odoo_1.name}}",
+                        "total_line_items_price": "{{odoo_1.amount_total}}",
+                        "line_items": [
+                            {
+                                "variant_id": "{{custom.order_lines[].shopify_product_variant_id}}",
+                                "quantity": "{{custom.order_lines[].product_uom_qty}}",
+                                "title": "{{custom.order_lines[].name}}",
+                                "sku": "{{custom.order_lines[].default_code}}",
+                                "price": "{{custom.order_lines[].price_unit}}"
+                            }
+                        ],
+                        "tax_lines": [
+                            {
+                                "price": "{{odoo_1.tax_totals.tax_amount}}"
+                            }
+                        ],
+                        "billing_address": {
+                            "address1": "{{odoo_2.street}}",
+                            "address2": "{{custom.customer.street2}}",
+                            "city": "{{odoo_2.city}}",
+                            "country": "{{odoo_2.country_id.1}}",
+                            "first_name": "{{odoo_2.complete_name | split: \" \" | first}}",
+                            "last_name": "{{odoo_2.complete_name | split: \" \" | last}}",
+                            "province": "{{custom.customer.state}}",
+                            "zip": "{{odoo_2.zip}}"
+                        },
+                        "customer": {
+                            "email": "{{odoo_2.email}}",
+                            "first_name": "{{odoo_2.complete_name | split: \" \" | first}}",
+                            "last_name": "{{odoo_2.complete_name | split: \" \" | last}}"
+                        },
+                        "shipping_address": {
+                            "address1": "{{odoo_2.street}}",
+                            "address2": "{{custom.customer.street2}}",
+                            "city": "{{odoo_2.city}}",
+                            "country": "{{odoo_2.country_id.1}}",
+                            "first_name": "{{odoo_2.complete_name | split: \" \" | first}}",
+                            "last_name": "{{odoo_2.complete_name | split: \" \" | last}}",
+                            "province": "{{custom.customer.state}}",
+                            "zip": "{{odoo_2.zip}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.currency",
+                    "body.email",
+                    "body.name",
+                    "body.total_line_items_price",
+                    "body.billing_address.address1",
+                    "body.billing_address.address2",
+                    "body.billing_address.city",
+                    "body.billing_address.country",
+                    "body.billing_address.province",
+                    "body.billing_address.zip",
+                    "body.customer.email",
+                    "body.customer.first_name",
+                    "body.customer.last_name",
+                    "body.line_items[].variant_id",
+                    "body.line_items[].quantity",
+                    "body.line_items[].title",
+                    "body.line_items[].sku",
+                    "body.line_items[].price",
+                    "body.shipping_address.address1",
+                    "body.shipping_address.address2",
+                    "body.shipping_address.city",
+                    "body.shipping_address.country",
+                    "body.shipping_address.province",
+                    "body.shipping_address.zip",
+                    "body.billing_address.first_name",
+                    "body.billing_address.last_name",
+                    "body.shipping_address.first_name",
+                    "body.shipping_address.last_name",
+                    "body.tax_lines[].price"
+                ],
+                "on_error": "default",
+                "weight": 14
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 15
+            }
+        ]
+    }
+}
