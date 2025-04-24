@@ -1,0 +1,51 @@
+{
+    "key": "shopify/fulfillment/use_package_tracking_to_track_new_fulfillment",
+    "name": "Track New Shopify Fulfillments",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "fulfillment",
+                "action": "created",
+                "name": "Fulfillment Created",
+                "key": "shopify",
+                "operation_id": "fulfillments_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "package_tracking",
+                "entity": "v4_tracking_create",
+                "action": "create",
+                "name": "Track Package",
+                "key": "package_tracking",
+                "operation_id": "createTracking",
+                "metadata": {
+                    "api_endpoint": "post \/v4\/trackings\/create",
+                    "body": {
+                        "tracking_number": "{{shopify.tracking_number}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
