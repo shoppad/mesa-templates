@@ -1,0 +1,126 @@
+{
+    "key": "shopify/customer/send_to_notion_database",
+    "name": "Send new Shopify customers to a Notion database",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "page",
+                "target": "notion.path.page",
+                "label": "What page would you like to use to create a database?",
+                "custom": true,
+                "type": "typeahead",
+                "description": "Select a page. Search by the name of the page if you do not see it in the dropdown."
+            },
+            {
+                "key": "create_database_name",
+                "target": "notion.path.create_database_name",
+                "label": "What do you want to name your database?",
+                "tokens": false,
+                "description": "Give your new database a name."
+            },
+            {
+                "key": "fields",
+                "target": "notion.setup_fields",
+                "label": "What are your database properties?",
+                "description": "This template will automatically create a new page for new Shopify customers. De-select the properties you do not want to include in your database.",
+                "options": [
+                    {
+                        "label": "Customer ID",
+                        "value": "Customer ID|{{shopify.id}}",
+                        "description": "The customer ID."
+                    },
+                    {
+                        "label": "Email",
+                        "value": "Email|{{shopify.email}}",
+                        "description": "The customer email."
+                    },
+                    {
+                        "label": "First Name",
+                        "value": "First Name|{{shopify.first_name}}",
+                        "description": "The customer first name."
+                    },
+                    {
+                        "label": "Last Name",
+                        "value": "Last Name|{{shopify.last_name}}",
+                        "description": "The customer last name."
+                    },
+                    {
+                        "label": "Phone",
+                        "value": "Phone|{{shopify.phone}}",
+                        "description": "The customer phone number."
+                    },
+                    {
+                        "label": "Tags",
+                        "value": "Tags|{{shopify.tags}}",
+                        "description": "The customer tags."
+                    },
+                    {
+                        "label": "Note",
+                        "value": "Note|{{shopify.note}}",
+                        "description": "The customer note."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "shopify",
+                "operation_id": "customers_create",
+                "metadata": {
+                    "frequency": "every"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "notion",
+                "entity": "v1_page",
+                "action": "create",
+                "name": "Add Page to Database",
+                "key": "notion",
+                "operation_id": "Create_a_Page_with_Content",
+                "metadata": {
+                    "api_endpoint": "post \/v1\/pages\/",
+                    "body": {
+                        "fields": {
+                            "Customer ID": "{{shopify.id}}",
+                            "Email": "{{shopify.email}}",
+                            "First Name": "{{shopify.first_name}}",
+                            "Last Name": "{{shopify.last_name}}",
+                            "Phone": "{{shopify.phone}}",
+                            "Tags": "{{shopify.tags}}",
+                            "Note": "{{shopify.note}}"
+                        }
+                    },
+                    "path": {
+                        "page": "",
+                        "database": ""
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
