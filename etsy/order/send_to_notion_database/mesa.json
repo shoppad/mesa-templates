@@ -34,7 +34,7 @@
                     },
                     {
                         "label": "Total Price",
-                        "value": "Total Price|{{etsy.total_price.amount | divided_by: 100}}",
+                        "value": "Total Price|{{etsy.total_price.amount}}",
                         "description": "A number equal to the sum of the individual listings' (price * quantity). Does not include tax or shipping costs."
                     },
                     {
@@ -69,7 +69,7 @@
                     },
                     {
                         "label": "Product Price",
-                        "value": "Product Price|{{loop.price.amount | divided_by: 100}}",
+                        "value": "Product Price|{{loop.price.amount}}",
                         "description": "The price of the product."
                     }
                 ],
@@ -147,14 +147,14 @@
                     "body": {
                         "fields": {
                             "Receipt ID": "{{etsy.receipt_id}}",
-                            "Total Price": "{{etsy.total_price.amount | divided_by: 100}}",
+                            "Total Price": "{{etsy.total_price.amount}}",
                             "Product Title": "{{loop.title}}",
                             "Product Quantity": "{{loop.quantity}}",
                             "Store Manager Link": "https://www.etsy.com/your/orders/sold/new?order_id={{etsy.receipt_id}}",
                             "Customer Name": "{{etsy.name}}",
                             "Shipping Address": "{{etsy.formatted_address}}",
                             "Product ID": "{{loop.product_id}}",
-                            "Product Price": "{{loop.price.amount | divided_by: 100}}"
+                            "Product Price": "{{loop.price.amount}}"
                         }
                     },
                     "path": {

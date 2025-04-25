@@ -28,9 +28,14 @@
                 "description": "This template will automatically create a new page for every variant in the new Shopify product. De-select the properties you do not want to include in your database.",
                 "options": [
                     {
-                        "label": "Title",
-                        "value": "Title|{{shopify.id}}",
+                        "label": "Product Title",
+                        "value": "Product Title|{{shopify.title}}",
                         "description": "The product title."
+                    },
+                    {
+                        "label": "Product ID",
+                        "value": "Product ID|{{shopify.id}}",
+                        "description": "The product ID."
                     },
                     {
                         "label": "Description (Body HTML)",
@@ -149,7 +154,8 @@
                     "trigger_parent_key": "loop",
                     "body": {
                         "fields": {
-                            "Title": "{{shopify.id}}",
+                            "Product Title": "{{shopify.title}}",
+                            "Product ID": "{{shopify.id}}",
                             "Description (Body HTML)": "{{shopify.body_html}}",
                             "Vendor": "{{shopify.vendor}}",
                             "Product Type": "{{shopify.product_type}}",
