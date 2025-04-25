@@ -1,0 +1,1673 @@
+{
+    "key": "etsy/listing/create_or_update_odoo_product",
+    "name": "Update Odoo Products When Etsy Listings Change",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 5,
+                "trigger_type": "input",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "list-updated",
+                "name": "Active Listing Updated",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "findAllListingsActiveUpdated",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/update",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "product.template",
+                "action": "search_read",
+                "name": "List Product",
+                "version": "v2",
+                "key": "odoo",
+                "operation_id": "product.template_search_read",
+                "metadata": {
+                    "api_endpoint": "get \/product",
+                    "body": {
+                        "search_query": [
+                            {
+                                "property": "name",
+                                "operator": "=",
+                                "value": "{{etsy.title}}"
+                            }
+                        ],
+                        "fields": [
+                            {
+                                "property": "id"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.search_query[].property",
+                    "body.search_query[].operator",
+                    "body.search_query[].value",
+                    "body.fields[].property"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - No Existing Odoo Product",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{odoo.0.id}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "product.template",
+                "action": "create",
+                "name": "Create Product",
+                "version": "v2",
+                "key": "odoo_1",
+                "operation_id": "product.template_create",
+                "metadata": {
+                    "api_endpoint": "post \/product",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "name": "{{etsy.title}}",
+                        "type": "consu",
+                        "service_tracking": "no",
+                        "sale_line_warn": "no-message",
+                        "description": "{{etsy.description}}",
+                        "description_sale": "{{etsy.description}}",
+                        "list_price": "{{etsy.price.amount | divided_by: 100}}",
+                        "active": "true",
+                        "default_code": "{{etsy.skus.0}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "label": "Name",
+                                "source": "odoo",
+                                "key": "name",
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Goods are tangible materials and merchandise you provide.\nA service is a non-material product you provide.",
+                                "x-type": "select",
+                                "label": "Product Type",
+                                "source": "odoo",
+                                "key": "type",
+                                "options": [
+                                    {
+                                        "label": "Goods",
+                                        "value": "consu"
+                                    },
+                                    {
+                                        "label": "Service",
+                                        "value": "service"
+                                    },
+                                    {
+                                        "label": "Combo",
+                                        "value": "combo"
+                                    }
+                                ],
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "",
+                                "x-type": "select",
+                                "label": "Create on Order",
+                                "source": "odoo",
+                                "key": "service_tracking",
+                                "options": [
+                                    {
+                                        "label": "Nothing",
+                                        "value": "no"
+                                    }
+                                ],
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "product.category",
+                                "label": "Product Category",
+                                "source": "odoo",
+                                "key": "categ_id",
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Selecting the \"Warning\" option will notify user with the message, Selecting \"Blocking Message\" will throw an exception with the message and block the flow. The Message has to be written in the next field.",
+                                "x-type": "select",
+                                "label": "Sales Order Line",
+                                "source": "odoo",
+                                "key": "sale_line_warn",
+                                "options": [
+                                    {
+                                        "label": "No Message",
+                                        "value": "no-message"
+                                    },
+                                    {
+                                        "label": "Warning",
+                                        "value": "warning"
+                                    },
+                                    {
+                                        "label": "Blocking Message",
+                                        "value": "block"
+                                    }
+                                ],
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "integer",
+                                "description": "Gives the sequence order when displaying a product list",
+                                "label": "Sequence",
+                                "source": "odoo",
+                                "key": "sequence",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "html",
+                                "description": "",
+                                "label": "Description",
+                                "source": "odoo",
+                                "key": "description",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "text",
+                                "description": "",
+                                "label": "Purchase Description",
+                                "source": "odoo",
+                                "key": "description_purchase",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "text",
+                                "description": "A description of the Product that you want to communicate to your customers. This description will be copied to every Sales Order, Delivery Order and Customer Invoice\/Credit Note",
+                                "label": "Sales Description",
+                                "source": "odoo",
+                                "key": "description_sale",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.currency",
+                                "readonly": true,
+                                "label": "Currency",
+                                "source": "odoo",
+                                "key": "currency_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.currency",
+                                "readonly": true,
+                                "label": "Cost Currency",
+                                "source": "odoo",
+                                "key": "cost_currency_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "float",
+                                "description": "Price at which the product is sold to customers.",
+                                "label": "Sales Price",
+                                "source": "odoo",
+                                "key": "list_price",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "float",
+                                "description": "Value of the product (automatically computed in AVCO).\n        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n        Used to compute margins on sale orders.",
+                                "label": "Cost",
+                                "source": "odoo",
+                                "key": "standard_price",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "float",
+                                "description": "",
+                                "label": "Volume",
+                                "source": "odoo",
+                                "key": "volume",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Volume unit of measure label",
+                                "source": "odoo",
+                                "key": "volume_uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "float",
+                                "description": "",
+                                "label": "Weight",
+                                "source": "odoo",
+                                "key": "weight",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Weight unit of measure label",
+                                "source": "odoo",
+                                "key": "weight_uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "label": "Sales",
+                                "source": "odoo",
+                                "key": "sale_ok",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "label": "Purchase",
+                                "source": "odoo",
+                                "key": "purchase_ok",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Unit of Measure Name",
+                                "source": "odoo",
+                                "key": "uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Conversion between Units of Measure can only occur if they belong to the same category. The conversion will be made based on the ratios.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.category",
+                                "readonly": true,
+                                "label": "UoM Category",
+                                "source": "odoo",
+                                "key": "uom_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "x-typeahead-domain": "[('category_id', '=', uom_category_id)]",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.company",
+                                "label": "Company",
+                                "source": "odoo",
+                                "key": "company_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "If unchecked, it will allow you to hide the product without removing it.",
+                                "x-type": "checkbox",
+                                "label": "Active",
+                                "source": "odoo",
+                                "key": "active",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "label": "Color Index",
+                                "source": "odoo",
+                                "key": "color",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Is a product variant",
+                                "source": "odoo",
+                                "key": "is_product_variant",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "product.product",
+                                "readonly": true,
+                                "label": "Product",
+                                "source": "odoo",
+                                "key": "product_variant_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "# Product Variants",
+                                "source": "odoo",
+                                "key": "product_variant_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "label": "Barcode",
+                                "source": "odoo",
+                                "key": "barcode",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "label": "Internal Reference",
+                                "source": "odoo",
+                                "key": "default_code",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Number of price rules",
+                                "source": "odoo",
+                                "key": "pricelist_item_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Documents Count",
+                                "source": "odoo",
+                                "key": "product_document_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Can Image 1024 be zoomed",
+                                "source": "odoo",
+                                "key": "can_image_1024_be_zoomed",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Is a configurable product",
+                                "source": "odoo",
+                                "key": "has_configurable_attributes",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Product Tooltip",
+                                "source": "odoo",
+                                "key": "product_tooltip",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "label": "Favorite",
+                                "source": "odoo",
+                                "key": "is_favorite",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "ID",
+                                "source": "odoo",
+                                "key": "id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Display Name",
+                                "source": "odoo",
+                                "key": "display_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.users",
+                                "readonly": true,
+                                "label": "Created by",
+                                "source": "odoo",
+                                "key": "create_uid",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "datetime",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Created on",
+                                "source": "odoo",
+                                "key": "create_date",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.users",
+                                "readonly": true,
+                                "label": "Last Updated by",
+                                "source": "odoo",
+                                "key": "write_uid",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "datetime",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Last Updated on",
+                                "source": "odoo",
+                                "key": "write_date",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Tax String",
+                                "source": "odoo",
+                                "key": "tax_string",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Keep this field empty to use the default value from the product category.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "account.account",
+                                "x-typeahead-domain": "['&amp;', ('deprecated', '=', False), ('account_type', 'not in', ('asset_receivable','liability_payable','asset_cash','liability_credit_card','off_balance'))]",
+                                "label": "Income Account",
+                                "source": "odoo",
+                                "key": "property_account_income_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Keep this field empty to use the default value from the product category. If anglo-saxon accounting with automated valuation method is configured, the expense account on the product category will be used.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "account.account",
+                                "x-typeahead-domain": "['&amp;', ('deprecated', '=', False), ('account_type', 'not in', ('asset_receivable','liability_payable','asset_cash','liability_credit_card','off_balance'))]",
+                                "label": "Expense Account",
+                                "source": "odoo",
+                                "key": "property_account_expense_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Fiscal Country Codes",
+                                "source": "odoo",
+                                "key": "fiscal_country_codes",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "https:\/\/taxcode.avatax.avalara.com\/",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "product.avatax.category",
+                                "label": "Avatax Category",
+                                "source": "odoo",
+                                "key": "avatax_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Manually set quantities on order: Invoice based on the manually entered quantity, without creating an analytic account.\nTimesheets on contract: Invoice based on the tracked hours on the related timesheet.\nCreate a task and track hours: Create a task on the sales order validation and track the work hours.",
+                                "x-type": "select",
+                                "label": "Track Service",
+                                "source": "odoo",
+                                "key": "service_type",
+                                "options": [
+                                    {
+                                        "label": "Manually set quantities on order",
+                                        "value": "manual"
+                                    }
+                                ],
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "text",
+                                "description": "",
+                                "label": "Message for Sales Order Line",
+                                "source": "odoo",
+                                "key": "sale_line_warn_msg",
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Validated expenses, vendor bills, or stock pickings (set up to track costs) can be invoiced to the customer at either cost or sales price.",
+                                "x-type": "select",
+                                "label": "Re-Invoice Costs",
+                                "source": "odoo",
+                                "key": "expense_policy",
+                                "options": [
+                                    {
+                                        "label": "No",
+                                        "value": "no"
+                                    },
+                                    {
+                                        "label": "At cost",
+                                        "value": "cost"
+                                    },
+                                    {
+                                        "label": "Sales price",
+                                        "value": "sales_price"
+                                    }
+                                ],
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Re-Invoice Policy visible",
+                                "source": "odoo",
+                                "key": "visible_expense_policy",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "float",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Sold",
+                                "source": "odoo",
+                                "key": "sales_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Ordered Quantity: Invoice quantities ordered by the customer.\nDelivered Quantity: Invoice quantities delivered to the customer.",
+                                "x-type": "select",
+                                "label": "Invoicing Policy",
+                                "source": "odoo",
+                                "key": "invoice_policy",
+                                "options": [
+                                    {
+                                        "label": "Ordered quantities",
+                                        "value": "order"
+                                    },
+                                    {
+                                        "label": "Delivered quantities",
+                                        "value": "delivery"
+                                    }
+                                ],
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Configurator: choose attribute values to add the matching product variant to the order.\nGrid: add several variants at once from the grid of attribute values",
+                                "x-type": "select",
+                                "label": "Add product mode",
+                                "source": "odoo",
+                                "key": "product_add_mode",
+                                "options": [
+                                    {
+                                        "label": "Product Configurator",
+                                        "value": "configurator"
+                                    },
+                                    {
+                                        "label": "Order Grid Entry",
+                                        "value": "matrix"
+                                    }
+                                ],
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - Has Existing Odoo Product",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{odoo.0.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "product.template",
+                "action": "read",
+                "name": "Retrieve Product",
+                "version": "v2",
+                "key": "odoo_2",
+                "operation_id": "product.template_read",
+                "metadata": {
+                    "api_endpoint": "get \/product\/{id}",
+                    "trigger_parent_key": "paths_2",
+                    "path": {
+                        "id": "{{odoo.0.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "odoo",
+                "entity": "product.template",
+                "action": "write",
+                "name": "Update Product",
+                "version": "v2",
+                "key": "odoo_3",
+                "operation_id": "product.template_write",
+                "metadata": {
+                    "api_endpoint": "put \/product\/{id}",
+                    "trigger_parent_key": "paths_2",
+                    "path": {
+                        "id": "{{odoo_2.id}}"
+                    },
+                    "body": {
+                        "name": "{{etsy.title}}",
+                        "type": "consu",
+                        "service_tracking": "no",
+                        "sale_line_warn": "no-message",
+                        "description": "{{etsy.description}}",
+                        "description_sale": "{{etsy.description}}",
+                        "list_price": "{{etsy.price.amount | divided_by: 100}}",
+                        "active": "true",
+                        "default_code": "{{etsy.skus.0}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "label": "Name",
+                                "source": "odoo",
+                                "key": "name",
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Goods are tangible materials and merchandise you provide.\nA service is a non-material product you provide.",
+                                "x-type": "select",
+                                "label": "Product Type",
+                                "source": "odoo",
+                                "key": "type",
+                                "options": [
+                                    {
+                                        "label": "Goods",
+                                        "value": "consu"
+                                    },
+                                    {
+                                        "label": "Service",
+                                        "value": "service"
+                                    },
+                                    {
+                                        "label": "Combo",
+                                        "value": "combo"
+                                    }
+                                ],
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "",
+                                "x-type": "select",
+                                "label": "Create on Order",
+                                "source": "odoo",
+                                "key": "service_tracking",
+                                "options": [
+                                    {
+                                        "label": "Nothing",
+                                        "value": "no"
+                                    }
+                                ],
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "product.category",
+                                "label": "Product Category",
+                                "source": "odoo",
+                                "key": "categ_id",
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Selecting the \"Warning\" option will notify user with the message, Selecting \"Blocking Message\" will throw an exception with the message and block the flow. The Message has to be written in the next field.",
+                                "x-type": "select",
+                                "label": "Sales Order Line",
+                                "source": "odoo",
+                                "key": "sale_line_warn",
+                                "options": [
+                                    {
+                                        "label": "No Message",
+                                        "value": "no-message"
+                                    },
+                                    {
+                                        "label": "Warning",
+                                        "value": "warning"
+                                    },
+                                    {
+                                        "label": "Blocking Message",
+                                        "value": "block"
+                                    }
+                                ],
+                                "required": true,
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "integer",
+                                "description": "Gives the sequence order when displaying a product list",
+                                "label": "Sequence",
+                                "source": "odoo",
+                                "key": "sequence",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "html",
+                                "description": "",
+                                "label": "Description",
+                                "source": "odoo",
+                                "key": "description",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "text",
+                                "description": "",
+                                "label": "Purchase Description",
+                                "source": "odoo",
+                                "key": "description_purchase",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "text",
+                                "description": "A description of the Product that you want to communicate to your customers. This description will be copied to every Sales Order, Delivery Order and Customer Invoice\/Credit Note",
+                                "label": "Sales Description",
+                                "source": "odoo",
+                                "key": "description_sale",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.currency",
+                                "readonly": true,
+                                "label": "Currency",
+                                "source": "odoo",
+                                "key": "currency_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.currency",
+                                "readonly": true,
+                                "label": "Cost Currency",
+                                "source": "odoo",
+                                "key": "cost_currency_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "float",
+                                "description": "Price at which the product is sold to customers.",
+                                "label": "Sales Price",
+                                "source": "odoo",
+                                "key": "list_price",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "float",
+                                "description": "Value of the product (automatically computed in AVCO).\n        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n        Used to compute margins on sale orders.",
+                                "label": "Cost",
+                                "source": "odoo",
+                                "key": "standard_price",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "float",
+                                "description": "",
+                                "label": "Volume",
+                                "source": "odoo",
+                                "key": "volume",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Volume unit of measure label",
+                                "source": "odoo",
+                                "key": "volume_uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "float",
+                                "description": "",
+                                "label": "Weight",
+                                "source": "odoo",
+                                "key": "weight",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Weight unit of measure label",
+                                "source": "odoo",
+                                "key": "weight_uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "label": "Sales",
+                                "source": "odoo",
+                                "key": "sale_ok",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "label": "Purchase",
+                                "source": "odoo",
+                                "key": "purchase_ok",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Unit of Measure Name",
+                                "source": "odoo",
+                                "key": "uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Conversion between Units of Measure can only occur if they belong to the same category. The conversion will be made based on the ratios.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.category",
+                                "readonly": true,
+                                "label": "UoM Category",
+                                "source": "odoo",
+                                "key": "uom_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "x-typeahead-domain": "[('category_id', '=', uom_category_id)]",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.company",
+                                "label": "Company",
+                                "source": "odoo",
+                                "key": "company_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "If unchecked, it will allow you to hide the product without removing it.",
+                                "x-type": "checkbox",
+                                "label": "Active",
+                                "source": "odoo",
+                                "key": "active",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "label": "Color Index",
+                                "source": "odoo",
+                                "key": "color",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Is a product variant",
+                                "source": "odoo",
+                                "key": "is_product_variant",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "product.product",
+                                "readonly": true,
+                                "label": "Product",
+                                "source": "odoo",
+                                "key": "product_variant_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "# Product Variants",
+                                "source": "odoo",
+                                "key": "product_variant_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "label": "Barcode",
+                                "source": "odoo",
+                                "key": "barcode",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "label": "Internal Reference",
+                                "source": "odoo",
+                                "key": "default_code",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Number of price rules",
+                                "source": "odoo",
+                                "key": "pricelist_item_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Documents Count",
+                                "source": "odoo",
+                                "key": "product_document_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Can Image 1024 be zoomed",
+                                "source": "odoo",
+                                "key": "can_image_1024_be_zoomed",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Is a configurable product",
+                                "source": "odoo",
+                                "key": "has_configurable_attributes",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Product Tooltip",
+                                "source": "odoo",
+                                "key": "product_tooltip",
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "label": "Favorite",
+                                "source": "odoo",
+                                "key": "is_favorite",
+                                "location": "required"
+                            },
+                            {
+                                "type": "integer",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "integer",
+                                "description": "",
+                                "readonly": true,
+                                "label": "ID",
+                                "source": "odoo",
+                                "key": "id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Display Name",
+                                "source": "odoo",
+                                "key": "display_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.users",
+                                "readonly": true,
+                                "label": "Created by",
+                                "source": "odoo",
+                                "key": "create_uid",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "datetime",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Created on",
+                                "source": "odoo",
+                                "key": "create_date",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "res.users",
+                                "readonly": true,
+                                "label": "Last Updated by",
+                                "source": "odoo",
+                                "key": "write_uid",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "datetime",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Last Updated on",
+                                "source": "odoo",
+                                "key": "write_date",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Tax String",
+                                "source": "odoo",
+                                "key": "tax_string",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Keep this field empty to use the default value from the product category.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "account.account",
+                                "x-typeahead-domain": "['&amp;', ('deprecated', '=', False), ('account_type', 'not in', ('asset_receivable','liability_payable','asset_cash','liability_credit_card','off_balance'))]",
+                                "label": "Income Account",
+                                "source": "odoo",
+                                "key": "property_account_income_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Keep this field empty to use the default value from the product category. If anglo-saxon accounting with automated valuation method is configured, the expense account on the product category will be used.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "account.account",
+                                "x-typeahead-domain": "['&amp;', ('deprecated', '=', False), ('account_type', 'not in', ('asset_receivable','liability_payable','asset_cash','liability_credit_card','off_balance'))]",
+                                "label": "Expense Account",
+                                "source": "odoo",
+                                "key": "property_account_expense_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "char",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Fiscal Country Codes",
+                                "source": "odoo",
+                                "key": "fiscal_country_codes",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "https:\/\/taxcode.avatax.avalara.com\/",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "product.avatax.category",
+                                "label": "Avatax Category",
+                                "source": "odoo",
+                                "key": "avatax_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Manually set quantities on order: Invoice based on the manually entered quantity, without creating an analytic account.\nTimesheets on contract: Invoice based on the tracked hours on the related timesheet.\nCreate a task and track hours: Create a task on the sales order validation and track the work hours.",
+                                "x-type": "select",
+                                "label": "Track Service",
+                                "source": "odoo",
+                                "key": "service_type",
+                                "options": [
+                                    {
+                                        "label": "Manually set quantities on order",
+                                        "value": "manual"
+                                    }
+                                ],
+                                "location": "required"
+                            },
+                            {
+                                "type": "string",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "text",
+                                "description": "",
+                                "label": "Message for Sales Order Line",
+                                "source": "odoo",
+                                "key": "sale_line_warn_msg",
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Validated expenses, vendor bills, or stock pickings (set up to track costs) can be invoiced to the customer at either cost or sales price.",
+                                "x-type": "select",
+                                "label": "Re-Invoice Costs",
+                                "source": "odoo",
+                                "key": "expense_policy",
+                                "options": [
+                                    {
+                                        "label": "No",
+                                        "value": "no"
+                                    },
+                                    {
+                                        "label": "At cost",
+                                        "value": "cost"
+                                    },
+                                    {
+                                        "label": "Sales price",
+                                        "value": "sales_price"
+                                    }
+                                ],
+                                "location": "required"
+                            },
+                            {
+                                "type": "checkbox",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "boolean",
+                                "description": "",
+                                "x-type": "checkbox",
+                                "readonly": true,
+                                "label": "Re-Invoice Policy visible",
+                                "source": "odoo",
+                                "key": "visible_expense_policy",
+                                "location": "required"
+                            },
+                            {
+                                "type": "number",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "float",
+                                "description": "",
+                                "readonly": true,
+                                "label": "Sold",
+                                "source": "odoo",
+                                "key": "sales_count",
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Ordered Quantity: Invoice quantities ordered by the customer.\nDelivered Quantity: Invoice quantities delivered to the customer.",
+                                "x-type": "select",
+                                "label": "Invoicing Policy",
+                                "source": "odoo",
+                                "key": "invoice_policy",
+                                "options": [
+                                    {
+                                        "label": "Ordered quantities",
+                                        "value": "order"
+                                    },
+                                    {
+                                        "label": "Delivered quantities",
+                                        "value": "delivery"
+                                    }
+                                ],
+                                "location": "required"
+                            },
+                            {
+                                "type": "select",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "selection",
+                                "description": "Configurator: choose attribute values to add the matching product variant to the order.\nGrid: add several variants at once from the grid of attribute values",
+                                "x-type": "select",
+                                "label": "Add product mode",
+                                "source": "odoo",
+                                "key": "product_add_mode",
+                                "options": [
+                                    {
+                                        "label": "Product Configurator",
+                                        "value": "configurator"
+                                    },
+                                    {
+                                        "label": "Order Grid Entry",
+                                        "value": "matrix"
+                                    }
+                                ],
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            }
+        ]
+    }
+}
