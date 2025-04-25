@@ -1,0 +1,285 @@
+{
+    "key": "odoo/product/create_or_update_etsy_listing",
+    "name": "Create and Update Etsy Listings from Odoo Products",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "odoo",
+                "entity": "product.template",
+                "action": "list-updated",
+                "name": "Product Updated",
+                "version": "v2",
+                "key": "odoo",
+                "operation_id": "product.template_updated",
+                "metadata": {
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "list",
+                "name": "Get List Of Draft Listings By Shop",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "getListingsByShop",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/shops\/{shop_id}\/listings",
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}"
+                    },
+                    "query": {
+                        "state": "draft",
+                        "limit": "100"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.limit",
+                    "query.state"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping - Match Odoo Product SKU To Etsy Draft Listing",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "mapping": [
+                        {
+                            "destination": "etsy_listing_id",
+                            "source": "{{SEE_CODE}}"
+                        }
+                    ],
+                    "script": "transform.js"
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - No Existing Etsy Draft Listing",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{transform.etsy_listing_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "create",
+                "name": "Create Draft Listing",
+                "version": "v3",
+                "key": "etsy_1",
+                "operation_id": "createDraftListing",
+                "metadata": {
+                    "api_endpoint": "post \/v3\/application\/shops\/{shop_id}\/listings",
+                    "trigger_parent_key": "paths_1",
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}"
+                    },
+                    "body": {
+                        "quantity": "{{ template | label: 'What is the quantity for this product?', default: 100, type: 'number', tokens: false }}",
+                        "title": "{{odoo.name}}",
+                        "description": "{{odoo.description}}",
+                        "price": "{{odoo.list_price}}",
+                        "who_made": "{{ template | label: 'Who made the product?', description: '', tokens: false }}",
+                        "when_made": "{{ template | label: 'When was the product made?', description: '', tokens: false }}",
+                        "taxonomy_id": "{{ template | label: 'What is the Taxonomy ID?', description: 'Select a product category.', tokens: false }}",
+                       "shipping_profile_id": "{{ template | label: 'What is your Shipping Profile ID?', description: 'Required when listing type is `physical`.', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - Has Existing Etsy Draft Listing",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{transform.etsy_listing_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "retrieve",
+                "name": "Retrieve Draft Listing",
+                "version": "v3",
+                "key": "etsy_2",
+                "operation_id": "getListing",
+                "metadata": {
+                    "api_endpoint": "get \/v3\/application\/listings\/{listing_id}",
+                    "trigger_parent_key": "paths_2",
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}",
+                        "listing_id": "{{transform.etsy_listing_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter - Check Required Name and Description",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "paths_2",
+                    "a": "{{odoo.name}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{odoo.description}}",
+                            "comparison": "is not empty"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "update",
+                "name": "Update Draft Listing",
+                "version": "v3",
+                "key": "etsy_3",
+                "operation_id": "updateListing",
+                "metadata": {
+                    "api_endpoint": "patch \/v3\/application\/shops\/{shop_id}\/listings\/{listing_id}",
+                    "trigger_parent_key": "paths_2",
+                    "path": {
+                        "shop_id": "{{ template | label: 'What is your Etsy store?' }}",
+                        "listing_id": "{{etsy_2.listing_id}}"
+                    },
+                    "body": {
+                        "title": "{{odoo.name}}",
+                        "description": "{{odoo.description}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.title",
+                    "body.description"
+                ],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
