@@ -1,0 +1,61 @@
+{
+    "key": "mcp/track_package",
+    "name": "Track a package",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "json": "{{ template | label: 'Set up Claude or other AI tools to connect with your MESA MCP server.', description: '[Learn more](https://docs.getmesa.com/tools/mcp) about getting started if this is your first time connecting to your MESA MCP server.\n\n**Note**: You only need to complete this setup once, regardless of how many workflows you connect to MCP. If you''ve already set it up, you can skip this step.' }}",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "Tracking number",
+                                "description": "Package tracking number",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "package_tracking",
+                "entity": "v4_tracking_create",
+                "action": "create",
+                "name": "Track Package",
+                "key": "package_tracking",
+                "operation_id": "createTracking",
+                "metadata": {
+                    "api_endpoint": "post \/v4\/trackings\/create",
+                    "body": {
+                        "tracking_number": "{{ask[\"Tracking number\"]}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
