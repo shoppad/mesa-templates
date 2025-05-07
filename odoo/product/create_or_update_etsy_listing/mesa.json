@@ -142,7 +142,7 @@
                         "shop_id": "{{ template | label: 'What is your Etsy store?' }}"
                     },
                     "body": {
-                        "quantity": "{{ template | label: 'What is the quantity for this product?', default: 100, type: 'number', tokens: false }}",
+                        "quantity": "{{ template | label: 'What''s the total available stock for this listing?', description: 'This number represents the total quantity of items available for purchase in the listing, calculated as the sum of all available offerings.', default: 100, type: 'number', tokens: false }}",
                         "title": "{{odoo.name}}",
                         "description": "{{odoo.description}}",
                         "price": "{{odoo.list_price}}",
