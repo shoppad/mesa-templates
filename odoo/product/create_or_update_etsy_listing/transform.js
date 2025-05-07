@@ -23,11 +23,11 @@ module.exports = new class {
     // Storing the matching Etsy listing ID
     let etsyListingId;
 
-    // Check if we have a matching SKU between Odoo product and Etsy listing
+    // Check if we have a matching titles between Odoo product and Etsy listing
     // If match, assign to Etsy listing ID to etsyListingId
     // Otherwise, leave as empty
     etsyDraftListings.results.forEach(listing => {
-      if (listing.skus && listing.skus[0] === odooProduct.default_code) {
+      if (listing.title === odooProduct.name) {
         etsyListingId = listing.listing_id;
         Mesa.log.info("Has matching Etsy listing ID");
         Mesa.log.info("Etsy listing id", etsyListingId);

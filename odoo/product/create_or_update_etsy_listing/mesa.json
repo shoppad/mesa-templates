@@ -61,7 +61,7 @@
                 "trigger_type": "output",
                 "type": "transform",
                 "entity": "mapping",
-                "name": "Transform Mapping - Match Odoo Product SKU To Etsy Draft Listing",
+                "name": "Transform Mapping - Match Odoo Product Title To Etsy Draft Listing",
                 "key": "transform",
                 "operation_id": "mapping",
                 "metadata": {
@@ -219,7 +219,7 @@
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{odoo.description}}",
+                            "a": "{{odoo.description_sale}}",
                             "comparison": "is not empty"
                         }
                     ]
@@ -253,7 +253,7 @@
                     },
                     "body": {
                         "title": "{{odoo.name}}",
-                        "description": "{{odoo.description}}"
+                        "description": "{{odoo.description_sale}}"
                     }
                 },
                 "local_fields": [],
