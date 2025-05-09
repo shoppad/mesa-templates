@@ -1,0 +1,120 @@
+{
+    "key": "mantle/customer/send_to_google_sheets",
+    "name": "Record New Customers from Mantle in Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row whenever a new customer is created. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Customer ID",
+                        "value": "Customer ID|{{mantle_1.customer.id}}",
+                        "description": "The ID of the customer."
+                    },
+                    {
+                        "label": "Email",
+                        "value": "Email|{{mantle_1.customer.email}}",
+                        "description": "The email of the customer."
+                    },
+                    {
+                        "label": "Name",
+                        "value": "Name|{{mantle_1.customer.name}}",
+                        "description": "The name of the customer."
+                    },
+                    {
+                        "label": "Phone",
+                        "value": "Phone|{{mantle_1.customer.contacts[0].phone}}",
+                        "description": "The phone number of the customer."
+                    },
+                    {
+                        "label": "Tags",
+                        "value": "Tags|{{mantle.tags[0].0}}",
+                        "description": "The tags of the customer."
+                    },
+                    {
+                        "label": "Note",
+                        "value": "Note|{{mantle_1.customer.contacts[0].notes}}",
+                        "description": "A note about the customer."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_subscribed",
+                "action": "subscribed",
+                "name": "Customer Subscribed",
+                "key": "mantle",
+                "operation_id": "post_customers_subscribed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "mantle_1",
+                "operation_id": "get__customers__id_",
+                "metadata": {
+                    "api_endpoint": "get \/customers\/{id}",
+                    "path": {
+                        "id": "{{mantle.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    }
+                },
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 1
+            }
+        ]
+    }
+}
