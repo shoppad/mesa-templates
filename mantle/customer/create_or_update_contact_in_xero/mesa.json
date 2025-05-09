@@ -1,0 +1,236 @@
+{
+    "key": "mantle/customer/create_or_update_contact_in_xero",
+    "name": "Create or Update a Contact in Xero from a New Plan Subscription",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_subscribed",
+                "action": "subscribed",
+                "name": "Customer Subscribed",
+                "key": "mantle",
+                "operation_id": "post_customers_subscribed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "mantle_1",
+                "operation_id": "get__customers__id_",
+                "metadata": {
+                    "api_endpoint": "get \/customers\/{id}",
+                    "path": {
+                        "id": "{{mantle.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "contact",
+                "action": "list",
+                "name": "Get Contact By Email",
+                "key": "xero",
+                "operation_id": "getContacts",
+                "metadata": {
+                    "api_endpoint": "get \/api.xro\/2.0\/Contacts",
+                    "query": {
+                        "searchTerm": "{{mantle_1.customer.email}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.searchTerm"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - No Existing Contact",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{xero.0.ContactID}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "contact",
+                "action": "update-bulk",
+                "name": "Create Contact",
+                "key": "xero_1",
+                "operation_id": "updateOrCreateContacts",
+                "metadata": {
+                    "api_endpoint": "post \/api.xro\/2.0\/Contacts",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "Contacts": [
+                            {
+                                "ContactID": "{{mantle_1.customer.id}}",
+                                "Name": "{{mantle_1.customer.name}}",
+                                "EmailAddress": "{{mantle_1.customer.email}}",
+                                "Addresses": [
+                                    {
+                                        "City": "{{mantle.city}}",
+                                        "Country": "{{mantle_1.customer.countryCode}}"
+                                    }
+                                ],
+                                "BrandingTheme": {
+                                    "Type": "INVOICE"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Contacts[].Name",
+                    "body.Contacts[].EmailAddress",
+                    "body.Contacts[].Addresses[].City",
+                    "body.Contacts[].Addresses[].Country"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - Has Existing Contact",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{xero.0.ContactID}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "contact",
+                "action": "update",
+                "name": "Update Contact",
+                "key": "xero_2",
+                "operation_id": "updateContact",
+                "metadata": {
+                    "api_endpoint": "post \/api.xro\/2.0\/Contacts\/{ContactID}",
+                    "trigger_parent_key": "paths_2",
+                    "path": {
+                        "ContactID": "{{xero.0.ContactID}}"
+                    },
+                    "body": {
+                        "Contacts": [
+                            {
+                                "ContactID": "{{xero.0.ContactID}}",
+                                "Name": "{{mantle_1.customer.name}}",
+                                "EmailAddress": "{{mantle_1.customer.email}}",
+                                "Addresses": [
+                                    {
+                                        "City": "{{mantle.city}}",
+                                        "Country": "{{mantle_1.customer.countryCode}}"
+                                    }
+                                ],
+                                "BrandingTheme": {
+                                    "Type": "INVOICE"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Contacts[].Name",
+                    "body.Contacts[].EmailAddress",
+                    "body.Contacts[].Addresses[].City",
+                    "body.Contacts[].Addresses[].Country"
+                ],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            }
+        ]
+    }
+}
