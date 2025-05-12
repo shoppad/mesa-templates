@@ -20,6 +20,11 @@
                 "description": "This template will automatically create a new row whenever a new customer is created. De-select the columns you do not want to include in your spreadsheet.",
                 "options": [
                     {
+                        "label": "Installed At",
+                        "value": "Installed At|{{mantle.appInstallation.installedAt}}",
+                        "description": "The installed at date."
+                    },
+                    {
                         "label": "Customer ID",
                         "value": "Customer ID|{{mantle_1.customer.id}}",
                         "description": "The ID of the customer."
@@ -33,6 +38,11 @@
                         "label": "Name",
                         "value": "Name|{{mantle_1.customer.name}}",
                         "description": "The name of the customer."
+                    },
+                    {
+                        "label": "Shopify Domain",
+                        "value": "Shopify Domain|{{mantle.customer.shopifyDomain}}",
+                        "description": "The Shopify domain."
                     },
                     {
                         "label": "Phone",
