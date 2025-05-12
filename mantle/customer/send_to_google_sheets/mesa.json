@@ -41,7 +41,7 @@
                     },
                     {
                         "label": "Shopify Domain",
-                        "value": "Shopify Domain|{{mantle.customer.shopifyDomain}}",
+                        "value": "Shopify Domain|{{mantle.shopify.myshopifyDomain}}",
                         "description": "The Shopify domain."
                     },
                     {
