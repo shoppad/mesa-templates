@@ -1,0 +1,175 @@
+{
+    "key": "mcp/retrieve_helpscout_conversations",
+    "name": "Retrieve Help Scout Conversations",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "ISO-8601 date",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "ISO-8601 date",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "tag",
+                                "description": "Optional helpscout tag to include",
+                                "type": "string",
+                                "required": false
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "helpscout",
+                "entity": "conversation",
+                "action": "list",
+                "name": "Get List of Conversations",
+                "key": "helpscout",
+                "operation_id": "get__v2_conversations",
+                "metadata": {
+                    "api_endpoint": "get \/v2\/conversations",
+                    "query": {
+                        "tag": "{{ask.tag}}",
+                        "query": "(createdAt:[{{ask.start_date}} TO {{ask.end_date}}])"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.query",
+                    "query.tag"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Conversations",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{helpscout.conversations[]}}",
+                    "filter": {
+                        "a": "{{helpscout.conversations[].key}}",
+                        "comparison": "equals",
+                        "b": "helpscout.conversations.1",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "helpscout",
+                "entity": "conversation_thread",
+                "action": "list",
+                "name": "Get List of Conversation's Threads",
+                "key": "helpscout_1",
+                "operation_id": "get-_v2_conversations_threads",
+                "metadata": {
+                    "api_endpoint": "get \/v2\/conversations\/{conversationId}\/threads",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "conversationId": "{{loop.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.conversationId"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "script": "custom.js"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": "map",
+                    "map": "Link: {{loop._links.self.href}}\nSubject: {{loop.subject}}\nMessage: \n{{custom_1.thread.body}}\nDate: {{loop.createdAt}}\n---\n"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "return",
+                    "map"
+                ],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
