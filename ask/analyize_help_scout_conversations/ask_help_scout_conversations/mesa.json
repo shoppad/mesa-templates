@@ -1,0 +1,53 @@
+{
+    "key": "analyize_help_scout_conversations",
+    "name": "Analyize Last Week's Help Scout Conversations",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@weekly:0 0 * * 0",
+                    "enqueue_type": "schedule",
+                    "next_sync_date_time": "2025-05-18T00:00:00-04:00",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "train",
+                "action": "ask",
+                "name": "Ask Ask",
+                "key": "ask",
+                "operation_id": "post-ask",
+                "metadata": {
+                    "api_endpoint": "post \/ask",
+                    "body": {
+                        "content": "Find interesting trends in my support tickets over the last week. Cite the link from each ticket that matches the trends."
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
