@@ -1,5 +1,5 @@
 {
-    "key": "mcp_shopify_retrieve_customers",
+    "key": "mcp/shopify/retrieve_customers",
     "name": "Retrieve Shopify Customers",
     "version": "1.0.0",
     "description": "",
