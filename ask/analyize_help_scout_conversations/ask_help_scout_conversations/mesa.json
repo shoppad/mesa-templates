@@ -32,7 +32,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "ask",
-                "entity": "train",
+                "entity": "ask",
                 "action": "ask",
                 "name": "Ask Ask",
                 "key": "ask",
