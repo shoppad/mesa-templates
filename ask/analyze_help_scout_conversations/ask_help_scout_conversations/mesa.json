@@ -1,6 +1,6 @@
 {
-    "key": "analyize_help_scout_conversations",
-    "name": "Analyize Last Week's Help Scout Conversations",
+    "key": "analyze_help_scout_conversations",
+    "name": "Analyze Last Week's Help Scout Conversations",
     "version": "1.0.0",
     "description": "",
     "seconds": 135,
