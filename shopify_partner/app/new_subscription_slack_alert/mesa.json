@@ -1,0 +1,93 @@
+{
+    "key": "shopify_partner/app/new_subscription_slack_alert",
+    "name": "Receive a Slack Alert for Each New Shopify App Subscription Charge",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shopify-partner",
+                "entity": "app",
+                "action": "subscription_sale",
+                "name": "App Subscription Charge Created",
+                "key": "shopify-partner",
+                "operation_id": "post_app_subscription_sale",
+                "metadata": {
+                    "api_endpoint": "post app_sales",
+                    "poll": "*\/15 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify-partner.app.name}}",
+                    "comparison": "contains",
+                    "b": "{{ template | label: 'What is the name of the app?', tokens: false }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-partner",
+                "entity": "mesa_transaction",
+                "action": "retrieve_app_subscription_sale_by_id",
+                "name": "Retrieve App Subscription Charge",
+                "key": "shopify-partner_1",
+                "operation_id": "get_app_subscription_sale_by_id",
+                "metadata": {
+                    "api_endpoint": "get \/mesa\/transactions\/{transactionId}\/app_subscription_sale",
+                    "path": {
+                        "transactionId": "{{shopify-partner.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "\ud83d\udcb0 New {{shopify-partner.app.name}} Subscription Created!\nCreated at: {{shopify-partner_1.createdAt | date: \"%B %e, %Y\"}} , {{shopify-partner.createdAt | date: \"%l:%M%P\"}}\nGross amount:  {{shopify-partner.grossAmount.amount}}\nName: {{shopify-partner.app.name}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
