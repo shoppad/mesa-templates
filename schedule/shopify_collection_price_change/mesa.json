@@ -36,7 +36,7 @@
                 "operation_id": "get_collection_products",
                 "metadata": {
                     "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
-                    "collection_id": "{{ template | label: 'What is the collection ID?', description: 'To find your Shopify collection ID, log in to your Shopify admin, go to **Products > Collections**, and click on the collection you want. In the browser''s address bar, you''ll see a URL like https://your-store.myshopify.com/admin/collections/123456789012—the number at the end is your collection ID. Enter that ID here.', tokens: false }}"
+                    "collection_id": "{{ template | label: 'What is the collection ID?', description: 'To find your Shopify collection ID, log in to your Shopify admin, go to **Products > Collections**, and click on the collection you want. In the browser''s address bar, you''ll see a URL like https://your-store.myshopify.com/admin/collections/123456789012 —the number at the end is your collection ID. Enter that ID here.', tokens: false }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
