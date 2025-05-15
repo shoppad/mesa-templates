@@ -1,0 +1,200 @@
+{
+    "key": "schedule/shopify_collection_price_change",
+    "name": "Schedule a Shopify Collection Price Change",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": null,
+                    "enqueue_type": "datetime",
+                    "datetime": "{{ template | label: 'Select a date to schedule the collection price change' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collection",
+                "action": "list",
+                "name": "Get List of Collections' Products",
+                "key": "shopify",
+                "operation_id": "get_collection_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
+                    "collection_id": "{{ template | label: 'What is the collection ID?', description: '', tokens: false }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Products",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Product Variants",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{shopify_1.variants[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
+                "key": "shopify_2",
+                "operation_id": "get_variants_variant_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/variants\/{{variant_id}}.json",
+                    "trigger_parent_key": "loop_2",
+                    "variant_id": "{{loop_2.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "update_id",
+                "name": "Update Product Variant",
+                "key": "shopify_3",
+                "operation_id": "put_variants_variant_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/variants\/{{variant_id}}.json",
+                    "product_id": "{{shopify_1.id}}",
+                    "trigger_parent_key": "loop_2",
+                    "variant_id": "{{shopify_2.id}}",
+                    "body": {
+                        "price": "{{shopify_2.price | times: 0.75 | round: 2}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.price"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_2",
+                    "trigger_parent_key": "loop_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            }
+        ]
+    }
+}
