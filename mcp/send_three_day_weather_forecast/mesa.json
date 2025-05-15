@@ -2,7 +2,7 @@
     "key": "mcp/send_three_day_weather_forecast",
     "name": "Send a 3-Day Weather Forecast",
     "version": "1.0.0",
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [

@@ -2,7 +2,7 @@
     "key": "mcp/track_package",
     "name": "Track a package",
     "version": "1.0.0",
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [

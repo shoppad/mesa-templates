@@ -2,7 +2,7 @@
     "key": "mcp/send_slack_message",
     "name": "Send a Slack message",
     "version": "1.0.0",
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [
