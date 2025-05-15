@@ -175,12 +175,12 @@
                             "disabled": "67c8caffd6cf40974d0ed799"
                         }
                     ],
-                    "table": "Shopify Gift Cards",
                     "where_clause": {
                         "comparison": "equals",
                         "b": "{{loop.id}}",
                         "a": "Gift Card ID"
-                    }
+                    },
+                    "table": "Shopify Gift Cards"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -199,7 +199,7 @@
                 "metadata": {
                     "api_endpoint": "get \/{database}\/{table}",
                     "trigger_parent_key": "loop",
-                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_1.email}}'\nAND \"Disabled At\" IS NOT NULL",
+                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_1.email}}'\n AND \"Disabled At\" IS NOT NULL",
                     "table": "Shopify Gift Cards",
                     "where_clause": {
                         "comparison": "equals"
@@ -218,7 +218,7 @@
                 "type": "klaviyo",
                 "entity": "profile",
                 "action": "list",
-                "name": "Get List of Profiles from Email",
+                "name": "Get Klaviyo Profile from Email",
                 "version": "v4",
                 "key": "klaviyo",
                 "operation_id": "get_profiles",
