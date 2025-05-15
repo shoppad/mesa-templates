@@ -50,11 +50,11 @@
                 "entity": "event",
                 "action": "create",
                 "name": "Create Event",
-                "version": "v3",
+                "version": "v4",
                 "key": "klaviyo",
-                "operation_id": "mesa_create_event",
+                "operation_id": "mesa_create_event_custom",
                 "metadata": {
-                    "api_endpoint": "post \/mesa\/api\/events\/",
+                    "api_endpoint": "post \/mesa\/api\/events",
                     "body": {
                         "mode": "create",
                         "properties": [
