@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/subscribe_shoppers_to_klaviyo_list",
-    "name": "Subscribe shoppers to a Klaviyo list after their first order",
+    "name": "Subscribe First-Time Shopify Customers to Klaviyo List",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -15,14 +15,19 @@
                 "name": "Order Created",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
@@ -31,10 +36,11 @@
                 "key": "shopify_1",
                 "operation_id": "get_customers_customer_id",
                 "metadata": {
-                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
                     "customer_id": "{{shopify.customer.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -44,6 +50,7 @@
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
                     "a": "{{shopify_1.orders_count}}",
                     "comparison": "equals",
@@ -57,6 +64,12 @@
                     ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -67,45 +80,39 @@
                 "entity": "profile_subscription_bulk_create_job",
                 "action": "create",
                 "name": "Subscribe Profile",
-                "version": "v3",
+                "version": "v4",
                 "key": "klaviyo",
-                "operation_id": "subscribe_profiles",
+                "operation_id": "mesa_bulk_subscribe_profiles",
                 "metadata": {
-                    "api_endpoint": "post /api/profile-subscription-bulk-create-jobs/",
+                    "api_endpoint": "post \/mesa\/api\/profile-subscription-bulk-create-jobs",
                     "body": {
-                        "data": {
-                            "type": "profile-subscription-bulk-create-job",
-                            "relationships": {
-                                "list": {
-                                    "data": {
-                                        "type": "list",
-                                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}"
-                                    }
-                                }
-                            },
-                            "attributes": {
-                                "profiles": {
-                                    "data": [
-                                        {
-                                            "type": "profile",
-                                            "attributes": {
-                                                "email": "{{shopify.email}}",
-                                                "subscriptions": {
-                                                    "email": {
-                                                        "marketing": {
-                                                            "consent": "SUBSCRIBED"
-                                                        }
+                        "list_id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}",
+                        "attributes": {
+                            "historical_import": false,
+                            "profiles": {
+                                "data": [
+                                    {
+                                        "attributes": {
+                                            "email": "{{shopify.email}}",
+                                            "subscriptions": {
+                                                "email": {
+                                                    "marketing": {
+                                                        "consent": "SUBSCRIBED"
                                                     }
                                                 }
                                             }
                                         }
-                                    ]
-                                }
+                                    }
+                                ]
                             }
                         }
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.attributes.profiles.data[].attributes.email",
+                    "body.attributes.profiles.data[].attributes.subscriptions.email.marketing.consent"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
