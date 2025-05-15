@@ -37,9 +37,9 @@
                 "key": "shopify",
                 "operation_id": "get_gift_cards",
                 "metadata": {
-                    "api_endpoint": "get admin/gift_cards.json",
+                    "api_endpoint": "get admin\/gift_cards.json",
                     "query": {
-                        "limit": 8000
+                        "limit": "8000"
                     }
                 },
                 "local_fields": [],
@@ -129,7 +129,7 @@
                         {
                             "key": "Customer ID",
                             "type": "numeric",
-                            "value": "{{shopify_1.id}}",
+                            "value": "{{loop.customer_id}}",
                             "disabled": "67c8caffd6cf40974d0ed799"
                         },
                         {
@@ -175,12 +175,12 @@
                             "disabled": "67c8caffd6cf40974d0ed799"
                         }
                     ],
+                    "table": "Shopify Gift Cards",
                     "where_clause": {
                         "comparison": "equals",
                         "b": "{{loop.id}}",
                         "a": "Gift Card ID"
-                    },
-                    "table": "Shopify Gift Cards"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -199,11 +199,11 @@
                 "metadata": {
                     "api_endpoint": "get \/{database}\/{table}",
                     "trigger_parent_key": "loop",
+                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_1.email}}'\nAND \"Disabled At\" IS NOT NULL",
+                    "table": "Shopify Gift Cards",
                     "where_clause": {
                         "comparison": "equals"
-                    },
-                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_1.email}}'\n  AND \"Disabled At\" IS NOT NULL",
-                    "table": "Shopify Gift Cards"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -218,20 +218,28 @@
                 "type": "klaviyo",
                 "entity": "profile",
                 "action": "list",
-                "name": "Get Klaviyo Profile from Email",
-                "version": "v3",
+                "name": "Get List of Profiles from Email",
+                "version": "v4",
                 "key": "klaviyo",
                 "operation_id": "get_profiles",
                 "metadata": {
-                    "api_endpoint": "get \/api\/profiles\/",
+                    "api_endpoint": "get \/api\/profiles",
                     "trigger_parent_key": "loop",
                     "query": {
-                        "filter": "equals(email,'{{shopify_1.email}}')"
+                        "filter": "specific_filter",
+                        "mesaFilter": "email",
+                        "mesaFilterOperator": "equals",
+                        "mesaFilterValue": "{{shopify_1.email}}",
+                        "mesaFilterHiddenValues": "{\"id\":\"any, equals\",\"email\":\"any, equals\",\"phone_number\":\"any, equals\",\"external_id\":\"any, equals\",\"_kx\":\"equals\",\"created\":\"greater-than, less-than\",\"updated\":\"greater-than, less-than\",\"subscriptions.email.marketing.list_suppressions.reason\":\"equals\",\"subscriptions.email.marketing.list_suppressions.timestamp\":\"greater-or-equal, greater-than, less-or-equal, less-than\",\"subscriptions.email.marketing.list_suppressions.list_id\":\"equals\",\"subscriptions.email.marketing.suppression.reason\":\"equals\",\"subscriptions.email.marketing.suppression.timestamp\":\"greater-or-equal, greater-than, less-or-equal, less-than\"}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "query.filter"
+                    "query.filter",
+                    "query.mesaFilter",
+                    "query.mesaFilterOperator",
+                    "query.mesaFilterValue",
+                    "query.advancedFilter"
                 ],
                 "on_error": "default",
                 "weight": 5
@@ -245,7 +253,7 @@
                 "operation_id": "filter",
                 "metadata": {
                     "trigger_parent_key": "loop",
-                    "a": "{{klaviyo.0.id}}",
+                    "a": "{{klaviyo.data[0].id}}",
                     "comparison": "is not empty",
                     "additional": [
                         {
@@ -266,19 +274,19 @@
                 "entity": "profile",
                 "action": "update",
                 "name": "Update Profile",
-                "version": "v3",
+                "version": "v4",
                 "key": "klaviyo_1",
                 "operation_id": "update_profile",
                 "metadata": {
-                    "api_endpoint": "patch \/api\/profiles\/{id}\/",
+                    "api_endpoint": "patch \/api\/profiles\/{id}",
                     "trigger_parent_key": "loop",
                     "path": {
-                        "id": "{{klaviyo.0.id}}"
+                        "id": "{{klaviyo.data[0].id}}"
                     },
                     "body": {
                         "data": {
                             "type": "profile",
-                            "id": "{{klaviyo.0.id}}",
+                            "id": "{{klaviyo.data[0].id}}",
                             "attributes": {
                                 "properties": {
                                     "Gift Card Balance": "{{data_1[0][\"Total Balance\"]}}"
