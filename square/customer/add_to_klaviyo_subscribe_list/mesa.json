@@ -1,13 +1,13 @@
 {
     "key": "square/customer/add_to_klaviyo_subscribe_list",
-    "name": "Add new Square customers to a Klaviyo subscribe list",
+    "name": "Add New Square Customers to Klaviyo Subscriber List",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
     "config": {
         "inputs": [
             {
-                "schema": 4,
+                "schema": 6,
                 "trigger_type": "input",
                 "type": "square",
                 "entity": "customer_created",
@@ -19,6 +19,7 @@
                     "host": "{{ template | label: 'Install the webhook URL', description: '(1) Open the [Square Developer Dashboard](https://developer.squareup.com/apps), sign in, and create a new app called \"MESA\" by clicking the gray plus button under Applications. (2) Navigate to Webhooks > Subscriptions, switch to Production mode, add a subscription with MESA''s Webhook URL, name it, and choose \"customer.created\" under events. [Learn more about this setup.](https://docs.getmesa.com/article/1846-square-payments#configure-square-triggers)' }}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -31,45 +32,39 @@
                 "entity": "profile_subscription_bulk_create_job",
                 "action": "create",
                 "name": "Subscribe Profile",
-                "version": "v3",
+                "version": "v4",
                 "key": "klaviyo",
-                "operation_id": "subscribe_profiles",
+                "operation_id": "mesa_bulk_subscribe_profiles",
                 "metadata": {
-                    "api_endpoint": "post /api/profile-subscription-bulk-create-jobs/",
+                    "api_endpoint": "post \/mesa\/api\/profile-subscription-bulk-create-jobs",
                     "body": {
-                        "data": {
-                            "type": "profile-subscription-bulk-create-job",
-                            "relationships": {
-                                "list": {
-                                    "data": {
-                                        "type": "list",
-                                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}"
-                                    }
-                                }
-                            },
-                            "attributes": {
-                                "profiles": {
-                                    "data": [
-                                        {
-                                            "type": "profile",
-                                            "attributes": {
-                                                "email": "{{square.email_address}}",
-                                                "subscriptions": {
-                                                    "email": {
-                                                        "marketing": {
-                                                            "consent": "SUBSCRIBED"
-                                                        }
+                        "list_id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}",
+                        "attributes": {
+                            "historical_import": false,
+                            "profiles": {
+                                "data": [
+                                    {
+                                        "attributes": {
+                                            "email": "{{square.email_address}}",
+                                            "subscriptions": {
+                                                "email": {
+                                                    "marketing": {
+                                                        "consent": "SUBSCRIBED"
                                                     }
                                                 }
                                             }
                                         }
-                                    ]
-                                }
+                                    }
+                                ]
                             }
                         }
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.attributes.profiles.data[].attributes.email",
+                    "body.attributes.profiles.data[].attributes.subscriptions.email.marketing.consent"
+                ],
                 "on_error": "default",
                 "weight": 0
             }

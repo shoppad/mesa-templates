@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Send a slack message from an MCP trigger.",
     "seconds": 0,
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [

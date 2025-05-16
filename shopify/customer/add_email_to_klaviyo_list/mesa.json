@@ -1,6 +1,6 @@
 {
     "key": "shopify/customer/add_email_to_klaviyo_list",
-    "name": "Add a Shopify customer's email address to a Klaviyo list",
+    "name": "Add New Shopify Customer Emails to Klaviyo List",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -15,7 +15,12 @@
                 "name": "Customer Created",
                 "key": "shopify",
                 "operation_id": "customers_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -27,11 +32,19 @@
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
                     "a": "{{shopify.email}}",
-                    "comparison": "is not empty"
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -42,45 +55,39 @@
                 "entity": "profile_subscription_bulk_create_job",
                 "action": "create",
                 "name": "Subscribe Profile",
-                "version": "v3",
+                "version": "v4",
                 "key": "klaviyo",
-                "operation_id": "subscribe_profiles",
+                "operation_id": "mesa_bulk_subscribe_profiles",
                 "metadata": {
-                    "api_endpoint": "post /api/profile-subscription-bulk-create-jobs/",
+                    "api_endpoint": "post \/mesa\/api\/profile-subscription-bulk-create-jobs",
                     "body": {
-                        "data": {
-                            "type": "profile-subscription-bulk-create-job",
-                            "relationships": {
-                                "list": {
-                                    "data": {
-                                        "type": "list",
-                                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}"
-                                    }
-                                }
-                            },
-                            "attributes": {
-                                "profiles": {
-                                    "data": [
-                                        {
-                                            "type": "profile",
-                                            "attributes": {
-                                                "email": "{{shopify.email}}",
-                                                "subscriptions": {
-                                                    "email": {
-                                                        "marketing": {
-                                                            "consent": "SUBSCRIBED"
-                                                        }
+                        "list_id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', tokens: false }}",
+                        "attributes": {
+                            "historical_import": false,
+                            "profiles": {
+                                "data": [
+                                    {
+                                        "attributes": {
+                                            "email": "{{shopify.email}}",
+                                            "subscriptions": {
+                                                "email": {
+                                                    "marketing": {
+                                                        "consent": "SUBSCRIBED"
                                                     }
                                                 }
                                             }
                                         }
-                                    ]
-                                }
+                                    }
+                                ]
                             }
                         }
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body.attributes.profiles.data[].attributes.email",
+                    "body.attributes.profiles.data[].attributes.subscriptions.email.marketing.consent"
+                ],
                 "on_error": "default",
                 "weight": 1
             }

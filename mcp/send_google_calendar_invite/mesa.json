@@ -2,7 +2,7 @@
     "key": "mcp/send_google_calendar_invite",
     "name": "Send a Google Calendar Invite",
     "version": "1.0.0",
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [

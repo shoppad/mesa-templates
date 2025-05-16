@@ -36,7 +36,7 @@
                 "operation_id": "get_collection_products",
                 "metadata": {
                     "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
-                    "collection_id": "{{ template | label: 'What is the collection ID?', description: '', tokens: false }}"
+                    "collection_id": "{{ template | label: 'What is the collection ID?', description: 'To find your Shopify collection ID, log in to your Shopify admin, go to **Products > Collections**, and click on the collection you want. In the browser''s address bar, you''ll see a URL like https://your-store.myshopify.com/admin/collections/123456789012 —the number at the end is your collection ID. Enter that ID here.', tokens: false }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -149,7 +149,7 @@
                     "trigger_parent_key": "loop_2",
                     "variant_id": "{{shopify_2.id}}",
                     "body": {
-                        "price": "{{shopify_2.price | times: 0.75 | round: 2}}"
+                        "price": "{{ template | label: 'How much would you like to reduce the price?', description: 'By default, this template will reduce prices in your selected collection by 25%. If you''d like to apply a different discount, simply double-click the variable and change the number after `times:` to match the percentage you''d like to keep. For example, to apply a 15% discount, use 0.85 instead, like this: `{{shopify_2.price | times: 0.85 | round: 2}}`.', default: '{{shopify_2.price | times: 0.75 | round: 2}}' }}"
                     }
                 },
                 "local_fields": [],
