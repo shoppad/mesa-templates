@@ -81,7 +81,7 @@
                 "operation_id": "slack",
                 "metadata": {
                     "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
-                    "message": "\ud83d\udcb0 New {{shopify-partner.app.name}} Subscription Created!\nCreated at: {{shopify-partner_1.createdAt | date: \"%B %e, %Y\"}} , {{shopify-partner.createdAt | date: \"%l:%M%P\"}}\nGross amount:  {{shopify-partner.grossAmount.amount}}\nName: {{shopify-partner.app.name}}"
+                    "message": "\ud83d\udcb0 New {{shopify-partner.app.name}} Subscription Created!\nCreated at: {{shopify-partner_1.createdAt | date: \"%B %e, %Y\"}} at {{shopify-partner.createdAt | date: \"%l:%M%P\"}}\nGross amount:  {{shopify-partner.grossAmount.amount}}\nName: {{shopify-partner.app.name}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
