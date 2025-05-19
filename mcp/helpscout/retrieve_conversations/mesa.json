@@ -1,10 +1,10 @@
 {
-    "key": "mcp/retrieve_helpscout_conversations",
+    "key": "mcp/helpscout/retrieve_conversations",
     "name": "Retrieve Help Scout Conversations",
     "version": "1.0.0",
-    "description": "",
+    "description": "Enable AI to retrieve Help Scout conversations in response to a prompt to gain instant, context-rich insights without manually searching past support threads. When a prompt triggers this MCP template, it automatically pulls the relevant Help Scout conversations and uses that data to craft a tailored, accurate response grounded in real customer history.",
     "seconds": 135,
-    "enabled": true,
+    "enabled": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -43,7 +43,15 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type",
+                    "body.parameters[].required"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -61,6 +69,8 @@
                 "metadata": {
                     "api_endpoint": "get \/v2\/conversations",
                     "query": {
+                        "limit": "5000",
+                        "status": "all",
                         "tag": "{{ask.tag}}",
                         "query": "(createdAt:[{{ask.start_date}} TO {{ask.end_date}}])"
                     }
@@ -68,7 +78,9 @@
                 "local_fields": [],
                 "selected_fields": [
                     "query.query",
-                    "query.tag"
+                    "query.tag",
+                    "query.status",
+                    "query.limit"
                 ],
                 "on_error": "default",
                 "weight": 0
@@ -83,18 +95,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{helpscout.conversations[]}}",
-                    "filter": {
-                        "a": "{{helpscout.conversations[].key}}",
-                        "comparison": "equals",
-                        "b": "helpscout.conversations.1",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{helpscout.conversations[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -143,7 +144,10 @@
                     "trigger_parent_key": "loop",
                     "script": "custom.js"
                 },
-                "selected_fields": [],
+                "local_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
