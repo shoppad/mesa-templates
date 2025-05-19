@@ -18,11 +18,15 @@
                 "metadata": {
                     "schedule": "@weekly:0 0 * * 0",
                     "enqueue_type": "schedule",
-                    "next_sync_date_time": "2025-05-18T00:00:00-04:00",
+                    "next_sync_date_time": "2025-05-25T00:00:00-04:00",
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -35,14 +39,12 @@
                 "entity": "ask",
                 "action": "ask",
                 "name": "Ask Ask",
-                "key": "ask",
+                "key": "ask_2",
                 "operation_id": "post-ask",
                 "metadata": {
                     "api_endpoint": "post \/ask",
                     "body": {
-                        "automations": [
-                            "mcp/retrieve_helpscout_conversations"
-                        ],
+                        "automations": ["mcp/helpscout/retrieve_conversations"],
                         "content": "Find interesting trends in my support tickets over the last week. Cite the link from each ticket that matches the trends."
                     }
                 },
@@ -50,6 +52,45 @@
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask_3",
+                "operation_id": "post-ask-skill",
+                "metadata": {
+                    "api_endpoint": "post \/ask\/skill",
+                    "trigger_manager_key": "ask_2",
+                    "trigger_parent_key": "ask_2"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "jeff@theshoppad.com",
+                        "subject": "Last Week's Help Scout Conversations",
+                        "message": "{{ask.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
             }
         ]
     }
