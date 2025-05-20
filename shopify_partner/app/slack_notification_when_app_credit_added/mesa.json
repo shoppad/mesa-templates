@@ -1,0 +1,51 @@
+{
+    "key": "shopify_partner/app/slack_notification_when_app_credit_added",
+    "name": "Receive a Slack Alert when an App Credit is Applied",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shopify-partner",
+                "entity": "app_event",
+                "action": "credit_applied",
+                "name": "App Credit Applied",
+                "key": "shopify-partner",
+                "operation_id": "post_credit_applied",
+                "metadata": {
+                    "api_endpoint": "post credit_applied",
+                    "poll": "@hourly:0 * * * *",
+                    "body": {
+                        "appId": "{{ template | label: 'What is your App ID?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "\ud83d\udcb8 App credit was applied\nOccurred at: {{shopify-partner.occurredAt | date: \"%B %e, %Y\"}}, {{shopify-partner.occurredAt | date: \"%l:%M%P\"}}\nType: {{shopify-partner.type}}\nShopify domain: {{shopify-partner.shop.myshopifyDomain}}\nNotes: {{shopify-partner.appCredit.name}}\nCredit amount: {{shopify-partner.appCredit.amount.amount}} {{shopify-partner.appCredit.amount.currencyCode}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
