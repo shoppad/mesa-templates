@@ -137,12 +137,13 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom Code",
+                "name": "Select first customer message",
                 "key": "custom",
                 "operation_id": "custom",
                 "metadata": {
                     "trigger_parent_key": "loop",
-                    "script": "custom.js"
+                    "script": "custom.js",
+                    "description": "Selects the first message in the thread created by the customer"
                 },
                 "local_fields": [],
                 "selected_fields": [

@@ -81,7 +81,7 @@
                     "body": {
                         "to": "{{ template | label: 'Email address', description: 'Where should we send the weekly report?' }}",
                         "subject": "Last Week's Help Scout Conversations",
-                        "message": "{{ask.response}}"
+                        "message": "{{ask.content}}"
                     }
                 },
                 "local_fields": [],
