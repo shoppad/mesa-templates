@@ -1,0 +1,53 @@
+{
+    "key": "shopify_partner/app/uninstall_slack_notification",
+    "name": "Receive a Slack Alert When Your Shopify App is Uninstalled",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shopify-partner",
+                "entity": "app_event",
+                "action": "relationship_uninstalled",
+                "name": "App Relationship Uninstalled",
+                "key": "shopify-partner",
+                "operation_id": "post_relationship_uninstalled",
+                "metadata": {
+                    "api_endpoint": "post relationship_uninstalled",
+                    "poll": "*\/15 * * * *",
+                    "body": {
+                        "appId": "{{ template | label: 'What is your App ID?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "name": "Send Message",
+                "version": "v2",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                    "message": "\ud83d\udea8 {{shopify-partner.shop.myshopifyDomain}} uninstalled. \nUninstalled at: {{shopify-partner.occurredAt}}\nNotes: {{shopify-partner.description}}\nUninstall reason: {{shopify-partner.reason}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
