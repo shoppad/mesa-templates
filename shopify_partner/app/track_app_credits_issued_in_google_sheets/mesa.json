@@ -1,11 +1,55 @@
 {
-    "key": "track-app-credits-applied-in-google-sheets",
-    "name": "Track Applied App Credits in Google Sheets",
+    "key": "shopify_partner/app/track_app_credits_issued_in_google_sheets",
+    "name": "Track Applied Shopify App Credits in Google Sheets",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
-    "setup": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will log each app credit issued with date, Shopify store domain, amount, and notes. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Date Credit Issued",
+                        "value": "Date Credit Issued|{{shopify-partner.occurredAt | date: \"%B %e, %Y\"}}",
+                        "description": "The date the credit was issued."
+                    },
+                    {
+                        "label": "Time Credit Issued",
+                        "value": "Time Credit Issued|{{shopify-partner.occurredAt | date: \"%l:%M%P\"}}",
+                        "description": "The time the credit was issued."
+                    },
+                    {
+                        "label": "Shopify Domain",
+                        "value": "Shopify Domain|{{shopify-partner.shop.myshopifyDomain}}",
+                        "description": "The Shopify Domain."
+                    },
+                    {
+                        "label": "Notes",
+                        "value": "Notes|{{shopify-partner.appCredit.name}}",
+                        "description": "The notes of the app credit."
+                    },
+                    {
+                        "label": "Amount",
+                        "value": "Amount|{{shopify-partner.appCredit.amount.amount}}",
+                        "description": "The amount of the app credit."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
     "config": {
         "inputs": [
             {
@@ -21,7 +65,7 @@
                     "api_endpoint": "post credit_applied",
                     "poll": "@hourly:0 * * * *",
                     "body": {
-                        "appId": "gid:\/\/partners\/App\/899758"
+                        "appId": "{{ template | label: 'What is your App ID?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -44,72 +88,14 @@
                 "metadata": {
                     "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
                     "path": {
-                        "spreadsheet_id": "1OYGDIdvj3xb3kitlKBpuB3fKgbUrlPJux6NFN9sYq80",
+                        "spreadsheet_id": "",
                         "sheet": "Sheet1"
                     },
-                    "columns": [
-                        "Date Credit Issued",
-                        "Time Credit Issued",
-                        "Shopify Domain",
-                        "Notes",
-                        "Amount"
-                    ],
                     "body": {
-                        "columns": {
-                            "A": "{{shopify-partner.occurredAt | date: \"%B %e, %Y\"}}",
-                            "B": "{{shopify-partner.occurredAt | date: \"%l:%M%P\"}}",
-                            "C": "{{shopify-partner.shop.myshopifyDomain}}",
-                            "D": "{{shopify-partner.appCredit.name}}",
-                            "E": "{{shopify-partner.appCredit.amount.amount}}"
-                        }
+                        "fields": {}
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "type": "object",
-                        "fields": [
-                            {
-                                "key": "columns",
-                                "type": "object",
-                                "fields": [
-                                    {
-                                        "key": "A",
-                                        "label": "Date Credit Issued",
-                                        "type": "text",
-                                        "location": "required"
-                                    },
-                                    {
-                                        "key": "B",
-                                        "label": "Time Credit Issued",
-                                        "type": "text",
-                                        "location": "required"
-                                    },
-                                    {
-                                        "key": "C",
-                                        "label": "Shopify Domain",
-                                        "type": "text",
-                                        "location": "required"
-                                    },
-                                    {
-                                        "key": "D",
-                                        "label": "Notes",
-                                        "type": "text",
-                                        "location": "required"
-                                    },
-                                    {
-                                        "key": "E",
-                                        "label": "Amount",
-                                        "type": "text",
-                                        "location": "required"
-                                    }
-                                ],
-                                "location": "required"
-                            }
-                        ],
-                        "location": "required"
-                    }
-                ],
+                "local_fields": [],
                 "selected_fields": [],
                 "on_error": "replay",
                 "weight": 0
