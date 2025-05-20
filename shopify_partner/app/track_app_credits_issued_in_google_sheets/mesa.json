@@ -1,0 +1,105 @@
+{
+    "key": "shopify_partner/app/track_app_credits_issued_in_google_sheets",
+    "name": "Track Applied Shopify App Credits in Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will log each app credit issued with date, Shopify store domain, amount, and notes. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Date Credit Issued",
+                        "value": "Date Credit Issued|{{shopify-partner.occurredAt | date: \"%B %e, %Y\"}}",
+                        "description": "The date the credit was issued."
+                    },
+                    {
+                        "label": "Time Credit Issued",
+                        "value": "Time Credit Issued|{{shopify-partner.occurredAt | date: \"%l:%M%P\"}}",
+                        "description": "The time the credit was issued."
+                    },
+                    {
+                        "label": "Shopify Domain",
+                        "value": "Shopify Domain|{{shopify-partner.shop.myshopifyDomain}}",
+                        "description": "The Shopify Domain."
+                    },
+                    {
+                        "label": "Notes",
+                        "value": "Notes|{{shopify-partner.appCredit.name}}",
+                        "description": "The notes of the app credit."
+                    },
+                    {
+                        "label": "Amount",
+                        "value": "Amount|{{shopify-partner.appCredit.amount.amount}}",
+                        "description": "The amount of the app credit."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shopify-partner",
+                "entity": "app_event",
+                "action": "credit_applied",
+                "name": "App Credit Applied",
+                "key": "shopify-partner",
+                "operation_id": "post_credit_applied",
+                "metadata": {
+                    "api_endpoint": "post credit_applied",
+                    "poll": "@hourly:0 * * * *",
+                    "body": {
+                        "appId": "{{ template | label: 'What is your App ID?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "fields": {}
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 0
+            }
+        ]
+    }
+}
