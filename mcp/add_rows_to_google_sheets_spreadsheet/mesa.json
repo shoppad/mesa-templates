@@ -1,0 +1,92 @@
+{
+    "key": "mcp/add_rows_to_google_sheets_spreadsheet",
+    "name": "Add Rows to Google Sheets Spreadsheet",
+    "version": "1.0.0",
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "spreadsheet_name",
+                                "description": "The name of the Spreadsheet to create",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "Values",
+                                "description": "Comma-separated list of the values for each column to add as a row in the spreadsheet. Bulk add multiple rows with a line break.",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "spreadsheet",
+                "action": "create",
+                "name": "Create New Spreadsheet",
+                "version": "v2",
+                "key": "googlesheets_1",
+                "operation_id": "spreadsheet_create",
+                "metadata": {
+                    "api_endpoint": "post \/",
+                    "body": {
+                        "title": "{{ask.spreadsheet_name}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "bulk_add",
+                "name": "Bulk Add Rows",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_bulk_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}\/bulk",
+                    "path": {
+                        "spreadsheet_id": "{{googlesheets_1.spreadsheet_id}}",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "data": "{{ask.Values}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 1
+            }
+        ]
+    }
+}
