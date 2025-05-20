@@ -1,0 +1,59 @@
+{
+    "key": "mcp/find_social_media_accounts_for_an_email_address",
+    "name": "Find Social Media Accounts for an Email Address",
+    "version": "1.0.0",
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "email",
+                                "description": "The email address to retrieve social media profiles for",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "name": "Find Social Profiles",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "find-social-profiles",
+                "metadata": {
+                    "api_endpoint": "post \/find-social-profiles",
+                    "body": {
+                        "content": "{{ask.email}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
