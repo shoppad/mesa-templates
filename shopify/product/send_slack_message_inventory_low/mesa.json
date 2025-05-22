@@ -77,7 +77,7 @@
                 "operation_id": "slack",
                 "metadata": {
                     "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}",
-                    "message": "{{ shopify_1.product_title }} {{ shopify_1.product_variant_title }} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{shopify_1.product_id}}"
+                    "message": "{{shopify_1.product_title}} {{shopify_1.product_variant_title}} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}\n\nView the product: https:\/\/admin.shopify.com\/store\/{{context.shop.domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_1.product_id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],

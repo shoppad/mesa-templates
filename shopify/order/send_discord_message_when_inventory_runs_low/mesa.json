@@ -82,7 +82,7 @@
                         "channelId": "{{ template | label: 'What is your server''s channel ID?', description: '', tokens: false }}"
                     },
                     "body": {
-                        "content": "{{shopify_1.product_title}} {{shopify_1.product_variant_title }} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{shopify_1.product_id}}"
+                        "content": "{{shopify_1.product_title}} {{shopify_1.product_variant_title}} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}\n\nView the product: https:\/\/admin.shopify.com\/store\/{{context.shop.domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_1.product_id}}"
                     }
                 },
                 "local_fields": [],
