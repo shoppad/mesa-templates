@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/send_slack_message_inventory_low",
-    "name": "Send a Slack message when inventory runs low",
+    "name": "Send Slack Alerts When Shopify Inventory Runs Low",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -13,56 +13,74 @@
                 "entity": "inventory_level",
                 "action": "updated",
                 "name": "Inventory Level Updated",
-                "key": "shopify_inventory_level",
+                "key": "shopify",
                 "operation_id": "inventory_levels_update",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
                 "name": "Filter",
                 "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "a": "{{shopify_inventory_level.available}}",
+                    "a": "{{shopify.available}}",
                     "comparison": "less than equal",
-                    "b": "3"
+                    "b": "3",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom",
-                "key": "custom",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "inventory_item_id_to_product_variant",
+                "name": "Retrieve Product Variant Details from Inventory Item ID",
+                "key": "shopify_1",
+                "operation_id": "get_mesa_productvariants_product_inventory_item_id_inventory_item_id_lookup",
                 "metadata": {
-                    "script": "custom.js",
-                    "description": "Gets the product and variant titles related to the updated inventory level."
+                    "api_endpoint": "get mesa\/productVariants\/{{product_inventory_item_id}}\/inventory-item-id-lookup.json",
+                    "product_inventory_item_id": "{{shopify.inventory_item_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
                 "name": "Send Message",
                 "version": "v2",
                 "key": "slack",
+                "operation_id": "slack",
                 "metadata": {
-                    "message": "{{ custom.product_title }}{{ custom.variant_title }} is running low on inventory. \n\nCurrent inventory quantity: {{shopify_inventory_level.available}}.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{custom.product_id}}",
-                    "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}"
+                    "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}",
+                    "message": "{{ shopify_1.product_title }} {{ shopify_1.product_variant_title }} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{shopify_1.product_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             }
