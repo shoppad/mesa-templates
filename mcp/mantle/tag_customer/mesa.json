@@ -1,0 +1,82 @@
+{
+    "key": "mcp/mantle/tag_customer",
+    "name": "Tag Mantle customer",
+    "version": "1.0.0",
+    "description": "Tag a mantle customer by their Mantle ID. To find a Mantle ID, use a `search` parameter with the Get list of Mantle customers skill.",
+    "seconds": 135,
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "customer_id",
+                                "description": "The Mantle ID of the customer that should be tagged",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "tag",
+                                "description": "A string representing the tag to apply",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer_addtag",
+                "action": "create",
+                "name": "Add Customer Tags",
+                "key": "mantle",
+                "operation_id": "post__customers__id__addtags",
+                "metadata": {
+                    "api_endpoint": "post \/customers\/{id}\/addTags",
+                    "path": {
+                        "id": "{{ask.customer_id}}"
+                    },
+                    "body": {
+                        "tags": [
+                            "{{ask.tag}}"
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.tags"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}

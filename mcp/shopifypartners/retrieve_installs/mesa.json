@@ -1,0 +1,82 @@
+{
+    "key": "mcp_shopifypartners_retrieve_installs",
+    "name": "Get list of Shopify app installs",
+    "version": "1.0.0",
+    "description": "Returns new app installations and their myshopify domain for a given time range",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-partner",
+                "entity": "app_event",
+                "action": "list_relationship_installed",
+                "name": "Get List of Installed App Relationships",
+                "key": "shopify-partner",
+                "operation_id": "list_relationship_installed",
+                "metadata": {
+                    "api_endpoint": "get \/mesa\/app_events\/{appId}\/RELATIONSHIP_INSTALLED",
+                    "query": {
+                        "appId": "{{template | title: 'Enter your app ID'}}",
+                        "first": "100",
+                        "occurredAtMin": "{{ask.start_date}}",
+                        "occurredAtMax": "{{ask.end_date}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.first",
+                    "query.occurredAtMin",
+                    "query.occurredAtMax"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}

@@ -1,0 +1,80 @@
+{
+    "key": "mcp_shopifypartners_retrieve_subscription_activations",
+    "name": "Get list of new Shopify app plan subscriptions",
+    "version": "1.0.0",
+    "description": "Returns new subscription signups, their plan, and the amount",
+    "seconds": 135,
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-partner",
+                "entity": "app_event",
+                "action": "list_subscription_charge_activated",
+                "name": "Get List of Activated Subscription Charges",
+                "key": "shopify-partner_1",
+                "operation_id": "list_subscription_charge_activated",
+                "metadata": {
+                    "api_endpoint": "get \/mesa\/app_events\/{appId}\/SUBSCRIPTION_CHARGE_ACTIVATED",
+                    "query": {
+                        "appId": "{{template | title: 'Enter your app ID'}}",
+                        "occurredAtMin": "{{ask.start_date}}",
+                        "occurredAtMax": "{{ask.end_date}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.occurredAtMin",
+                    "query.occurredAtMax"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}

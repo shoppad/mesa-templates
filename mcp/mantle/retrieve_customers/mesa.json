@@ -1,0 +1,72 @@
+{
+    "key": "mcp_mantle_retrieve_customers",
+    "name": "Get list of Mantle customers",
+    "version": "1.0.0",
+    "description": "Returns the most recently created Mantle customer, with up to 250 records",
+    "seconds": 135,
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "search",
+                                "description": "An optional search term. Could be a customer's name, email, myshopify domain, app installed, etc.",
+                                "type": "string",
+                                "required": false
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer",
+                "action": "list",
+                "name": "Get List of Customers",
+                "key": "mantle",
+                "operation_id": "get__customers",
+                "metadata": {
+                    "api_endpoint": "get \/customers",
+                    "query": {
+                        "take": "250",
+                        "sort": "createdAt",
+                        "sortDirection": "desc",
+                        "search": "{{ask.search}}",
+                        "appId": "{{ template | label: 'Which app?' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.take",
+                    "query.search",
+                    "query.sort",
+                    "query.sortDirection",
+                    "query.appId"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
