@@ -1,0 +1,89 @@
+{
+    "key": "mcp_shopifypartners_retrieve_usage_charges",
+    "name": "Get list of usage charges",
+    "version": "1.0.0",
+    "description": "Returns a list of usage charges for an app over a given time range. Optionally specify a store to see only their usage charges.",
+    "seconds": 135,
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "ISO 8601 format YYYY-MM-DDTHH:mm:ss.sssZ",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "myshopify_domain",
+                                "description": "Optionally add an myshopify domain",
+                                "type": "string",
+                                "required": false
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-partner",
+                "entity": "mesa_transaction",
+                "action": "list_app_usage_sale",
+                "name": "Get List of App Usage Charges",
+                "key": "shopify-partner",
+                "operation_id": "get_app_usage_sale",
+                "metadata": {
+                    "api_endpoint": "get \/mesa\/transactions\/app_usage_sale",
+                    "query": {
+                        "createdAtMin": "{{ask.start_date}}",
+                        "createdAtMax": "{{ask.end_date}}",
+                        "appId": "{{template | title: 'Enter your app ID'}}",
+                        "myshopifyDomain": "{{ask.myshopify_domain}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.appId",
+                    "query.myshopifyDomain",
+                    "query.createdAtMax",
+                    "query.createdAtMin"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
