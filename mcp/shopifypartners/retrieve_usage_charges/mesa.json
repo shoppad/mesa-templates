@@ -1,5 +1,5 @@
 {
-    "key": "get_list_shopify_partners_subscriptions_1_1_1",
+    "key": "mcp_shopifypartners_retrieve_usage_charges",
     "name": "Get list of usage charges",
     "version": "1.0.0",
     "description": "Returns a list of usage charges for an app over a given time range. Optionally specify a store to see only their usage charges.",

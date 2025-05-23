@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Returns new app installations and their myshopify domain for a given time range",
     "seconds": 135,
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [
