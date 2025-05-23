@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Enable AI to retrieve Help Scout conversations in response to a prompt to gain instant, context-rich insights without manually searching past support threads. When a prompt triggers this MCP template, it automatically pulls the relevant Help Scout conversations and uses that data to craft a tailored, accurate response grounded in real customer history.",
     "seconds": 135,
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [
