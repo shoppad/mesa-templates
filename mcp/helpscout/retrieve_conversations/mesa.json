@@ -143,7 +143,7 @@
                 "metadata": {
                     "trigger_parent_key": "loop",
                     "script": "custom.js",
-                    "description": "Selects the first message in the thread created by the customer"
+                    "description": "Extract the latest customer message from a Help Scout conversation and remove any HTML tags."
                 },
                 "local_fields": [],
                 "selected_fields": [
