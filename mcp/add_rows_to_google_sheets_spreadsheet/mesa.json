@@ -9,11 +9,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -54,7 +54,7 @@
                 "metadata": {
                     "api_endpoint": "post \/",
                     "body": {
-                        "title": "{{ask.spreadsheet_name}}"
+                        "title": "{{skill.spreadsheet_name}}"
                     }
                 },
                 "local_fields": [],
@@ -79,7 +79,7 @@
                         "sheet": "Sheet1"
                     },
                     "body": {
-                        "data": "{{ask.Values}}"
+                        "data": "{{skill.Values}}"
                     }
                 },
                 "local_fields": [],

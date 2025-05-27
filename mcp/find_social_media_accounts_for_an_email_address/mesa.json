@@ -9,11 +9,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -49,7 +49,7 @@
                     "format": "json",
                     "web_search": true,
                     "body": {
-                        "content": "{{ask.email}}"
+                        "content": "{{skill.email}}"
                     }
                 },
                 "local_fields": [],

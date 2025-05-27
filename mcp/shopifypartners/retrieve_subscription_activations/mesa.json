@@ -11,11 +11,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -63,8 +63,8 @@
                     "api_endpoint": "get \/mesa\/app_events\/{appId}\/SUBSCRIPTION_CHARGE_ACTIVATED",
                     "query": {
                         "appId": "{{template | title: 'Enter your app ID'}}",
-                        "occurredAtMin": "{{ask.start_date}}",
-                        "occurredAtMax": "{{ask.end_date}}"
+                        "occurredAtMin": "{{skill.start_date}}",
+                        "occurredAtMax": "{{skill.end_date}}"
                     }
                 },
                 "local_fields": [],
