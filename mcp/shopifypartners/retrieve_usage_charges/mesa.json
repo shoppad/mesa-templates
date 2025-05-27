@@ -70,7 +70,7 @@
                     "query": {
                         "createdAtMin": "{{skill.start_date}}",
                         "createdAtMax": "{{skill.end_date}}",
-                        "appId": "{{template | title: 'Enter your app ID'}}",
+                        "appId": "{{template | title: 'What is your App ID?', description: 'In the Partner Dashboard, go to Apps and open the relevant app. The URL will end with something like /apps/1234567. That number (1234567) is the numeric part of the GraphQL ID: gid://partners/App/1234567.'}}",
                         "myshopifyDomain": "{{skill.myshopify_domain}}"
                     }
                 },

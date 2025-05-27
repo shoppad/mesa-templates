@@ -35,7 +35,7 @@
                 "type": "ask",
                 "entity": "ask",
                 "action": "ask",
-                "name": "Ask Ask",
+                "name": "Ask",
                 "key": "ask",
                 "operation_id": "post-ask",
                 "metadata": {
