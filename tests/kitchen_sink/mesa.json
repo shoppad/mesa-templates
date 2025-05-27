@@ -38,7 +38,7 @@
             {
                 "trigger_type": "output",
                 "enabled": false,
-                "type": "virtual_output",
+                "type": "queue",
                 "name": "Kitchen Sink VO",
                 "key": "out-kitchen-sink-vo",
                 "trigger_name": "Out: Kitchen Sink VO",
