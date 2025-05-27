@@ -9,11 +9,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -65,7 +65,7 @@
                     "mapping": [
                         {
                             "destination": "emails",
-                            "source": "{{ask.emails}}"
+                            "source": "{{skill.emails}}"
                         }
                     ],
                     "script": "transform.js"
@@ -95,7 +95,7 @@
                     "api_endpoint": "post \/calendars\/{calendarId}\/events",
                     "event_default_duration": "{{ template | label: 'What''s the default time set for an event?', description: 'How long the event should last (in minutes). This is only used if no end time is provided.', default: 30, type: 'number', tokens: false }}",
                     "body": {
-                        "summary": "{{ask.Title}}",
+                        "summary": "{{skill.Title}}",
                         "transparency": "opaque",
                         "visibility": "default",
                         "attendees": [
@@ -106,10 +106,10 @@
                             }
                         ],
                         "start": {
-                            "dateTime": "{{ask[\"Event Start Date Time\"]}}"
+                            "dateTime": "{{skill[\"Event Start Date Time\"]}}"
                         },
                         "end": {
-                            "dateTime": "{{ask[\"Event End Date Time\"]}}"
+                            "dateTime": "{{skill[\"Event End Date Time\"]}}"
                         },
                         "creator": {
                             "self": false

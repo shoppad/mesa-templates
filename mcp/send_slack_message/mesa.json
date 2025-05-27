@@ -9,11 +9,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -51,7 +51,7 @@
                 "operation_id": "slack",
                 "metadata": {
                     "channel": "{{ template | label: 'Which Slack channel should the message be sent to?', tokens: false }}",
-                    "message": "{{ask.message}}"
+                    "message": "{{skill.message}}"
                 },
                 "local_fields": [],
                 "selected_fields": [

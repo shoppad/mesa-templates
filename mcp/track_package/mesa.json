@@ -9,11 +9,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -47,7 +47,7 @@
                 "metadata": {
                     "api_endpoint": "post \/v4\/trackings\/create",
                     "body": {
-                        "tracking_number": "{{ask[\"Tracking number\"]}}"
+                        "tracking_number": "{{skill[\"Tracking number\"]}}"
                     }
                 },
                 "local_fields": [],

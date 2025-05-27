@@ -9,11 +9,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "MCP Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -60,7 +60,7 @@
                 "operation_id": "get_orders_order_id",
                 "metadata": {
                     "api_endpoint": "get admin\/orders\/{{order_id}}.json",
-                    "order_id": "{{ask.order_id}}"
+                    "order_id": "{{skill.order_id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -82,7 +82,7 @@
                     "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
                     "order_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "{{ask.tag}}"
+                        "tag": "{{skill.tag}}"
                     }
                 },
                 "local_fields": [],

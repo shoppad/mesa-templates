@@ -11,11 +11,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "ask",
-                "entity": "ask",
+                "type": "skill",
+                "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
-                "key": "ask",
+                "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
                     "api_endpoint": "post \/skill",
@@ -71,8 +71,8 @@
                     "query": {
                         "limit": "5000",
                         "status": "all",
-                        "tag": "{{ask.tag}}",
-                        "query": "(createdAt:[{{ask.start_date}} TO {{ask.end_date}}])"
+                        "tag": "{{skill.tag}}",
+                        "query": "(createdAt:[{{skill.start_date}} TO {{skill.end_date}}])"
                     }
                 },
                 "local_fields": [],
