@@ -1,0 +1,134 @@
+{
+    "key": "mantle/customer/send_refunds_to_google_sheets",
+    "name": "Capture Customer Refund Details in Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every refund. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Customer ID",
+                        "value": "Customer ID|{{mantle.id}}",
+                        "description": "The customer ID."
+                    },
+                    {
+                        "label": "Customer's Name",
+                        "value": "Customer's Name|{{mantle_1.customer.name}}",
+                        "description": "The name of the customer."
+                    },
+                    {
+                        "label": "Customer's Email",
+                        "value": "Customer's Email|{{mantle_1.customer.email}}",
+                        "description": "The email address of the customer."
+                    },
+                    {
+                        "label": "Shopify Domain",
+                        "value": "Shopify Domain|{{mantle.shopify.myshopifyDomain}}",
+                        "description": "The Shopify Domain."
+                    },
+                    {
+                        "label": "Refund Amount",
+                        "value": "Refund Amount|{{mantle.transaction.netAmount}}",
+                        "description": "The refund amount."
+                    },
+                    {
+                        "label": "Date Refund Was Issued",
+                        "value": "Date Refund Was Issued|{{mantle.transaction.date}}",
+                        "description": "The date refund was issued."
+                    },
+                    {
+                        "label": "Tags",
+                        "value": "Tags|{{mantle_1.customer.tags[0].0}}",
+                        "description": "The tags of the refund."
+                    },
+                    {
+                        "label": "Notes",
+                        "value": "Notes|{{mantle_1.customer.notes}}",
+                        "description": "The notes of the refund."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_refunded",
+                "action": "refunded",
+                "name": "Customer Refunded",
+                "key": "mantle",
+                "operation_id": "post_customers_refunded",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "mantle_1",
+                "operation_id": "get__customers__id_",
+                "metadata": {
+                    "api_endpoint": "get \/customers\/{id}",
+                    "path": {
+                        "id": "{{mantle.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "fields": {}
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 1
+            }
+        ]
+    }
+}
