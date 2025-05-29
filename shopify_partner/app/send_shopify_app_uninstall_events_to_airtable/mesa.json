@@ -1,23 +1,23 @@
 {
-    "key": "shopify_partner/app/send_uninstall_records_to_google_sheets",
-    "name": "Log Shopify App Uninstall Events to Google Sheets",
+    "key": "shopify_partner/app/send_shopify_app_uninstall_events_to_airtable",
+    "name": "Send Shopify App Uninstall Events to Airtable",
     "version": "1.0.0",
     "enabled": false,
     "setup": {
         "mode": "custom",
         "fields": [
             {
-                "key": "create_spreadsheet_name",
-                "target": "googlesheets.path.create_spreadsheet_name",
-                "label": "What do you want to name your spreadsheet?",
+                "key": "create_table_name",
+                "target": "airtable.path.create_table_name",
+                "label": "What do you want to name your table?",
                 "tokens": false,
-                "description": "Give your new Google Spreadsheet a name."
+                "description": "Give your new table a name."
             },
             {
                 "key": "fields",
-                "target": "googlesheets.setup_fields",
-                "label": "What are your spreadsheet columns?",
-                "description": "This template will automatically create a new row for every Shopify app uninstall record. De-select the columns you do not want to include in your spreadsheet.",
+                "target": "airtable.setup_fields",
+                "label": "What are your table columns?",
+                "description": "This template will automatically create a new row for every Shopify app uninstall record. De-select the columns you do not want to include in your table.",
                 "options": [
                     {
                         "label": "Date",
@@ -63,43 +63,48 @@
                 "operation_id": "post_relationship_uninstalled",
                 "metadata": {
                     "api_endpoint": "post relationship_uninstalled",
-                    "poll": "*\/15 * * * *",
+                    "poll": "@hourly:0 * * * *",
                     "body": {
                         "appId": "{{ template | label: 'What is your App ID?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "poll"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 4.1,
+                "schema": 4,
                 "trigger_type": "output",
-                "type": "googlesheets",
-                "entity": "row",
+                "type": "airtable",
+                "entity": "record",
                 "action": "create",
-                "name": "Add Row",
-                "version": "v2",
-                "key": "googlesheets",
-                "operation_id": "record_create",
+                "name": "Add Record",
+                "version": "v3",
+                "key": "airtable",
+                "operation_id": "create",
                 "metadata": {
-                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "api_endpoint": "post \/{base}\/{table}",
                     "path": {
-                        "spreadsheet_id": "",
-                        "sheet": "Sheet1"
+                        "base": "{{ template | label: 'Which base would you like to use to create a table?', description: 'Select a base.', tokens: false }}",
+                        "table": ""
                     },
                     "body": {
-                        "fields": {}
+                        "typecast": false,
+                        "fields": {
+                            "Date": "{{shopify-partner.occurredAt}}",
+                            "Shopify Domain": "{{shopify-partner.shop.myshopifyDomain}}",
+                            "Type": "{{shopify-partner.type}}",
+                            "Description": "{{shopify-partner.description}}",
+                            "Reason": "{{shopify-partner.reason}}"
+                        }
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
-                "on_error": "replay",
+                "on_error": "default",
                 "weight": 0
             }
         ]
