@@ -1,0 +1,75 @@
+{
+    "key": "mcp/get_google_calendar_events",
+    "name": "Get Google Calendar Events",
+    "version": "1.0.0",
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "skill",
+                "entity": "skill",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "ISO format",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "ISO format",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googlecalendar",
+                "entity": "calendar_event",
+                "action": "list",
+                "name": "Get List of Events",
+                "key": "googlecalendar",
+                "operation_id": "calendar.events.list",
+                "metadata": {
+                    "api_endpoint": "get \/calendars\/{calendarId}\/events",
+                    "event_default_duration": 30,
+                    "query": {
+                        "timeMax": "{{ask.end_date}}",
+                        "timeMin": "{{ask.start_date}}"
+                    },
+                    "path": {
+                        "calendarId": "{{ template | label: 'Select Calendar' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.timeMax",
+                    "query.timeMin",
+                    "path.calendarId"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
