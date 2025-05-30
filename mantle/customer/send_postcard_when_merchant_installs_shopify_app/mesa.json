@@ -1,0 +1,88 @@
+{
+    "key": "mantle/customer/send_postcard_when_merchant_installs_shopify_app",
+    "name": "Mail a Welcome Postcard to Merchants After Shopify App Installation",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_subscribed",
+                "action": "subscribed",
+                "name": "Customer Subscribed",
+                "key": "mantle",
+                "operation_id": "post_customers_subscribed",
+                "metadata": {
+                    "path": {
+                        "appIds": "{{ template | label: 'What is the app?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path.appIds"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "mantle_1",
+                "operation_id": "get__customers__id_",
+                "metadata": {
+                    "api_endpoint": "get \/customers\/{id}",
+                    "path": {
+                        "id": "{{mantle.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "thanks",
+                "entity": "postcard",
+                "action": "create",
+                "name": "Send Postcard",
+                "key": "thanks",
+                "operation_id": "4x6Postcard",
+                "metadata": {
+                    "api_endpoint": "post \/send\/postcard",
+                    "entity_wrapper": "body",
+                    "body": {
+                        "message": "\ud83c\udf89 Welcome to the {{mantle_1.customer.appInstallations[0].app.displayName}} family!\n\nWe\u2019re thrilled to have you on board.\n\nIf you ever need help, ideas, or just want to share your success story, we\u2019re only a click away. You're not just a user \u2014 you're part of a growing community of forward-thinking Shopify merchants.\n\nLet\u2019s make something amazing together.\n\nWith appreciation,\nThe {{mantle_1.customer.appInstallations[0].app.displayName}} team",
+                        "size": "{{ template | label: 'What is the size of the postcard?', description: '', tokens: false }}",
+                        "front_image_url": "{{ template | label: 'What is the Image URL for the front of the postcard?', description: 'Enter the full URL to the image to use on the front of your postcard.', type: 'string', tokens: false }}",
+                        "handwriting_style": "{{ template | label: 'Select a handwriting style for your postcard.', description: '[Preview](https://help.thanks.io/handwriting-styles-for-message-templates) the current styles available.', tokens: false }}",
+                        "recipients": [
+                            {
+                                "name": "{{mantle_1.customer.name}}",
+                                "address": "{{mantle_1.customer.billingAddress.address1}}{{mantle_1.customer.billingAddress.address2}}",
+                                "city": "{{mantle_1.customer.billingAddress.city}}",
+                                "province": "{{mantle_1.customer.billingAddress.provinceCode}}",
+                                "postal_code": "{{mantle_1.customer.billingAddress.zip}}",
+                                "country": "{{mantle_1.customer.billingAddress.country}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
