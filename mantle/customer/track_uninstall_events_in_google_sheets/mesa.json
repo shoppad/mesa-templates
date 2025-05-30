@@ -1,0 +1,115 @@
+{
+    "key": "mantle/customer/track_uninstall_events_in_google_sheets",
+    "name": "Record Mantle App Uninstall Events to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every uninstall record. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Uninstalled At",
+                        "value": "Uninstalled At|{{mantle.customer.uninstalledAt}}",
+                        "description": "The uninstalled at date."
+                    },
+                    {
+                        "label": "Shopify Domain",
+                        "value": "Shopify Domain|{{mantle.customer.shopify.myshopifyDomain}}",
+                        "description": "The Shopify Domain."
+                    },
+                    {
+                        "label": "Installed At",
+                        "value": "Installed At|{{mantle.customer.installedAt}}",
+                        "description": "The installed at date."
+                    },
+                    {
+                        "label": "Average Monthly Revenue",
+                        "value": "Average Monthly Revenue|{{mantle.customer.averageMonthlyRevenue}}",
+                        "description": "The average monthly revenue."
+                    },
+                    {
+                        "label": "Shopify Plan",
+                        "value": "Shopify Plan|{{mantle.customer.shopify.planName}}",
+                        "description": "The Shopify plan name."
+                    },
+                    {
+                        "label": "Description",
+                        "value": "Description|{{mantle.descriptionEnglish}}",
+                        "description": "The description."
+                    },
+                    {
+                        "label": "Uninstall Reason",
+                        "value": "Uninstall Reason|{{mantle.reasonEnglish}}",
+                        "description": "The uninstall reason."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_uninstalled",
+                "action": "uninstalled",
+                "name": "Customer Uninstalled",
+                "key": "mantle",
+                "operation_id": "post_customers_uninstalled",
+                "metadata": {
+                    "path": {
+                        "appIds": "{{ template | label: 'What is the app?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path.appIds"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "fields": {}
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 0
+            }
+        ]
+    }
+}
