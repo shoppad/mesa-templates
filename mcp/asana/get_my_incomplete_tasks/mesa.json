@@ -45,7 +45,7 @@
                 "metadata": {
                     "api_endpoint": "get \/user_task_lists\/{user_task_list_gid}\/tasks",
                     "path": {
-                        "user_task_list_gid": "{{ template | label: 'Which Asana Task List should we look at?' }}"
+                        "user_task_list_gid": "{{ template | label: 'What is your My Tasks List ID in Asana?', description: 'To find it, open the My Tasks view in Asana. In the browser URL, you''ll see a string like this: https://app.asana.com/0/1234567890123456/list. The string of numbers is your My Tasks List ID. Copy that string of numbers and paste that here.' }}"
                     },
                     "query": {
                         "completed_since": "now"
