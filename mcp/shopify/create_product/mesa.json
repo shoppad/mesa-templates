@@ -1,0 +1,143 @@
+{
+    "key": "mcp/shopify/create_product",
+    "name": "Create a Product on my Shopify Store",
+    "version": "1.0.0",
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "skill",
+                "entity": "skill",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "Title",
+                                "description": "The name of the product",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "Price",
+                                "description": "The price of the product",
+                                "type": "number",
+                                "required": true
+                            },
+                            {
+                                "key": "Image",
+                                "description": "URL of the product image",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "Description",
+                                "description": "A description of the product. Supports HTML formatting.",
+                                "type": "string",
+                                "required": false
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "json",
+                    "body",
+                    "body.parameters",
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type",
+                    "body.parameters[].required"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "create",
+                "name": "Create Product",
+                "key": "shopify",
+                "operation_id": "post_products",
+                "metadata": {
+                    "api_endpoint": "post admin\/products.json",
+                    "body": {
+                        "body_html": "{{ask.Description}}",
+                        "published_at": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
+                        "status": "active",
+                        "title": "{{ask.Title}}",
+                        "images": [
+                            {
+                                "src": "{{ask.Image}}"
+                            }
+                        ],
+                        "variants": [
+                            {
+                                "price": "{{ask.Price}}"
+                            }
+                        ],
+                        "published_scope": "web"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "fields": [
+                            {
+                                "key": "published_scope",
+                                "type": "custom",
+                                "allow_custom_fields": false,
+                                "location": "required",
+                                "convertOnSave": false
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [
+                    "body.title",
+                    "body.variants[].price",
+                    "body.published_at",
+                    "body.status",
+                    "body.images[].src",
+                    "body.body_html"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "set",
+                "name": "Set Inventory Level",
+                "key": "shopify_1",
+                "operation_id": "post_inventory_levels_set",
+                "metadata": {
+                    "api_endpoint": "post admin\/inventory_levels\/set.json",
+                    "body": {
+                        "available": "{{ template | label: 'How much inventory is available?', default: 50, type: 'number', tokens: false }}",
+                        "location_id": "{{ template | label: 'What is the location?' }}",
+                        "inventory_item_id": "{{shopify.variants[0].inventory_item_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
