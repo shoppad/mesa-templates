@@ -1,0 +1,63 @@
+{
+    "key": "mcp/asana/get_my_incomplete_tasks",
+    "name": "Get My Incomplete Asana Tasks",
+    "version": "1.0.0",
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "skill",
+                "entity": "skill",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "type": "string",
+                                "required": false
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "asana",
+                "entity": "user_task_list_task",
+                "action": "list",
+                "name": "Get List of Tasks from a User's Task List",
+                "key": "asana",
+                "operation_id": "getTasksForUserTaskList",
+                "metadata": {
+                    "api_endpoint": "get \/user_task_lists\/{user_task_list_gid}\/tasks",
+                    "path": {
+                        "user_task_list_gid": "{{ template | label: 'Which Asana Task List should we look at?' }}"
+                    },
+                    "query": {
+                        "completed_since": "now"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.completed_since"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
