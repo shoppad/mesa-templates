@@ -23,13 +23,13 @@
                         "parameters": [
                             {
                                 "key": "start_date",
-                                "description": "ISO-8601 date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
                                 "type": "string",
                                 "required": true
                             },
                             {
                                 "key": "end_date",
-                                "description": "ISO-8601 date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
                                 "type": "string",
                                 "required": true
                             },
