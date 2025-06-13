@@ -86,25 +86,10 @@
                             {
                                 "price": "{{ask.Price}}"
                             }
-                        ],
-                        "published_scope": "web"
+                        ]
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "fields": [
-                            {
-                                "key": "published_scope",
-                                "type": "custom",
-                                "allow_custom_fields": false,
-                                "location": "required",
-                                "convertOnSave": false
-                            }
-                        ],
-                        "location": "required"
-                    }
-                ],
+                "local_fields": [],
                 "selected_fields": [
                     "body.title",
                     "body.variants[].price",
