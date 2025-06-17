@@ -122,6 +122,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
+                "version": "v1",
                 "entity": "record",
                 "action": "update_create",
                 "name": "Update or Create Record",
