@@ -1,0 +1,275 @@
+{
+    "key": "mantle/customer/create_customer_in_quickbooks",
+    "name": "Create a Customer Record in QuickBooks from a New Plan Subscription",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_subscribed",
+                "action": "subscribed",
+                "name": "Customer Subscribed",
+                "key": "mantle",
+                "operation_id": "post_customers_subscribed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "mantle_1",
+                "operation_id": "get__customers__id_",
+                "metadata": {
+                    "api_endpoint": "get \/customers\/{id}",
+                    "path": {
+                        "id": "{{mantle.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{mantle_1.customer.appInstallations[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "customer",
+                "action": "query",
+                "name": "Query Customer",
+                "key": "quickbooks",
+                "operation_id": "CustomerQuery",
+                "metadata": {
+                    "api_endpoint": "get \/customer\/query",
+                    "trigger_parent_key": "loop",
+                    "query": {
+                        "query": "SELECT * FROM Customer WHERE PrimaryEmailAddr = '{{mantle_1.customer.email}}'"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": {
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - No Existing Customer",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{quickbooks.0.Id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "quickbooks_1",
+                "operation_id": "CustomerPost3",
+                "metadata": {
+                    "api_endpoint": "post \/customer",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "Notes": "{{mantle_1.customer.notes}} \nShopify Domain: {{mantle_1.customer.shopifyDomain}}\nInstalled at: {{loop.installedAt}}",
+                        "DisplayName": "{{mantle_1.customer.name}}",
+                        "BillAddr": {
+                            "Line1": "{{mantle_1.customer.billingAddress.address1}}",
+                            "City": "{{mantle.city}}",
+                            "Country": "{{mantle_1.customer.countryCode}}",
+                            "CountrySubDivisionCode": "{{mantle_1.customer.countryCode}}",
+                            "PostalCode": "{{mantle_1.customer.billingAddress.zip}}"
+                        },
+                        "PrimaryPhone": {
+                            "FreeFormNumber": "{{mantle_1.customer.contacts[0].phone}}"
+                        },
+                        "PrimaryEmailAddr": {
+                            "Address": "{{mantle_1.customer.email}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path - Has Existing Customer",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{quickbooks.0.Id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "customer",
+                "action": "update",
+                "name": "Update Customer",
+                "key": "quickbooks_2",
+                "operation_id": "CustomerUpdate",
+                "metadata": {
+                    "api_endpoint": "post \/customer\/update",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "Notes": "{{mantle_1.customer.notes}} \nShopify Domain: {{mantle_1.customer.shopifyDomain}}\nInstalled at: {{loop.installedAt}}",
+                        "sparse": true,
+                        "Id": "{{quickbooks.0.Id}}",
+                        "SyncToken": "{{quickbooks.0.SyncToken}}",
+                        "DisplayName": "{{mantle_1.customer.name}}",
+                        "BillAddr": {
+                            "Id": "{{quickbooks.0.BillAddr.Id}}",
+                            "Line1": "{{mantle_1.customer.billingAddress.address1}}",
+                            "City": "{{mantle.city}}",
+                            "Country": "{{mantle_1.customer.countryCode}}",
+                            "CountrySubDivisionCode": "{{mantle_1.customer.countryCode}}",
+                            "PostalCode": "{{mantle_1.customer.billingAddress.zip}}"
+                        },
+                        "PrimaryPhone": {
+                            "FreeFormNumber": "{{mantle_1.customer.contacts[0].phone}}"
+                        },
+                        "PrimaryEmailAddr": {
+                            "Address": "{{mantle_1.customer.email}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Notes"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
