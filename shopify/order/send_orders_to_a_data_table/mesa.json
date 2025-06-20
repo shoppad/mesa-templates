@@ -16,13 +16,10 @@
                 "key": "shopify",
                 "operation_id": "orders_create",
                 "metadata": {
-                    "frequency": "every",
-                    "includeFields": []
+                    "frequency": "every"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "frequency"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -33,12 +30,11 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop over Products in Order",
+                "name": "Loop Over Products In Order",
                 "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify.line_items[]}}",
                     "filter": {
                         "comparison": "equals",
                         "additional": [
@@ -47,17 +43,11 @@
                                 "comparison": "equals"
                             }
                         ]
-                    }
+                    },
+                    "key": "{{shopify.line_items[]}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter",
-                    "filter.a",
-                    "filter.comparison",
-                    "filter.b",
-                    "filter.additional"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -79,129 +69,127 @@
                             "key": "Order Name",
                             "type": "text",
                             "value": "{{shopify.name}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Order ID",
                             "type": "numeric",
                             "value": "{{shopify.id}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Order Created At",
                             "type": "timestamptz",
                             "value": "{{shopify.created_at}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Order Updated At",
                             "type": "timestamptz",
                             "value": "{{shopify.updated_at}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Order Admin URL",
                             "type": "text",
                             "value": " https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Customer",
                             "type": "text",
                             "value": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
+                        },
+                        {
+                            "key": "Customer Email",
+                            "type": "text",
+                            "value": "{{shopify.email}}",
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Shipping Address 1",
                             "type": "text",
                             "value": "{{shopify.shipping_address.address1}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Shipping Address 2",
                             "type": "text",
                             "value": "{{shopify.shipping_address.address2}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Shipping City",
                             "type": "text",
                             "value": "{{shopify.shipping_address.city}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Shipping State\/Province",
                             "type": "text",
                             "value": "{{shopify.shipping_address.province}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
-                            "key": "Shipping Zip\/Postal Code",
+                            "key": "ShippingShipping Zip\/Postal Code",
                             "type": "text",
                             "value": "{{shopify.shipping_address.zip}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Shipping Country",
                             "type": "text",
                             "value": "{{shopify.shipping_address.country}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Product Title",
                             "type": "text",
                             "value": "{{loop.title}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Product ID",
                             "type": "numeric",
                             "value": "{{loop.product_id}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Product Line Item ID",
                             "type": "numeric",
                             "value": "{{loop.id}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Product SKU",
                             "type": "text",
                             "value": "{{loop.sku}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Product Vendor",
                             "type": "text",
                             "value": "{{loop.vendor}}",
-                            "disabled": "67d847184ad4c8da260d0ee7"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Product Quantity",
                             "type": "numeric",
                             "value": "{{loop.quantity}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
                             "key": "Product Price",
                             "type": "numeric",
                             "value": "{{loop.price}}",
-                            "disabled": "67d22de5036652c1d400e8ad"
+                            "disabled": "685588eab1c40d9cd700b4a2"
                         }
                     ],
                     "table": "Shopify Orders"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "create",
-                    "table",
-                    "columns",
-                    "columns[].key",
-                    "columns[].type",
-                    "columns[].value",
-                    "columns[].disabled"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
