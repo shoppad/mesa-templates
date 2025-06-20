@@ -132,7 +132,7 @@
                             "disabled": "685588eab1c40d9cd700b4a2"
                         },
                         {
-                            "key": "ShippingShipping Zip\/Postal Code",
+                            "key": "Shipping Zip\/Postal Code",
                             "type": "text",
                             "value": "{{shopify.shipping_address.zip}}",
                             "disabled": "685588eab1c40d9cd700b4a2"
