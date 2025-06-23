@@ -1,0 +1,114 @@
+{
+    "key": "schedule/remove_shopify_product_tags_on_date_and_time",
+    "name": "Remove Shopify Product Tags on a Set Date",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": null,
+                    "enqueue_type": "datetime",
+                    "datetime": "{{ template | label: 'Select a date to schedule removing products'' tags' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collection",
+                "action": "list",
+                "name": "Get List of Collections' Products",
+                "key": "shopify",
+                "operation_id": "get_collection_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
+                    "collection_id": "{{ template | label: 'What is the collection ID?', description: 'To find your Shopify collection ID, log in to your Shopify admin, go to **Products > Collections**, and click on the collection you want. In the browser''s address bar, you''ll see a URL like https://your-store.myshopify.com/admin/collections/123456789012 —the number at the end is your collection ID. Enter that ID here.', tokens: false }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_remove",
+                "name": "Product Remove Tag",
+                "key": "shopify_1",
+                "operation_id": "delete_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "delete mesa\/products\/{{product_id}}\/tag.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag would you like to remove from your products?', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
