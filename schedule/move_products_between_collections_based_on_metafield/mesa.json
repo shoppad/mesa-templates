@@ -1,0 +1,304 @@
+{
+    "key": "schedule/move_products_between_collections_based_on_metafield",
+    "name": "Schedule Product Collection Changes by Metafield Date",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@daily:0 0 * * *",
+                    "enqueue_type": "schedule"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collection",
+                "action": "list",
+                "name": "Get List of Collections' Products (Coming Soon)",
+                "key": "shopify",
+                "operation_id": "get_collection_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
+                    "collection_id": "291342286913",
+                    "query": {
+                        "limit": "100"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.limit"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter - Check Products Exist In Collection",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Products in Collection",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "metafield_get",
+                "name": "Retrieve Product Metafield",
+                "key": "shopify_1",
+                "operation_id": "get_mesa_products_product_id_metafield",
+                "metadata": {
+                    "api_endpoint": "get mesa\/products\/{{product_id}}\/metafield.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop.id}}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "publish_date"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter - Check Product Metafield Is Today",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "a": "{{shopify_1.value}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{shopify_1.value}}",
+                            "comparison": "equals",
+                            "b": "{{\"now\" | date: \"%Y-%m-%d\"}}"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "name": "Transform Mapping - Clear Product Metafield",
+                "key": "transform",
+                "operation_id": "mapping",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "script": "transform.js",
+                    "mapping": [
+                        {
+                            "destination": "product_id",
+                            "source": "{{loop.id}}"
+                        },
+                        {
+                            "destination": "key",
+                            "source": "publish_date"
+                        },
+                        {
+                            "destination": "namespace",
+                            "source": "custom"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "custom_collection",
+                "action": "list",
+                "name": "Get List of Custom Collections",
+                "key": "shopify_2",
+                "operation_id": "get_custom_collections",
+                "metadata": {
+                    "api_endpoint": "get admin\/custom_collections.json",
+                    "trigger_parent_key": "loop",
+                    "query": {
+                        "limit": "1",
+                        "title": "Coming Soon"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.title",
+                    "query.limit"
+                ],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collect",
+                "action": "list",
+                "name": "Get List of Collects",
+                "key": "shopify_3",
+                "operation_id": "get_collects",
+                "metadata": {
+                    "api_endpoint": "get admin\/collects.json",
+                    "trigger_parent_key": "loop",
+                    "parameters": "product_id={{loop.id}}&collection_id={{shopify_2.0.id}}",
+                    "query": {
+                        "limit": "1"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "parameters",
+                    "query.limit"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collect",
+                "action": "delete",
+                "name": "Remove Product from Custom Collection",
+                "key": "shopify_4",
+                "operation_id": "delete_collects_collect_id",
+                "metadata": {
+                    "api_endpoint": "delete admin\/collects\/{{collect_id}}.json",
+                    "trigger_parent_key": "loop",
+                    "collect_id": "{{shopify_3.0.id}}",
+                    "body": {
+                        "collection_id": "291342286913",
+                        "product_id": "{{loop.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collect",
+                "action": "create",
+                "name": "Add Product to Custom Collection (New Arrivals)",
+                "key": "shopify_5",
+                "operation_id": "post_collects",
+                "metadata": {
+                    "api_endpoint": "post admin\/collects.json",
+                    "body": {
+                        "collection_id": "291342319681",
+                        "product_id": "{{loop.id}}"
+                    },
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 10
+            }
+        ]
+    }
+}
