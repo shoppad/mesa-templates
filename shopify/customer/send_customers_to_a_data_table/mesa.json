@@ -30,6 +30,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
+                "version": "v2",
                 "entity": "record",
                 "action": "create",
                 "name": "Create Record",
@@ -37,54 +38,79 @@
                 "operation_id": "post_database_table",
                 "metadata": {
                     "api_endpoint": "post /{database}/{table}",
-                    "create": "existing",
-                    "columns": [
-                        {
-                            "key": "Customer ID",
-                            "type": "numeric",
-                            "value": "{{shopify.id}}",
-                            "disabled": "669a7d4a6df5493bc8067d03"
-                        },
-                        {
-                            "key": "Email",
-                            "type": "varchar",
-                            "value": "{{shopify.email}}",
-                            "disabled": "669a7d4a6df5493bc8067d03"
-                        },
-                        {
-                            "key": "First Name",
-                            "type": "varchar",
-                            "value": "{{shopify.first_name}}",
-                            "disabled": "669a7d4a6df5493bc8067d03"
-                        },
-                        {
-                            "key": "Last Name",
-                            "type": "varchar",
-                            "value": "{{shopify.last_name}}",
-                            "disabled": "669a7d4a6df5493bc8067d03"
-                        },
-                        {
-                            "key": "Phone",
-                            "type": "varchar",
-                            "value": "{{shopify.phone}}",
-                            "disabled": "669a7d4a6df5493bc8067d03"
-                        },
-                        {
-                            "key": "Tags",
-                            "type": "text",
-                            "value": "{{shopify.tags}}",
-                            "disabled": "669a7d4a6df5493bc8067d03"
-                        },
-                        {
-                            "key": "Note",
-                            "type": "text",
-                            "value": "{{shopify.note}}",
-                            "disabled": "669a7d4a6df5493bc8067d03"
-                        }
-                    ],
-                    "table": "Shopify Customers"
+                    "table": "Shopify Customers",
+                    "columns": {
+                      "Customer ID": "{{shopify.id}}",
+                      "Email": "{{shopify.email}}",
+                      "First Name": "{{shopify.first_name}}",
+                      "Last Name": "{{shopify.last_name}}",
+                      "Phone": "{{shopify.phone}}",
+                      "Tags": "{{shopify.tags}}",
+                      "Note": "{{shopify.note}}"
+                    }
                 },
-                "local_fields": [],
+                "local_fields": [
+                  {
+                    "key": "columns",
+                    "type": "object",
+                    "fields": [
+                      {
+                        "key": "Customer ID",
+                        "label": "Customer ID",
+                        "type": "text",
+                        "x-udtname": "numeric",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Email",
+                        "label": "Email",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "First Name",
+                        "label": "First Name",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Last Name",
+                        "label": "Last Name",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Phone",
+                        "label": "Phone",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Tags",
+                        "label": "Tags",
+                        "type": "text",
+                        "x-udtname": "text",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Note",
+                        "label": "Note",
+                        "type": "text",
+                        "x-udtname": "text",
+                        "location": "required"
+                      }
+                    ],
+                    "location": "required"
+                  }
+                ],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 0

@@ -55,6 +55,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
+                "version": "v2",
                 "entity": "record",
                 "action": "create",
                 "name": "Create Record",
@@ -64,132 +65,195 @@
                     "api_endpoint": "post \/{database}\/{table}",
                     "trigger_parent_key": "loop",
                     "create": "existing",
-                    "columns": [
-                        {
-                            "key": "Order Name",
-                            "type": "text",
-                            "value": "{{shopify.name}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Order ID",
-                            "type": "numeric",
-                            "value": "{{shopify.id}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Order Created At",
-                            "type": "timestamptz",
-                            "value": "{{shopify.created_at}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Order Updated At",
-                            "type": "timestamptz",
-                            "value": "{{shopify.updated_at}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Order Admin URL",
-                            "type": "text",
-                            "value": " https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Customer",
-                            "type": "text",
-                            "value": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Customer Email",
-                            "type": "text",
-                            "value": "{{shopify.email}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Shipping Address 1",
-                            "type": "text",
-                            "value": "{{shopify.shipping_address.address1}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Shipping Address 2",
-                            "type": "text",
-                            "value": "{{shopify.shipping_address.address2}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Shipping City",
-                            "type": "text",
-                            "value": "{{shopify.shipping_address.city}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Shipping State\/Province",
-                            "type": "text",
-                            "value": "{{shopify.shipping_address.province}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Shipping Zip\/Postal Code",
-                            "type": "text",
-                            "value": "{{shopify.shipping_address.zip}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Shipping Country",
-                            "type": "text",
-                            "value": "{{shopify.shipping_address.country}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Product Title",
-                            "type": "text",
-                            "value": "{{loop.title}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Product ID",
-                            "type": "numeric",
-                            "value": "{{loop.product_id}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Product Line Item ID",
-                            "type": "numeric",
-                            "value": "{{loop.id}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Product SKU",
-                            "type": "text",
-                            "value": "{{loop.sku}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Product Vendor",
-                            "type": "text",
-                            "value": "{{loop.vendor}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Product Quantity",
-                            "type": "numeric",
-                            "value": "{{loop.quantity}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        },
-                        {
-                            "key": "Product Price",
-                            "type": "numeric",
-                            "value": "{{loop.price}}",
-                            "disabled": "685588eab1c40d9cd700b4a2"
-                        }
-                    ],
+                    "columns": {
+                        "Order Name": "{{shopify.name}}",
+                        "Order ID": "{{shopify.id}}",
+                        "Order Created At": "{{shopify.created_at}}",
+                        "Order Updated At": "{{shopify.updated_at}}",
+                        "Order Admin URL": " https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/orders/{{shopify.id}}",
+                        "Customer": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
+                        "Customer Email": "{{shopify.email}}",
+                        "Shipping Address 1": "{{shopify.shipping_address.address1}}",
+                        "Shipping Address 2": "{{shopify.shipping_address.address2}}",
+                        "Shipping City": "{{shopify.shipping_address.city}}",
+                        "Shipping State/Province": "{{shopify.shipping_address.province}}",
+                        "Shipping Zip/Postal Code": "{{shopify.shipping_address.zip}}",
+                        "Shipping Country": "{{shopify.shipping_address.country}}",
+                        "Product Title": "{{loop.title}}",
+                        "Product ID": "{{loop.product_id}}",
+                        "Product Line Item ID": "{{loop.id}}",
+                        "Product SKU": "{{loop.sku}}",
+                        "Product Vendor": "{{loop.vendor}}",
+                        "Product Quantity": "{{loop.quantity}}",
+                        "Product Price": "{{loop.price}}"
+                    },
                     "table": "Shopify Orders"
                 },
-                "local_fields": [],
-                "selected_fields": [],
+                "local_fields": [
+                  {
+                    "key": "columns",
+                    "type": "object",
+                    "fields": [
+                      {
+                        "key": "Order Name",
+                        "label": "Order Name",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Order ID",
+                        "label": "Order ID",
+                        "type": "text",
+                        "x-udtname": "numeric",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Order Created At",
+                        "label": "Order Created At",
+                        "type": "text",
+                        "x-udtname": "timestamptz",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Order Updated At",
+                        "label": "Order Updated At",
+                        "type": "text",
+                        "x-udtname": "timestamptz",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Order Admin URL",
+                        "label": "Order Admin URL",
+                        "type": "text",
+                        "x-udtname": "text",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Customer",
+                        "label": "Customer",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Customer Email",
+                        "label": "Customer Email",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Shipping Address 1",
+                        "label": "Shipping Address 1",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Shipping Address 2",
+                        "label": "Shipping Address 2",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Shipping City",
+                        "label": "Shipping City",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Shipping State/Province",
+                        "label": "Shipping State/Province",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Shipping Zip/Postal Code",
+                        "label": "Shipping Zip/Postal Code",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Shipping Country",
+                        "label": "Shipping Country",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Product Title",
+                        "label": "Product Title",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Product ID",
+                        "label": "Product ID",
+                        "type": "text",
+                        "x-udtname": "numeric",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Product Line Item ID",
+                        "label": "Product Line Item ID",
+                        "type": "text",
+                        "x-udtname": "numeric",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Product SKU",
+                        "label": "Product SKU",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Product Vendor",
+                        "label": "Product Vendor",
+                        "type": "text",
+                        "x-udtname": "varchar",
+                        "x-maxlength": 255,
+                        "location": "required"
+                      },
+                      {
+                        "key": "Product Quantity",
+                        "label": "Product Quantity",
+                        "type": "text",
+                        "x-udtname": "numeric",
+                        "location": "required"
+                      },
+                      {
+                        "key": "Product Price",
+                        "label": "Product Price",
+                        "type": "text",
+                        "x-udtname": "numeric",
+                        "location": "required"
+                      }
+                    ],
+                    "location": "required"
+                  }
+                ],
+                "selected_fields": [
+                    "table",
+                    "columns"
+                ],
                 "on_error": "default",
                 "weight": 1
             },

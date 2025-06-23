@@ -25,6 +25,7 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
+                "version": "v1",
                 "entity": "record",
                 "action": "retrieve",
                 "name": "Retrieve Record",
