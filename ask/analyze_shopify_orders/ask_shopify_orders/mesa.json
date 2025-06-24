@@ -1,0 +1,92 @@
+{
+    "key": "analyze_shopify_orders",
+    "name": "Analyze Shopify Orders",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@weekly:0 0 * * 0",
+                    "enqueue_type": "schedule",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "schedule"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "ask",
+                "name": "Ask",
+                "key": "ask",
+                "operation_id": "post-ask",
+                "metadata": {
+                    "api_endpoint": "post \/ask",
+                    "body": {
+                        "automations": ["mcp/shopify/retrieve_orders"],
+                        "content": "Get all of my Shopify orders placed in the last 2 years and generate a summary of the sales formatted as HTML to use in an email. Include:\n\n- Table of top sales including links to orders and customers\n- Table of top selling products\n- Number and gross total of sales\n"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask_1",
+                "operation_id": "post-ask-skill",
+                "metadata": {
+                    "api_endpoint": "post \/ask\/skill",
+                    "trigger_manager_key": "ask",
+                    "trigger_parent_key": "ask"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{ template | label: 'Email address', description: 'Where should we send the weekly report?' }}",
+                        "subject": "Summary of Shopify orders last week",
+                        "message": "{{ask.content}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
