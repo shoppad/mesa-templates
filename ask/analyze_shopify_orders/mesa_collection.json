@@ -1,0 +1,9 @@
+{
+    "key": "ask/analyze_shopify_orders",
+    "name": "Analyze Shopify Orders with Ask",
+    "version": "1.0.0",
+    "templates": [
+        "mcp/shopify/retrieve_orders",
+        "ask_shopify_orders"
+    ]
+}
