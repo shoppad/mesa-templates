@@ -10,6 +10,7 @@
                 "schema": 6,
                 "trigger_type": "input",
                 "type": "square",
+                "version": "v1",
                 "entity": "customer_created",
                 "action": "created",
                 "name": "Customer Created",
