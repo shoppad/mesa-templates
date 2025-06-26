@@ -1,6 +1,6 @@
 {
     "key": "square/order/update_shopify_inventory",
-    "name": "Update inventory in Shopify when a Square order is created",
+    "name": "Update Shopify Inventory When Square Orders Are Created",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -10,132 +10,150 @@
                 "schema": 4,
                 "trigger_type": "input",
                 "type": "square",
-                "version": "v1",
-                "entity": "order_created",
-                "action": "created",
+                "entity": "order",
+                "action": "list-created",
                 "name": "Order Created",
+                "version": "v2",
                 "key": "square",
-                "operation_id": "order.created",
+                "operation_id": "order_created",
                 "metadata": {
-                    "host": "{{ template | label: 'Install the webhook URL', description: '(1) Open the [Square Developer Dashboard](https://developer.squareup.com/apps), sign in, and create a new app called \"MESA\" by clicking the gray plus button under Applications. (2) Navigate to Webhooks > Subscriptions, switch to Production mode, add a subscription with MESA''s Webhook URL, name it, and choose \"order.created\" under events. [Learn more about this setup.](https://docs.getmesa.com/article/1846-square-payments#configure-square-triggers)' }}"
+                    "api_endpoint": "get \/orders",
+                    "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "square",
-                "version": "v1",
-                "entity": "v2_order",
-                "action": "retrieve",
-                "name": "Retrieve Order",
-                "key": "square_1",
-                "operation_id": "RetrieveOrder",
-                "metadata": {
-                    "api_endpoint": "get /v2/orders/{order_id}",
-                    "path": {
-                        "order_id": "{{square.order_id}}"
-                    }
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{square_1.line_items[]}}",
+                    "key": "{{square.line_items[]}}",
                     "filter": {
-                        "comparison": "equals"
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 0
             },
             {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "square",
-                "version": "v1",
                 "entity": "v2_catalog_object",
                 "action": "retrieve",
                 "name": "Retrieve Catalog Object",
-                "key": "square_2",
+                "version": "v2",
+                "key": "square_1",
                 "operation_id": "RetrieveCatalogObject",
                 "metadata": {
-                    "api_endpoint": "get /v2/catalog/object/{object_id}",
+                    "api_endpoint": "get \/v2\/catalog\/object\/{object_id}",
+                    "trigger_parent_key": "loop",
                     "path": {
                         "object_id": "{{loop.catalog_object_id}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom Code",
-                "key": "custom",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "sku_to_product_variant",
+                "name": "Retrieve Product Variant Details from SKU",
+                "key": "shopify",
+                "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
                 "metadata": {
-                    "description": "Get Shopify Product's Inventory Item ID from Square Product's SKU via Shopify GraphQL.",
-                    "script": "custom.js"
+                    "api_endpoint": "get mesa\/productVariants\/{{product_sku}}\/sku-lookup.json",
+                    "trigger_parent_key": "loop",
+                    "product_sku": "{{square_1.object.item_variation_data.sku}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "square",
-                "version": "v1",
                 "entity": "v2_inventory",
                 "action": "retrieve",
                 "name": "Retrieve Inventory Count",
-                "key": "square_3",
+                "version": "v2",
+                "key": "square_2",
                 "operation_id": "RetrieveInventoryCount",
                 "metadata": {
-                    "api_endpoint": "get /v2/inventory/{catalog_object_id}",
+                    "api_endpoint": "get \/v2\/inventory\/{catalog_object_id}",
+                    "trigger_parent_key": "loop",
                     "path": {
                         "catalog_object_id": "{{loop.catalog_object_id}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             },
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "inventory_level",
                 "action": "set",
                 "name": "Set Inventory Level",
-                "key": "shopify",
+                "key": "shopify_1",
                 "operation_id": "post_inventory_levels_set",
                 "metadata": {
-                    "api_endpoint": "post admin/inventory_levels/set.json",
+                    "api_endpoint": "post admin\/inventory_levels\/set.json",
+                    "trigger_parent_key": "loop",
                     "body": {
-                        "available": "{{square_3.0.quantity}}",
+                        "available": "{{square_2.counts[0].quantity}}",
                         "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.', tokens: false }}",
-                        "inventory_item_id": "{{custom.inventory_item_id}}"
+                        "inventory_item_id": "{{shopify.inventory_item_id}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 5
             }
