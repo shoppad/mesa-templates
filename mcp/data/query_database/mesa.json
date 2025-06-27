@@ -1,0 +1,53 @@
+{
+    "key": "mcp/data/query_database",
+    "name": "Query Data from a Database",
+    "version": "1.0.0",
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "skill",
+                "entity": "skill",
+                "action": "skill",
+                "name": "Skill",
+                "key": "skill",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": []
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "table_schema",
+                "name": "Record Table Schema",
+                "version": "v2",
+                "key": "data",
+                "operation_id": "get_database_table_schema",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}\/schema",
+                    "table": "{{ template | label: 'Select a table to query', description: '' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
