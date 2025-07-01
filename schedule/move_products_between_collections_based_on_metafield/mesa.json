@@ -249,7 +249,6 @@
                     "trigger_parent_key": "loop",
                     "collect_id": "{{shopify_3.0.id}}",
                     "body": {
-                        "collection_id": "291342286913",
                         "product_id": "{{loop.id}}"
                     }
                 },
@@ -270,7 +269,6 @@
                 "metadata": {
                     "api_endpoint": "post admin\/collects.json",
                     "body": {
-                        "collection_id": "291342319681",
                         "product_id": "{{loop.id}}"
                     },
                     "trigger_parent_key": "loop"
