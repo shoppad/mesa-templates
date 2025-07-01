@@ -35,7 +35,6 @@
                 "operation_id": "get_collection_products",
                 "metadata": {
                     "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
-                    "collection_id": "291342286913",
                     "query": {
                         "limit": "100"
                     }
