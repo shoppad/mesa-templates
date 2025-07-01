@@ -149,10 +149,10 @@
                         "Notes": "{{mantle_1.customer.notes}} \nShopify Domain: {{mantle_1.customer.shopifyDomain}}\nInstalled at: {{loop.installedAt}}",
                         "DisplayName": "{{mantle_1.customer.name}}",
                         "BillAddr": {
-                            "Line1": "{{mantle_1.customer.billingAddress.address1}}",
-                            "City": "{{mantle.city}}",
-                            "Country": "{{mantle_1.customer.countryCode}}",
-                            "CountrySubDivisionCode": "{{mantle_1.customer.countryCode}}",
+                            "Line1": "{{mantle_1.customer.billingAddress.address1}}, {{mantle_1.customer.billingAddress.address2}}",
+                            "City": "{{mantle_1.customer.billingAddress.city}}",
+                            "Country": "{{mantle_1.customer.billingAddress.country}}",
+                            "CountrySubDivisionCode": "{{mantle_1.customer.billingAddress.countryCodeV2}}",
                             "PostalCode": "{{mantle_1.customer.billingAddress.zip}}"
                         },
                         "PrimaryPhone": {
@@ -214,10 +214,10 @@
                         "DisplayName": "{{mantle_1.customer.name}}",
                         "BillAddr": {
                             "Id": "{{quickbooks.0.BillAddr.Id}}",
-                            "Line1": "{{mantle_1.customer.billingAddress.address1}}",
-                            "City": "{{mantle.city}}",
-                            "Country": "{{mantle_1.customer.countryCode}}",
-                            "CountrySubDivisionCode": "{{mantle_1.customer.countryCode}}",
+                            "Line1": "{{mantle_1.customer.billingAddress.address1}}, {{mantle_1.customer.billingAddress.address2}}",
+                            "City": "{{mantle_1.customer.billingAddress.city}}",
+                            "Country": "{{mantle_1.customer.billingAddress.country}}",
+                            "CountrySubDivisionCode": "{{mantle_1.customer.billingAddress.countryCodeV2}}",
                             "PostalCode": "{{mantle_1.customer.billingAddress.zip}}"
                         },
                         "PrimaryPhone": {
