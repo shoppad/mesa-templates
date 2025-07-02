@@ -1,0 +1,345 @@
+{
+    "key": "shopify/order/flag_and_cancel_when_address_doesn't_match_identity",
+    "name": "Tag and Cancel Fraudulent Orders with Address Discrepancies",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Query",
+                "version": "v2",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}",
+                    "table": "Shopify Orders",
+                    "where": {
+                        "comparison": "equals",
+                        "b": "{{shopify.shipping_address.address1}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals",
+                                "b": "{{shopify.shipping_address.address2}}",
+                                "a": "Shipping Address 2"
+                            },
+                            {
+                                "operator": "and",
+                                "comparison": "equals",
+                                "b": "{{shopify.shipping_address.city}}",
+                                "a": "Shipping City"
+                            },
+                            {
+                                "operator": "and",
+                                "comparison": "equals",
+                                "b": "{{shopify.shipping_address.zip}}",
+                                "a": "Shipping State\/Province"
+                            },
+                            {
+                                "operator": "and",
+                                "comparison": "equals",
+                                "b": "{{shopify.shipping_address.country}}",
+                                "a": "Shipping Country"
+                            }
+                        ],
+                        "a": "Shipping Address 1"
+                    },
+                    "sort": {
+                        "order": "DESC"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Order Name",
+                                "label": "Order Name",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Order ID",
+                                "label": "Order ID",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Order Created At",
+                                "label": "Order Created At",
+                                "type": "hidden",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Order Updated At",
+                                "label": "Order Updated At",
+                                "type": "hidden",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Order Admin URL",
+                                "label": "Order Admin URL",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Customer",
+                                "label": "Customer",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Customer Email",
+                                "label": "Customer Email",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Shipping Address 1",
+                                "label": "Shipping Address 1",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Shipping Address 2",
+                                "label": "Shipping Address 2",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Shipping City",
+                                "label": "Shipping City",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Shipping State\/Province",
+                                "label": "Shipping State\/Province",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Shipping Zip\/Postal Code",
+                                "label": "Shipping Zip\/Postal Code",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Shipping Country",
+                                "label": "Shipping Country",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product Title",
+                                "label": "Product Title",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product ID",
+                                "label": "Product ID",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product Line Item ID",
+                                "label": "Product Line Item ID",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product SKU",
+                                "label": "Product SKU",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product Vendor",
+                                "label": "Product Vendor",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product Quantity",
+                                "label": "Product Quantity",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product Price",
+                                "label": "Product Price",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [
+                    "where.additional[].operator",
+                    "where.additional[].a",
+                    "where.additional[].comparison",
+                    "where.additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{data.0.Customer}}",
+                    "comparison": "equals",
+                    "b": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
+                    "additional": [
+                        {
+                            "operator": "or",
+                            "a": "{{data[\"0[\\\"Customer Email\\\"]\"]}}",
+                            "comparison": "equals",
+                            "b": "{{shopify.email}}"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approval",
+                "key": "approval",
+                "operation_id": "approval",
+                "metadata": {
+                    "message": "{{ template | label: 'What is the approval message?', description: 'The approval message appears in the Approvals list to describe each request. Add variables to include key details like the customer''s name, order number, or other important information. You can format this message using Markdown to make it easier to read.', default: '⚠️ Order {{shopify.number}} has been flagged as potentially fraudulent because the shipping address recipients do not match those used in previous orders. Please review the order details and approve this request if you confirm it is fraudulent, so the order can be marked as \"Fraud\" and canceled.' }}",
+                    "field": false,
+                    "label_accept": "Accept",
+                    "label_reject": "Reject",
+                    "alert_emails": "{{ template | label: 'Who should receive approval emails?', description: 'Whenever a new item needs approval, we''ll send a notification to the email addresses you list here. To notify multiple people, separate their email addresses with commas.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "Fraud"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "cancel",
+                "name": "Cancel Order",
+                "key": "shopify_2",
+                "operation_id": "post_orders_order_id_cancel",
+                "metadata": {
+                    "api_endpoint": "post admin\/orders\/{{order_id}}\/cancel.json",
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
