@@ -36,7 +36,7 @@
                 "metadata": {
                     "api_endpoint": "get admin/orders.json",
                     "query": {
-                        "limit": "{{ template | label: 'How many orders to process at once?', description: 'We recommend setting this to something low initially to run a test, and then setting to 250 when you are ready to make it live.', default: 10 }}",
+                        "limit": "{{ template | label: 'How many orders should be processed at a time?', description: 'We suggest starting with a small number to test things out—10 is the default. Once everything looks good and you''re ready to go live, you can increase this to up to 250 for faster processing.', default: 10 }}",
                         "status": "open",
                         "fulfillment_status": "unfulfilled"
                     }
