@@ -2,8 +2,6 @@
     "key": "shopify/inventory/tag_fulfillable_orders_kj/tag",
     "name": "Tag Fulfillable Orders",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
