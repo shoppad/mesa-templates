@@ -1,17 +1,9 @@
 {
-    "key": "schedule_change",
-    "name": "Schedule a Shopify theme change on a specific date and time",
+    "key": "shopify/theme/schedule_change",
+    "name": "Schedule Shopify Theme Changes for Specific Dates and Events",
     "version": "1.0.0",
-    "description": "MESA can schedule theme changes at different times, so your store design can, for example, fit better to specific dates and events (such as Thanksgiving, Christmas, Black Friday, New Year's Eve, and more). Schedule automatic launches for product releases, store-wide promotions, and sales and have everything revert back when your events end.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -21,19 +13,18 @@
                 "name": "Schedule",
                 "key": "schedule",
                 "metadata": {
-                    "schedule": null,
-                    "datetime": "{{ template | label: 'Date and time to schedule the theme change', description: '', tokens: false, weight: 1}}",
                     "enqueue_type": "datetime",
-                    "next_sync_date_time": "2023-01-19T10:00:00-08:00"
+                    "schedule": null
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "theme",
@@ -42,9 +33,10 @@
                 "key": "shopify",
                 "operation_id": "put_themes_theme_id",
                 "metadata": {
-                    "theme_id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0}}"
+                    "api_endpoint": "put admin\/themes\/{{theme_id}}.json"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
