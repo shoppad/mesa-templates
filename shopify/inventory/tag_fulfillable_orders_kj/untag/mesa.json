@@ -202,16 +202,7 @@
                     "b": "custom.{{custom | size | minus: 1}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "b",
-                    "additional",
-                    "additional[].operator",
-                    "additional[].a",
-                    "additional[].comparison",
-                    "additional[].b"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 5
             },
@@ -230,6 +221,24 @@
                 ],
                 "on_error": "default",
                 "weight": 6
+            },
+{
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
             }
         ]
     }
