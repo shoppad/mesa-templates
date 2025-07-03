@@ -151,13 +151,7 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter",
-                    "filter.a",
-                    "filter.comparison",
-                    "filter.b"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },

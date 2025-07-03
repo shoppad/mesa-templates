@@ -121,15 +121,7 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "additional",
-                    "additional[].operator",
-                    "additional[].a",
-                    "additional[].comparison",
-                    "additional[].b"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
@@ -192,16 +184,7 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "b",
-                    "additional",
-                    "additional[].operator",
-                    "additional[].a",
-                    "additional[].comparison",
-                    "additional[].b"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 6
             },
