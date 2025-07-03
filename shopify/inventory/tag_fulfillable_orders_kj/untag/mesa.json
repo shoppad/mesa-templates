@@ -2,8 +2,6 @@
     "key": "shopify/inventory/tag_fulfillable_orders_kj/untag",
     "name": "Reset Fulfillable Orders Tags",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
@@ -141,13 +139,19 @@
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop Over Orders",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{custom}}",
                     "filter": {
-                        "comparison": "equals"
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
