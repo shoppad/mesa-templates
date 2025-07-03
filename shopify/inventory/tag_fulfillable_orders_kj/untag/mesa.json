@@ -169,6 +169,7 @@
                 "key": "shopify",
                 "operation_id": "deletemesa-order-order_id-tag",
                 "metadata": {
+                    "trigger_parent_key": "loop",
                     "api_endpoint": "delete mesa/orders/{{order_id}}/tag.json",
                     "order_id": "{{loop.id}}",
                     "body": {
@@ -191,6 +192,7 @@
                 "name": "Loop done?",
                 "key": "filter",
                 "metadata": {
+                    "trigger_parent_key": "loop",
                     "a": "{{loop.key}}",
                     "comparison": "equals",
                     "additional": [
@@ -213,6 +215,7 @@
                 "name": "Run Workflow: Tag Fulfillable Orders",
                 "key": "custom_1",
                 "metadata": {
+                    "trigger_parent_key": "loop",
                     "script": "custom_1.js"
                 },
                 "local_fields": [],
