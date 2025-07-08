@@ -20,9 +20,7 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "frequency"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,7 +34,7 @@
                 "action": "search_read",
                 "name": "Get all products",
                 "version": "v2",
-                "key": "odoo_3",
+                "key": "odoo",
                 "operation_id": "product.template_search_read",
                 "metadata": {
                     "api_endpoint": "get \/product",
@@ -73,23 +71,17 @@
                 "key": "filter",
                 "operation_id": "filter",
                 "metadata": {
+                    "a": "{{odoo.0.id}}",
                     "comparison": "is empty",
                     "additional": [
                         {
                             "operator": "and",
                             "comparison": "equals"
                         }
-                    ],
-                    "a": "{{odoo_3.0.id}}",
-                    "script": "filter.js"
+                    ]
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "additional",
-                    "script"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -898,7 +890,7 @@
                     "mapping": [
                         {
                             "destination": "id",
-                            "source": "{{odoo_3.0.id}}{{odoo_1.id}}"
+                            "source": "{{odoo.0.id}}{{odoo_1.id}}"
                         }
                     ]
                 },
@@ -920,20 +912,23 @@
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify.variants[]}}",
                     "filter": {
-                        "comparison": "equals"
-                    }
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    },
+                    "key": "{{shopify.variants[]}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
             },
@@ -945,14 +940,11 @@
                 "action": "search_read",
                 "name": "Get product attributes for variant",
                 "version": "v2",
-                "key": "odoo_4",
+                "key": "odoo_2",
                 "operation_id": "custom_search_read",
                 "metadata": {
                     "api_endpoint": "get \/custom",
                     "trigger_parent_key": "loop",
-                    "query": {
-                        "entity_name_custom": "product.template.attribute.value"
-                    },
                     "body": {
                         "search_query": [
                             {
@@ -961,6 +953,9 @@
                                 "value": "{{loop.option1}},{{loop.option2}},{{loop.option3}}"
                             }
                         ]
+                    },
+                    "query": {
+                        "entity_name_custom": "product.template.attribute.value"
                     }
                 },
                 "local_fields": [],
@@ -980,7 +975,7 @@
                 "action": "search_read",
                 "name": "Search for existing product variant by sku",
                 "version": "v2",
-                "key": "odoo",
+                "key": "odoo_3",
                 "operation_id": "product.product_search_read",
                 "metadata": {
                     "api_endpoint": "get \/product_variant",
@@ -1018,7 +1013,7 @@
                 "action": "search_read",
                 "name": "Search for existing product by sku",
                 "version": "v2",
-                "key": "odoo_9",
+                "key": "odoo_4",
                 "operation_id": "product.template_search_read",
                 "metadata": {
                     "api_endpoint": "get \/product",
@@ -1054,6 +1049,7 @@
                 "type": "paths",
                 "entity": "paths",
                 "name": "Paths",
+                "version": "v2",
                 "key": "paths",
                 "operation_id": "paths_paths",
                 "metadata": {
@@ -1070,20 +1066,21 @@
                 "type": "paths",
                 "entity": "path",
                 "name": "Has product attributes, no existing product variant",
+                "version": "v2",
                 "key": "paths_1",
                 "operation_id": "paths_path",
                 "metadata": {
                     "trigger_manager_key": "paths",
                     "trigger_parent_key": "loop",
+                    "a": "{{odoo_3.0.id}}",
                     "comparison": "is empty",
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{odoo_4.0.id}}",
+                            "a": "{{odoo_2.0.id}}",
                             "comparison": "is not empty"
                         }
-                    ],
-                    "a": "{{odoo.0.id}}"
+                    ]
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -1101,9 +1098,9 @@
                 "type": "odoo",
                 "entity": "product.product",
                 "action": "create",
-                "name": "Create a product variant",
+                "name": "Create Product Variant",
                 "version": "v2",
-                "key": "odoo_2",
+                "key": "odoo_5",
                 "operation_id": "product.product_create",
                 "metadata": {
                     "api_endpoint": "post \/product_variant",
@@ -1113,7 +1110,7 @@
                         "name": "{{shopify.title}}",
                         "type": "consu",
                         "service_tracking": "no",
-                        "categ_id": "2",
+                        "categ_id": "3",
                         "lst_price": "{{loop.price}}",
                         "default_code": "{{loop.sku}}",
                         "active": "true",
@@ -1122,7 +1119,7 @@
                         "company_id": "1",
                         "product_template_attribute_value_ids": [
                             {
-                                "product_template_attribute_value_ids_value": "{{odoo_4[].id}}"
+                                "product_template_attribute_value_ids_value": "{{odoo_2[].id}}"
                             }
                         ]
                     }
@@ -1161,7 +1158,7 @@
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
-                                "description": "A storable product is a product for which you manage stock. The Inventory app has to be installed.\nA consumable product is a product for which stock is not managed.\nA service is a non-material product you provide.",
+                                "description": "Goods are tangible materials and merchandise you provide.\nA service is a non-material product you provide.",
                                 "x-type": "select",
                                 "label": "Product Type",
                                 "source": "odoo",
@@ -1174,6 +1171,10 @@
                                     {
                                         "label": "Service",
                                         "value": "service"
+                                    },
+                                    {
+                                        "label": "Combo",
+                                        "value": "combo"
                                     }
                                 ],
                                 "required": true,
@@ -1192,18 +1193,6 @@
                                     {
                                         "label": "Nothing",
                                         "value": "no"
-                                    },
-                                    {
-                                        "label": "Task",
-                                        "value": "task_global_project"
-                                    },
-                                    {
-                                        "label": "Project &amp; Task",
-                                        "value": "task_in_project"
-                                    },
-                                    {
-                                        "label": "Project",
-                                        "value": "project_only"
                                     }
                                 ],
                                 "required": true,
@@ -1248,30 +1237,6 @@
                                 ],
                                 "required": true,
                                 "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id"
                             },
                             {
                                 "type": "number",
@@ -1411,7 +1376,7 @@
                             },
                             {
                                 "type": "number",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "float",
                                 "description": "Value of the product (automatically computed in AVCO).\n        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n        Used to compute margins on sale orders.",
                                 "label": "Cost",
@@ -1727,6 +1692,19 @@
                                 "location": "required"
                             },
                             {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id",
+                                "location": "required"
+                            },
+                            {
                                 "type": "string",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "char",
@@ -1735,6 +1713,33 @@
                                 "label": "Unit of Measure Name",
                                 "source": "odoo",
                                 "key": "uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Conversion between Units of Measure can only occur if they belong to the same category. The conversion will be made based on the ratios.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.category",
+                                "readonly": true,
+                                "label": "UoM Category",
+                                "source": "odoo",
+                                "key": "uom_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id",
                                 "location": "required"
                             },
                             {
@@ -1869,10 +1874,6 @@
                                     {
                                         "label": "Manually set quantities on order",
                                         "value": "manual"
-                                    },
-                                    {
-                                        "label": "Project Milestones",
-                                        "value": "milestones"
                                     }
                                 ],
                                 "location": "required"
@@ -1891,9 +1892,9 @@
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
-                                "description": "Validated expenses can be re-invoiced to a customer at its cost or sales price.",
+                                "description": "Validated expenses, vendor bills, or stock pickings (set up to track costs) can be invoiced to the customer at either cost or sales price.",
                                 "x-type": "select",
-                                "label": "Re-Invoice Expenses",
+                                "label": "Re-Invoice Costs",
                                 "source": "odoo",
                                 "key": "expense_policy",
                                 "options": [
@@ -1946,72 +1947,22 @@
                                 "location": "required"
                             },
                             {
-                                "type": "checkbox",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "boolean",
-                                "description": "If enabled, a shift will automatically be generated for the selected role when confirming the Sales Order. Only employees with this role will automatically be assigned shifts for Sales Orders containing this service.",
-                                "x-type": "checkbox",
-                                "label": "Plan Services",
-                                "source": "odoo",
-                                "key": "planning_enabled",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "planning.role",
-                                "label": "Planning Role",
-                                "source": "odoo",
-                                "key": "planning_role_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project",
-                                "source": "odoo",
-                                "key": "project_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project Template",
-                                "source": "odoo",
-                                "key": "project_template_id",
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
-                                "description": "",
+                                "description": "Configurator: choose attribute values to add the matching product variant to the order.\nGrid: add several variants at once from the grid of attribute values",
                                 "x-type": "select",
-                                "label": "Service Invoicing Policy",
+                                "label": "Add product mode",
                                 "source": "odoo",
-                                "key": "service_policy",
+                                "key": "product_add_mode",
                                 "options": [
                                     {
-                                        "label": "Prepaid\/Fixed Price",
-                                        "value": "ordered_prepaid"
+                                        "label": "Product Configurator",
+                                        "value": "configurator"
                                     },
                                     {
-                                        "label": "Based on Delivered Quantity (Manual)",
-                                        "value": "delivered_manual"
+                                        "label": "Order Grid Entry",
+                                        "value": "matrix"
                                     }
                                 ],
                                 "location": "required"
@@ -2020,9 +1971,7 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [
-                    "body"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 10
             },
@@ -2032,6 +1981,7 @@
                 "type": "paths",
                 "entity": "path",
                 "name": "Has product attributes, has existing product variant",
+                "version": "v2",
                 "key": "paths_2",
                 "operation_id": "paths_path",
                 "metadata": {
@@ -2041,11 +1991,11 @@
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{odoo_4.0.id}}",
+                            "a": "{{odoo_2.0.id}}",
                             "comparison": "is not empty"
                         }
                     ],
-                    "a": "{{odoo.0.id}}"
+                    "a": "{{odoo_3.0.id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -2063,19 +2013,22 @@
                 "type": "odoo",
                 "entity": "product.product",
                 "action": "write",
-                "name": "Update a product variant",
+                "name": "Update Product Variant",
                 "version": "v2",
                 "key": "odoo_6",
-                "operation_id": "product.product_update",
+                "operation_id": "product.product_write",
                 "metadata": {
                     "api_endpoint": "put \/product_variant\/{id}",
                     "trigger_parent_key": "paths_2",
+                    "path": {
+                        "id": "{{odoo_3.0.id}}"
+                    },
                     "body": {
                         "product_tmpl_id": "{{transform.id}}",
                         "name": "{{shopify.title}}",
                         "type": "consu",
                         "service_tracking": "no",
-                        "categ_id": "2",
+                        "categ_id": "3",
                         "lst_price": "{{loop.price}}",
                         "default_code": "{{loop.sku}}",
                         "active": "true",
@@ -2084,12 +2037,9 @@
                         "company_id": "1",
                         "product_template_attribute_value_ids": [
                             {
-                                "product_template_attribute_value_ids_value": "{{odoo_4[].id}}"
+                                "product_template_attribute_value_ids_value": "{{odoo_2[].id}}"
                             }
                         ]
-                    },
-                    "path": {
-                        "id": "{{odoo.0.id}}"
                     }
                 },
                 "local_fields": [
@@ -2126,7 +2076,7 @@
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
-                                "description": "A storable product is a product for which you manage stock. The Inventory app has to be installed.\nA consumable product is a product for which stock is not managed.\nA service is a non-material product you provide.",
+                                "description": "Goods are tangible materials and merchandise you provide.\nA service is a non-material product you provide.",
                                 "x-type": "select",
                                 "label": "Product Type",
                                 "source": "odoo",
@@ -2139,6 +2089,10 @@
                                     {
                                         "label": "Service",
                                         "value": "service"
+                                    },
+                                    {
+                                        "label": "Combo",
+                                        "value": "combo"
                                     }
                                 ],
                                 "required": true,
@@ -2157,18 +2111,6 @@
                                     {
                                         "label": "Nothing",
                                         "value": "no"
-                                    },
-                                    {
-                                        "label": "Task",
-                                        "value": "task_global_project"
-                                    },
-                                    {
-                                        "label": "Project &amp; Task",
-                                        "value": "task_in_project"
-                                    },
-                                    {
-                                        "label": "Project",
-                                        "value": "project_only"
                                     }
                                 ],
                                 "required": true,
@@ -2213,30 +2155,6 @@
                                 ],
                                 "required": true,
                                 "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id"
                             },
                             {
                                 "type": "number",
@@ -2376,7 +2294,7 @@
                             },
                             {
                                 "type": "number",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "float",
                                 "description": "Value of the product (automatically computed in AVCO).\n        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n        Used to compute margins on sale orders.",
                                 "label": "Cost",
@@ -2692,6 +2610,19 @@
                                 "location": "required"
                             },
                             {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id",
+                                "location": "required"
+                            },
+                            {
                                 "type": "string",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "char",
@@ -2700,6 +2631,33 @@
                                 "label": "Unit of Measure Name",
                                 "source": "odoo",
                                 "key": "uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Conversion between Units of Measure can only occur if they belong to the same category. The conversion will be made based on the ratios.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.category",
+                                "readonly": true,
+                                "label": "UoM Category",
+                                "source": "odoo",
+                                "key": "uom_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id",
                                 "location": "required"
                             },
                             {
@@ -2834,10 +2792,6 @@
                                     {
                                         "label": "Manually set quantities on order",
                                         "value": "manual"
-                                    },
-                                    {
-                                        "label": "Project Milestones",
-                                        "value": "milestones"
                                     }
                                 ],
                                 "location": "required"
@@ -2856,9 +2810,9 @@
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
-                                "description": "Validated expenses can be re-invoiced to a customer at its cost or sales price.",
+                                "description": "Validated expenses, vendor bills, or stock pickings (set up to track costs) can be invoiced to the customer at either cost or sales price.",
                                 "x-type": "select",
-                                "label": "Re-Invoice Expenses",
+                                "label": "Re-Invoice Costs",
                                 "source": "odoo",
                                 "key": "expense_policy",
                                 "options": [
@@ -2911,72 +2865,22 @@
                                 "location": "required"
                             },
                             {
-                                "type": "checkbox",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "boolean",
-                                "description": "If enabled, a shift will automatically be generated for the selected role when confirming the Sales Order. Only employees with this role will automatically be assigned shifts for Sales Orders containing this service.",
-                                "x-type": "checkbox",
-                                "label": "Plan Services",
-                                "source": "odoo",
-                                "key": "planning_enabled",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "planning.role",
-                                "label": "Planning Role",
-                                "source": "odoo",
-                                "key": "planning_role_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project",
-                                "source": "odoo",
-                                "key": "project_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project Template",
-                                "source": "odoo",
-                                "key": "project_template_id",
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "selection",
-                                "description": "",
+                                "description": "Configurator: choose attribute values to add the matching product variant to the order.\nGrid: add several variants at once from the grid of attribute values",
                                 "x-type": "select",
-                                "label": "Service Invoicing Policy",
+                                "label": "Add product mode",
                                 "source": "odoo",
-                                "key": "service_policy",
+                                "key": "product_add_mode",
                                 "options": [
                                     {
-                                        "label": "Prepaid\/Fixed Price",
-                                        "value": "ordered_prepaid"
+                                        "label": "Product Configurator",
+                                        "value": "configurator"
                                     },
                                     {
-                                        "label": "Based on Delivered Quantity (Manual)",
-                                        "value": "delivered_manual"
+                                        "label": "Order Grid Entry",
+                                        "value": "matrix"
                                     }
                                 ],
                                 "location": "required"
@@ -2985,11 +2889,7 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [
-                    "path",
-                    "path.id",
-                    "body"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 12
             },
@@ -2999,6 +2899,7 @@
                 "type": "paths",
                 "entity": "path",
                 "name": "No product attributes, no existing product by sku",
+                "version": "v2",
                 "key": "paths_4",
                 "operation_id": "paths_path",
                 "metadata": {
@@ -3008,11 +2909,11 @@
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{odoo_9.0.id}}",
+                            "a": "{{odoo_4.0.id}}",
                             "comparison": "is empty"
                         }
                     ],
-                    "a": "{{odoo_4.0.id}}"
+                    "a": "{{odoo_2.0.id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -3030,7 +2931,7 @@
                 "type": "odoo",
                 "entity": "product.template",
                 "action": "create",
-                "name": "Create a product",
+                "name": "Create Product",
                 "version": "v2",
                 "key": "odoo_7",
                 "operation_id": "product.template_create",
@@ -3070,7 +2971,7 @@
                                 "type": "select",
                                 "x-odoo-store": true,
                                 "x-odoo-type": "selection",
-                                "description": "A storable product is a product for which you manage stock. The Inventory app has to be installed.\nA consumable product is a product for which stock is not managed.\nA service is a non-material product you provide.",
+                                "description": "Goods are tangible materials and merchandise you provide.\nA service is a non-material product you provide.",
                                 "x-type": "select",
                                 "label": "Product Type",
                                 "source": "odoo",
@@ -3083,6 +2984,10 @@
                                     {
                                         "label": "Service",
                                         "value": "service"
+                                    },
+                                    {
+                                        "label": "Combo",
+                                        "value": "combo"
                                     }
                                 ],
                                 "required": true,
@@ -3101,18 +3006,6 @@
                                     {
                                         "label": "Nothing",
                                         "value": "no"
-                                    },
-                                    {
-                                        "label": "Task",
-                                        "value": "task_global_project"
-                                    },
-                                    {
-                                        "label": "Project &amp; Task",
-                                        "value": "task_in_project"
-                                    },
-                                    {
-                                        "label": "Project",
-                                        "value": "project_only"
                                     }
                                 ],
                                 "required": true,
@@ -3157,30 +3050,6 @@
                                 ],
                                 "required": true,
                                 "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id"
                             },
                             {
                                 "type": "integer",
@@ -3335,6 +3204,19 @@
                                 "location": "required"
                             },
                             {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id",
+                                "location": "required"
+                            },
+                            {
                                 "type": "string",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "char",
@@ -3343,6 +3225,34 @@
                                 "label": "Unit of Measure Name",
                                 "source": "odoo",
                                 "key": "uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Conversion between Units of Measure can only occur if they belong to the same category. The conversion will be made based on the ratios.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.category",
+                                "readonly": true,
+                                "label": "UoM Category",
+                                "source": "odoo",
+                                "key": "uom_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "x-typeahead-domain": "[('category_id', '=', uom_category_id)]",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id",
                                 "location": "required"
                             },
                             {
@@ -3589,7 +3499,7 @@
                             },
                             {
                                 "type": "typeahead",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "many2one",
                                 "description": "Keep this field empty to use the default value from the product category.",
                                 "x-type": "typeahead",
@@ -3603,7 +3513,7 @@
                             },
                             {
                                 "type": "typeahead",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "many2one",
                                 "description": "Keep this field empty to use the default value from the product category. If anglo-saxon accounting with automated valuation method is configured, the expense account on the product category will be used.",
                                 "x-type": "typeahead",
@@ -3652,10 +3562,6 @@
                                     {
                                         "label": "Manually set quantities on order",
                                         "value": "manual"
-                                    },
-                                    {
-                                        "label": "Project Milestones",
-                                        "value": "milestones"
                                     }
                                 ],
                                 "location": "required"
@@ -3674,9 +3580,9 @@
                                 "type": "select",
                                 "x-odoo-store": true,
                                 "x-odoo-type": "selection",
-                                "description": "Validated expenses can be re-invoiced to a customer at its cost or sales price.",
+                                "description": "Validated expenses, vendor bills, or stock pickings (set up to track costs) can be invoiced to the customer at either cost or sales price.",
                                 "x-type": "select",
-                                "label": "Re-Invoice Expenses",
+                                "label": "Re-Invoice Costs",
                                 "source": "odoo",
                                 "key": "expense_policy",
                                 "options": [
@@ -3740,72 +3646,22 @@
                                 "location": "required"
                             },
                             {
-                                "type": "checkbox",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "boolean",
-                                "description": "If enabled, a shift will automatically be generated for the selected role when confirming the Sales Order. Only employees with this role will automatically be assigned shifts for Sales Orders containing this service.",
-                                "x-type": "checkbox",
-                                "label": "Plan Services",
-                                "source": "odoo",
-                                "key": "planning_enabled",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "planning.role",
-                                "label": "Planning Role",
-                                "source": "odoo",
-                                "key": "planning_role_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project",
-                                "source": "odoo",
-                                "key": "project_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project Template",
-                                "source": "odoo",
-                                "key": "project_template_id",
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "selection",
-                                "description": "",
+                                "description": "Configurator: choose attribute values to add the matching product variant to the order.\nGrid: add several variants at once from the grid of attribute values",
                                 "x-type": "select",
-                                "label": "Service Invoicing Policy",
+                                "label": "Add product mode",
                                 "source": "odoo",
-                                "key": "service_policy",
+                                "key": "product_add_mode",
                                 "options": [
                                     {
-                                        "label": "Prepaid\/Fixed Price",
-                                        "value": "ordered_prepaid"
+                                        "label": "Product Configurator",
+                                        "value": "configurator"
                                     },
                                     {
-                                        "label": "Based on Delivered Quantity (Manual)",
-                                        "value": "delivered_manual"
+                                        "label": "Order Grid Entry",
+                                        "value": "matrix"
                                     }
                                 ],
                                 "location": "required"
@@ -3814,9 +3670,7 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [
-                    "body"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 14
             },
@@ -3829,23 +3683,18 @@
                 "operation_id": "filter",
                 "metadata": {
                     "trigger_parent_key": "paths_4",
+                    "a": "{{ shopify.variants | size }}",
                     "comparison": "equals",
+                    "b": "1",
                     "additional": [
                         {
                             "operator": "and",
                             "comparison": "equals"
                         }
-                    ],
-                    "a": "{{ shopify.variants | size }}",
-                    "b": "1"
+                    ]
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "b",
-                    "additional"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 15
             },
@@ -3867,11 +3716,8 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "path",
-                    "path.id"
-                ],
-                "on_error": "ignore",
+                "selected_fields": [],
+                "on_error": "default",
                 "weight": 16
             },
             {
@@ -3880,6 +3726,7 @@
                 "type": "paths",
                 "entity": "path",
                 "name": "No product attributes, has existing product by sku",
+                "version": "v2",
                 "key": "paths_5",
                 "operation_id": "paths_path",
                 "metadata": {
@@ -3889,11 +3736,11 @@
                     "additional": [
                         {
                             "operator": "and",
-                            "a": "{{odoo_9.0.id}}",
+                            "a": "{{odoo_4.0.id}}",
                             "comparison": "is not empty"
                         }
                     ],
-                    "a": "{{odoo_4.0.id}}"
+                    "a": "{{odoo_2.0.id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -3911,15 +3758,15 @@
                 "type": "odoo",
                 "entity": "product.template",
                 "action": "write",
-                "name": "Update a product by id",
+                "name": "Update Product",
                 "version": "v2",
-                "key": "odoo_5",
+                "key": "odoo_9",
                 "operation_id": "product.template_write",
                 "metadata": {
                     "api_endpoint": "put \/product\/{id}",
                     "trigger_parent_key": "paths_5",
                     "path": {
-                        "id": "{{odoo_9.0.id}}"
+                        "id": "{{odoo_4.0.id}}"
                     },
                     "body": {
                         "name": "{{shopify.title}}{% unless loop.title == 'Default Title' %} - {{loop.title}}{% endunless %}",
@@ -3951,7 +3798,7 @@
                                 "type": "select",
                                 "x-odoo-store": true,
                                 "x-odoo-type": "selection",
-                                "description": "A storable product is a product for which you manage stock. The Inventory app has to be installed.\nA consumable product is a product for which stock is not managed.\nA service is a non-material product you provide.",
+                                "description": "Goods are tangible materials and merchandise you provide.\nA service is a non-material product you provide.",
                                 "x-type": "select",
                                 "label": "Product Type",
                                 "source": "odoo",
@@ -3964,6 +3811,10 @@
                                     {
                                         "label": "Service",
                                         "value": "service"
+                                    },
+                                    {
+                                        "label": "Combo",
+                                        "value": "combo"
                                     }
                                 ],
                                 "required": true,
@@ -3982,18 +3833,6 @@
                                     {
                                         "label": "Nothing",
                                         "value": "no"
-                                    },
-                                    {
-                                        "label": "Task",
-                                        "value": "task_global_project"
-                                    },
-                                    {
-                                        "label": "Project &amp; Task",
-                                        "value": "task_in_project"
-                                    },
-                                    {
-                                        "label": "Project",
-                                        "value": "project_only"
                                     }
                                 ],
                                 "required": true,
@@ -4038,30 +3877,6 @@
                                 ],
                                 "required": true,
                                 "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for all stock operations.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Unit of Measure",
-                                "source": "odoo",
-                                "key": "uom_id"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "uom.uom",
-                                "label": "Purchase Unit",
-                                "source": "odoo",
-                                "key": "uom_po_id"
                             },
                             {
                                 "type": "integer",
@@ -4216,6 +4031,19 @@
                                 "location": "required"
                             },
                             {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for all stock operations.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "label": "Unit of Measure",
+                                "source": "odoo",
+                                "key": "uom_id",
+                                "location": "required"
+                            },
+                            {
                                 "type": "string",
                                 "x-odoo-store": false,
                                 "x-odoo-type": "char",
@@ -4224,6 +4052,34 @@
                                 "label": "Unit of Measure Name",
                                 "source": "odoo",
                                 "key": "uom_name",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": false,
+                                "x-odoo-type": "many2one",
+                                "description": "Conversion between Units of Measure can only occur if they belong to the same category. The conversion will be made based on the ratios.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.category",
+                                "readonly": true,
+                                "label": "UoM Category",
+                                "source": "odoo",
+                                "key": "uom_category_id",
+                                "location": "required"
+                            },
+                            {
+                                "type": "typeahead",
+                                "x-odoo-store": true,
+                                "x-odoo-type": "many2one",
+                                "description": "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure.",
+                                "x-type": "typeahead",
+                                "x-typeahead": true,
+                                "x-typeahead-entity": "uom.uom",
+                                "x-typeahead-domain": "[('category_id', '=', uom_category_id)]",
+                                "label": "Purchase Unit",
+                                "source": "odoo",
+                                "key": "uom_po_id",
                                 "location": "required"
                             },
                             {
@@ -4470,7 +4326,7 @@
                             },
                             {
                                 "type": "typeahead",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "many2one",
                                 "description": "Keep this field empty to use the default value from the product category.",
                                 "x-type": "typeahead",
@@ -4484,7 +4340,7 @@
                             },
                             {
                                 "type": "typeahead",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "many2one",
                                 "description": "Keep this field empty to use the default value from the product category. If anglo-saxon accounting with automated valuation method is configured, the expense account on the product category will be used.",
                                 "x-type": "typeahead",
@@ -4533,10 +4389,6 @@
                                     {
                                         "label": "Manually set quantities on order",
                                         "value": "manual"
-                                    },
-                                    {
-                                        "label": "Project Milestones",
-                                        "value": "milestones"
                                     }
                                 ],
                                 "location": "required"
@@ -4555,9 +4407,9 @@
                                 "type": "select",
                                 "x-odoo-store": true,
                                 "x-odoo-type": "selection",
-                                "description": "Validated expenses can be re-invoiced to a customer at its cost or sales price.",
+                                "description": "Validated expenses, vendor bills, or stock pickings (set up to track costs) can be invoiced to the customer at either cost or sales price.",
                                 "x-type": "select",
-                                "label": "Re-Invoice Expenses",
+                                "label": "Re-Invoice Costs",
                                 "source": "odoo",
                                 "key": "expense_policy",
                                 "options": [
@@ -4621,72 +4473,22 @@
                                 "location": "required"
                             },
                             {
-                                "type": "checkbox",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "boolean",
-                                "description": "If enabled, a shift will automatically be generated for the selected role when confirming the Sales Order. Only employees with this role will automatically be assigned shifts for Sales Orders containing this service.",
-                                "x-type": "checkbox",
-                                "label": "Plan Services",
-                                "source": "odoo",
-                                "key": "planning_enabled",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": true,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "planning.role",
-                                "label": "Planning Role",
-                                "source": "odoo",
-                                "key": "planning_role_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project",
-                                "source": "odoo",
-                                "key": "project_id",
-                                "location": "required"
-                            },
-                            {
-                                "type": "typeahead",
-                                "x-odoo-store": false,
-                                "x-odoo-type": "many2one",
-                                "description": "",
-                                "x-type": "typeahead",
-                                "x-typeahead": true,
-                                "x-typeahead-entity": "project.project",
-                                "label": "Project Template",
-                                "source": "odoo",
-                                "key": "project_template_id",
-                                "location": "required"
-                            },
-                            {
                                 "type": "select",
-                                "x-odoo-store": false,
+                                "x-odoo-store": true,
                                 "x-odoo-type": "selection",
-                                "description": "",
+                                "description": "Configurator: choose attribute values to add the matching product variant to the order.\nGrid: add several variants at once from the grid of attribute values",
                                 "x-type": "select",
-                                "label": "Service Invoicing Policy",
+                                "label": "Add product mode",
                                 "source": "odoo",
-                                "key": "service_policy",
+                                "key": "product_add_mode",
                                 "options": [
                                     {
-                                        "label": "Prepaid\/Fixed Price",
-                                        "value": "ordered_prepaid"
+                                        "label": "Product Configurator",
+                                        "value": "configurator"
                                     },
                                     {
-                                        "label": "Based on Delivered Quantity (Manual)",
-                                        "value": "delivered_manual"
+                                        "label": "Order Grid Entry",
+                                        "value": "matrix"
                                     }
                                 ],
                                 "location": "required"
@@ -4695,13 +4497,44 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [
-                    "path",
-                    "path.id",
-                    "body"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 18
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 19
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 20
             }
         ]
     }
