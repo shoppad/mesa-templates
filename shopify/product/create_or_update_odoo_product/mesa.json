@@ -3766,7 +3766,7 @@
                     "api_endpoint": "put \/product\/{id}",
                     "trigger_parent_key": "paths_5",
                     "path": {
-                        "id": "{{odoo_3.0.id}}"
+                        "id": "{{odoo_4.0.id}}"
                     },
                     "body": {
                         "name": "{{shopify.title}}{% unless loop.title == 'Default Title' %} - {{loop.title}}{% endunless %}",
