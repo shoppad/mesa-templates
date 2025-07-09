@@ -14,7 +14,7 @@
                 "key": "schedule",
                 "metadata": {
                     "enqueue_type": "datetime",
-                    "datetime": "{{ template | label: 'Date and time to schedule the theme change', description: '', tokens: false, weight: 1}}",
+                    "datetime": "{{ template | label: 'Date and time to schedule the theme change', description: '', tokens: false, weight: 1 }}",
                     "schedule": null
                 },
                 "local_fields": [],
@@ -34,7 +34,7 @@
                 "key": "shopify",
                 "operation_id": "put_themes_theme_id",
                 "metadata": {
-                    "theme_id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0}}",
+                    "theme_id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0 }}",
                     "api_endpoint": "put admin\/themes\/{{theme_id}}.json"
                 },
                 "local_fields": [],
