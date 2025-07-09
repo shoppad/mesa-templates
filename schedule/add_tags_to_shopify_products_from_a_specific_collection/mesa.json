@@ -3,7 +3,7 @@
     "name": "Tag Shopify Products on a Set Date",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -15,7 +15,8 @@
                 "operation_id": "schedule",
                 "metadata": {
                     "schedule": null,
-                    "enqueue_type": "datetime"
+                    "enqueue_type": "datetime",
+                    "datetime": "{{ template | label: 'Select a date to schedule tagging products' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -34,7 +35,8 @@
                 "key": "shopify",
                 "operation_id": "get_collection_products",
                 "metadata": {
-                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json"
+                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
+                    "collection_id": "{{ template | label: 'What is the collection ID?', description: 'To find your Shopify collection ID, log in to your Shopify admin, go to **Products > Collections**, and click on the collection you want. In the browser''s address bar, you''ll see a URL like https://your-store.myshopify.com/admin/collections/123456789012 —the number at the end is your collection ID. Enter that ID here.', tokens: false }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -79,7 +81,10 @@
                 "metadata": {
                     "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
                     "trigger_parent_key": "loop",
-                    "product_id": "{{loop.id}}"
+                    "product_id": "{{loop.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What would you like to tag your products?', tokens: false }}"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
