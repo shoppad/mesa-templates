@@ -1,0 +1,74 @@
+{
+    "key": "mcp/autogen/yedric_to_ask_workflow",
+    "name": "_Run_Prompt_on_a_Schedule",
+    "version": "1.0.0",
+    "description": "Automatically turn a Yedric prompt into an Ask workflow",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "schedule": "@weekly:0 0 * * 0",
+                    "enqueue_type": "schedule"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "ask",
+                "name": "Ask",
+                "key": "ask",
+                "operation_id": "post-ask",
+                "metadata": {
+                    "api_endpoint": "post \/ask",
+                    "body": {
+                        "content": "[this will be replaced with the prompt]"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "subject": "Last Week's Help Scout Conversations",
+                        "message": "{{ask.content}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.to",
+                    "body.subject",
+                    "body.message"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
