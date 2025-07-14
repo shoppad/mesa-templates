@@ -37,7 +37,7 @@
                 "metadata": {
                     "api_endpoint": "post \/ask",
                     "body": {
-                        "content": "[this will be replaced with the prompt]"
+                        "content": "[replaced by prompt]"
                     }
                 },
                 "local_fields": [],
@@ -55,7 +55,8 @@
                 "metadata": {
                     "api_endpoint": "post \/send-email",
                     "body": {
-                        "subject": "Last Week's Help Scout Conversations",
+                        "to": "{{ template | label: 'Email address', description: 'Where should we send the report?' }}",
+                        "subject": "[replaced by workflow_tile]",
                         "message": "{{ask.content}}"
                     }
                 },
