@@ -20,7 +20,7 @@
                 "type": "yotpoloyalty",
                 "entity": "points",
                 "action": "changed",
-                "name": "& Referrals Points Changed",
+                "name": "Referrals Points Changed",
                 "key": "yotpoloyalty_points",
                 "metadata": [],
                 "local_fields": [],
