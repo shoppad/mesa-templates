@@ -41,7 +41,6 @@
                 "metadata": {
                     "api_endpoint": "post \/ask",
                     "body": {
-                        "automations": ["mcp/helpscout/retrieve_conversations"],
                         "content": "Find interesting trends in my support tickets over the last week. Cite the link from each ticket that matches the trends."
                     }
                 },

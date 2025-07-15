@@ -41,8 +41,27 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask_1",
+                "operation_id": "post-ask-skill",
+                "metadata": {
+                    "api_endpoint": "post \/ask\/skill",
+                    "trigger_manager_key": "ask",
+                    "trigger_parent_key": "ask"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
             },
             {
                 "schema": 5,
@@ -56,7 +75,7 @@
                     "api_endpoint": "post \/send-email",
                     "body": {
                         "to": "{{ template | label: 'Email address', description: 'Where should we send the report?' }}",
-                        "subject": "[replaced by workflow_tile]",
+                        "subject": "[replaced by workflow_title]",
                         "message": "{{ask.content}}"
                     }
                 },
