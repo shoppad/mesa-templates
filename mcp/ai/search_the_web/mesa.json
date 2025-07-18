@@ -1,0 +1,62 @@
+{
+    "key": "mcp/ai/search_the_web",
+    "name": "Search the Web",
+    "version": "1.0.0",
+    "enabled": true,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "skill",
+                "entity": "skill",
+                "action": "skill",
+                "name": "Skill",
+                "key": "skill",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "content",
+                                "description": "Enter the text to analyze. Generally this text will come from one or more variables.",
+                                "type": "string",
+                                "required": true
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "web-search",
+                "action": "search",
+                "name": "Search Web",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "web-search",
+                "metadata": {
+                    "api_endpoint": "post \/web-search",
+                    "body": {
+                        "role": "user",
+                        "content": "{{skill.content}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
