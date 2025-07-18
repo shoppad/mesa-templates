@@ -1,0 +1,201 @@
+{
+    "key": "product/updated/archive_sold_out_products_1_wip",
+    "name": "Archive Shopify Products if Sold Out for 30 Days (1 of 2)(WIP)",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "variant",
+                "action": "out_of_stock",
+                "name": "Variant Out of Stock",
+                "key": "shopify",
+                "operation_id": "variants_out_of_stock",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product Details",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "product_id": "{{shopify.product_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "sum",
+                "name": "Calculate Total Inventory",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_sum",
+                "metadata": {
+                    "key": "{{shopify_1.variants[]}}",
+                    "sum_field": "{{shopify_1.variants[].inventory_quantity}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "If Inventory = 0",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{loop.sum}}",
+                    "comparison": "equals",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update_create",
+                "name": "Create or Update Sold Out Record",
+                "version": "v2",
+                "key": "data",
+                "operation_id": "post_database_table_upsert",
+                "metadata": {
+                    "api_endpoint": "post \/{database}\/{table}\/upsert",
+                    "table": "Sold Out Shopify Product Tracker",
+                    "where": {
+                        "comparison": "equals",
+                        "b": "{{shopify_1.id}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ],
+                        "a": "Product ID"
+                    },
+                    "columns": {
+                        "Product ID": "{{shopify_1.id}}",
+                        "Product Title": "{{shopify_1.title}}",
+                        "Inventory Quantity": "{{loop.sum}}",
+                        "Sold Out Start Date": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
+                        "Sold Out Day Count": "0",
+                        "Status": "Active",
+                        "Shopify Admin Link": "https:\/\/admin.shopify.com\/store\/{{context.shop.domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_1.id}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Product ID",
+                                "label": "Product ID",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product Title",
+                                "label": "Product Title",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Inventory Quantity",
+                                "label": "Inventory Quantity",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Sold Out Start Date",
+                                "label": "Sold Out Start Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Sold Out End Date",
+                                "label": "Sold Out End Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Sold Out Day Count",
+                                "label": "Sold Out Day Count",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Status",
+                                "label": "Status",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Shopify Admin Link",
+                                "label": "Shopify Admin Link",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
