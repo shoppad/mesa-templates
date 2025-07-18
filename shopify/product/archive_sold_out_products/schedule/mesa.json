@@ -1,0 +1,777 @@
+{
+    "key": "shopify/product/archive_sold_out_products/schedule",
+    "name": "Archive Shopify Products if Sold Out for 30 Days (2 of 2)",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "enqueue_type": "schedule",
+                    "schedule": "@daily:0 0 * * *",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Find Active Shopify Products",
+                "version": "v2",
+                "key": "data",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}",
+                    "table": "Sold Out Shopify Product Tracker",
+                    "where": {
+                        "comparison": "equals",
+                        "b": "Active",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ],
+                        "a": "Status"
+                    },
+                    "sort": {
+                        "order": "DESC"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Product ID",
+                                "label": "Product ID",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Product Title",
+                                "label": "Product Title",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Inventory Quantity",
+                                "label": "Inventory Quantity",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Start Date",
+                                "label": "Sold Out Start Date",
+                                "type": "hidden",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out End Date",
+                                "label": "Sold Out End Date",
+                                "type": "hidden",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Day Count",
+                                "label": "Sold Out Day Count",
+                                "type": "hidden",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Status",
+                                "label": "Status",
+                                "type": "hidden",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            }
+                        ]
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if Any Products Found",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{data}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "For Each Product",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{data}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product Details",
+                "key": "shopify",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop[\"Product ID\"]}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "sum",
+                "name": "Calculate Total Inventory",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_sum",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{shopify.variants[]}}",
+                    "sum_field": "{{shopify.variants[].inventory_quantity}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths Based on Inventory Check",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": {
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - If Inventory = 0",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop",
+                    "a": "{{loop_2.sum}}",
+                    "comparison": "equals",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update",
+                "name": "Update Record - Increment Sold Out Counter",
+                "version": "v2",
+                "key": "data_1",
+                "operation_id": "patch_database_table_mesa_id",
+                "metadata": {
+                    "api_endpoint": "patch \/{database}\/{table}\/{mesa_id}",
+                    "trigger_parent_key": "paths_1",
+                    "table": "Sold Out Shopify Product Tracker",
+                    "where": {
+                        "comparison": "equals",
+                        "b": "{{loop[\"Product ID\"]}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ],
+                        "a": "Product ID"
+                    },
+                    "columns": {
+                        "Sold Out Day Count": "{{loop[\"Sold Out Day Count\"] | plus: 1}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Product ID",
+                                "label": "Product ID",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Product Title",
+                                "label": "Product Title",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Inventory Quantity",
+                                "label": "Inventory Quantity",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Start Date",
+                                "label": "Sold Out Start Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out End Date",
+                                "label": "Sold Out End Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Day Count",
+                                "label": "Sold Out Day Count",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Status",
+                                "label": "Status",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            }
+                        ]
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - If Inventory > 0",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop",
+                    "comparison": "greater than",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{loop_2.sum}}",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update",
+                "name": "Update Record - Reset Sold Out Counter",
+                "version": "v2",
+                "key": "data_2",
+                "operation_id": "patch_database_table_mesa_id",
+                "metadata": {
+                    "api_endpoint": "patch \/{database}\/{table}\/{mesa_id}",
+                    "trigger_parent_key": "paths_2",
+                    "table": "Sold Out Shopify Product Tracker",
+                    "where": {
+                        "comparison": "equals",
+                        "b": "{{loop[\"Product ID\"]}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ],
+                        "a": "Product ID"
+                    },
+                    "columns": {
+                        "Sold Out End Date": "Reset",
+                        "Sold Out Day Count": "0"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Product ID",
+                                "label": "Product ID",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Product Title",
+                                "label": "Product Title",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Inventory Quantity",
+                                "label": "Inventory Quantity",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Start Date",
+                                "label": "Sold Out Start Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out End Date",
+                                "label": "Sold Out End Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Day Count",
+                                "label": "Sold Out Day Count",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Status",
+                                "label": "Status",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            }
+                        ]
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 10
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 11
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "query",
+                "name": "Find Products Sold Out for 30 Days",
+                "version": "v2",
+                "key": "data_3",
+                "operation_id": "get_database_table",
+                "metadata": {
+                    "api_endpoint": "get \/{database}\/{table}",
+                    "table": "Sold Out Shopify Product Tracker",
+                    "where": {
+                        "comparison": "equals",
+                        "b": "30",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals",
+                                "b": "Active",
+                                "a": "Status"
+                            }
+                        ],
+                        "a": "Sold Out Day Count"
+                    },
+                    "sort": {
+                        "order": "DESC"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Product ID",
+                                "label": "Product ID",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Product Title",
+                                "label": "Product Title",
+                                "type": "hidden",
+                                "x-udtname": "text",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Inventory Quantity",
+                                "label": "Inventory Quantity",
+                                "type": "hidden",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Start Date",
+                                "label": "Sold Out Start Date",
+                                "type": "hidden",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out End Date",
+                                "label": "Sold Out End Date",
+                                "type": "hidden",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Sold Out Day Count",
+                                "label": "Sold Out Day Count",
+                                "type": "hidden",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Status",
+                                "label": "Status",
+                                "type": "hidden",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null
+                            }
+                        ]
+                    }
+                ],
+                "selected_fields": [
+                    "where.additional[].operator",
+                    "where.additional[].a",
+                    "where.additional[].comparison",
+                    "where.additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 12
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if Any 30-Day Product",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{data_3}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 13
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "For Each 30-Day Product",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{data_3}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 14
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product - Archive Product in Shopify",
+                "key": "shopify_1",
+                "operation_id": "put_products_product_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/products\/{{product_id}}.json",
+                    "product_id": "{{loop_3[\"Product ID\"]}}",
+                    "trigger_parent_key": "loop_3",
+                    "body": {
+                        "status": "archived"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.status"
+                ],
+                "on_error": "default",
+                "weight": 15
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "update",
+                "name": "Update Record - Mark Product as Archived in Record",
+                "version": "v2",
+                "key": "data_4",
+                "operation_id": "patch_database_table_mesa_id",
+                "metadata": {
+                    "api_endpoint": "patch \/{database}\/{table}\/{mesa_id}",
+                    "trigger_parent_key": "loop_3",
+                    "table": "Sold Out Shopify Product Tracker",
+                    "where": {
+                        "comparison": "equals",
+                        "b": "{{loop_3[\"Product ID\"]}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ],
+                        "a": "Product ID"
+                    },
+                    "columns": {
+                        "Sold Out End Date": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
+                        "Status": "Archived"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Product ID",
+                                "label": "Product ID",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Product Title",
+                                "label": "Product Title",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Inventory Quantity",
+                                "label": "Inventory Quantity",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Sold Out Start Date",
+                                "label": "Sold Out Start Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Sold Out End Date",
+                                "label": "Sold Out End Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Sold Out Day Count",
+                                "label": "Sold Out Day Count",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Status",
+                                "label": "Status",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 16
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_4",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_3",
+                    "trigger_parent_key": "loop_3"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 17
+            }
+        ]
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "key": "shopify/product/archive_sold_out_products",
+    "name": "Archive Shopify Products if Sold Out for 30 Days",
+    "version": "1.0.0",
+    "templates": [
+        "shopify/product/archive_sold_out_products/data",
+        "shopify/product/archive_sold_out_products/schedule"
+    ]
+}
