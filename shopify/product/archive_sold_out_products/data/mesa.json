@@ -1,6 +1,6 @@
 {
-    "key": "product/updated/archive_sold_out_products_1_wip",
-    "name": "Archive Shopify Products if Sold Out for 30 Days (1 of 2)(WIP)",
+    "key": "shopify/product/archive_sold_out_products/data",
+    "name": "Archive Shopify Products if Sold Out for 30 Days (1 of 2)",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
