@@ -1,5 +1,5 @@
 {
-    "key": "shopify/order/flag_and_cancel_when_address_doesn't_match_identity",
+    "key": "shopify/order/flag_and_cancel_when_address_does_not_match_identity",
     "name": "Tag and Cancel Fraudulent Orders with Address Discrepancies",
     "version": "1.0.0",
     "enabled": false,
@@ -32,7 +32,7 @@
                 "type": "data",
                 "entity": "record",
                 "action": "query",
-                "name": "Query",
+                "name": "Find Past Orders with Same Shipping Address",
                 "version": "v2",
                 "key": "data",
                 "operation_id": "get_database_table",
@@ -256,7 +256,7 @@
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter",
+                "name": "Compare Customer Name and Email",
                 "key": "filter",
                 "operation_id": "filter",
                 "metadata": {
@@ -286,11 +286,11 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "approval",
-                "name": "Approval",
+                "name": "Manual Review for Suspicious Order",
                 "key": "approval",
                 "operation_id": "approval",
                 "metadata": {
-                    "message": "{{ template | label: 'What is the approval message?', description: 'The approval message appears in the Approvals list to describe each request. Add variables to include key details like the customer''s name, order number, or other important information. You can format this message using Markdown to make it easier to read.', default: '⚠️ Order {{shopify.number}} has been flagged as potentially fraudulent because the shipping address recipients do not match those used in previous orders. Please review the order details and approve this request if you confirm it is fraudulent, so the order can be marked as \"Fraud\" and canceled.' }}",
+                    "message": "{{ template | label: 'What is the approval message?', description: 'The approval message appears in the Approvals list to describe each request. Add variables to include key details like the customer''s name, order number, or other important information. You can format this message using Markdown to make it easier to read.', default: '⚠️ Order {{shopify.order_number}} has been flagged as potentially fraudulent because the shipping address recipients do not match those used in previous orders. Please review the order details and approve this request if you confirm it is fraudulent, so the order can be marked as \"Fraud\" and canceled.' }}",
                     "field": false,
                     "label_accept": "Accept",
                     "label_reject": "Reject",
@@ -307,7 +307,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "tag_add",
-                "name": "Order Add Tag",
+                "name": "Tag Order as Fraud (if Approved)",
                 "key": "shopify_1",
                 "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
@@ -328,7 +328,7 @@
                 "type": "shopify",
                 "entity": "order",
                 "action": "cancel",
-                "name": "Cancel Order",
+                "name": "Cancel the Fradulent Order",
                 "key": "shopify_2",
                 "operation_id": "post_orders_order_id_cancel",
                 "metadata": {
