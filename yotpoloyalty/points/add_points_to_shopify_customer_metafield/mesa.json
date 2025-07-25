@@ -1,0 +1,73 @@
+{
+    "key": "yotpoloyalty/points/add_points_to_shopify_customer_metafield",
+    "name": "Update Shopify Customer Metafield with Yotpo Loyalty Points",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "yotpoloyalty",
+                "entity": "points",
+                "action": "changed",
+                "name": "Points Changed",
+                "key": "yotpoloyalty",
+                "operation_id": "swell_points_changed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer_search",
+                "action": "list",
+                "name": "Search Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_search",
+                "metadata": {
+                    "api_endpoint": "get admin\/customers\/search.json",
+                    "parameters": "email={{yotpoloyalty.customer.email}}&limit=1"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "parameters"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "metafield_set",
+                "name": "Set Customer Metafield",
+                "key": "shopify_1",
+                "operation_id": "put_mesa_customers_customer_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/customers\/{{customer_id}}\/metafield.json",
+                    "customer_id": "{{shopify.0.id}}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "yotpo_loyalty_points",
+                        "type": "number_integer",
+                        "listType": "single_line_text_field",
+                        "value": "{{yotpoloyalty.current_balance}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
