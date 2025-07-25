@@ -3,7 +3,7 @@
     "name": "Update Shopify Customer Metafield with Yotpo Loyalty Points",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
