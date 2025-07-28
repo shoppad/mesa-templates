@@ -2,8 +2,6 @@
     "key": "mcp/helpscout/retrieve_conversations",
     "name": "Retrieve Help Scout Conversations",
     "version": "1.0.0",
-    "description": "Enable AI to retrieve Help Scout conversations in response to a prompt to gain instant, context-rich insights without manually searching past support threads. When a prompt triggers this MCP template, it automatically pulls the relevant Help Scout conversations and uses that data to craft a tailored, accurate response grounded in real customer history.",
-    "seconds": 135,
     "enabled": true,
     "setup": true,
     "config": {
@@ -165,7 +163,7 @@
                     "trigger_manager_key": "loop",
                     "trigger_parent_key": "loop",
                     "return": "map",
-                    "map": "Link: {{loop._links.self.href}}\nSubject: {{loop.subject}}\nMessage: \n{{custom_1.thread.body}}\nDate: {{loop.createdAt}}\n---\n"
+                    "map": "Link: {{loop._links.self.href}}\nSubject: {{loop.subject}}\nMessage: \n{{custom.thread.body}}\nDate: {{loop.createdAt}}\n---\n"
                 },
                 "local_fields": [],
                 "selected_fields": [
