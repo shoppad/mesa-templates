@@ -20,7 +20,9 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -40,7 +42,9 @@
                     "order_id": "{{shopify.order_id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "order_id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -52,11 +56,14 @@
                 "key": "custom",
                 "operation_id": "custom",
                 "metadata": {
-                    "description": "Calculates the refund amount that gets sent to Mixpanel.",
+                    "description": "Calculates the refund amount, format line items' titles and SKUs, and sum up quantities.",
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "description",
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -78,7 +85,7 @@
                     "body": {
                         "mesaData": [
                             {
-                                "event": "Refund Order {{shopify_1.name}}",
+                                "event": "Refund - Order {{shopify_1.name}}",
                                 "properties": {
                                     "distinct_id": "MESA",
                                     "mesa_properties": [
@@ -93,6 +100,34 @@
                                         {
                                             "key": "Refund Amount",
                                             "value": "{{custom.total_refund_amount}}"
+                                        },
+                                        {
+                                            "key": "Refund Timestamp",
+                                            "value": "{{shopify.created_at}}"
+                                        },
+                                        {
+                                            "key": "Refund Reason",
+                                            "value": "{{shopify.order_adjustments[0].reason}}"
+                                        },
+                                        {
+                                            "key": "Refunded Line Items Titles",
+                                            "value": "{{custom.refunded_line_items_titles}}"
+                                        },
+                                        {
+                                            "key": "Refunded Line Items Total Quantity",
+                                            "value": "{{custom.refunded_line_items_total_quantity}}"
+                                        },
+                                        {
+                                            "key": "Refunded Line Items SKU",
+                                            "value": "{{custom.refunded_line_items_skus}}"
+                                        },
+                                        {
+                                            "key": "Billing Customer Name",
+                                            "value": "{{shopify_1.customer.first_name}} {{shopify_1.customer.last_name}}"
+                                        },
+                                        {
+                                            "key": "Billing Customer Email",
+                                            "value": "{{shopify_1.email}}"
                                         }
                                     ]
                                 }
@@ -101,7 +136,19 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "query",
+                    "query.project_id",
+                    "query.strict",
+                    "body",
+                    "body.mesaData",
+                    "body.mesaData[].event",
+                    "body.mesaData[].properties",
+                    "body.mesaData[].properties.distinct_id",
+                    "body.mesaData[].properties.mesa_properties",
+                    "body.mesaData[].properties.mesa_properties[].key",
+                    "body.mesaData[].properties.mesa_properties[].value"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
