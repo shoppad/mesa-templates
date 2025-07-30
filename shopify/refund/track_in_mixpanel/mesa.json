@@ -1,0 +1,110 @@
+{
+    "key": "shopify/refund/track_in_mixpanel",
+    "name": "Track Shopify Refunds in Mixpanel",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "refund",
+                "action": "created",
+                "name": "Refund Created",
+                "key": "shopify",
+                "operation_id": "refunds_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{shopify.order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "description": "Calculates the refund amount that gets sent to Mixpanel.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mixpanel",
+                "entity": "import",
+                "action": "create",
+                "name": "Create an Event",
+                "key": "mixpanel",
+                "operation_id": "import-events",
+                "metadata": {
+                    "api_endpoint": "post \/import",
+                    "query": {
+                        "project_id": "mesaProjectId",
+                        "strict": "1"
+                    },
+                    "body": {
+                        "mesaData": [
+                            {
+                                "event": "Refund Order {{shopify_1.name}}",
+                                "properties": {
+                                    "distinct_id": "MESA",
+                                    "mesa_properties": [
+                                        {
+                                            "key": "Order ID",
+                                            "value": "{{shopify_1.id}}"
+                                        },
+                                        {
+                                            "key": "Order Name",
+                                            "value": "{{shopify_1.name}}"
+                                        },
+                                        {
+                                            "key": "Refund Amount",
+                                            "value": "{{custom.total_refund_amount}}"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
