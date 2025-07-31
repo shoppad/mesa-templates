@@ -160,7 +160,7 @@
                                 "key": "Sold Out End Date",
                                 "label": "Sold Out End Date",
                                 "type": "text",
-                                "x-udtname": "timestamptz",
+                                "x-udtname": "text",
                                 "x-maxlength": null,
                                 "location": "required"
                             },
