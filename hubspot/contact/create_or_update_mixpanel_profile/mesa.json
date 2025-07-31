@@ -1,0 +1,75 @@
+{
+    "key": "hubspot/contact/create_or_update_mixpanel_profile",
+    "name": "Create or Update Mixpanel Profiles from New HubSpot Contacts",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "list-created",
+                "name": "Contact Created",
+                "key": "hubspot",
+                "operation_id": "contact_list-created",
+                "metadata": {
+                    "api_endpoint": "post \/contacts\/lists",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mixpanel",
+                "entity": "engage_profile_set_once",
+                "action": "create",
+                "name": "Set Profile Properties",
+                "key": "mixpanel",
+                "operation_id": "profile-set-property-once",
+                "metadata": {
+                    "api_endpoint": "post \/engage#profile-set-once",
+                    "query": {
+                        "verbose": "1"
+                    },
+                    "body": {
+                        "mesaData": [
+                            {
+                                "$token": "{{template | label: 'What is the Mixpanel Project Token?' }}",
+                                "$distinct_id": "{{hubspot.properties.email}}",
+                                "$set_once": [
+                                    {
+                                        "key": "Email",
+                                        "value": "{{hubspot.properties.email}}"
+                                    },
+                                    {
+                                        "key": "First Name, Last Name",
+                                        "value": "{{hubspot.properties.firstname}} {{hubspot.properties.lastname}}"
+                                    },
+                                    {
+                                        "key": "Created At",
+                                        "value": "{{hubspot.createdAt}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
