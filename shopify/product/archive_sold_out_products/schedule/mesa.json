@@ -90,7 +90,7 @@
                                 "key": "Sold Out End Date",
                                 "label": "Sold Out End Date",
                                 "type": "hidden",
-                                "x-udtname": "timestamptz",
+                                "x-udtname": "text",
                                 "x-maxlength": null
                             },
                             {
