@@ -41,7 +41,7 @@
                     "body": {
                         "mesaData": [
                             {
-                                "event": "Help Scout Support Ticket Created",
+                                "event": "{{ template | label: 'What is the Event Name for this tracking event?', description: 'If creating a new event, choose a clear, consistent name that describes the user action or system event you want to track (e.g., Support Ticket Opened). Avoid including overly specific details like dates or ticket number in the event name.' }}",
                                 "properties": {
                                     "distinct_id": "MESA",
                                     "mesa_properties": [
