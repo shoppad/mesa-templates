@@ -1,6 +1,6 @@
 {
     "key": "helpscout/conversation/send_open_ticket_to_mixpanel_event",
-    "name": "Send Events in Mixpanel for New Support Tickets in Help Scout",
+    "name": "Capture New Help Scout Ticket Activity in Mixpanel Events",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
