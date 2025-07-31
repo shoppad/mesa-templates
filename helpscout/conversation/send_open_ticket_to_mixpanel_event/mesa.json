@@ -1,0 +1,89 @@
+{
+    "key": "helpscout/conversation/send_open_ticket_to_mixpanel_event",
+    "name": "Send Events in Mixpanel for New Support Tickets in Help Scout",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "helpscout",
+                "entity": "conversation",
+                "action": "created",
+                "name": "Conversation Created",
+                "key": "helpscout",
+                "operation_id": "convo_created",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mixpanel",
+                "entity": "import",
+                "action": "create",
+                "name": "Create an Event",
+                "key": "mixpanel",
+                "operation_id": "import-events",
+                "metadata": {
+                    "api_endpoint": "post \/import",
+                    "query": {
+                        "project_id": "mesaProjectId",
+                        "strict": "1"
+                    },
+                    "body": {
+                        "mesaData": [
+                            {
+                                "event": "Help Scout Support Ticket Created",
+                                "properties": {
+                                    "distinct_id": "MESA",
+                                    "mesa_properties": [
+                                        {
+                                            "key": "Distinct ID",
+                                            "value": "{{helpscout.createdBy.email}}"
+                                        },
+                                        {
+                                            "key": "Ticket ID",
+                                            "value": "{{helpscout.id}}"
+                                        },
+                                        {
+                                            "key": "Ticket Subject",
+                                            "value": "{{helpscout.subject}}"
+                                        },
+                                        {
+                                            "key": "Ticket Status",
+                                            "value": "{{helpscout.status}}"
+                                        },
+                                        {
+                                            "key": "Ticket Type",
+                                            "value": "{{helpscout.type}}"
+                                        },
+                                        {
+                                            "key": "Tags",
+                                            "value": "{% if helpscout.tags.size > 0 %}{% for tag_item in helpscout.tags %}{{ tag_item.tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% endif %}"
+                                        },
+                                        {
+                                            "key": "Date",
+                                            "value": "{{helpscout.createdAt}}"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
