@@ -1,0 +1,84 @@
+{
+    "key": "shipstation/order/remove_underscore_line_items_and_update_order",
+    "name": "Remove Underscore Line Item Properties from Shipstation",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shipstation",
+                "entity": "order",
+                "action": "ORDER_NOTIFY",
+                "name": "Order Created",
+                "version": "v2",
+                "key": "shipstation",
+                "operation_id": "order_ORDER_NOTIFY",
+                "metadata": {
+                    "api_endpoint": "get \/orders"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "shipstation",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "version": "v2",
+                "key": "shipstation_1",
+                "operation_id": "GetOrder",
+                "metadata": {
+                    "api_endpoint": "get \/orders\/{orderId}",
+                    "path": {
+                        "orderId": "{{shipstation.orderId}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code - Remove Underscore Line Item Properties",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "description": "Remove line item properties starting with underscore in ShipStation order.",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Custom Code - ShipStation Create\/Update Order",
+                "key": "custom_1",
+                "operation_id": "custom",
+                "metadata": {
+                    "description": "Create or update a ShipStation order.",
+                    "script": "custom_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
