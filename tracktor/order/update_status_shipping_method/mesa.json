@@ -1,6 +1,6 @@
 {
     "key": "tracktor/order/update_status_shipping_method",
-    "name": "Update an order's status and send an email if Express shipping is enabled",
+    "name": "Update Shopify Order Status and Notify Customer for Express Shipping",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -58,6 +58,23 @@
                 "weight": 1
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
@@ -67,11 +84,11 @@
                 "metadata": {
                     "to": "{{shopify_order.email}}",
                     "subject": "An update on your order {{shopify_order.name}} ",
-                    "message": "Hey {{shopify_order.customer.first_name}}!\n\nWe noticed that your order requires Express shipping. Our team is making sure that your order gets out of the door as soon as possible!\n\nThanks!\n- {{context.shop.name}}"
+                    "message": "Hey {{shopify_order.customer.first_name}}!\n\nWe noticed that your order requires Express shipping. Our team is making sure that your order gets out of the door as soon as possible!\n\nThanks!\n- {{shopify.name}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
         ]
     }

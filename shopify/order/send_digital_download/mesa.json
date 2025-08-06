@@ -1,17 +1,9 @@
 {
-    "key": "send_digital_download",
-    "name": "Sell downloadable products from your store",
+    "key": "shopify/order/send_digital_download",
+    "name": "Easily Sell Downloadable Products on Your Shopify Store",
     "version": "1.0.0",
-    "description": "Quickly sell downloadable products from your Shopify store without using another app. Offering downloadable products is a great way to grow your business or complement your physical products.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -94,6 +86,23 @@
                 "weight": 2
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_2",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
@@ -103,11 +112,11 @@
                 "metadata": {
                     "to": "{{shopify.email}}",
                     "subject": "Link to your Digital Download ",
-                    "message": "Hello {{shopify.customer.first_name}}!\n\nThank you for placing your order {{shopify.name}}.\n\nYour order is ready for download at this link: \n\nThanks!\n-{{context.shop.name}}"
+                    "message": "Hello {{shopify.customer.first_name}}!\n\nThank you for placing your order {{shopify.name}}.\n\nYour order is ready for download at this link: \n\nThanks!\n-{{shopify_2.name}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ],
         "storage": []

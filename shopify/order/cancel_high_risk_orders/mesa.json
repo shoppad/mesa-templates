@@ -95,6 +95,23 @@
                 "weight": 2
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_3",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
@@ -105,15 +122,15 @@
                 "metadata": {
                     "api_endpoint": "post \/send-email",
                     "body": {
-                        "to": "{{context.shop.email}}",
+                        "to": "{{shopify_3.email}}",
                         "subject": "Order {{shopify.name}} was canceled due to high risk",
-                        "message": "Order {{shopify.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
+                        "message": "Order {{shopify.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{shopify_3.myshopify_domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }

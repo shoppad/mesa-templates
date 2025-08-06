@@ -1,6 +1,6 @@
 {
     "key": "tracktor/fulfillment/delay_in_transit_sms",
-    "name": "Receive an SMS message if a package is delayed while in transit",
+    "name": "Get SMS Alerts for Delayed Packages in Transit",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -82,6 +82,23 @@
                 "weight": 2
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "sms",
@@ -91,13 +108,13 @@
                 "key": "sms",
                 "operation_id": "message_send",
                 "metadata": {
-                    "to": "{{context.shop.phone}}",
+                    "to": "{{shopify.phone}}",
                     "message": "Order {{tracktor_1.order_name}} has been in transit for over 60 hours!"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }

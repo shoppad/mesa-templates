@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_thanks_io_postcard",
-    "name": "Send a postcard after an order is created",
+    "name": "Send a Thank-You Postcard 10 Days After Order Creation",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
@@ -45,6 +45,23 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "thanks",
@@ -57,9 +74,9 @@
                     "api_endpoint": "post \/send\/postcard",
                     "entity_wrapper": "body",
                     "body": {
-                        "message": "Dear {{shopify.customer.first_name}},\n\nThank you for your recent purchase on {{context.shop.name}}.  Your business means the world to us and we hope you are enjoying your {{shopify.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{context.shop.name}} Team",
+                        "message": "Dear {{shopify.customer.first_name}},\n\nThank you for your recent purchase on {{shopify_1.name}}.  Your business means the world to us and we hope you are enjoying your {{shopify.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{shopify_1.name}} Team",
                         "handwriting_style": "1",
-                        "return_name": "{{context.shop.name}}",
+                        "return_name": "{{shopify_1.name}}",
                         "return_address": "{{context.shop.address1}}",
                         "return_address2": "{{context.shop.address2}}",
                         "return_city": "{{context.shop.city}}",
@@ -86,7 +103,7 @@
                     "body.return_postal_code"
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
         ]
     }

@@ -21,7 +21,7 @@
                 "options": [
                     {
                         "label": "Order URL",
-                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{shopify.id}}",
+                        "value": "Order URL|https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
@@ -108,6 +108,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
@@ -131,7 +148,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4.1,
@@ -157,7 +174,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "replay",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 5.1,
@@ -175,7 +192,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
         ]
     }

@@ -1,17 +1,9 @@
 {
-    "key": "shopify_product_create_facebook_product",
-    "name": "Create a Facebook product with a tagged Shopify product",
+    "key": "shopify/product/create_facebook_product",
+    "name": "Automatically Create Facebook Catalog Product from Tagged Shopify Product",
     "version": "1.0.0",
-    "description": "Automatically create Facebook Catalog products for any product generated on your Shopify store tagged with \"Facebook.\" With this template, you can sync products with Facebook and easily modify them. For example, you can use liquid tags to adjust the product description or even add a Mesa Image step to crop all photos before sending them to Facebook automatically.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -44,6 +36,23 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "facebook",
@@ -63,16 +72,15 @@
                         "image_url": "{{shopify_product.images[0].src}}",
                         "category": "{{shopify_product.product_type}}",
                         "retailer_id": "{{shopify_product.variants[0].sku}}",
-                        "url": "https://{{context.shop.domain}}/products/{{shopify_product.handle}}",
+                        "url": "https://{{shopify_1.domain}}/products/{{shopify_product.handle}}",
                         "description": "{{shopify_product.body_html}}",
                         "brand": "{{shopify_product.vendor}}"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

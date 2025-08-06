@@ -27,6 +27,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
@@ -46,7 +63,7 @@
                     "key"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -209,7 +226,7 @@
                         {
                             "key": "Admin Order URL",
                             "type": "varchar",
-                            "value": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}",
+                            "value": "https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}",
                             "disabled": "63092830fbb5514e47674b8e"
                         }
                     ],
@@ -225,7 +242,7 @@
                     "columns[].disabled"
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
         ]
     }

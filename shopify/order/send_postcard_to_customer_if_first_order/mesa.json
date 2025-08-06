@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/send_postcard_to_customer_if_first_order",
-    "name": "Send a postcard when a customer places their first order",
+    "name": "Send a Personalized Postcard for First-Time Shopify Customers",
     "version": "1.0.0",
-    "description": "First impressions count. When a customer makes their first purchase, you can send them a postcard to thank them and start the customer relationship on a good foot.",
-    "video": "",
-    "readme": "<br /> By default, this template is set up to use one of the free \"Thank You\" postcard designs from PostcardMania. <br /><br /> - In the **PostcardMania Create Order** action, create a PostCardMania [Credential](https://docs.getmesa.com/article/596-credentials) if you have not done so already. [Click here](https://docs.getmesa.com/article/1237-postcardmania) for more information on connecting PostcardMania with Mesa.<br />- [Input the Design ID, Mail Class, and Logo information](https://docs.getmesa.com/article/1237-postcardmania#configuring) in the action as well.<br />- Go over the other variables in the action and confirm that they match the variables seen in your PostcardMania account.<br />- Enable the workflow and hit Save.",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -59,7 +51,24 @@
                 "local_fields": [],
                 "on_error": "default",
                 "weight": 1
-            }},
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
             {
                 "schema": 4,
                 "trigger_type": "output",
@@ -91,31 +100,31 @@
                                 },
                                 {
                                     "key": "companyaddress",
-                                    "value": "{{context.shop.email}}"
+                                    "value": "{{shopify.email}}"
                                 },
                                 {
                                     "key": "companycity",
-                                    "value": "{{ context.shop.city }}"
+                                    "value": "{{ shopify.city }}"
                                 },
                                 {
                                     "key": "companyname",
-                                    "value": "{{context.shop.name}}"
+                                    "value": "{{shopify.name}}"
                                 },
                                 {
                                     "key": "companystate",
-                                    "value": "{{context.shop.province}}"
+                                    "value": "{{shopify.province}}"
                                 },
                                 {
                                     "key": "companyurl",
-                                    "value": "{{context.shop.domain}}"
+                                    "value": "{{shopify.domain}}"
                                 },
                                 {
                                     "key": "companyzipcode",
-                                    "value": "{{context.shop.zip}}"
+                                    "value": "{{shopify.zip}}"
                                 },
                                 {
                                     "key": "phone",
-                                    "value": "{{context.shop.phone}}"
+                                    "value": "{{shopify.phone}}"
                                 },
                                 {
                                     "key": "productname",
@@ -127,9 +136,8 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }

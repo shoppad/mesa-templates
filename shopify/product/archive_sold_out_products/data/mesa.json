@@ -45,6 +45,23 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_2",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
@@ -60,7 +77,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 4.1,
@@ -83,7 +100,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -116,7 +133,7 @@
                         "Sold Out Start Date": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
                         "Sold Out Day Count": "0",
                         "Status": "Active",
-                        "Shopify Admin Link": "https:\/\/admin.shopify.com\/store\/{{context.shop.domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_1.id}}"
+                        "Shopify Admin Link": "https:\/\/admin.shopify.com\/store\/{{shopify_2.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_1.id}}"
                     }
                 },
                 "local_fields": [
@@ -194,7 +211,7 @@
                 ],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }

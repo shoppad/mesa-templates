@@ -1,17 +1,9 @@
 {
     "key": "form/shopify_order_return",
-    "name": "Start a return with Forms by MESA",
+    "name": "Enable Self-Service Returns with Forms",
     "version": "1.0.0",
-    "description": "Link to a form from your Tracktor tracking page or on a customer's Order History page that allows customers to easily initiate an order return. The full order details, as well as the Reason for Return, will be included in the email to your back office. This automation could be extended to automatically generate a return label that is sent to the customer.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "forms-by-mesa",
-    "destination": "slack",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -73,6 +65,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
@@ -85,28 +94,32 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v1",
                 "entity": "row",
                 "action": "create",
                 "name": "Add Row",
-                "key": "googlesheets_row_1",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
                 "metadata": {
-                    "path": {
-                        "mode": "create",
-                        "header_row": "first_row"
-                    },
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "columns": [
+                        "Order Name",
+                        "Created At",
+                        "Total Price",
+                        "Reason for Return"
+                    ],
                     "body": {
-                        "fields": {
-                            "Order Name": "{{shopify_order.name}}",
-                            "Created At": "{{shopify_order.created_at}}",
-                            "Total Price": "{{shopify_order.total_price}}",
-                            "Reason for Return": "{{forms.reason}}"
+                        "columns": {
+                            "A": "{{shopify_order.name}}",
+                            "B": "{{shopify_order.created_at}}",
+                            "C": "{{shopify_order.total_price}}",
+                            "D": "{{forms.reason}}"
                         }
                     }
                 },
@@ -116,40 +129,43 @@
                         "type": "object",
                         "fields": [
                             {
-                                "key": "fields",
+                                "key": "columns",
                                 "type": "object",
                                 "fields": [
                                     {
-                                        "key": "Order Name",
+                                        "key": "A",
                                         "label": "Order Name",
                                         "type": "text",
-                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Created At",
+                                        "key": "B",
                                         "label": "Created At",
                                         "type": "text",
-                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Total Price",
+                                        "key": "C",
                                         "label": "Total Price",
                                         "type": "text",
-                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Reason for Return",
+                                        "key": "D",
                                         "label": "Reason for Return",
                                         "type": "text",
-                                        "source": "googlesheets_1WBYvv9oFFz9mQ4UNsYLBk-96nCp6_ocpGePLWSn07pI_Sheet1"
+                                        "location": "required"
                                     }
-                                ]
+                                ],
+                                "location": "required"
                             }
-                        ]
+                        ],
+                        "location": "required"
                     }
                 ],
+                "selected_fields": [],
                 "on_error": "replay",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 2,
@@ -161,7 +177,7 @@
                 "metadata": {
                     "to": "{{shopify_order.email}}",
                     "subject": "Your return for order {{shopify_order.name}}",
-                    "message": "Hello {{shopify_order.customer.first_name}},\n\nWe're sorry that you had an issue with your order. We are working on initiating a return for the following products and will reach out shortly with next steps.\n\nThank you,\nThe {{context.shop.name}} Team"
+                    "message": "Hello {{shopify_order.customer.first_name}},\n\nWe're sorry that you had an issue with your order. We are working on initiating a return for the following products and will reach out shortly with next steps.\n\nThank you,\nThe {{shopify.name}} Team"
                 },
                 "local_fields": [],
                 "on_error": "default",

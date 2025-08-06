@@ -1,17 +1,8 @@
 {
     "key": "tracktor/fulfillment/send_email_when_in_transit",
-    "name": "Send an email when a package is \"In Transit\"",
+    "name": "Email Customers When Their Package Status Is \"In Transit\"",
     "version": "1.0.0",
-    "description": "Keeping customers up to date on their orders is key to avoiding the dreaded, where is my package question. When you combine MESA with Tracktor, you can set up a workflow that automatically sends an email to customers when their package's delivery status changes to In Transit. It's going to give them peace of mind as they continue to wait for their order.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -45,6 +36,23 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
@@ -54,13 +62,12 @@
                 "metadata": {
                     "to": "{{tracktor_order.order_email}}",
                     "subject": "Order {{tracktor_order.order_name}} is on your way!",
-                    "message": "Hello {{tracktor_order.customer_first_name}}!\n\nThanks for your patience as your order is on its way to you!\n\n- {{context.shop.name}}"
+                    "message": "Hello {{tracktor_order.customer_first_name}}!\n\nThanks for your patience as your order is on its way to you!\n\n- {{shopify.name}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

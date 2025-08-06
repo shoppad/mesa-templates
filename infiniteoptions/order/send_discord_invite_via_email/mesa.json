@@ -1,6 +1,6 @@
 {
     "key": "infiniteoptions/order/send_discord_invite_via_email",
-    "name": "Email a Discord invitation when a product using Infinite Options is purchased",
+    "name": "Send Discord Invitation for Purchases of Infinite Options Products",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -25,13 +25,30 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
-                "key": "shopify",
+                "key": "shopify_1",
                 "operation_id": "get_customers_customer_id",
                 "metadata": {
                     "api_endpoint": "get admin/customers/{{customer_id}}.json",
@@ -39,7 +56,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -50,11 +67,11 @@
                 "metadata": {
                     "a": "discord:invite",
                     "comparison": "not in",
-                    "b": "{{shopify.tags}}"
+                    "b": "{{shopify_1.tags}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -73,7 +90,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -85,11 +102,11 @@
                 "metadata": {
                     "to": "{{infiniteoptions.order.email}}",
                     "subject": "Welcome to our Discord community! - Discord Invite",
-                    "message": "Hey {{shopify.first_name}},\n\nHere is your discord invite: https://discord.gg/{{discord.code}}\n\nThanks!\n-{{context.shop.name}}"
+                    "message": "Hey {{shopify_1.first_name}},\n\nHere is your discord invite: https://discord.gg/{{discord.code}}\n\nThanks!\n-{{shopify.name}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 3,
@@ -98,18 +115,18 @@
                 "entity": "customer",
                 "action": "tag_add",
                 "name": "Customer Add Tag",
-                "key": "shopify_1",
+                "key": "shopify_2",
                 "operation_id": "post_mesa_customers_customer_id_tag",
                 "metadata": {
                     "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
-                    "customer_id": "{{shopify.id}}",
+                    "customer_id": "{{shopify_1.id}}",
                     "body": {
                         "tag": "discord:invite"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ]
     }

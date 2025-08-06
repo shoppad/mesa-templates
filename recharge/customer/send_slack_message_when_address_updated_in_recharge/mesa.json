@@ -1,16 +1,9 @@
 {
     "key": "recharge/customer/send_slack_message_when_address_updated_in_recharge",
-    "name": "Send a Slack message when an address is updated in Recharge",
+    "name": "Receive Slack Notifications for Address Updates in Recharge",
     "version": "1.0.0",
-    "description": "Ensure your team always has the latest customer information by alerting them when the change occurs. This template will send a Slack message when a customer makes an update to their address in Recharge.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -29,6 +22,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
@@ -36,11 +46,11 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "A customer updated their address.\n\nCustomer's Name: {{recharge.first_name}} {{recharge.last_name}}\nAddress: {{recharge.address1}}{% if recharge.address2 %} {{recharge.address2}}{% endif %}, {{recharge.city}} {{recharge.country_code}} {{recharge.zip}}\nView this customer: https://{{context.shop.name}}-sp.admin.rechargeapps.com/merchant/customers/{{recharge.customer_id}}"
+                    "message": "A customer updated their address.\n\nCustomer's Name: {{recharge.first_name}} {{recharge.last_name}}\nAddress: {{recharge.address1}}{% if recharge.address2 %} {{recharge.address2}}{% endif %}, {{recharge.city}} {{recharge.country_code}} {{recharge.zip}}\nView this customer: https:\/\/{{shopify.name}}-sp.admin.rechargeapps.com\/merchant\/customers\/{{recharge.customer_id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []

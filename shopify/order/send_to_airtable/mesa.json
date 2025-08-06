@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_to_airtable",
-    "name": "Send Shopify orders to Airtable",
+    "name": "Send Shopify Orders to Airtable",
     "version": "1.0.0",
     "enabled": false,
     "setup": {
@@ -131,7 +131,7 @@
                     },
                     {
                         "label": "Admin Order URL",
-                        "value": "Admin Order URL|https://{{context.shop.domain}}/admin/orders/{{shopify.id}}",
+                        "value": "Admin Order URL|https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify.id}}",
                         "description": "The URL to view the order in the Shopify admin"
                     }
                 ],
@@ -162,6 +162,23 @@
             }
         ],
         "outputs": [
+                      {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 5.1,
                 "trigger_type": "output",
@@ -186,7 +203,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -226,7 +243,7 @@
                             "Product Quantity": "{{loop.quantity}}",
                             "Line Item ID": "{{loop.id}}",
                             "Created At": "{{shopify_order.created_at}}",
-                            "Admin Order URL": "https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify_order.id}}"
+                            "Admin Order URL": "https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify_order.id}}"
                         }
                     },
                     "path": {
@@ -237,7 +254,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 5.1,
@@ -255,7 +272,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
         ]
     }

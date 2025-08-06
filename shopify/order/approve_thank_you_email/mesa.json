@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/approve_thank_you_email",
-    "name": "Approve automated thank-you emails before they get sent",
+    "name": "Approve Automated Thank-You Emails Before Sending to Customers",
     "version": "1.0.0",
-    "description": "The wrong message going out can affect your brand and influence future interactions. With this template, merchants can now approve email content before it reaches the customer. ",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -21,7 +13,7 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
@@ -29,20 +21,37 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "approval",
                 "name": "Approval",
                 "key": "approval",
                 "metadata": {
-                    "message": "Thank you email for a new order:\n\n**Order Details:**\n\n- Order Number: {{shopify_order.name}}\n- Email: {{shopify_order.email}}\n- Total Price: ${{shopify_order.total_price}}",
+                    "message": "Thank you email for a new order:\n\n**Order Details:**\n\n- Order Number: {{shopify.name}}\n- Email: {{shopify.email}}\n- Total Price: ${{shopify.total_price}}",
                     "field": true,
                     "label_accept": "Send Email",
                     "label_reject": "Reject"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 2,
@@ -53,13 +62,13 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{shopify_order.email}}",
-                    "subject": "Order {{shopify_order.name}} confirmation",
-                    "message": "Hi {{shopify_order.customer.first_name}},\n\nThanks for your purchase! We're getting your order {{shopify_order.name}} ready to be shipped. We will notify you when it has been sent.\n\n{% if approval.field != \"\" %}Additional notes: {{approval.field}}\n\n{% endif %}Thanks,\n\nThe {{context.shop.name}} Team"
+                    "to": "{{shopify.email}}",
+                    "subject": "Order {{shopify.name}} confirmation",
+                    "message": "Hi {{shopify.customer.first_name}},\n\nThanks for your purchase! We're getting your order {{shopify.name}} ready to be shipped. We will notify you when it has been sent.\n\n{% if approval.field != \"\" %}Additional notes: {{approval.field}}\n\n{% endif %}Thanks,\n\nThe {{shopify_1.name}} Team"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
         ],
         "storage": []

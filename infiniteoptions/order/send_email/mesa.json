@@ -1,17 +1,8 @@
 {
     "key": "infiniteoptions/order/send_email",
-    "name": "Receive an email when a customer purchases a product with options",
+    "name": "Get Notified by Email When a Product with Options is Purchased",
     "version": "1.0.0",
-    "description": "Avoid surprises and ensure both you and your team are prepared for when an order is placed containing a product that requires special handling. MESA will automatically send an email to your store’s registered email address when an order with Infinite Options products is purchased",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -31,6 +22,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
@@ -41,11 +49,11 @@
                 "metadata": {
                     "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email' }}",
                     "subject": "New Infinite Options Order {{infiniteoptions_order.order.order_number}}",
-                    "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://{{context.shop.domain}}/admin/orders/{{infiniteoptions_order.order.id}}"
+                    "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{infiniteoptions_order.order.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []

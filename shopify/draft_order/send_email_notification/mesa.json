@@ -1,17 +1,8 @@
 {
     "key": "shopify/draft_order/send_email_notification",
-    "name": "Receive an email when a draft order is created",
+    "name": "Email Notification for New Draft Orders in Shopify",
     "version": "1.0.0",
-    "description": "Being notified about any activity on your Shopify store is helpful for a store owner who may not always have time to monitor the store. This template sends an email notification when a Shopify draft order is created. Store owners will receive an email with a link to the recently created Shopify draft order.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -30,6 +21,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
@@ -38,12 +46,12 @@
                 "key": "email",
                 "metadata": {
                     "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email' }}",
-                    "subject": "{{context.shop.name}}, A new draft order has been created.",
-                    "message": "A new draft order {{shopify.name}} has been created. \nSee: https:\/\/{{context.shop.myshopify_domain}}\/admin\/draft_orders\/{{shopify.id}}"
+                    "subject": "{{shopify.name}}, A new draft order has been created.",
+                    "message": "A new draft order {{shopify.name}} has been created. \nSee: https:\/\/{{shopify_1.myshopify_domain}}\/admin\/draft_orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []

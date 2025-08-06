@@ -1,17 +1,9 @@
 {
-    "key": "send_quote",
-    "name": "Send a product or service quote to a staff email address",
+    "key": "form/send_quote",
+    "name": "Email Product or Service Quotes to Staff from Shopify Forms",
     "version": "1.0.0",
-    "description": "Customize your sales experience by using quote forms for your customers anywhere on your Shopify store. Forms by Mesa is an easy way to collect data with a simple interface and powerful editor. Close more deals with inbound quote requests emailed directly to you and your teams.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -69,6 +61,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
@@ -77,13 +86,13 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{context.shop.email}}",
+                    "to": "{{shopify.email}}",
                     "subject": "New Product or Service Quote",
                     "message": "Name: {{form.name}}\nEmail Address: {{form.email}}\nPhone: {{form.phone}}\nMessage: {{form.message}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []

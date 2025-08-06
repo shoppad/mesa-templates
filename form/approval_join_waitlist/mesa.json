@@ -1,17 +1,9 @@
 {
     "key": "form/approval_join_waitlist",
-    "name": "Notify customers on a product waitlist",
+    "name": "Notify Waitlisted Customers When a Product Becomes Available",
     "version": "1.0.0",
-    "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. This template allows you to manually approve or reject users on a product waitlist and notify them via email using Forms by Mesa.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -62,6 +54,23 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
@@ -74,7 +83,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 2,
@@ -87,11 +96,11 @@
                 "metadata": {
                     "to": "{{form.email}}",
                     "subject": "{{shopify_product.title}} is available now!",
-                    "message": "Hey there, \n\nThanks for signing up on our waitlist! {{shopify_product.title}} has become available. Get it while stock lasts: https://{{context.shop.domain}}/products/{{shopify_product.handle}}"
+                    "message": "Hey there, \n\nThanks for signing up on our waitlist! {{shopify_product.title}} has become available. Get it while stock lasts: https://{{shopify.myshopify_domain}}/products/{{shopify_product.handle}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
         ],
         "storage": []

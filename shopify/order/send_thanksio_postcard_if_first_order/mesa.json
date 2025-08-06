@@ -1,16 +1,9 @@
 {
     "key": "shopify/order/send_thanksio_postcard_if_first_order",
-    "name": "Send a postcard when a customer places their first order",
+    "name": "Send a Personalized Postcard for First-Time Shopify Customers",
     "version": "1.0.0",
-    "description": "Let your customers know how much you value their business with a thank you note. This template will send a postcard from thanks.io after the customer makes their first purchase.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -61,6 +54,23 @@
                 "weight": 1
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_2",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "thanks",
@@ -73,10 +83,10 @@
                     "api_endpoint": "post /send/postcard",
                     "entity_wrapper": "body",
                     "body": {
-                        "message": "Hello {{shopify.customer.first_name}},\n\nThank you for your first purchase on {{context.shop.name}}. We hope you love our product!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\nThank you,\n{{context.shop.name}} Team",
-                        "return_name": "{{context.shop.name}}",
-                        "return_address": "{{context.shop.address1}}",
-                        "return_address2": "{{context.shop.address2}}",
+                        "message": "Hello {{shopify.customer.first_name}},\n\nThank you for your first purchase on {{shopify_2.name}}. We hope you love our product!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\nThank you,\n{{shopify_2.name}} Team",
+                        "return_name": "{{shopify_2.name}}",
+                        "return_address": "{{shopify_2.address1}}",
+                        "return_address2": "{{shopify_2.address2}}",
                         "return_city": "{{context.shop.city}}",
                         "return_postal_code": "{{context.shop.zip}}",
                         "recipients": [
@@ -93,9 +103,8 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }

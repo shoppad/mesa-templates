@@ -99,6 +99,23 @@
                 "weight": 3
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_5",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
@@ -119,7 +136,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             },
             {
                 "schema": 5,
@@ -134,13 +151,13 @@
                     "body": {
                         "to": "{{ template | label: 'What is the email you would like to send to?', tokens: false }}",
                         "subject": "Product {{shopify_3.title}} stock level is low",
-                        "message": "Product {{shopify_3.title}}\n\n{{shopify_4.name}} stock level is low at {{shopify.available}}\n\nProduct URL: https:\/\/admin.shopify.com\/store\/{{context.shop.domain | | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_3.id}}"
+                        "message": "Product {{shopify_3.title}}\n\n{{shopify_4.name}} stock level is low at {{shopify.available}}\n\nProduct URL: https:\/\/admin.shopify.com\/store\/{{shopify_5.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_3.id}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             }
         ]
     }

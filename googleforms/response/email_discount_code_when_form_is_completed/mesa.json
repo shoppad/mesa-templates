@@ -40,13 +40,30 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "discount_code",
                 "action": "list",
                 "name": "Get Discount Code",
-                "key": "shopify",
+                "key": "shopify_1",
                 "operation_id": "get_price_rules_price_rule_id_discount_codes",
                 "metadata": {
                     "api_endpoint": "get admin/price_rules/{{price_rule_id}}/discount_codes.json",
@@ -54,7 +71,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 2
             },
             {
                 "schema": 3,
@@ -67,11 +84,11 @@
                 "operation_id": "get_price_rules_price_rule_id",
                 "metadata": {
                     "api_endpoint": "get admin/price_rules/{{price_rule_id}}.json",
-                    "price_rule_id": "{{shopify.0.price_rule_id}}"
+                    "price_rule_id": "{{shopify_1.0.price_rule_id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 3
             },
             {
                 "schema": 2,
@@ -85,7 +102,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 4
             },
             {
                 "schema": 5,
@@ -100,12 +117,12 @@
                     "body": {
                         "to": "{{googleforms.email}}",
                         "subject": "Thanks for your feedback! Here's a {{custom.price_rule_value}}% discount!",
-                        "message": "Hi there,\n\nWe want to express our gratitude for completing our survey.\n\nAs a thank you, we're offering you an exclusive {{custom.price_rule_value}}% discount on your next order. Just use code {{shopify.0.code}} at checkout to enjoy the savings.\n\nWe appreciate your support and look forward to serving you again soon!\n\nBest regards.\n{{context.shop.name}}"
+                        "message": "Hi there,\n\nWe want to express our gratitude for completing our survey.\n\nAs a thank you, we're offering you an exclusive {{custom.price_rule_value}}% discount on your next order. Just use code {{shopify_1.0.code}} at checkout to enjoy the savings.\n\nWe appreciate your support and look forward to serving you again soon!\n\nBest regards.\n{{shopify.name}}"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 5
             }
         ]
     }

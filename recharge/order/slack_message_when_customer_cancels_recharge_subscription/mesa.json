@@ -1,6 +1,6 @@
 {
     "key": "recharge/order/slack_message_when_customer_cancels_recharge_subscription",
-    "name": "Send a Slack message when a customer cancels their subscription in Recharge",
+    "name": "Receive Slack Notifications When a Customer Cancels a Recharge Subscription",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -23,6 +23,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "recharge",
@@ -39,7 +56,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -49,12 +66,12 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "A customer has canceled their Recharge subscription.\n\nCustomer's Name: {{recharge_1.first_name}} {{recharge_1.last_name}}\nCancellation Reason: {{recharge.cancellation_reason}}\nView subscription: https:\/\/{{context.shop.name}}-sp.admin.rechargeapps.com\/merchant\/subscriptions\/{{recharge.id}}\/details",
+                    "message": "A customer has canceled their Recharge subscription.\n\nCustomer's Name: {{recharge_1.first_name}} {{recharge_1.last_name}}\nCancellation Reason: {{recharge.cancellation_reason}}\nView subscription: https:\/\/{{shopify.name}}-sp.admin.rechargeapps.com\/merchant\/subscriptions\/{{recharge.id}}\/details",
                     "channel": "{{ template | label: 'What is the Slack channel you would like to send the message to?', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
         ]
     }
