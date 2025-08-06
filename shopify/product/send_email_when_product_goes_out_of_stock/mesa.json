@@ -1,99 +1,157 @@
 {
     "key": "shopify/product/send_email_when_product_goes_out_of_stock",
-    "name": "Receive an email when a product goes out of stock",
+    "name": "Email Notification When a Shopify Product Goes Out of Stock",
     "version": "1.0.0",
-    "description": "It can be challenging to have up-to-the-minute information regarding your product\u2019s inventory levels. It's critical that if a product goes out of stock, you can be prepared to handle restocking and customer notifications promptly. This out of stock email template will send an email to the store owner when a product goes out of stock. Inventory surprises, be gone!",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "email",
-    "seconds": 360,
     "enabled": false,
-    "logging": true,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
             {
-                "schema": 2,
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "loop",
-                "version": "v2",
-                "entity": "loop",
-                "operation_id": "loop_loop",
-                "name": "Loop",
-                "key": "loop",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}"
+                    "api_endpoint": "get admin\/shop.json"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "shopify",
-                "entity": "variant",
-                "action": "retrieve",
-                "name": "Retrieve Variant",
-                "key": "shopify_variant",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "api_endpoint": "GET admin/variants/{{variant_id}}.json",
-                    "variant_id": "{{loop.variant_id}}"
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 2,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
+                "key": "shopify_2",
+                "operation_id": "get_variants_variant_id",
                 "metadata": {
-                    "a": "{{shopify_variant.inventory_quantity}}",
-                    "comparison": "less than equal",
-                    "b": "{{ template | label: 'What should be the out of stock threshold?', description: 'When product inventory reaches this level (or below) the notification will trigger.', default: '0', tokens: false }}"
+                    "api_endpoint": "get admin\/variants\/{{variant_id}}.json",
+                    "trigger_parent_key": "loop",
+                    "variant_id": "{{loop.variant_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 2,
+                "schema": 4.1,
                 "trigger_type": "output",
-                "type": "email",
-                "version": "v1",
-                "name": "Email",
-                "key": "email",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
                 "metadata": {
-                    "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email', default: '' }}",
-                    "subject": "Item out of stock: {{shopify_variant.sku}}",
-                    "message": "This is an automated message to let you know that SKU {{shopify_variant.sku}} is now out of stock. \n\nView the product: https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/products/{{shopify_variant.product_id}}"
+                    "trigger_parent_key": "loop",
+                    "a": "{{shopify_2.inventory_quantity}}",
+                    "comparison": "less than equal",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "to": "{{ template | label: 'What email address should receive this notification?' }}",
+                        "subject": "Item out of stock: {{shopify_2.sku}}",
+                        "message": "This is an automated message to let you know that SKU {{shopify_2.sku}} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_2.product_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
             }
-        ],
-        "storage": []
+        ]
     }
 }
