@@ -30,10 +30,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
                 "entity": "order_risk",
                 "action": "retrieve",
                 "name": "Get List of Order's Risks",
-                "key": "shopify_1",
+                "key": "shopify_2",
                 "operation_id": "get_orders_order_id_risks_graphql",
                 "metadata": {
                     "api_endpoint": "get graphql\/orders_risks\/id.json",
@@ -44,7 +61,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4.1,
@@ -74,7 +91,7 @@
                     "additional[].b"
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 2,
@@ -84,7 +101,7 @@
                 "key": "approval",
                 "operation_id": "approval",
                 "metadata": {
-                    "message": "A possible fraudulent order was created. \n\n**Order Details:**\n\n- Order: {{shopify.name}}\n- Email: {{shopify.email}}\n- https:\/\/{{context.shop.myshopify_domain}}\/admin\/orders\/{{shopify.id}}",
+                    "message": "A possible fraudulent order was created. \n\n**Order Details:**\n\n- Order: {{shopify.name}}\n- Email: {{shopify.email}}\n- https:\/\/{{shopify_1.myshopify_domain}}\/admin\/orders\/{{shopify.id}}",
                     "field": true,
                     "label_accept": "Submit",
                     "label_reject": "Ignore",
@@ -105,7 +122,7 @@
                     "label_reject"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 3.1,
@@ -114,7 +131,7 @@
                 "entity": "order_transaction",
                 "action": "list",
                 "name": "Get List of Order Transactions",
-                "key": "shopify_2",
+                "key": "shopify_3",
                 "operation_id": "get_orders_order_id_transactions",
                 "metadata": {
                     "api_endpoint": "get admin\/orders\/{{order_id}}\/transactions.json",
@@ -123,7 +140,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 4.1,
@@ -133,7 +150,7 @@
                 "key": "filter_1",
                 "operation_id": "filter",
                 "metadata": {
-                    "a": "{{shopify_2[0].kind}}",
+                    "a": "{{shopify_3[0].kind}}",
                     "comparison": "equals",
                     "b": "authorization",
                     "additional": [
@@ -146,7 +163,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             },
             {
                 "schema": 3.1,
@@ -155,15 +172,15 @@
                 "entity": "order_transaction",
                 "action": "create",
                 "name": "Create Order Transaction",
-                "key": "shopify_3",
+                "key": "shopify_4",
                 "operation_id": "post_orders_order_id_transactions",
                 "metadata": {
                     "api_endpoint": "post admin\/orders\/{{order_id}}\/transactions.json",
                     "order_id": "{{shopify.id}}",
                     "body": {
-                        "amount": "{{shopify_2[0].amount}}",
+                        "amount": "{{shopify_3[0].amount}}",
                         "kind": "capture",
-                        "parent_id": "{{shopify_2[0].id}}"
+                        "parent_id": "{{shopify_3[0].id}}"
                     }
                 },
                 "local_fields": [],
@@ -171,7 +188,7 @@
                     "body.amount"
                 ],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             },
             {
                 "schema": 4.1,
@@ -194,7 +211,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 6
+                "weight": 7
             },
             {
                 "schema": 3.1,
@@ -203,7 +220,7 @@
                 "entity": "order",
                 "action": "cancel",
                 "name": "Cancel Order",
-                "key": "shopify_4",
+                "key": "shopify_5",
                 "operation_id": "post_orders_order_id_cancel",
                 "metadata": {
                     "api_endpoint": "post admin\/orders\/{{order_id}}\/cancel.json",
@@ -212,7 +229,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 7
+                "weight": 8
             }
         ]
     }
