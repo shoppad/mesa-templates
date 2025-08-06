@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/create_discord_channel_message",
-    "name": "Create a channel message when a new product is created in Shopify",
+    "name": "Send Discord Channel Message for New Shopify Products",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -55,6 +55,23 @@
                 "weight": 1
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_2",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "discord",
@@ -68,7 +85,7 @@
                     "body": {
                         "embed": {
                             "title": "New Product Added",
-                            "description": "\ud83c\udf89 New Product \ud83c\udf89\n{{shopify_1.title}}\n\nView Product: https://{{context.shop.domain}}/products/{{shopify_1.handle}}",
+                            "description": "\ud83c\udf89 New Product \ud83c\udf89\n{{shopify_1.title}}\n\nView Product: https://{{shopify_2.domain}}/products/{{shopify_1.handle}}",
                             "timestamp": "{{shopify_1.published_at}}",
                             "color": "15105570",
                             "image": {
@@ -82,7 +99,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
         ]
     }
