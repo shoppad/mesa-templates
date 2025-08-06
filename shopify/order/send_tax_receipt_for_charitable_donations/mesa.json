@@ -1,16 +1,9 @@
 {
     "key": "shopify/order/send_tax_receipt_for_charitable_donations",
-    "name": "Send Tax Deduction Receipt for Charitable Donations",
+    "name": "Automatically Send Tax Deduction Receipts for Charitable Donations",
     "version": "1.0.0",
-    "description": "Customers may want to receive a tax deduction receipt for their donation purchase. This template sends customers an email receipt when they make a tax deductible charitable donation at checkout. When a customer makes a donation to a tax-exempt nonprofit organization, they can deduct the full amount of their gift as a charitable contribution for federal income tax purposes.",
-    "readme": "https://github.com/blob/master/shopify/order/send_tax_receipt_for_charitable_donations/README.md",
-    "video": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "email",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -30,6 +23,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "trigger_type": "output",
                 "type": "filter",
                 "entity": "",
@@ -43,7 +53,7 @@
                 },
                 "local_fields": null,
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "trigger_type": "output",
@@ -57,13 +67,12 @@
                 "metadata": {
                     "to": "{{shopify_order.email}}",
                     "subject": "Thank you for your donation!",
-                    "message": "Dear {{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}, \n\nThank you for your gift of ${{shopify_order.total_tip_received}}, received on {{shopify_order.created_at}}.\n\nYour donation is to a tax-exempt nonprofit organization under Section 501(c)3 of the Internal Revenue Code. You can deduct the full amount of your gift as a charitable contribution for federal income tax purposes. No goods or services were provided in exchange for your contribution.\n\nSincerely,\n{{context.shop.name}}"
+                    "message": "Dear {{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}}, \n\nThank you for your gift of ${{shopify_order.total_tip_received}}, received on {{shopify_order.created_at}}.\n\nYour donation is to a tax-exempt nonprofit organization under Section 501(c)3 of the Internal Revenue Code. You can deduct the full amount of your gift as a charitable contribution for federal income tax purposes. No goods or services were provided in exchange for your contribution.\n\nSincerely,\n{{shopify_1.name}}"
                 },
                 "local_fields": null,
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
