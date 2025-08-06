@@ -1,6 +1,6 @@
 {
     "key": "tracktor/fulfillment/send_gmail_email_when_package_is_in_transit",
-    "name": "Send an email via Gmail when a package is \"In Transit\"",
+    "name": "Send Customer Email Notifications via Gmail When Package is In Transit",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -41,6 +41,23 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "gmail",
@@ -54,14 +71,14 @@
                     "body": {
                         "to": "{{tracktor_1.order_email}}",
                         "subject": "{{ template | label: 'What is the subject of your email?', description: '', default: 'Order {{tracktor_1.order_name}} is on your way!' }}",
-                        "message": "{{ template | label: 'What is the message of your email?', description: '', default: 'Hello {{tracktor_1.customer_first_name}}!\n\nThanks for your patience as your order is on its way to you!\n\n- {{context.shop.name}}' }}",
+                        "message": "{{ template | label: 'What is the message of your email?', description: '', default: 'Hello {{tracktor_1.customer_first_name}}!\n\nThanks for your patience as your order is on its way to you!\n\n- {{shopify.name}}' }}",
                         "from": "{{ template | label: 'What is the email address that the email is sent from?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
         ]
     }
