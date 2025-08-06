@@ -1,16 +1,8 @@
 {
     "key": "shopify/order/receive_sms_when_order_created",
-    "name": "Receive an SMS message when a new Shopify order is created",
+    "name": "Get SMS Alerts for New Shopify Orders",
     "version": "1.0.0",
-    "description": "Stay on top of your business anywhere, anytime with the help of MESA. This template will send an SMS message to the store administrator when a new Shopify order is created. With the new order details at your fingertips, you'll be better prepared and always in the know of what's going on with your business.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -30,6 +22,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "sms",
@@ -38,12 +47,12 @@
                 "name": "Send Message to store owner",
                 "key": "sms",
                 "metadata": {
-                    "message": "A new order was placed: {{shopify.name}}\n\nClick here to view the order: https:\/\/{{context.shop.domain}}\/admin\/orders\/{{shopify.id}}",
+                    "message": "A new order was placed: {{shopify.name}}\n\nClick here to view the order: https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}",
                     "to": "{{ template | label: 'What phone number should receive this notification?', description: 'SMS by MESA currently only supports phone numbers from the United States or Canada.', type: 'string', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ],
         "storage": []
