@@ -46,7 +46,7 @@
                         "starts_at": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
                         "once_per_customer": "true",
                         "target_selection": "entitled",
-                        "ends_at": "{{ template | label: 'How long is the discount code valid?', description: 'It is set to 14 days (2 weeks) by default. Leave as is or update the date variable before continuing.', default: '{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | add_time: 14, \"days\"}}' | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
+                        "ends_at": "{{ template | label: 'How long is the discount code valid?', description: 'It is set to 14 days (2 weeks) by default. Leave as is or update the date variable before continuing.', default: '{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | add_time: 14, \"days\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}' }}",
                         "entitled_product_ids": [
                           "{{ template | label: 'What product can a customer apply their discount towards?', description: 'You''ll need to enter the Entitled Product ID. To find this, navigate to your Shopify admin in a separate tab. Go to the Products page and view an individual product. Locate the page''s URL. Copy the set of numbers after /products/ and paste that here.', tokens: false }}"
                         ],
@@ -151,6 +151,23 @@
                 "weight": 4
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_6",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "filter",
@@ -162,7 +179,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             },
             {
                 "schema": 2,
@@ -175,7 +192,7 @@
                 "operation_id": "message_send",
                 "metadata": {
                     "to": "{{shopify.phone}}",
-                    "message": "{{ template | label: 'Do you have any changes you''d like to make to the SMS message?', description: 'If you changed your discount, you''ll want to make sure that''s reflected here.', default: 'Thank you for shopping with {{context.shop.name}}.\n\nTake 20% off on the {{shopify_5.title}}.\n\nUse online code: {{shopify_3.code}}' }}"
+                    "message": "{{ template | label: 'Do you have any changes you''d like to make to the SMS message?', description: 'If you changed your discount, you''ll want to make sure that''s reflected here.', default: 'Thank you for shopping with {{shopify_6.name}}.\n\nTake 20% off on the {{shopify_5.title}}.\n\nUse online code: {{shopify_3.code}}' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -183,7 +200,7 @@
                     "message"
                 ],
                 "on_error": "default",
-                "weight": 6
+                "weight": 7
             }
         ]
     }
