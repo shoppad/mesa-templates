@@ -1,6 +1,6 @@
 {
     "key": "tracktor/fulfillment/delay_in_transit_email",
-    "name": "Receive an email if a package is delayed",
+    "name": "Email Notification for Delayed Packages in Transit",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -100,6 +100,23 @@
                 "weight": 3
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
@@ -110,7 +127,7 @@
                 "metadata": {
                     "api_endpoint": "post \/send-email",
                     "body": {
-                        "to": "{{context.shop.email}}",
+                        "to": "{{shopify.email}}",
                         "subject": "Order {{tracktor_1.order_name}} Delayed in Transit",
                         "message": "Order Number: {{tracktor_1.order_name}} \nCarrier: {{tracktor_1.carrier.name}}\nTracking: {{tracktor_1.tracking_number}}"
                     }
@@ -118,7 +135,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ]
     }
