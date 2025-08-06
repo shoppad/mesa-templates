@@ -1,16 +1,9 @@
 {
     "key": "yotpo/review/send_a_thank_you_email",
-    "name": "Send a thank you email when a review is created in Yotpo",
+    "name": "Automatically Send a Thank You Email for Yotpo Reviews",
     "version": "1.0.0",
-    "description": "Feedback from your customers is always appreciated. Let your customers know how much you value their time by sending them a message of thanks when the feedback is received. This customizable template will send a thank you email to your customer when they create a review in Yotpo.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -30,6 +23,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
@@ -39,13 +49,12 @@
                 "metadata": {
                     "to": "{{yotpo.customer_email}}",
                     "subject": "Thank you for providing a review!",
-                    "message": "Hello {{yotpo.reviewer_display_name}},\n\nThank you so much for leaving a review. Your feedback is very important to us.\n\nThank you,\n{{context.shop.name}}"
+                    "message": "Hello {{yotpo.reviewer_display_name}},\n\nThank you so much for leaving a review. Your feedback is very important to us.\n\nThank you,\n{{shopify.name}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }
