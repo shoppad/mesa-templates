@@ -1,6 +1,6 @@
 {
-    "key": "uploadery_order_add_line_items_to_google_sheet",
-    "name": "Add Uploadery Line Items to Google Sheet",
+    "key": "uploadery/order/add_line_items_to_google_sheet",
+    "name": "Export Uploadery Line Items and Order Details to Google Sheets",
     "enabled": false,
     "setup": {
         "mode": "custom",
@@ -20,7 +20,7 @@
                 "options": [
                     {
                         "label": "Order URL",
-                        "value": "Order URL|https://{{context.shop.domain}}/admin/orders/{{uploadery_order_created.order.id}}",
+                        "value": "Order URL|https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{uploadery_order_created.order.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
@@ -102,6 +102,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "loop",
@@ -115,7 +132,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -136,7 +153,7 @@
                     }
                 },
                 "on_error": "replay",
-                "weight": 1
+                "weight": 2
             }
         ],
         "storage": []
