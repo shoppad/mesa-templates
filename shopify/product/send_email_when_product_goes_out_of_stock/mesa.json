@@ -99,7 +99,7 @@
                     "trigger_parent_key": "loop",
                     "a": "{{shopify_2.inventory_quantity}}",
                     "comparison": "less than equal",
-                    "b": "0",
+                    "b": "{{ template | label: 'What should be the out of stock threshold?', description: 'When product inventory reaches this level (or below) the notification will trigger.', default: '0', tokens: false }}",
                     "additional": [
                         {
                             "operator": "and",
