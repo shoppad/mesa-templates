@@ -1,16 +1,9 @@
 {
-    "key": "uploadery_order_add_line_items_to_airtable",
-    "name": "Add Uploadery images and line items to Airtable",
+    "key": "uploadery/order/add_line_items_to_airtable",
+    "name": "Add Uploadery Images and Line Items to Airtable",
     "version": "1.0.0",
-    "description": "Airtable is great because it gives you all of the power and flexibility of Google Sheets, and lets you store files directly in your spreadsheet.  Use this template to easily manage every order with an Uploadery file upload and store the files and line item details in a spreadsheet to keep track of their progress. When each order is created, Mesa will add Uploadery Line Items to an Airtable table.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "uploadery",
-    "destination": "airtable",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -29,6 +22,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
@@ -42,7 +52,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 4,
@@ -70,7 +80,7 @@
                             "Product SKU": "{{loop.sku}}",
                             "Product Price": "{{loop.price}}",
                             "Order Name": "{{uploadery_order.order.name}}",
-                            "Order URL": "https://{{context.shop.domain}}/admin/orders/{{uploadery_order.order.id}}",
+                            "Order URL": "https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{uploadery_order.order.id}}",
                             "File": [
                                 {
                                     "url": "{{loop.fields.uploadery_1}}"
@@ -193,9 +203,8 @@
                     }
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }
