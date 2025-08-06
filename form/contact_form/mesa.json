@@ -1,16 +1,9 @@
 {
-    "key": "form_contact_form",
-    "name": "Send Contact Form Submissions to Email and Slack",
+    "key": "form/contact_form",
+    "name": "Automatically Send Contact Form Submissions to Email and Slack",
     "version": "1.0.0",
-    "description": "Create a contact form to embed on your website that sends an email and Slack message for each submission.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "form",
-    "destination": "email",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -63,6 +56,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
@@ -71,14 +81,14 @@
                 "name": "Email",
                 "key": "email",
                 "metadata": {
-                    "to": "{{context.shop.email}}",
+                    "to": "{{shopify.email}}",
                     "subject": "New Contact Form Submission",
                     "message": "Name: {{form.name}}\nEmail: {{form.email}}\nCompany: {{form.company}}\nMessage:\n{{form.message}}",
                     "from": "{{form.email}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 2,
@@ -92,7 +102,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             }
         ],
         "storage": []
