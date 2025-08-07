@@ -77,10 +77,10 @@
                         "message": "Dear {{shopify.customer.first_name}},\n\nThank you for your recent purchase on {{shopify_1.name}}.  Your business means the world to us and we hope you are enjoying your {{shopify.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{shopify_1.name}} Team",
                         "handwriting_style": "1",
                         "return_name": "{{shopify_1.name}}",
-                        "return_address": "{{context.shop.address1}}",
-                        "return_address2": "{{context.shop.address2}}",
-                        "return_city": "{{context.shop.city}}",
-                        "return_postal_code": "{{context.shop.zip}}",
+                        "return_address": "{{shopify_1.address1}}",
+                        "return_address2": "{{shopify_1.address2}}",
+                        "return_city": "{{shopify_1.city}}",
+                        "return_postal_code": "{{shopify_1.zip}}",
                         "recipients": [
                             {
                                 "name": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
