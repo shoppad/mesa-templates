@@ -1,0 +1,111 @@
+{
+    "key": "mcp/wordpress/get_blog_posts",
+    "name": "Get WordPress Blog Posts",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "skill",
+                "entity": "skill",
+                "action": "skill",
+                "name": "Skill",
+                "key": "skill",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "search",
+                                "description": "Limit results to those matching a string.",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "limit",
+                                "description": "The number of blog posts to get",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "start_date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "start_updated_date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "end_updated_date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
+                                "type": "string",
+                                "required": false
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "mcp_server",
+                    "body",
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type",
+                    "body.parameters[].required"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "wordpress",
+                "entity": "post",
+                "action": "list",
+                "name": "Post List",
+                "key": "wordpress",
+                "operation_id": "posts-list",
+                "metadata": {
+                    "api_endpoint": "get \/wp\/v2\/posts",
+                    "query": {
+                        "limit": "1000",
+                        "search": "{{skill.search}}",
+                        "after": "{{skill.start_date}}",
+                        "modified_after": "{{skill.start_updated_date}}",
+                        "before": "{{skill.end_date}}",
+                        "modified_before": "{{skill.end_updated_date}}",
+                        "status": "any"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.after",
+                    "query.before",
+                    "query.limit",
+                    "query.status",
+                    "query.search",
+                    "query.modified_after",
+                    "query.modified_before"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
