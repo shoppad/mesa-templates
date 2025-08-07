@@ -1,0 +1,73 @@
+{
+    "key": "odoo/inventory/update_shopify_stock_by_sku",
+    "name": "Update Shopify Stock Levels Based on Odoo Inventory Changes",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "odoo",
+                "entity": "stock.quant",
+                "action": "list-updated",
+                "name": "Inventory Updated",
+                "version": "v2",
+                "key": "odoo",
+                "operation_id": "stock.quant_updated",
+                "metadata": {
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "sku_to_product_variant",
+                "name": "Retrieve Product Variant Details from SKU",
+                "key": "shopify",
+                "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
+                "metadata": {
+                    "api_endpoint": "get mesa\/productVariants\/{{product_sku}}\/sku-lookup.json",
+                    "product_sku": "{{odoo.product_reference_code}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "set",
+                "name": "Set Inventory Level",
+                "key": "shopify_1",
+                "operation_id": "post_inventory_levels_set",
+                "metadata": {
+                    "api_endpoint": "post admin\/inventory_levels\/set.json",
+                    "body": {
+                        "available": "{{odoo.available_quantity}}",
+                        "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
+                        "inventory_item_id": "{{shopify.inventory_item_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
