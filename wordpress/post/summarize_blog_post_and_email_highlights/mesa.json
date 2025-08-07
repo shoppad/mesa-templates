@@ -1,0 +1,80 @@
+{
+    "key": "wordpress/post/summarize_blog_post_and_email_highlights",
+    "name": "Summarize New Blog Posts and Email the Highlights",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "wordpress",
+                "entity": "post",
+                "action": "list-created",
+                "name": "Post Published",
+                "key": "wordpress",
+                "operation_id": "post_published",
+                "metadata": {
+                    "api_endpoint": "get \/posts",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "poll"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "summarize",
+                "action": "create",
+                "name": "Summarize",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-summarize",
+                "metadata": {
+                    "api_endpoint": "post \/summarize",
+                    "body": {
+                        "role": "user",
+                        "content": "{{wordpress.content.rendered}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{ template | label: 'What email address should receive these highlights', tokens: false, type: 'email' }}",
+                        "subject": "{{ template | label: 'What is the subject of your email?', description: '' }}",
+                        "message": "{{ template | label: 'What is the message of your email?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
