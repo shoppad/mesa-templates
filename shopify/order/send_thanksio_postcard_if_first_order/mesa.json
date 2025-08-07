@@ -87,8 +87,8 @@
                         "return_name": "{{shopify_2.name}}",
                         "return_address": "{{shopify_2.address1}}",
                         "return_address2": "{{shopify_2.address2}}",
-                        "return_city": "{{context.shop.city}}",
-                        "return_postal_code": "{{context.shop.zip}}",
+                        "return_city": "{{shopify_2.city}}",
+                        "return_postal_code": "{{shopify_2.zip}}",
                         "recipients": [
                             {
                                 "name": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
