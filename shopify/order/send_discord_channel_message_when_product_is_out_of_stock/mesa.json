@@ -27,6 +27,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
@@ -50,7 +67,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 3.1,
@@ -59,7 +76,7 @@
                 "entity": "product_variant",
                 "action": "retrieve_id",
                 "name": "Retrieve Product Variant",
-                "key": "shopify_1",
+                "key": "shopify_2",
                 "operation_id": "get_variants_variant_id",
                 "metadata": {
                     "api_endpoint": "get admin\/variants\/{{variant_id}}.json",
@@ -69,7 +86,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 4.1,
@@ -80,7 +97,7 @@
                 "operation_id": "filter",
                 "metadata": {
                     "trigger_parent_key": "loop",
-                    "a": "{{shopify_1.inventory_quantity}}",
+                    "a": "{{shopify_2.inventory_quantity}}",
                     "comparison": "less than equal",
                     "b": "0",
                     "additional": [
@@ -93,7 +110,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -111,7 +128,7 @@
                         "channelId": "{{ template | label: 'What is your server''s channel ID?', tokens: false }}"
                     },
                     "body": {
-                        "content": "This is an automated message to let you know that {% if shopify_1.sku != \"\" %}SKU *{{shopify_1.sku}}*{% else %}*{{loop.title}}*{% if shopify_1.option1 != \"Default Title\" %} *- {{shopify_1.option1}}*{% endif %}{% endif %} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{shopify_1.product_id}}"
+                        "content": "This is an automated message to let you know that {% if shopify_2.sku != \"\" %}SKU *{{shopify_2.sku}}*{% else %}*{{loop.title}}*{% if shopify_2.option1 != \"Default Title\" %} *- {{shopify_2.option1}}*{% endif %}{% endif %} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_2.product_id}}"
                     }
                 },
                 "local_fields": [],
@@ -119,7 +136,7 @@
                     "body.content"
                 ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 5.1,
@@ -137,7 +154,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ]
     }

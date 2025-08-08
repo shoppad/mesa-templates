@@ -26,6 +26,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
@@ -70,7 +87,7 @@
                         "Order ID": "{{shopify.id}}",
                         "Order Created At": "{{shopify.created_at}}",
                         "Order Updated At": "{{shopify.updated_at}}",
-                        "Order Admin URL": " https://admin.shopify.com/store/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}/orders/{{shopify.id}}",
+                        "Order Admin URL": " https://admin.shopify.com/store/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify.id}}",
                         "Customer": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
                         "Customer Email": "{{shopify.email}}",
                         "Shipping Address 1": "{{shopify.shipping_address.address1}}",

@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/slack_message_when_product_goes_out_of_stock",
-    "name": "Send a Slack message when a product goes out of stock",
+    "name": "Receive Slack Notifications When a Shopify Product Goes Out of Stock",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -13,7 +13,7 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify_order",
+                "key": "shopify",
                 "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
@@ -22,6 +22,23 @@
             }
         ],
         "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
             {
                 "schema": 5,
                 "trigger_type": "output",
@@ -32,14 +49,14 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}",
+                    "key": "{{shopify.line_items[]}}",
                     "filter": {
                         "comparison": "equals"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 3,
@@ -48,7 +65,7 @@
                 "entity": "product_variant",
                 "action": "retrieve_id",
                 "name": "Retrieve Product Variant",
-                "key": "shopify",
+                "key": "shopify_2",
                 "operation_id": "get_variants_variant_id",
                 "metadata": {
                     "api_endpoint": "get admin/variants/{{variant_id}}.json",
@@ -56,7 +73,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 2,
@@ -65,14 +82,14 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify.inventory_quantity}}",
+                    "a": "{{shopify_2.inventory_quantity}}",
                     "comparison": "equals",
                     "b": "0",
                     "script": "filter.js"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -82,12 +99,12 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "This is an automated message to let you know that {% if shopify.sku != \"\" %}SKU *{{shopify.sku}}*{% else %}*{{loop.title}}*{% if shopify.option1 != \"Default Title\" %} *- {{shopify.option1}}*{% endif %}{% endif %} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/products\/{{shopify.product_id}}",
+                    "message": "This is an automated message to let you know that {% if shopify_2.sku != \"\" %}SKU *{{shopify_2.sku}}*{% else %}*{{loop.title}}*{% if shopify_2.option1 != \"Default Title\" %} *- {{shopify_2.option1}}*{% endif %}{% endif %} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_2.product_id}}",
                     "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }

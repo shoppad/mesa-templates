@@ -30,10 +30,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
                 "entity": "order_risk",
                 "action": "retrieve",
                 "name": "Get List of Order's Risks",
-                "key": "shopify_1",
+                "key": "shopify_2",
                 "operation_id": "get_orders_order_id_risks_graphql",
                 "metadata": {
                     "api_endpoint": "get graphql\/orders_risks\/id.json",
@@ -44,7 +61,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 5.1,
@@ -56,9 +73,9 @@
                 "key": "loop",
                 "operation_id": "loop_count",
                 "metadata": {
-                    "key": "{{shopify_1.assessments[]}}",
+                    "key": "{{shopify_2.assessments[]}}",
                     "filter": {
-                        "a": "{{shopify_1.assessments[].riskLevel}}",
+                        "a": "{{shopify_2.assessments[].riskLevel}}",
                         "comparison": "equals",
                         "b": "HIGH",
                         "additional": [
@@ -72,7 +89,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 4.1,
@@ -95,7 +112,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -106,13 +123,13 @@
                 "key": "slack",
                 "operation_id": "slack",
                 "metadata": {
-                    "message": "Order {{shopify.name}} was detected to be at a high risk for fraud. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}",
+                    "message": "Order {{shopify.name}} was detected to be at a high risk for fraud. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}",
                     "channel": "{{ template | label: 'What is the Slack channel you would like to send the message to?', tokens: false }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }
