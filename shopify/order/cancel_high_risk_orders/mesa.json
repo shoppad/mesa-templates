@@ -124,7 +124,7 @@
                     "body": {
                         "to": "{{shopify_3.email}}",
                         "subject": "Order {{shopify.name}} was canceled due to high risk",
-                        "message": "Order {{shopify.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{shopify_3.myshopify_domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
+                        "message": "Order {{shopify.name}} was detected to be at a high risk for fraud and has been automatically canceled. The items have been restocked, and the customer was notified. \n\nView the order: https:\/\/admin.shopify.com\/store\/{{shopify_3.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}"
                     }
                 },
                 "local_fields": [],
