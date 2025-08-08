@@ -47,7 +47,7 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions.order.order_number}} \nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{shopify.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{infiniteoptions.order.id}}",
+                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions.order.order_number}} \nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{shopify.domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{infiniteoptions.order.id}}",
                     "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}"
                 },
                 "local_fields": [],
