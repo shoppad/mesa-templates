@@ -29,7 +29,7 @@
                 "options": [
                     {
                         "label": "Order URL",
-                        "value": "Order URL|https://{{shopify_1.domain}}/admin/orders/{{shopify.id}}",
+                        "value": "Order URL|https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
@@ -172,7 +172,7 @@
                     "trigger_parent_key": "loop",
                     "body": {
                         "fields": {
-                            "Order URL": "https://{{shopify_1.domain}}/admin/orders/{{shopify.id}}",
+                            "Order URL": "https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}",
                             "Order Name": "{{shopify.order.name}}",
                             "Email": "{{shopify.email}}",
                             "Shipping Name": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
