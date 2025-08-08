@@ -15,7 +15,7 @@ module.exports = new class {
     const vars = context.steps;
 
     // Get Shopify shop details
-    const shopifyShopDetails = context.steps.shopify;
+    const shopifyShopDetails = vars.shopify;
 
     let output = context.automation.outputs.find(object => object.key == 'send_webhook');
     let webhookUrl = output.metadata.webhook_url;
