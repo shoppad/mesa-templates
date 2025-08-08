@@ -3,7 +3,7 @@
     "name": "Sync Shopify Gift Card Balances to Klaviyo Profiles",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
