@@ -66,8 +66,8 @@
                     "api_endpoint": "post \/send-email",
                     "body": {
                         "to": "{{ template | label: 'What email address should receive these highlights', tokens: false, type: 'email' }}",
-                        "subject": "{{ template | label: 'What is the subject of your email?', description: '' }}",
-                        "message": "{{ template | label: 'What is the message of your email?', description: '' }}"
+                        "subject": "{{ template | label: 'What is the subject of your email?', description: '', default: '\ud83d\udce8 New Blog Summary Ready for \"{{wordpress.title.rendered}}\"' }}",
+                        "message": "{{ template | label: 'What is the message of your email?', description: '', default: '{{ai.response}}' }}"
                     }
                 },
                 "local_fields": [],
