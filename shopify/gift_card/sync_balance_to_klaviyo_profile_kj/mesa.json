@@ -14,8 +14,8 @@
                 "key": "schedule",
                 "operation_id": "schedule",
                 "metadata": {
-                    "schedule": "@daily:0 0 * * *",
-                    "enqueue_type": "schedule"
+                    "enqueue_type": "schedule",
+                    "schedule": "@daily:0 0 * * *"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -115,92 +115,126 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
-                "version": "v1",
                 "entity": "record",
                 "action": "update_create",
                 "name": "Update or Create Record",
+                "version": "v2",
                 "key": "data",
                 "operation_id": "post_database_table_upsert",
                 "metadata": {
                     "api_endpoint": "post \/{database}\/{table}\/upsert",
                     "trigger_parent_key": "loop",
-                    "create": "existing",
-                    "columns": [
-                        {
-                            "key": "Gift Card ID",
-                            "type": "numeric",
-                            "value": "{{loop.id}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Initial Value",
-                            "type": "numeric",
-                            "value": "{{loop.initial_value}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Balance",
-                            "type": "numeric",
-                            "value": "{{loop.balance}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Customer ID",
-                            "type": "numeric",
-                            "value": "{{loop.customer_id}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Customer Email",
-                            "type": "text",
-                            "value": "{{shopify_2.email}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Customer Name",
-                            "type": "text",
-                            "value": "{{shopify_2.first_name}} {{shopify_2.last_name}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Created At",
-                            "type": "timestamptz",
-                            "value": "{{loop.created_at}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Updated At",
-                            "type": "timestamptz",
-                            "value": "{{loop.updated_at}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Expires On",
-                            "type": "timestamptz",
-                            "value": "{{loop.expires_on}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Disabled At",
-                            "type": "timestamptz",
-                            "value": "{{loop.disabled_at}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        },
-                        {
-                            "key": "Admin Gift Card URL",
-                            "type": "text",
-                            "value": "https:\/\/admin.shopify.com\/store\/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}\/gift_cards\/{{loop.id}}",
-                            "disabled": "67c8caffd6cf40974d0ed799"
-                        }
-                    ],
-                    "where_clause": {
+                    "table": "Shopify Gift Cards",
+                    "where": {
                         "comparison": "equals",
                         "b": "{{loop.id}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ],
                         "a": "Gift Card ID"
                     },
-                    "table": "Shopify Gift Cards"
+                    "columns": {
+                        "Gift Card ID": "{{loop.id}}",
+                        "Initial Value": "{{loop.initial_value}}",
+                        "Balance": "{{loop.balance}}",
+                        "Customer ID": "{{loop.customer_id}}",
+                        "Customer Email": "{{shopify_2.email}}",
+                        "Customer Name": "{{shopify_2.first_name}} {{shopify_2.last_name}}",
+                        "Created At": "{{loop.created_at}}",
+                        "Updated At": "{{loop.updated_at}}",
+                        "Expires On": "{{loop.expires_on}}",
+                        "Disabled At": "{{loop.disabled_at}}",
+                        "Admin Gift Card URL": "https:\/\/admin.shopify.com\/store\/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}\/gift_cards\/{{loop.id}}"
+                    }
                 },
-                "local_fields": [],
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Gift Card ID",
+                                "label": "Gift Card ID",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Initial Value",
+                                "label": "Initial Value",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Balance",
+                                "label": "Balance",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Customer ID",
+                                "label": "Customer ID",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Customer Email",
+                                "label": "Customer Email",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Customer Name",
+                                "label": "Customer Name",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Created At",
+                                "label": "Created At",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Updated At",
+                                "label": "Updated At",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Expires On",
+                                "label": "Expires On",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Disabled At",
+                                "label": "Disabled At",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null
+                            },
+                            {
+                                "key": "Admin Gift Card URL",
+                                "label": "Admin Gift Card URL",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null
+                            }
+                        ]
+                    }
+                ],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
@@ -209,25 +243,19 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
-                "version": "v1",
                 "entity": "record",
-                "action": "query",
-                "name": "Query",
+                "action": "custom_query",
+                "name": "Custom SQL Query",
+                "version": "v2",
                 "key": "data_1",
-                "operation_id": "get_database_table",
+                "operation_id": "get_database_custom_query",
                 "metadata": {
                     "api_endpoint": "get \/{database}\/{table}",
                     "trigger_parent_key": "loop",
-                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_2.email}}'\n AND \"Disabled At\" IS NOT NULL",
-                    "table": "Shopify Gift Cards",
-                    "where_clause": {
-                        "comparison": "equals"
-                    }
+                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_2.email}}'\n AND \"Disabled At\" IS NOT NULL"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "query"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 5
             },
@@ -245,6 +273,7 @@
                     "api_endpoint": "get \/api\/profiles",
                     "trigger_parent_key": "loop",
                     "query": {
+                        "page[size]": "1",
                         "filter": "specific_filter",
                         "mesaFilter": "email",
                         "mesaFilterOperator": "equals",
@@ -258,7 +287,8 @@
                     "query.mesaFilter",
                     "query.mesaFilterOperator",
                     "query.mesaFilterValue",
-                    "query.advancedFilter"
+                    "query.advancedFilter",
+                    "query.page[size]"
                 ],
                 "on_error": "default",
                 "weight": 6
