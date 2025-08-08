@@ -1,6 +1,6 @@
 {
     "key": "uploadery/order/send_email",
-    "name": "Send an email when an Uploadery order is created",
+    "name": "Email Uploadery Files to Team When a Shopify Order is Created",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -26,6 +26,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
@@ -38,13 +55,13 @@
                     "body": {
                         "to": "{{ template | label: 'What email address should receive this notification?', type: 'string', tokens: false }}",
                         "subject": "New order with file upload created {{uploadery.order.name}}",
-                        "message": "A new order was created with Uploadery fields:\n\nOrder {{uploadery.order.name}}\nhttps:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{uploadery.order.id}}\n\nUploadery line items:\n{% for line_item in uploadery.order.line_items %}\n {{ line_item.title }} x {{ line_item.quantity }}\n{% for property in line_item.properties %} - {{ property.name }}: {{ property.value }}\n{% endfor %}{% endfor %}"
+                        "message": "A new order was created with Uploadery fields:\n\nOrder {{uploadery.order.name}}\nhttps:\/\/admin.shopify.com\/store\/{{shopify.domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{uploadery.order.id}}\n\nUploadery line items:\n{% for line_item in uploadery.order.line_items %}\n {{ line_item.title }} x {{ line_item.quantity }}\n{% for property in line_item.properties %} - {{ property.name }}: {{ property.value }}\n{% endfor %}{% endfor %}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ]
     }

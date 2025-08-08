@@ -1,16 +1,8 @@
 {
     "key": "shopify/order/send_expedited_shipping_alert_to_logistics",
-    "name": "Tag an order when expedited shipping is selected",
+    "name": "Tag Shopify Orders with Expedited Shipping and Notify Team",
     "version": "1.0.0",
-    "description": "Prioritizing orders that require expedited shipping is important for your team and the customer. This template tags an order with \"expedited shipping\" and sends an email to the store administrator if the order's shipping method is 2 days or next day. This ensures that you and your team are on top of things, especially during peak seasons.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
     "setup": true,
     "config": {
         "inputs": [
@@ -53,6 +45,23 @@
                 "weight": 0
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "email",
@@ -62,11 +71,11 @@
                 "metadata": {
                     "to": "{{ template | label: 'What email address should receive this notification?', description: '', default: '', type: 'string', tokens: false, placeholder: '' }}",
                     "subject": "New {{shopify.shipping_lines[0].title}} order received: {{shopify.name}}",
-                    "message": "Order {{shopify.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify.shipping_address.city}}, {{shopify.shipping_address.province}} {{shopify.shipping_address.country}}.\n\nView the order: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{shopify.id}}"
+                    "message": "Order {{shopify.name}} selected expedited shipping at checkout. The order is being shipped to {{shopify.shipping_address.city}}, {{shopify.shipping_address.province}} {{shopify.shipping_address.country}}.\n\nView the order: https:\/\/admin.shopify.com\/store\/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 3,
@@ -75,7 +84,7 @@
                 "entity": "order",
                 "action": "tag_add",
                 "name": "Order Add Tag",
-                "key": "shopify_1",
+                "key": "shopify_2",
                 "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
                     "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
@@ -86,7 +95,7 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             }
         ],
         "storage": []

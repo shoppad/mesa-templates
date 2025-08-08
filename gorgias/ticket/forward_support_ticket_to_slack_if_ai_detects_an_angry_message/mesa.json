@@ -1,6 +1,6 @@
 {
     "key": "gorgias/ticket/forward_support_ticket_to_slack_if_ai_detects_an_angry_message",
-    "name": "Escalate an angry Gorgias support ticket to Slack",
+    "name": "Escalate angry Gorgias support tickets to Slack",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -116,6 +116,23 @@
                 "weight": 3
             },
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
@@ -125,12 +142,12 @@
                 "operation_id": "slack",
                 "metadata": {
                     "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
-                    "message": "{{ template | label: 'What is your Gorgias Inbox ID?', description: 'Go to your Gorgias account. Click Inbox. In the URL, copy the numbers after /apps/views and replace the text ADD INBOX ID.', default: '*Gorgias Support Ticket URL*\nhttps:\/\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}.gorgias.com\/app\/views\/ADD INBOX ID\/{{gorgias.id}}\n\n*AI Angry Confidence Score*\n{{custom.ai_response.confidence_score}}\n\n*AI Explanation*\n{{custom.ai_response.explanation}}\n\n*Support Ticket Message*\n{{gorgias_1.0.stripped_text}}' }}"
+                    "message": "{{ template | label: 'What is your Gorgias Inbox ID?', description: 'Go to your Gorgias account. Click Inbox. In the URL, copy the numbers after /apps/views and replace the text ADD INBOX ID.', default: '*Gorgias Support Ticket URL*\nhttps:\/\/{{shopify.domain | replace: \".myshopify.com\", \"\"}}.gorgias.com\/app\/views\/ADD INBOX ID\/{{gorgias.id}}\n\n*AI Angry Confidence Score*\n{{custom.ai_response.confidence_score}}\n\n*AI Explanation*\n{{custom.ai_response.explanation}}\n\n*Support Ticket Message*\n{{gorgias_1.0.stripped_text}}' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ]
     }

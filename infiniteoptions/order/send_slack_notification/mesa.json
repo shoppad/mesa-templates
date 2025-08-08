@@ -1,6 +1,6 @@
 {
     "key": "infiniteoptions/order/send_slack_notification",
-    "name": "Send a Slack notification when a product with options is purchased",
+    "name": "Receive Slack Alerts for Purchases of Products with Options",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -23,6 +23,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
@@ -30,12 +47,12 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions.order.order_number}} \nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{ context.shop.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{infiniteoptions.order.id}}",
+                    "message": "**New Infinite Options Order**\nOrder Number: {{infiniteoptions.order.order_number}} \nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{shopify.domain | replace: \".myshopify.com\", \"\" }}\/orders\/{{infiniteoptions.order.id}}",
                     "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ]
     }
