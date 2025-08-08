@@ -42,6 +42,23 @@
         ],
         "outputs": [
             {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
@@ -66,7 +83,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             },
             {
                 "schema": 5.1,
@@ -92,7 +109,7 @@
                     "filter.b"
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 5.1,
@@ -118,7 +135,7 @@
                     "filter.b"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -148,7 +165,7 @@
                     "query"
                 ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 2,
@@ -165,7 +182,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             },
             {
                 "schema": 4,
@@ -249,7 +266,7 @@
                     "columns[].disabled"
                 ],
                 "on_error": "default",
-                "weight": 5
+                "weight": 6
             },
             {
                 "schema": 4.1,
@@ -282,7 +299,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 6
+                "weight": 7
             },
             {
                 "schema": 2,
@@ -299,7 +316,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 7
+                "weight": 8
             },
             {
                 "schema": 4,
@@ -390,7 +407,7 @@
                     "columns[].disabled"
                 ],
                 "on_error": "default",
-                "weight": 8
+                "weight": 9
             },
             {
                 "schema": 2,
@@ -406,7 +423,7 @@
                     "description"
                 ],
                 "on_error": "default",
-                "weight": 9
+                "weight": 10
             },
             {
                 "schema": 4.1,
@@ -435,7 +452,7 @@
                     "additional[].b"
                 ],
                 "on_error": "default",
-                "weight": 10
+                "weight": 11
             },
             {
                 "schema": 4.1,
@@ -466,7 +483,7 @@
                     "additional[].b"
                 ],
                 "on_error": "default",
-                "weight": 11
+                "weight": 12
             },
             {
                 "schema": 2,
@@ -493,7 +510,7 @@
                     "script"
                 ],
                 "on_error": "default",
-                "weight": 12
+                "weight": 13
             }
         ]
     }
