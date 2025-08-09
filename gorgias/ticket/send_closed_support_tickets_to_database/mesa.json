@@ -37,15 +37,15 @@
                 "key": "filter",
                 "operation_id": "filter",
                 "metadata": {
+                    "a": "{{gorgias.status}}",
                     "comparison": "equals",
+                    "b": "closed",
                     "additional": [
                         {
                             "operator": "and",
                             "comparison": "equals"
                         }
-                    ],
-                    "a": "{{gorgias.status}}",
-                    "b": "closed"
+                    ]
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -103,39 +103,55 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
-                "version": "v1",
                 "entity": "record",
                 "action": "create",
                 "name": "Create Record",
+                "version": "v2",
                 "key": "data",
                 "operation_id": "post_database_table",
                 "metadata": {
                     "api_endpoint": "post \/{database}\/{table}",
                     "trigger_parent_key": "loop",
-                    "create": "existing",
-                    "columns": [
-                        {
-                            "key": "Support Ticket ID",
-                            "type": "numeric",
-                            "value": "{{loop.ticket_id}}",
-                            "disabled": "6763980e750eded2960218ff"
-                        },
-                        {
-                            "key": "Message",
-                            "type": "text",
-                            "value": "{{loop.stripped_text}}",
-                            "disabled": "6763980e750eded2960218ff"
-                        },
-                        {
-                            "key": "Closed Date",
-                            "type": "timestamptz",
-                            "value": "{{gorgias.closed_datetime | date: \"%Y-%m-%d %H:%M\"}}",
-                            "disabled": "6763980e750eded2960218ff"
-                        }
-                    ],
-                    "table": "Closed Gorgias Support Tickets"
+                    "table": "Closed Gorgias Support Tickets",
+                    "columns": {
+                        "Support Ticket ID": "{{loop.ticket_id}}",
+                        "Message": "{{loop.stripped_text}}",
+                        "Closed Date": "{{gorgias.closed_datetime | date: \"%Y-%m-%d %H:%M\"}}"
+                    }
                 },
-                "local_fields": [],
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "Support Ticket ID",
+                                "label": "Support Ticket ID",
+                                "type": "number",
+                                "x-udtname": "numeric",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Message",
+                                "label": "Message",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Closed Date",
+                                "label": "Closed Date",
+                                "type": "text",
+                                "x-udtname": "timestamptz",
+                                "x-maxlength": null,
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
