@@ -14,11 +14,14 @@
                 "key": "schedule",
                 "operation_id": "schedule",
                 "metadata": {
-                    "schedule": "@daily:0 0 * * *",
-                    "enqueue_type": "schedule"
+                    "enqueue_type": "schedule",
+                    "schedule": "@daily:0 0 * * *"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -28,23 +31,18 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
-                "version": "v1",
                 "entity": "record",
-                "action": "query",
-                "name": "Query",
+                "action": "custom_query",
+                "name": "Custom SQL Query",
+                "version": "v2",
                 "key": "data",
-                "operation_id": "get_database_table",
+                "operation_id": "get_database_custom_query",
                 "metadata": {
                     "api_endpoint": "get \/{database}\/{table}",
-                    "query": "SELECT * FROM \"Add table name here\" WHERE \"Created At\" > '{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\" | date: \"%Y-%m-%dT00:00:00%z\"}}';",
-                    "where_clause": {
-                        "comparison": "equals"
-                    }
+                    "query": "SELECT *\nFROM \"Add table name here\"\nWHERE \"Created At\" > '{{ \"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\" | date: \"%Y-%m-%dT00:00:00%z\" }}';"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "query"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -65,7 +63,10 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.title"
+                ],
                 "on_error": "replay",
                 "weight": 1
             },
@@ -90,7 +91,13 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.spreadsheet_id",
+                    "path.sheet",
+                    "body",
+                    "body.data"
+                ],
                 "on_error": "replay",
                 "weight": 2
             }

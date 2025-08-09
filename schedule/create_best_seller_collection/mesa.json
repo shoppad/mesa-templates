@@ -14,11 +14,14 @@
                 "key": "schedule",
                 "operation_id": "schedule",
                 "metadata": {
-                    "schedule": "@daily:0 0 * * *",
-                    "enqueue_type": "schedule"
+                    "enqueue_type": "schedule",
+                    "schedule": "@daily:0 0 * * *"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -54,7 +57,9 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -62,24 +67,18 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
-                "version": "v1",
                 "entity": "record",
-                "action": "query",
-                "name": "Query Best Selling Products",
+                "action": "custom_query",
+                "name": "Custom SQL Query",
+                "version": "v2",
                 "key": "data",
-                "operation_id": "get_database_table",
+                "operation_id": "get_database_custom_query",
                 "metadata": {
                     "api_endpoint": "get \/{database}\/{table}",
-                    "query": "SELECT \n    ROW_NUMBER() OVER (ORDER BY sum(\"Product Quantity\") DESC) AS \"Best Sellers Index\",\n    \"Product ID\",\n    \"Product Title\",\n    sum(\"Product Quantity\") AS \"Quantity\"\nFROM \"Shopify Orders\" \nWHERE \"Order Created At\" > CURRENT_DATE - INTERVAL '{{transform[\"Days Back\"]}} days' \nGROUP BY \"Product ID\", \"Product Title\"\nORDER BY \"Quantity\" DESC\nLIMIT {{transform[\"Limit\"]}}",
-                    "table": "Shopify Order Line Items",
-                    "where_clause": {
-                        "comparison": "equals"
-                    }
+                    "query": "SELECT \n    ROW_NUMBER() OVER (ORDER BY sum(\"Product Quantity\") DESC) AS \"Best Sellers Index\",\n    \"Product ID\",\n    \"Product Title\",\n    sum(\"Product Quantity\") AS \"Quantity\"\nFROM \"Shopify Orders\" \nWHERE \"Order Created At\" > CURRENT_DATE - INTERVAL '{{transform[\"Days Back\"]}} days' \nGROUP BY \"Product ID\", \"Product Title\"\nORDER BY \"Quantity\" DESC\nLIMIT {{transform[\"Limit\"]}}\n"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "query"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -127,7 +126,14 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -153,7 +159,14 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.namespace",
+                    "body.key",
+                    "body.type",
+                    "body.listType"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -197,7 +210,14 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
                 "on_error": "default",
                 "weight": 6
             },
@@ -216,7 +236,9 @@
                     "product_id": "{{loop_2[\"Product ID\"]}}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "product_id"
+                ],
                 "on_error": "default",
                 "weight": 7
             },
@@ -242,7 +264,15 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.namespace",
+                    "body.key",
+                    "body.type",
+                    "body.listType",
+                    "body.value"
+                ],
                 "on_error": "default",
                 "weight": 8
             },
@@ -258,7 +288,9 @@
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 9
             },

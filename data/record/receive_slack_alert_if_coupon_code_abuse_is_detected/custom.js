@@ -1,22 +1,24 @@
 const Mesa = require('vendor/Mesa.js');
 
 /**
- * A Mesa Script exports a class with a script() method.
+ * A MESA Script exports a class with a script() method.
  */
-module.exports = new class {
-
+module.exports = new (class {
   /**
-   * Mesa Script
+   * MESA Script
    *
-   * @param {object} payload The payload data
+   * @param {object} prevResponse The response from the previous step
    * @param {object} context Additional context about this task
    */
-  script = (payload, context) => {
+  script = (prevResponse, context) => {
+    // Retrieve the Variables Available to this step
+    const vars = context.steps;
 
     let newPayload = {};
-    newPayload.json_results = JSON.stringify(payload);
-    
-    // We're done, call the next step!
+    newPayload.json_results = JSON.stringify(prevResponse);
+
+    // Call the next step in this workflow
+    // response will be the Variables Available from this step
     Mesa.output.next(newPayload);
-  }
-}
+  };
+})();

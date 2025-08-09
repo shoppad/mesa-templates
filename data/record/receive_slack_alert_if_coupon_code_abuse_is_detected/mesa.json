@@ -10,10 +10,10 @@
                 "schema": 4,
                 "trigger_type": "input",
                 "type": "data",
-                "version": "v1",
                 "entity": "record",
                 "action": "created",
                 "name": "Record Created",
+                "version": "v2",
                 "key": "data",
                 "operation_id": "record_created",
                 "metadata": {
@@ -34,24 +34,18 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "data",
-                "version": "v1",
                 "entity": "record",
-                "action": "query",
-                "name": "Query",
+                "action": "custom_query",
+                "name": "Custom SQL Query",
+                "version": "v2",
                 "key": "data_1",
-                "operation_id": "get_database_table",
+                "operation_id": "get_database_custom_query",
                 "metadata": {
                     "api_endpoint": "get \/{database}\/{table}",
-                    "query": "SELECT TO_CHAR(\"Created At\", 'yyyy-mm-dd'), SUM(\"Total Price\") as total, SUM(\"Total Discount\") as total_discounts,ROUND(SUM(\"Total Discount\") \/  SUM(\"Total Price\"), 2) as percentage FROM \"Shopify Orders\" GROUP BY TO_CHAR(\"Created At\", 'yyyy-mm-dd') ORDER BY TO_CHAR(\"Created At\", 'yyyy-mm-dd') ",
-                    "where_clause": {
-                        "comparison": "equals"
-                    },
-                    "table": "Shopify Orders"
+                    "query": "SELECT\n  TO_CHAR(\"Created At\", 'yyyy-mm-dd'),\n  SUM(\"Total Price\") AS total,\n  SUM(\"Total Discount\") AS total_discounts,\n  ROUND(SUM(\"Total Discount\") \/ SUM(\"Total Price\"), 2) AS percentage\nFROM \"Shopify Orders\"\nGROUP BY TO_CHAR(\"Created At\", 'yyyy-mm-dd')\nORDER BY TO_CHAR(\"Created At\", 'yyyy-mm-dd');"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "query"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -63,8 +57,8 @@
                 "key": "custom",
                 "operation_id": "custom",
                 "metadata": {
-                    "script": "custom.js",
-                    "description": "Format order totals by day including their discount amounts that can be understood by other systems or components"
+                    "description": "Format order totals by day including their discount amounts that can be understood by other systems or components",
+                    "script": "custom.js"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -86,7 +80,7 @@
                     "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "{{ template | label: 'What is the AI prompt to determine coupon code abuse?', description: 'Prompt defaults to check if the overall discount percentage of total sales is more than 10% - this value can be changed if the percentage is different for your business.', default: 'Included is a JSON result showing order totals by day including the discount amounts. Compare the discount rate against the usual average discount rate (assume 10% if unspecified). Is the discount rate higher than usual? Reply only Yes or No: \n{{ custom.json_results }}', type: 'number' }}"
+                        "content": "Included is a JSON result showing order totals by day including the discount amounts. Compare the discount rate against the usual average discount rate (assume 10% if unspecified). Is the discount rate higher than usual? Reply only Yes or No: \n{{ custom.json_results }}"
                     }
                 },
                 "local_fields": [],
@@ -123,13 +117,18 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
+                "entity": "message",
+                "action": "create",
                 "name": "Send Message",
-                "version": "v2",
+                "version": "v3",
                 "key": "slack",
                 "operation_id": "slack",
                 "metadata": {
-                    "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
-                    "message": "{{ template | label: 'What are the contents of the Slack message?', description: '', default: 'Coupon code abuse detected', tokens: false }}"
+                    "api_endpoint": "post \/api\/chat.postMessage",
+                    "body": {
+                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                        "markdown_text": "{{ template | label: 'What are the contents of the Slack message?', description: '', default: 'Coupon code abuse detected', tokens: false }}"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
