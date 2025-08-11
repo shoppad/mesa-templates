@@ -1,0 +1,186 @@
+{
+    "key": "mcp/zendesk/get_support_tickets",
+    "name": "Retrieve Zendesk Tickets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "skill",
+                "entity": "skill",
+                "action": "skill",
+                "name": "Skill",
+                "key": "skill",
+                "operation_id": "post-skill",
+                "metadata": {
+                    "api_endpoint": "post \/skill",
+                    "body": {
+                        "parameters": [
+                            {
+                                "key": "start_date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "end_date",
+                                "description": "ISO-8601 date YYYY-MM-DDThh:mm:ssZ in the UTC timezone",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "key": "tag",
+                                "description": "Optional zendesk tag to include",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "status",
+                                "description": "These are the default statues: new, open, pending, hold. There could be custom statues.",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "key": "limit",
+                                "description": "The number of tickets to retrieve. If not specified, the default is 1,000. Note: You cannot fetch more than 1,000 records at a time.",
+                                "type": "number",
+                                "required": false
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.parameters[].key",
+                    "body.parameters[].description",
+                    "body.parameters[].type",
+                    "body.parameters[].required"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "zendesk",
+                "entity": "ticket",
+                "action": "list",
+                "name": "Get List of Tickets",
+                "key": "zendesk",
+                "operation_id": "ListTickets",
+                "metadata": {
+                    "api_endpoint": "get \/api\/v2\/tickets",
+                    "query": {
+                        "created_at_min": "{{skill.start_date}}",
+                        "created_at_max": "{{skill.end_date}}",
+                        "status": "{{skill.status}}",
+                        "tag": "{{skill.tag}}",
+                        "limit": "{{skill.limit}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.limit",
+                    "query.created_at_max",
+                    "query.created_at_min",
+                    "query.status",
+                    "query.tag"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Tickets",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{zendesk.tickets[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "zendesk",
+                "entity": "ticket_comment",
+                "action": "list",
+                "name": "Get List of Comments",
+                "key": "zendesk_1",
+                "operation_id": "ListTicketComments",
+                "metadata": {
+                    "api_endpoint": "get \/api\/v2\/tickets\/{ticket_id}\/comments",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "ticket_id": "{{loop.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Select first customer comment",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "script": "custom.js",
+                    "description": "Extract the latest customer comment from a Zendesk ticket."
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": "map",
+                    "map": "Link: {{loop.url}}\nSubject: {{loop.subject}}\nMessage: {{custom.comment}}\n\nDate: {{loop.created_at}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "return",
+                    "map"
+                ],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
