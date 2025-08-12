@@ -1,0 +1,100 @@
+{
+    "key": "shopify/order/update_address_in_shipstation",
+    "name": "Update the Shipstation address when a Shopify address is updated",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "updated",
+                "name": "Order Updated",
+                "key": "shopify",
+                "operation_id": "orders_updated",
+                "metadata": {
+                    "frequency": "specific",
+                    "includeFields": [
+                        "billing_address",
+                        "shipping_address"
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "shipstation",
+                "entity": "order_createorder",
+                "action": "create_order",
+                "name": "Create or Update Order",
+                "version": "v2",
+                "key": "shipstation",
+                "operation_id": "CreateUpdateOrder",
+                "metadata": {
+                    "api_endpoint": "post /orders/createorder",
+                    "body": {
+                        "orderNumber": "{{shopify_1.order_number}}",
+                        "orderKey": "{{shopify.id}}",
+                        "orderStatus": "{{ template | label: 'What will the order's status be set to?', description: '', tokens: false }}",
+                        "orderDate": "{{shopify_1.created_at}}",
+                        "billTo": {
+                            "name": "{{shopify_1.billing_address.name}}",
+                            "company": "{{shopify_1.billing_address.company}}",
+                            "street1": "{{shopify_1.billing_address.address1}}",
+                            "street2": "{{shopify_1.billing_address.address2}}",
+                            "city": "{{shopify_1.billing_address.city}}",
+                            "state": "{{shopify_1.billing_address.province_code}}",
+                            "postalCode": "{{shopify_1.billing_address.zip}}",
+                            "country": "{{shopify_1.billing_address.country_code}}",
+                            "phone": "{{shopify_1.billing_address.phone}}"
+                        },
+                        "shipTo": {
+                            "name": "{{shopify_1.shipping_address.name}}",
+                            "company": "{{shopify_1.shipping_address.company}}",
+                            "street1": "{{shopify_1.shipping_address.address1}}",
+                            "street2": "{{shopify_1.shipping_address.address2}}",
+                            "city": "{{shopify_1.shipping_address.city}}",
+                            "state": "{{shopify_1.shipping_address.province_code}}",
+                            "postalCode": "{{shopify_1.shipping_address.zip}}",
+                            "country": "{{shopify_1.shipping_address.country_code}}",
+                            "phone": "{{shopify_1.shipping_address.phone}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.orderKey"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
