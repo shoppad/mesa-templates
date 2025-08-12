@@ -1,9 +1,9 @@
 {
-    "key": "ask/analyize_help_scout_conversations",
+    "key": "ask/analyze_help_scout_conversations",
     "name": "Analyze Help Scout Conversations with Ask",
     "version": "1.0.0",
     "templates": [
-        "mcp/helpscout/retrieve_helpscout_conversations",
+        "mcp/helpscout/retrieve_conversations",
         "ask_help_scout_conversations"
     ]
 }
