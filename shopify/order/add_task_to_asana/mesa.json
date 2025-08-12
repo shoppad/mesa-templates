@@ -34,7 +34,7 @@
                 "entity": "shop",
                 "action": "list",
                 "name": "Retrieve Shop",
-                "key": "shopify",
+                "key": "shopify_1",
                 "operation_id": "get_shop",
                 "metadata": {
                     "api_endpoint": "get admin\/shop.json"
