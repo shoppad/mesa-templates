@@ -1,0 +1,101 @@
+{
+    "key": "analyze_zendesk_tickets_and_email_summary",
+    "name": "Analyze Last Week's Zendesk Tickets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "enqueue_type": "schedule",
+                    "schedule": "@weekly:0 0 * * 0",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "ask",
+                "name": "Ask",
+                "key": "ask",
+                "operation_id": "post-ask",
+                "metadata": {
+                    "api_endpoint": "post /ask",
+                    "body": {
+                        "automations": ["mcp/zendesk/get_support_tickets"],
+                        "content": "Find interesting trends in my support tickets over the last week. Cite the link from each ticket that matches the trends.",
+                        "instructions": "You do not have the ability to ask the user more questions. Make assumptions where possible. If you can not determine a value, throw an error and include the missing parameter(s) in the message. Prefix any message with an error with `ERROR`. For emails return HTML with no wrapping."
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.automations",
+                    "body.content",
+                    "body.instructions"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask_1",
+                "operation_id": "post-ask-skill",
+                "metadata": {
+                    "api_endpoint": "post /ask/skill",
+                    "trigger_manager_key": "ask",
+                    "trigger_parent_key": "ask"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "/send-email",
+                "metadata": {
+                    "api_endpoint": "post /send-email",
+                    "body": {
+                        "to": "{{ template | label: 'Email address', description: 'Where should we send the weekly report?' }}",
+                        "subject": "Last Week's Zendesk Conversations",
+                        "message": "{{ask.content}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.subject", "body.message"],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
