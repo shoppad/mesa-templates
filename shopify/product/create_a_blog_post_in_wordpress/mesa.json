@@ -1,0 +1,132 @@
+{
+    "key": "shopify/product/create_a_blog_post_in_wordpress",
+    "name": "Generate a WordPress Blog for New Products in Shopify",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "product_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Blog Title",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'What is the brand name, positioning, tone, and primary audience of your brand?', description: 'Replace [BRAND_NAME], [BRAND_POSITIONING], [BRAND_TONE], [PRIMARY_AUDIENCE] with the brand name, positioning, tone, and primary audience of your brand.', default: 'You are a marketing copywriter for **[BRAND_NAME]**, a **[BRAND_POSITIONING]** brand. \nWrite in a **[BRAND_TONE]** voice for **[PRIMARY_AUDIENCE]**. \n\nFrom the product title and description, create **1 blog title option** under 60 characters. \nTitle should be compelling, SEO-friendly, and encourage clicks without being clickbait. \n\nProduct Title: {{shopify_1.title}}\nProduct Description: {{shopify_1.body_html}}\n\nRules: \n- Use strong, active language. \n- Avoid generic phrases like \u201camazing\u201d or \u201cmust-have.\u201d  \n- Where natural, weave in the product type or benefit. \n- Keep each title unique and distinct in style.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Blog Body",
+                "version": "v2",
+                "key": "ai_1",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "{{ template | label: 'What is the brand name, positioning, tone, and primary audience of your brand?', description: 'Replace [BRAND_NAME], [BRAND_POSITIONING], [BRAND_TONE], [PRIMARY_AUDIENCE] with the brand name, positioning, tone, and primary audience of your brand.', default: 'You are a marketing copywriter for **[BRAND_NAME]**, a **[BRAND_POSITIONING]** brand. \nWrite in a **[BRAND_TONE]** voice for **[PRIMARY_AUDIENCE]**. \n\nTask: From the product title and description, create a **publication-ready blog body** that explains what it is, why it matters, and how to use it. Keep it crisp, concrete, and helpful.\n\nProduct Title: {{shopify_1.title}} \nProduct Description: \n{{shopify_1.body_html}}\n\nOutput exactly in this structure (Markdown):\n1. **Hero intro** (60\u201390 words) \n2. **Main article** with 5\u20137 scannable subheads \n3. **3 Feature \u2192 Benefit bullets** (one line each)  \n4. **Simple FAQ (3 Q&As)** addressing likely objections \n\nStyle rules: short paragraphs, active verbs, no clich\u00e9s, no invented specs, use numbers where possible.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "wordpress",
+                "entity": "post",
+                "action": "create",
+                "name": "Create Post",
+                "key": "wordpress",
+                "operation_id": "posts-create",
+                "metadata": {
+                    "api_endpoint": "post \/wp\/v2\/posts",
+                    "body": {
+                        "status": "draft",
+                        "title": "{{ai.response}}",
+                        "content": "{{ai_1.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.title",
+                    "body.content",
+                    "body.status"
+                ],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
