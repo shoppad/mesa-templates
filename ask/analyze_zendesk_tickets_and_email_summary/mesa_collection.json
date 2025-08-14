@@ -1,0 +1,9 @@
+{
+    "key": "ask/analyze_zendesk_tickets_and_email_summary",
+    "name": "Analyze Last Week's Zendesk Tickets",
+    "version": "1.0.0",
+    "templates": [
+        "mcp/zendesk/get_support_tickets",
+        "ask_zendesk_tickets_and_email_summary"
+    ]
+}
