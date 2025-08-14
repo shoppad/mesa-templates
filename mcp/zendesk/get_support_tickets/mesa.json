@@ -2,7 +2,7 @@
     "key": "mcp/zendesk/get_support_tickets",
     "name": "Retrieve Zendesk Tickets",
     "version": "1.0.0",
-    "enabled": false,
+    "enabled": true,
     "setup": true,
     "config": {
         "inputs": [
