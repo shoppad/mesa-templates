@@ -1,0 +1,183 @@
+{
+    "key": "zendesk/ticket/summarize_closed_tickets_and_send_to_asana",
+    "name": "Send Closed Zendesk Ticket Summaries to Asana",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "zendesk",
+                "entity": "status",
+                "action": "changed",
+                "name": "Ticket Status Updated",
+                "key": "zendesk",
+                "operation_id": "status_changed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "zendesk",
+                "entity": "ticket",
+                "action": "get",
+                "name": "Retrieve Ticket",
+                "key": "zendesk_1",
+                "operation_id": "ShowTicket",
+                "metadata": {
+                    "api_endpoint": "get \/api\/v2\/tickets\/{ticket_id}",
+                    "path": {
+                        "ticket_id": "{{zendesk.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if Ticket Status is Closed",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{zendesk_1.status}}",
+                    "comparison": "equals",
+                    "b": "closed",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "zendesk",
+                "entity": "ticket_comment",
+                "action": "list",
+                "name": "Get List of Comments",
+                "key": "zendesk_2",
+                "operation_id": "ListTicketComments",
+                "metadata": {
+                    "api_endpoint": "get \/api\/v2\/tickets\/{ticket_id}\/comments",
+                    "path": {
+                        "ticket_id": "{{zendesk_1.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "map",
+                "name": "Loop Through Comments",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_map",
+                "metadata": {
+                    "key": "{{zendesk_2.comments[]}}",
+                    "map_field": "{{zendesk_2.comments[].body}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Generate Title",
+                "version": "v2",
+                "key": "ai_1",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Based on the customer support thread provided {{loop_2.comma_separated}}, generate a short, descriptive title that captures the essence of the customer\u2019s concern or situation. Avoid technical jargon.\n\nExample Input:\n\u201cCustomer: I can't access my dashboard, Support: Can you try clearing your cache?, Customer: That worked, thanks!\u201d\n\nExample Output:\nLogin Issue Resolved After Basic Troubleshooting "
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Generate Summary",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Summary Writing Instructions for Support Threads:\nWhen reviewing a customer support thread (messages separated by commas), write a short, clear summary that includes only:\n\n-General nature of the customer\u2019s problem (no technical detail)\n-Their experience or sentiment (e.g., frustration, confusion, satisfaction)\n-Resolution status (resolved, pending, unclear)\n-The solution provided\n\nExample\nInput:\nCustomer: I can't access my dashboard, Support: Can you try clearing your cache?, Customer: That worked, thanks!\n\nOutput:\nThe customer was unable to access their dashboard but regained access after clearing the cache. They appeared satisfied with the outcome. {{loop_2.comma_separated}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "asana",
+                "entity": "task",
+                "action": "create",
+                "name": "Create Task",
+                "key": "asana",
+                "operation_id": "createTask",
+                "metadata": {
+                    "api_endpoint": "post \/tasks",
+                    "body": {
+                        "data": {
+                            "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
+                            "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
+                            "name": "{{ai_1.response}}",
+                            "notes": "Zendesk Summary: {{ai.response}}\nTicket #: {{zendesk_1.id}}\nCustomer Email: {{zendesk_1.recipient}}\nTicket Updated At: {{zendesk_1.updated_at}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.data.workspace",
+                    "body.data.projects",
+                    "body.data.name",
+                    "body.data.notes"
+                ],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
