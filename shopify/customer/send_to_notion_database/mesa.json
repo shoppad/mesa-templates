@@ -54,7 +54,7 @@
                     },
                     {
                         "label": "Tags",
-                        "value": "Tags|{{shopify.tags}}",
+                        "value": "Tags|{{shopify_1.tags}}",
                         "description": "The customer tags."
                     },
                     {
@@ -90,6 +90,24 @@
         ],
         "outputs": [
             {
+              "schema": 3.1,
+              "trigger_type": "output",
+              "type": "shopify",
+              "entity": "customer",
+              "action": "retrieve",
+              "name": "Retrieve Customer",
+              "key": "shopify_1",
+              "operation_id": "get_customers_customer_id",
+              "metadata": {
+                  "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
+                  "customer_id": "{{shopify.id}}"
+              },
+              "local_fields": [],
+              "selected_fields": [],
+              "on_error": "default",
+              "weight": 0
+            },
+            {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "notion",
@@ -107,7 +125,7 @@
                             "First Name": "{{shopify.first_name}}",
                             "Last Name": "{{shopify.last_name}}",
                             "Phone": "{{shopify.phone}}",
-                            "Tags": "{{shopify.tags}}",
+                            "Tags": "{{shopify_1.tags}}",
                             "Note": "{{shopify.note}}"
                         }
                     },
@@ -119,7 +137,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 1
             }
         ]
     }
