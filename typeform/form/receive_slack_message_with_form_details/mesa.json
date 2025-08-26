@@ -1,0 +1,54 @@
+{
+    "key": "typeform/form/receive_slack_message_with_form_details",
+    "name": "Receive Slack Alerts for Each Typeform Submission",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "typeform",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Response Created",
+                "key": "typeform",
+                "operation_id": "form_response",
+                "metadata": {
+                    "path": {
+                        "form_id": "{{ template | label: 'What is the form ID?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "entity": "message",
+                "action": "create",
+                "name": "Send Message",
+                "version": "v3",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "api_endpoint": "post \/api\/chat.postMessage",
+                    "body": {
+                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                        "markdown_text": "{{ template | label: 'What are the contents of the Slack message?', description: '', default: 'New survey response received!' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
