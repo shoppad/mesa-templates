@@ -17,7 +17,7 @@
                 "operation_id": "form_response",
                 "metadata": {
                     "path": {
-                        "form_id": "{{ template | label: 'What is the form ID?', description: '' }}"
+                        "form_id": "{{ template | label: 'Enter the Form ID for the Typeform MESA is monitoring.', description: 'To find the form ID, open the form in Typeform and copy its URL. The ID is the code after /to/ or /form/ (e.g., AbCd12EF). Paste that here.' }}"
                     }
                 },
                 "local_fields": [],
@@ -41,7 +41,7 @@
                     "api_endpoint": "post \/api\/chat.postMessage",
                     "body": {
                         "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
-                        "markdown_text": "{{ template | label: 'What are the contents of the Slack message?', description: '', default: 'New survey response received!' }}"
+                        "markdown_text": "{{ template | label: 'Create your Slack message.', description: 'Use variables to pull in specific details from your survey.', default: 'New survey response received!' }}"
                     }
                 },
                 "local_fields": [],
