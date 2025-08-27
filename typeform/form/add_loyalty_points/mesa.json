@@ -21,9 +21,7 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "path"
-                ],
+                "selected_fields": ["path"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -39,13 +37,11 @@
                 "key": "loyaltylion",
                 "operation_id": "get_v2_customers",
                 "metadata": {
-                    "api_endpoint": "GET \/v2\/customers",
+                    "api_endpoint": "GET /v2/customers",
                     "parameters": "email={{typeform.answers.field_email.value}}&limit=1"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "parameters"
-                ],
+                "selected_fields": ["parameters"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -59,7 +55,7 @@
                 "key": "loyaltylion_1",
                 "operation_id": "post_v2_customers_merchant_id_points",
                 "metadata": {
-                    "api_endpoint": "POST \/v2\/customers\/{{merchant_id}}\/points",
+                    "api_endpoint": "POST /v2/customers/{{merchant_id}}/points",
                     "merchant_id": "{{loyaltylion.0.merchant_id}}",
                     "mapping": [
                         {
@@ -68,7 +64,7 @@
                         },
                         {
                             "destination": "reason",
-                            "source": "Bonus points for online order"
+                            "source": "Bonus points for survey response"
                         }
                     ]
                 },
@@ -80,9 +76,7 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [
-                    "merchant_id"
-                ],
+                "selected_fields": ["merchant_id"],
                 "on_error": "default",
                 "weight": 1
             }
