@@ -1,0 +1,91 @@
+{
+    "key": "typeform/form/add_loyalty_points",
+    "name": "Grant Bonus Loyalty Points After Each Typeform Submission",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "typeform",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Response Created",
+                "key": "typeform",
+                "operation_id": "form_response",
+                "metadata": {
+                    "path": {
+                        "form_id": "{{ template | label: 'Enter the Form ID for the Typeform MESA is monitoring.', description: 'To find the form ID, open the form in Typeform and copy its URL. The ID is the code after /to/ or /form/ (e.g., AbCd12EF). Paste that here.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loyaltylion",
+                "entity": "customer",
+                "action": "list",
+                "name": "Get List of Customers",
+                "key": "loyaltylion",
+                "operation_id": "get_v2_customers",
+                "metadata": {
+                    "api_endpoint": "GET \/v2\/customers",
+                    "parameters": "email={{typeform.answers.field_email.value}}&limit=1"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "parameters"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "loyaltylion",
+                "entity": "customer",
+                "action": "add_points",
+                "name": "Add Points to Customer",
+                "key": "loyaltylion_1",
+                "operation_id": "post_v2_customers_merchant_id_points",
+                "metadata": {
+                    "api_endpoint": "POST \/v2\/customers\/{{merchant_id}}\/points",
+                    "merchant_id": "{{loyaltylion.0.merchant_id}}",
+                    "mapping": [
+                        {
+                            "destination": "points",
+                            "source": "100"
+                        },
+                        {
+                            "destination": "reason",
+                            "source": "Bonus points for online order"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [
+                    "merchant_id"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
