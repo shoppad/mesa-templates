@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/create_shipstation_label",
-    "name": " Automatically Create a ShipStation Label for New Shopify Orders",
+    "name": "Automatically Create a ShipStation Label for New Shopify Orders",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
