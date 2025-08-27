@@ -102,7 +102,7 @@
                         "email": "{{typeform.answers.field_email.value}}",
                         "first_name": "{{typeform.answers.field_first_name.value}}",
                         "last_name": "{{typeform.answers.field_last_name.value}}",
-                        "tags": "{{ template | label: 'Enter the tags you want to add to a newly created customer.', description: 'Separate tags with commas.' }}"
+                        "tags": "{{ template | label: 'Enter the tags you want to add to an existing customer.', description: 'Separate tags with commas.' }}"
                     }
                 },
                 "local_fields": [],
@@ -156,7 +156,7 @@
                         "email": "{{typeform.answers.field_email.value}}",
                         "first_name": "{{typeform.answers.field_first_name.value}}",
                         "last_name": "{{typeform.answers.field_last_name.value}}",
-                        "tags": "{{ template | label: 'Enter the tags you want to add to an existing customer.', description: 'Separate tags with commas.' }}"
+                        "tags": "{{ template | label: 'Enter the tags you want to add to a newly created customer.', description: 'Separate tags with commas.' }}"
                     }
                 },
                 "local_fields": [],
