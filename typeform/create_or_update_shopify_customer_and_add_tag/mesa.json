@@ -1,0 +1,190 @@
+{
+    "key": "typeform/form/create_or_update_shopify_customer_and_add_tag",
+    "name": "Create or Update a Shopify Customer from New Typeform Submissions",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "typeform",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Response Created",
+                "key": "typeform",
+                "operation_id": "form_response",
+                "metadata": {
+                    "path": {
+                        "form_id": "{{ template | label: 'Enter the Form ID for the Typeform MESA is monitoring.', description: 'To find the form ID, open the form in Typeform and copy its URL. The ID is the code after /to/ or /form/ (e.g., AbCd12EF). Paste that here.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer_search",
+                "action": "list",
+                "name": "Search Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_search",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/search.json",
+                    "parameters": "email={{typeform.answers.field_email.value}}&limit=1"
+                },
+                "local_fields": [],
+                "selected_fields": ["parameters"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - Has Existing Customer",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "update",
+                "name": "Update Customer",
+                "key": "shopify_1",
+                "operation_id": "put_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "put admin/customers/{{customer_id}}.json",
+                    "trigger_parent_key": "paths_1",
+                    "customer_id": "{{shopify.0.id}}",
+                    "body": {
+                        "email": "{{typeform.answers.field_email.value}}",
+                        "first_name": "{{typeform.answers.field_first_name.value}}",
+                        "last_name": "{{typeform.answers.field_last_name.value}}",
+                        "tags": "{{ template | label: 'Enter the tags you want to add to the customer.', description: 'Separate tags with commas.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.tags",
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - No Existing Customer",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "shopify_2",
+                "operation_id": "post_customers",
+                "metadata": {
+                    "api_endpoint": "post admin/customers.json",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "email": "{{typeform.answers.field_email.value}}",
+                        "first_name": "{{typeform.answers.field_first_name.value}}",
+                        "last_name": "{{typeform.answers.field_last_name.value}}",
+                        "tags": "{{ template | label: 'Enter the tags you want to add to the customer.', description: 'Separate tags with commas.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.tags",
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
