@@ -38,7 +38,7 @@
                 "operation_id": "get_customers_search",
                 "metadata": {
                     "api_endpoint": "get admin/customers/search.json",
-                    "parameters": "email={{typeform.answers.field_email.value}}&limit=1"
+                    "parameters": "email=&limit=1"
                 },
                 "local_fields": [],
                 "selected_fields": ["parameters"],
