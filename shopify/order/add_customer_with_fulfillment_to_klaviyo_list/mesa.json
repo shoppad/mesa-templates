@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/add_customer_with_fulfillment_to_klaviyo_list",
-    "name": "Add Shopify Customers to Klaviyo List Post-Order Fulfillment",
+    "name": "Add Shopify Customers to a Klaviyo List Post-Order Fulfillment",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -42,7 +42,7 @@
                         "data": [
                             {
                                 "type": "profile",
-                                "mesa_profile_field": "{{shopify.customer.email}}"
+                                "mesa_profile_field": "{{shopify.email}}{{shopify.phone}}"
                             }
                         ]
                     },
