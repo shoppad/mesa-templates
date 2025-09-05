@@ -1,0 +1,60 @@
+{
+    "key": "shopify/order/add_customer_with_fulfillment_to_klaviyo_list",
+    "name": "Add Shopify Customers to Klaviyo List Post-Order Fulfillment",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "fulfilled",
+                "name": "Order Fulfilled",
+                "key": "shopify",
+                "operation_id": "orders_fulfilled",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_relationship_profile",
+                "action": "create",
+                "name": "Add Profile to List",
+                "version": "v4",
+                "key": "klaviyo",
+                "operation_id": "add_profiles_to_list",
+                "metadata": {
+                    "api_endpoint": "post /api/lists/{id}/relationships/profiles",
+                    "body": {
+                        "data": [
+                            {
+                                "type": "profile",
+                                "mesa_profile_field": "{{shopify.customer.email}}"
+                            }
+                        ]
+                    },
+                    "path": {
+                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
