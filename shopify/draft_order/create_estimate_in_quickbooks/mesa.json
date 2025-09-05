@@ -1,0 +1,297 @@
+{
+    "key": "shopify/draft_order/create_estimate_in_quickbooks",
+    "name": "Generate QuickBooks Estimate from Shopify Draft Order",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "created",
+                "name": "Draft Order Created",
+                "key": "shopify",
+                "operation_id": "draft_orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "customer_id"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "customer",
+                "action": "query",
+                "name": "Query Customer",
+                "key": "quickbooks",
+                "operation_id": "CustomerQuery",
+                "metadata": {
+                    "api_endpoint": "get \/customer\/query",
+                    "query": {
+                        "query": "SELECT * FROM Customer WHERE PrimaryEmailAddr = '{{shopify.email}}'"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query",
+                    "query.query"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - Has Existing Customer",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{quickbooks.0.Id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "estimate",
+                "action": "create",
+                "name": "Create or Update Estimate",
+                "key": "quickbooks_1",
+                "operation_id": "EstimatePost3",
+                "metadata": {
+                    "api_endpoint": "post \/estimate",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "sparse": "false",
+                        "Line": [
+                            {
+                                "Amount": "{{shopify.line_items[].price}}",
+                                "DetailType": "SalesItemLineDetail",
+                                "LineNum": "{{shopify.line_items[].quantity}}",
+                                "Description": "{{shopify.line_items[].name}}",
+                                "SalesItemLineDetail": {
+                                    "UnitPrice": "{{shopify.line_items[].price}}",
+                                    "Qty": "{{shopify.line_items[].quantity}}"
+                                }
+                            }
+                        ],
+                        "CurrencyRef": {
+                            "value": "{{shopify.currency}}"
+                        },
+                        "TxnTaxDetail": {
+                            "TotalTax": "{{shopify.total_tax}}"
+                        },
+                        "CustomerRef": {
+                            "value": "{{quickbooks.0.Id}}",
+                            "name": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Line[].Amount",
+                    "body.Line[].DetailType",
+                    "body.Line[].LineNum",
+                    "body.Line[].Description"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - No Existing Customer",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{quickbooks.0.Id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "quickbooks_2",
+                "operation_id": "CustomerPost3",
+                "metadata": {
+                    "api_endpoint": "post \/customer",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "Notes": "{{shopify_1.note}}",
+                        "DisplayName": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}",
+                        "BillAddr": {
+                            "Line1": "{{shopify.billing_address.address1}}",
+                            "City": "{{shopify.billing_address.city}}",
+                            "Country": "{{shopify.billing_address.country}}",
+                            "CountrySubDivisionCode": "{{shopify.billing_address.country_code}}",
+                            "PostalCode": "{{shopify.billing_address.zip}}"
+                        },
+                        "PrimaryPhone": {
+                            "FreeFormNumber": "{{shopify.customer.phone}}"
+                        },
+                        "PrimaryEmailAddr": {
+                            "Address": "{{shopify.email}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "quickbooks",
+                "entity": "estimate",
+                "action": "create",
+                "name": "Create or Update Estimate",
+                "key": "quickbooks_3",
+                "operation_id": "EstimatePost3",
+                "metadata": {
+                    "api_endpoint": "post \/estimate",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "sparse": "false",
+                        "Line": [
+                            {
+                                "Amount": "{{shopify.line_items[].price}}",
+                                "DetailType": "SalesItemLineDetail",
+                                "LineNum": "{{shopify.line_items[].quantity}}",
+                                "Description": "{{shopify.line_items[].name}}",
+                                "SalesItemLineDetail": {
+                                    "UnitPrice": "{{shopify.line_items[].price}}",
+                                    "Qty": "{{shopify.line_items[].quantity}}"
+                                }
+                            }
+                        ],
+                        "CurrencyRef": {
+                            "value": "{{shopify.currency}}"
+                        },
+                        "TxnTaxDetail": {
+                            "TotalTax": "{{shopify.total_tax}}"
+                        },
+                        "CustomerRef": {
+                            "value": "{{quickbooks_2.Customer.Id}}",
+                            "name": "{{shopify.customer.first_name}} {{shopify.customer.last_name}}"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Line[].Amount",
+                    "body.Line[].DetailType",
+                    "body.Line[].LineNum",
+                    "body.Line[].Description"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            }
+        ]
+    }
+}
