@@ -1,0 +1,143 @@
+{
+    "key": "hubspot/lead/research_contact_with_perplexity",
+    "name": "Research New HubSpot Leads with Perplexity",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "list-created",
+                "name": "Contact Created",
+                "key": "hubspot",
+                "operation_id": "contact_list-created",
+                "metadata": {
+                    "api_endpoint": "post /contacts/lists",
+                    "poll": "*/15 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": ["poll"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact_association",
+                "action": "retrieve",
+                "name": "List Contact Associations",
+                "key": "hubspot_1",
+                "operation_id": "contact_association_retrieve",
+                "metadata": {
+                    "api_endpoint": "get /crm/v3/objects/contacts/{contactId}/associations/{toObjectType}",
+                    "path": {
+                        "contactId": "{{hubspot.id}}",
+                        "toObjectType": "companies"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "company",
+                "action": "retrieve",
+                "name": "Retrieve Company",
+                "key": "hubspot_2",
+                "operation_id": "company_retrieve",
+                "metadata": {
+                    "api_endpoint": "get /crm/v3/objects/companies/{companyId}",
+                    "path": {
+                        "companyId": "{{hubspot_1.results[0].id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "retrieve",
+                "name": "Retrieve Contact by ID",
+                "key": "hubspot_3",
+                "operation_id": "contact_retrieve",
+                "metadata": {
+                    "api_endpoint": "get /crm/v3/objects/contacts/{contactId}",
+                    "path": {
+                        "contactId": "{{hubspot.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "perplexity",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "perplexity",
+                "operation_id": "chat-completion",
+                "metadata": {
+                    "api_endpoint": "post /chat/completions",
+                    "body": {
+                        "model": "sonar-pro",
+                        "role": "user",
+                        "content": "You are an AI research assistant for a sales team. A new lead has been created in HubSpot with the following information:\n\n- Contact Name: {{hubspot.properties.firstname}} {{hubspot.properties.lastname}}\n- Job Title: {{hubspot_3.properties.jobtitle}}\n- Company: {{hubspot_3.properties.company}}\n- Industry: {{hubspot_3.properties.industry}}\n- Location: {{hubspot_3.properties.city}}, {{hubspot_3.properties.state}}, {{hubspot_3.properties.country}}\n\nYour task is to research {{hubspot_3.properties.company}} and provide the following:\n\n1. Company Overview\n   - Brief description of what the company does.  \n   - Key products or services provided.  \n   - Size, revenue (if available), and main markets served.  \n\n2. Industry Challenges & Trends  \n   - Key issues, challenges, or trends affecting {{hubspot_2.properties.industry}} that may be relevant to this prospect.  \n\n3. Competitive Landscape \n   - List of notable competitors and what differentiates {{hubspot_2.properties.name}} from them.  \n   - Insights into competitive advantages or weaknesses.  \n\n4. Sales Talking Points\n   - 3\u20135 personalized conversation starters or insights that a sales rep can use when reaching out to {{hubspot.properties.firstname}}.  \n\nFormat your findings as a clear, structured report. Keep it concise, professional, and actionable for sales enablement.\n",
+                        "search_mode": "web",
+                        "temperature": "0.2",
+                        "top_p": "0.9",
+                        "return_images": true,
+                        "return_related_questions": true,
+                        "stream": false,
+                        "disable_search": false,
+                        "enable_search_classifier": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "/send-email",
+                "metadata": {
+                    "api_endpoint": "post /send-email",
+                    "body": {
+                        "to": "{{ template | label: 'What email address should receive this notification?', description: '' }}",
+                        "subject": "\ud83d\udd0d Research ready for {{hubspot.properties.firstname}} {{hubspot.properties.lastname}}",
+                        "message": "{{perplexity.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
