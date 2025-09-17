@@ -1,0 +1,45 @@
+{
+    "key": "typeform/form/send_response_to_google_sheets",
+    "name": "Send Typeform Responses to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "typeform",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Response Created",
+                "key": "typeform",
+                "operation_id": "form_response",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}"
+                },
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 0
+            }
+        ]
+    }
+}
