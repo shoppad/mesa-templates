@@ -1,0 +1,59 @@
+{
+    "key": "googlecalendar/event/create_recall_meeting_bot",
+    "name": "Record Google Calendar Meetings with Recall",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googlecalendar",
+                "entity": "event",
+                "action": "created",
+                "name": "Event Created",
+                "key": "googlecalendar",
+                "operation_id": "events_created",
+                "metadata": {
+                    "api_endpoint": "get /calenders/events/created",
+                    "poll": "*/15 * * * *",
+                    "path": {
+                        "calendarId": "{{ template | label: 'Select Calendar' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["poll"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "recall",
+                "entity": "bot",
+                "action": "create",
+                "name": "Create Bot",
+                "key": "recall",
+                "operation_id": "recall-create-bot",
+                "metadata": {
+                    "api_endpoint": "post /bot",
+                    "body": {
+                        "meeting_url": "{{googlecalendar.meetUrl}}",
+                        "bot_name": "MESA Recording Bot"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.meeting_url",
+                    "body.bot_name"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}

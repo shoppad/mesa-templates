@@ -1,0 +1,74 @@
+{
+    "key": "recall/transcript/send_meeting_notes_to_slack",
+    "name": "Transcribe Meeting and Send the Notes to Slack",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "recall",
+                "entity": "webhook",
+                "action": "transcript_ready",
+                "name": "Transcript Ready",
+                "key": "recall",
+                "operation_id": "recall-webhook-transcript-done",
+                "metadata": {
+                    "api_endpoint": "post transcript.done"
+                },
+                "local_fields": [],
+                "selected_fields": ["host"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You are given a transcript in this format:\n[hh:mm:ss] Speaker Name: text\nPlease provide the following:\n1. A concise summary of the conversation (2\u20133 paragraphs).  \n2. A clear list of any action items, decisions, or follow-ups mentioned.  \n3. If there are no action items, state \u201cNo action items found.\u201d\nTranscript: {{recall.transcript}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.role", "body.content"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "entity": "message",
+                "action": "create",
+                "name": "Send Message",
+                "version": "v3",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "api_endpoint": "post /api/chat.postMessage",
+                    "body": {
+                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                        "markdown_text": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.markdown_text"],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
