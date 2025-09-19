@@ -1,0 +1,184 @@
+{
+    "key": "typeform/form/add_or_update_hubspot_contact",
+    "name": "Create or Update a HubSpot Contact from a Typeform Response",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "typeform",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Response Created",
+                "key": "typeform",
+                "operation_id": "form_response",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact_search",
+                "action": "create",
+                "name": "Search for Contact",
+                "key": "hubspot",
+                "operation_id": "contact_search_create",
+                "metadata": {
+                    "api_endpoint": "post \/crm\/v3\/objects\/contacts\/search",
+                    "body": {
+                        "limit": "1",
+                        "after": "0",
+                        "filterGroups": [
+                            {
+                                "filters": [
+                                    {
+                                        "propertyName": "email",
+                                        "operator": "EQ"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.filterGroups[].filters[].propertyName",
+                    "body.filterGroups[].filters[].operator",
+                    "body.filterGroups[].filters[].value",
+                    "body.limit"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - Has Existing Contact",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{hubspot.results[0].properties.email}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "update",
+                "name": "Update Contact",
+                "key": "hubspot_1",
+                "operation_id": "contact_update",
+                "metadata": {
+                    "api_endpoint": "patch \/crm\/v3\/objects\/contacts\/{contactId}",
+                    "trigger_parent_key": "paths_1",
+                    "path": {
+                        "contactId": "{{hubspot.results[0].id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - No Existing Contact",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{hubspot.results[0].properties.email}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "hubspot",
+                "entity": "contact",
+                "action": "create",
+                "name": "Create Contact",
+                "key": "hubspot_2",
+                "operation_id": "contact_create",
+                "metadata": {
+                    "api_endpoint": "post \/crm\/v3\/objects\/contacts",
+                    "trigger_parent_key": "paths_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
