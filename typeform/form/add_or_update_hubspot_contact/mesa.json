@@ -3,7 +3,7 @@
     "name": "Create or Update a HubSpot Contact from a Typeform Response",
     "version": "1.0.0",
     "enabled": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -33,7 +33,7 @@
                 "key": "hubspot",
                 "operation_id": "contact_search_create",
                 "metadata": {
-                    "api_endpoint": "post \/crm\/v3\/objects\/contacts\/search",
+                    "api_endpoint": "post /crm/v3/objects/contacts/search",
                     "body": {
                         "limit": "1",
                         "after": "0",
@@ -109,7 +109,7 @@
                 "key": "hubspot_1",
                 "operation_id": "contact_update",
                 "metadata": {
-                    "api_endpoint": "patch \/crm\/v3\/objects\/contacts\/{contactId}",
+                    "api_endpoint": "patch /crm/v3/objects/contacts/{contactId}",
                     "trigger_parent_key": "paths_1",
                     "path": {
                         "contactId": "{{hubspot.results[0].id}}"
@@ -155,7 +155,7 @@
                 "key": "hubspot_2",
                 "operation_id": "contact_create",
                 "metadata": {
-                    "api_endpoint": "post \/crm\/v3\/objects\/contacts",
+                    "api_endpoint": "post /crm/v3/objects/contacts",
                     "trigger_parent_key": "paths_2"
                 },
                 "local_fields": [],
