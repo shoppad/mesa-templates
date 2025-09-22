@@ -1,0 +1,318 @@
+{
+    "key": "helpscout/conversation/use_perplexity_to_research_issue",
+    "name": "Turn Complex Help Scout Tickets into Research-Backed Customer Responses",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "helpscout",
+                "entity": "conversation",
+                "action": "tags",
+                "name": "Conversation Tags Updated",
+                "key": "helpscout",
+                "operation_id": "convo_tags",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "count",
+                "name": "Number of matches",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
+                "metadata": {
+                    "key": "{{helpscout.tags[]}}",
+                    "filter": {
+                        "a": "{{helpscout.tags[].tag}}",
+                        "comparison": "equals",
+                        "b": "updated by mesa",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{loop.count}}",
+                    "comparison": "equals",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "helpscout",
+                "entity": "conversation_thread",
+                "action": "list",
+                "name": "Get List of Conversation's Threads",
+                "key": "helpscout_1",
+                "operation_id": "get-_v2_conversations_threads",
+                "metadata": {
+                    "api_endpoint": "get /v2/conversations/{conversationId}/threads",
+                    "path": {
+                        "conversationId": "{{helpscout.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["path", "path.conversationId"],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "map",
+                "name": "Map",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_map",
+                "metadata": {
+                    "key": "{{helpscout_1.threads[]}}",
+                    "map_field": "{{helpscout_1.threads[].body}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "map_field",
+                    "filter",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{helpscout.tags[]}}",
+                    "filter": {
+                        "a": "{{helpscout.tags[].tag}}",
+                        "comparison": "equals",
+                        "b": "research needed",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "perplexity",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "perplexity",
+                "operation_id": "chat-completion",
+                "metadata": {
+                    "api_endpoint": "post /chat/completions",
+                    "trigger_parent_key": "loop_1",
+                    "body": {
+                        "model": "sonar-pro",
+                        "role": "user",
+                        "content": "You are a research assistant for [INSERT COMPANY NAME] [INSERT COMPANY WEBSITE] customer support team.\nDo not present yourself as Help Scout or as the responding support agent. [INSERT COMPANY NAME] provides customer support through Help Scout, and you are preparing background research to help our agent draft a reply.\n\nCompany & Product Context\n\nCompany: [INSERT COMPANY NAME] ([INSERT WHAT COMPANY DOES])\n\nSupport Channel: Help Scout (you are not the agent; you only provide research and a draft note for the agent to review)\n\nTicket Details\n\nUse the following ticket fields as the source of the customer\u2019s question and situation:\n{{loop_3.comma_separated}}\n\nYour Task\n\nResearch and summarize the most relevant, current information from reliable sources. Prioritize vendor docs, official standards, and reputable technical sources. If dates matter (versions, outages, policy changes), state explicit dates.\n\nInclude, when applicable:\n\nProduct specifications (versions, requirements, limits, configuration details)\n\nCompetitive benchmarks or comparisons (how alternatives differ; pros/cons relevant to the user\u2019s goal)\n\nTroubleshooting protocols or known fixes (clear steps, diagnostics, edge cases)\n\nApplicable industry standards or best practices (cite the standard and summarize the relevant clauses)\n\nOutput Format (Draft Note for Agent)\n\nWrite a concise draft the [INSERT COMPANY NAME] agent can review, refine, and send. Avoid filler\u2014focus on actionable guidance.\n\nStructure:\n\nSummary (2\u20133 sentences) \u2014 What the customer is trying to do and the recommended path.\n\nWhat We Found \u2014 Bullet points with key facts and links.\n\nSteps to Resolve / Next Actions \u2014 Ordered, testable steps tailored to the ticket.\n\nNotes & Caveats \u2014 Version/date constraints, known limitations, ownership boundaries.\n\nSources \u2014 List of links with brief 1-line descriptions. Prefer primary/official sources.\n\nStyle & Constraints\n\nBe neutral and precise; don\u2019t promise roadmap items or unsupported capabilities.\n\nIf something is uncertain or version-dependent, call it out explicitly.\n\nUse clear, non-marketed language appropriate for a support reply.\n\nDo not impersonate the customer support agent, [INSERT COMPANY NAME], or Help Scout in the first person; you are producing research and a draft note.\n\nCitations are required for all non-obvious claims and any time-sensitive details.",
+                        "search_mode": "web",
+                        "temperature": "0.2",
+                        "top_p": "0.9",
+                        "return_images": true,
+                        "return_related_questions": true,
+                        "stream": false,
+                        "disable_search": false,
+                        "enable_search_classifier": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.model",
+                    "body.role",
+                    "body.content",
+                    "body.search_mode",
+                    "body.temperature",
+                    "body.top_p",
+                    "body.return_images",
+                    "body.return_related_questions"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "helpscout",
+                "entity": "conversation_note",
+                "action": "create",
+                "name": "Add Note to Conversation",
+                "key": "helpscout_2",
+                "operation_id": "post-_v2_conversations__conversationId__notes",
+                "metadata": {
+                    "api_endpoint": "post /v2/conversations/{conversationId}/notes",
+                    "trigger_parent_key": "loop_1",
+                    "path": {
+                        "conversationId": "{{helpscout.id}}"
+                    },
+                    "body": {
+                        "text": "{{perplexity.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "map",
+                "name": "Map",
+                "version": "v3",
+                "key": "loop_4",
+                "operation_id": "loop_map",
+                "metadata": {
+                    "trigger_parent_key": "loop_1",
+                    "key": "{{helpscout.tags[]}}",
+                    "map_field": "{{helpscout.tags[].tag}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "map_field",
+                    "filter",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "helpscout",
+                "entity": "conversation_tag",
+                "action": "update",
+                "name": "Update Conversation's Tags",
+                "key": "helpscout_3",
+                "operation_id": "put-_v2_conversations__conversationId__tags",
+                "metadata": {
+                    "api_endpoint": "put /v2/conversations/{conversationId}/tags",
+                    "trigger_parent_key": "loop_1",
+                    "path": {
+                        "conversationId": "{{helpscout.id}}"
+                    },
+                    "body": {
+                        "tags": "{{loop_4.comma_separated}}, updated by mesa"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.conversationId",
+                    "body",
+                    "body.tags"
+                ],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_1",
+                    "trigger_parent_key": "loop_1"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
