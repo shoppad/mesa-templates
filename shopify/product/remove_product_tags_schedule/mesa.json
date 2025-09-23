@@ -1,0 +1,118 @@
+{
+    "key": "shopify/product/remove_product_tags_schedule",
+    "name": "Scheduled Shopify Product Tag Removal for Timed Releases",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "enqueue_type": "datetime",
+                    "schedule": null,
+                    "datetime": "{{ template | label: 'Select a date to schedule removing products'' tags' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin/products.json",
+                    "query": {
+                        "limit": "250"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query.limit"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "a": "{{shopify[].tags}}",
+                        "comparison": "contains",
+                        "b": "{{ template | label: 'What tag would you like to remove from your products?', description: '' }}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_remove",
+                "name": "Product Remove Tag",
+                "key": "shopify_1",
+                "operation_id": "delete_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "delete mesa/products/{{product_id}}/tag.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag would you like to remove from your products?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
