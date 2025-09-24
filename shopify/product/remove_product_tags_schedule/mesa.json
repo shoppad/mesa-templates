@@ -59,7 +59,7 @@
                     "filter": {
                         "a": "{{shopify[].tags}}",
                         "comparison": "contains",
-                        "b": "{{ template | label: 'What tag would you like to remove from your products?', description: '' }}",
+                        "b": "{{ template | label: 'Which tag should MESA look for when checking your products before release?', description: '' }}",
                         "additional": [
                             {
                                 "operator": "and",
@@ -87,7 +87,7 @@
                     "trigger_parent_key": "loop",
                     "product_id": "{{loop.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag would you like to remove from your products?', description: '' }}"
+                        "tag": "{{ template | label: 'Which tag should MESA remove to make your products available for purchase?', description: 'This should be the same tag you entered on the previous screen. We ask again so each workflow step knows which products to target.' }}"
                     }
                 },
                 "local_fields": [],
