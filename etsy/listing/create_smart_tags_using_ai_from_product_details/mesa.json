@@ -1,0 +1,82 @@
+{
+    "key": "etsy/listing/create_smart_tags_using_ai_from_product_details",
+    "name": "Create Smart Etsy Tags Using AI from Your Listing Details",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 5,
+                "trigger_type": "input",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "list-created",
+                "name": "Active Listing Created",
+                "version": "v3",
+                "key": "etsy",
+                "operation_id": "findAllListingsActiveCreated",
+                "metadata": {
+                    "api_endpoint": "get /v3/application/listings/create",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You are an Etsy SEO expert. Based on the following Etsy listing title and description, generate 13 highly relevant tags. Each tag must:\n\nBe under 20 characters.\n\nUse exact or close variations of customer search phrases.\n\nReflect product type, materials, style, occasion, use cases, and giftability.\n\nInclude a mix of long-tail keywords (up to 20 characters) and shorter keywords.\n\nAvoid duplicates, plurals, or words already covered in the title unless they improve search intent.\n\nBe written in lowercase, separated by commas.\n\nHere is the listing:\nTitle: {{etsy.title}}\nDescription: {{etsy.description}}\n\nProvide only the 13 optimized tags."
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "etsy",
+                "entity": "shoplisting",
+                "action": "update",
+                "name": "Update Listing",
+                "version": "v3",
+                "key": "etsy_1",
+                "operation_id": "updateListing",
+                "metadata": {
+                    "api_endpoint": "patch /v3/application/shops/{shop_id}/listings/{listing_id}",
+                    "path": {
+                        "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}",
+                        "listing_id": "{{etsy.listing_id}}"
+                    },
+                    "body": {
+                        "tags": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.tags"],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
