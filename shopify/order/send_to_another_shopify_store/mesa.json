@@ -20,9 +20,7 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "frequency"
-                ],
+                "selected_fields": ["frequency"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,7 +36,7 @@
                 "key": "shopify_1",
                 "operation_id": "post_orders",
                 "metadata": {
-                    "api_endpoint": "post admin\/orders.json",
+                    "api_endpoint": "post admin/orders.json",
                     "body": {
                         "currency": "{{shopify.currency}}",
                         "email": "{{shopify.email}}",
@@ -68,6 +66,12 @@
                                 "title": "{{shopify.line_items[].title}}",
                                 "sku": "{{shopify.line_items[].sku}}",
                                 "price": "{{shopify.line_items[].price}}",
+                                "properties": [
+                                    {
+                                        "name": "{{shopify.line_items[].properties[].name}}",
+                                        "value": "{{shopify.line_items[].properties[].value}}"
+                                    }
+                                ],
                                 "applied_discount": {
                                     "title": "{{shopify.line_items[].applied_discount.title}}",
                                     "description": "{{shopify.line_items[].applied_discount.description}}",
@@ -176,7 +180,9 @@
                     "body.line_items[].applied_discount.description",
                     "body.line_items[].applied_discount.value",
                     "body.line_items[].applied_discount.value_type",
-                    "body.line_items[].applied_discount.amount"
+                    "body.line_items[].applied_discount.amount",
+                    "body.line_items[].properties[].name",
+                    "body.line_items[].properties[].value"
                 ],
                 "on_error": "default",
                 "weight": 0
