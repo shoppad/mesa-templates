@@ -2,15 +2,8 @@
     "key": "shopify/product/add_placeholder_image",
     "name": "Add a placeholder image when a Shopify product is created",
     "version": "1.0.0",
-    "description": "Adding multiple products to your store from a third-party service can be confusing. This template adds a placeholder image when products are created, allowing automatic updates to the product image.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 120,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -22,8 +15,12 @@
                 "name": "Product Created",
                 "key": "shopify_product",
                 "operation_id": "products_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -43,6 +40,7 @@
                     "product_id": "{{shopify_product.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["product_id"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -57,6 +55,7 @@
                     "a": "{{shopify_retrieve_product.images[0].src}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["a", "comparison"],
                 "on_error": "default",
                 "weight": 1
             },
@@ -71,16 +70,15 @@
                 "operation_id": "put_products_product_id",
                 "metadata": {
                     "api_endpoint": "put admin/products/{{product_id}}.json",
-                    "body": {
-                        "images": [
-                            {
-                                "src": ""
-                            }
-                        ]
-                    },
                     "product_id": "{{shopify_product.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.images",
+                    "body.images[].src"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
