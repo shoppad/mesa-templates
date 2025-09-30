@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/add_placeholder_image",
-    "name": "Add a placeholder image when a Shopify product is created",
+    "name": "Automatically Add Placeholder Image to New Shopify Products",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
