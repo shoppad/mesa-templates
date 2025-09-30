@@ -1,0 +1,191 @@
+{
+    "key": "schedule/daily_reddit_scraper",
+    "name": "Daily Reddit Scraper",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "enqueue_type": "schedule",
+                    "schedule": "@daily:0 0 * * *",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "reddit",
+                "entity": "post",
+                "action": "retrieve",
+                "name": "Get List of Subreddit's Posts",
+                "key": "reddit",
+                "operation_id": "discoverPostsBySubreddit",
+                "metadata": {
+                    "api_endpoint": "post /posts/by-subreddit",
+                    "body": {
+                        "url": "{{ template | label: 'What is the subreddit URL?', description: '' }}",
+                        "sort_by": "New"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.url", "body.sort_by"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{reddit}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "role": "user",
+                        "content": "You are a strict JSON-only classifier that evaluates whether a Reddit post is relevant to [INSERT YOUR DOMAIN / PRODUCT / AREA] and how it might be relevant.\n\nSTATIC_KEYWORDS (do not modify):\n[\"{{insert keywords here}}\"]\n\nINPUT_POST:\n- title: \"{{loop.title}}\"\n- description: \"{{loop.description}}\"\n- url: \"{{loop.url}}\"\n\nTASKS:\n1. Decide if the post is relevant to [YOUR DOMAIN / PRODUCT / AREA] by checking semantic meaning and overlap with STATIC_KEYWORDS.\n2. Decide if it \u201cmakes sense\u201d for [YOUR COMPANY / TEAM] to engage (i.e., there is a plausible value prop or conversation fit).\n3. Explain briefly why (1\u20132 sentences).\n4. Suggest concrete integration or use-case ideas, if relevant (e.g., \u201ctrigger on X \u2192 do Y\u201d, \u201csync data between A and B\u201d).\n5. Return ONLY the JSON object below\u2014no extra text.\n\nOUTPUT JSON SCHEMA (return EXACTLY this shape and key order):\n{\n  \"url\": string,\n  \"relevant\": boolean,\n  \"makes_sense\": boolean,\n  \"explanation\": string,\n  \"matched_keywords\": string[], \n  \"integration_ideas\": string[],\n  \"confidence\": number\n}\n\nRULES:\n-\"matched_keywords\" must be a subset of STATIC_KEYWORDS actually supported by the post\u2019s content (title/description).\n-\"confidence\" is a float between 0 and 1 reflecting certainty in \"relevant\".\n-Keep \"explanation\" to <= 300 characters.\n-If not relevant, return [] for \"integration_ideas\".\n-ABSOLUTELY DO NOT return markdown, code fences, or any prose. The output must be ONLY a raw JSON object."
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.role", "body.content"],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Remove Markdown From the AI Payload",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "selected_fields": ["script"],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "a": "{{custom.relevant}}",
+                    "comparison": "equals",
+                    "b": "true",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "b", "additional"],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "entity": "message",
+                "action": "create",
+                "name": "Send Message",
+                "version": "v3",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "api_endpoint": "post /api/chat.postMessage",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                        "markdown_text": "URL:{{loop.url}}\nExplanation:{{ custom.explanation }}\nDescription: {{ loop.description }}\n{% if custom.matched_keywords and custom.matched_keywords.size > 0 %}\nKeywords:\n{% for keyword in custom.matched_keywords %}\n- {{ keyword }}\n{% endfor %}\n{% endif %}\n\n{% if custom.integration_ideas and custom.integration_ideas.size > 0 %}\nIntegration Ideas:\n{% for idea in custom.integration_ideas %}\n- {{ idea }}\n{% endfor %}\n{% endif %}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.markdown_text"],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
