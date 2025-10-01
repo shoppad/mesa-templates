@@ -3,7 +3,7 @@
     "name": "Approve Automated Thank-You Emails Before Sending to Customers",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {

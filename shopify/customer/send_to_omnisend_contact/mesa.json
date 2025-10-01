@@ -1,16 +1,9 @@
 {
     "key": "shopify/customer/send_to_omnisend_contact",
-    "name": "Send Shopify customer to Omnisend contact",
+    "name": "Automatically Add New Shopify Customers to Omnisend Contacts",
     "version": "1.0.0",
-    "description": "This template sends your customers contact details from Shopify to a Omnisend Contact as soon as the customer is created in Shopify. This happens automatically so your Omnisend lists are always up to date.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "omnisend",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,7 +14,10 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify_customer",
+                "operation_id": "customers_create",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -35,7 +31,9 @@
                 "action": "create",
                 "name": "Create Contact",
                 "key": "omnisend_contact",
+                "operation_id": "POST-contacts",
                 "metadata": {
+                    "api_endpoint": "post /contacts",
                     "body": {
                         "email": "{{shopify_customer.email}}",
                         "smsPhoneNumber": "{{shopify_customer.phone}}",
@@ -50,10 +48,22 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.email",
+                    "body.smsPhoneNumber",
+                    "body.firstName",
+                    "body.lastName",
+                    "body.country",
+                    "body.countryCode",
+                    "body.state",
+                    "body.city",
+                    "body.address",
+                    "body.postalCode"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
