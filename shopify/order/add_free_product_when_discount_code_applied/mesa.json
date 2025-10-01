@@ -1,16 +1,9 @@
 {
     "key": "shopify/order/add_free_product_when_discount_code_applied",
-    "name": "Add a free product to an order when a specific discount code is applied",
+    "name": "Add a Free Product to Shopify Orders with Specific Discount Codes",
     "version": "1.0.0",
-    "description": "Encourage your customers to complete their purchase or make a repeat purchase by offering a discount code that will add a free gift to their order. After your customer completes their checkout, check if the order has a specific discount code applied, then add a free product to the order for fulfillment.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,8 +14,13 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify",
-                "metadata": [],
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -32,15 +30,27 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop over the order's discount codes",
+                "version": "v3",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify.discount_codes[]}}"
+                    "key": "{{shopify.discount_codes[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "key"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -52,9 +62,21 @@
                 "key": "filter",
                 "metadata": {
                     "comparison": "equals",
-                    "a": "{{loop.code}}"
+                    "a": "{{loop.code}}",
+                    "trigger_parent_key": "loop",
+                    "b": "{{ template | label: 'What is the specific discount code customers will use?', description: '' }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -66,21 +88,52 @@
                 "action": "line_item_add",
                 "name": "Add Line Item to Order",
                 "key": "shopify_1",
+                "operation_id": "post_mesa_orders_order_id_add-line-item",
                 "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/add-line-item.json",
                     "body": {
+                        "product_id": "{{ template | label: 'What is the free product you would like to add?', description: '' }}",
+                        "variant_id": "{{ template | label: 'What is the variant of the free product you would like to add?', description: 'Select ''Default Title'' if there are no additional variants.' }}",
                         "quantity": "1",
                         "discount_type": "Percentage",
                         "discount_amount": "100",
                         "allow_duplicates": true,
                         "notify_customer": "false"
                     },
-                    "order_id": "{{shopify.id}}"
+                    "order_id": "{{shopify.id}}",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.quantity",
+                    "body.discount_type",
+                    "body.discount_amount",
+                    "body.allow_duplicates",
+                    "body.notify_customer"
+                ],
                 "on_error": "default",
                 "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }
