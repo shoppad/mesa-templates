@@ -1,16 +1,9 @@
 {
     "key": "add_shopify_customer_tag",
-    "name": "Add a Tag to a Shopify Customer When They Purchase a Subscription Product Through Recharge",
+    "name": "Automatically Tag Shopify Customers Who Purchase Subscriptions",
     "version": "1.0.0",
-    "description": "Mesa makes it easy to track and manage customers that buy a subscription product purchased through Recharge. Whenever a customer purchases a subscription product, Mesa instantly adds a tag to the Shopify customer and includes their data as part of your Recharge list. It’s going to help you identify new subscriptions and use this information to fulfill orders.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "recharge",
-    "destination": "shopify",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,8 +14,10 @@
                 "action": "subscription/created",
                 "name": "Subscription Created",
                 "key": "recharge_subscription",
+                "operation_id": "subscription_created",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": ["topic"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,11 +31,13 @@
                 "action": "retrieve",
                 "name": "Retrieve Customer",
                 "key": "recharge_customer",
+                "operation_id": "get-customers-customer_id",
                 "metadata": {
                     "api_endpoint": "GET /customers/{{customer_id}}",
                     "customer_id": "{{recharge_subscription.customer_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["customer_id"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -52,12 +49,15 @@
                 "action": "retrieve",
                 "name": "Retrieve Customer",
                 "key": "shopify_customer_1",
+                "operation_id": "get_customers_customer_id",
                 "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
                     "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["customer_id"],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
                 "schema": 3,
@@ -67,17 +67,19 @@
                 "action": "tag_add",
                 "name": "Customer Add Tag",
                 "key": "shopify_customer",
+                "operation_id": "post_mesa_customers_customer_id_tag",
                 "metadata": {
+                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
                     "customer_id": "{{shopify_customer_1.id}}",
                     "body": {
                         "tag": "Recharge Tag"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": ["customer_id", "body", "body.tag"],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

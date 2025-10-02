@@ -3,7 +3,7 @@
     "name": "Automatically Add Placeholder Image to New Shopify Products",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -20,7 +20,7 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["frequency"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -52,7 +52,13 @@
                 "key": "filter",
                 "metadata": {
                     "comparison": "is empty",
-                    "a": "{{shopify_retrieve_product.images[0].src}}"
+                    "a": "{{shopify_retrieve_product.images[0].src}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
                 "selected_fields": ["a", "comparison"],
@@ -70,7 +76,14 @@
                 "operation_id": "put_products_product_id",
                 "metadata": {
                     "api_endpoint": "put admin/products/{{product_id}}.json",
-                    "product_id": "{{shopify_product.id}}"
+                    "product_id": "{{shopify_product.id}}",
+                    "body": {
+                        "images": [
+                            {
+                                "src": "{{ template | label: 'What is the placeholder image URL?', description: '' }}"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -82,7 +95,6 @@
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

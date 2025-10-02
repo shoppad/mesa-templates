@@ -3,7 +3,7 @@
     "name": "Send a gift card to a customer if their order is delayed",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -17,13 +17,11 @@
                 "key": "gorgias",
                 "operation_id": "ticket_created",
                 "metadata": {
-                    "api_endpoint": "put \/api\/views\/0\/items?",
-                    "poll": "@hourly:0 * * * *",
-                  "next_sync_date_time": "2024-09-18T20:00:00-05:00"                },
+                    "api_endpoint": "put /api/views/0/items?",
+                    "poll": "@hourly:0 * * * *"
+                },
                 "local_fields": [],
-                "selected_fields": [
-                    "poll"
-                ],
+                "selected_fields": ["poll"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -43,7 +41,7 @@
                     "test_bypass": false
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["amount", "unit"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -58,13 +56,13 @@
                 "key": "gorgias_1",
                 "operation_id": "retrieve_ticket",
                 "metadata": {
-                    "api_endpoint": "get \/api\/tickets\/{id}\/",
+                    "api_endpoint": "get /api/tickets/{id}/",
                     "path": {
                         "id": "{{gorgias.id}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["path", "path.id"],
                 "on_error": "default",
                 "weight": 1
             },
@@ -74,7 +72,7 @@
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
@@ -83,7 +81,13 @@
                     "filter": {
                         "a": "{{loop.name}}",
                         "comparison": "equals",
-                        "b": "send-gift-card"
+                        "b": "send-gift-card",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
@@ -105,7 +109,7 @@
                 "key": "govalo",
                 "operation_id": "post-card",
                 "metadata": {
-                    "api_endpoint": "post \/cards",
+                    "api_endpoint": "post /cards",
                     "trigger_parent_key": "loop",
                     "body": {
                         "firstName": "{{gorgias_1.customer.firstname}}",
@@ -113,13 +117,40 @@
                         "email": "{{gorgias_1.customer.email}}",
                         "note": "Here is a small gift of appreciation!",
                         "value": "20",
-                        "eventType": "giftcard"
+                        "eventType": "giftcard",
+                        "productId": "{{ template | label: 'What is the product ID?', description: '' }}"
                     }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.firstName",
+                    "body.lastName",
+                    "body.email",
+                    "body.note",
+                    "body.value",
+                    "body.eventType"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }

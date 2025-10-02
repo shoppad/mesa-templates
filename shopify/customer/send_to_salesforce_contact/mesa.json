@@ -1,17 +1,9 @@
 {
     "key": "shopify/customer/send_to_salesforce_contact",
-    "name": "Send Customer to Salesforce Contact",
+    "name": "Create Salesforce Contacts from New Shopify Customers",
     "version": "1.0.0",
-    "description": "Minimize the need for manual memorization by instantly connecting Shopify to Salesforce Contact. This template sends your customers from Shopify to Salesforce Contact as soon as the customer is created. This allows you to stay on top of your business by keeping track of your customers.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,10 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify_customer",
+                "operation_id": "customers_create",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,6 +31,7 @@
                 "action": "create",
                 "name": "Create Contact",
                 "key": "salesforce_contact",
+                "operation_id": "contact_create",
                 "metadata": {
                     "entity_name": "Contact",
                     "method": "POST",
@@ -57,10 +53,23 @@
                         "fields": []
                     }
                 ],
+                "selected_fields": [
+                    "body",
+                    "body.FirstName",
+                    "body.LastName",
+                    "body.Email",
+                    "body.MailingStreet",
+                    "body.MailingCity",
+                    "body.MailingState",
+                    "body.MailingPostalCode",
+                    "body.MailingCountry",
+                    "body.Phone",
+                    "method",
+                    "entity_name"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

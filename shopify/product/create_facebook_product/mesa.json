@@ -3,7 +3,7 @@
     "name": "Automatically Create Facebook Catalog Product from Tagged Shopify Product",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -14,7 +14,13 @@
                 "action": "created",
                 "name": "Product Created",
                 "key": "shopify_product",
-                "metadata": [],
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -29,9 +35,16 @@
                 "metadata": {
                     "a": "facebook",
                     "comparison": "in",
-                    "b": "{{shopify_product.tags}}"
+                    "b": "{{shopify_product.tags}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": ["a", "comparison", "b"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -45,7 +58,7 @@
                 "key": "shopify_1",
                 "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -60,11 +73,9 @@
                 "action": "create",
                 "name": "Product Create",
                 "key": "facebook_product",
+                "operation_id": "ProductCreate",
                 "metadata": {
-                    "path": {
-                        "business": "",
-                        "catalog": ""
-                    },
+                    "api_endpoint": "post /{catalog}/products",
                     "body": {
                         "name": "{{shopify_product.title}}",
                         "currency": "USD",
@@ -75,9 +86,26 @@
                         "url": "https://{{shopify_1.domain}}/products/{{shopify_product.handle}}",
                         "description": "{{shopify_product.body_html}}",
                         "brand": "{{shopify_product.vendor}}"
+                    },
+                    "path": {
+                        "business": "{{ template | label: 'What is your business?', description: '' }}",
+                        "catalog": "{{ template | label: 'What is your catalog?', description: '' }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "body",
+                    "body.name",
+                    "body.currency",
+                    "body.price",
+                    "body.image_url",
+                    "body.category",
+                    "body.retailer_id",
+                    "body.url",
+                    "body.description",
+                    "body.brand"
+                ],
                 "on_error": "default",
                 "weight": 2
             }

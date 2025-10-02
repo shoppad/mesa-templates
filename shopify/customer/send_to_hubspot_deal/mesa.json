@@ -2,17 +2,8 @@
     "key": "shopify/customer/send_to_hubspot_deal",
     "name": "Send Shopify Customer to HubSpot Contact and Deal",
     "version": "1.0.0",
-    "description": "HubSpot provides an extensive overview so you can take a look at your store's analytics. This template sends a Shopify customer from Shopify to HubSpot contact and deal whenever a customer is created. This allows your sales team to always be in sync with your Shopify store and act on an opportunity in a timely manner.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Customer"
-    ],
-    "source": "shopify",
-    "destination": "hubspot",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -23,7 +14,13 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify_customer",
-                "metadata": [],
+                "operation_id": "customers_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -37,17 +34,25 @@
                 "action": "create",
                 "name": "Hubspot Create Contact",
                 "key": "hubspot_contact",
+                "operation_id": "contact_create",
                 "metadata": {
+                    "api_endpoint": "post /crm/v3/objects/contacts",
                     "body": {
                         "properties": {
                             "email": "{{shopify_customer.email}}",
                             "firstname": "{{shopify_customer.first_name}}",
-                            "lastname": "{{shopify_customer.last_name}}",
-                            "phone": "{{shopify_customer.phone}}"
+                            "lastname": "{{shopify_customer.last_name}}"
                         }
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.properties",
+                    "body.properties.email",
+                    "body.properties.firstname",
+                    "body.properties.lastname"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -59,7 +64,9 @@
                 "action": "create",
                 "name": "Hubspot Create Deal",
                 "key": "hubspot_deal",
+                "operation_id": "deal_create",
                 "metadata": {
+                    "api_endpoint": "post /crm/v3/objects/deals",
                     "body": {
                         "properties": {
                             "dealname": "{{shopify_customer.first_name}} {{shopify_customer.last_name}} Deal"
@@ -67,6 +74,11 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.properties",
+                    "body.properties.dealname"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -78,7 +90,9 @@
                 "action": "update",
                 "name": "Hubspot Contact Association Update",
                 "key": "hubspot_contact_association",
+                "operation_id": "contact_association_update",
                 "metadata": {
+                    "api_endpoint": "put /crm/v3/objects/contacts/{contactId}/associations/{toObjectType}/{toObjectId}/{associationType}",
                     "path": {
                         "contactId": "{{hubspot_contact.id}}",
                         "toObjectType": "deals",
@@ -87,10 +101,16 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.contactId",
+                    "path.toObjectType",
+                    "path.toObjectId",
+                    "path.associationType"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

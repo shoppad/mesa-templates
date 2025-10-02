@@ -1,16 +1,9 @@
 {
     "key": "delighted/survey/send_slack_message_if_low_delighted_survey_score",
-    "name": "Send a Slack message when a customer gives a low Delighted survey score",
+    "name": "Notify Team on Slack for Low Delighted Survey Scores",
     "version": "1.0.0",
-    "description": "If a customer provides less than stellar feedback, you'll want to know about it as soon as possible so that you can reach out and try to resolve the issue that prompted the poor survey response. This customizable template will send a Slack message to the channel of your choice when a customer gives a low score on their Delighted survey. ",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 135,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -18,12 +11,18 @@
                 "trigger_type": "input",
                 "type": "delighted",
                 "entity": "survey",
-                "action": "survey/response",
+                "action": "survey\/response",
                 "name": "Survey Response",
                 "key": "delighted",
                 "operation_id": "survey_response_created_or_updated",
-                "metadata": [],
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL', description: '' }}"
+                },
                 "local_fields": [],
+                "selected_fields": [
+                    "host",
+                    "topic"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -41,6 +40,11 @@
                     "b": "5"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -52,13 +56,16 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
+                    "channel": "{{ template | label: 'Which Slack channel should the message be sent to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
                     "message": "{{delighted.person.name}} gave a Delighted score of: {{delighted.score}}\nCustomer's Comment: {{delighted.comment}}\nCustomer's Email: {{delighted.person.email}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "message"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

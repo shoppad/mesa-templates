@@ -1,17 +1,9 @@
 {
     "key": "salesforce/product/send_to_shopify_product",
-    "name": "Send Salesforce Product To Shopify Product",
+    "name": "Automatically Sync New Salesforce Products to Shopify",
     "version": "1.0.0",
-    "description": "Effectively maintain consistent product information between Shopify and Salesforce. This template sends the product details from Salesforce to Shopify Product as soon as the Salesforce product is created. Save yourself time and let both platforms team up to share key information.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,13 +14,19 @@
                 "action": "list-created",
                 "name": "Product Created",
                 "key": "salesforce_product",
+                "operation_id": "product_list-created",
                 "metadata": {
                     "entity_name": "Product2",
                     "method": "list-created",
-                    "poll": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2022-05-13T11:00:00-07:00"
+                    "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "method",
+                    "entity_name",
+                    "poll",
+                    "next_sync_date_time"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -42,7 +40,9 @@
                 "action": "create",
                 "name": "Create Product",
                 "key": "shopify_product",
+                "operation_id": "post_products",
                 "metadata": {
+                    "api_endpoint": "post admin/products.json",
                     "body": {
                         "title": "{{salesforce_product.Name}}",
                         "body_html": "{{salesforce_product.Description}}",
@@ -55,10 +55,17 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.body_html",
+                    "body.title",
+                    "body.variants",
+                    "body.variants[].barcode",
+                    "body.variants[].sku"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

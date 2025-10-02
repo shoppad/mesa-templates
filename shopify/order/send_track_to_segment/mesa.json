@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/send_track_to_segment",
-    "name": "Send a Shopify order status update to Segment",
+    "name": "Automatically Send Shopify Order Status Updates to Segment",
     "version": "1.0.0",
-    "description": "When Shopify orders are updated, it can be challenging to track what was updated and when. Eliminate manual effort and the potential for user mistakes by keeping your systems in check with automation. This template will automatically send updates to a Segment track when a Shopify order is updated.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,10 @@
                 "action": "updated",
                 "name": "Order Updated",
                 "key": "shopify_order",
+                "operation_id": "orders_updated",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,7 +31,9 @@
                 "action": "send",
                 "name": "Track",
                 "key": "segment_track",
+                "operation_id": "post-track",
                 "metadata": {
+                    "api_endpoint": "post /track",
                     "body": {
                         "userId": "{{shopify_order.customer.id}}",
                         "event": "Order Status Update",
@@ -124,10 +121,31 @@
                         ]
                     }
                 ],
+                "selected_fields": [
+                    "body",
+                    "body.userId",
+                    "body.event",
+                    "body.timestamp",
+                    "body.properties",
+                    "body.context",
+                    "body.context.app",
+                    "body.context.app.name",
+                    "body.context.traits",
+                    "body.context.traits.email",
+                    "body.context.traits.firstName",
+                    "body.context.traits.id",
+                    "body.context.traits.lastName",
+                    "body.context.traits.phone",
+                    "body.context.traits.address",
+                    "body.context.traits.address.street",
+                    "body.context.traits.address.city",
+                    "body.context.traits.address.state",
+                    "body.context.traits.address.postalCode",
+                    "body.context.traits.address.country"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

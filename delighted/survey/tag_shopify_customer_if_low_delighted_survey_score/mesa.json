@@ -1,20 +1,9 @@
 {
     "key": "delighted/survey/tag_shopify_customer_if_low_delighted_survey_score",
-    "name": "Tag a customer if they provide a negative survey response",
+    "name": "Automatically Tag Shopify Customers with Negative Survey Responses",
     "version": "1.0.0",
-    "description": "Knowing how you should interact with specific customers can be very helpful in certain situations. This template tags a Shopify customer if they give a low score on their Delighted survey. This provides your team with more insight on your customers.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "delighted",
-        "customer"
-    ],
-    "source": "delighted",
-    "destination": "shopify",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -25,8 +14,11 @@
                 "action": "survey/created",
                 "name": "Survey Response Created",
                 "key": "delighted_survey",
-                "metadata": [],
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL', description: '' }}"
+                },
                 "local_fields": [],
+                "selected_fields": ["host"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -44,6 +36,7 @@
                     "b": "5"
                 },
                 "local_fields": [],
+                "selected_fields": ["a", "comparison", "b"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -55,10 +48,13 @@
                 "action": "list",
                 "name": "Get List Customer Search",
                 "key": "shopify_customer_search",
+                "operation_id": "get_customers_search",
                 "metadata": {
+                    "api_endpoint": "get admin/customers/search.json",
                     "parameters": "query=email:{{delighted_survey.person.email}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["parameters"],
                 "on_error": "default",
                 "weight": 1
             },
@@ -74,6 +70,7 @@
                     "b": "{{delighted_survey.person.email}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["a", "comparison", "b"],
                 "on_error": "default",
                 "weight": 2
             },
@@ -85,17 +82,19 @@
                 "action": "tag_add",
                 "name": "Customer Add Tag",
                 "key": "shopify_customer",
+                "operation_id": "post_mesa_customers_customer_id_tag",
                 "metadata": {
+                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
                     "customer_id": "{{shopify_customer_search.0.id}}",
                     "body": {
                         "tag": "Unhappy Survey"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": ["customer_id", "body", "body.tag"],
                 "on_error": "default",
                 "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }

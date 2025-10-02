@@ -1,17 +1,9 @@
 {
-    "key": "low_score_email_staff",
-    "name": "Send an email to staff when a low Delighted score is posted",
+    "key": "delighted/survey/low_score_email_staff",
+    "name": "Notify Staff by Email When a Low Delighted Score is Received",
     "version": "1.0.0",
-    "description": "When customers provide negative feedback, you must follow up with them and try to understand why. Mesa allows you to automatically send an email to staff when you receive a low Delighted score, so you can proceed to contact the customer and learn more about their negative review.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -19,11 +11,18 @@
                 "trigger_type": "input",
                 "type": "delighted",
                 "entity": "survey",
-                "action": "survey/response",
+                "action": "survey\/response",
                 "name": "Survey Response",
                 "key": "delighted_survey",
-                "metadata": [],
+                "operation_id": "survey_response_created_or_updated",
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL', description: '' }}"
+                },
                 "local_fields": [],
+                "selected_fields": [
+                    "host",
+                    "topic"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -41,6 +40,11 @@
                     "b": "5"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -48,9 +52,8 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "email",
-                "version": "v1",
-                "is_premium": true,
                 "name": "Email",
+                "version": "v1",
                 "key": "email",
                 "metadata": {
                     "subject": "Low NPS Score:  {{delighted_survey.person.name}}left a score of {{delighted_survey.score}}",
@@ -58,10 +61,14 @@
                     "from": "{{delighted_survey.person.email}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "subject",
+                    "message",
+                    "from"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

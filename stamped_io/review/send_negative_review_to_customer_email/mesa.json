@@ -3,7 +3,7 @@
     "name": "Send an email to a customer when a negative Stamped.io review is received",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -15,7 +15,9 @@
                 "name": "Review Created",
                 "key": "stampedio",
                 "operation_id": "review_created",
-                "metadata": [],
+                "metadata": {
+                    "host": "{{ template | label: 'Install the webhook URL', description: '' }}"
+                },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
@@ -71,9 +73,9 @@
                 "name": "Send Email",
                 "version": "v2",
                 "key": "email",
-                "operation_id": "\/send-email",
+                "operation_id": "/send-email",
                 "metadata": {
-                    "api_endpoint": "post \/send-email",
+                    "api_endpoint": "post /send-email",
                     "body": {
                         "to": "{{stampedio.customerEmail}}",
                         "subject": "Hi {{stampedio.author}} - is there something we can do better?",

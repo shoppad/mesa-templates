@@ -1,17 +1,9 @@
 {
     "key": "salesforce/lead/send_to_shopify_customer",
-    "name": "Send Salesforce Lead To Shopify Customer",
+    "name": "Convert Salesforce Leads to Shopify Customers Automatically",
     "version": "1.0.0",
-    "description": "Retain customer loyalty by connecting your converted lead from Salesforce to Shopify. This template sends contact details from Salesforce to Shopify customer when a lead converts. Keep the momentum going by bridging the gap between these two major platforms.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,13 +14,19 @@
                 "action": "list-converted",
                 "name": "Lead Converted",
                 "key": "salesforce_lead",
+                "operation_id": "lead_list-converted",
                 "metadata": {
                     "entity_name": "Lead",
                     "method": "list-converted",
-                    "poll": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2022-05-25T14:00:00-07:00"
+                    "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "method",
+                    "entity_name",
+                    "poll",
+                    "next_sync_date_time"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -42,7 +40,9 @@
                 "action": "create",
                 "name": "Create Customer",
                 "key": "shopify_customer",
+                "operation_id": "post_customers",
                 "metadata": {
+                    "api_endpoint": "post admin/customers.json",
                     "body": {
                         "email": "{{salesforce_lead.Email}}",
                         "phone": "{{salesforce_lead.Phone}}",
@@ -61,10 +61,23 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.addresses",
+                    "body.addresses[].address1",
+                    "body.addresses[].city",
+                    "body.addresses[].country",
+                    "body.addresses[].phone",
+                    "body.addresses[].province",
+                    "body.addresses[].zip",
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name",
+                    "body.phone"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

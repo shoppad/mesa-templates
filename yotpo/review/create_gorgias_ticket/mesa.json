@@ -1,17 +1,9 @@
 {
-    "key": "create_gorgias_ticket",
+    "key": "yotpo/review/create_gorgias_ticket",
     "name": "Create a Gorgias support ticket when a customer leaves a negative Yotpo review",
     "version": "1.0.0",
-    "description": "Gorgias is a customer service platform that tracks all of your customer feedback in one place. To get the most out of the software, you can automatically create a Gorgias Support Ticket With Mesa when a customer leaves a negative Yotpo review. It’s going to make it easier to follow up with them and understand the reasoning behind their dissatisfaction.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,8 +14,10 @@
                 "action": "created",
                 "name": "Review Created",
                 "key": "yotpo_review",
+                "operation_id": "review_create",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -41,6 +35,7 @@
                     "b": "3"
                 },
                 "local_fields": [],
+                "selected_fields": ["a", "comparison", "b"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -51,10 +46,11 @@
                 "entity": "ticket",
                 "action": "create",
                 "name": "Create Ticket",
-                "key": "gorgias_ticket",
                 "version": "v2",
+                "key": "gorgias_ticket",
+                "operation_id": "create_ticket",
                 "metadata": {
-                    "entity_wrapper": "body",
+                    "api_endpoint": "post /api/tickets",
                     "body": {
                         "channel": "api",
                         "messages": [
@@ -86,10 +82,29 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.channel",
+                    "body.customer",
+                    "body.customer.email",
+                    "body.messages",
+                    "body.messages[].body_html",
+                    "body.messages[].body_text",
+                    "body.messages[].channel",
+                    "body.messages[].from_agent",
+                    "body.messages[].sender",
+                    "body.messages[].sender.email",
+                    "body.messages[].source",
+                    "body.messages[].source.from",
+                    "body.messages[].source.from.address",
+                    "body.messages[].source.to",
+                    "body.messages[].source.to[].address",
+                    "body.messages[].subject",
+                    "body.messages[].via"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

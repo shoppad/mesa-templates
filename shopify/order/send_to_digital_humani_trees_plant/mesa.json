@@ -3,7 +3,7 @@
     "name": "Plant a Tree for Every Order Over $10 in Your Shopify Store",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -14,8 +14,13 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
-                "metadata": [],
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -31,9 +36,21 @@
                     "a": "{{shopify_order.total_price}}",
                     "comparison": "greater than",
                     "b": "10",
-                    "script": "filter.js"
+                    "script": "filter.js",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "script"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -45,15 +62,22 @@
                 "action": "plant",
                 "name": "Plant Trees",
                 "key": "digitalhumani_trees",
+                "operation_id": "post-tree",
                 "metadata": {
+                    "api_endpoint": "post \/tree",
                     "body": {
-                        "enterpriseId": "",
-                        "projectId": "",
+                        "enterpriseId": "{{ template | label: 'What is the Digital Humani enterprise ID?', description: '' }}",
+                        "projectId": "{{ template | label: 'What is the Digital Humani project ID?', description: '' }}",
                         "user": "{{shopify_order.email}}",
-                        "treeCount": 1
+                        "treeCount": "1"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.user",
+                    "body.treeCount"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -67,7 +91,7 @@
                 "key": "shopify_order_update_notes",
                 "operation_id": "put_mesa_orders_order_id_note",
                 "metadata": {
-                   "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
+                    "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
                         "note": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | date: \"%B %e, %Y\"}}: Submitted Digital Humani tree planting request. Total trees: {{digitalhumani_trees.treeCount}}. Request ID: {{digitalhumani_trees.uuid}}",
@@ -75,6 +99,12 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.note",
+                    "body.append"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
