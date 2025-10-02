@@ -1,0 +1,54 @@
+{
+    "key": "wordpress/comment/send_to_discord",
+    "name": "Send WordPress Blog Comments to a Discord Channel",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "wordpress",
+                "entity": "comment",
+                "action": "list-created",
+                "name": "Comment Published",
+                "key": "wordpress",
+                "operation_id": "comment_published",
+                "metadata": {
+                    "api_endpoint": "get /comments",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": ["poll"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Create Channel Message",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-messages",
+                "metadata": {
+                    "api_endpoint": "post /channels/{channelId}/messages",
+                    "path": {
+                        "channelId": "{{ template | label: 'What is your Discord''s Channel ID?', description: '', tokens: false }}"
+                    },
+                    "body": {
+                        "content": "New comment published!\n\nAuthor Name: {{wordpress.author_name}}\n{% if wordpress.author.email %}\nAuthor Email Address: {{wordpress.author_email}}{% endif %}\nComment Text: \n{{wordpress.content.rendered | strip_html}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.content"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
