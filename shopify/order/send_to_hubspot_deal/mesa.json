@@ -2,17 +2,8 @@
     "key": "shopify/order/send_to_hubspot_deal",
     "name": "Send Order To HubSpot Deal",
     "version": "1.0.0",
-    "description": "Send order from Shopify to HubSpot Deal when order is created.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Order"
-    ],
-    "source": "shopify",
-    "destination": "hubspot",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -23,7 +14,10 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -37,7 +31,9 @@
                 "action": "create",
                 "name": "Hubspot Create Deal",
                 "key": "hubspot_deal",
+                "operation_id": "deal_create",
                 "metadata": {
+                    "api_endpoint": "post /crm/v3/objects/deals",
                     "body": {
                         "properties": {
                             "amount": "{{shopify_order.total_price}}",
@@ -46,10 +42,15 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.properties",
+                    "body.properties.amount",
+                    "body.properties.dealname"
+                ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

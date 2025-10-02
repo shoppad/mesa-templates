@@ -1,17 +1,9 @@
 {
     "key": "shopify/order/send_to_salesforce_lead",
-    "name": "Send Order To Salesforce Lead",
+    "name": "Convert Shopify Customers to Salesforce Leads Automatically",
     "version": "1.0.0",
-    "description": "Seize the moment and secure your customer’s loyalty by linking your Shopify customers to the Salesforce lead system.  This template sends orders from Shopify to Salesforce Lead as soon as the order is created on Shopify. Keep the momentum going by bridging the gap between these two major platforms.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,7 +14,10 @@
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,6 +31,7 @@
                 "action": "create",
                 "name": "Create Lead",
                 "key": "salesforce_lead",
+                "operation_id": "lead_create",
                 "metadata": {
                     "entity_name": "Lead",
                     "method": "POST",
@@ -52,10 +48,25 @@
                         "Email": "{{shopify_order.email}}"
                     }
                 },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.LastName",
+                    "body.FirstName",
+                    "body.Company",
+                    "body.Street",
+                    "body.City",
+                    "body.State",
+                    "body.PostalCode",
+                    "body.Country",
+                    "body.Phone",
+                    "body.Email",
+                    "method",
+                    "entity_name"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

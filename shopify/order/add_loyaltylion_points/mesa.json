@@ -2,57 +2,56 @@
     "key": "shopify/order/add_loyaltylion_points",
     "name": "Add bonus loyalty points when a customer completes an order",
     "version": "1.0.0",
-    "description": "Recognizing repeat customers such as a simple gesture or an incentive goes a long way. This template adds 100 bonus points to a customer's profile on LoyaltyLion every time they complete a purchase. You can track and reward your customers instead of offering discounts automatically.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "loyaltylion",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
+                "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
-                "metadata": {
-                    "topic": "orders/create"
-                },
-                "local_fields": null,
+                "operation_id": "orders_create",
+                "metadata": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "loyaltylion",
                 "entity": "customer",
                 "action": "list",
                 "name": "List Customer",
                 "key": "loyaltylion_customer_1",
+                "operation_id": "get_v2_customers",
                 "metadata": {
-                    "api_endpoint": "GET /v2/customers",
+                    "api_endpoint": "GET \/v2\/customers",
                     "parameters": "email={{shopify_order.email}}&limit=1"
                 },
-                "local_fields": null,
+                "selected_fields": [
+                    "parameters"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "loyaltylion",
                 "entity": "customer",
                 "action": "add_points",
                 "name": "Add Points to Customer",
                 "key": "loyaltylion_customer",
+                "operation_id": "post_v2_customers_merchant_id_points",
                 "metadata": {
-                    "api_endpoint": "POST /v2/customers/{{merchant_id}}/points",
+                    "api_endpoint": "POST \/v2\/customers\/{{merchant_id}}\/points",
                     "mapping": [
                         {
                             "destination": "points",
@@ -73,10 +72,12 @@
                         "location": "mapping"
                     }
                 ],
+                "selected_fields": [
+                    "merchant_id"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

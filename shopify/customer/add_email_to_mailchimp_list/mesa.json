@@ -1,16 +1,9 @@
 {
-    "key": "add_email_to_mailchimp_list",
-    "name": "Add a customer's email address to a Mailchimp list when a Shopify customer is created",
+    "key": "shopify/customer/add_email_to_mailchimp_list",
+    "name": "Automatically Add New Shopify Customers to Mailchimp List",
     "version": "1.0.0",
-    "description": "Growing your email list on Mailchimp needs to be one of your priorities to maximize sales. Each time a customer is created on Shopify, Mesa can then instantly add their email address to your Mailchimp list, without doing everything manually yourself.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "shopify",
-    "destination": "mailchimp",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,7 +14,10 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify_customer",
+                "operation_id": "customers_create",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -82,10 +78,10 @@
                         "location": "mapping"
                     }
                 ],
+                "selected_fields": ["email_address"],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

@@ -3,7 +3,7 @@
     "name": "Send a Personalized Postcard for First-Time Shopify Customers",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -15,7 +15,12 @@
                 "name": "Order Created",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -35,6 +40,7 @@
                     "customer_id": "{{shopify.customer.id}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["customer_id"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -47,9 +53,16 @@
                 "metadata": {
                     "a": "{{shopify_1.orders_count}}",
                     "comparison": "equals",
-                    "b": "1"
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": ["a", "comparison", "b"],
                 "on_error": "default",
                 "weight": 1
             },
@@ -63,7 +76,7 @@
                 "key": "shopify_2",
                 "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -84,6 +97,9 @@
                     "entity_wrapper": "body",
                     "body": {
                         "message": "Hello {{shopify.customer.first_name}},\n\nThank you for your first purchase on {{shopify_2.name}}. We hope you love our product!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\nThank you,\n{{shopify_2.name}} Team",
+                        "size": "{{ template | label: 'What is the size of the postcard?', description: '' }}",
+                        "front_image_url": "{{ template | label: 'What is the Image URL for the front of the postcard?', description: 'Enter the full URL to the image to use on the front of your postcard.' }}",
+                        "handwriting_style": "{{ template | label: 'Select a handwriting style for your postcard.', description: '[Preview](https://help.thanks.io/handwriting-styles-for-message-templates) the current styles available.' }}",
                         "return_name": "{{shopify_2.name}}",
                         "return_address": "{{shopify_2.address1}}",
                         "return_address2": "{{shopify_2.address2}}",
@@ -102,6 +118,23 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "entity_wrapper",
+                    "body",
+                    "body.message",
+                    "body.recipients",
+                    "body.recipients[].name",
+                    "body.recipients[].address",
+                    "body.recipients[].city",
+                    "body.recipients[].province",
+                    "body.recipients[].postal_code",
+                    "body.recipients[].country",
+                    "body.return_name",
+                    "body.return_address",
+                    "body.return_address2",
+                    "body.return_city",
+                    "body.return_postal_code"
+                ],
                 "on_error": "default",
                 "weight": 3
             }

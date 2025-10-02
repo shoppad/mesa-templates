@@ -1,18 +1,9 @@
 {
     "key": "shopify/customer/send_to_hubspot_contact",
-    "name": "Send Shopify Customer To HubSpot Contact",
+    "name": "Automatically Sync Shopify Customers to HubSpot Contacts",
     "version": "1.0.0",
-    "description": "Send customer from Shopify to HubSpot Contact when customer is created.",
-    "video": "",
-    "readme": "",
-    "tags": [
-        "Customer"
-    ],
-    "source": "shopify",
-    "destination": "hubspot",
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -23,7 +14,10 @@
                 "action": "created",
                 "name": "Customer Created",
                 "key": "shopify_customer",
+                "operation_id": "customers_create",
                 "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -37,7 +31,9 @@
                 "action": "create",
                 "name": "Hubspot Create Contact",
                 "key": "hubspot_contact",
+                "operation_id": "contact_create",
                 "metadata": {
+                    "api_endpoint": "post /crm/v3/objects/contacts",
                     "body": {
                         "properties": {
                             "email": "{{shopify_customer.email}}",
@@ -47,10 +43,17 @@
                         }
                     }
                 },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.properties",
+                    "body.properties.email",
+                    "body.properties.firstname",
+                    "body.properties.lastname"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

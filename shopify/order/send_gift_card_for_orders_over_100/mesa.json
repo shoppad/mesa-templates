@@ -1,9 +1,9 @@
 {
     "key": "shopify/order/send_gift_card_for_orders_over_100",
-    "name": "Send a $20 gift card to a customer if they spend $100 or more",
+    "name": "Reward Customers with a $20 Gift Card for Orders Over $100",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -20,7 +20,9 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -40,7 +42,10 @@
                     "test_bypass": false
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "amount",
+                    "unit"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -63,7 +68,12 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -82,13 +92,22 @@
                         "firstName": "{{shopify.customer.first_name}}",
                         "lastName": "{{shopify.customer.last_name}}",
                         "email": "{{shopify.email}}",
-                        "note": "Thank you for being an awesome customer!",
+                        "note": "{{ template | label: 'What is the note that you want to send to the customer?', description: '', default: 'Thank you for being an awesome customer!' }}",
                         "value": "20",
-                        "eventType": "giftcard"
+                        "eventType": "giftcard",
+                        "productId": "{{ template | label: 'What is the product ID?', description: '' }}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.firstName",
+                    "body.lastName",
+                    "body.email",
+                    "body.note",
+                    "body.value",
+                    "body.eventType"
+                ],
                 "on_error": "default",
                 "weight": 2
             }

@@ -1,16 +1,9 @@
 {
-    "key": "when_cancelled_remove_shopify_customer_tag",
-    "name": "Remove a Tag From a Shopify Customer When They Cancel a Subscription Product Through Recharge",
+    "key": "recharge/order/when_cancelled_remove_shopify_customer_tag",
+    "name": "Remove Shopify Customer Tag on Recharge Subscription Cancellation",
     "version": "1.0.0",
-    "description": "Whenever a customer decides to cancel one of their subscription products, you’ll need to update the information on Shopify. With just a simple automation workflow, Mesa can save you time by removing a tag during a Recharge cancellation. The customer’s data won’t show up on your list of ReCharge orders anymore.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "recharge",
-    "destination": "shopify",
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -18,11 +11,15 @@
                 "trigger_type": "input",
                 "type": "recharge",
                 "entity": "subscription",
-                "action": "subscription/cancelled",
+                "action": "subscription\/cancelled",
                 "name": "Subscription Cancelled",
                 "key": "recharge_subscription",
+                "operation_id": "subscription_cancelled",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": [
+                    "topic"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,11 +33,15 @@
                 "action": "retrieve",
                 "name": "Retrieve Customer",
                 "key": "recharge_customer",
+                "operation_id": "get-customers-customer_id",
                 "metadata": {
-                    "api_endpoint": "GET /customers/{{customer_id}}",
+                    "api_endpoint": "GET \/customers\/{{customer_id}}",
                     "customer_id": "{{recharge_subscription.customer_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "customer_id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -52,10 +53,15 @@
                 "action": "retrieve",
                 "name": "Retrieve Customer",
                 "key": "shopify_customer_1",
+                "operation_id": "get_customers_customer_id",
                 "metadata": {
+                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
                     "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "customer_id"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -66,11 +72,16 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "Recharge Tag",
+                    "a": "{{ template | label: 'What is the Shopify customer tag that you want to filter for?', description: '' }}",
                     "comparison": "in",
                     "b": "{{shopify_customer_1.tags}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -82,17 +93,23 @@
                 "action": "tag_remove",
                 "name": "Customer Remove Tag",
                 "key": "shopify_customer_2",
+                "operation_id": "delete_mesa_customers_customer_id_tag",
                 "metadata": {
+                    "api_endpoint": "delete mesa/customers/{{customer_id}}/tag.json",
                     "customer_id": "{{shopify_customer_1.id}}",
                     "body": {
-                        "tag": "Recharge Tag"
+                        "tag": "{{ template | label: 'What is the Shopify customer tag that you want to remove?', description: '' }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "customer_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "default",
                 "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }

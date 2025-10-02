@@ -3,7 +3,7 @@
     "name": "Automatically Send a Thank You Email for Yotpo Reviews",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -32,7 +32,7 @@
                 "key": "shopify",
                 "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -49,7 +49,7 @@
                 "metadata": {
                     "to": "{{yotpo.customer_email}}",
                     "subject": "Thank you for providing a review!",
-                    "message": "Hello {{yotpo.reviewer_display_name}},\n\nThank you so much for leaving a review. Your feedback is very important to us.\n\nThank you,\n{{shopify.name}}"
+                    "message": "{{ template | label: 'What is the message of your email?', description: '', default: 'Hello {{yotpo.reviewer_display_name}},\n\nThank you so much for leaving a review. Your feedback is very important to us.\n\nThank you,\n{{shopify.name}}' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",

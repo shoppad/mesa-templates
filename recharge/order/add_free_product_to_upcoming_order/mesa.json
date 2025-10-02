@@ -1,16 +1,9 @@
 {
     "key": "recharge/order/add_free_product_to_upcoming_order",
-    "name": "Add a free product to your customer's Recharge order",
+    "name": "Include a Free Product in Customer Recharge Orders",
     "version": "1.0.0",
-    "description": "Let your customers know how much you appreciate their continued business while building brand loyalty by providing a free gift in their order. This template will add a free one-time product to a customer's current Recharge order after the order is created. Please note that this template is for those merchants using the Shopify-hosted checkout version of Recharge.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -18,11 +11,13 @@
                 "trigger_type": "input",
                 "type": "recharge",
                 "entity": "order",
-                "action": "order\/created",
+                "action": "order/created",
                 "name": "Order Created",
                 "key": "recharge",
+                "operation_id": "order_created",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": ["topic"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,9 +31,13 @@
                 "action": "line_item_add",
                 "name": "Add Line Item to Order",
                 "key": "shopify",
+                "operation_id": "post_mesa_orders_order_id_add-line-item",
                 "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/add-line-item.json",
                     "order_id": "{{recharge.external_order_id.ecommerce}}",
                     "body": {
+                        "product_id": "{{ template | label: 'What is the free product that will be added to the order?', description: '' }}",
+                        "variant_id": "{{ template | label: 'What is the variant of the free product?', description: '' }}",
                         "quantity": "1",
                         "discount_type": "Percentage",
                         "discount_amount": "100",
@@ -47,10 +46,18 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.quantity",
+                    "body.discount_type",
+                    "body.discount_amount",
+                    "body.allow_duplicates",
+                    "body.notify_customer"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }

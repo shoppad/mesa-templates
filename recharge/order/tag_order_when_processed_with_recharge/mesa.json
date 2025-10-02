@@ -1,17 +1,9 @@
 {
     "key": "recharge/order/tag_order_when_processed_with_recharge",
-    "name": "Tag an order when processed with Recharge",
+    "name": "Automatically Tag Shopify Orders Processed with Recharge",
     "version": "1.0.0",
-    "description": "Gain better visibility into when subscription orders are processed and reduce your workload with the help of tags. This template will tag orders with \"subscription\" when processed with Recharge. You'll have up-to-date information at your fingertips without lifting a finger.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -19,11 +11,15 @@
                 "trigger_type": "input",
                 "type": "recharge",
                 "entity": "order",
-                "action": "order/created",
+                "action": "order\/created",
                 "name": "Order Created",
                 "key": "recharge_order",
+                "operation_id": "order_created",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": [
+                    "topic"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -37,10 +33,15 @@
                 "action": "retrieve",
                 "name": "Retrieve Order",
                 "key": "shopify_order",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
                     "order_id": "{{recharge_order.external_order_id.ecommerce}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "order_id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -52,17 +53,23 @@
                 "action": "tag_add",
                 "name": "Order Add Tag",
                 "key": "shopify_order_1",
+                "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
                     "order_id": "{{shopify_order.id}}",
                     "body": {
                         "tag": "subscription"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

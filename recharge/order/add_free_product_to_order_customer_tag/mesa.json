@@ -3,7 +3,7 @@
     "name": "Automatically Add Free Product to Upcoming Recharge Order on Customer Tag",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -20,7 +20,9 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -40,7 +42,9 @@
                     "customer_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "customer_id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -129,11 +133,20 @@
                         "address_id": "{{recharge_1.0.address_id}}",
                         "price": "0",
                         "next_charge_scheduled_at": "{{recharge_1.0.next_charge_scheduled_at}}",
-                        "quantity": "1"
+                        "product_title": "{{ template | label: 'What is the free product title you would like to add?', description: '' }}",
+                        "quantity": "1",
+                        "external_variant_id": {
+                            "ecommerce": "{{ template | label: 'What is the Shopify Variant ID of the free product you would like to add?', description: '' }}"
+                        }
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.address_id",
+                    "body.next_charge_scheduled_at",
+                    "body.quantity"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -154,7 +167,11 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "customer_id",
+                    "body",
+                    "body.tag"
+                ],
                 "on_error": "default",
                 "weight": 5
             }
