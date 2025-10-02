@@ -3,7 +3,7 @@
     "name": "Receive Slack Notifications for Address Updates in Recharge",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -11,11 +11,15 @@
                 "trigger_type": "input",
                 "type": "recharge",
                 "entity": "address",
-                "action": "address/updated",
+                "action": "address\/updated",
                 "name": "Address Updated",
                 "key": "recharge",
+                "operation_id": "address_updated",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": [
+                    "topic"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -46,13 +50,16 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
+                    "channel": "{{ template | label: 'What is the Slack channel you would like to send the message to?', description: '' }}",
                     "message": "A customer updated their address.\n\nCustomer's Name: {{recharge.first_name}} {{recharge.last_name}}\nAddress: {{recharge.address1}}{% if recharge.address2 %} {{recharge.address2}}{% endif %}, {{recharge.city}} {{recharge.country_code}} {{recharge.zip}}\nView this customer: https:\/\/{{shopify.name}}-sp.admin.rechargeapps.com\/merchant\/customers\/{{recharge.customer_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "message"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
-        ],
-        "storage": []
+        ]
     }
 }

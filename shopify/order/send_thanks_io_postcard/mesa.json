@@ -3,7 +3,7 @@
     "name": "Send a Thank-You Postcard 10 Days After Order Creation",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -20,7 +20,7 @@
                     "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["frequency"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -40,7 +40,7 @@
                     "test_bypass": false
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["amount", "unit"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -54,7 +54,7 @@
                 "key": "shopify_1",
                 "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -71,11 +71,13 @@
                 "key": "thanks",
                 "operation_id": "4x6Postcard",
                 "metadata": {
-                    "api_endpoint": "post \/send\/postcard",
+                    "api_endpoint": "post /send/postcard",
                     "entity_wrapper": "body",
                     "body": {
                         "message": "Dear {{shopify.customer.first_name}},\n\nThank you for your recent purchase on {{shopify_1.name}}.  Your business means the world to us and we hope you are enjoying your {{shopify.line_items[0].title}}!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{shopify_1.name}} Team",
-                        "handwriting_style": "1",
+                        "size": "{{ template | label: 'What is the size of the postcard?', description: '' }}",
+                        "front_image_url": "{{ template | label: 'What is the Image URL for the front of the postcard?', description: 'Enter the full URL to the image to use on the front of your postcard.' }}",
+                        "handwriting_style": "{{ template | label: 'Select a handwriting style for your postcard.', description: '[Preview](https://help.thanks.io/handwriting-styles-for-message-templates) the current styles available.' }}",
                         "return_name": "{{shopify_1.name}}",
                         "return_address": "{{shopify_1.address1}}",
                         "return_address2": "{{shopify_1.address2}}",

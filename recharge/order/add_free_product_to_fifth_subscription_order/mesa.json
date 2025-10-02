@@ -1,16 +1,9 @@
 {
-    "key": "add_free_product_to_fifth_subscription_order",
-    "name": "Add a free product to a customer's fifth Recharge subscription order",
+    "key": "reccharge/orer/add_free_product_to_fifth_subscription_order",
+    "name": "Reward Loyal Customers with a Free Product on Their Fifth Recharge Subscription Order",
     "version": "1.0.0",
-    "description": "Reward your customers for their continued business by sending them a free gift with their order. This customizable template will add a free one-time product to a customer's fifth subscription order overall. Prefer to apply the free gift to the second, third, or tenth subscription order? No problem. Within the template, locate the Filter step and adjust which subscription should receive the free gift, and let automation take care of the rest.",
-    "video": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -21,8 +14,12 @@
                 "action": "order\/created",
                 "name": "Order Created",
                 "key": "recharge",
+                "operation_id": "order_created",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": [
+                    "topic"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -36,12 +33,18 @@
                 "action": "list",
                 "name": "Orders Count",
                 "key": "recharge_1",
+                "operation_id": "orders_count",
                 "metadata": {
+                    "api_endpoint": "get \/mesa\/orders\/{email}\/orders_count.json",
                     "path": {
                         "email": "{{recharge.customer.email}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.email"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -54,9 +57,20 @@
                 "metadata": {
                     "a": "{{recharge_1.count}}",
                     "comparison": "equals",
-                    "b": "5"
+                    "b": "5",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -68,9 +82,13 @@
                 "action": "line_item_add",
                 "name": "Add Line Item to Order",
                 "key": "shopify",
+                "operation_id": "post_mesa_orders_order_id_add-line-item",
                 "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/add-line-item.json",
                     "order_id": "{{recharge.external_order_id.ecommerce}}",
                     "body": {
+                        "product_id": "{{ template | label: 'What is the free product that will be added to the order?', description: '' }}",
+                        "variant_id": "{{ template | label: 'What is the variant of the free product?', description: '' }}",
                         "quantity": "1",
                         "discount_type": "Percentage",
                         "discount_amount": "100",
@@ -79,10 +97,18 @@
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.quantity",
+                    "body.discount_type",
+                    "body.discount_amount",
+                    "body.allow_duplicates",
+                    "body.notify_customer"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
-        ],
-        "storage": []
+        ]
     }
 }

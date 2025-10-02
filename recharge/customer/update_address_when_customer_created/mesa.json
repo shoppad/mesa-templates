@@ -3,7 +3,7 @@
     "name": "Sync Address in Recharge When a New Shopify Customer is Created",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -23,7 +23,7 @@
         ],
         "outputs": [
             {
-               "schema": 3.1,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
@@ -31,7 +31,7 @@
                 "name": "Get List of Customers within the past 24 hours",
                 "key": "shopify",
                 "metadata": {
-                    "api_endpoint": "get admin\/customers.json",
+                    "api_endpoint": "get admin/customers.json",
                     "query": {
                         "limit": "250",
                         "updated_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"

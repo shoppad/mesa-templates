@@ -1,9 +1,9 @@
 {
-    "key": "hubspot_contact_send_to_shopify_customer",
+    "key": "hubspot/contact/send_to_shopify_customer",
     "name": "Sync HubSpot Contacts to Shopify Customers Automatically",
     "version": "1.0.0",
     "enabled": false,
-    "setup": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -16,9 +16,8 @@
                 "key": "hubspot",
                 "operation_id": "contact_list-updated",
                 "metadata": {
-                    "api_endpoint": "post \/contacts\/lists",
-                    "poll": "@hourly:0 * * * *",
-                    "next_sync_date_time": "2025-02-24T16:00:00-08:00"
+                    "api_endpoint": "post /contacts/lists",
+                    "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -37,13 +36,11 @@
                 "key": "shopify",
                 "operation_id": "get_customers_search",
                 "metadata": {
-                    "api_endpoint": "get admin\/customers\/search.json",
+                    "api_endpoint": "get admin/customers/search.json",
                     "parameters": "query=email:{{hubspot.properties.email}}&fields=id,email"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "parameters"
-                ],
+                "selected_fields": ["parameters"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -130,7 +127,7 @@
                 "key": "shopify_1",
                 "operation_id": "put_customers_customer_id",
                 "metadata": {
-                    "api_endpoint": "put admin\/customers\/{{customer_id}}.json",
+                    "api_endpoint": "put admin/customers/{{customer_id}}.json",
                     "trigger_parent_key": "paths_1",
                     "customer_id": "{{loop.items.0}}",
                     "body": {
@@ -183,7 +180,7 @@
                 "key": "shopify_2",
                 "operation_id": "post_customers",
                 "metadata": {
-                    "api_endpoint": "post admin\/customers.json",
+                    "api_endpoint": "post admin/customers.json",
                     "trigger_parent_key": "paths_2",
                     "body": {
                         "email": "{{hubspot.properties.email}}",

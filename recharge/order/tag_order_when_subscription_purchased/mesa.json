@@ -1,17 +1,9 @@
 {
     "key": "recharge/order/tag_order_when_subscription_purchased",
-    "name": "Tag an order when a subscription is purchased",
+    "name": "Tag Shopify Orders Automatically for Subscription Purchases",
     "version": "1.0.0",
-    "description": "Know right away when a customer purchases a subscription with the help of tags. This template will add the tag \"recharge-payments-order\" to the Shopify order when a customer purchases a subscription product through Recharge. You'll be able to identify new subscriptions without the added hassle of manual effort.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 60,
     "enabled": false,
-    "logging": true,
-    "debug": false,
+    "setup": true,
     "config": {
         "inputs": [
             {
@@ -22,8 +14,10 @@
                 "action": "order/created",
                 "name": "Order Created",
                 "key": "recharge_order",
+                "operation_id": "order_created",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": ["topic"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -33,15 +27,16 @@
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v3",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{recharge_order.line_items[]}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["key"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -53,10 +48,14 @@
                 "action": "list",
                 "name": "List Order",
                 "key": "recharge_order_1",
+                "operation_id": "get-orders",
                 "metadata": {
-                    "parameters": "customer_id={{recharge_order.customer.id}}&purchase_item_id={{loop.purchase_item_id}}"
+                    "api_endpoint": "get /orders",
+                    "parameters": "customer_id={{recharge_order.customer.id}}&purchase_item_id={{loop.purchase_item_id}}",
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": ["parameters"],
                 "on_error": "default",
                 "weight": 1
             },
@@ -68,17 +67,37 @@
                 "action": "tag_add",
                 "name": "Order Add Tag",
                 "key": "shopify_order_1",
+                "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
                     "order_id": "{{recharge_order.external_order_id.ecommerce}}",
                     "body": {
                         "tag": "recharge-payments-order"
-                    }
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": ["order_id", "body", "body.tag"],
                 "on_error": "default",
                 "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }
