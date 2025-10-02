@@ -3,7 +3,7 @@
     "name": "Daily Reddit Scraper",
     "version": "1.0.0",
     "enabled": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
