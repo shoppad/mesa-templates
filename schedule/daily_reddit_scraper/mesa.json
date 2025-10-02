@@ -41,7 +41,6 @@
                 "metadata": {
                     "api_endpoint": "post /posts/by-subreddit",
                     "body": {
-                        "url": "{{ template | label: 'What is the subreddit URL?', description: '' }}",
                         "sort_by": "New"
                     }
                 },
@@ -160,7 +159,6 @@
                     "api_endpoint": "post /api/chat.postMessage",
                     "trigger_parent_key": "loop",
                     "body": {
-                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
                         "markdown_text": "\ud83d\udce3 **Reddit Post Found!**\n\n**URL:** {{loop.url}}\n\n**Explanation:**  {{custom.explanation}}\n\n**Description:** {{ loop.description }}\n{% if custom.matched_keywords and custom.matched_keywords.size > 0 %}\n\n**Keywords:** \n{% for keyword in custom.matched_keywords %}\n- {{ keyword }}\n{% endfor %}\n{% endif %}\n\n{% if custom.integration_ideas and custom.integration_ideas.size > 0 %}\n**Integration Ideas:** \n{% for idea in custom.integration_ideas %}\n- {{ idea }}\n{% endfor %}\n{% endif %}\n"
                     }
                 },
