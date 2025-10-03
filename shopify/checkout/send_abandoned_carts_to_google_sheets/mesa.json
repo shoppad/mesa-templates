@@ -69,8 +69,9 @@
                 "name": "Schedule",
                 "key": "schedule",
                 "metadata": {
-                    "schedule": "@hourly:0 * * * *",
-                    "enqueue_type": "schedule"
+                    "datetime": null,
+                    "enqueue_type": "schedule",
+                    "schedule": "{{ template | label: 'Select how frequently you want to schedule sending abandoned carts to Google Sheets' }}"
                 },
                 "local_fields": [],
                 "on_error": "default",
