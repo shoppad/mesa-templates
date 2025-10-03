@@ -1,0 +1,163 @@
+{
+    "key": "google_sheets/row/automated_wordpress_drafts",
+    "name": "Generate WordPress Content Drafts Using Perplexity Research",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new spreadsheet with the following columns.",
+                "options": [
+                    {
+                        "label": "Topic",
+                        "value": "Topic",
+                        "description": "The topic of the blog post."
+                    },
+                    {
+                        "label": "Primary Keywords",
+                        "value": "Primary Keywords",
+                        "description": "The primary keywords for the blog post."
+                    },
+                    {
+                        "label": "Secondary Keywords",
+                        "value": "Secondary Keywords",
+                        "description": "The secondary keywords for the blog post."
+                    },
+                    {
+                        "label": "Audience",
+                        "value": "Audience",
+                        "description": "The audience for the blog post."
+                    },
+                    {
+                        "label": "Content Angle",
+                        "value": "Content Angle",
+                        "description": "The content angle for the blog post."
+                    },
+                    {
+                        "label": "Desired Length / Format",
+                        "value": "Desired Length / Format",
+                        "description": "The desired length and format for the blog post."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "created",
+                "name": "Row Created",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_created",
+                "metadata": {
+                    "api_endpoint": "get /{spreadsheet_id}/{sheet}",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1",
+                        "query_type": "all",
+                        "comparison": "="
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "perplexity",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "perplexity",
+                "operation_id": "chat-completion",
+                "metadata": {
+                    "api_endpoint": "post /chat/completions",
+                    "body": {
+                        "model": "sonar-pro",
+                        "role": "user",
+                        "content": "You are an SEO expert and brand copywriter connected to a Google Sheet that contains content planning inputs. For each row, pull the following columns:\n\n-Topic: {{googlesheets.data[\"Topic \"]}}\n-Primary Keyword(s): {{googlesheets.data[\"Primary Keywords\"]}}\n-Secondary Keyword(s): {{googlesheets.data[\"Secondary Keywords\"]}}\n-Audience (target reader segment): {{googlesheets.data.Audience}}\n-Content Angle (perspective, theme, or positioning): {{googlesheets.data[\"Content Angle\"]}}\n-Desired Length / Format (word count range, format type such as blog post, listicle, guide, tone, etc.): {{googlesheets.data[\"Desire Length / Format\"]}}\n\nUsing this information, create a cohesive, SEO-optimized blog draft that also reflects the brand\u2019s personality.\n\nWriting Instructions\n1. SEO Layer: Include a keyword-friendly title, meta description, and structured headings (<h2>, <h3>). Naturally weave in keywords.\n2. On-Brand Voice: Use the chosen tone, phrasing, and CTA style consistently.\n3. Content Structure:\n-Engaging introduction that hooks the audience and reflects the brand.\n-Clear, scannable sections expanding on the idea from the chosen angle.\n-Branded touches (examples, language, or personality markers).\n-Conclusion with a call-to-action that matches the brand voice.\n4. Formatting: Provide output in clean HTML (<p>, <h2>, <h3>, <ul>/<li>) so it can be directly published into WordPress.\n\nDo not generate filler details outside of the sheet inputs.",
+                        "search_mode": "web",
+                        "temperature": "0.2",
+                        "top_p": "0.9",
+                        "return_images": true,
+                        "return_related_questions": true,
+                        "stream": false,
+                        "disable_search": false,
+                        "enable_search_classifier": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Generate a keyword-friendly title: {{perplexity.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "wordpress",
+                "entity": "post",
+                "action": "create",
+                "name": "Create Post",
+                "key": "wordpress",
+                "operation_id": "posts-create",
+                "metadata": {
+                    "api_endpoint": "post /wp/v2/posts",
+                    "body": {
+                        "status": "draft",
+                        "title": "{{ai.response}}",
+                        "content": "{{perplexity.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.status"],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
