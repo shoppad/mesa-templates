@@ -1,0 +1,76 @@
+{
+    "key": "shipstation/order/premium_order_tagging",
+    "name": "Tag Premium Orders in ShipStation Based on Order Value",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shipstation",
+                "entity": "order",
+                "action": "ORDER_NOTIFY",
+                "name": "Order Created",
+                "version": "v2",
+                "key": "shipstation",
+                "operation_id": "order_ORDER_NOTIFY",
+                "metadata": {
+                    "api_endpoint": "get /orders"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shipstation.orderTotal}}",
+                    "comparison": "greater than equal",
+                    "b": "{{ template | label: 'What is the minimum order value for a premium order?', description: 'Orders with a total value greater than or equal to this amount will be tagged as premium.', default: 500, type: 'number' }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "shipstation",
+                "entity": "order_addtag",
+                "action": "create",
+                "name": "Add Tag to Order",
+                "version": "v2",
+                "key": "shipstation_1",
+                "operation_id": "post_orders_addtag",
+                "metadata": {
+                    "api_endpoint": "post /orders/addtag",
+                    "body": {
+                        "orderId": "{{shipstation.orderId}}",
+                        "tagId": "{{ template | label: 'What is the tag ID for the premium order?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
