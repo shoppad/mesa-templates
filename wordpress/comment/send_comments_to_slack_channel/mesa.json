@@ -1,0 +1,73 @@
+{
+    "key": "wordpress/comment/send_comments_to_slack_channel",
+    "name": "Send WordPress Blog Comments to Slack",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "wordpress",
+                "entity": "comment",
+                "action": "list-created",
+                "name": "Comment Published",
+                "key": "wordpress",
+                "operation_id": "comment_published",
+                "metadata": {
+                    "api_endpoint": "get /comments",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "wordpress",
+                "entity": "post",
+                "action": "retrieve",
+                "name": "Retrieve Post",
+                "key": "wordpress_1",
+                "operation_id": "posts-retrieve",
+                "metadata": {
+                    "api_endpoint": "get /wp/v2/posts/{id}",
+                    "path": {
+                        "id": "{{wordpress.post}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "entity": "message",
+                "action": "create",
+                "name": "Send Message",
+                "version": "v3",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "api_endpoint": "post /api/chat.postMessage",
+                    "body": {
+                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+                        "markdown_text": "\ud83d\udcac New Comment Published for {{wordpress_1.title.rendered}}\nComment: {{wordpress.content.rendered}}\nComment Link: {{wordpress.link}}\nComment Author: {{wordpress.author_name}}\nComment Email: {{wordpress.author_email}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
