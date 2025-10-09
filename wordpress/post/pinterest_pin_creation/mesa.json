@@ -1,0 +1,105 @@
+{
+    "key": "wordpress/post/pinterest_pin_creation",
+    "name": "Create Pinterest Pins from WordPress Blog Posts",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "wordpress",
+                "entity": "post",
+                "action": "list-created",
+                "name": "Post Published",
+                "key": "wordpress",
+                "operation_id": "post_published",
+                "metadata": {
+                    "api_endpoint": "get /posts",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "wordpress",
+                "entity": "media",
+                "action": "retrieve",
+                "name": "Retrieve Media",
+                "key": "wordpress_1",
+                "operation_id": "media-retrieve",
+                "metadata": {
+                    "api_endpoint": "get /wp/v2/media/{id}",
+                    "path": {
+                        "id": "{{wordpress.featured_media}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Use AI to Reduce the Pinterest Pin Title",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Shorten the title to max length = 100 characters and remove any ASCHII codes {{wordpress.title.rendered}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "pinterest",
+                "entity": "pin",
+                "action": "create",
+                "name": "Create Pin",
+                "key": "pinterest",
+                "operation_id": "pins/create",
+                "metadata": {
+                    "api_endpoint": "post /pins",
+                    "body": {
+                        "link": "{{wordpress.link}}",
+                        "title": "{{ai.response}}",
+                        "description": "{{wordpress.excerpt.rendered | strip_html}}",
+                        "board_id": "{{ template | label: 'Which board should the pin be created on?', tokens: false }}",
+                        "media_source": {
+                            "source_type": "image_url",
+                            "url": "{{wordpress_1.source_url}}",
+                            "is_standard": true
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.title",
+                    "body.description",
+                    "body.link"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
