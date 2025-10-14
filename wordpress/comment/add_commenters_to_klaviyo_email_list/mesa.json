@@ -1,0 +1,172 @@
+{
+    "key": "wordpress/comment/add_commenters_to_klaviyo_email_list",
+    "name": "Add WordPress Blog Commenters to Klaviyo Email List",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "wordpress",
+                "entity": "comment",
+                "action": "list-created",
+                "name": "Comment Published",
+                "key": "wordpress",
+                "operation_id": "comment_published",
+                "metadata": {
+                    "api_endpoint": "get /comments",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{wordpress.author_email}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_profile",
+                "action": "retrieve",
+                "name": "Get List of List's Profiles",
+                "version": "v4",
+                "key": "klaviyo",
+                "operation_id": "get_profiles_for_list",
+                "metadata": {
+                    "api_endpoint": "get /api/lists/{id}/profiles",
+                    "query": {
+                        "filter": "all",
+                        "mesaFilterHiddenValues": "{\"email\":\"any, equals\",\"phone_number\":\"any, equals\",\"push_token\":\"any, equals\",\"_kx\":\"equals\",\"joined_group_at\":\"greater-or-equal, greater-than, less-or-equal, less-than\"}"
+                    },
+                    "path": {
+                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "count",
+                "name": "Number of matches",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
+                "metadata": {
+                    "key": "{{klaviyo.data[]}}",
+                    "filter": {
+                        "a": "{{klaviyo.data[].attributes.email}}",
+                        "comparison": "equals",
+                        "b": "{{wordpress.author_email}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{loop.count}}",
+                    "comparison": "equals",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "profile_subscription_bulk_create_job",
+                "action": "create",
+                "name": "Subscribe Profile",
+                "version": "v4",
+                "key": "klaviyo_1",
+                "operation_id": "mesa_bulk_subscribe_profiles",
+                "metadata": {
+                    "api_endpoint": "post /mesa/api/profile-subscription-bulk-create-jobs",
+                    "body": {
+                        "list_id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', description: '' }}",
+                        "attributes": {
+                            "historical_import": false,
+                            "profiles": {
+                                "data": [
+                                    {
+                                        "attributes": {
+                                            "email": "{{wordpress.author_email}}",
+                                            "subscriptions": {
+                                                "email": {
+                                                    "marketing": {
+                                                        "consent": "SUBSCRIBED"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.attributes.profiles.data[].attributes.email",
+                    "body.attributes.profiles.data[].attributes.subscriptions.email.marketing.consent"
+                ],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
