@@ -1,0 +1,109 @@
+{
+    "key": "rss/feed/rss_feed_items_to_database",
+    "name": "Save RSS Feed Items to a Database",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "rss",
+                "entity": "feed_item",
+                "action": "new_item",
+                "name": "New RSS Feed Item",
+                "version": "1.0.0",
+                "key": "rss",
+                "operation_id": "new_feed_item",
+                "metadata": {
+                    "api_endpoint": "get /feeds/check",
+                    "poll": "*/15 * * * *",
+                    "path": {
+                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["poll"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "data",
+                "entity": "record",
+                "action": "create",
+                "name": "Create Record",
+                "version": "v2",
+                "key": "data",
+                "operation_id": "post_database_table",
+                "metadata": {
+                    "api_endpoint": "post /{database}/{table}",
+                    "table": "rss_feed",
+                    "columns": {
+                        "author": "{{rss.itunes_author}}",
+                        "createdAt": "{{rss.pubDate}}",
+                        "title": "{{rss.title}}",
+                        "description": "{{rss.description | strip_html}}",
+                        "Link": "{{rss.link}}"
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "columns",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "author",
+                                "label": "author",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "createdAt",
+                                "label": "createdAt",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "title",
+                                "label": "title",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "description",
+                                "label": "description",
+                                "type": "text",
+                                "x-udtname": "text",
+                                "x-maxlength": null,
+                                "location": "required"
+                            },
+                            {
+                                "key": "Link",
+                                "label": "Link",
+                                "type": "text",
+                                "x-udtname": "varchar",
+                                "x-maxlength": null,
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": ["table"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
