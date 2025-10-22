@@ -20,7 +20,7 @@
                     "api_endpoint": "get /feeds/check",
                     "poll": "@hourly:0 * * * *",
                     "path": {
-                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: '' }}"
+                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: 'You can usually find a site''s RSS feed by adding /feed or /rss to its URL, or by checking its blog page for the orange RSS icon.' }}"
                     }
                 },
                 "local_fields": [],
@@ -36,7 +36,7 @@
                 "type": "ask",
                 "entity": "ask",
                 "action": "ask",
-                "name": "Ask",
+                "name": "Clean Up Feed Text",
                 "key": "ask",
                 "operation_id": "post-ask",
                 "metadata": {
@@ -50,24 +50,6 @@
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "ask",
-                "entity": "ask",
-                "action": "skill",
-                "name": "Skill",
-                "key": "ask_1",
-                "operation_id": "post-ask-skill",
-                "metadata": {
-                    "api_endpoint": "post /ask/skill",
-                    "trigger_manager_key": "ask",
-                    "trigger_parent_key": "ask"
-                },
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 1
             },
             {
                 "schema": 4,
