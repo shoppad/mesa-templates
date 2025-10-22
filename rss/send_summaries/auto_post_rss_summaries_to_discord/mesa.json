@@ -20,7 +20,7 @@
                     "api_endpoint": "get /feeds/check",
                     "poll": "@hourly:0 * * * *",
                     "path": {
-                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: '' }}"
+                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: 'You can usually find a site''s RSS feed by adding /feed or /rss to its URL, or by checking its blog page for the orange RSS icon.' }}"
                     }
                 },
                 "local_fields": [],
@@ -36,7 +36,7 @@
                 "type": "perplexity",
                 "entity": "chat_completion",
                 "action": "create",
-                "name": "Create Chat Completion",
+                "name": "Summarize RSS Item",
                 "key": "perplexity",
                 "operation_id": "chat-completion",
                 "metadata": {
