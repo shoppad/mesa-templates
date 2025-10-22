@@ -1,17 +1,9 @@
 {
-    "key": "send_to_google_sheets",
-    "name": "Export Order and Fulfillment Details of Delivered Orders into Google Sheets",
+    "key": "tracktor/order/send_to_google_sheets",
+    "name": "Export Delivered Order and Fulfillment Details to Google Sheets",
     "version": "1.0.0",
-    "description": "As a Tracktor customer, you have access to order data for 90 days. We understand merchants may need to access data beyond this timeframe. Or want all tracking data in one centralized location to allow the querying of shipments or high-level order data. This template allows you to export order and fulfillment details of delivered orders into Google Sheets so you have current and past tracking data in one place.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -20,59 +12,74 @@
                 "type": "tracktor",
                 "entity": "fulfillment",
                 "action": "fulfillment/delivered",
-                "name": "Fulfillment Delivered",
-                "key": "tracktor_fulfillment",
+                "name": "Fulfillment Status is Delivered",
+                "key": "tracktor",
+                "operation_id": "fulfillment_delivered",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
-                "key": "shopify_order",
+                "key": "shopify",
+                "operation_id": "get_orders_order_id",
                 "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{tracktor.order_id}}"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 4.2,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v1",
                 "entity": "row",
                 "action": "create",
-                "name": "Create Row - Fulfillments",
-                "key": "googlesheets_row_1",
+                "name": "Add Row - Fulfillments",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
                 "metadata": {
-                    "path": {
-                        "mode": "create",
-                        "spreadsheet_id": "",
-                        "sheet_name": "Sheet1",
-                        "header_row": "first_row"
-                    },
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
+                    "columns": [
+                        "Order ID",
+                        "Order Name (number)",
+                        "Order Email",
+                        "Order Phone",
+                        "Tracking Number",
+                        "Tracking Company",
+                        "Shipping Country",
+                        "Shipment Status",
+                        "Created At (date and time)",
+                        "Delivery Date (and time)",
+                        "Tracking URL",
+                        "Days since Ordered"
+                    ],
                     "body": {
-                        "fields": {
-                            "Order ID": "{{shopify_order.id}}",
-                            "Order Name (number)": "{{shopify_order.name}}",
-                            "Order Email": "{{shopify_order.email}}",
-                            "Order Phone": "{{shopify_order.customer.phone}}",
-                            "Tracking Number": "{{tracktor_fulfillment.tracking_number}}",
-                            "Tracking Company": "{{tracktor_fulfillment.carrier.name}}",
-                            "Shipping Country": "{{shopify_order.shipping_address.country}}",
-                            "Shipment Status": "{{tracktor_fulfillment.shipment_status}}",
-                            "Created At (date and time)": "{{shopify_order.created_at}}",
-                            "Delivery Date (and time)": "{{tracktor_fulfillment.latest_status.datetime}}",
-                            "Tracking URL": "{{tracktor_fulfillment.shop_url}}/apps/tracktor/track?order={{tracktor_fulfillment.order_name | url_encode }}&email={{shopify_order.email}}"
+                        "columns": {
+                            "A": "{{shopify.id}}",
+                            "B": "{{shopify.name}}",
+                            "C": "{{shopify.email}}",
+                            "D": "{{shopify.customer.phone}}",
+                            "E": "{{tracktor.tracking_number}}",
+                            "F": "{{tracktor.carrier.name}}",
+                            "G": "{{shopify.billing_address.country}}",
+                            "H": "{{tracktor.shipment_status}}",
+                            "I": "{{shopify.created_at}}",
+                            "J": "{{tracktor.latest_status.datetime}}",
+                            "K": "{{tracktor.shop_url}}/apps/tracktor/track?order={{tracktor.order_name | url_encode }}&email={{shopify.email}}"
                         }
                     }
                 },
@@ -82,91 +89,79 @@
                         "type": "object",
                         "fields": [
                             {
-                                "key": "fields",
+                                "key": "columns",
                                 "type": "object",
                                 "fields": [
                                     {
-                                        "key": "Order ID",
+                                        "key": "A",
                                         "label": "Order ID",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Order Name (number)",
+                                        "key": "B",
                                         "label": "Order Name (number)",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Order Email",
+                                        "key": "C",
                                         "label": "Order Email",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Order Phone",
+                                        "key": "D",
                                         "label": "Order Phone",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Tracking Number",
+                                        "key": "E",
                                         "label": "Tracking Number",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Tracking Company",
+                                        "key": "F",
                                         "label": "Tracking Company",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Shipping Country",
+                                        "key": "G",
                                         "label": "Shipping Country",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Shipment Status",
+                                        "key": "H",
                                         "label": "Shipment Status",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Created At (date and time)",
+                                        "key": "I",
                                         "label": "Created At (date and time)",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Delivery Date (and time)",
+                                        "key": "J",
                                         "label": "Delivery Date (and time)",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Tracking URL",
+                                        "key": "K",
                                         "label": "Tracking URL",
                                         "type": "text"
                                     },
                                     {
-                                        "key": "Days since Ordered",
+                                        "key": "L",
                                         "label": "Days since Ordered",
                                         "type": "text"
                                     }
-                                ]
+                                ],
+                                "location": "required"
                             }
-                        ]
+                        ],
+                        "location": "required"
                     }
                 ],
+                "selected_fields": [],
                 "on_error": "replay",
                 "weight": 1
-            },
-            {
-                "schema": 3,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "order",
-                "action": "retrieve",
-                "name": "Retrieve Order",
-                "key": "shopify_order_1",
-                "metadata": {
-                    "order_id": "{{shopify_order.id}}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
             },
             {
                 "schema": 2,
@@ -174,48 +169,64 @@
                 "type": "custom",
                 "name": "Custom Code",
                 "key": "custom",
+                "operation_id": "custom",
                 "metadata": {
-                    "script": "custom.js",
-                    "description": "Goes through each fulfillment in the order and checks if each fulfillment is fulfilled and requires shipping. The automation stops if these conditions are not met."
+                    "description": "Goes through each fulfillment in the order and checks if each fulfillment is fulfilled and requires shipping. The automation stops if these conditions are not met.",
+                    "script": "custom.js"
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
-                "schema": 4,
+                "schema": 4.2,
                 "trigger_type": "output",
                 "type": "googlesheets",
-                "version": "v1",
                 "entity": "row",
                 "action": "create",
-                "name": "Create Row - Orders",
-                "key": "googlesheets_row",
+                "name": "Add Row - Orders",
+                "version": "v2",
+                "key": "googlesheets_1",
+                "operation_id": "record_create",
                 "metadata": {
-                    "path": {
-                        "mode": "create",
-                        "spreadsheet_id": "",
-                        "sheet_name": "Sheet1",
-                        "header_row": "first_row"
-                    },
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
+                    "columns": [
+                        "Order ID",
+                        "Order Name (number)",
+                        "Order Email",
+                        "Customer First Name",
+                        "Customer Last Name",
+                        "Customer Full Name",
+                        "Customer Email",
+                        "Total Price",
+                        "Shipping Address 1",
+                        "Shipping Address 2",
+                        "Shipping City",
+                        "Shipping Zip",
+                        "Shipping Province",
+                        "Shipping Country",
+                        "Created At (date and time)",
+                        "Tracking URL"
+                    ],
                     "body": {
-                        "fields": {
-                            "Order ID": "{{shopify_order.id}}",
-                            "Order Name (number)": "{{shopify_order.name}}",
-                            "Order Email": "{{shopify_order.email}}",
-                            "Customer First Name": "{{shopify_order.customer.first_name}}",
-                            "Customer Last Name": "{{shopify_order.customer.last_name}}",
-                            "Customer Full Name": "{{shopify_order.customer.default_address.name}}",
-                            "Customer Email": "{{shopify_order.customer.email}}",
-                            "Total Price": "{{shopify_order.total_price}}",
-                            "Shipping Address 1": "{{shopify_order.shipping_address.address1}}",
-                            "Shipping Address 2": "{{shopify_order.shipping_address.address2}}",
-                            "Shipping City": "{{shopify_order.shipping_address.city}}",
-                            "Shipping Zip": "{{shopify_order.shipping_address.zip}}",
-                            "Shipping Province": "{{shopify_order.shipping_address.province}}",
-                            "Shipping Country": "{{shopify_order.shipping_address.country}}",
-                            "Created At (date and time)": "{{shopify_order_1.created_at}}",
-                            "Tracking URL": "{{tracktor_fulfillment.shop_url}}/apps/tracktor/track?order={{tracktor_fulfillment.order_name | url_encode }}&email={{shopify_order.email}}"
+                        "columns": {
+                            "A": "{{shopify.id}}",
+                            "B": "{{shopify.name}}",
+                            "C": "{{shopify.email}}",
+                            "D": "{{shopify.customer.first_name}}",
+                            "E": "{{shopify.customer.last_name}}",
+                            "F": "{{shopify.customer.default_address.name}}",
+                            "G": "{{shopify.customer.email}}",
+                            "H": "{{shopify.total_price}}",
+                            "I": "{{shopify.shipping_address.address1}}",
+                            "J": "{{shopify.shipping_address.address2}}",
+                            "K": "{{shopify.shipping_address.city}}",
+                            "L": "{{shopify.shipping_address.zip}}",
+                            "M": "{{shopify.shipping_address.province}}",
+                            "N": "{{shopify.shipping_address.country}}",
+                            "O": "{{shopify.created_at}}",
+                            "P": "{{tracktor.shop_url}}/apps/tracktor/track?order={{tracktor.order_name | url_encode }}&email={{shopify.email}}"
                         }
                     }
                 },
@@ -225,98 +236,116 @@
                         "type": "object",
                         "fields": [
                             {
-                                "key": "fields",
+                                "key": "columns",
                                 "type": "object",
                                 "fields": [
                                     {
-                                        "key": "Order ID",
+                                        "key": "A",
                                         "label": "Order ID",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Order Name (number)",
+                                        "key": "B",
                                         "label": "Order Name (number)",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Order Email",
+                                        "key": "C",
                                         "label": "Order Email",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Customer First Name",
+                                        "key": "D",
                                         "label": "Customer First Name",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Customer Last Name",
+                                        "key": "E",
                                         "label": "Customer Last Name",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Customer Full Name",
+                                        "key": "F",
                                         "label": "Customer Full Name",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Customer Email",
+                                        "key": "G",
                                         "label": "Customer Email",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Total Price",
+                                        "key": "H",
                                         "label": "Total Price",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Shipping Address 1",
+                                        "key": "I",
                                         "label": "Shipping Address 1",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Shipping Address 2",
+                                        "key": "J",
                                         "label": "Shipping Address 2",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Shipping City",
+                                        "key": "K",
                                         "label": "Shipping City",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Shipping Zip",
+                                        "key": "L",
                                         "label": "Shipping Zip",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Shipping Province",
+                                        "key": "M",
                                         "label": "Shipping Province",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Shipping Country",
+                                        "key": "N",
                                         "label": "Shipping Country",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Created At (date and time)",
+                                        "key": "O",
                                         "label": "Created At (date and time)",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     },
                                     {
-                                        "key": "Tracking URL",
+                                        "key": "P",
                                         "label": "Tracking URL",
-                                        "type": "text"
+                                        "type": "text",
+                                        "location": "required"
                                     }
-                                ]
+                                ],
+                                "location": "required"
                             }
-                        ]
+                        ],
+                        "location": "required"
                     }
                 ],
+                "selected_fields": [],
                 "on_error": "replay",
-                "weight": 4
+                "weight": 3
             }
-        ],
-        "storage": []
+        ]
     }
 }
