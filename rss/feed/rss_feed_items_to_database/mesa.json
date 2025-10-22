@@ -20,7 +20,7 @@
                     "api_endpoint": "get /feeds/check",
                     "poll": "*/15 * * * *",
                     "path": {
-                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: '' }}"
+                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: 'You can usually find a site''s RSS feed by adding /feed or /rss to its URL, or by checking its blog page for the orange RSS icon.' }}"
                     }
                 },
                 "local_fields": [],
@@ -44,7 +44,7 @@
                     "api_endpoint": "post /{database}/{table}",
                     "table": "rss_feed",
                     "columns": {
-                        "author": "{{rss.itunes_author}}",
+                        "author": "{{rss.dc_creator}}",
                         "createdAt": "{{rss.pubDate}}",
                         "title": "{{rss.title}}",
                         "description": "{{rss.description | strip_html}}",
