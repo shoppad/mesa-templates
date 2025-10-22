@@ -1,0 +1,88 @@
+{
+    "key": "rss/send_summaries/auto_post_rss_summaries_to_discord",
+    "name": "Auto-Post Smart Article Summaries from RSS Feeds to Discord",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "rss",
+                "entity": "feed_item",
+                "action": "new_item",
+                "name": "New RSS Item",
+                "version": "1.0.0",
+                "key": "rss",
+                "operation_id": "new_feed_item",
+                "metadata": {
+                    "api_endpoint": "get /feeds/check",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "feed_url": "{{ template | label: 'What is the RSS feed URL?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "perplexity",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "perplexity",
+                "operation_id": "chat-completion",
+                "metadata": {
+                    "api_endpoint": "post /chat/completions",
+                    "body": {
+                        "model": "sonar",
+                        "role": "user",
+                        "content": "Read the article at the following link and give me a summary of what the article is about:{{rss.link}}",
+                        "search_mode": "web",
+                        "temperature": "0.2",
+                        "top_p": "0.9",
+                        "return_images": true,
+                        "return_related_questions": true,
+                        "stream": false,
+                        "disable_search": false,
+                        "enable_search_classifier": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "discord",
+                "entity": "channel_message",
+                "action": "create",
+                "name": "Create Channel Message",
+                "key": "discord",
+                "operation_id": "post-channels-channelId-messages",
+                "metadata": {
+                    "api_endpoint": "post /channels/{channelId}/messages",
+                    "path": {
+                        "channelId": "{{ template | label: 'What is the Discord channel ID?', description: '' }}"
+                    },
+                    "body": {
+                        "content": "{{rss.title}}\n{{perplexity.response}}\n{{rss.link}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.content"],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
