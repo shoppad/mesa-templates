@@ -137,7 +137,7 @@
                 "metadata": {
                     "api_endpoint": "post /mesa/api/profile-subscription-bulk-create-jobs",
                     "body": {
-                        "list_id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', description: '' }}",
+                        "list_id": "{{ template | label: 'Select the Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}",
                         "attributes": {
                             "historical_import": false,
                             "profiles": {
