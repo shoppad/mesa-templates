@@ -1,0 +1,205 @@
+{
+    "key": "shopify/fulfillment/shopify_fulfillments_to_google_sheets",
+    "name": "Add Shopify Fulfillments with Tracking Numbers to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every fulfillment. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Order ID",
+                        "value": "Order ID|{{shopify_1.id}}",
+                        "description": "The ID of the order."
+                    },
+                    {
+                        "label": "Order Name",
+                        "value": "Order Name|{{shopify_1.name}}",
+                        "description": "The human-readable label for the order (example: #1001)."
+                    },
+                    {
+                        "label": "Order Email",
+                        "value": "Order Email|{{shopify_1.email}}",
+                        "description": "The email address of the customer that placed the order."
+                    },
+                    {
+                        "label": "Order Phone",
+                        "value": "Order Phone|{{shopify_1.customer.phone}}",
+                        "description": "The phone number of the customer that placed the order."
+                    },
+                    {
+                        "label": "Customer First Name",
+                        "value": "Customer First Name|{{shopify_1.customer.first_name}}",
+                        "description": "The first name of the customer that placed the order."
+                    },
+                    {
+                        "label": "Customer Last Name",
+                        "value": "Customer Last Name|{{shopify_1.customer.last_name}}",
+                        "description": "The last name of the customer that placed the order."
+                    },
+                    {
+                        "label": "Customer Email",
+                        "value": "Customer Email|{{shopify_1.customer.email}}",
+                        "description": "The email address of the customer that placed the order."
+                    },
+                    {
+                        "label": "Total Price",
+                        "value": "Total Price|{{shopify_1.total_price}}",
+                        "description": "The total price of the order."
+                    },
+                    {
+                        "label": "Shipping Address 1",
+                        "value": "Shipping Address 1|{{shopify_1.shipping_address.address1}}",
+                        "description": "The first line of the shipping address."
+                    },
+                    {
+                        "label": "Shipping Address 2",
+                        "value": "Shipping Address 2|{{shopify_1.shipping_address.address2}}",
+                        "description": "The second line of the shipping address."
+                    },
+                    {
+                        "label": "Shipping City",
+                        "value": "Shipping City|{{shopify_1.shipping_address.city}}",
+                        "description": "The city of the shipping address."
+                    },
+                    {
+                        "label": "Shipping Province",
+                        "value": "Shipping Province|{{shopify_1.shipping_address.province}}",
+                        "description": "The province of the shipping address."
+                    },
+                    {
+                        "label": "Shipping Country",
+                        "value": "Shipping Country|{{shopify_1.shipping_address.country}}",
+                        "description": "The country of the shipping address."
+                    },
+                    {
+                        "label": "Shipping Zip",
+                        "value": "Shipping Zip|{{shopify_1.shipping_address.zip}}",
+                        "description": "The zip code of the shipping address."
+                    },
+                    {
+                        "label": "Tracking Number",
+                        "value": "Tracking Number|{{shopify.tracking_number}}",
+                        "description": "The tracking number of the order."
+                    },
+                    {
+                        "label": "Tracking Company",
+                        "value": "Tracking Company|{{shopify.tracking_company}}",
+                        "description": "The company that is tracking the order."
+                    },
+                    {
+                        "label": "Days Since Ordered",
+                        "value": "Days Since Ordered|{{shopify_1.created_at | time_between: shopify.created_at, \"days\"}}",
+                        "description": "The number of days since the order was placed."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "fulfillment",
+                "action": "created",
+                "name": "Fulfillment Created",
+                "key": "shopify",
+                "operation_id": "fulfillments_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": ["frequency"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{shopify.order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": ["order_id"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.2,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
+                    "columns": [
+                        "Order ID",
+                        "Order name",
+                        "Order Email",
+                        "Order Phone",
+                        "Customer First Name",
+                        "Customer Last Name",
+                        "Customer Email",
+                        "Total Price",
+                        "Shipping Address 1",
+                        "Shipping Address 2",
+                        "Shipping City",
+                        "Shipping Zip",
+                        "Shipping Province",
+                        "Shipping Country",
+                        "Shipment Status",
+                        "Tracking Number",
+                        "Tracking Company",
+                        "Days Since Ordered"
+                    ],
+                    "body": {
+                        "columns": {}
+                    },
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.spreadsheet_id",
+                    "path.sheet",
+                    "columns"
+                ],
+                "on_error": "replay",
+                "weight": 1
+            }
+        ]
+    }
+}
