@@ -20,7 +20,7 @@
                     "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["poll"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -44,7 +44,7 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -69,7 +69,12 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "path",
+                    "query",
+                    "query.filter",
+                    "query.mesaFilterHiddenValues"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -97,18 +102,99 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
             {
-                "schema": 4.1,
+                "schema": 5,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter_1",
-                "operation_id": "filter",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - Has Existing Klaviyo Profile",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
                 "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{loop.count}}",
+                    "comparison": "equals",
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_relationship_profile",
+                "action": "create",
+                "name": "Add Profile to List",
+                "version": "v4",
+                "key": "klaviyo_1",
+                "operation_id": "add_profiles_to_list",
+                "metadata": {
+                    "api_endpoint": "post /api/lists/{id}/relationships/profiles",
+                    "trigger_parent_key": "paths_1",
+                    "path": {
+                        "id": "{{ template | label: 'Select the same Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}"
+                    },
+                    "body": {
+                        "data": [
+                            {
+                                "type": "profile",
+                                "mesa_profile_field": "{{wordpress.author_email}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - No Existing Klaviyo Profile",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
                     "a": "{{loop.count}}",
                     "comparison": "equals",
                     "b": "0",
@@ -122,50 +208,82 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 6
             },
             {
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "klaviyo",
-                "entity": "profile_subscription_bulk_create_job",
+                "entity": "profile",
                 "action": "create",
-                "name": "Subscribe Profile",
+                "name": "Create Profile",
                 "version": "v4",
-                "key": "klaviyo_1",
-                "operation_id": "mesa_bulk_subscribe_profiles",
+                "key": "klaviyo_2",
+                "operation_id": "create_profile",
                 "metadata": {
-                    "api_endpoint": "post /mesa/api/profile-subscription-bulk-create-jobs",
+                    "api_endpoint": "post /api/profiles",
+                    "trigger_parent_key": "paths_2",
                     "body": {
-                        "list_id": "{{ template | label: 'Select the Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}",
-                        "attributes": {
-                            "historical_import": false,
-                            "profiles": {
-                                "data": [
-                                    {
-                                        "attributes": {
-                                            "email": "{{wordpress.author_email}}",
-                                            "subscriptions": {
-                                                "email": {
-                                                    "marketing": {
-                                                        "consent": "SUBSCRIBED"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                ]
+                        "data": {
+                            "type": "profile",
+                            "attributes": {
+                                "email": "{{wordpress.author_email}}",
+                                "first_name": "{{wordpress.author_name | split: \" \" | first}}",
+                                "last_name": "{{wordpress.author_name | split: \" \" | last}}"
                             }
                         }
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "body.attributes.profiles.data[].attributes.email",
-                    "body.attributes.profiles.data[].attributes.subscriptions.email.marketing.consent"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 7
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_relationship_profile",
+                "action": "create",
+                "name": "Add Profile to List",
+                "version": "v4",
+                "key": "klaviyo_3",
+                "operation_id": "add_profiles_to_list",
+                "metadata": {
+                    "api_endpoint": "post /api/lists/{id}/relationships/profiles",
+                    "trigger_parent_key": "paths_2",
+                    "path": {
+                        "id": "{{ template | label: 'Re-select the same Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}"
+                    },
+                    "body": {
+                        "data": [
+                            {
+                                "type": "profile",
+                                "mesa_profile_field": "{{wordpress.author_email}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
             }
         ]
     }
