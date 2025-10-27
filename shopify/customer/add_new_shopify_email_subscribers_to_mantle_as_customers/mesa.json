@@ -1,0 +1,183 @@
+{
+    "key": "shopify/customer/add_new_shopify_email_subscribers_to_mantle_as_customers",
+    "name": "Sync New Shopify Email Subscribers to Mantle Customers",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "created",
+                "name": "Customer Created",
+                "key": "shopify",
+                "operation_id": "customers_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "contact",
+                "action": "list",
+                "name": "Get List of Contacts",
+                "key": "mantle_1",
+                "operation_id": "get__contacts",
+                "metadata": {
+                    "api_endpoint": "get /contacts",
+                    "query": {
+                        "search": "{{shopify.email}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query.search"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{mantle_1.total}}",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "contact",
+                "action": "create",
+                "name": "Create Contact",
+                "key": "mantle",
+                "operation_id": "post__contacts",
+                "metadata": {
+                    "api_endpoint": "post /contacts",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "name": "{{shopify.default_address.name}}",
+                        "email": "{{shopify.email}}",
+                        "tags": ["newsletter"]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.name", "body.email", "body.tags"],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "greater than",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{mantle_1.total}}",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "contact",
+                "action": "update",
+                "name": "Update Contact",
+                "key": "mantle_2",
+                "operation_id": "put__contacts__id_",
+                "metadata": {
+                    "api_endpoint": "put /contacts/{id}",
+                    "body": {
+                        "name": "{{shopify.default_address.name}}",
+                        "email": "{{shopify.email}}",
+                        "tags": ["newsletter"]
+                    },
+                    "trigger_parent_key": "paths_2",
+                    "path": {
+                        "id": "{{mantle_1.contacts[0].id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.name", "body.email", "body.tags"],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
