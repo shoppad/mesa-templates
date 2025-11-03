@@ -1,0 +1,111 @@
+{
+    "key": "shopify/order/tag_unfulfilled_orders_after_time",
+    "name": "Tag Shopify Orders if Unfulfilled After Set Time",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "version": "v2",
+                "key": "delay",
+                "operation_id": "delay",
+                "metadata": {
+                    "amount": "{{ template | label: 'How many days would you like to wait?', description: '', default: 10, type: 'number', tokens: false }}",
+                    "unit": "days",
+                    "test_bypass": false
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify_1.fulfillment_status}}",
+                    "comparison": "does not equal",
+                    "b": "fulfilled",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag will be added to the order?', description: '', default: 'Unfulfilled', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
