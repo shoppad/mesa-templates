@@ -35,7 +35,7 @@
                 "key": "delay",
                 "operation_id": "delay",
                 "metadata": {
-                    "amount": "{{ template | label: 'How many days would you like to wait?', description: '', default: 10, type: 'number', tokens: false }}",
+                    "amount": "{{ template | label: 'How long should MESA wait after the order is created before checking its fulfillment status?', description: '', default: 10, type: 'number', tokens: false }}",
                     "unit": "days",
                     "test_bypass": false
                 },
@@ -98,7 +98,7 @@
                     "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
                     "order_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be added to the order?', description: '', default: 'Unfulfilled', tokens: false }}"
+                        "tag": "{{ template | label: 'What tag should MESA add to the order if it''s still unfulfilled?', description: 'This tag helps you identify orders that haven''t been fulfilled after the waiting period. (Default: Unfulfilled).', default: 'Unfulfilled', tokens: false }}"
                     }
                 },
                 "local_fields": [],
