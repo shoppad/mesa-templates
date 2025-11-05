@@ -1,0 +1,69 @@
+{
+    "key": "shopify/product/new_product_google_docs_documentation",
+    "name": "Generate Google Docs for New Shopify Products",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": ["frequency"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googledocs",
+                "entity": "document",
+                "action": "create",
+                "name": "Create Product Document",
+                "key": "googledocs",
+                "operation_id": "documents-create",
+                "metadata": {
+                    "api_endpoint": "post /drive/v3/files",
+                    "body": {
+                        "name": "{{shopify.title}}",
+                        "text": "\ud83d\udecd\ufe0f New Product Created: {{shopify.title}}\n\nDate Created: {{shopify.created_at | date: \"%B %e, %Y\"}}\nStatus: {{shopify.status}}  \nProduct URL: https://{{shopify_1.domain}}/products/{{shopify.handle}}\n\n---\n\n\ud83c\udff7\ufe0f Product Details\n\n-Product ID: {{shopify.id}}\n-Vendor: {{shopify.vendor}}\n-Type: {{shopify.product_type}}\n-Tags: {{shopify.tags}}\n\n---\n\n\ud83d\udcf8 Product Images\n\nMain Image: {{shopify.image.src}}\nAlt Image: {{shopify.image.alt}}\n\n---\n\n\ud83d\udcb2 Variants\n\n| Title | SKU | Price | Compare-at | Cost | Inventory | Barcode | Weight | Options |\n|--------|------|--------|-------------|--------|------------|----------|---------|-----------|\n\n{% for variant in shopify.variants %}\n| {{variant.title}} | {{variant.sku}} | {{variant.price}} | {{variant.compare_at_price}} |  {{variant.inventory_quantity}} | {{variant.barcode}} | {{variant.weight}} {{variant.weight_unit}} | {{variant.option1}} | {{variant.option2}} {{variant.option3}} |\n{% endfor %}\n\n---\n\n\ud83e\uddfe Description\n\n{{shopify.body_html | strip_html}}\n\n---\n\n\ud83d\ude9a Shipping & Fulfillment\n{% for variant in shopify.variants %}\n-Variant: {{variant.title}}  \n  - Requires Shipping: {{variant.requires_shipping}}  \n  - Weight: {{variant.weight}} {{variant.weight_unit}}  \n  - Fulfillment Service: {{variant.fulfillment_service}}\n{% endfor %}\n\n"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
