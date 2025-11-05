@@ -1,0 +1,114 @@
+{
+    "key": "judgeme/review/five_star_reviews_to_google_doc",
+    "name": "Collect 5-Star Judge.me Reviews in a Google Doc",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "judgeme",
+                "entity": "review_created",
+                "action": "created",
+                "name": "Review Created",
+                "key": "judgeme",
+                "operation_id": "review/created",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if Review is a 5-Star Rating",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{judgeme.rating}}",
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "b": "5"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "judgeme",
+                "entity": "review",
+                "action": "retrieve",
+                "name": "Retrieve Review Details",
+                "key": "judgeme_1",
+                "operation_id": "get_reviews_by_id",
+                "metadata": {
+                    "api_endpoint": "get /reviews/{id}",
+                    "path": {
+                        "id": "{{judgeme.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Summarize Review",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Analyze the following customer review and provide a concise summary and sentiment analysis.\n\nInclude:\n-Overall sentiment (Positive, Neutral, or Negative)\n-Key themes or points mentioned by the customer\n-Notable quotes or phrases that could be used in marketing copy\n\nSuggested headline or takeaway that captures the customer\u2019s story\n\nReview: {{judgeme_1.body}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googledocs",
+                "entity": "document",
+                "action": "create",
+                "name": "Create Review Document",
+                "key": "googledocs",
+                "operation_id": "documents-create",
+                "metadata": {
+                    "api_endpoint": "post /drive/v3/files",
+                    "body": {
+                        "name": "{{judgeme.reviewer.name}}",
+                        "text": "\u2b50 5-Star Review Received on {{judgeme.created_at}}\n\nCustomer: {{judgeme.reviewer.name}}\nProduct: {{judgeme.product_title}}\nSource: Judge.me  \n\nReview Title: {{judgeme.title}}  \nReview Text: {{judgeme.body}}\n\n\ud83d\uddbc\ufe0f View Photo: {{judgeme_1.pictures[0].hidden}}\n\n---\n\n\ud83d\udce6 Product Image: {{judgeme_1.pictures[0].urls.compact}}\n\n\ud83e\udde0 AI Summary: {{ai.response}}\n\n---\n"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
