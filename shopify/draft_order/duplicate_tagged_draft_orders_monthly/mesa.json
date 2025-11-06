@@ -1,6 +1,6 @@
 {
     "key": "shopify/draft_order/duplicate_tagged_draft_orders_monthly",
-    "name": "Duplicate Tagged Draft Orders on a Set Day Each Month (Updated WIP)",
+    "name": "Duplicate Tagged Draft Orders on a Set Day Each Month",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
