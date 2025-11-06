@@ -91,6 +91,10 @@
                 "operation_id": "post_graphql_draft_order_duplicate_id",
                 "metadata": {
                     "api_endpoint": "post graphql/draft_order/duplicate/id.json",
+                    "graphql_name": "draftOrderDuplicate",
+                    "argument": "$id: ID",
+                    "variables": "id: $id",
+                    "shopify_entity_id": ["draft_order"],
                     "trigger_parent_key": "loop",
                     "body": {
                         "id": "{{loop.id}}",
