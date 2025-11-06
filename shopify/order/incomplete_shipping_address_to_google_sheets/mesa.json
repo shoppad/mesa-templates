@@ -1,0 +1,206 @@
+{
+    "key": "shopify/order/incomplete_shipping_address_to_google_sheets",
+    "name": "Capture Incomplete Shopify Shipping Details and Route to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What would you like to name your spreadsheet?",
+                "tokens": false,
+                "description": "Enter a name for your new Google Sheets spreadsheet."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "Which columns should be included in your spreadsheet?",
+                "description": "Uncheck any columns you don’t want to include.",
+                "options": [
+                    {
+                        "label": "Order URL",
+                        "value": "Order URL|https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify.id}}",
+                        "description": "The URL to the order in the Shopify admin."
+                    },
+                    {
+                        "label": "Order Name",
+                        "value": "Order Name|{{shopify.name}}",
+                        "description": "The human-readable label for the order (example: #1001)."
+                    },
+                    {
+                        "label": "Buyer Name",
+                        "value": "Buyer Name|{{shopify.billing_address.name}}",
+                        "description": "The full name of the buyer."
+                    },
+                    {
+                        "label": "Buyer Email",
+                        "value": "Buyer Email|{{shopify.email}}",
+                        "description": "The email address of the buyer."
+                    },
+                    {
+                        "label": "Shipping Name",
+                        "value": "Shipping Name|{{shopify.shipping_address.name}}",
+                        "description": "The full name of the recipient of the shipping address."
+                    },
+                    {
+                        "label": "Address 1",
+                        "value": "Address 1|{{shopify.shipping_address.address1}}",
+                        "description": "The first line of the shipping address."
+                    },
+                    {
+                        "label": "Address 2",
+                        "value": "Address 2|{{shopify.shipping_address.address2}}",
+                        "description": "The second line of the shipping address."
+                    },
+                    {
+                        "label": "City",
+                        "value": "City|{{shopify.shipping_address.city}}",
+                        "description": "The city of the shipping address."
+                    },
+                    {
+                        "label": "State",
+                        "value": "State|{{shopify.shipping_address.province}}",
+                        "description": "The state/province of the shipping address."
+                    },
+                    {
+                        "label": "Zip",
+                        "value": "Zip|{{shopify.shipping_address.zip}}",
+                        "description": "The zip code of the shipping address."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "ask",
+                "name": "Review the Shipping Address to Confirm if it's Complete",
+                "key": "ask",
+                "operation_id": "post-ask",
+                "metadata": {
+                    "api_endpoint": "post /ask",
+                    "body": {
+                        "content": "Check if the shipping address is incomplete for the following order:\n\nOrder Created\n\nShipping Address:\n{{shopify.shipping_address}}\n\nRules:\nAn address is complete if it includes all of the following:\n-Street address (e.g., \"123 Main St\" or \"45 Market Road\")\n-City\n-State or province\n-ZIP or postal code\nApartment, suite, or unit numbers are optional and not required for completeness.\n\nResponse Format:\n-Reply with \u201cYes\u201d if the address is incomplete\n-Reply with \u201cNo\u201d if the address is complete\n-Do not include any explanation or additional text.",
+                        "instructions": "You do not have the ability to ask the user more questions. Make assumptions where possible. If you can not determine a value, throw an error and include the missing parameter(s) in the message. Prefix any message with an error with `ERROR`. For emails return HTML with no wrapping."
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask_1",
+                "operation_id": "post-ask-skill",
+                "metadata": {
+                    "api_endpoint": "post /ask/skill",
+                    "trigger_manager_key": "ask",
+                    "trigger_parent_key": "ask"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Is the Shipping Address Incomplete?",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{ask.content}}",
+                    "comparison": "equals",
+                    "b": "Yes",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4.2,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Buyer and Incomplete Shipping Details for Follow-Up",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "columns": {}
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 4
+            }
+        ]
+    }
+}
