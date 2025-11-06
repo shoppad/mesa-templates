@@ -149,35 +149,30 @@
                 "weight": 5
             },
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "asana",
-                "entity": "task",
-                "action": "create",
-                "name": "Create Task",
-                "key": "asana",
-                "operation_id": "createTask",
-                "metadata": {
-                    "api_endpoint": "post \/tasks",
-                    "body": {
-                        "data": {
-                            "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
-                            "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
-                            "name": "{{ai_1.response}}",
-                            "notes": "Zendesk Summary: {{ai.response}}\nTicket #: {{zendesk_1.id}}\nCustomer Email: {{zendesk_1.recipient}}\nTicket Updated At: {{zendesk_1.updated_at}}"
-                        }
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "body.data.workspace",
-                    "body.data.projects",
-                    "body.data.name",
-                    "body.data.notes"
-                ],
-                "on_error": "default",
-                "weight": 6
-            }
+              "schema": 4,
+              "trigger_type": "output",
+              "type": "asana",
+              "entity": "task",
+              "action": "create",
+              "name": "Create Task",
+              "key": "asana",
+              "operation_id": "createTaskMesa",
+              "metadata": {
+                  "api_endpoint": "post \/mesa\/tasks",
+                  "body": {
+                      "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
+                      "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
+                      "name": "{{ai_1.response}}",
+                      "notes": "Zendesk Summary: {{ai.response}}\nTicket #: {{zendesk_1.id}}\nCustomer Email: {{zendesk_1.recipient}}\nTicket Updated At: {{zendesk_1.updated_at}}"
+                  }
+              },
+              "local_fields": [],
+              "selected_fields": [
+                  "body.notes"
+              ],
+              "on_error": "default",
+              "weight": 6
+          }
         ]
     }
 }
