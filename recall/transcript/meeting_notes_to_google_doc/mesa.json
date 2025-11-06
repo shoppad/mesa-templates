@@ -1,0 +1,96 @@
+{
+    "key": "recall/transcript/meeting_notes_to_google_doc",
+    "name": "Convert Meeting Audio to Text and Deliver Notes to Google Docs",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "recall",
+                "entity": "webhook",
+                "action": "transcript_ready",
+                "name": "Transcript Ready",
+                "key": "recall",
+                "operation_id": "recall-webhook-transcript-done",
+                "metadata": {
+                    "api_endpoint": "post transcript.done",
+                    "host": "{{ template | label: 'Install the webhook URL', description: '' }}"
+                },
+                "local_fields": [],
+                "selected_fields": ["host"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Create Descriptive Document Title",
+                "version": "v2",
+                "key": "ai_2",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Review the meeting transcript and generate a concise, descriptive title for the summary document. The title should capture the main topic, decision, or outcome of the meeting so it\u2019s easy to understand and locate later in Google Drive: {{recall.transcript}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Summarize Meeting Transcription",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post /prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You are given a transcript in this format:\n[hh:mm:ss] Speaker Name: text\nPlease provide the following:\n1. A concise summary of the conversation (2\u20133 paragraphs).  \n2. A clear list of any action items, decisions, or follow-ups mentioned.  \n3. If there are no action items, state \u201cNo action items found.\u201d\nTranscript: {{recall.transcript}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.role", "body.content"],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "googledocs",
+                "entity": "document",
+                "action": "create",
+                "name": "Create Document",
+                "key": "googledocs",
+                "operation_id": "documents-create",
+                "metadata": {
+                    "api_endpoint": "post /drive/v3/files",
+                    "body": {
+                        "name": "{{ai_1.response}}",
+                        "text": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
