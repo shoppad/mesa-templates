@@ -1,0 +1,189 @@
+{
+    "key": "shopify/draft/duplicate_tagged_draft_orders_monthly",
+    "name": "Duplicate Tagged Draft Orders on a Set Day Each Month",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "enqueue_type": "schedule",
+                    "schedule": "{{ template | label: 'When should MESA check for draft orders to duplicate?', description: 'Choose the day of the month when MESA should look for matching draft orders.' }}",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "list",
+                "name": "Get List of Draft Orders",
+                "key": "shopify",
+                "operation_id": "get_draft_orders",
+                "metadata": {
+                    "api_endpoint": "get admin/draft_orders.json",
+                    "query": {
+                        "limit": "{{ template | label: 'How many draft orders should this workflow check each month?', description: 'Enter the number of recent draft orders to review when the workflow runs. The default is 100. The maximum is 8,000.', type: number, default: 100 }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query.limit"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if the Duplicate Tracking Tag Exists on the Draft Order",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.0.tags}}",
+                    "comparison": "does not equal",
+                    "b": "MESA Duplicated Draft Order",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Draft Order Tags",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "a": "{{shopify[].tags}}",
+                        "comparison": "contains",
+                        "b": "{{ template | label: 'What tag should MESA look for on draft orders?', description: 'MESA will only duplicate draft orders that have this tag.' }}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "create",
+                "name": "Duplicate Draft Order",
+                "key": "shopify_1",
+                "operation_id": "post_graphql_draft_order_duplicate_id",
+                "metadata": {
+                    "api_endpoint": "post graphql/draft_order/duplicate/id.json",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "id": "{{loop.id}}",
+                        "shopify_entity_id": "draft_order"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "tag_remove",
+                "name": "Remove Duplication Tag from New Draft Order",
+                "key": "shopify_2",
+                "operation_id": "delete_mesa_draft_orders_draft_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "delete mesa/draft_orders/{{draft_order_id}}/tag.json",
+                    "trigger_parent_key": "loop",
+                    "draft_order_id": "{{shopify_1.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'Which tag should be removed from the duplicated draft order?', description: 'Enter the exact tag name that triggers duplication. This tag will be removed from the newly duplicated draft order to prevent it from being duplicated again in future runs. The tag name is case-sensitive and must match exactly.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "draft_order",
+                "action": "tag_add",
+                "name": "Add Tracking Tag to New Draft Order",
+                "key": "shopify_3",
+                "operation_id": "post_mesa_draft_orders_draft_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/draft_orders/{{draft_order_id}}/tag.json",
+                    "trigger_parent_key": "loop",
+                    "draft_order_id": "{{shopify_1.id}}",
+                    "body": {
+                        "tag": "MESA Duplicated Draft Order"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
