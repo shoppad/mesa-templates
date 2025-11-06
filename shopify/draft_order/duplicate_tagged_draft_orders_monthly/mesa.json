@@ -19,11 +19,7 @@
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "enqueue_type",
-                    "schedule",
-                    "next_sync_date_time"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -50,29 +46,6 @@
                 "weight": 0
             },
             {
-                "schema": 4.1,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Check if the Duplicate Tracking Tag Exists on the Draft Order",
-                "key": "filter",
-                "operation_id": "filter",
-                "metadata": {
-                    "a": "{{shopify.0.tags}}",
-                    "comparison": "does not equal",
-                    "b": "MESA Duplicated Draft Order",
-                    "additional": [
-                        {
-                            "operator": "and",
-                            "comparison": "equals"
-                        }
-                    ]
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
                 "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
@@ -90,15 +63,22 @@
                         "additional": [
                             {
                                 "operator": "and",
-                                "comparison": "equals"
+                                "a": "{{shopify[].tags}}",
+                                "comparison": "does not contain",
+                                "b": "MESA Duplicated Draft Order"
                             }
                         ]
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "filter.additional[].operator",
+                    "filter.additional[].a",
+                    "filter.additional[].comparison",
+                    "filter.additional[].b"
+                ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             },
             {
                 "schema": 3.1,
@@ -120,7 +100,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             },
             {
                 "schema": 3.1,
@@ -142,7 +122,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             },
             {
                 "schema": 3.1,
@@ -164,7 +144,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 4
             },
             {
                 "schema": 5.1,
@@ -182,7 +162,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 6
+                "weight": 5
             }
         ]
     }
