@@ -42,12 +42,7 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "b",
-                    "additional"
-               ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -67,10 +62,7 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "path",
-                    "path.conversationId"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -97,12 +89,7 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "map_field",
-                    "filter",
-                    "filter.additional"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
@@ -118,19 +105,13 @@
                 "operation_id": "post-prompt",
                 "metadata": {
                     "api_endpoint": "post \/prompt",
-                    "temperature": "1",
                     "body": {
                         "role": "user",
-                        "content": "Here is a customer support thread. They are separated by commas. Can you provide a summary? Don't include technical details. {{loop_2.comma_separated}}"
+                        "content": "Here is a customer support thread. They are separated by commas. Can you provide a summary? Don't include technical details. {{loop.comma_separated}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "temperature",
-                    "body",
-                    "body.role",
-                    "body.content"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
@@ -146,19 +127,13 @@
                 "operation_id": "post-prompt",
                 "metadata": {
                     "api_endpoint": "post \/prompt",
-                    "temperature": "1",
                     "body": {
                         "role": "user",
                         "content": "Here is a customer support thread. They are separated by commas. Can you provide a title? Don't preface it with \"Title:\" {{loop.comma_separated}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "temperature",
-                    "body",
-                    "body.role",
-                    "body.content"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
             },
@@ -170,24 +145,19 @@
                 "action": "create",
                 "name": "Create Task",
                 "key": "asana",
-                "operation_id": "createTask",
+                "operation_id": "createTaskMesa",
                 "metadata": {
-                    "api_endpoint": "post \/tasks",
+                    "api_endpoint": "post \/mesa\/tasks",
                     "body": {
-                        "data": {
-                            "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
-                            "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
-                            "name": "{{ai_1.response}}",
-                            "notes": "Helpscout Summary: {{ai.response}}\nTicket #: {{helpscout.number}}\nCustomer email: {{helpscout.createdBy.email}}\nDate closed: {{helpscout.closedAt}}"
-                        }
+                        "workspace": "{{ template | label: 'What is the workspace?', description: '', tokens: false, placeholder: '' }}",
+                        "projects": "{{ template | label: 'What is the project?', description: '', tokens: false, placeholder: '' }}",
+                        "name": "{{ai_1.response}}",
+                        "notes": "Helpscout Summary: {{ai.response}}\nTicket #: {{helpscout.number}}\nCustomer email: {{helpscout.createdBy.email}}\nDate closed: {{helpscout.closedAt}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "body.data.workspace",
-                    "body.data.name",
-                    "body.data.notes",
-                    "body.data.projects"
+                    "body.notes"
                 ],
                 "on_error": "default",
                 "weight": 5
