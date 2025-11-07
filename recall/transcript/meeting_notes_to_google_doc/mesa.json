@@ -82,7 +82,7 @@
                 "metadata": {
                     "api_endpoint": "post /drive/v3/files",
                     "body": {
-                        "name": "{{ai_1.response}}",
+                        "name": "{{ai_2.response}}",
                         "text": "{{ai.response}}"
                     }
                 },
