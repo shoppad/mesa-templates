@@ -136,24 +136,6 @@
                 "weight": 1
             },
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "ask",
-                "entity": "ask",
-                "action": "skill",
-                "name": "Skill",
-                "key": "ask_1",
-                "operation_id": "post-ask-skill",
-                "metadata": {
-                    "api_endpoint": "post /ask/skill",
-                    "trigger_manager_key": "ask",
-                    "trigger_parent_key": "ask"
-                },
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
