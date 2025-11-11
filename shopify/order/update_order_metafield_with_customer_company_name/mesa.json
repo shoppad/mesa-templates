@@ -1,0 +1,86 @@
+{
+    "key": "shopify/order/update_order_metafield_with_customer_company_name",
+    "name": "Update Shopify Order Metafield with Customer Company Name",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify-plus",
+                "entity": "company_location",
+                "action": "retrieve",
+                "name": "Retrieve Company Location",
+                "key": "shopify_plus_1",
+                "operation_id": "retrieve_company_location",
+                "metadata": {
+                    "api_endpoint": "get \/company_location\/id",
+                    "body": {
+                        "id": "{{shopify.company.location_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "metafield_set",
+                "name": "Set Order Metafield",
+                "key": "shopify_2",
+                "operation_id": "put_mesa_orders_order_id_metafield",
+                "metadata": {
+                    "api_endpoint": "put mesa\/orders\/{{order_id}}\/metafield.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "namespace": "custom",
+                        "key": "company_location_name",
+                        "type": "single_line_text_field",
+                        "listType": "single_line_text_field",
+                        "value": "{{shopify_plus_1.name}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "order_id",
+                    "body",
+                    "body.namespace",
+                    "body.key",
+                    "body.type",
+                    "body.listType",
+                    "body.value"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
