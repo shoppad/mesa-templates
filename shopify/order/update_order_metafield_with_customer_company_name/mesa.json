@@ -62,7 +62,7 @@
                     "order_id": "{{shopify.id}}",
                     "body": {
                         "namespace": "custom",
-                        "key": "company_location_name",
+                        "key": "customer_company_name",
                         "type": "single_line_text_field",
                         "listType": "single_line_text_field",
                         "value": "{{shopify_plus_1.name}}"
