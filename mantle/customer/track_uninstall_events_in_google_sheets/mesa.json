@@ -71,15 +71,9 @@
                 "name": "Customer Uninstalled",
                 "key": "mantle",
                 "operation_id": "post_customers_uninstalled",
-                "metadata": {
-                    "path": {
-                        "appIds": "{{ template | label: 'What is the app?', description: '' }}"
-                    }
-                },
+                "metadata": [],
                 "local_fields": [],
-                "selected_fields": [
-                    "path.appIds"
-                ],
+                "selected_fields": ["path.appIds"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -96,7 +90,7 @@
                 "key": "googlesheets",
                 "operation_id": "record_create",
                 "metadata": {
-                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
                     "path": {
                         "spreadsheet_id": "",
                         "sheet": "Sheet1"
