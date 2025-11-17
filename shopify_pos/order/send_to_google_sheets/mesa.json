@@ -60,18 +60,18 @@
                         "description": "The total tax of the POS order."
                     },
                     {
-                        "label": "POS Fulfillment Title",
-                        "value": "POS Fulfillment Title|{{loop.title}}",
+                        "label": "POS Line Item Title",
+                        "value": "POS Line Item Title|{{loop.title}}",
                         "description": "The title of the product purchased in this line item."
                     },
                     {
-                        "label": "POS Fulfillment SKU",
-                        "value": "POS Fulfillment SKU|{{loop.sku}}",
+                        "label": "POS Line Item SKU",
+                        "value": "POS Line Item SKU|{{loop.sku}}",
                         "description": "The SKU of the product purchased in this line item."
                     },
                     {
-                        "label": "POS Fulfillment Price",
-                        "value": "POS Fulfillment Price|{{loop.price}}",
+                        "label": "POS Line Item Price",
+                        "value": "POS Line Item Price|{{loop.price}}",
                         "description": "The price of the product purchased in this line item."
                     },
                     {
