@@ -61,18 +61,18 @@
                     },
                     {
                         "label": "POS Fulfillment Title",
-                        "value": "POS Fulfillment Title|{{shopify_pos.fulfillment_title}}",
-                        "description": "The title of the fulfillment for the POS order."
+                        "value": "POS Fulfillment Title|{{loop.title}}",
+                        "description": "The title of the product purchased in this line item."
                     },
                     {
                         "label": "POS Fulfillment SKU",
-                        "value": "POS Fulfillment SKU|{{shopify_pos.fulfillment_sku}}",
-                        "description": "The SKU of the fulfillment for the POS order."
+                        "value": "POS Fulfillment SKU|{{loop.sku}}",
+                        "description": "The SKU of the product purchased in this line item."
                     },
                     {
                         "label": "POS Fulfillment Price",
-                        "value": "POS Fulfillment Price|{{shopify_pos.fulfillment_price}}",
-                        "description": "The price of the fulfillment for the POS order."
+                        "value": "POS Fulfillment Price|{{loop.price}}",
+                        "description": "The price of the product purchased in this line item."
                     },
                     {
                         "label": "POS Payment Gateway",
