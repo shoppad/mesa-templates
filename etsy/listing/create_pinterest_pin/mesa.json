@@ -49,9 +49,56 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.listing_id"
+                ],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Shorten Etsy Title for Pinterest Requirements",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Shorten the Etsy listing title to under 100 characters while preserving its original meaning and key terms: {{etsy.title}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Shorten Etsy Description for Pinterest Requirements",
+                "version": "v2",
+                "key": "ai_1",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Shorten the Etsy listing description to under 500 characters while preserving its original meaning and key terms: {{etsy.description}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -65,8 +112,9 @@
                 "metadata": {
                     "api_endpoint": "post \/pins",
                     "body": {
-                        "title": "{{etsy.title}}",
-                        "description": "{{etsy.description}}",
+                        "link": "{{etsy.url}}",
+                        "title": "{{ai.response}}",
+                        "description": "{{ai_1.response}}",
                         "board_id": "{{ template | label: 'Which board should the pin be created on?', tokens: false }}",
                         "media_source": {
                             "source_type": "image_url",
@@ -79,10 +127,11 @@
                 "selected_fields": [
                     "body.media_source.is_standard",
                     "body.title",
-                    "body.description"
+                    "body.description",
+                    "body.link"
                 ],
                 "on_error": "default",
-                "weight": 1
+                "weight": 3
             }
         ]
     }
