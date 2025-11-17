@@ -1,0 +1,202 @@
+{
+    "key": "shopify_pos/order/send_to_google_sheets",
+    "name": "Send Shopify POS Orders to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every line item in the POS order. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "POS Order Created At",
+                        "value": "POS Order Created At|{{shopify_pos.created_at}}",
+                        "description": "The date and time the POS order was created."
+                    },
+                    {
+                        "label": "POS Location ID",
+                        "value": "POS Location ID|{{shopify_pos.location_id}}",
+                        "description": "The ID of the POS location."
+                    },
+                    {
+                        "label": "POS Order Status URL",
+                        "value": "POS Order Status URL|https://admin.shopify.com/store/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify_pos.id}}",
+                        "description": "The URL to the POS order status in the Shopify admin."
+                    },
+                    {
+                        "label": "POS Order Name",
+                        "value": "POS Order Name|{{shopify_pos.name}}",
+                        "description": "The human-readable label for the POS order (example: #1001)."
+                    },
+                    {
+                        "label": "POS Order Created Email",
+                        "value": "POS Order Created Email|{{shopify_pos.email}}",
+                        "description": "The email address of the customer that placed the POS order."
+                    },
+                    {
+                        "label": "POS Current Subtotal Price",
+                        "value": "POS Current Subtotal Price|{{shopify_pos.current_subtotal_price}}",
+                        "description": "The subtotal price of the POS order."
+                    },
+                    {
+                        "label": "POS Current Total Discounts",
+                        "value": "POS Current Total Discounts|{{shopify_pos.current_total_discounts}}",
+                        "description": "The total discounts of the POS order."
+                    },
+                    {
+                        "label": "POS Current Total Tax",
+                        "value": "POS Current Total Tax|{{shopify_pos.current_total_tax}}",
+                        "description": "The total tax of the POS order."
+                    },
+                    {
+                        "label": "POS Fulfillment Title",
+                        "value": "POS Fulfillment Title|{{shopify_pos.fulfillment_title}}",
+                        "description": "The title of the fulfillment for the POS order."
+                    },
+                    {
+                        "label": "POS Fulfillment SKU",
+                        "value": "POS Fulfillment SKU|{{shopify_pos.fulfillment_sku}}",
+                        "description": "The SKU of the fulfillment for the POS order."
+                    },
+                    {
+                        "label": "POS Fulfillment Price",
+                        "value": "POS Fulfillment Price|{{shopify_pos.fulfillment_price}}",
+                        "description": "The price of the fulfillment for the POS order."
+                    },
+                    {
+                        "label": "POS Payment Gateway",
+                        "value": "POS Payment Gateway|{{shopify_pos.payment_gateway_names.0}}",
+                        "description": "The payment gateway used for the POS order."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "shopify-pos",
+                "entity": "order",
+                "action": "created",
+                "name": "POS Order Created",
+                "key": "shopify_pos",
+                "operation_id": "order_created",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify_pos.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.2,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "columns": [],
+                    "body": {
+                        "columns": {}
+                    },
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.spreadsheet_id",
+                    "path.sheet",
+                    "columns"
+                ],
+                "on_error": "replay",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
