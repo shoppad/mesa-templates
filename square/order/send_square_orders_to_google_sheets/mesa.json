@@ -61,7 +61,7 @@
                     },
                     {
                         "label": "Net Total",
-                        "value": "Net Total|{{square_1.order.net_amounts.total_money.amount}}",
+                        "value": "Net Total|{{square_1.order.net_amounts.total_money.amount | divided_by: 100}}",
                         "description": "The net total of the order."
                     }
                 ],
