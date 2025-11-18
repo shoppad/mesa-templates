@@ -1,5 +1,5 @@
 {
-    "key": "send_square_orders_to_google_sheets",
+    "key": "square/order/send_square_orders_to_google_sheets",
     "name": "Send Square Orders to Google Sheets",
     "version": "1.0.0",
     "enabled": false,
