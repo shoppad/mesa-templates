@@ -1,0 +1,190 @@
+{
+    "key": "square/order/send_square_orders_to_google_sheets",
+    "name": "Send Square Orders to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every line item in the order. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Created At",
+                        "value": "Created At|{{square.created_at}}",
+                        "description": "The date and time the order was created."
+                    },
+                    {
+                        "label": "Location ID",
+                        "value": "Location ID|{{square.location_id}}",
+                        "description": "The ID of the location where the order was created."
+                    },
+                    {
+                        "label": "Line Item Quantity",
+                        "value": "Line Item Quantity|{{loop.quantity}}",
+                        "description": "The quantity of the line item purchased in this order."
+                    },
+                    {
+                        "label": "Line Item Name",
+                        "value": "Line Item Name|{{loop.name}}",
+                        "description": "The name of the line item purchased in this order."
+                    },
+                    {
+                        "label": "Line Item Base Price",
+                        "value": "Line Item Base Price|{{loop.base_price_money.amount}}",
+                        "description": "The base price of the line item purchased in this order."
+                    },
+                    {
+                        "label": "Line Item Tax",
+                        "value": "Line Item Tax|{{loop.total_tax_money.amount}}",
+                        "description": "The tax of the line item purchased in this order."
+                    },
+                    {
+                        "label": "Line Item Discount",
+                        "value": "Line Item Discount|{{loop.total_discount_money.amount}}",
+                        "description": "The discount of the line item purchased in this order."
+                    },
+                    {
+                        "label": "Line Item Total",
+                        "value": "Line Item Total|{{loop.total_money.amount}}",
+                        "description": "The total price of the line item purchased in this order."
+                    },
+                    {
+                        "label": "Net Total",
+                        "value": "Net Total|{{square_1.order.net_amounts.total_money.amount}}",
+                        "description": "The net total of the order."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "square",
+                "entity": "order",
+                "action": "list-created",
+                "name": "Order Created",
+                "version": "v2",
+                "key": "square",
+                "operation_id": "order_created",
+                "metadata": {
+                    "api_endpoint": "get /orders",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "square",
+                "entity": "v2_order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "version": "v2",
+                "key": "square_1",
+                "operation_id": "RetrieveOrder",
+                "metadata": {
+                    "api_endpoint": "get /v2/orders/{order_id}",
+                    "path": {
+                        "order_id": "{{square.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{square.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.2,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "columns": [],
+                    "body": {
+                        "columns": {}
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
