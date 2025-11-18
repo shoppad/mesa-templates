@@ -15,11 +15,7 @@
                 "name": "Customer Subscribed",
                 "key": "mantle",
                 "operation_id": "post_customers_subscribed",
-                "metadata": {
-                    "path": {
-                        "appIds": "{{ template | label: 'What is the app?', description: '' }}"
-                    }
-                },
+                "metadata": [],
                 "local_fields": [],
                 "selected_fields": [
                     "path.appIds"
