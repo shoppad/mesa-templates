@@ -83,9 +83,10 @@
                         "product_id": "{{ template | label: 'What product should be added as the free gift?', description: 'Select a product from the dropdown or enter a Product ID.' }}",
                         "variant_id": "{{ template | label: 'Which product variant of the free gift should be added?', description: 'Choose the specific variant (size, color, pack, etc.) from the dropdown or enter the Variant ID.' }}",
                         "quantity": "1",
-                        "discount_type": "No Discount",
+                        "discount_type": "Percentage",
+                        "discount_amount": "100",
                         "allow_duplicates": true,
-                        "notify_customer": true
+                        "notify_customer": "false"
                     }
                 },
                 "local_fields": [],
