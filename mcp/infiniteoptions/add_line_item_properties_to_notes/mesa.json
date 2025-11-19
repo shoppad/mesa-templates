@@ -1,0 +1,87 @@
+{
+  "key": "mcp/infiniteoptions/add_line_item_properties_to_notes",
+  "name": "Add Infinite Options to Shopify Order Notes",
+  "version": "2.0.0",
+  "description": "Add product options to the order notes field in Shopify. This Yedric skill copies customizations or selections directly into order notes, ensuring third-party services and team members can quickly access important details. Streamline order tracking and fulfillment by consolidating essential information in one central location.",
+  "seconds": 180,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "skill",
+        "entity": "skill",
+        "action": "skill",
+        "name": "Skill",
+        "key": "skill",
+        "operation_id": "post-skill",
+        "metadata": {
+          "api_endpoint": "post /skill",
+          "body": {
+            "parameters": [
+              {
+                "key": "order_id",
+                "description": "The ID of the order. This is different from the <code>order_number</code> property, which is the ID          used by the shop owner and customer.",
+                "type": "string",
+                "required": true
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "body.parameters[].key",
+          "body.parameters[].description",
+          "body.parameters[].type",
+          "body.parameters[].required"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3.1,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "retrieve",
+        "name": "Retrieve Order",
+        "key": "shopify",
+        "operation_id": "get_orders_order_id",
+        "metadata": {
+          "api_endpoint": "get admin/orders/{{order_id}}.json",
+          "order_id": "{{skill.order_id}}"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "order",
+        "action": "note_update",
+        "name": "Order Note Update",
+        "key": "shopify_1",
+        "operation_id": "put_mesa_orders_order_id_note",
+        "metadata": {
+          "api_endpoint": "put mesa/orders/{{order_id}}/note.json",
+          "body": {
+            "note": "{% for line_item in shopify.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}",
+            "append": true
+          },
+          "order_id": "{{shopify.id}}"
+        },
+        "local_fields": [],
+        "selected_fields": ["order_id", "body", "body.note", "body.append"],
+        "on_error": "default",
+        "weight": 1
+      }
+    ]
+  }
+}

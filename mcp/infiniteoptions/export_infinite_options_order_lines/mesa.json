@@ -1,0 +1,186 @@
+{
+  "key": "mcp/infiniteoptions/export_infinite_options_order_lines",
+  "name": "Export Infinite Options Order Lines",
+  "version": "1.0.0",
+  "description": "Searches Shopify for Order line items that match a user's \"Infinite options\" fields properties (line item properties), and creates a digestible output for each order line and its properties.",
+  "seconds": 135,
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "skill",
+        "entity": "skill",
+        "action": "skill",
+        "name": "Skill",
+        "key": "skill",
+        "operation_id": "post-skill",
+        "metadata": {
+          "api_endpoint": "post /skill",
+          "body": {
+            "parameters": [
+              {
+                "key": "infiniteoptions_field",
+                "description": "Single Infinite Options field from the `_Get_Fields` tool call.  If none provided will default to all (all_infinite_options_options).",
+                "type": "string",
+                "required": false
+              },
+              {
+                "key": "created_at_min",
+                "description": "Show orders created at or after date.",
+                "type": "string",
+                "required": false
+              },
+              {
+                "key": "created_at_max",
+                "description": "Show orders created at or before date.",
+                "type": "string",
+                "required": false
+              },
+              {
+                "key": "status",
+                "description": "Filter orders by their status.  Defaults to \"Any\"",
+                "type": "string",
+                "required": false
+              }
+            ]
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "body.parameters[].key",
+          "body.parameters[].description",
+          "body.parameters[].type",
+          "body.parameters[].required"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 3.1,
+        "trigger_type": "output",
+        "type": "shopify",
+        "entity": "shop",
+        "action": "list",
+        "name": "Retrieve Shop",
+        "key": "shopify",
+        "operation_id": "get_shop",
+        "metadata": {
+          "api_endpoint": "get admin/shop.json"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4.1,
+        "trigger_type": "output",
+        "type": "infiniteoptions",
+        "entity": "order",
+        "action": "list",
+        "name": "Order List",
+        "key": "infiniteoptions",
+        "operation_id": "get_infiniteoptions_orders",
+        "metadata": {
+          "api_endpoint": "get infiniteoptions/orders.json",
+          "field_name": "{{skill.infiniteoptions_field | default: 'all_infinite_options_options' }}",
+          "query": {
+            "status": "{{skill.status | default: 'any'}}",
+            "created_at_min": "{{skill.created_at_min | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
+            "created_at_max": "{{skill.created_at_max | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [
+          "query.status",
+          "query.created_at_min",
+          "query.created_at_max"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 3,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Map order lines with matching properties",
+        "key": "transform",
+        "operation_id": "mapping",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "_Note about the following:",
+              "source": "The following fields will be run for each order + line item that matches a property from the skill param. Any field in the form {{infiniteoptions.0.line_items[0].title}} can be accessed for each matching order + line"
+            },
+            {
+              "destination": "Order URL",
+              "source": "https://admin.shopify.com/store/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{infiniteoptions.0.order.id}}"
+            },
+            {
+              "destination": "Order Name",
+              "source": "{{infiniteoptions.0.order.name}}"
+            },
+            {
+              "destination": "Email",
+              "source": "{{infiniteoptions.0.order.email}}"
+            },
+            {
+              "destination": "Shipping Name",
+              "source": "{{infiniteoptions.0.order.shipping_address.first_name}} {{infiniteoptions.0.order.last_name}}"
+            },
+            {
+              "destination": "Address",
+              "source": "{{infiniteoptions.0.order.shipping_address.address1}}"
+            },
+            {
+              "destination": "City",
+              "source": "{{infiniteoptions.0.order.shipping_address.city}}"
+            },
+            {
+              "destination": "Province",
+              "source": "{{infiniteoptions.0.order.shipping_address.province}}"
+            },
+            {
+              "destination": "Zip",
+              "source": "{{infiniteoptions.0.order.shipping_address.zip}}"
+            },
+            {
+              "destination": "Country",
+              "source": "{{infiniteoptions.0.order.shipping_address.country}}"
+            },
+            {
+              "destination": "Product Name",
+              "source": "{{infiniteoptions.0.line_items[0].title}}"
+            },
+            {
+              "destination": "Product SKU",
+              "source": "{{infiniteoptions.0.line_items[0].sku}}"
+            },
+            {
+              "destination": "Product Price",
+              "source": "{{infiniteoptions.0.line_items[0].price}}"
+            }
+          ],
+          "script": "transform.js"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "required"
+          }
+        ],
+        "selected_fields": ["script"],
+        "on_error": "default",
+        "weight": 2
+      }
+    ]
+  }
+}
