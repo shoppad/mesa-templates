@@ -1,0 +1,98 @@
+{
+    "key": "shopify/order/add_free_gift_tagged_customers",
+    "name": "Add Free Gift to Tagged Customer Order in Shopify",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify_1.tags}}",
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "b": "{{ template | label: 'Which customer tag should MESA look for when deciding to add the free gift?', description: 'Example: VIP, Loyalty Member, Gold Tier', tokens: false }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "line_item_add",
+                "name": "Add Line Item to Order",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_orders_order_id_add-line-item",
+                "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/add-line-item.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "product_id": "{{ template | label: 'What product should be added as the free gift?', description: 'Select a product from the dropdown or enter a Product ID.' }}",
+                        "variant_id": "{{ template | label: 'Which product variant of the free gift should be added?', description: 'Choose the specific variant (size, color, pack, etc.) from the dropdown or enter the Variant ID.' }}",
+                        "quantity": "1",
+                        "discount_type": "No Discount",
+                        "allow_duplicates": true,
+                        "notify_customer": true
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
