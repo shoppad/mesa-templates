@@ -1,0 +1,183 @@
+{
+    "key": "shopify/product/send_products_to_google_sheets",
+    "name": "Send Shopify Products to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every variant of a product. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Title",
+                        "value": "Title|{{shopify.title}}",
+                        "description": "The title of the product."
+                    },
+                    {
+                        "label": "ID",
+                        "value": "ID|{{shopify.id}}",
+                        "description": "The ID of the product."
+                    },
+                    {
+                        "label": "Description",
+                        "value": "Description|{{shopify.body_html | strip_html}}",
+                        "description": "The description of the product."
+                    },
+                    {
+                        "label": "Vendor",
+                        "value": "Vendor|{{shopify.vendor}}",
+                        "description": "The vendor of the product."
+                    },
+                    {
+                        "label": "Product Type",
+                        "value": "Product Type|{{shopify.product_type}}",
+                        "description": "The type of the product."
+                    },
+                    {
+                        "label": "Variant Title",
+                        "value": "Variant Title|{{loop.title}}",
+                        "description": "The title of the variant."
+                    },
+                    {
+                        "label": "Variant ID",
+                        "value": "Variant ID|{{loop.id}}",
+                        "description": "The ID of the variant."
+                    },
+                    {
+                        "label": "Variant Price",
+                        "value": "Variant Price|{{loop.price}}",
+                        "description": "The price of the variant."
+                    },
+                    {
+                        "label": "Variant SKU",
+                        "value": "Variant SKU|{{loop.sku}}",
+                        "description": "The SKU of the variant."
+                    },
+                    {
+                        "label": "Variant Inventory Quantity",
+                        "value": "Variant Inventory Quantity|{{loop.inventory_quantity}}",
+                        "description": "The inventory quantity of the variant."
+                    },
+                    {
+                        "label": "Created At",
+                        "value": "Created At|{{shopify.created_at}}",
+                        "description": "The date and time the product was created."
+                    },
+                    {
+                        "label": "Updated At",
+                        "value": "Updated At|{{shopify.updated_at}}",
+                        "description": "The date and time the product was last updated."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Variants",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.variants[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.2,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "columns": [],
+                    "body": {
+                        "columns": {}
+                    },
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
