@@ -29,13 +29,13 @@
               },
               {
                 "key": "created_at_min",
-                "description": "Show orders created at or after date.",
+                "description": "Show orders created at or after date. Format: YYYY-MM-DDTHH:mm:ssZ in the user's timezone.",
                 "type": "string",
                 "required": true
               },
               {
                 "key": "created_at_max",
-                "description": "Show orders created at or before date.",
+                "description": "Show orders created at or before date. Format: YYYY-MM-DDTHH:mm:ssZ in the user's timezone.",
                 "type": "string",
                 "required": true
               },
