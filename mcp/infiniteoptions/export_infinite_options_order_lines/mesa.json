@@ -25,19 +25,19 @@
                 "key": "infiniteoptions_field",
                 "description": "Single Infinite Options field from the `_Get_Fields` tool call.  If none provided will default to all (all_infinite_options_options).",
                 "type": "string",
-                "required": false
+                "required": true
               },
               {
                 "key": "created_at_min",
                 "description": "Show orders created at or after date.",
                 "type": "string",
-                "required": false
+                "required": true
               },
               {
                 "key": "created_at_max",
                 "description": "Show orders created at or before date.",
                 "type": "string",
-                "required": false
+                "required": true
               },
               {
                 "key": "status",
