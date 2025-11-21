@@ -31,12 +31,7 @@
           }
         },
         "local_fields": [],
-        "selected_fields": [
-          "body.parameters[].key",
-          "body.parameters[].description",
-          "body.parameters[].type",
-          "body.parameters[].required"
-        ],
+        "selected_fields": [],
         "on_error": "default",
         "weight": 0
       }

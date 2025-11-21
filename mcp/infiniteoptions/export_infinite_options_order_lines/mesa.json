@@ -23,7 +23,7 @@
             "parameters": [
               {
                 "key": "infiniteoptions_field",
-                "description": "Single Infinite Options field from the `_Get_Fields` tool call.  If none provided will default to all (all_infinite_options_options).",
+                "description": "Single Infinite Options field from the `_Get_Fields` tool call.  Use `all_infinite_options_options` to get all fields.",
                 "type": "string",
                 "required": true
               },
@@ -49,12 +49,7 @@
           }
         },
         "local_fields": [],
-        "selected_fields": [
-          "body.parameters[].key",
-          "body.parameters[].description",
-          "body.parameters[].type",
-          "body.parameters[].required"
-        ],
+        "selected_fields": [],
         "on_error": "default",
         "weight": 0
       }
