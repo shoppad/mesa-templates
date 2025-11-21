@@ -1,6 +1,6 @@
 {
   "key": "mcp/infiniteoptions/add_line_item_properties_to_notes",
-  "name": "Add Infinite Options to Shopify Order Notes",
+  "name": "Add Line Item Properties from Infinite Options to Shopify Order Notes",
   "version": "2.0.0",
   "description": "Add product options to the order notes field in Shopify. This Yedric skill copies customizations or selections directly into order notes, ensuring third-party services and team members can quickly access important details. Streamline order tracking and fulfillment by consolidating essential information in one central location.",
   "seconds": 180,
@@ -31,12 +31,7 @@
           }
         },
         "local_fields": [],
-        "selected_fields": [
-          "body.parameters[].key",
-          "body.parameters[].description",
-          "body.parameters[].type",
-          "body.parameters[].required"
-        ],
+        "selected_fields": [],
         "on_error": "default",
         "weight": 0
       }

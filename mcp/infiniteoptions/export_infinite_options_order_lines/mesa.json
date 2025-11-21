@@ -1,6 +1,6 @@
 {
   "key": "mcp/infiniteoptions/export_infinite_options_order_lines",
-  "name": "Export Infinite Options Order Lines",
+  "name": "Retrieve Shopify Order Line Items with Infinite Options Properties",
   "version": "1.0.0",
   "description": "Searches Shopify for Order line items that match a user's \"Infinite options\" fields properties (line item properties), and creates a digestible output for each order line and its properties.",
   "seconds": 135,
@@ -23,21 +23,21 @@
             "parameters": [
               {
                 "key": "infiniteoptions_field",
-                "description": "Single Infinite Options field from the `_Get_Fields` tool call.  If none provided will default to all (all_infinite_options_options).",
+                "description": "Single Infinite Options field from the `_Get_Fields` tool call.  Use `all_infinite_options_options` to get all fields.",
                 "type": "string",
-                "required": false
+                "required": true
               },
               {
                 "key": "created_at_min",
                 "description": "Show orders created at or after date.",
                 "type": "string",
-                "required": false
+                "required": true
               },
               {
                 "key": "created_at_max",
                 "description": "Show orders created at or before date.",
                 "type": "string",
-                "required": false
+                "required": true
               },
               {
                 "key": "status",
@@ -49,12 +49,7 @@
           }
         },
         "local_fields": [],
-        "selected_fields": [
-          "body.parameters[].key",
-          "body.parameters[].description",
-          "body.parameters[].type",
-          "body.parameters[].required"
-        ],
+        "selected_fields": [],
         "on_error": "default",
         "weight": 0
       }
