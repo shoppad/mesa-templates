@@ -37,29 +37,28 @@ module.exports = new (class {
     }
 
     // Process our hits
-    context.steps.infiniteoptions.forEach((order) => {
-      order.line_items.forEach((line) => {
-        // Construct a local context where this order and this line are the only present ones
-        const localContext = {
-          ...context,
-          steps: {
-            ...context.steps,
-            infiniteoptions: [
-              {
-                ...order,
-                line_items: [line],
-              },
-            ],
-          },
+    context.steps.infiniteoptions.forEach(({ order, line_items }) => {
+      line_items.forEach((line) => {
+        const address = order.shipping_address || order.billing_address || {};
+        const lineValues = {
+          'Order URL': `https://admin.shopify.com/store/${context.steps.shopify.myshopify_domain.replace(
+            '.myshopify.com',
+            ''
+          )}/orders/${order.id}`,
+          'Order Name': order.name,
+          Email: order.email,
+          'Shipping Name': `${address.first_name || ''} ${
+            address.last_name || ''
+          }`,
+          Address: address.address1 || '',
+          City: address.city || '',
+          Province: address.province || '',
+          Zip: address.zip || '',
+          Country: address.country || '',
+          'Product Name': line.title,
+          'Product SKU': line.sku,
+          'Product Price': line.price,
         };
-        const lineValues = Transform.convert(localContext, payload);
-
-        // Drop the keys prefaced with '_' (notes)
-        Object.keys(lineValues).forEach((key) => {
-          if (key.match(/^_/)) {
-            delete lineValues[key];
-          }
-        });
 
         // Build a map of property values
         const propValues = line.properties.reduce(
