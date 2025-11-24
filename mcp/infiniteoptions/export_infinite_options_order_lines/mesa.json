@@ -110,56 +110,52 @@
         "metadata": {
           "mapping": [
             {
-              "destination": "_Note about the following:",
-              "source": "The following fields will be run for each order + line item that matches a property from the skill param. Any field in the form {{infiniteoptions.0.line_items[0].title}} can be accessed for each matching order + line"
-            },
-            {
               "destination": "Order URL",
-              "source": "https://admin.shopify.com/store/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{infiniteoptions.0.order.id}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Order Name",
-              "source": "{{infiniteoptions.0.order.name}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Email",
-              "source": "{{infiniteoptions.0.order.email}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Shipping Name",
-              "source": "{{infiniteoptions.0.order.shipping_address.first_name}} {{infiniteoptions.0.order.last_name}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Address",
-              "source": "{{infiniteoptions.0.order.shipping_address.address1}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "City",
-              "source": "{{infiniteoptions.0.order.shipping_address.city}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Province",
-              "source": "{{infiniteoptions.0.order.shipping_address.province}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Zip",
-              "source": "{{infiniteoptions.0.order.shipping_address.zip}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Country",
-              "source": "{{infiniteoptions.0.order.shipping_address.country}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Product Name",
-              "source": "{{infiniteoptions.0.line_items[0].title}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Product SKU",
-              "source": "{{infiniteoptions.0.line_items[0].sku}}"
+              "source": "{{SEE_CODE}}"
             },
             {
               "destination": "Product Price",
-              "source": "{{infiniteoptions.0.line_items[0].price}}"
+              "source": "{{SEE_CODE}}"
             }
           ],
           "script": "transform.js"
