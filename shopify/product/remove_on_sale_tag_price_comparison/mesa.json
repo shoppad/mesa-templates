@@ -1,0 +1,121 @@
+{
+    "key": "shopify/product/remove_on_sale_tag_price_comparison",
+    "name": "Remove \"On Sale\" Product Tag When Compare-at Price Equals Regular Price",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "key": "shopify",
+                "operation_id": "products_update",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "list",
+                "name": "Get List of Product Variants",
+                "key": "shopify_1",
+                "operation_id": "get_products_product_id_variants",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}/variants.json",
+                    "product_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": ["product_id", "query"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop Over Variants",
+                "version": "v1",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{ shopify_1 }}"
+                },
+                "local_fields": [],
+                "selected_fields": ["key"],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "comparison": "is empty",
+                    "a": "{{ loop.compare_at_price }}",
+                    "additional": [
+                        {
+                            "operator": "or",
+                            "a": "{{loop.compare_at_price}}",
+                            "comparison": "less than equal",
+                            "b": "{{loop.price}}"
+                        }
+                    ],
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_remove",
+                "name": "Product Remove Tag",
+                "key": "shopify_3",
+                "operation_id": "delete_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "delete mesa/products/{{product_id}}/tag.json",
+                    "product_id": "{{shopify.id}}",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag does your store use to mark products as \"on sale\"?', description: 'MESA will remove this tag when the product isn''t actually discounted.', default: 'On Sale' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
