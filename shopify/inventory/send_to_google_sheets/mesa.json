@@ -1,0 +1,208 @@
+{
+    "key": "shopify/inventory/send_to_google_sheets",
+    "name": "Send Shopify Product Inventory to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "inventory_level",
+                "action": "updated",
+                "name": "Inventory Level Updated",
+                "key": "shopify",
+                "operation_id": "inventory_levels_update",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.2,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "query",
+                "name": "Query Rows",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_query",
+                "metadata": {
+                    "api_endpoint": "get /{spreadsheet_id}/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "{{ template | label: 'Which Google Sheet should MESA use to look up your product data?', description: 'For easiest setup, we recommend first running the \"**Send Shopify Products to Google Sheets**\" template and then selecting the same spreadsheet here. MESA will use this sheet to look up each product''s Variant ID.' }}",
+                        "sheet": "Sheet1",
+                        "query_type": "where",
+                        "comparison": "=",
+                        "b": "{{shopify.variant.id}}",
+                        "a": "G"
+                    },
+                    "columns": [
+                        "Title",
+                        "ID",
+                        "Description",
+                        "Vendor",
+                        "Product Type",
+                        "Variant Title",
+                        "Variant ID",
+                        "Variant Price",
+                        "Variant SKU",
+                        "Variant Inventory Quantity",
+                        "Created At",
+                        "Updated At",
+                        "Row"
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 0
+            },
+            {
+                "schema": 4.2,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "update",
+                "name": "Update Row",
+                "version": "v2",
+                "key": "googlesheets_2",
+                "operation_id": "record_update",
+                "metadata": {
+                    "api_endpoint": "put /{spreadsheet_id}/{sheet}/{row}",
+                    "path": {
+                        "spreadsheet_id": "{{ template | label: 'Which Google Sheet should MESA update with the latest inventory levels?', description: 'We recommend selecting the same spreadsheet you used for product lookups to keep everything in one place.' }}",
+                        "sheet": "Sheet1",
+                        "row": "{{googlesheets.0.data.Row}}"
+                    },
+                    "columns": [
+                        "Title",
+                        "ID",
+                        "Description",
+                        "Vendor",
+                        "Product Type",
+                        "Variant Title",
+                        "Variant ID",
+                        "Variant Price",
+                        "Variant SKU",
+                        "Variant Inventory Quantity",
+                        "Created At",
+                        "Updated At",
+                        "Row"
+                    ],
+                    "body": {
+                        "columns": {
+                            "J": "{{shopify.variant.inventory_quantity}}"
+                        }
+                    }
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "columns",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "A",
+                                        "label": "Title",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "B",
+                                        "label": "ID",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "C",
+                                        "label": "Description",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "D",
+                                        "label": "Vendor",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "E",
+                                        "label": "Product Type",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "F",
+                                        "label": "Variant Title",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "G",
+                                        "label": "Variant ID",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "H",
+                                        "label": "Variant Price",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "I",
+                                        "label": "Variant SKU",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "J",
+                                        "label": "Variant Inventory Quantity",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "K",
+                                        "label": "Created At",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "L",
+                                        "label": "Updated At",
+                                        "type": "text",
+                                        "location": "required"
+                                    },
+                                    {
+                                        "key": "M",
+                                        "label": "Row",
+                                        "type": "text",
+                                        "location": "required"
+                                    }
+                                ],
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 1
+            }
+        ]
+    }
+}
