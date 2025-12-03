@@ -1,0 +1,307 @@
+{
+    "key": "mantle/customer/add_to_klaviyo_email_list",
+    "name": "Add New Mantle Customers to Klaviyo Email List",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "mantle",
+                "entity": "customer_installed",
+                "action": "installed",
+                "name": "Customer Installed",
+                "key": "mantle",
+                "operation_id": "post_customers_installed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{mantle.customer.email}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_profile",
+                "action": "retrieve",
+                "name": "Get List of List's Profiles",
+                "version": "v4",
+                "key": "klaviyo",
+                "operation_id": "get_profiles_for_list",
+                "metadata": {
+                    "api_endpoint": "get /api/lists/{id}/profiles",
+                    "query": {
+                        "filter": "all",
+                        "mesaFilterHiddenValues": "{\"email\":\"any, equals\",\"phone_number\":\"any, equals\",\"push_token\":\"any, equals\",\"_kx\":\"equals\",\"joined_group_at\":\"greater-or-equal, greater-than, less-or-equal, less-than\"}"
+                    },
+                    "path": {
+                        "id": "{{ template | label: 'What is the Klaviyo list you would like the customer to be subscribed to?', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "query",
+                    "query.filter",
+                    "query.mesaFilterHiddenValues"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "count",
+                "name": "Number of matches",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
+                "metadata": {
+                    "key": "{{klaviyo.data[]}}",
+                    "filter": {
+                        "a": "{{klaviyo.data[].attributes.email}}",
+                        "comparison": "equals",
+                        "b": "{{mantle[\"application/json\"].email}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - Has Existing Klaviyo Profile",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{loop.count}}",
+                    "comparison": "equals",
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "b", "additional"],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_relationship_profile",
+                "action": "create",
+                "name": "Add Profile to List",
+                "version": "v4",
+                "key": "klaviyo_1",
+                "operation_id": "add_profiles_to_list",
+                "metadata": {
+                    "api_endpoint": "post /api/lists/{id}/relationships/profiles",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "data": [
+                            {
+                                "type": "profile",
+                                "mesa_profile_field": "{{mantle.customer.email}}"
+                            }
+                        ]
+                    },
+                    "path": {
+                        "id": "{{ template | label: 'Select the same Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "body",
+                    "body.data",
+                    "body.data[].type",
+                    "body.data[].mesa_profile_field"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - No Existing Klaviyo Profile",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{loop.count}}",
+                    "comparison": "equals",
+                    "b": "0",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "profile",
+                "action": "create",
+                "name": "Create Profile",
+                "version": "v4",
+                "key": "klaviyo_2",
+                "operation_id": "create_profile",
+                "metadata": {
+                    "api_endpoint": "post /api/profiles",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "data": {
+                            "type": "profile",
+                            "attributes": {
+                                "email": "{{mantle.customer.email}}",
+                                "organization": "{{mantle.customer.name}}"
+                            }
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.data",
+                    "body.data.type",
+                    "body.data.attributes",
+                    "body.data.attributes.email",
+                    "body.data.attributes.first_name",
+                    "body.data.attributes.last_name"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_relationship_profile",
+                "action": "create",
+                "name": "Add Profile to List",
+                "version": "v4",
+                "key": "klaviyo_3",
+                "operation_id": "add_profiles_to_list",
+                "metadata": {
+                    "api_endpoint": "post /api/lists/{id}/relationships/profiles",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "data": [
+                            {
+                                "type": "profile",
+                                "mesa_profile_field": "{{mantle.customer.email}}"
+                            }
+                        ]
+                    },
+                    "path": {
+                        "id": "{{ template | label: 'Re-select the same Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "body",
+                    "body.data",
+                    "body.data[].type",
+                    "body.data[].mesa_profile_field"
+                ],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
