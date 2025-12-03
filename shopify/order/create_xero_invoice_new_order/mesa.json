@@ -1,0 +1,321 @@
+{
+    "key": "shopify/order/create_xero_invoice_new_order",
+    "name": "Create Xero Invoices for New Shopify Orders",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin\/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "contact",
+                "action": "list",
+                "name": "Get List of Contacts",
+                "key": "xero",
+                "operation_id": "getContacts",
+                "metadata": {
+                    "api_endpoint": "get \/api.xro\/2.0\/Contacts",
+                    "query": {
+                        "where": "EmailAddress==\"{{shopify.email}}\""
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.where"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "account",
+                "action": "list",
+                "name": "Get List of Accounts",
+                "key": "xero_1",
+                "operation_id": "getAccounts",
+                "metadata": {
+                    "api_endpoint": "get \/api.xro\/2.0\/Accounts"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Shopify Customer Exists in Xero",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{xero.0.EmailAddress}}",
+                    "comparison": "equals",
+                    "b": "{{shopify.email}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "invoice",
+                "action": "create",
+                "name": "Create Invoice",
+                "key": "xero_2",
+                "operation_id": "createInvoices",
+                "metadata": {
+                    "api_endpoint": "put \/api.xro\/2.0\/Invoices",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "Invoices": [
+                            {
+                                "Type": "ACCREC",
+                                "Date": "{{shopify.created_at | date: \"%Y-%m-%d\"}}",
+                                "Reference": "{{shopify.name}}",
+                                "Url": "https:\/\/admin.shopify.com\/store\/{{shopify_1.domain}}\/orders\/{{shopify.id}}",
+                                "HasErrors": "false",
+                                "LineItems": [
+                                    {
+                                        "AccountID": "{{xero_1.0.AccountID}}",
+                                        "Description": "{{shopify.line_items[].name}}",
+                                        "Quantity": "{{shopify.line_items[].quantity}}",
+                                        "UnitAmount": "{{shopify.line_items[].price}}"
+                                    }
+                                ],
+                                "Contact": {
+                                    "ContactID": "{{xero.0.ContactID}}",
+                                    "Name": "{{shopify.billing_address.name}}"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Invoices[].Date",
+                    "body.Invoices[].Reference",
+                    "body.Invoices[].Url",
+                    "body.Invoices[].LineItems[].Description",
+                    "body.Invoices[].LineItems[].Quantity",
+                    "body.Invoices[].LineItems[].UnitAmount",
+                    "body.Invoices[].Contact.Name"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Shopify Customer Does Not Exist in Xero",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "does not equal",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{xero.0.EmailAddress}}",
+                    "b": "{{shopify.email}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "contact",
+                "action": "update-bulk",
+                "name": "Create or Update Contacts",
+                "key": "xero_3",
+                "operation_id": "updateOrCreateContacts",
+                "metadata": {
+                    "api_endpoint": "post \/api.xro\/2.0\/Contacts",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "Contacts": [
+                            {
+                                "Name": "{{shopify.billing_address.name}}",
+                                "EmailAddress": "{{shopify.email}}",
+                                "Addresses": [
+                                    {
+                                        "AddressLine1": "{{shopify.billing_address.address1}}",
+                                        "AddressLine2": "{{shopify.billing_address.address2}}",
+                                        "City": "{{shopify.billing_address.city}}",
+                                        "Region": "{{shopify.billing_address.province}}",
+                                        "PostalCode": "{{shopify.billing_address.zip}}",
+                                        "Country": "{{shopify.billing_address.country}}"
+                                    }
+                                ],
+                                "Phones": [
+                                    {
+                                        "PhoneNumber": "{{shopify.phone}}"
+                                    }
+                                ],
+                                "BrandingTheme": {
+                                    "Type": "INVOICE"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Contacts[].Name",
+                    "body.Contacts[].EmailAddress",
+                    "body.Contacts[].Addresses[].AddressLine1",
+                    "body.Contacts[].Addresses[].AddressLine2",
+                    "body.Contacts[].Addresses[].City",
+                    "body.Contacts[].Addresses[].Region",
+                    "body.Contacts[].Addresses[].PostalCode",
+                    "body.Contacts[].Addresses[].Country",
+                    "body.Contacts[].Phones[].PhoneNumber"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "invoice",
+                "action": "create",
+                "name": "Create Invoice",
+                "key": "xero_4",
+                "operation_id": "createInvoices",
+                "metadata": {
+                    "api_endpoint": "put \/api.xro\/2.0\/Invoices",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "Invoices": [
+                            {
+                                "Type": "ACCREC",
+                                "Date": "{{shopify.created_at | date: \"%Y-%m-%d\"}}",
+                                "Reference": "{{shopify.name}}",
+                                "Url": "https:\/\/admin.shopify.com\/store\/{{shopify_1.domain}}\/orders\/{{shopify.id}}",
+                                "HasErrors": "false",
+                                "LineItems": [
+                                    {
+                                        "Description": "{{shopify.line_items[].name}}",
+                                        "Quantity": "{{shopify.line_items[].quantity}}",
+                                        "UnitAmount": "{{shopify.line_items[].price}}"
+                                    }
+                                ],
+                                "Contact": {
+                                    "ContactID": "{{xero_3.0.ContactID}}",
+                                    "Name": "{{shopify.billing_address.name}}"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Invoices[].Date",
+                    "body.Invoices[].Reference",
+                    "body.Invoices[].Url",
+                    "body.Invoices[].LineItems[].Description",
+                    "body.Invoices[].LineItems[].Quantity",
+                    "body.Invoices[].LineItems[].UnitAmount",
+                    "body.Invoices[].Contact.Name"
+                ],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
