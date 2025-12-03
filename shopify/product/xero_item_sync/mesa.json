@@ -1,0 +1,112 @@
+{
+    "key": "shopify/product/xero_item_sync",
+    "name": "Create Xero Items from Shopify Products",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Variants",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.variants[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "xero",
+                "entity": "item",
+                "action": "create",
+                "name": "Create Item",
+                "key": "xero_1",
+                "operation_id": "createItems",
+                "metadata": {
+                    "api_endpoint": "put /api.xro/2.0/Items",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "Items": [
+                            {
+                                "Code": "{{loop.sku}}",
+                                "Name": "{{shopify.title}}",
+                                "Description": "{{shopify.body_html | strip_html}}",
+                                "QuantityOnHand": "{{loop.inventory_quantity}}",
+                                "SalesDetails": {
+                                    "UnitPrice": "{{loop.price}}"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.Items[].Name",
+                    "body.Items[].Description",
+                    "body.Items[].QuantityOnHand",
+                    "body.Items[].Code",
+                    "body.Items[].SalesDetails.UnitPrice"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
