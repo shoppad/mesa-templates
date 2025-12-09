@@ -1,0 +1,116 @@
+{
+    "key": "katana/order/delivered_gmail_notification",
+    "name": "Email Customers via Gmail When Katana Sales Orders are Delivered",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "katana",
+                "entity": "sales_order",
+                "action": "delivered",
+                "name": "Sales Order Delivered",
+                "key": "katana",
+                "operation_id": "sales_order_delivered",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "sales_order",
+                "action": "retrieve",
+                "name": "Retrieve Sales Order",
+                "key": "katana_2",
+                "operation_id": "getSalesOrder",
+                "metadata": {
+                    "api_endpoint": "get \/sales_orders\/{id}",
+                    "path": {
+                        "id": "{{katana.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "customer",
+                "action": "list",
+                "name": "Get List of Customers",
+                "key": "katana_1",
+                "operation_id": "getAllCustomers",
+                "metadata": {
+                    "api_endpoint": "get \/customers",
+                    "query": {
+                        "ids": "{{katana_2.customer_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.ids"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{katana.customer_id}}",
+                    "comparison": "equals",
+                    "b": "{{katana_1.0.id}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gmail",
+                "entity": "gmail_v1_user_message_send",
+                "action": "create",
+                "name": "Send Email",
+                "key": "gmail",
+                "operation_id": "gmail-users-messages-send",
+                "metadata": {
+                    "api_endpoint": "post \/gmail\/v1\/users\/{userId}\/messages\/send",
+                    "body": {
+                        "to": "{{katana_1.0.email}}",
+                        "subject": "Your order has been delivered!",
+                        "message": "Hi {{katana_2.addresses[0].first_name}},\n\nGood news \u2014 your order {{katana_2.order_no}} was delivered on {{katana_2.delivery_date}}.\n\nDelivered To:\n{{katana_2.shipping_address_id}}\n{{katana_2.addresses[0].city}}, {{katana_2.addresses[0].state}} {{katana_2.addresses[0].zip}}\n\nItems Delivered:\nID: {{katana_2.sales_order_rows[0].id}}\nQuantity:{{katana_2.sales_order_rows[0].quantity}}\nTotal Price: {{katana_2.sales_order_rows[0].total}}\n\n\nTracking Number: {{katana_2.tracking_number}}\n\nIf anything looks wrong or your package is missing, reply to this email or contact us.\n\nThanks for shopping with us!",
+                        "from": "{{ template | label: 'Please enter the Gmail address that should be used as the sender for these emails.', description: '' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
