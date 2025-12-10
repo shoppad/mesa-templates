@@ -33,13 +33,13 @@
                 "key": "katana_2",
                 "operation_id": "getSalesOrder",
                 "metadata": {
-                    "api_endpoint": "get \/sales_orders\/{id}",
+                    "api_endpoint": "get /sales_orders/{id}",
                     "path": {
                         "id": "{{katana.id}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["path", "path.id"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -53,40 +53,103 @@
                 "key": "katana_1",
                 "operation_id": "getAllCustomers",
                 "metadata": {
-                    "api_endpoint": "get \/customers",
+                    "api_endpoint": "get /customers",
                     "query": {
                         "ids": "{{katana_2.customer_id}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "query.ids"
-                ],
+                "selected_fields": ["query.ids"],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 4.1,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "operation_id": "filter",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Sales Order Rows",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "a": "{{katana.customer_id}}",
-                    "comparison": "equals",
-                    "b": "{{katana_1.0.id}}",
-                    "additional": [
-                        {
-                            "operator": "and",
-                            "comparison": "equals"
-                        }
-                    ]
+                    "key": "{{katana_2.sales_order_rows[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "variant",
+                "action": "retrieve",
+                "name": "Retrieve Variant",
+                "key": "katana_3",
+                "operation_id": "getVariant",
+                "metadata": {
+                    "api_endpoint": "get /variants/{id}",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "id": "{{loop.variant_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "katana",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "katana_4",
+                "operation_id": "getProduct",
+                "metadata": {
+                    "api_endpoint": "get /products/{id}",
+                    "trigger_parent_key": "loop",
+                    "path": {
+                        "id": "{{katana_3.product_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": "map",
+                    "map": "{{katana_4.name}}"
+                },
+                "local_fields": [],
+                "selected_fields": ["return", "map"],
+                "on_error": "default",
+                "weight": 5
             },
             {
                 "schema": 4,
@@ -98,18 +161,18 @@
                 "key": "gmail",
                 "operation_id": "gmail-users-messages-send",
                 "metadata": {
-                    "api_endpoint": "post \/gmail\/v1\/users\/{userId}\/messages\/send",
+                    "api_endpoint": "post /gmail/v1/users/{userId}/messages/send",
                     "body": {
                         "to": "{{katana_1.0.email}}",
-                        "subject": "Your order has been delivered!",
-                        "message": "Hi {{katana_2.addresses[0].first_name}},\n\nGood news \u2014 your order {{katana_2.order_no}} was delivered on {{katana_2.delivery_date}}.\n\nDelivered To:\n{{katana_2.shipping_address_id}}\n{{katana_2.addresses[0].city}}, {{katana_2.addresses[0].state}} {{katana_2.addresses[0].zip}}\n\nItems Delivered:\nID: {{katana_2.sales_order_rows[0].id}}\nQuantity:{{katana_2.sales_order_rows[0].quantity}}\nTotal Price: {{katana_2.sales_order_rows[0].total}}\n\n\nTracking Number: {{katana_2.tracking_number}}\n\nIf anything looks wrong or your package is missing, reply to this email or contact us.\n\nThanks for shopping with us!",
+                        "subject": "Your order {{katana_2.order_no}}has been delivered!",
+                        "message": "Hi {{katana_1.0.first_name}},\n<br><br>\nGreat news \u2014 your order {{katana_2.order_no}} was successfully delivered on {{katana.delivery_date | date: \"%B %e, %Y\"}}.\n\n<br><br>\n\n\ud83d\udce6 Delivery Details\n\nDelivered To:\n{{katana_1.0.first_name}} {{katana_1.0.last_name}},\n{{katana_1.0.addresses[0].line_1}}\n{{katana_1.0.addresses[0].line_2}}\n{{katana_1.0.addresses[0].city}}, {{katana_1.0.addresses[0].state}} {{katana_1.0.addresses[0].zip}}\n\n<br><br>\n\n\ud83d\udecd\ufe0f Items Delivered\nProduct: {% for item in loop_1.items %}\n{{ item }}\n{% endfor %}\n{% for row in katana_2.sales_order_rows %}\nQuantity: {{row.quantity}}\nPrice: {{row.price_per_unit | remove_last: \"00000000\"}}\n<br>\n{% endfor %}\n\n<br>\n\ud83d\ude9a Tracking\n\n{% if tracking_number %}\nTracking Number: {{katana_2.tracking_number}}\n{% else %}\nTracking information was not provided for this delivery.\n{% endif %}\n\n<br><br>\n\nIf anything looks incorrect or you didn\u2019t receive your package, just reply to this email and we\u2019ll help right away.\n\n<br><br>\n\nThanks again for shopping with us!",
                         "from": "{{ template | label: 'Please enter the Gmail address that should be used as the sender for these emails.', description: '' }}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 3
+                "weight": 7
             }
         ]
     }
