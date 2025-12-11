@@ -102,7 +102,7 @@
                         "first_name": "{{tally.answers.field_first_name.value}}",
                         "last_name": "{{tally.answers.field_last_name.value}}"
                     },
-                    "customer_id": "{{shopify.0}}"
+                    "customer_id": "{{shopify.0.id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
