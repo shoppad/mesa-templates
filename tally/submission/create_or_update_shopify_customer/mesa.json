@@ -1,0 +1,189 @@
+{
+    "key": "tally/submission/create_or_update_shopify_customer",
+    "name": "Create or Update Shopify Customer from New Tally Submissions",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "tally",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Submitted",
+                "key": "tally",
+                "operation_id": "form_response",
+                "metadata": {
+                    "path": {
+                        "form_id": "{{ template | label: 'Select your Tally form from the dropdown or enter the Form ID for MESA to monitor.', description: 'To find the Form ID, open your Tally form and check the URL — the ID is the code at the end. Example: https://tally.so/r/abc123XYZ → Form ID: abc123XYZ.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer_search",
+                "action": "list",
+                "name": "Search Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_search",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/search.json",
+                    "parameters": "email={{tally.answers.field_email.value}}&limit=1"
+                },
+                "local_fields": [],
+                "selected_fields": ["parameters"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule - Has Existing Customer",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "update",
+                "name": "Update Customer",
+                "key": "shopify_1",
+                "operation_id": "put_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "put admin/customers/{{customer_id}}.json",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "email": "{{tally.answers.field_email.value}}",
+                        "first_name": "{{tally.answers.field_first_name.value}}",
+                        "last_name": "{{tally.answers.field_last_name.value}}"
+                    },
+                    "customer_id": "{{shopify.0}}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.tags",
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule - No Existing Customer",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "shopify_2",
+                "operation_id": "post_customers",
+                "metadata": {
+                    "api_endpoint": "post admin/customers.json",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "email": "{{tally.answers.field_email.value}}",
+                        "first_name": "{{tally.answers.field_first_name.value}}",
+                        "last_name": "{{tally.answers.field_last_name.value}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.tags",
+                    "body.email",
+                    "body.first_name",
+                    "body.last_name"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
