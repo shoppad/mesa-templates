@@ -17,7 +17,7 @@
                 "operation_id": "form_response",
                 "metadata": {
                     "path": {
-                        "form_id": "{{ template | label: 'TODO.', description: '' }}"
+                        "form_id": "{{ template | label: 'Select your Tally form from the dropdown or enter the Form ID for MESA to monitor.', description: 'To find the Form ID, open your Tally form and check the URL — the ID is the code at the end. Example: https://tally.so/r/abc123XYZ → Form ID: abc123XYZ.' }}"
                     }
                 },
                 "local_fields": [],
