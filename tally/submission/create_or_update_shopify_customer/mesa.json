@@ -3,7 +3,7 @@
     "name": "Create or Update Shopify Customer from New Tally Submissions",
     "version": "1.0.0",
     "enabled": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
@@ -15,13 +15,9 @@
                 "name": "Form Submitted",
                 "key": "tally",
                 "operation_id": "form_response",
-                "metadata": {
-                    "path": {
-                        "form_id": "{{ template | label: 'Select your Tally form from the dropdown or enter the Form ID for MESA to monitor.', description: 'To find the Form ID, open your Tally form and check the URL — the ID is the code at the end. Example: https://tally.so/r/abc123XYZ → Form ID: abc123XYZ.' }}"
-                    }
-                },
+                "metadata": [],
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["path"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,7 +34,7 @@
                 "operation_id": "get_customers_search",
                 "metadata": {
                     "api_endpoint": "get admin/customers/search.json",
-                    "parameters": "email={{tally.answers.field_email.value}}&limit=1"
+                    "parameters": "email=&limit=1"
                 },
                 "local_fields": [],
                 "selected_fields": ["parameters"],
@@ -97,11 +93,6 @@
                 "metadata": {
                     "api_endpoint": "put admin/customers/{{customer_id}}.json",
                     "trigger_parent_key": "paths_1",
-                    "body": {
-                        "email": "{{tally.answers.field_email.value}}",
-                        "first_name": "{{tally.answers.field_first_name.value}}",
-                        "last_name": "{{tally.answers.field_last_name.value}}"
-                    },
                     "customer_id": "{{shopify.0.id}}"
                 },
                 "local_fields": [],
@@ -150,12 +141,7 @@
                 "operation_id": "post_customers",
                 "metadata": {
                     "api_endpoint": "post admin/customers.json",
-                    "trigger_parent_key": "paths_2",
-                    "body": {
-                        "email": "{{tally.answers.field_email.value}}",
-                        "first_name": "{{tally.answers.field_first_name.value}}",
-                        "last_name": "{{tally.answers.field_last_name.value}}"
-                    }
+                    "trigger_parent_key": "paths_2"
                 },
                 "local_fields": [],
                 "selected_fields": [
