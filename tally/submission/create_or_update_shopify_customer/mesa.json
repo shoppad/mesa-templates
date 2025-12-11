@@ -71,7 +71,7 @@
                 "operation_id": "paths_path",
                 "metadata": {
                     "trigger_manager_key": "paths",
-                    "a": "{{shopify.0}}",
+                    "a": "{{shopify.0.id}}",
                     "comparison": "is not empty",
                     "additional": [
                         {
@@ -125,7 +125,7 @@
                 "operation_id": "paths_path",
                 "metadata": {
                     "trigger_manager_key": "paths",
-                    "a": "{{shopify.0}}",
+                    "a": "{{shopify.0.id}}",
                     "comparison": "is empty",
                     "additional": [
                         {
