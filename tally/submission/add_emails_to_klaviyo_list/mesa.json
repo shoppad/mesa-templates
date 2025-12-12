@@ -1,0 +1,294 @@
+{
+    "key": "tally/submission/add_emails_to_klaviyo_list",
+    "name": "Add Emails from Tally Form Submissions to Klaviyo Email List",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "tally",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Submitted",
+                "key": "tally",
+                "operation_id": "form_response",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": ["path", "path.form_id"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter for an Email Address",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_profile",
+                "action": "retrieve",
+                "name": "Get List of List's Profiles",
+                "version": "v4",
+                "key": "klaviyo_1",
+                "operation_id": "get_profiles_for_list",
+                "metadata": {
+                    "api_endpoint": "get /api/lists/{id}/profiles",
+                    "query": {
+                        "filter": "all",
+                        "mesaFilterHiddenValues": "{\"email\":\"any, equals\",\"phone_number\":\"any, equals\",\"push_token\":\"any, equals\",\"_kx\":\"equals\",\"joined_group_at\":\"greater-or-equal, greater-than, less-or-equal, less-than\"}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.filter",
+                    "query.mesaFilter",
+                    "query.mesaFilterOperator",
+                    "query.mesaFilterValue",
+                    "query.advancedFilter"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "count",
+                "name": "Check if Email in Tally Form Matches an Email in Klaviyo",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_count",
+                "metadata": {
+                    "key": "{{klaviyo_1.data[]}}",
+                    "filter": {
+                        "a": "{{klaviyo_1.data[].attributes.email}}",
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1: Tally Email Does Match an Existing Email in Klaviyo",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{loop.count}}",
+                    "comparison": "equals",
+                    "b": "1",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "b", "additional"],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_relationship_profile",
+                "action": "create",
+                "name": "Add Profile to List",
+                "version": "v4",
+                "key": "klaviyo",
+                "operation_id": "add_profiles_to_list",
+                "metadata": {
+                    "api_endpoint": "post /api/lists/{id}/relationships/profiles",
+                    "trigger_parent_key": "paths_1",
+                    "path": {
+                        "id": "RYncsq"
+                    },
+                    "body": {
+                        "data": [
+                            {
+                                "type": "profile"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.id",
+                    "body",
+                    "body.data",
+                    "body.data[].type",
+                    "body.data[].mesa_profile_field"
+                ],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2: Tally Email Does Not Match an Existing Email in Klaviyo",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{loop.count}}",
+                    "b": "0"
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "additional"],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "profile",
+                "action": "create",
+                "name": "Create Profile",
+                "version": "v4",
+                "key": "klaviyo_2",
+                "operation_id": "create_profile",
+                "metadata": {
+                    "api_endpoint": "post /api/profiles",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "data": {
+                            "type": "profile"
+                        }
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.data",
+                    "body.data.type",
+                    "body.data.attributes",
+                    "body.data.attributes.email"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "klaviyo",
+                "entity": "list_relationship_profile",
+                "action": "create",
+                "name": "Add Profile to List",
+                "version": "v4",
+                "key": "klaviyo_3",
+                "operation_id": "add_profiles_to_list",
+                "metadata": {
+                    "api_endpoint": "post /api/lists/{id}/relationships/profiles",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "data": [
+                            {
+                                "type": "profile"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.id",
+                    "body",
+                    "body.data",
+                    "body.data[].type",
+                    "body.data[].mesa_profile_field"
+                ],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
