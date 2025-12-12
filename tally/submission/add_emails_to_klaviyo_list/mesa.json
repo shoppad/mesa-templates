@@ -160,9 +160,6 @@
                 "metadata": {
                     "api_endpoint": "post /api/lists/{id}/relationships/profiles",
                     "trigger_parent_key": "paths_1",
-                    "path": {
-                        "id": "RYncsq"
-                    },
                     "body": {
                         "data": [
                             {
