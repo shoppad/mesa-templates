@@ -1,5 +1,5 @@
 {
-    "key": "TODO tally/form/add_emails_to_klaviyo_list",
+    "key": "tally/submission/add_emails_to_klaviyo_list",
     "name": "Add Emails from Tally Form Submissions to Klaviyo Email List",
     "version": "1.0.0",
     "enabled": false,
