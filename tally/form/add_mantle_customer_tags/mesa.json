@@ -1,0 +1,90 @@
+{
+    "key": "tally/form/add_mantle_customer_tags",
+    "name": "Add Customer Tags in Mantle from Tally Form Submissions",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": false,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "tally",
+                "entity": "form_response",
+                "action": "created",
+                "name": "Form Submitted",
+                "key": "tally",
+                "operation_id": "form_response",
+                "metadata": {},
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer",
+                "action": "list",
+                "name": "Get List of Customers",
+                "key": "mantle",
+                "operation_id": "get__customers",
+                "metadata": {
+                    "api_endpoint": "get /customers",
+                    "query": {
+                        "take": "1"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query.search", "query.take"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{mantle.customers[0].email}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "mantle",
+                "entity": "customer_addtag",
+                "action": "create",
+                "name": "Add Customer Tags",
+                "key": "mantle_1",
+                "operation_id": "post__customers__id__addtags",
+                "metadata": {
+                    "api_endpoint": "post /customers/{id}/addTags",
+                    "path": {
+                        "id": "{{mantle.customers[0].id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.tags"],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
