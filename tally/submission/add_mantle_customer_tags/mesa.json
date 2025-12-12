@@ -1,5 +1,5 @@
 {
-    "key": "tally/form/add_mantle_customer_tags",
+    "key": "tally/submission/add_mantle_customer_tags",
     "name": "Add Customer Tags in Mantle from Tally Form Submissions",
     "version": "1.0.0",
     "enabled": false,
