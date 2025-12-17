@@ -20,9 +20,7 @@
                     "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "poll"
-                ],
+                "selected_fields": ["poll"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -38,11 +36,11 @@
                 "key": "shopify",
                 "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
                 "metadata": {
-                    "api_endpoint": "get mesa\/productVariants\/{{product_sku}}\/sku-lookup.json",
+                    "api_endpoint": "get mesa/productVariants/{{product_sku}}/sku-lookup.json",
                     "product_sku": "{{odoo.product_reference_code}}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["product_sku"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -51,16 +49,16 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "inventory_level",
-                "action": "set",
-                "name": "Set Inventory Level",
+                "action": "set-by-variant",
+                "name": "Set Inventory Level By Variant",
                 "key": "shopify_1",
-                "operation_id": "post_inventory_levels_set",
+                "operation_id": "post_mesa_inventory_levels_set_by_variant",
                 "metadata": {
-                    "api_endpoint": "post admin\/inventory_levels\/set.json",
+                    "api_endpoint": "post mesa/inventory_levels/set-by-variant.json",
                     "body": {
                         "available": "{{odoo.available_quantity}}",
                         "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
-                        "inventory_item_id": "{{shopify.inventory_item_id}}"
+                        "variant_id": "{{shopify.product_variant_id}}"
                     }
                 },
                 "local_fields": [],
