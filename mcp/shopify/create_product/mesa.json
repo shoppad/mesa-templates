@@ -16,7 +16,7 @@
                 "key": "ask",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -71,7 +71,7 @@
                 "key": "shopify",
                 "operation_id": "post_products",
                 "metadata": {
-                    "api_endpoint": "post admin\/products.json",
+                    "api_endpoint": "post admin/products.json",
                     "body": {
                         "body_html": "{{ask.Description}}",
                         "published_at": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
@@ -106,16 +106,16 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "inventory_level",
-                "action": "set",
-                "name": "Set Inventory Level",
+                "action": "set-by-variant",
+                "name": "Set Inventory Level By Variant",
                 "key": "shopify_1",
-                "operation_id": "post_inventory_levels_set",
+                "operation_id": "post_mesa_inventory_levels_set_by_variant",
                 "metadata": {
-                    "api_endpoint": "post admin\/inventory_levels\/set.json",
+                    "api_endpoint": "post mesa/inventory_levels/set-by-variant.json",
                     "body": {
                         "available": "{{ template | label: 'How much inventory is available?', default: 50, type: 'number', tokens: false }}",
                         "location_id": "{{ template | label: 'What is the location?' }}",
-                        "inventory_item_id": "{{shopify.variants[0].inventory_item_id}}"
+                        "variant_id": "{{shopify.variants[0].id}}"
                     }
                 },
                 "local_fields": [],
