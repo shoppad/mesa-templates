@@ -1,6 +1,6 @@
 {
     "key": "ftp/update_shopify_inventory_with_csv_file",
-    "name": "Automate Shopify Inventory Updates from CSV on FTP Server",
+    "name": "Update Shopify Inventory from CSV Files On Your FTP Server",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
