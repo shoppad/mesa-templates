@@ -1,6 +1,6 @@
 {
     "key": "square/order/update_shopify_inventory",
-    "name": "Update Shopify Inventory When Square Orders Are Created",
+    "name": "Update Shopify Inventory From New Square Orders",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -17,11 +17,11 @@
                 "key": "square",
                 "operation_id": "order_created",
                 "metadata": {
-                    "api_endpoint": "get \/orders",
+                    "api_endpoint": "get /orders",
                     "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["poll"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -49,7 +49,14 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -64,14 +71,14 @@
                 "key": "square_1",
                 "operation_id": "RetrieveCatalogObject",
                 "metadata": {
-                    "api_endpoint": "get \/v2\/catalog\/object\/{object_id}",
+                    "api_endpoint": "get /v2/catalog/object/{object_id}",
                     "trigger_parent_key": "loop",
                     "path": {
                         "object_id": "{{loop.catalog_object_id}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["path", "path.object_id"],
                 "on_error": "default",
                 "weight": 1
             },
@@ -85,12 +92,12 @@
                 "key": "shopify",
                 "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
                 "metadata": {
-                    "api_endpoint": "get mesa\/productVariants\/{{product_sku}}\/sku-lookup.json",
+                    "api_endpoint": "get mesa/productVariants/{{product_sku}}/sku-lookup.json",
                     "trigger_parent_key": "loop",
                     "product_sku": "{{square_1.object.item_variation_data.sku}}"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["product_sku"],
                 "on_error": "default",
                 "weight": 2
             },
@@ -105,14 +112,14 @@
                 "key": "square_2",
                 "operation_id": "RetrieveInventoryCount",
                 "metadata": {
-                    "api_endpoint": "get \/v2\/inventory\/{catalog_object_id}",
+                    "api_endpoint": "get /v2/inventory/{catalog_object_id}",
                     "trigger_parent_key": "loop",
                     "path": {
                         "catalog_object_id": "{{loop.catalog_object_id}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["path", "path.catalog_object_id"],
                 "on_error": "default",
                 "weight": 3
             },
@@ -121,17 +128,17 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "inventory_level",
-                "action": "set",
-                "name": "Set Inventory Level",
+                "action": "set-by-variant",
+                "name": "Set Inventory Level By Variant",
                 "key": "shopify_1",
-                "operation_id": "post_inventory_levels_set",
+                "operation_id": "post_mesa_inventory_levels_set_by_variant",
                 "metadata": {
-                    "api_endpoint": "post admin\/inventory_levels\/set.json",
+                    "api_endpoint": "post mesa/inventory_levels/set-by-variant.json",
                     "trigger_parent_key": "loop",
                     "body": {
                         "available": "{{square_2.counts[0].quantity}}",
                         "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.', tokens: false }}",
-                        "inventory_item_id": "{{shopify.inventory_item_id}}"
+                        "variant_id": "{{shopify.product_variant_id}}"
                     }
                 },
                 "local_fields": [],
