@@ -27,95 +27,6 @@
         ],
         "outputs": [
             {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "inventory_item",
-                "action": "retrieve",
-                "name": "Retrieve Inventory Item",
-                "key": "shopify_1",
-                "operation_id": "get_inventory_items_inventory_item_id",
-                "metadata": {
-                    "api_endpoint": "get admin\/inventory_items\/{{inventory_item_id}}.json",
-                    "inventory_item_id": "{{shopify.inventory_item_id}}"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product_variant",
-                "action": "sku_to_product_variant",
-                "name": "Retrieve Product Variant Details from SKU",
-                "key": "shopify_2",
-                "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
-                "metadata": {
-                    "api_endpoint": "get mesa\/productVariants\/{{product_sku}}\/sku-lookup.json",
-                    "product_sku": "{{shopify_1.sku}}"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "retrieve",
-                "name": "Retrieve Product",
-                "key": "shopify_3",
-                "operation_id": "get_products_product_id",
-                "metadata": {
-                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "product_id": "{{shopify_2.product_id}}"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "location",
-                "action": "retrieve",
-                "name": "Retrieve Location",
-                "key": "shopify_4",
-                "operation_id": "get_locations_location_id",
-                "metadata": {
-                    "api_endpoint": "get admin\/locations\/{{location_id}}.json",
-                    "location_id": "{{shopify.location_id}}"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "shop",
-                "action": "list",
-                "name": "Retrieve Shop",
-                "key": "shopify_5",
-                "operation_id": "get_shop",
-                "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 4
-            },
-            {
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
@@ -136,7 +47,60 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 5
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_2",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.variant.product_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "location",
+                "action": "retrieve",
+                "name": "Retrieve Location",
+                "key": "shopify_3",
+                "operation_id": "get_locations_location_id",
+                "metadata": {
+                    "api_endpoint": "get admin/locations/{{location_id}}.json",
+                    "location_id": "{{shopify.location_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
             },
             {
                 "schema": 5,
@@ -145,19 +109,19 @@
                 "name": "Send Email",
                 "version": "v2",
                 "key": "email",
-                "operation_id": "\/send-email",
+                "operation_id": "/send-email",
                 "metadata": {
-                    "api_endpoint": "post \/send-email",
+                    "api_endpoint": "post /send-email",
                     "body": {
                         "to": "{{ template | label: 'What is the email you would like to send to?', tokens: false }}",
-                        "subject": "Product {{shopify_3.title}} stock level is low",
-                        "message": "Product {{shopify_3.title}}\n\n{{shopify_4.name}} stock level is low at {{shopify.available}}\n\nProduct URL: https:\/\/admin.shopify.com\/store\/{{shopify_5.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_3.id}}"
+                        "subject": "Product {{shopify_2.title}} stock level is low",
+                        "message": "<p>Product {{shopify_2.title}} {{shopify.variant.title}} stock level is low at {{shopify_3.name}}.</p><p></p><p><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" class=\"text-blue-600 underline\" href=\"https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: &quot;.myshopify.com&quot;, &quot;&quot;}}/products/{{ shopify_3.id }}\">View product</a></p>"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 6
+                "weight": 4
             }
         ]
     }

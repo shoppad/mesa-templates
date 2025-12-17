@@ -53,14 +53,13 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "product_variant",
-                "action": "inventory_item_id_to_product_variant",
-                "name": "Retrieve Product Variant Details from Inventory Item ID",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
                 "key": "shopify_1",
-                "operation_id": "get_mesa_productvariants_product_inventory_item_id_inventory_item_id_lookup",
+                "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get mesa\/productVariants\/{{product_inventory_item_id}}\/inventory-item-id-lookup.json",
-                    "product_inventory_item_id": "{{shopify.inventory_item_id}}"
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -71,13 +70,14 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "shop",
-                "action": "list",
-                "name": "Retrieve Shop",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
                 "key": "shopify_2",
-                "operation_id": "get_shop",
+                "operation_id": "get_products_product_id",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.variant.product_id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -88,13 +88,18 @@
                 "schema": 4,
                 "trigger_type": "output",
                 "type": "slack",
+                "entity": "message",
+                "action": "create",
                 "name": "Send Message",
-                "version": "v2",
+                "version": "v3",
                 "key": "slack",
                 "operation_id": "slack",
                 "metadata": {
-                    "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}",
-                    "message": "{{shopify_1.product_title}} {{shopify_1.product_variant_title}} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}\n\nView the product: https:\/\/admin.shopify.com\/store\/{{shopify_2.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_1.product_id}}"
+                    "api_endpoint": "post /api/chat.postMessage",
+                    "body": {
+                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.' }}",
+                        "markdown_text": "{{shopify_2.title}} {{shopify.variant.title}} is running low on inventory.\n\nCurrent inventory quantity: {{shopify.available}}\n\nView product: https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.id}}"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],

@@ -1,6 +1,6 @@
 {
     "key": "shopify/inventory/get_discord_alerts_with_stock_update",
-    "name": "Get Discord Notifications for Shopify Stock Updates",
+    "name": "Get Discord Notifications for Shopify Inventory Updates",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -30,14 +30,13 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "product_variant",
-                "action": "inventory_item_id_to_product_variant",
-                "name": "Retrieve Product Variant Details from Inventory Item ID",
-                "key": "shopify_2",
-                "operation_id": "get_mesa_productvariants_product_inventory_item_id_inventory_item_id_lookup",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_1",
+                "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get mesa/productVariants/{{product_inventory_item_id}}/inventory-item-id-lookup.json",
-                    "product_inventory_item_id": "{{shopify.inventory_item_id}}"
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -48,36 +47,19 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "product_variant",
-                "action": "retrieve_id",
-                "name": "Retrieve Product Variant",
-                "key": "shopify_4",
-                "operation_id": "get_variants_variant_id",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_2",
+                "operation_id": "get_products_product_id",
                 "metadata": {
-                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
-                    "variant_id": "{{shopify_2.product_variant_id}}"
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.variant.product_id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "shop",
-                "action": "list",
-                "name": "Retrieve Shop",
-                "key": "shopify_3",
-                "operation_id": "get_shop",
-                "metadata": {
-                    "api_endpoint": "get admin/shop.json"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 2
             },
             {
                 "schema": 4,
@@ -86,7 +68,7 @@
                 "entity": "channel_message",
                 "action": "create",
                 "name": "Create Channel Message",
-                "key": "discord_1",
+                "key": "discord",
                 "operation_id": "post-channels-channelId-messages",
                 "metadata": {
                     "api_endpoint": "post /channels/{channelId}/messages",
@@ -94,13 +76,13 @@
                         "channelId": "{{ template | label: 'What is your Discord''s Channel ID?', description: '', tokens: false }}"
                     },
                     "body": {
-                        "content": "\ud83d\udce6 Inventory Updated\nProduct: {{shopify_2.product_title}}\nVariant: {{shopify_2.product_variant_title}}\nSKU: {{shopify_4.sku}}\n\nAvailabe Quantity: {{shopify.available}}\n\n\ud83d\udd17 https://admin.shopify.com/store/{{shopify_3.myshopify_domain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.product_id}}"
+                        "content": "\ud83d\udce6 Inventory Updated\nProduct: {{shopify_2.title}}\nVariant: {{shopify.variant.title}}\nSKU: {{shopify.variant.sku}}\n\nAvailabe Quantity: {{shopify.available}}\n\n\ud83d\udd17 https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.id}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": ["body.content"],
                 "on_error": "default",
-                "weight": 3
+                "weight": 2
             }
         ]
     }
