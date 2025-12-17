@@ -70,37 +70,19 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "product_variant",
-                "action": "retrieve_id",
-                "name": "Retrieve Product Variant",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
                 "key": "shopify_2",
-                "operation_id": "get_variants_variant_id",
+                "operation_id": "get_products_product_id",
                 "metadata": {
-                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
-                    "variant_id": "{{shopify.variant.id}}"
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.variant.product_id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "entity": "product",
-                "action": "retrieve",
-                "name": "Retrieve Product",
-                "key": "shopify_3",
-                "operation_id": "get_products_product_id",
-                "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}.json",
-                    "product_id": "{{shopify_2.product_id}}"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 3
             },
             {
                 "schema": 4,
@@ -116,13 +98,13 @@
                     "api_endpoint": "post /api/chat.postMessage",
                     "body": {
                         "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.' }}",
-                        "markdown_text": "{{shopify_3.title}} {{shopify_2.title}} is running low on inventory.\n\nCurrent inventory quantity: {{shopify.available}}\n\nView product: https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_3.id}}"
+                        "markdown_text": "{{shopify_2.title}} {{shopify.variant.title}} is running low on inventory.\n\nCurrent inventory quantity: {{shopify.available}}\n\nView product: https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.id}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 4
+                "weight": 3
             }
         ]
     }
