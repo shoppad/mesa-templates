@@ -53,14 +53,13 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "product_variant",
-                "action": "inventory_item_id_to_product_variant",
-                "name": "Retrieve Product Variant Details from Inventory Item ID",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
                 "key": "shopify_1",
-                "operation_id": "get_mesa_productvariants_product_inventory_item_id_inventory_item_id_lookup",
+                "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get mesa\/productVariants\/{{product_inventory_item_id}}\/inventory-item-id-lookup.json",
-                    "product_inventory_item_id": "{{shopify.inventory_item_id}}"
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -71,18 +70,37 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "shop",
-                "action": "list",
-                "name": "Retrieve Shop",
+                "entity": "product_variant",
+                "action": "retrieve_id",
+                "name": "Retrieve Product Variant",
                 "key": "shopify_2",
-                "operation_id": "get_shop",
+                "operation_id": "get_variants_variant_id",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
+                    "variant_id": "{{shopify.variant.id}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_3",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify_2.product_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
             },
             {
                 "schema": 4,
@@ -94,20 +112,18 @@
                 "key": "discord",
                 "operation_id": "post-channels-channelId-messages",
                 "metadata": {
-                    "api_endpoint": "post \/channels\/{channelId}\/messages",
+                    "api_endpoint": "post /channels/{channelId}/messages",
                     "path": {
                         "channelId": "{{ template | label: 'What is your server''s channel ID?', description: '', tokens: false }}"
                     },
                     "body": {
-                        "content": "{{shopify_1.product_title}} {{shopify_1.product_variant_title}} is running low on inventory. \n\nCurrent inventory quantity: {{shopify.available}}\n\nView the product: https:\/\/admin.shopify.com\/store\/{{shopify_2.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_1.product_id}}"
+                        "content": "{{shopify_3.title}} {{shopify_2.title}} is running low on inventory.\n\nCurrent inventory quantity: {{shopify.available}}\n\nView product: https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_3.id}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "body.content"
-                ],
+                "selected_fields": ["body.content"],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             }
         ]
     }
