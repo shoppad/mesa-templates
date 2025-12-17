@@ -10,23 +10,20 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "ftp",
-                "version": "v1",
                 "entity": "csv",
+                "action": "csv",
                 "name": "Fetch CSV File",
+                "version": "v2",
                 "key": "ftp",
                 "operation_id": "csv",
                 "metadata": {
+                    "api_endpoint": "post /ftp/csv",
                     "file": "{{ template | label: 'What is the name of the CSV file?', description: 'The path to the file on the FTP server, you can use '*' wildcards to match portions of the path. Note: the file must be a valid CSV to be read.\n\nIt is required that you have columns SKU and Inventory in your CSV file.', tokens: false, placeholder: 'orders/Order*.csv' }}",
-                    "use_headers": true,
-                    "delimiter": ",",
                     "move_file": false,
                     "schedule": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "use_headers",
-                    "delimiter"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -51,8 +48,7 @@
                                 "comparison": "equals"
                             }
                         ]
-                    },
-                    "script": "loop.js"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -60,16 +56,18 @@
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Custom Code",
-                "key": "custom",
-                "operation_id": "custom",
+                "type": "shopify",
+                "entity": "product_variant",
+                "action": "sku_to_product_variant",
+                "name": "Retrieve Product Variant Details from SKU",
+                "key": "shopify",
+                "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
                 "metadata": {
+                    "api_endpoint": "get mesa/productVariants/{{product_sku}}/sku-lookup.json",
                     "trigger_parent_key": "loop",
-                    "description": "Retrieve product variant details that match with the SKU via Shopify GraphQL. Add the Inventory Item ID to the payload that gets pass to the next step.",
-                    "script": "custom.js"
+                    "product_sku": "{{loop[\"SKU\"]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -81,17 +79,17 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "inventory_level",
-                "action": "set",
-                "name": "Set Inventory Level",
-                "key": "shopify",
-                "operation_id": "post_inventory_levels_set",
+                "action": "set-by-variant",
+                "name": "Set Inventory Level By Variant",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_inventory_levels_set_by_variant",
                 "metadata": {
-                    "api_endpoint": "post admin/inventory_levels/set.json",
+                    "api_endpoint": "post mesa/inventory_levels/set-by-variant.json",
                     "trigger_parent_key": "loop",
                     "body": {
-                        "available": "{{loop.Inventory}}",
+                        "available": "{{loop.inventory}}",
                         "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
-                        "inventory_item_id": "{{custom.inventory_item_id}}"
+                        "variant_id": "{{shopify.product_variant_id}}"
                     }
                 },
                 "local_fields": [],
