@@ -252,7 +252,7 @@
                 "metadata": {
                     "api_endpoint": "get \/{database}\/{table}",
                     "trigger_parent_key": "loop",
-                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_2.email}}'\n AND \"Disabled At\" IS NOT NULL"
+                    "query": "SELECT SUM(CAST(\"Balance\" AS numeric)) AS \"Total Balance\"\nFROM \"Shopify Gift Cards\"\nWHERE \"Customer Email\" = '{{shopify_2.email}}'\n AND \"Disabled At\" IS NULL"
                 },
                 "local_fields": [],
                 "selected_fields": [],
