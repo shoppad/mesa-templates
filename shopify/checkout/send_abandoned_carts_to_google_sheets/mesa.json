@@ -27,7 +27,7 @@
                     {
                         "label": "Customer First Name",
                         "value": "Customer First Name|{{loop.customer.first_name}}",
-                        "description": "TThe customer's first name."
+                        "description": "The customer's first name."
                     },
                     {
                         "label": "Customer Last Name",
