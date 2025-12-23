@@ -1,0 +1,308 @@
+{
+    "key": "shopify/order/route_wholesale_orders_by_customer_tag",
+    "name": "Route Wholesale Orders by Customer Tag",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_5",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_2",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{shopify.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "comparison": "contains",
+                    "additional": [
+                        {
+                            "operator": "or",
+                            "a": "{{shopify_1.tags}}",
+                            "comparison": "contains",
+                            "b": "B2B"
+                        },
+                        {
+                            "operator": "and",
+                            "a": "{{shopify_2.financial_status}}",
+                            "comparison": "contains",
+                            "b": "pending"
+                        },
+                        {
+                            "operator": "or",
+                            "a": "{{shopify_2.financial_status}}",
+                            "comparison": "contains",
+                            "b": "paid"
+                        }
+                    ],
+                    "a": "{{shopify_1.tags}}",
+                    "b": "wholesale"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "fulfillment_order",
+                "action": "list",
+                "name": "Retrieve Order's Fulfillment Orders",
+                "key": "shopify_6",
+                "operation_id": "get_orders_order_id_fulfillment_orders",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}/fulfillment_orders.json",
+                    "order_id": "{{shopify_2.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Order Add Tag",
+                "key": "shopify_3",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag should be added to routed orders?', description: 'This tag will be added to orders that meet the filter criteria to indicate they have been routed. Defaults to wholesale-fulfill.', default: 'wholesale-fulfill' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify_6}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Line Items",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{loop.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "fulfillment_order",
+                "action": "move",
+                "name": "Move Fulfillment Order",
+                "key": "shopify_4",
+                "operation_id": "post_fulfillment_orders_fulfillment_order_id_move",
+                "metadata": {
+                    "api_endpoint": "post admin/fulfillment_orders/{{fulfillment_order_id}}/move.json",
+                    "trigger_parent_key": "loop_2",
+                    "body": {
+                        "fulfillment_order": {
+                            "new_location_id": "{{ template | label: 'What location should these orders be fulfilled from?', description: 'Enter the Shopify Location ID where these orders should be routed (found in the location’s URL in Shopify Admin).' }}",
+                            "fulfillment_order_line_items": [
+                                {
+                                    "id": "{{loop_2.id}}",
+                                    "quantity": "{{loop_2.quantity}}"
+                                }
+                            ]
+                        }
+                    },
+                    "fulfillment_order_id": "{{loop_2.fulfillment_order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_2",
+                    "trigger_parent_key": "loop_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": "map",
+                    "map": "{{loop.assigned_location.location_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": ["return", "map"],
+                "on_error": "default",
+                "weight": 10
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "entity": "message",
+                "action": "create",
+                "name": "Send Message",
+                "version": "v3",
+                "key": "slack",
+                "operation_id": "slack",
+                "metadata": {
+                    "api_endpoint": "post /api/chat.postMessage",
+                    "body": {
+                        "channel": "{{ template | label: 'Which Slack channel should receive notifications?', description: 'Select the Slack channel where MESA will post a message when an order is successfully routed.' }}",
+                        "markdown_text": "\ud83d\udce6 New Wholesale Order Routed\n\nA new wholesale order has been automatically routed to the bulk fulfillment center.\n\n\u2022 Order: {{shopify_2.name}}\n\u2022 Customer: {{shopify_2.customer.first_name}} {{shopify_2.customer.last_name}}\n\u2022 Order Tags: {{shopify_2.tags}}\n\u2022 Customer Tags: {{shopify_1.tags}}\n\u2022 Total: {{shopify_2.current_total_price}}\n\u2022 Location: {{loop_1.items.0}}\n\nThis order was tagged wholesale-fulfill and separated from retail fulfillment to keep operations running smoothly.\n\n\ud83d\udc49 View order in Shopify: https://admin.shopify.com/store/{{shopify_5.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify_2.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 11
+            }
+        ]
+    }
+}
