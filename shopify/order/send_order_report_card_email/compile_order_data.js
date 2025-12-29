@@ -18,9 +18,10 @@ module.exports = new (class {
     const output = Transform.convert(context, payload);
 
     // Adjust `output` here to alter data after we transform it.
+    const shopifyOrders = context.steps['shopify_order'];
 
     // Run through orders
-    if (payload && payload.length) {
+    if (shopifyOrders && shopifyOrders.length) {
       const productsCount = {};
 
       payload.forEach((order) => {
