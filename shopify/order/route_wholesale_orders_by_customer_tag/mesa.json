@@ -83,7 +83,7 @@
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter",
+                "name": "Check for Customer Tags and Order's Financial Status",
                 "key": "filter",
                 "operation_id": "filter",
                 "metadata": {
@@ -217,9 +217,55 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
+                "entity": "inventory_level",
+                "action": "list",
+                "name": "Get List of Inventory Levels",
+                "key": "shopify_7",
+                "operation_id": "get_inventory_levels",
+                "metadata": {
+                    "api_endpoint": "get admin/inventory_levels.json",
+                    "trigger_parent_key": "loop_2",
+                    "query": {
+                        "inventory_item_ids": "{{loop_2.id}}",
+                        "location_ids": "79964766252"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check for Available Inventory at the Desired Location",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop_2",
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{shopify_7.0.available}}",
+                    "b": "{{loop_2.fulfillable_quantity}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
                 "entity": "fulfillment_order",
                 "action": "move",
-                "name": "Move Fulfillment Order",
+                "name": "Move Fulfillment Order (Only if there is Available Inventory)",
                 "key": "shopify_4",
                 "operation_id": "post_fulfillment_orders_fulfillment_order_id_move",
                 "metadata": {
@@ -227,7 +273,7 @@
                     "trigger_parent_key": "loop_2",
                     "body": {
                         "fulfillment_order": {
-                            "new_location_id": "{{ template | label: 'What location should these orders be fulfilled from?', description: 'Enter the Shopify Location ID where these orders should be routed (found in the location’s URL in Shopify Admin).' }}",
+                            "new_location_id": "{{ template | label: 'What location should these orders be fulfilled from? ', description: 'Enter the Shopify Location ID where these orders should be routed (found in the location's URL in Shopify Admin).' }}",
                             "fulfillment_order_line_items": [
                                 {
                                     "id": "{{loop_2.id}}",
@@ -241,7 +287,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 8
+                "weight": 10
             },
             {
                 "schema": 5.1,
@@ -259,7 +305,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 9
+                "weight": 11
             },
             {
                 "schema": 5.1,
@@ -279,7 +325,30 @@
                 "local_fields": [],
                 "selected_fields": ["return", "map"],
                 "on_error": "default",
-                "weight": 10
+                "weight": 12
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if the Location Moved Successfully",
+                "key": "filter_2",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{loop_1.items.0}}",
+                    "comparison": "does not equal",
+                    "b": "{{shopify_6.0.assigned_location_id}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 13
             },
             {
                 "schema": 4,
@@ -294,14 +363,14 @@
                 "metadata": {
                     "api_endpoint": "post /api/chat.postMessage",
                     "body": {
-                        "channel": "{{ template | label: 'Which Slack channel should receive notifications?', description: 'Select the Slack channel where MESA will post a message when an order is successfully routed.' }}",
+                        "channel": "{{ template | label: 'Which Slack channel should receive notifications? ', description: 'Select the Slack channel where MESA will post a message when an order is successfully routed.' }}",
                         "markdown_text": "\ud83d\udce6 New Wholesale Order Routed\n\nA new wholesale order has been automatically routed to the bulk fulfillment center.\n\n\u2022 Order: {{shopify_2.name}}\n\u2022 Customer: {{shopify_2.customer.first_name}} {{shopify_2.customer.last_name}}\n\u2022 Order Tags: {{shopify_2.tags}}\n\u2022 Customer Tags: {{shopify_1.tags}}\n\u2022 Total: {{shopify_2.current_total_price}}\n\u2022 Location: {{loop_1.items.0}}\n\nThis order was tagged wholesale-fulfill and separated from retail fulfillment to keep operations running smoothly.\n\n\ud83d\udc49 View order in Shopify: https://admin.shopify.com/store/{{shopify_5.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify_2.id}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 11
+                "weight": 14
             }
         ]
     }
