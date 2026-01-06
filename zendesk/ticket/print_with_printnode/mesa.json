@@ -1,0 +1,161 @@
+{
+    "key": "zendesk/ticket/print_with_printnode",
+    "name": "Print Zendesk Ticket Attachments Automatically with PrintNode",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "zendesk",
+                "entity": "ticket",
+                "action": "created",
+                "name": "Ticket Created",
+                "key": "zendesk",
+                "operation_id": "ticket_created",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "zendesk",
+                "entity": "ticket_comment",
+                "action": "list",
+                "name": "Get List of Comments",
+                "key": "zendesk_1",
+                "operation_id": "ListTicketComments",
+                "metadata": {
+                    "api_endpoint": "get /api/v2/tickets/{ticket_id}/comments",
+                    "path": {
+                        "ticket_id": "{{zendesk.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop over ticket's comments",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{zendesk_1.comments[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop over comment's attachments",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{loop.attachments[]}}",
+                    "filter": {
+                        "a": "{{loop.attachments[].content_url}}",
+                        "comparison": "is not empty",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "printnode",
+                "entity": "printjob",
+                "action": "create",
+                "name": "Create Print Job",
+                "key": "printnode",
+                "operation_id": "post__printjobs",
+                "metadata": {
+                    "api_endpoint": "post /printjobs",
+                    "trigger_parent_key": "loop_2",
+                    "body": {
+                        "printerId": "{{ template | label: 'Which PrintNode printer should we send the ticket attachments to?', description: 'Select a printer from the dropdown. If you don''t see it, ensure the printer is connected in your PrintNode dashboard, then refresh and select the correct printer.' }}",
+                        "contentType": "pdf_uri",
+                        "content": "{{loop_2.mapped_content_url}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_2",
+                    "trigger_parent_key": "loop_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            }
+        ]
+    }
+}
