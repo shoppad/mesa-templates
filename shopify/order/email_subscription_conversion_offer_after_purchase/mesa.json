@@ -1,0 +1,254 @@
+{
+    "key": "shopify/order/email_subscription_conversion_offer_after_purchase",
+    "name": "Send Subscription Conversion Emails After Product Purchase",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "paid",
+                "name": "Order Paid",
+                "key": "shopify",
+                "operation_id": "orders_paid",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "shop",
+                "action": "list",
+                "name": "Retrieve Shop",
+                "key": "shopify_4",
+                "operation_id": "get_shop",
+                "metadata": {
+                    "api_endpoint": "get admin/shop.json"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_1",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop over Line Items to Check for Non-Subscription Product and Determine if the Customer is New",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "a": "{{shopify.line_items[].sku}}",
+                        "comparison": "equals",
+                        "b": "{{ template | label: 'Which product SKU should trigger the subscription offer email?', description: 'Enter the SKU of the product that a customer must purchase to qualify for this subscription conversion email.' }}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "a": "{{shopify_1.orders_count}}",
+                                "comparison": "equals",
+                                "b": "0"
+                            },
+                            {
+                                "operator": "and",
+                                "a": "{{shopify_1.tags}}",
+                                "comparison": "does not equal",
+                                "b": "{{ template | label: 'What customer tag identifies an existing subscriber?', description: 'MESA will check for this customer tag to avoid sending subscription offers to customers who are already subscribed. Default: subscriber', default: 'subscriber' }}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "filter.additional[].operator",
+                    "filter.additional[].a",
+                    "filter.additional[].comparison",
+                    "filter.additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "delay",
+                "name": "Delay",
+                "version": "v2",
+                "key": "delay",
+                "operation_id": "delay",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "amount": "7",
+                    "unit": "days",
+                    "test_bypass": true
+                },
+                "local_fields": [],
+                "selected_fields": ["test_bypass"],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "key": "shopify_2",
+                "operation_id": "get_customers_customer_id",
+                "metadata": {
+                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
+                    "customer_id": "{{shopify.customer.id}}",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_3",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
+                    "order_id": "{{shopify.id}}",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify_5",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "trigger_parent_key": "loop",
+                    "product_id": "{{loop.product_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "a": "{{shopify_2.tags}}",
+                    "comparison": "does not equal",
+                    "b": "{{ template | label: 'Enter the customer tag again to exclude existing subscribers', description: 'This tag should match the previously defined customer tag. Default: subscriber', default: 'subscriber' }}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "{{shopify_3.fulfillment_status}}",
+                            "comparison": "does not equal",
+                            "b": "restocked"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 7
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "/send-email",
+                "metadata": {
+                    "api_endpoint": "post /send-email",
+                    "trigger_parent_key": "loop",
+                    "body": {
+                        "to": "{{shopify_3.email}}",
+                        "subject": "Switch to subscription & save 15%",
+                        "message": "<p>Hi {{shopify_2.first_name}},</p><p></p><p>You\u2019ve tried {{loop.title}} once \u2014 want it delivered automatically so you\u2019re always stocked?</p><p></p><p>Switch to subscription! Click here: https://{{shopify_4.domain}}/products/{{shopify_5.handle}}</p><p></p><p>Best,</p><p>{{shopify_4.name}}</p>"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
