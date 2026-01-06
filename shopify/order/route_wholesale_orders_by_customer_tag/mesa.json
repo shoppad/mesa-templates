@@ -226,7 +226,7 @@
                     "api_endpoint": "get admin/inventory_levels.json",
                     "trigger_parent_key": "loop_2",
                     "query": {
-                        "inventory_item_ids": "{{loop_2.id}}",
+                        "inventory_item_ids": "{{loop_2.inventory_item_id}}",
                         "location_ids": "79964766252"
                     }
                 },
@@ -244,7 +244,7 @@
                 "operation_id": "filter",
                 "metadata": {
                     "trigger_parent_key": "loop_2",
-                    "comparison": "equals",
+                    "comparison": "greater than equal",
                     "additional": [
                         {
                             "operator": "and",
