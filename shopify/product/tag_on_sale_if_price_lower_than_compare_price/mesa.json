@@ -1,0 +1,95 @@
+{
+    "key": "shopify/product/tag_on_sale_if_price_lower_than_compare_price",
+    "name": "Tag products as \"on sale\" if the price is lower than the compare price",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "key": "shopify",
+                "operation_id": "products_update",
+                "metadata": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter_1",
+                "metadata": {
+                    "a": "{{shopify.tags}}",
+                    "comparison": "does not contain",
+                    "b": "{{ template | label: 'What tag would you like to add to products that are on sale?', default: 'on sale', tokens: false }}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v2",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.variants[]}}",
+                    "filter": {
+                        "comparison": "equals"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "metadata": {
+                    "a": "{{loop.price}}",
+                    "comparison": "less than",
+                    "b": "{{loop.compare_at_price}}"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "tag_add",
+                "name": "Product Add Tag",
+                "key": "shopify_1",
+                "operation_id": "post_mesa_products_product_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
+                    "product_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "{{ template | label: 'What tag would you like to add to products that are on sale?', description: 'Enter the name of the tag. Multiple tags can be separated by commas.', default: 'on sale', tokens: false }}"
+                    }
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
