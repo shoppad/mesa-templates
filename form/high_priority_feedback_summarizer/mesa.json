@@ -1,0 +1,158 @@
+{
+    "key": "feedback/summarize/high_priority_feedback_summarizer",
+    "name": "High-Priority Feedback Summarizer",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "form",
+                "name": "Form Submitted",
+                "key": "form",
+                "operation_id": "form",
+                "metadata": {
+                    "form_data": [
+                        {
+                            "type": "header",
+                            "subtype": "h1",
+                            "label": "General Feedback Form"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Name",
+                            "description": "Enter your first and last name",
+                            "className": "form-control",
+                            "name": "Name",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Email",
+                            "description": "Enter the best email to reach you at",
+                            "className": "form-control",
+                            "name": "Email",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "text",
+                            "required": false,
+                            "label": "Feedback",
+                            "description": "Share any thoughts with us!",
+                            "className": "form-control",
+                            "name": "Feedback",
+                            "subtype": "text"
+                        },
+                        {
+                            "type": "select",
+                            "required": false,
+                            "label": "Priority",
+                            "description": "How should we prioritize your feedback?",
+                            "className": "form-control",
+                            "name": "Priority",
+                            "multiple": false,
+                            "values": [
+                                {
+                                    "label": "High",
+                                    "value": "option-1",
+                                    "selected": true
+                                },
+                                {
+                                    "label": "Medium",
+                                    "value": "option-2",
+                                    "selected": false
+                                },
+                                {
+                                    "label": "Low",
+                                    "value": "option-3",
+                                    "selected": false
+                                }
+                            ]
+                        }
+                    ],
+                    "embed_code": "{{ template | label: 'Add the Form Embed Code', description: '' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "form_data",
+                    "embed_code",
+                    "url"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check if the Form Response is High Priority",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "comparison": "equals",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{form.Priority}}",
+                    "b": "option-1"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Summarize the Feedback",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "Review the feedback below and synthesize it into a clear summary with specific action items our team can follow up on to ensure we address the feedback effectively.\n\nFeedback: {{form.Feedback}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Send Summary by Email",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{ template | label: 'Enter the email address that should receive high-priority feedback summaries.', description: 'This email will receive a summary only when feedback is marked as high priority.' }}",
+                        "subject": "Thank you for your feedback!",
+                        "message": "<p>You received a form response!<\/p><p><\/p><p>\ud83d\udccb Feedback response:<\/p><p>{{ai.response}}<\/p>"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
