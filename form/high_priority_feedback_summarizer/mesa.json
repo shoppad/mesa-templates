@@ -1,5 +1,5 @@
 {
-    "key": "feedback/summarize/high_priority_feedback_summarizer",
+    "key": "form/high_priority_feedback_summarizer",
     "name": "High-Priority Feedback Summarizer",
     "version": "1.0.0",
     "enabled": false,
@@ -74,14 +74,10 @@
                             ]
                         }
                     ],
-                    "embed_code": "{{ template | label: 'Add the Form Embed Code', description: '' }}"
+                    "embed_code": "{{ template | label: 'Add the form to your website.', description: 'Copy the form embed code and paste it into the page where you want the form to appear. Use your website editor''s option for embedded content or custom code. Once the page is publicly accessible, the form will be visible to visitors.' }}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "form_data",
-                    "embed_code",
-                    "url"
-                ],
+                "selected_fields": ["form_data", "embed_code", "url"],
                 "on_error": "default",
                 "weight": 0
             }
