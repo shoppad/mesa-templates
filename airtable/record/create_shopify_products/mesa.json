@@ -1,0 +1,178 @@
+{
+    "key": "airtable/record/create_shopify_products",
+    "name": "Create Shopify Products from Airtable Records",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_table_name",
+                "target": "airtable.path.create_table_name",
+                "label": "What do you want to name your table?",
+                "tokens": false,
+                "description": "Give your new table a name."
+            },
+            {
+                "key": "fields",
+                "target": "airtable.setup_fields",
+                "label": "What are your table columns?",
+                "description": "This template will automatically create a new Shopify product for every row in the table.",
+                "options": [
+                    {
+                        "label": "Title",
+                        "value": "Title|{{airtable.fields.Title}}",
+                        "description": "The product title."
+                    },
+                    {
+                        "label": "Description (Body HTML)",
+                        "value": "Description (Body HTML)|{{airtable.fields[\"Description (Body HTML)\"]}}",
+                        "description": "The product description."
+                    },
+                    {
+                        "label": "Vendor",
+                        "value": "Vendor|{{airtable.fields.Vendor}}",
+                        "description": "The product vendor."
+                    },
+                    {
+                        "label": "Product Type",
+                        "value": "Product Type|{{airtable.fields.Product Type}}",
+                        "description": "The product type."
+                    },
+                    {
+                        "label": "Tags",
+                        "value": "Tags|{{airtable.fields.Tags}}",
+                        "description": "The product tags."
+                    },
+                    {
+                        "label": "Variant Title",
+                        "value": "Variant Title|{{airtable.fields.Variant Title}}",
+                        "description": "The product variant title."
+                    },
+                    {
+                        "label": "Variant Price",
+                        "value": "Variant Price|{{airtable.fields.Variant Price}}",
+                        "description": "The product variant price."
+                    },
+                    {
+                        "label": "Variant Compare At Price",
+                        "value": "Variant Compare At Price|{{airtable.fields.Variant Compare At Price}}",
+                        "description": "The product variant compare at price."
+                    },
+                    {
+                        "label": "Variant Barcode",
+                        "value": "Variant Barcode|{{airtable.fields.Variant Barcode}}",
+                        "description": "The product variant barcode."
+                    },
+                    {
+                        "label": "Variant Sku",
+                        "value": "Variant Sku|{{airtable.fields.Variant Sku}}",
+                        "description": "The product variant sku."
+                    },
+                    {
+                        "label": "Variant Inventory Item ID",
+                        "value": "Variant Inventory Item ID|{{airtable.fields.Variant Inventory Item ID}}",
+                        "description": "The product variant inventory item id."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "airtable",
+                "entity": "record",
+                "action": "created",
+                "name": "Record Created",
+                "version": "v3",
+                "key": "airtable",
+                "operation_id": "record_created",
+                "metadata": {
+                    "api_endpoint": "get \/{base}\/{table}",
+                    "poll": "@hourly:0 * * * *",
+                    "path": {
+                        "base": "{{ template | label: 'Select your Airtable base', description: '' }}",
+                        "table": ""
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["poll"],
+                "on_error": "default",
+                "weight": 1
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{airtable.fields.Title}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "create",
+                "name": "Create Product",
+                "key": "shopify",
+                "operation_id": "post_products",
+                "metadata": {
+                    "api_endpoint": "post admin\/products.json",
+                    "body": {
+                        "body_html": "{{airtable.fields[\"Description (Body HTML)\"]}}",
+                        "product_type": "{{airtable.fields[\"Product Type\"]}}",
+                        "tags": "{{airtable.fields.Tags}}",
+                        "title": "{{airtable.fields.Title}}",
+                        "vendor": "{{airtable.fields.Vendor}}",
+                        "variants": [
+                            {
+                                "barcode": "{{airtable.fields[\"Variant Barcode\"]}}",
+                                "compare_at_price": "{{airtable.fields[\"Variant Compare At Price\"]}}",
+                                "option1": "{{airtable.fields[\"Variant Title\"]}}",
+                                "price": "{{airtable.fields[\"Variant Price\"]}}",
+                                "sku": "{{airtable.fields[\"Variant Sku\"]}}"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.body_html",
+                    "body.product_type",
+                    "body.tags",
+                    "body.title",
+                    "body.vendor",
+                    "body.variants[].barcode",
+                    "body.variants[].compare_at_price",
+                    "body.variants[].option1",
+                    "body.variants[].price",
+                    "body.variants[].sku"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
