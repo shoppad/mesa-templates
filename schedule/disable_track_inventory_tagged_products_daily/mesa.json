@@ -16,7 +16,7 @@
                 "metadata": {
                     "enqueue_type": "schedule",
                     "datetime": null,
-                    "schedule": "{{ template | label: 'Select how often MESA should check for tagged products and disable inventory tracking.', description: 'The workflow runs daily at midnight by default, but you can adjust it to run hourly, weekly, or monthly.' }}"
+                    "schedule": "{{ template | label: 'When should this workflow run to check for tagged products?', description: '' }}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -35,7 +35,7 @@
                 "type": "shopify",
                 "entity": "product",
                 "action": "list",
-                "name": "Get List of Products",
+                "name": "Get Products from Shopify",
                 "key": "shopify",
                 "operation_id": "get_products",
                 "metadata": {
@@ -54,7 +54,7 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop",
+                "name": "Go Through Each Product and Check For Tag",
                 "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
@@ -89,7 +89,7 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop",
+                "name": "For Each Matching Product, Check Every Variant",
                 "version": "v3",
                 "key": "loop_2",
                 "operation_id": "loop_loop",
@@ -124,7 +124,7 @@
                 "type": "shopify",
                 "entity": "inventory_item",
                 "action": "retrieve",
-                "name": "Retrieve Inventory Item",
+                "name": "Look Up the Inventory Settings for this Variant",
                 "key": "shopify_5",
                 "operation_id": "get_inventory_items_inventory_item_id",
                 "metadata": {
@@ -141,7 +141,7 @@
                 "schema": 4.1,
                 "trigger_type": "output",
                 "type": "filter",
-                "name": "Filter",
+                "name": "Continue Only if Inventory Tracking is Currently Enabled",
                 "key": "filter",
                 "operation_id": "filter",
                 "metadata": {
@@ -167,7 +167,7 @@
                 "type": "shopify",
                 "entity": "inventory_item",
                 "action": "update",
-                "name": "Update Inventory Item",
+                "name": "Turn Off Inventory Tracking for this Variant",
                 "key": "shopify_6",
                 "operation_id": "put_inventory_items_inventory_item_id",
                 "metadata": {
@@ -188,7 +188,7 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "end",
-                "name": "Loop End",
+                "name": "Done Processing All Variants for this Product",
                 "version": "v3",
                 "key": "loop_3",
                 "operation_id": "loop_end",
@@ -206,7 +206,7 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "end",
-                "name": "Loop End",
+                "name": "Done Processing All Tagged Products",
                 "version": "v3",
                 "key": "loop_1",
                 "operation_id": "loop_end",
