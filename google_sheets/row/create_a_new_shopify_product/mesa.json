@@ -1,6 +1,6 @@
 {
     "key": "google_sheets/row/create_a_new_shopify_product",
-    "name": "Create Shopify products from new rows in Google Sheets",
+    "name": "Create Shopify Products from Google Sheets Rows",
     "version": "1.0.0",
     "enabled": false,
     "setup": {
@@ -35,44 +35,44 @@
                         "description": "The product vendor."
                     },
                     {
-                      "label": "Product Type",
-                      "value": "Product Type",
-                      "description": "The product type."
+                        "label": "Product Type",
+                        "value": "Product Type",
+                        "description": "The product type."
                     },
                     {
-                      "label": "Tags",
-                      "value": "Tags",
-                      "description": "The product tags."
+                        "label": "Tags",
+                        "value": "Tags",
+                        "description": "The product tags."
                     },
                     {
-                      "label": "Variant Title",
-                      "value": "Variant Title",
-                      "description": "The product variant title."
+                        "label": "Variant Title",
+                        "value": "Variant Title",
+                        "description": "The product variant title."
                     },
                     {
-                      "label": "Variant Price",
-                      "value": "Variant Price",
-                      "description": "The product variant price."
+                        "label": "Variant Price",
+                        "value": "Variant Price",
+                        "description": "The product variant price."
                     },
                     {
-                      "label": "Variant Compare At Price",
-                      "value": "Variant Compare At Price",
-                      "description": "The product variant compare at price."
+                        "label": "Variant Compare At Price",
+                        "value": "Variant Compare At Price",
+                        "description": "The product variant compare at price."
                     },
                     {
-                      "label": "Variant Barcode",
-                      "value": "Variant Barcode",
-                      "description": "The product variant barcode."
+                        "label": "Variant Barcode",
+                        "value": "Variant Barcode",
+                        "description": "The product variant barcode."
                     },
                     {
-                      "label": "Variant Sku",
-                      "value": "Variant Sku",
-                      "description": "The product variant sku."
+                        "label": "Variant Sku",
+                        "value": "Variant Sku",
+                        "description": "The product variant sku."
                     },
                     {
-                      "label": "Variant Inventory Item ID",
-                      "value": "Variant Inventory Item ID",
-                      "description": "The product variant inventory item id."
+                        "label": "Variant Inventory Item ID",
+                        "value": "Variant Inventory Item ID",
+                        "description": "The product variant inventory item id."
                     }
                 ],
                 "check_all": true,
