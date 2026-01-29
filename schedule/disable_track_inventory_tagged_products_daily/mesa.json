@@ -1,0 +1,224 @@
+{
+    "key": "schedule/disable_track_inventory_tagged_products_daily",
+    "name": "Disable Inventory Tracking for Tagged Products Every Day",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "enqueue_type": "schedule",
+                    "datetime": null,
+                    "schedule": "{{ template | label: 'Select how often MESA should check for tagged products and disable inventory tracking.', description: 'The workflow runs daily at midnight by default, but you can adjust it to run hourly, weekly, or monthly.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "list",
+                "name": "Get List of Products",
+                "key": "shopify",
+                "operation_id": "get_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/products.json",
+                    "query": {
+                        "limit": "2000"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query", "query.limit"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify}}",
+                    "filter": {
+                        "a": "{{shopify[].tags}}",
+                        "comparison": "contains",
+                        "b": "{{ template | label: 'Specify the product tag MESA should look for.', description: 'Any product with this tag, including all variants, will have inventory tracking automatically turned off when the workflow runs.' }}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop_2",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{loop.variants[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_item",
+                "action": "retrieve",
+                "name": "Retrieve Inventory Item",
+                "key": "shopify_5",
+                "operation_id": "get_inventory_items_inventory_item_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/inventory_items\/{{inventory_item_id}}.json",
+                    "trigger_parent_key": "loop_2",
+                    "inventory_item_id": "{{loop_2.inventory_item_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": ["inventory_item_id"],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop_2",
+                    "a": "{{shopify_5.tracked}}",
+                    "comparison": "equals",
+                    "b": "true",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "b", "additional"],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "inventory_item",
+                "action": "update",
+                "name": "Update Inventory Item",
+                "key": "shopify_6",
+                "operation_id": "put_inventory_items_inventory_item_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/inventory_items\/{{inventory_item_id}}.json",
+                    "trigger_parent_key": "loop_2",
+                    "inventory_item_id": "{{shopify_5.id}}",
+                    "body": {
+                        "tracked": "false"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.tracked"],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_2",
+                    "trigger_parent_key": "loop_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 7
+            }
+        ]
+    }
+}
