@@ -39,7 +39,7 @@
                     "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
                     "product_id": "{{shopify.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be added to the product?', description: 'The tag is set to 'New Arrival' by default. Change this tag if you prefer something different. You will need to re-enter this tag on the next screen. We recommend copying the tag before clicking next to ensure the tag matches.', default: 'New Arrival', tokens: false }}"
+                        "tag": "{{ template | label: 'What tag will be added and removed from the product?', description: 'The tag is set to \"New Arrival\" by default. Change this tag if you prefer something different.', default: 'New Arrival', tokens: false }}"
                     }
                 },
                 "local_fields": [],
@@ -96,7 +96,7 @@
                     "api_endpoint": "delete mesa\/products\/{{product_id}}\/tag.json",
                     "product_id": "{{shopify_2.id}}",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be removed from the product?', description: 'This needs to be the same as the tag that is added.', default: 'New Arrival', tokens: false, copy_value_from: 'shopify_1.body.tag' }}"
+                        "tag": "{{ template | copy_value_from: 'shopify_1.body.tag' }}"
                     }
                 },
                 "local_fields": [],

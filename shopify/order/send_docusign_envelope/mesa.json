@@ -72,8 +72,8 @@
                 "metadata": {
                     "api_endpoint": "put /v2.1/accounts/{accountId}/envelopes/{envelopeId}/recipients",
                     "path": {
-                        "server": "{{ template | label: 'What is the data center location?', tokens: false, copy_value_from: 'docusign.path.server' }}",
-                        "accountId": "{{ template | label: 'What is the account ID?', tokens: false, copy_value_from: 'docusign.path.accountId' }}",
+                        "server": "{{ template | copy_value_from: 'docusign.path.server' }}",
+                        "accountId": "{{ template | copy_value_from: 'docusign.path.accountId' }}",
                         "envelopeId": "{{docusign.envelopeId}}"
                     },
                     "body": {
@@ -111,8 +111,8 @@
                 "metadata": {
                     "api_endpoint": "put /v2.1/accounts/{accountId}/envelopes/{envelopeId}",
                     "path": {
-                        "server": "{{ template | label: 'What is the data center location?', tokens: false, copy_value_from: 'docusign.path.server' }}",
-                        "accountId": "{{ template | label: 'What is the account ID?', tokens: false, copy_value_from: 'docusign.path.accountId' }}",
+                        "server": "{{ template | copy_value_from: 'docusign.path.server' }}",
+                        "accountId": "{{ template | copy_value_from: 'docusign.path.accountId' }}",
                         "envelopeId": "{{docusign.envelopeId}}"
                     },
                     "body": {

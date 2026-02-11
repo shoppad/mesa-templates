@@ -173,7 +173,7 @@
                         ]
                     },
                     "path": {
-                        "id": "{{ template | label: 'Select the same Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}"
+                        "id": "{{ template | copy_value_from: 'klaviyo.path.id' }}"
                     }
                 },
                 "local_fields": [],
@@ -271,7 +271,7 @@
                         ]
                     },
                     "path": {
-                        "id": "{{ template | label: 'Re-select the same Klaviyo list again that you would like the customer to be subscribed to.', description: '' }}"
+                        "id": "{{ template | copy_value_from: 'klaviyo.path.id' }}"
                     }
                 },
                 "local_fields": [],

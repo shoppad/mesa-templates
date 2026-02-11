@@ -1,6 +1,6 @@
 {
     "key": "shopify/inventory/send_to_google_sheets",
-    "name": "Send Shopify Product Inventory to Google Sheets",
+    "name": "Send Shopify Product Inventory Updates to Google Sheets",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -80,7 +80,7 @@
                 "metadata": {
                     "api_endpoint": "put /{spreadsheet_id}/{sheet}/{row}",
                     "path": {
-                        "spreadsheet_id": "{{ template | label: 'Which Google Sheet should MESA update with the latest inventory levels?', description: 'We recommend selecting the same spreadsheet you used for product lookups to keep everything in one place.' }}",
+                        "spreadsheet_id": "{{ template | copy_value_from: 'googlesheets.path.spreadsheet_id' }}",
                         "sheet": "Sheet1",
                         "row": "{{googlesheets.0.data.Row}}"
                     },
