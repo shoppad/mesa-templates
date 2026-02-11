@@ -189,7 +189,7 @@
                     "trigger_parent_key": "loop",
                     "a": "{{shopify_2.tags}}",
                     "comparison": "does not equal",
-                    "b": "{{ template | copy_value_from: 'filter_1.body.b' }}",
+                    "b": "{{ template | copy_value_from: 'loop.filter.additional.1.b' }}",
                     "additional": [
                         {
                             "operator": "and",
