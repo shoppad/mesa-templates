@@ -60,6 +60,7 @@
                 "name": "Save File",
                 "key": "dropbox",
                 "operation_id": "file_save",
+                "version": "v1",
                 "metadata": {
                     "trigger_parent_key": "loop",
                     "file_url": "{{loop.value}}",
