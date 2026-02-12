@@ -84,6 +84,7 @@
                 "name": "Save File",
                 "key": "dropbox",
                 "operation_id": "file_save",
+                "version": "v1",
                 "metadata": {
                     "file_url": "{{loop_1.value}}",
                     "file_path": "/{{filename}}"
