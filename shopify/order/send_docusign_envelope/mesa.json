@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_docusign_envelope",
-    "name": "Send a Docusign envelope for new Shopify orders",
+    "name": "Send Docusign Envelope for New Shopify Orders",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -72,8 +72,8 @@
                 "metadata": {
                     "api_endpoint": "put /v2.1/accounts/{accountId}/envelopes/{envelopeId}/recipients",
                     "path": {
-                        "server": "{{ template | label: 'What is the data center location?', tokens: false }}",
-                        "accountId": "{{ template | label: 'What is the account ID?', tokens: false }}",
+                        "server": "{{ template | copy_value_from: 'docusign.path.server' }}",
+                        "accountId": "{{ template | copy_value_from: 'docusign.path.accountId' }}",
                         "envelopeId": "{{docusign.envelopeId}}"
                     },
                     "body": {
@@ -111,8 +111,8 @@
                 "metadata": {
                     "api_endpoint": "put /v2.1/accounts/{accountId}/envelopes/{envelopeId}",
                     "path": {
-                        "server": "{{ template | label: 'What is the data center location?', tokens: false }}",
-                        "accountId": "{{ template | label: 'What is the account ID?', tokens: false }}",
+                        "server": "{{ template | copy_value_from: 'docusign.path.server' }}",
+                        "accountId": "{{ template | copy_value_from: 'docusign.path.accountId' }}",
                         "envelopeId": "{{docusign.envelopeId}}"
                     },
                     "body": {

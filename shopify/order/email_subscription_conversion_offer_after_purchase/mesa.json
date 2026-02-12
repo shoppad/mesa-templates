@@ -189,7 +189,7 @@
                     "trigger_parent_key": "loop",
                     "a": "{{shopify_2.tags}}",
                     "comparison": "does not equal",
-                    "b": "{{ template | label: 'Enter the customer tag again to exclude existing subscribers', description: 'This tag should match the previously defined customer tag. Default: subscriber', default: 'subscriber' }}",
+                    "b": "{{ template | copy_value_from: 'loop.filter.additional.1.b' }}",
                     "additional": [
                         {
                             "operator": "and",
