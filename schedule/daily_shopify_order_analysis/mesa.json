@@ -15,14 +15,11 @@
                 "operation_id": "schedule",
                 "metadata": {
                     "enqueue_type": "schedule",
-                    "schedule": "{{ template | label: 'What time would you like to receive your daily order analysis email?', description: 'It is recommended to schedule this daily at a time when you are typically available to review the report.' }}",
+                    "schedule": "{{ template | label: 'What time would you like to receive your daily order analysis email?', description: 'The delivery cadence is set to hourly by default. Change it to Daily to receive this analysis once per day.' }}",
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "enqueue_type",
-                    "schedule"
-                ],
+                "selected_fields": ["enqueue_type", "schedule"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -72,11 +69,7 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "body",
-                    "body.role",
-                    "body.content"
-                ],
+                "selected_fields": ["body", "body.role", "body.content"],
                 "on_error": "default",
                 "weight": 1
             },
