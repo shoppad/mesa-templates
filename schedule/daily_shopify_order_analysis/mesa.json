@@ -1,0 +1,109 @@
+{
+    "key": "schedule/daily_shopify_order_analysis",
+    "name": "Daily Shopify Order Analysis",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "schedule",
+                "name": "Schedule",
+                "key": "schedule",
+                "operation_id": "schedule",
+                "metadata": {
+                    "enqueue_type": "schedule",
+                    "schedule": "{{ template | label: 'What time would you like to receive your daily order analysis email?', description: 'It is recommended to schedule this daily at a time when you are typically available to review the report.' }}",
+                    "datetime": null
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "enqueue_type",
+                    "schedule"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "list",
+                "name": "Retrieve Past 24-Hour Sales Data",
+                "key": "shopify_order",
+                "operation_id": "get_orders",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders.json",
+                    "query": {
+                        "status": "any",
+                        "created_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 24, \"hours\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}",
+                        "created_at_max": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query.status",
+                    "query.created_at_min",
+                    "query.created_at_max"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Analyze Orders & Generate Daily Store Pulse",
+                "version": "v2",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You are a senior ecommerce analyst reviewing the last 24 hours of Shopify orders.\n\nYour job is to produce a concise but insightful \u201cDaily Store Pulse\u201d summary for the merchant.\n\nYou will be given raw Shopify orders data. First, compute the same rollup metrics that an analyst would normally calculate in code, then write the summary.\n\nRaw Shopify orders payload:\n{{shopify_order}}\n\nCompute these metrics from the orders:\n\n- orders_total: total number of orders\n- estimated_gross_revenue: sum of current_total_price across all orders (convert to a number; treat missing\/invalid as 0)\n- average_order_value: estimated_gross_revenue \/ orders_total (0 if no orders)\n- orders_over_100: count of orders where current_total_price > 100\n- orders_paid: count where financial_status indicates paid (include \"paid\" and \"partially_paid\")\n- orders_pending: count where financial_status indicates not-yet-paid (include \"pending\" and \"authorized\")\n- orders_fulfilled: count where fulfillment_status is \"fulfilled\" (or fulfillments indicate fulfilled)\n- most_popular_product: determine best-selling product by total quantity across all line_items\n  (sum quantities by product title; break ties by revenue if possible)\n\nRules \/ guardrails:\n\n- Ignore cancelled\/voided orders ONLY if a clear cancellation indicator exists.\n- Do not output raw JSON.\n- Do not say \u201cbased on the data provided.\u201d\n- Write like a real ecommerce operator, not an AI assistant.\n- Keep total output under 250 words.\n- Output must be plain text only.\n\n------------------------------------------------------------\nFORMATTING REQUIREMENTS (VERY IMPORTANT)\n------------------------------------------------------------\n\n- Do NOT use markdown symbols like #, ##, ###, or ####\n- Do NOT use bold text or asterisks (**)\n- Do NOT format anything as markdown\n- Use clean spacing and email-friendly plain text\n\nReturn the report EXACTLY in this structure:\n\nDaily Store Pulse\n\nSummary\n[3\u20135 sentence paragraph summarizing performance]\n\nIF orders_total > 0, include:\n\nKey Metrics\n- Total orders: X\n- Estimated gross revenue: $X\n- Average order value: $X\n- High-value orders (>$100): X\n- Fulfillment breakdown:\n  - Paid: X\n  - Pending: X\n  - Fulfilled: X\n\nBest-Selling Product(s)\n- Product Name (X units)\n\nNoteworthy Insights\n[1\u20132 short sentences highlighting patterns or concerns]\n\nPractical Recommendation\n[1 clear, practical action the merchant should take today]\n\n------------------------------------------------------------\n\nIF orders_total = 0, DO NOT analyze performance.\n\nInstead return EXACTLY this structure:\n\nDaily Store Pulse\n\nSummary\nThere were no orders placed in the last 24 hours. This can occur occasionally and should be seen as an opportunity to analyze and adapt strategies.\n\nPossible Reasons\n1. Traffic drop or fewer visitors\n2. Seasonal or day-to-day variation\n3. Marketing or ad activity slowed or paused\n\nActions to Generate Sales\n1. Re-engage past customers with an email or SMS offer\n2. Increase visibility through social or influencer activity\n3. Audit and relaunch high-performing ad campaigns\n\nClose with a short motivating sentence.\nKeep output under 200 words.\n\n"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.role",
+                    "body.content"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "email",
+                "name": "Email Daily Order Analysis",
+                "version": "v2",
+                "key": "email",
+                "operation_id": "\/send-email",
+                "metadata": {
+                    "api_endpoint": "post \/send-email",
+                    "body": {
+                        "to": "{{ template | label: 'Which email address should receive the daily order analysis?', description: 'You can enter multiple recipients by separating their addresses with commas.' }}",
+                        "subject": "Order Report Card for {{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | date: \"%B %e, %Y\"}}",
+                        "message": "{{ai.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body.advanced_options.from",
+                    "body.advanced_options.reply_to"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
