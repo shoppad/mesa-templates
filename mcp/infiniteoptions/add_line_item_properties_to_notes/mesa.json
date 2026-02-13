@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "description": "Add product options to the order notes field in Shopify. This Yedric skill copies customizations or selections directly into order notes, ensuring third-party services and team members can quickly access important details. Streamline order tracking and fulfillment by consolidating essential information in one central location.",
   "seconds": 180,
-  "enabled": false,
+  "enabled": true,
   "setup": true,
   "config": {
     "inputs": [
