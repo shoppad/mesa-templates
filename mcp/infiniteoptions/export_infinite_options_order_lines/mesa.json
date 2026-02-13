@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Searches Shopify for Order line items that match a user's \"Infinite options\" fields properties (line item properties), and creates a digestible output for each order line and its properties.",
   "seconds": 135,
-  "enabled": false,
+  "enabled": true,
   "setup": true,
   "config": {
     "inputs": [
