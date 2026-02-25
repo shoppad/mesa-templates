@@ -1,9 +1,7 @@
 {
     "key": "shopify/product/publish_to_pos_channel_based_on_tags_kj",
-    "name": "Publish Or Unpublish To POS Channel From Product Tags Changed Webhook",
+    "name": "Manage Published Shopify Products to POS Channel Using Tags",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
@@ -18,44 +16,83 @@
                 "key": "shopify",
                 "operation_id": "products_update",
                 "metadata": {
-                    "includeFields": "id,tags"
+                    "frequency": "every",
+                    "includeFields": []
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "includeFields"
-                ],
+                "selected_fields": ["includeFields"],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 2,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Get Publication ID For POS Channel",
-                "key": "custom",
+                "type": "shopify",
+                "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve the Full Product Details",
+                "key": "shopify_3",
+                "operation_id": "get_products_product_id",
                 "metadata": {
-                    "script": "custom.js"
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "product_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "script"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4.1,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "If Publish To POS Is In Tags",
-                "key": "filter",
+                "type": "shopify",
+                "entity": "publication",
+                "action": "retrieve",
+                "name": "Retrieve the POS Sales Channel",
+                "key": "shopify_1",
+                "operation_id": "get_graphql_publications_id",
                 "metadata": {
+                    "api_endpoint": "get graphql\/publications\/id.json",
+                    "body": {
+                        "id": "{{ template | label: 'Select or enter your Shopify POS Sales Channel ID', description: 'This identifies the Shopify POS sales channel where products will be published or removed.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Decide Whether this Product Should Appear in POS",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "If the Product is Tagged \u201cPublish To POS\u201d",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
                     "a": "{{shopify.tags}}",
-                    "comparison": "contains",
+                    "comparison": "equals",
                     "b": "Publish To POS",
-                    "script": "filter.js",
                     "additional": [
                         {
                             "operator": "and",
@@ -64,60 +101,109 @@
                     ]
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "b",
-                    "script"
-                ],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Publish to POS Channel",
-                "key": "custom_3",
-                "metadata": {
-                    "script": "custom_3.js"
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "script"
-                ],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Else",
-                "key": "custom_1",
-                "metadata": {
-                    "script": "custom_1.js"
-                },
-                "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 2,
+                "schema": 3.1,
                 "trigger_type": "output",
-                "type": "custom",
-                "name": "Unpublish From POS Channel",
-                "key": "custom_5",
+                "type": "shopify",
+                "entity": "publishable",
+                "action": "publish",
+                "name": "Publish this Product to Shopify POS",
+                "key": "shopify_2",
+                "operation_id": "post_graphql_publishable_id_publish",
                 "metadata": {
-                    "script": "custom_5.js"
+                    "api_endpoint": "post graphql\/publishable\/id.json",
+                    "argument": "$id: ID!, $input: [PublicationInput!]!",
+                    "graphql_name": "publishablePublish",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "id": "{{shopify_3.id}}",
+                        "shopify_entity_id": "product",
+                        "input": [
+                            {
+                                "publicationId": "{{ template | label: 'Which Sales Channel ID should products tagged with \"Publish to POS\" be published to?', description: 'Select or enter the Shopify POS Sales Channel ID where tagged products should be made available.' }}"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "script"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "If the Product is NOT Tagged \u201cPublish To POS\u201d",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "comparison": "does not equal",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "a": "{{shopify.tags}}",
+                    "b": "Publish to POS"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "publishable",
+                "action": "unpublish",
+                "name": "Remove this Product from Shopify POS",
+                "key": "shopify_4",
+                "operation_id": "post_graphql_publishable_id_unpublish",
+                "metadata": {
+                    "api_endpoint": "post graphql\/publishable\/id.json",
+                    "argument": "$id: ID!, $input: [PublicationInput!]!",
+                    "graphql_name": "publishableUnpublish",
+                    "body": {
+                        "id": "{{shopify_3.id}}",
+                        "shopify_entity_id": "product",
+                        "input": [
+                            {
+                                "publicationId": "{{ template | label: 'Which Shopify POS Sales Channel should products without the \"Publish to POS\" tag be removed from?', description: 'Select your Shopify POS sales channel from the dropdown, or enter the Sales Channel ID manually. Products without the specified tag will be unpublished from this channel.' }}"
+                            }
+                        ]
+                    },
+                    "trigger_parent_key": "paths_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
             }
         ]
     }
