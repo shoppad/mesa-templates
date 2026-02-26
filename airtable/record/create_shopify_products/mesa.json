@@ -97,7 +97,8 @@
                     "poll": "@hourly:0 * * * *",
                     "path": {
                         "base": "{{ template | label: 'Select your Airtable base', description: '' }}",
-                        "table": ""
+                        "table": "",
+                        "skip_update_local_fields_metadata": true
                     }
                 },
                 "local_fields": [],
