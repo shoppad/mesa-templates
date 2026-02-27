@@ -1,6 +1,6 @@
 {
     "key": "uploadery/order/send_file_to_dropbox",
-    "name": "Automatically Send Shopify Order Upload Files to Dropbox",
+    "name": "Send Shopify Order Upload Files to Dropbox",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -52,19 +52,22 @@
                 "weight": 0
             },
             {
-                "schema": 2,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "dropbox",
                 "entity": "file",
                 "action": "save",
                 "name": "Save File",
+                "version": "v2",
                 "key": "dropbox",
                 "operation_id": "file_save",
-                "version": "v1",
                 "metadata": {
+                    "api_endpoint": "post \/files\/save_url",
                     "trigger_parent_key": "loop",
-                    "file_url": "{{loop.value}}",
-                    "file_path": "\/{{filename}}"
+                    "body": {
+                        "file_url": "{{loop.value}}",
+                        "folder_path": "{{ template | label: 'What folder would you like to save files to?', description: 'Select a folder from the dropdown. If you don''t see it, ensure the folder is created in your Dropbox account, then refresh and select the correct folder.' }}"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [],

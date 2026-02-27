@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/send_file_to_dropbox",
-    "name": "Send files from a Shopify order to Dropbox",
+    "name": "Send Files from Shopify Orders to Dropbox",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
@@ -15,83 +15,130 @@
                 "name": "Order Created",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{shopify.line_items[]}}",
                     "filter": {
-                        "comparison": "equals"
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
                 "name": "Loop",
-                "version": "v2",
-                "key": "loop_1",
+                "version": "v3",
+                "key": "loop_2",
                 "operation_id": "loop_loop",
                 "metadata": {
+                    "trigger_parent_key": "loop",
                     "key": "{{loop.properties[]}}",
                     "filter": {
-                        "comparison": "equals"
+                        "a": "{{loop.properties[].name}}",
+                        "comparison": "contains",
+                        "b": "{{ template | label: 'What is the name of the product option for the uploaded file?', tokens: false, placeholder: 'File' }}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
             {
                 "schema": 4,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{loop_1.name}}",
-                    "comparison": "contains",
-                    "b": "{{ template | label: 'What is the name of the product option for the uploaded file?', tokens: false, placeholder: 'File' }}"
-                },
-                "local_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
                 "type": "dropbox",
                 "entity": "file",
                 "action": "save",
                 "name": "Save File",
+                "version": "v2",
                 "key": "dropbox",
                 "operation_id": "file_save",
-                "version": "v1",
                 "metadata": {
-                    "file_url": "{{loop_1.value}}",
-                    "file_path": "/{{filename}}"
+                    "api_endpoint": "post \/files\/save_url",
+                    "trigger_parent_key": "loop_2",
+                    "body": {
+                        "file_url": "{{loop_2.value}}",
+                        "folder_path": "{{ template | label: 'What folder would you like to save files to?', description: 'Select a folder from the dropdown. If you don''t see it, ensure the folder is created in your Dropbox account, then refresh and select the correct folder.' }}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_2",
+                    "trigger_parent_key": "loop_2"
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
             }
         ]
     }
