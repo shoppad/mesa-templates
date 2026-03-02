@@ -3,7 +3,7 @@
     "name": "Boost Shopify Product Search Rankings Using Metafields in Search & Discovery",
     "version": "1.0.0",
     "enabled": false,
-    "setup": true,
+    "setup": false,
     "config": {
         "inputs": [
             {
