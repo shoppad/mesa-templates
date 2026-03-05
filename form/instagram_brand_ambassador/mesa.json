@@ -1,25 +1,18 @@
 {
-    "key": "instagram_brand_ambassador",
-    "name": "Collect Brand Ambassador Instagram Handles and Tag Customers with \"Influencer\"",
+    "key": "form/instagram_brand_ambassador",
+    "name": "Tag Customers as Influencers and Collect Instagram Handles",
     "version": "1.0.0",
-    "description": "Forms by Mesa is an easy way to collect data from your Shopify store with a simple interface and powerful editor. Grow your influencer and ambassador programs by asking for Instagram handles at checkout.  You can then reach out to customers with large followings and make sure their experience is top-notch.",
-    "video": "",
-    "readme": "",
-    "tags": [],
-    "source": "",
-    "destination": "",
-    "seconds": 0,
     "enabled": false,
-    "logging": false,
-    "debug": false,
+    "setup": false,
     "config": {
         "inputs": [
             {
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "form",
-                "name": "Form",
+                "name": "Form Submitted",
                 "key": "form",
+                "operation_id": "form",
                 "metadata": {
                     "form_data": [
                         {
@@ -30,13 +23,13 @@
                         {
                             "type": "paragraph",
                             "subtype": "p",
-                            "label": "<br>Thank you for your purchase. Are you interested in becoming a Brand Ambassador with us?<br><br>Fill out the fields below to submit your request to become an Instagram Influencer for our team!<br><br>"
+                            "label": "Thank you for your purchase. Are you interested in becoming a Brand Ambassador with us? Fill out the fields below to submit your request to become an Instagram Influencer for our team!"
                         },
                         {
                             "type": "text",
                             "required": true,
                             "label": "Instagram Handle",
-                            "placeholder": "@examplehandle",
+                            "placeholder": "@instagramhandle",
                             "className": "form-control",
                             "name": "instagram-handle",
                             "subtype": "text"
@@ -45,59 +38,187 @@
                             "type": "text",
                             "required": true,
                             "label": "Email Address",
-                            "placeholder": "someone@example.com",
+                            "placeholder": "name@email.com",
                             "className": "form-control",
                             "name": "email-address",
                             "subtype": "text"
-                        },
-                        {
-                            "type": "hidden",
-                            "name": "customer-id",
-                            "value": "{{customer.id}}"
                         }
                     ]
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "customer",
-                "action": "retrieve",
-                "name": "Customer Retrieve",
-                "key": "shopify_customer",
+                "entity": "customer_search",
+                "action": "list",
+                "name": "Search Customer",
+                "key": "shopify",
+                "operation_id": "get_customers_search",
                 "metadata": {
-                    "customer_id": "{{form.customer-id}}"
+                    "api_endpoint": "get admin\/customers\/search.json",
+                    "parameters": "limit=1&email={{form.email-address}}"
                 },
                 "local_fields": [],
+                "selected_fields": ["parameters"],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 3,
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule: Check if Existing Customer",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
-                "action": "update",
-                "name": "Customer Update",
-                "key": "shopify_customer_2",
+                "action": "note_update",
+                "name": "Update Customer Notes",
+                "key": "shopify_1",
+                "operation_id": "put_mesa_customers_customer_id_note",
                 "metadata": {
+                    "api_endpoint": "put mesa\/customers\/{{customer_id}}\/note.json",
+                    "customer_id": "{{shopify.0.id}}",
+                    "trigger_parent_key": "paths_1",
                     "body": {
-                        "tags": "{{shopify_customer.tags}},Influencer",
-                        "note": "{{shopify_customer.note}}\nBrand Ambassador submission:\n\nEmail: {{form.email-address}}\nIG handle: {{form.instagram-handle}}"
-                    },
-                    "customer_id": "{{shopify_customer.id}}"
+                        "note": "Brand Ambassador submission:\n\nEmail: {{form.email-address}}\nInstagram Handle: {{form.instagram-handle}}",
+                        "append": true
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "tag_add",
+                "name": "Customer Add Tag",
+                "key": "shopify_2",
+                "operation_id": "post_mesa_customers_customer_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/customers\/{{customer_id}}\/tag.json",
+                    "customer_id": "{{shopify.0.id}}",
+                    "trigger_parent_key": "paths_1",
+                    "body": {
+                        "tag": "Influencer"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule: Check if New Customer",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "a": "{{shopify.0.id}}",
+                    "comparison": "is empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "create",
+                "name": "Create Customer",
+                "key": "shopify_3",
+                "operation_id": "post_customers",
+                "metadata": {
+                    "api_endpoint": "post admin\/customers.json",
+                    "trigger_parent_key": "paths_2",
+                    "body": {
+                        "email": "{{form.email-address}}",
+                        "note": "Brand Ambassador submission:\n\nEmail: {{form.email-address}}\nInstagram Handle: {{form.instagram-handle}}",
+                        "tags": "Influencer"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.email", "body.note", "body.tags"],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
             }
-        ],
-        "storage": []
+        ]
     }
 }
