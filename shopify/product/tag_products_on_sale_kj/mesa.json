@@ -1,9 +1,7 @@
 {
     "key": "shopify/product/tag_products_on_sale_kj",
-    "name": "Tag product as on sale by looking at Compare At price",
+    "name": "Tag Shopify Products as \"On Sale\" Based on Compare-at Price",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
@@ -17,7 +15,10 @@
                 "name": "Product Updated",
                 "key": "shopify",
                 "operation_id": "products_update",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
@@ -26,7 +27,7 @@
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product_variant",
@@ -35,69 +36,50 @@
                 "key": "shopify_1",
                 "operation_id": "get_products_product_id_variants",
                 "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}/variants.json",
+                    "api_endpoint": "get admin\/products\/{{product_id}}\/variants.json",
                     "product_id": "{{shopify.id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "product_id",
-                    "query"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop Over Variants",
-                "version": "v1",
+                "name": "Loop Over Variants and Filter",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{ shopify_1 }}"
+                    "filter": {
+                        "a": "{{shopify_1[].compare_at_price}}",
+                        "comparison": "is not empty",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "a": "{{shopify_1[].price}}",
+                                "comparison": "less than",
+                                "b": "{{shopify_1[].compare_at_price}}"
+                            }
+                        ]
+                    },
+                    "key": "{{shopify_1}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "key"
+                    "filter.additional[].operator",
+                    "filter.additional[].a",
+                    "filter.additional[].comparison",
+                    "filter.additional[].b"
                 ],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
-                "metadata": {
-                    "comparison": "is not empty",
-                    "a": "{{ loop.compare_at_price }}",
-                    "additional": [
-                        {
-                            "operator": "and",
-                            "a": "{{ loop.price }}",
-                            "comparison": "less than",
-                            "b": "{{ loop.compare_at_price }}"
-                        }
-                    ]
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "additional",
-                    "additional[].operator",
-                    "additional[].a",
-                    "additional[].comparison",
-                    "additional[].b"
-                ],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 3,
+                "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
@@ -106,18 +88,33 @@
                 "key": "shopify_2",
                 "operation_id": "post_mesa_products_product_id_tag",
                 "metadata": {
-                    "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
+                    "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
                     "product_id": "{{shopify.id}}",
+                    "trigger_parent_key": "loop",
                     "body": {
                         "tag": "On Sale"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "product_id",
-                    "body",
-                    "body.tag"
-                ],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             }
