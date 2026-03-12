@@ -49,7 +49,7 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop",
+                "name": "Loop Over Variants and Filter",
                 "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
