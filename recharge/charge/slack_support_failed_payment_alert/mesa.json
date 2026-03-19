@@ -1,0 +1,50 @@
+{
+    "key": "recharge/charge/slack_support_failed_payment_alert",
+    "name": "Send Slack Alert When Recharge Payment Fails",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "recharge",
+                "entity": "charge",
+                "action": "charge\/failed",
+                "name": "Recharge Charge Failed",
+                "key": "recharge_charge",
+                "operation_id": "charge_failed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "slack",
+                "entity": "message",
+                "action": "create",
+                "name": "Send Slack Message",
+                "version": "v3",
+                "key": "slack_message",
+                "operation_id": "slack",
+                "metadata": {
+                    "api_endpoint": "post \/api\/chat.postMessage",
+                    "body": {
+                        "channel": "{{ template | label: 'To which Slack channel would you like to send the message?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite @MESA. [Learn more.](https://docs.getmesa.com/connect/slack#invite)' }}",
+                        "markdown_text": "*:warning: Recharge charge failed*\n\u2022 Customer: {{recharge_charge.customer.email}} (Recharge customer ID: {{recharge_charge.customer.id}})\n\u2022 Charge ID: {{recharge_charge.id}}\n\u2022 Status: {{recharge_charge.status}}\n\u2022 Amount: {{recharge_charge.total_price}} {{recharge_charge.currency}}\n\u2022 Payment processor: {{recharge_charge.payment_processor}}\n\u2022 External transaction: {{recharge_charge.external_transaction_id.payment_processor}}\n\u2022 Created: {{recharge_charge.created_at}}\n\u2022 Processed: {{recharge_charge.processed_at}}\n\u2022 External order ID: {{recharge_charge.external_order_id.ecommerce}}\n\u2022 Address ID: {{recharge_charge.address_id}}\n\n*Line items*\n{% for item in recharge_charge.line_items %}\u2022 {{item.quantity}}\u00d7 {{item.title}} (SKU: {{item.sku}}) \u2014 {{item.total_price}}\n{% endfor %}\n\n*Shipping*\n{{recharge_charge.shipping_address.first_name}} {{recharge_charge.shipping_address.last_name}}, {{recharge_charge.shipping_address.address1}} {{recharge_charge.shipping_address.address2}}, {{recharge_charge.shipping_address.city}}, {{recharge_charge.shipping_address.province}} {{recharge_charge.shipping_address.zip}}, {{recharge_charge.shipping_address.country}}\n\n*Note*: {{recharge_charge.note}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.markdown_text"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
