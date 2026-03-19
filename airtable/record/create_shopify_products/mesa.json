@@ -68,11 +68,6 @@
                         "label": "Variant Sku",
                         "value": "Variant Sku|{{airtable.fields.Variant Sku}}",
                         "description": "The product variant sku."
-                    },
-                    {
-                        "label": "Variant Inventory Item ID",
-                        "value": "Variant Inventory Item ID|{{airtable.fields.Variant Inventory Item ID}}",
-                        "description": "The product variant inventory item id."
                     }
                 ],
                 "check_all": true,
