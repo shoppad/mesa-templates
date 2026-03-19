@@ -1,0 +1,46 @@
+{
+    "key": "recharge/charge/sms_support_team_alert",
+    "name": "Send SMS Alerts When Recharge Subscription Payments Fail",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "recharge",
+                "entity": "charge",
+                "action": "charge\/failed",
+                "name": "Recharge Charge Failed",
+                "key": "recharge_charge",
+                "operation_id": "charge_failed",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "sms",
+                "entity": "message",
+                "action": "send",
+                "name": "Send SMS alert",
+                "key": "sms_message",
+                "operation_id": "message_send",
+                "metadata": {
+                    "to": "{{ template | label: 'Which phone number(s) should receive this SMS alert?', description: 'Enter one or more phone numbers separated by commas (e.g., +15551234567, +15557654321).' }}",
+                    "message": "Recharge charge FAILED. Charge {{recharge_charge.id}} | {{recharge_charge.customer.email}} | Total {{recharge_charge.total_price}} {{recharge_charge.currency}} | Processor {{recharge_charge.payment_processor}} | Scheduled {{recharge_charge.scheduled_at}}"
+                },
+                "local_fields": [],
+                "selected_fields": ["to", "message"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
