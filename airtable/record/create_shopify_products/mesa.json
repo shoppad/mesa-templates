@@ -7,6 +7,13 @@
         "mode": "custom",
         "fields": [
             {
+                "key": "create_base_name",
+                "target": "airtable.path.create_base_name",
+                "label": "What do you want to name your base?",
+                "tokens": false,
+                "description": "Give your new Airtable base a name."
+            },
+            {
                 "key": "create_table_name",
                 "target": "airtable.path.create_table_name",
                 "label": "What do you want to name your table?",
@@ -91,8 +98,6 @@
                     "api_endpoint": "get \/{base}\/{table}",
                     "poll": "@hourly:0 * * * *",
                     "path": {
-                        "base": "{{ template | label: 'Select your Airtable base', description: '' }}",
-                        "table": "",
                         "skip_update_local_fields_metadata": true
                     }
                 },
