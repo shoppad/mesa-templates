@@ -1,0 +1,175 @@
+{
+    "key": "shopify/refund/track_refunds_google_sheets",
+    "name": "Track Shopify Order Refunds in Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "Give your refund tracking sheet a name.",
+                "tokens": false,
+                "description": "You'll see it appear in your Google Drive once setup is complete."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "Select what refund details you want to capture.",
+                "description": "We've included all available columns by default. Simply deselect any you'd like to leave out.",
+                "options": [
+                    {
+                        "label": "Customer ID",
+                        "value": "Customer ID|{{shopify_1.customer.id}}",
+                        "description": "The customer ID."
+                    },
+                    {
+                        "label": "Customer Name",
+                        "value": "Customer Name|{{shopify_1.customer.first_name}} {{shopify_1.customer.last_name}}",
+                        "description": "The name of the customer."
+                    },
+                    {
+                        "label": "Customer Email",
+                        "value": "Customer Email|{{shopify_1.email}}",
+                        "description": "The email address of the customer."
+                    },
+                    {
+                        "label": "Refund Amount",
+                        "value": "Refund Amount|{{loop.amount}}",
+                        "description": "The amount of the refund."
+                    },
+                    {
+                        "label": "Refund Issue Date",
+                        "value": "Refund Issue Date|{{shopify.processed_at}}",
+                        "description": "The date the refund was issued."
+                    },
+                    {
+                        "label": "Order Tags",
+                        "value": "Order Tags|{{shopify_1.tags}}",
+                        "description": "The tags of the refund."
+                    },
+                    {
+                        "label": "Refund Notes",
+                        "value": "Refund Notes|{{shopify.note}}",
+                        "description": "The notes of the refund."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "refund",
+                "action": "created",
+                "name": "Refund Created",
+                "key": "shopify",
+                "operation_id": "refunds_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "retrieve",
+                "name": "Retrieve Order",
+                "key": "shopify_1",
+                "operation_id": "get_orders_order_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "order_id": "{{shopify.order_id}}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Transactions",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.transactions[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.3,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "fields": {}
+                    },
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
