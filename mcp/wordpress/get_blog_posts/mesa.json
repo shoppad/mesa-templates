@@ -9,14 +9,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -68,7 +68,8 @@
                     "body.parameters[].required"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -82,7 +83,7 @@
                 "key": "wordpress",
                 "operation_id": "posts-list",
                 "metadata": {
-                    "api_endpoint": "get \/wp\/v2\/posts",
+                    "api_endpoint": "get /wp/v2/posts",
                     "query": {
                         "limit": "1000",
                         "search": "{{skill.search}}",

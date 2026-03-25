@@ -11,14 +11,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -45,7 +45,8 @@
                     "body.parameters[].type"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -59,7 +60,7 @@
                 "key": "shopify",
                 "operation_id": "get_customers",
                 "metadata": {
-                    "api_endpoint": "get admin\/customers.json",
+                    "api_endpoint": "get admin/customers.json",
                     "query": {
                         "limit": "250",
                         "created_at_min": "{{skill.start_date}}",

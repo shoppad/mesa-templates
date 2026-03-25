@@ -9,14 +9,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -60,7 +60,8 @@
                     "body.parameters[].required"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -74,7 +75,7 @@
                 "key": "zendesk",
                 "operation_id": "ListTickets",
                 "metadata": {
-                    "api_endpoint": "get \/api\/v2\/tickets",
+                    "api_endpoint": "get /api/v2/tickets",
                     "query": {
                         "created_at_min": "{{skill.start_date}}",
                         "created_at_max": "{{skill.end_date}}",
@@ -130,7 +131,7 @@
                 "key": "zendesk_1",
                 "operation_id": "ListTicketComments",
                 "metadata": {
-                    "api_endpoint": "get \/api\/v2\/tickets\/{ticket_id}\/comments",
+                    "api_endpoint": "get /api/v2/tickets/{ticket_id}/comments",
                     "trigger_parent_key": "loop",
                     "path": {
                         "ticket_id": "{{loop.id}}"

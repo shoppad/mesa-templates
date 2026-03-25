@@ -9,14 +9,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "ask",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -29,7 +29,8 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -43,7 +44,7 @@
                 "key": "asana",
                 "operation_id": "getTasksForUserTaskList",
                 "metadata": {
-                    "api_endpoint": "get \/user_task_lists\/{user_task_list_gid}\/tasks",
+                    "api_endpoint": "get /user_task_lists/{user_task_list_gid}/tasks",
                     "path": {
                         "user_task_list_gid": "{{ template | label: 'What is your My Tasks List ID in Asana?', description: 'To find it, open the My Tasks view in Asana. In the browser URL, you''ll see a string like this: https://app.asana.com/0/1234567890123456/list. The string of numbers is your My Tasks List ID. Copy that string of numbers and paste that here.' }}"
                     },

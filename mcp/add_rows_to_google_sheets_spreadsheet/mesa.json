@@ -9,14 +9,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -37,7 +37,8 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -52,7 +53,7 @@
                 "key": "googlesheets_1",
                 "operation_id": "spreadsheet_create",
                 "metadata": {
-                    "api_endpoint": "post \/",
+                    "api_endpoint": "post /",
                     "body": {
                         "title": "{{skill.spreadsheet_name}}"
                     }
@@ -73,7 +74,7 @@
                 "key": "googlesheets",
                 "operation_id": "record_bulk_create",
                 "metadata": {
-                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}\/bulk",
+                    "api_endpoint": "post /{spreadsheet_id}/{sheet}/bulk",
                     "path": {
                         "spreadsheet_id": "{{googlesheets_1.spreadsheet_id}}",
                         "sheet": "Sheet1"

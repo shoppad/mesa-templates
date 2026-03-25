@@ -9,14 +9,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -51,7 +51,8 @@
                     "body.parameters[].required"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -65,7 +66,7 @@
                 "key": "helpscout",
                 "operation_id": "get__v2_conversations",
                 "metadata": {
-                    "api_endpoint": "get \/v2\/conversations",
+                    "api_endpoint": "get /v2/conversations",
                     "query": {
                         "limit": "5000",
                         "status": "all",
@@ -117,7 +118,7 @@
                 "key": "helpscout_1",
                 "operation_id": "get-_v2_conversations_threads",
                 "metadata": {
-                    "api_endpoint": "get \/v2\/conversations\/{conversationId}\/threads",
+                    "api_endpoint": "get /v2/conversations/{conversationId}/threads",
                     "trigger_parent_key": "loop",
                     "path": {
                         "conversationId": "{{loop.id}}"
