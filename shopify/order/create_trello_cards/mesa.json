@@ -1,0 +1,56 @@
+{
+    "key": "shopify/order/create_trello_cards",
+    "name": "Create Trello Cards from New Shopify Orders",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "trello",
+                "entity": "card",
+                "action": "create",
+                "name": "Create Card",
+                "key": "trello",
+                "operation_id": "post-cards",
+                "metadata": {
+                    "api_endpoint": "post \/cards",
+                    "path": {
+                        "boardId": "{{ template | label: 'Select your Trello board.', description: 'Choose the Trello board where new cards will be created. This is the board you want your incoming Shopify orders to appear on.' }}"
+                    },
+                    "query": {
+                        "idList": "{{ template | label: 'Select your Trello list.', description: 'Choose the list on that board where each new order card will be added. In Trello, lists are the columns inside a board — for example, ''To Do'', ''In Progress'', or ''Orders to Fulfill''.' }}",
+                        "name": "Order {{shopify.name}}",
+                        "desc": "Order Number: {{shopify.name}}\nOrder Total: {{shopify.current_total_price}}\nCustomer: {{shopify.customer.first_name}} {{shopify.customer.last_name}}\nCustomer Email: {{shopify.customer.email}}\n\n*Products*\n{% for product in shopify.line_items %}\nProduct: {{product.title}}\n Qty: {{product.quantity}}\n Price: {{product.price}}\n{% for property in product.properties %}\n  {{ property.name }}: {{property.value}}\n{% endfor %}\n {% endfor %}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query.desc"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ]
+    }
+}
