@@ -88,7 +88,7 @@
                 "metadata": {
                     "api_endpoint": "post \/{base}\/{table}",
                     "path": {
-                        "base": "{{ template | label: 'Which base would you like to use to create a table?', description: 'Select a base.', tokens: false }}",
+                        "base": "{{ template | label: 'Select your Airtable base', description: 'Select the Airtable base you want to connect to Shopify. We''ll add a new table to it where your product listings will be created and synced.' }}",
                         "table": ""
                     },
                     "body": {

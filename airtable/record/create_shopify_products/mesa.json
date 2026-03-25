@@ -91,7 +91,7 @@
                     "api_endpoint": "get \/{base}\/{table}",
                     "poll": "@hourly:0 * * * *",
                     "path": {
-                        "base": "{{ template | label: 'Select your Airtable base', description: '' }}",
+                        "base": "{{ template | label: 'Select your Airtable base', description: 'Select the Airtable base you want to connect to Shopify. We''ll add a new table to it where your product listings will be created and synced.' }}",
                         "table": "",
                         "skip_update_local_fields_metadata": true
                     }
