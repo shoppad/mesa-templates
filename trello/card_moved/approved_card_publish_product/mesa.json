@@ -1,0 +1,121 @@
+{
+    "key": "trello/card_moved/approved_card_publish_product",
+    "name": "Publish Shopify Products When Trello Cards Move to Approved",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "trello",
+                "entity": "card",
+                "action": "list-updated",
+                "name": "Trello Card Updated",
+                "key": "trello_card",
+                "operation_id": "card_updated",
+                "metadata": {
+                    "api_endpoint": "get \/members\/me\/cards",
+                    "poll": "*\/15 * * * *",
+                    "path": {
+                        "boardId": "{{ template | label: 'Select your Trello board.', description: 'Choose the Trello board where new cards will be created. This is the board you want your incoming Shopify products to appear on.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["poll"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "trello",
+                "entity": "card",
+                "action": "retrieve",
+                "name": "Retrieve Card",
+                "key": "trello",
+                "operation_id": "get-cards-id",
+                "metadata": {
+                    "api_endpoint": "get \/cards\/{cardId}",
+                    "path": {
+                        "boardId": "{{ template | copy_value_from: 'trello_card.path.boardId' }}",
+                        "cardId": "{{trello_card.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "trello",
+                "entity": "list",
+                "action": "retrieve",
+                "name": "Retrieve List",
+                "key": "trello_1",
+                "operation_id": "get-lists-id",
+                "metadata": {
+                    "api_endpoint": "get \/lists\/{id}",
+                    "path": {
+                        "boardId": "{{ template | copy_value_from: 'trello_card.path.boardId' }}",
+                        "id": "{{trello_card.idList}}",
+                        "listId": "{{trello_card.idList}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["path.listId", "path.id"],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Only if Approved",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{trello_1.name}}",
+                    "comparison": "equals",
+                    "b": "Approved",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": ["a", "comparison", "b"],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "update",
+                "name": "Set product active",
+                "key": "shopify_product",
+                "operation_id": "put_products_product_id",
+                "metadata": {
+                    "api_endpoint": "put admin\/products\/{{product_id}}.json",
+                    "product_id": "{{ trello_card.name | split: 'Product ID:' | last | strip }}",
+                    "body": {
+                        "status": "active"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["product_id", "body.status"],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
