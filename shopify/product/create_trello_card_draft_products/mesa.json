@@ -1,0 +1,79 @@
+{
+    "key": "shopify/product/create_trello_card_draft_products",
+    "name": "Create Trello Cards When Shopify Draft Products Are Made",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check If Product Status Is Draft",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.status}}",
+                    "comparison": "equals",
+                    "b": "draft",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "trello",
+                "entity": "card",
+                "action": "create",
+                "name": "Create Card For Shopify Draft Products",
+                "key": "trello",
+                "operation_id": "post-cards",
+                "metadata": {
+                    "api_endpoint": "post \/cards",
+                    "path": {
+                        "boardId": "{{ template | label: 'Select your Trello board.', description: 'Choose the Trello board where new cards will be created. This is the board you want your incoming Shopify products to appear on.' }}"
+                    },
+                    "query": {
+                        "idList": "{{ template | label: 'Select your Trello list.', description: 'Choose the list on that board where each new product card will be added. In Trello, lists are the columns inside a board — for example, ''To Do'', ''In Progress'', or ''Products to List''.' }}",
+                        "name": "{{shopify.title}}, Product ID: {{shopify.id}}",
+                        "desc": "{{shopify.body_html | strip_html}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query.desc"],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
