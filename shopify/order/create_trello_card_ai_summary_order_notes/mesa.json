@@ -1,0 +1,118 @@
+{
+    "key": "shopify/order/create_trello_card_ai_summary_order_notes",
+    "name": "Send Order Notes to Trello Cards with AI Summary",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Check If Shopify Order Has Notes",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.note}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "script": "filter.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "ask",
+                "name": "Summarize Shopify Order Notes",
+                "key": "ask",
+                "operation_id": "post-ask",
+                "metadata": {
+                    "api_endpoint": "post \/ask",
+                    "body": {
+                        "content": "Parse and summarize the following Shopify order note into a clean action item that will then be added to a Trello card: {{shopify.note}}",
+                        "instructions": "You do not have the ability to ask the user more questions. Make assumptions where possible. If you can not determine a value, throw an error and include the missing parameter(s) in the message. Prefix any message with an error with `ERROR`. For emails return HTML with no wrapping."
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ask",
+                "entity": "ask",
+                "action": "skill",
+                "name": "Skill",
+                "key": "ask_1",
+                "operation_id": "post-ask-skill",
+                "metadata": {
+                    "api_endpoint": "post \/ask\/skill",
+                    "trigger_manager_key": "ask",
+                    "trigger_parent_key": "ask"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "trello",
+                "entity": "card",
+                "action": "create",
+                "name": "Create Card",
+                "key": "trello",
+                "operation_id": "post-cards",
+                "metadata": {
+                    "api_endpoint": "post \/cards",
+                    "path": {
+                        "boardId": "{{ template | label: 'Select your Trello board.', description: 'Choose the Trello board where new cards will be created. This is the board you want your incoming Shopify orders to appear on.' }}"
+                    },
+                    "query": {
+                        "idList": "{{ template | label: 'Select your Trello list.', description: 'Choose the list on that board where each new order card will be added. In Trello, lists are the columns inside a board — for example, ''To Do'', ''In Progress'', or ''Orders to Fulfill''.' }}",
+                        "name": "Shopify Order {{shopify.name}} has notes",
+                        "desc": "{{ask.content}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["query.desc"],
+                "on_error": "default",
+                "weight": 3
+            }
+        ]
+    }
+}
