@@ -1,9 +1,7 @@
 {
-    "key": "google_analytics",
-    "name": "Track Shopify refunds in Google Analytics",
+    "key": "shopify/refund/google_analytics",
+    "name": "Track Shopify Refunds in Google Analytics",
     "version": "1.0.0",
-    "description": "It\u2019s essential to track your product returns. By identifying which products are frequently sent back from customers, you can proceed to either remove the item from your product line or find ways to improve it (such as enhancing the quality). Thankfully, MESA does all the hard work for you by keeping track of all your Shopify Returns within Google Analytics.",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
