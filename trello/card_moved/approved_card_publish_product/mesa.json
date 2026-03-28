@@ -100,6 +100,48 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
+                "action": "retrieve",
+                "name": "Retrieve Product",
+                "key": "shopify",
+                "operation_id": "get_products_product_id",
+                "metadata": {
+                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
+                    "product_id": "{{ trello_card.name | split: 'Product ID:' | last | strip }}"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Continue Only If Product Status Is Draft",
+                "key": "filter_1",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{shopify.status}}",
+                    "comparison": "equals",
+                    "b": "draft",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ],
+                    "script": "filter_1.js"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
                 "action": "update",
                 "name": "Set product active",
                 "key": "shopify_product",
@@ -114,7 +156,7 @@
                 "local_fields": [],
                 "selected_fields": ["product_id", "body.status"],
                 "on_error": "default",
-                "weight": 3
+                "weight": 5
             }
         ]
     }
