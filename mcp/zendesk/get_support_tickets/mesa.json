@@ -113,10 +113,13 @@
                                 "comparison": "equals"
                             }
                         ]
-                    }
+                    },
+                    "return": true
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "return"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -170,12 +173,11 @@
                 "metadata": {
                     "trigger_manager_key": "loop",
                     "trigger_parent_key": "loop",
-                    "return": "map",
+                    "return": true,
                     "map": "Link: {{loop.url}}\nSubject: {{loop.subject}}\nMessage: {{custom.comment}}\n\nDate: {{loop.created_at}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "return",
                     "map"
                 ],
                 "on_error": "default",

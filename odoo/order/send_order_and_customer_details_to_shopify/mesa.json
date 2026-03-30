@@ -120,10 +120,13 @@
                                 "comparison": "equals"
                             }
                         ]
-                    }
+                    },
+                    "return": true
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "return"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -161,12 +164,11 @@
                 "metadata": {
                     "trigger_manager_key": "loop",
                     "trigger_parent_key": "loop",
-                    "return": "map",
+                    "return": true,
                     "map": "{{odoo_4}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "return",
                     "map"
                 ],
                 "on_error": "default",

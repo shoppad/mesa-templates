@@ -72,7 +72,8 @@
                                 "comparison": "equals"
                             }
                         ]
-                    }
+                    },
+                    "return": true
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -81,7 +82,8 @@
                     "filter.a",
                     "filter.comparison",
                     "filter.b",
-                    "filter.additional"
+                    "filter.additional",
+                    "return"
                 ],
                 "on_error": "default",
                 "weight": 1
@@ -123,12 +125,11 @@
                 "metadata": {
                     "trigger_manager_key": "loop",
                     "trigger_parent_key": "loop",
-                    "return": "map",
+                    "return": true,
                     "map": "{{square_2.object.item_variation_data.sku}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "return",
                     "map"
                 ],
                 "on_error": "default",

@@ -82,10 +82,13 @@
                                 "comparison": "equals"
                             }
                         ]
-                    }
+                    },
+                    "return": true
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "return"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -143,11 +146,11 @@
                 "metadata": {
                     "trigger_manager_key": "loop",
                     "trigger_parent_key": "loop",
-                    "return": "map",
+                    "return": true,
                     "map": "{{katana_4.name}}"
                 },
                 "local_fields": [],
-                "selected_fields": ["return", "map"],
+                "selected_fields": ["map"],
                 "on_error": "default",
                 "weight": 5
             },
