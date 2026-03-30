@@ -93,7 +93,8 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{helpscout.conversations[]}}"
+                    "key": "{{helpscout.conversations[]}}",
+                    "return": true
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -102,7 +103,8 @@
                     "filter.a",
                     "filter.comparison",
                     "filter.b",
-                    "filter.additional"
+                    "filter.additional",
+                    "return"
                 ],
                 "on_error": "default",
                 "weight": 1
@@ -162,12 +164,11 @@
                 "metadata": {
                     "trigger_manager_key": "loop",
                     "trigger_parent_key": "loop",
-                    "return": "map",
+                    "return": true,
                     "map": "Link: {{loop._links.self.href}}\nSubject: {{loop.subject}}\nMessage: \n{{custom.thread.body}}\nDate: {{loop.createdAt}}\n---\n"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "return",
                     "map"
                 ],
                 "on_error": "default",
