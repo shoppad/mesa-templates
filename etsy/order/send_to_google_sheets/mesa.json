@@ -85,7 +85,7 @@
                 "metadata": {
                     "api_endpoint": "get /v3/application/shops/{shop_id}/receipts-webhook",
                     "path": {
-                      "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}" 
+                        "shop_id": "{{ template | label: 'What is your Etsy Shop ID?', description: '', tokens: false, placeholder: '' }}"
                     }
                 },
                 "local_fields": [],
@@ -111,7 +111,7 @@
                 "weight": 0
             },
             {
-                "schema": 4,
+                "schema": 4.1,
                 "trigger_type": "output",
                 "type": "googlesheets",
                 "entity": "row",
@@ -121,14 +121,18 @@
                 "key": "googlesheets",
                 "operation_id": "record_create",
                 "metadata": {
-                    "api_endpoint": "post /{spreadsheet_id}/{sheet_name}",
                     "path": {
+                        "spreadsheet_id": "",
                         "sheet_name": "Sheet1"
                     },
                     "body": {
                         "fields": {}
-                    }
+                    },
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "trigger_parent_key": "loop"
                 },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "replay",
                 "weight": 1
             }
