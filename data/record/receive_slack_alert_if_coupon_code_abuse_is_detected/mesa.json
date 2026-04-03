@@ -1,140 +1,136 @@
 {
-    "key": "data/record/receive_slack_alert_if_coupon_code_abuse_is_detected",
-    "name": "Detect Coupon Code Abuse and Receive Slack Alerts",
-    "version": "1.0.0",
-    "enabled": false,
-    "setup": true,
-    "config": {
-        "inputs": [
+  "key": "data/record/receive_slack_alert_if_coupon_code_abuse_is_detected",
+  "name": "Detect Coupon Code Abuse and Receive Slack Alerts",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "data",
+        "entity": "record",
+        "action": "created",
+        "name": "Record Created",
+        "version": "v2",
+        "key": "data",
+        "operation_id": "record_created",
+        "metadata": {
+          "api_endpoint": "get /{database}/{table}/created",
+          "poll": "@hourly:0 * * * *",
+          "table": "Shopify Orders"
+        },
+        "local_fields": [],
+        "selected_fields": ["poll"],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "custom_query",
+        "name": "Custom SQL Query",
+        "version": "v2",
+        "key": "data_1",
+        "operation_id": "get_database_custom_query",
+        "metadata": {
+          "api_endpoint": "get /{database}/{table}",
+          "query": "SELECT\n  TO_CHAR(\"Created At\", 'yyyy-mm-dd'),\n  SUM(\"Total Price\") AS total,\n  SUM(\"Total Discount\") AS total_discounts,\n  ROUND(SUM(\"Total Discount\") / SUM(\"Total Price\"), 2) AS percentage\nFROM \"Shopify Orders\"\nGROUP BY TO_CHAR(\"Created At\", 'yyyy-mm-dd')\nORDER BY TO_CHAR(\"Created At\", 'yyyy-mm-dd');"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Format order total by day including discounts",
+        "key": "custom",
+        "operation_id": "custom",
+        "metadata": {
+          "description": "Format order totals by day including their discount amounts that can be understood by other systems or components",
+          "script": "custom.js"
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "ai",
+        "entity": "prompt",
+        "action": "create",
+        "name": "Compare discount rates to identify coupon abuse",
+        "version": "v3",
+        "key": "ai",
+        "operation_id": "post-prompt",
+        "metadata": {
+          "api_endpoint": "post /prompt",
+          "temperature": "1",
+          "body": {
+            "role": "user",
+            "content": "Included is a JSON result showing order totals by day including the discount amounts. Compare the discount rate against the usual average discount rate (assume 10% if unspecified). Is the discount rate higher than usual? Reply only Yes or No: \n{{ custom.json_results }}"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": ["temperature"],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 4.1,
+        "trigger_type": "output",
+        "type": "filter",
+        "name": "Was coupon abuse detected?",
+        "key": "filter",
+        "operation_id": "filter",
+        "metadata": {
+          "a": "{{ai.response}}",
+          "comparison": "equals",
+          "b": "Yes",
+          "additional": [
             {
-                "schema": 4,
-                "trigger_type": "input",
-                "type": "data",
-                "entity": "record",
-                "action": "created",
-                "name": "Record Created",
-                "version": "v2",
-                "key": "data",
-                "operation_id": "record_created",
-                "metadata": {
-                    "api_endpoint": "get \/{database}\/{table}\/created",
-                    "poll": "@hourly:0 * * * *",
-                    "table": "Shopify Orders"
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "poll"
-                ],
-                "on_error": "default",
-                "weight": 0
+              "operator": "and",
+              "comparison": "equals"
             }
-        ],
-        "outputs": [
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "data",
-                "entity": "record",
-                "action": "custom_query",
-                "name": "Custom SQL Query",
-                "version": "v2",
-                "key": "data_1",
-                "operation_id": "get_database_custom_query",
-                "metadata": {
-                    "api_endpoint": "get \/{database}\/{table}",
-                    "query": "SELECT\n  TO_CHAR(\"Created At\", 'yyyy-mm-dd'),\n  SUM(\"Total Price\") AS total,\n  SUM(\"Total Discount\") AS total_discounts,\n  ROUND(SUM(\"Total Discount\") \/ SUM(\"Total Price\"), 2) AS percentage\nFROM \"Shopify Orders\"\nGROUP BY TO_CHAR(\"Created At\", 'yyyy-mm-dd')\nORDER BY TO_CHAR(\"Created At\", 'yyyy-mm-dd');"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 0
-            },
-            {
-                "schema": 2,
-                "trigger_type": "output",
-                "type": "custom",
-                "name": "Format order total by day including discounts",
-                "key": "custom",
-                "operation_id": "custom",
-                "metadata": {
-                    "description": "Format order totals by day including their discount amounts that can be understood by other systems or components",
-                    "script": "custom.js"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 1
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "ai",
-                "entity": "prompt",
-                "action": "create",
-                "name": "Compare discount rates to identify coupon abuse",
-                "version": "v2",
-                "key": "ai",
-                "operation_id": "post-prompt",
-                "metadata": {
-                    "api_endpoint": "post \/prompt",
-                    "temperature": "1",
-                    "body": {
-                        "role": "user",
-                        "content": "Included is a JSON result showing order totals by day including the discount amounts. Compare the discount rate against the usual average discount rate (assume 10% if unspecified). Is the discount rate higher than usual? Reply only Yes or No: \n{{ custom.json_results }}"
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "temperature"
-                ],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 4.1,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Was coupon abuse detected?",
-                "key": "filter",
-                "operation_id": "filter",
-                "metadata": {
-                    "a": "{{ai.response}}",
-                    "comparison": "equals",
-                    "b": "Yes",
-                    "additional": [
-                        {
-                            "operator": "and",
-                            "comparison": "equals"
-                        }
-                    ]
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "slack",
-                "entity": "message",
-                "action": "create",
-                "name": "Send Message",
-                "version": "v3",
-                "key": "slack",
-                "operation_id": "slack",
-                "metadata": {
-                    "api_endpoint": "post \/api\/chat.postMessage",
-                    "body": {
-                        "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
-                        "markdown_text": "{{ template | label: 'What are the contents of the Slack message?', description: '', default: 'Coupon code abuse detected', tokens: false }}"
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 4
-            }
-        ]
-    }
+          ]
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "slack",
+        "entity": "message",
+        "action": "create",
+        "name": "Send Message",
+        "version": "v3",
+        "key": "slack",
+        "operation_id": "slack",
+        "metadata": {
+          "api_endpoint": "post /api/chat.postMessage",
+          "body": {
+            "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.', tokens: false }}",
+            "markdown_text": "{{ template | label: 'What are the contents of the Slack message?', description: '', default: 'Coupon code abuse detected', tokens: false }}"
+          }
+        },
+        "local_fields": [],
+        "selected_fields": [],
+        "on_error": "default",
+        "weight": 4
+      }
+    ]
+  }
 }
