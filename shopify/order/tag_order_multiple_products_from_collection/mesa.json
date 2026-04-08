@@ -1,0 +1,197 @@
+{
+    "key": "shopify/order/tag_order_multiple_products_from_collection",
+    "name": "Tag Shopify Orders with Multiple Products from a Collection",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "created",
+                "name": "Order Created",
+                "key": "shopify",
+                "operation_id": "orders_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Go Through Each Line Item on the Order",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.line_items[]}}",
+                    "filter": {
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "collection",
+                "action": "list",
+                "name": "Get All Products from the Target Collection",
+                "key": "shopify_2",
+                "operation_id": "get_collection_products",
+                "metadata": {
+                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
+                    "trigger_parent_key": "loop",
+                    "collection_id": "299569545260"
+                },
+                "local_fields": [],
+                "selected_fields": ["collection_id"],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "map",
+                "name": "Check Whether This Order Item Belongs to the Target Collection",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_map",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "key": "{{shopify_2}}",
+                    "map_field": "{{shopify_2[].id}}",
+                    "filter": {
+                        "a": "{{loop.product_id}}",
+                        "comparison": "equals",
+                        "b": "{{shopify_2[].id}}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Collect All Matching Products from the Order",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": "map",
+                    "map": "{{loop_3.items.0}}"
+                },
+                "local_fields": [],
+                "selected_fields": ["return", "map"],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "Count How Many Products from the Collection Were Purchased",
+                "key": "custom",
+                "operation_id": "custom",
+                "metadata": {
+                    "script": "custom.js",
+                    "description": "Convert matching products' structure from Loop End, and count how many products."
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Continue Only If at Least 2 Matching Products Were Found",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{custom.products_count}}",
+                    "comparison": "greater than equal",
+                    "b": "2",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "order",
+                "action": "tag_add",
+                "name": "Add Tag to the Order",
+                "key": "shopify_3",
+                "operation_id": "post_mesa_orders_order_id_tag",
+                "metadata": {
+                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "order_id": "{{shopify.id}}",
+                    "body": {
+                        "tag": "Home"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["order_id", "body", "body.tag"],
+                "on_error": "default",
+                "weight": 6
+            }
+        ]
+    }
+}
