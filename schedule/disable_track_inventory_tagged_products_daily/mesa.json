@@ -95,16 +95,7 @@
                 "operation_id": "loop_loop",
                 "metadata": {
                     "trigger_parent_key": "loop",
-                    "key": "{{loop.variants[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{loop.variants[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [

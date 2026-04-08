@@ -53,16 +53,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{zendesk_1.comments[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{zendesk_1.comments[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],

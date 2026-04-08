@@ -37,16 +37,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{square.line_items[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{square.line_items[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [

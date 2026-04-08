@@ -250,16 +250,7 @@
                 "operation_id": "loop_loop",
                 "metadata": {
                     "trigger_parent_key": "paths_6",
-                    "key": "{{odoo.product_variant_ids[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{odoo.product_variant_ids[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -619,16 +610,7 @@
                 "operation_id": "loop_loop",
                 "metadata": {
                     "trigger_parent_key": "paths_10",
-                    "key": "{{custom_1.updated_odoo_product_variants}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{custom_1.updated_odoo_product_variants}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],

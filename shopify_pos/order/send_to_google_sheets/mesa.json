@@ -131,16 +131,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_pos.line_items[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{shopify_pos.line_items[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],

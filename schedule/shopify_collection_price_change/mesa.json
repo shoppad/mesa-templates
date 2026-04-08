@@ -53,16 +53,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{shopify}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -99,16 +90,7 @@
                 "operation_id": "loop_loop",
                 "metadata": {
                     "trigger_parent_key": "loop",
-                    "key": "{{shopify_1.variants[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{shopify_1.variants[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],

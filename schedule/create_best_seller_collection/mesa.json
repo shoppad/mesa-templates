@@ -114,16 +114,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{shopify}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -198,16 +189,7 @@
                 "key": "loop_2",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{data}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{data}}"
                 },
                 "local_fields": [],
                 "selected_fields": [

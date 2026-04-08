@@ -53,16 +53,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{mantle_1.customer.appInstallations[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{mantle_1.customer.appInstallations[]}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],

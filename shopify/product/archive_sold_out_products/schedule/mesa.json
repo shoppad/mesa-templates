@@ -146,16 +146,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{data}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{data}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -615,16 +606,7 @@
                 "key": "loop_3",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{data_3}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{data_3}}"
                 },
                 "local_fields": [],
                 "selected_fields": [],

@@ -112,16 +112,7 @@
                 "operation_id": "loop_map",
                 "metadata": {
                     "key": "{{helpscout_1.threads[]}}",
-                    "map_field": "{{helpscout_1.threads[].body}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "map_field": "{{helpscout_1.threads[].body}}"
                 },
                 "local_fields": [],
                 "selected_fields": [
@@ -245,16 +236,7 @@
                 "metadata": {
                     "trigger_parent_key": "loop_1",
                     "key": "{{helpscout.tags[]}}",
-                    "map_field": "{{helpscout.tags[].tag}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "map_field": "{{helpscout.tags[].tag}}"
                 },
                 "local_fields": [],
                 "selected_fields": [

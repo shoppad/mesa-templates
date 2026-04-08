@@ -74,15 +74,6 @@
                 "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{katana_2.sales_order_rows[]}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    },
                     "return": true
                 },
                 "local_fields": [],
