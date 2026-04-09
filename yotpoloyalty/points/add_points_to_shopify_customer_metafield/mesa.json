@@ -17,7 +17,7 @@
                 "operation_id": "swell_points_changed",
                 "metadata": [],
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["host"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -34,12 +34,13 @@
                 "operation_id": "get_customers_search",
                 "metadata": {
                     "api_endpoint": "get admin\/customers\/search.json",
-                    "parameters": "email={{yotpoloyalty.customer.email}}&limit=1"
+                    "body": {
+                        "email_address": "{{yotpoloyalty.customer.email}}",
+                        "limit": "1"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "parameters"
-                ],
+                "selected_fields": ["body.limit"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -64,7 +65,15 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "customer_id",
+                    "body",
+                    "body.namespace",
+                    "body.key",
+                    "body.type",
+                    "body.listType",
+                    "body.value"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
