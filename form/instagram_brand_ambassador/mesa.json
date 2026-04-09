@@ -63,10 +63,13 @@
                 "operation_id": "get_customers_search",
                 "metadata": {
                     "api_endpoint": "get admin\/customers\/search.json",
-                    "parameters": "limit=1&email={{form.email-address}}"
+                    "body": {
+                        "email_address": "{{form.email-address}}",
+                        "limit": "1"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": ["parameters"],
+                "selected_fields": ["body.limit"],
                 "on_error": "default",
                 "weight": 0
             },
