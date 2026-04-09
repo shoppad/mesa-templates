@@ -36,11 +36,14 @@
                 "key": "shopify",
                 "operation_id": "get_customers_search",
                 "metadata": {
-                    "api_endpoint": "get admin/customers/search.json",
-                    "parameters": "query=email:{{hubspot.properties.email}}&fields=id,email"
+                    "api_endpoint": "get admin\/customers\/search.json",
+                    "body": {
+                        "email_address": "{{hubspot.properties.email}}",
+                        "limit": "1"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": ["parameters"],
+                "selected_fields": ["body.limit"],
                 "on_error": "default",
                 "weight": 0
             },
