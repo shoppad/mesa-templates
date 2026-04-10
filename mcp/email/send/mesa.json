@@ -11,14 +11,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "MCP Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -49,7 +49,8 @@
                     "body.parameters[].type"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -60,9 +61,9 @@
                 "name": "Send Email",
                 "version": "v2",
                 "key": "email",
-                "operation_id": "\/send-email",
+                "operation_id": "/send-email",
                 "metadata": {
-                    "api_endpoint": "post \/send-email",
+                    "api_endpoint": "post /send-email",
                     "body": {
                         "to": "{{skill.email}}",
                         "subject": "{{skill.subject}}",

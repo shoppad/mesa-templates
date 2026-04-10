@@ -9,14 +9,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "MCP Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -37,7 +37,8 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -51,7 +52,7 @@
                 "key": "shopify",
                 "operation_id": "get_orders_order_id",
                 "metadata": {
-                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
+                    "api_endpoint": "get admin/orders/{{order_id}}.json",
                     "order_id": "{{skill.order_id}}"
                 },
                 "local_fields": [],
@@ -87,7 +88,7 @@
                 "key": "shopify_1",
                 "operation_id": "post_mesa_orders_order_id_tag",
                 "metadata": {
-                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/tag.json",
+                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
                     "order_id": "{{shopify.id}}",
                     "body": {
                         "tag": "{{skill.tag}}"

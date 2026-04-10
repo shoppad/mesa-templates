@@ -9,19 +9,19 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
                                 "key": "Location",
-                                "description": "A US Zipcode, UK Postal Code, Canada Postal Code, IP Address, Latitude\/Longitude (decimal degree) or a city name.",
+                                "description": "A US Zipcode, UK Postal Code, Canada Postal Code, IP Address, Latitude/Longitude (decimal degree) or a city name.",
                                 "type": "string",
                                 "required": true
                             }
@@ -31,7 +31,8 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -45,7 +46,7 @@
                 "key": "weather",
                 "operation_id": "forecast-weather",
                 "metadata": {
-                    "api_endpoint": "get \/forecast.json",
+                    "api_endpoint": "get /forecast.json",
                     "query": {
                         "q": "{{skill.Location}}",
                         "days": "3"

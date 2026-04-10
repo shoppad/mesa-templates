@@ -117,23 +117,24 @@
             {
                 "schema": 4,
                 "trigger_type": "output",
-                "type": "ask",
-                "entity": "ask",
-                "action": "ask",
+                "type": "ai",
+                "entity": "agent",
+                "action": "create",
                 "name": "Review the Shipping Address to Confirm if it's Complete",
                 "key": "ask",
-                "operation_id": "post-ask",
+                "operation_id": "post-agent",
                 "metadata": {
-                    "api_endpoint": "post /ask",
+                    "api_endpoint": "post /agent",
                     "body": {
-                        "content": "Check if the shipping address is incomplete for the following order:\n\nOrder Created\n\nShipping Address:\n{{shopify.shipping_address}}\n\nRules:\nAn address is complete if it includes all of the following:\n-Street address (e.g., \"123 Main St\" or \"45 Market Road\")\n-City\n-State or province\n-ZIP or postal code\nApartment, suite, or unit numbers are optional and not required for completeness.\n\nResponse Format:\n-Reply with \u201cYes\u201d if the address is incomplete\n-Reply with \u201cNo\u201d if the address is complete\n-Do not include any explanation or additional text.",
+                        "content": "Check if the shipping address is incomplete for the following order:\n\nOrder Created\n\nShipping Address:\n{{shopify.shipping_address}}\n\nRules:\nAn address is complete if it includes all of the following:\n-Street address (e.g., \"123 Main St\" or \"45 Market Road\")\n-City\n-State or province\n-ZIP or postal code\nApartment, suite, or unit numbers are optional and not required for completeness.\n\nResponse Format:\n-Reply with “Yes” if the address is incomplete\n-Reply with “No” if the address is complete\n-Do not include any explanation or additional text.",
                         "instructions": "You do not have the ability to ask the user more questions. Make assumptions where possible. If you can not determine a value, throw an error and include the missing parameter(s) in the message. Prefix any message with an error with `ERROR`. For emails return HTML with no wrapping."
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 1,
+                "version": "v3"
             },
             {
                 "schema": 4.1,

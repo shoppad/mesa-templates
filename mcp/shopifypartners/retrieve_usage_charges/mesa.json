@@ -11,14 +11,14 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "skill",
+                "type": "ai",
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post \/skill",
+                    "api_endpoint": "post /skill",
                     "body": {
                         "parameters": [
                             {
@@ -52,7 +52,8 @@
                     "body.parameters[].type"
                 ],
                 "on_error": "default",
-                "weight": 0
+                "weight": 0,
+                "version": "v3"
             }
         ],
         "outputs": [
@@ -66,7 +67,7 @@
                 "key": "shopify-partner",
                 "operation_id": "get_app_usage_sale",
                 "metadata": {
-                    "api_endpoint": "get \/mesa\/transactions\/app_usage_sale",
+                    "api_endpoint": "get /mesa/transactions/app_usage_sale",
                     "query": {
                         "createdAtMin": "{{skill.start_date}}",
                         "createdAtMax": "{{skill.end_date}}",
