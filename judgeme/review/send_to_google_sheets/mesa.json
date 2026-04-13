@@ -1,0 +1,104 @@
+{
+    "key": "judgeme/review/send_to_google_sheets",
+    "name": "Send Judge.me Reviews to Google Sheets",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name."
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets.setup_fields",
+                "label": "Select what review details you want to capture.",
+                "description": "We've included all available columns by default. Simply deselect any you'd like to leave out.",
+                "options": [
+                    {
+                        "label": "Created At",
+                        "value": "Created At|{{judgeme.created_at}}",
+                        "description": "The date and time the review was created."
+                    },
+                    {
+                        "label": "Reviewer Name",
+                        "value": "Reviewer Name|{{judgeme.reviewer.name}}",
+                        "description": "The name of the reviewer."
+                    },
+                    {
+                        "label": "Reviewer Email",
+                        "value": "Reviewer Email|{{judgeme.reviewer.email}}",
+                        "description": "The email address of the reviewer."
+                    },
+                    {
+                        "label": "Product Title",
+                        "value": "Product Title|{{judgeme.product_title}}",
+                        "description": "The name of the product purchased in this line item."
+                    },
+                    {
+                        "label": "Review Text",
+                        "value": "Review Text|{{judgeme.body}}",
+                        "description": "The text of the review."
+                    },
+                    {
+                        "label": "Rating",
+                        "value": "Rating|{{judgeme.rating}}",
+                        "description": "The rating of the review."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes"
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 4,
+                "trigger_type": "input",
+                "type": "judgeme",
+                "entity": "review_created",
+                "action": "created",
+                "name": "Review Created",
+                "key": "judgeme",
+                "operation_id": "review\/created",
+                "metadata": [],
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4.3,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "body": {
+                        "fields": {}
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "replay",
+                "weight": 0
+            }
+        ]
+    }
+}
