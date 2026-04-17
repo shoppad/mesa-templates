@@ -68,7 +68,8 @@
                 "check_all": true,
                 "type": "checkboxes"
             }
-        ]
+        ],
+        "allow_skip_guided_setup": false
     },
     "config": {
         "inputs": [
