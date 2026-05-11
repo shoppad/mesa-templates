@@ -1,5 +1,5 @@
 {
-    "key": "infiniteoptions_order_add_line_items_to_google_sheet_6",
+    "key": "hulk/order/send_product_options_to_google_sheets",
     "name": "Send Hulk Product Options to Google Sheets",
     "version": "2.0.0",
     "enabled": false,
