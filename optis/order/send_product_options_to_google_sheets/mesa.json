@@ -1,6 +1,6 @@
 {
-    "key": "qikify/order/send_product_options_to_google_sheets",
-    "name": "Send Qikify Product Options to Google Sheets",
+    "key": "optis/order/send_product_options_to_google_sheets",
+    "name": "Send OPTIS Product Options to Google Sheets",
     "version": "2.0.0",
     "enabled": false,
     "setup": {
@@ -21,47 +21,47 @@
                 "options": [
                     {
                         "label": "Order URL",
-                        "value": "Order URL|https:\/\/admin.shopify.com\/store\/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{qikify_product_options.order.id}}",
+                        "value": "Order URL|https:\/\/admin.shopify.com\/store\/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{optis_product_options.order.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
                         "label": "Order Name",
-                        "value": "Order Name|{{qikify_product_options.order.name}}",
+                        "value": "Order Name|{{optis_product_options.order.name}}",
                         "description": "The human-readable label for the order (example: #1001)."
                     },
                     {
                         "label": "Email",
-                        "value": "Email|{{qikify_product_options.order.email}}",
+                        "value": "Email|{{optis_product_options.order.email}}",
                         "description": "The email address of the customer that placed the order."
                     },
                     {
                         "label": "Shipping Name",
-                        "value": "Shipping Name|{{qikify_product_options.order.shipping_address.first_name}} {{qikify_product_options.order.shipping_address.last_name}}",
+                        "value": "Shipping Name|{{optis_product_options.order.shipping_address.first_name}} {{optis_product_options.order.shipping_address.last_name}}",
                         "description": "The full name of the recipient of the Shipping Address."
                     },
                     {
                         "label": "Address",
-                        "value": "Address|{{qikify_product_options.order.shipping_address.address1}}",
+                        "value": "Address|{{optis_product_options.order.shipping_address.address1}}",
                         "description": "The street address of the Shipping Address."
                     },
                     {
                         "label": "City",
-                        "value": "City|{{qikify_product_options.order.shipping_address.city}}",
+                        "value": "City|{{optis_product_options.order.shipping_address.city}}",
                         "description": "The city of the Shipping Address."
                     },
                     {
                         "label": "State/Province",
-                        "value": "State/Province|{{qikify_product_options.order.shipping_address.province}}",
+                        "value": "State/Province|{{optis_product_options.order.shipping_address.province}}",
                         "description": "The state/province of the Shipping Address."
                     },
                     {
                         "label": "Zip/Postal Code",
-                        "value": "Zip/Postal Code|{{qikify_product_options.order.shipping_address.zip}}",
+                        "value": "Zip/Postal Code|{{optis_product_options.order.shipping_address.zip}",
                         "description": "The zip code of the Shipping Address."
                     },
                     {
                         "label": "Country",
-                        "value": "Country|{{qikify_product_options.order.shipping_address.country}}",
+                        "value": "Country|{{optis_product_options.order.shipping_address.country}}",
                         "description": "The country of the Shipping Address."
                     },
                     {
@@ -90,11 +90,11 @@
             {
                 "schema": 4,
                 "trigger_type": "input",
-                "type": "qikify-product-options",
+                "type": "optis-product-options",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "qikify_product_options",
+                "key": "optis_product_options",
                 "operation_id": "order_created",
                 "metadata": [],
                 "local_fields": [],
@@ -131,7 +131,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{qikify_product_options.line_items[]}}",
+                    "key": "{{optis_product_options.line_items[]}}",
                     "filter": {
                         "comparison": "equals",
                         "additional": [
@@ -165,7 +165,7 @@
                 "metadata": {
                     "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
                     "path": {
-                        "spreadsheet_id": "",
+                        "spreadsheet_id": "1",
                         "sheet": "Sheet1"
                     },
                     "body": {

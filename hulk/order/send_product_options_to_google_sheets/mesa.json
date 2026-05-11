@@ -36,7 +36,7 @@
                     },
                     {
                         "label": "Shipping Name",
-                        "value": "Shipping Name|{{hulk_product_options.order.shipping_address.first_name}}{{hulk_product_options.order.shipping_address.last_name}}",
+                        "value": "Shipping Name|{{hulk_product_options.order.shipping_address.first_name}} {{hulk_product_options.order.shipping_address.last_name}}",
                         "description": "The full name of the recipient of the Shipping Address."
                     },
                     {
