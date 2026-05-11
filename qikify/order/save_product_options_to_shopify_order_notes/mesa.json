@@ -36,7 +36,7 @@
                     "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
                     "order_id": "{{qikify_product_options.order.id}}",
                     "body": {
-                        "note": "{% for line_item in qikify.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}",
+                        "note": "{% for line_item in qikify_product_options.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}",
                         "append": true
                     }
                 },
