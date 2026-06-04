@@ -22,7 +22,7 @@
                         {
                             "type": "paragraph",
                             "subtype": "p",
-                            "label": "Enter your birthday to receive a special gift :)<div><br><\/div>"
+                            "label": "Enter your birthday to receive a special gift :)<div><br></div>"
                         },
                         {
                             "type": "date",
@@ -53,17 +53,24 @@
                 "entity": "customer",
                 "action": "update",
                 "name": "Update Customer",
+                "version": "v2",
                 "key": "shopify_customer",
-                "operation_id": "put_customers_customer_id",
+                "operation_id": "customerUpdate",
                 "metadata": {
-                    "api_endpoint": "put admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{form.customer-id}}",
+                    "api_endpoint": "post /graphql/customer/update",
                     "body": {
+                        "id": "{{form.customer-id}}",
                         "note": "{{form.dob}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "note",
+                    "body",
+                    "body.id",
+                    "body.note"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
