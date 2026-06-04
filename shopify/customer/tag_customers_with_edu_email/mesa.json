@@ -13,7 +13,9 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
+                "version": "v2",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
                 "on_error": "default",
@@ -41,16 +43,26 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Customer Add Tag",
+                "version": "v2",
                 "key": "shopify_customer",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "customer_id": "{{shopify_order.customer.id}}",
+                    "api_endpoint": "post /graphql/customerTags/add",
                     "body": {
-                        "tag": "{{ template | label: 'What tag would you like to add to the customer?',  default: 'education', tokens: false }}"
+                        "id": "{{shopify_order.customer.id}}",
+                        "tags": "{{ template | label: 'What tag would you like to add to the customer?',  default: 'education', tokens: false }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
