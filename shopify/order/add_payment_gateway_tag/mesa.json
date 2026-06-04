@@ -21,7 +21,9 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
+                "version": "v2",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
@@ -35,12 +37,21 @@
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
+                "version": "v2",
                 "key": "shopify_order_2",
+                "operation_id": "order",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
-                    "site": "current"
+                    "api_endpoint": "get /graphql/order/retrieve",
+                    "body": {
+                        "id": "{{shopify_order.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -51,15 +62,24 @@
                 "entity": "order",
                 "action": "update",
                 "name": "Update Order",
+                "version": "v2",
                 "key": "shopify_order_1",
+                "operation_id": "orderUpdate",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
+                    "api_endpoint": "post /graphql/order/update",
                     "body": {
-                        "tags": "{{shopify_order_2.tags}}, {{shopify_order_2.gateway}}"
-                    },
-                    "site": "current"
+                        "id": "{{shopify_order.id}}",
+                        "tags": "{{shopify_order_2.tags | join: \", \"}}, {{shopify_order_2.paymentGatewayNames | join: \", \"}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
