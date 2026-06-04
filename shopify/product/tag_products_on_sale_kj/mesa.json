@@ -13,6 +13,7 @@
                 "entity": "product",
                 "action": "updated",
                 "name": "Product Updated",
+                "version": "v2",
                 "key": "shopify",
                 "operation_id": "products_update",
                 "metadata": {
@@ -30,17 +31,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "entity": "product_variant",
+                "entity": "productvariant",
                 "action": "list",
                 "name": "Get List of Product Variants",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_products_product_id_variants",
+                "operation_id": "productVariants",
                 "metadata": {
-                    "api_endpoint": "get admin\/products\/{{product_id}}\/variants.json",
-                    "product_id": "{{shopify.id}}"
+                    "api_endpoint": "get /graphql/productVariants",
+                    "body": {
+                        "product_id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.product_id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -55,14 +63,14 @@
                 "operation_id": "loop_loop",
                 "metadata": {
                     "filter": {
-                        "a": "{{shopify_1[].compare_at_price}}",
+                        "a": "{{shopify_1[].compareAtPrice}}",
                         "comparison": "is not empty",
                         "additional": [
                             {
                                 "operator": "and",
                                 "a": "{{shopify_1[].price}}",
                                 "comparison": "less than",
-                                "b": "{{shopify_1[].compare_at_price}}"
+                                "b": "{{shopify_1[].compareAtPrice}}"
                             }
                         ]
                     },
@@ -83,20 +91,27 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "product",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Product Add Tag",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "post_mesa_products_product_id_tag",
+                "operation_id": "productTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
-                    "product_id": "{{shopify.id}}",
-                    "trigger_parent_key": "loop",
+                    "api_endpoint": "post /graphql/productTags/add",
                     "body": {
-                        "tag": "On Sale"
-                    }
+                        "id": "{{shopify.id}}",
+                        "tags": "On Sale"
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
