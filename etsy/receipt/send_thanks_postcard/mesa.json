@@ -17,7 +17,7 @@
                 "key": "etsy",
                 "operation_id": "receipt-created-webhook",
                 "metadata": {
-                    "api_endpoint": "get \/v3\/application\/shops\/{shop_id}\/receipts-webhook",
+                    "api_endpoint": "get /v3/application/shops/{shop_id}/receipts-webhook",
                     "poll": "@hourly:0 * * * *",
                     "path": {
                         "shop_id": "{{ template | label: 'Select your Etsy shop.', description: 'Alternatively, you can add an Etsy Shop ID (a unique number assigned to your store) if you can''t locate your shop in the dropdown.' }}"
@@ -35,12 +35,14 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -57,7 +59,7 @@
                 "key": "thanks",
                 "operation_id": "4x6Postcard",
                 "metadata": {
-                    "api_endpoint": "post \/send\/postcard",
+                    "api_endpoint": "post /send/postcard",
                     "entity_wrapper": "body",
                     "body": {
                         "message": "Dear {{etsy.name}},\n\nThank you for your recent purchase on {{shopify.name}}.  Your business means the world to us and we hope you are enjoying our products.\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{shopify.name}} Team",
@@ -65,10 +67,10 @@
                         "front_image_url": "{{ template | label: 'Add an image to your postcard.', description: 'Enter the full URL of the image you want to use on the front of your postcard. Make sure the URL is publicly accessible.', type: 'string', tokens: false }}",
                         "handwriting_style": "{{ template | label: 'Select a handwriting style for your postcard.', description: '[Preview](https://help.thanks.io/handwriting-styles-for-message-templates) the current styles available.', tokens: false }}",
                         "return_name": "{{shopify.name}}",
-                        "return_address": "{{shopify.address1}}",
-                        "return_address2": "{{shopify.address2}}",
-                        "return_city": "{{shopify.city}}",
-                        "return_postal_code": "{{shopify.zip}}",
+                        "return_address": "{{shopify.shopAddress.address1}}",
+                        "return_address2": "{{shopify.shopAddress.address2}}",
+                        "return_city": "{{shopify.shopAddress.city}}",
+                        "return_postal_code": "{{shopify.shopAddress.zip}}",
                         "recipients": [
                             {
                                 "name": "{{etsy.name}}",
