@@ -231,7 +231,15 @@ class Migrator {
             return step;
         }
 
-        // Rebuild metadata and selected_fields.
+        // Rebuild metadata and selected_fields. v1 "site": "current" is
+        // dropped: the v2 connector resolves the current store implicitly and
+        // a literal "current" breaks credential lookup. Any other site value
+        // targets a foreign store and needs a human decision.
+        if (meta.site === 'current') {
+            delete meta.site;
+        } else if (meta.site !== undefined) {
+            this.report.errors.push(`${where} ${step.key}: non-"current" site value ${JSON.stringify(meta.site)} needs manual review`);
+        }
         const newMeta = { api_endpoint: entry.v2.api_endpoint, body };
         for (const k of PASSTHROUGH_META) {
             if (meta[k] !== undefined) {
@@ -240,7 +248,6 @@ class Migrator {
         }
         const selected = [
             ...Object.keys(body),
-            ...(meta.site !== undefined ? ['site'] : []),
             ...(Object.keys(body).length ? ['body', ...Object.keys(body).map((k) => `body.${k}`)] : []),
         ];
 
@@ -359,7 +366,17 @@ class Migrator {
                 new RegExp(`\\{\\{\\s*${k}((?:\\[\\])?(?:\\.[^}|]*)?)\\s*(\\|[^}]*)?\\}\\}`, 'g'),
                 (m, rawPath, filters) => {
                     const rewritten = this.rewritePath(entry, key, rawPath || '');
-                    return `{{${key}${rewritten}${filters ? ` ${filters.trim()}` : ''}}}`;
+                    let filterPart = filters ? ` ${filters.trim()}` : '';
+                    // Array-at-runtime fields embedded in string context need
+                    // an explicit join; a whole-value token passes the raw
+                    // array through (correct for list-typed inputs).
+                    const plainPath = rewritten.replace(/^[.[\]]+/, '').replace(/\[\]/g, '');
+                    const wholeValue = out.trim() === m.trim();
+                    if (!filterPart && !wholeValue && (entry.array_fields || []).includes(plainPath)) {
+                        filterPart = ' | join: ", "';
+                        this.report.tokens.push(`${key}: ${plainPath} is an array at runtime, appended | join: ", "`);
+                    }
+                    return `{{${key}${rewritten}${filterPart}}}`;
                 },
             );
         }
