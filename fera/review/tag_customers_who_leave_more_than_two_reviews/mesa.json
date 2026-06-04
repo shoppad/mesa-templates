@@ -63,13 +63,21 @@
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_customers_customer_id",
+                "operation_id": "customer",
                 "metadata": {
-                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{fera.external_customer_id}}"
+                    "api_endpoint": "get /graphql/customer/retrieve",
+                    "body": {
+                        "id": "{{fera.external_customer_id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -78,18 +86,26 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "customer",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Customer Add Tag",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "post_mesa_customers_customer_id_tag",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
-                    "customer_id": "{{shopify.id}}",
+                    "api_endpoint": "post /graphql/customerTags/add",
                     "body": {
-                        "tag": "{{ template | label: 'What would you like to tag your customers?', default: 'engaged', tokens: false }}"
+                        "id": "{{shopify.id}}",
+                        "tags": "{{ template | label: 'What would you like to tag your customers?', default: 'engaged', tokens: false }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 3
             }
