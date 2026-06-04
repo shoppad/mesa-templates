@@ -58,12 +58,14 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -77,11 +79,21 @@
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Product Retrieve",
+                "version": "v2",
                 "key": "shopify_product",
+                "operation_id": "product",
                 "metadata": {
-                    "product_id": ""
+                    "api_endpoint": "get /graphql/product/retrieve",
+                    "body": {
+                        "id": ""
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -96,7 +108,7 @@
                 "metadata": {
                     "to": "{{form.email}}",
                     "subject": "{{shopify_product.title}} is available now!",
-                    "message": "Hey there, \n\nThanks for signing up on our waitlist! {{shopify_product.title}} has become available. Get it while stock lasts: https://{{shopify.myshopify_domain}}/products/{{shopify_product.handle}}"
+                    "message": "Hey there, \n\nThanks for signing up on our waitlist! {{shopify_product.title}} has become available. Get it while stock lasts: https://{{shopify.myshopifyDomain}}/products/{{shopify_product.handle}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
