@@ -13,6 +13,7 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
+                "version": "v2",
                 "key": "shopify_order",
                 "operation_id": "orders_create",
                 "metadata": [],
@@ -27,18 +28,26 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Order Add Tag",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "post_mesa_orders_order_id_tag",
+                "operation_id": "orderTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
-                    "order_id": "{{shopify_order.id}}",
+                    "api_endpoint": "post /graphql/orderTags/add",
                     "body": {
-                        "tag": "{{shopify_order.shipping_address.province_code}}"
+                        "id": "{{shopify_order.id}}",
+                        "tags": "{{shopify_order.shipping_address.province_code}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
