@@ -104,6 +104,23 @@ const RESPONSE_NEST = {
     'metafield/list': 'metafields',
 };
 
+/**
+ * Response fields that are ARRAYS at runtime even though the v2 OpenAPI
+ * response schema types them as strings (GraphQL [String!] lists are not
+ * joined by the runtime; rendering one inside a larger string produces a PHP
+ * print_r dump). Tokens embedding these fields in string context get a
+ * Liquid `| join: ", "` filter appended; whole-value tokens pass the raw
+ * array through untouched. Keyed by v1 op, values are v2 response paths.
+ */
+const ARRAY_FIELDS = {
+    'order/retrieve': ['tags', 'paymentGatewayNames'],
+    'order/update': ['tags', 'paymentGatewayNames'],
+    'customer/retrieve': ['tags'],
+    'customer/update': ['tags'],
+    'product/retrieve': ['tags'],
+    'product/update': ['tags'],
+};
+
 // ---------------------------------------------------------------------------
 // Artifact loading
 // ---------------------------------------------------------------------------
@@ -257,6 +274,7 @@ function main() {
             field_rules: FIELD_RULES[v1Key] || null,
             response_renames: RESPONSE_RENAMES[v1Key] || {},
             response_nest: RESPONSE_NEST[v1Key] || null,
+            array_fields: ARRAY_FIELDS[v1Key] || [],
             response_paths: schema.response_paths,
         };
     };

@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-06-04T23:18:14.043Z",
+    "generated_at": "2026-06-04T23:37:43.927Z",
     "mesa_repo_branch": "mesa/shopify-v2",
     "outputs": {
         "order/retrieve": {
@@ -28,6 +28,10 @@
                 "total_price": "totalPriceSet"
             },
             "response_nest": null,
+            "array_fields": [
+                "tags",
+                "paymentGatewayNames"
+            ],
             "response_paths": [
                 "additionalFees[]",
                 "additionalFees[].id",
@@ -932,6 +936,7 @@
             },
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "name",
@@ -961,6 +966,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "name",
@@ -987,6 +993,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "createdAt",
                 "id",
@@ -1020,6 +1027,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "createdAt",
                 "id",
@@ -1069,6 +1077,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].additionalFees[]",
@@ -1917,6 +1926,9 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [
+                "tags"
+            ],
             "response_paths": [
                 "amountSpent",
                 "amountSpent.amount",
@@ -2755,6 +2767,7 @@
             },
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "displayName",
                 "id",
@@ -2781,6 +2794,9 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [
+                "tags"
+            ],
             "response_paths": [
                 "availablePublicationsCount",
                 "bundleConsolidatedOptions[]",
@@ -2888,6 +2904,9 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [
+                "tags"
+            ],
             "response_paths": [
                 "availablePublicationsCount",
                 "bundleConsolidatedOptions[]",
@@ -2985,6 +3004,10 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [
+                "tags",
+                "paymentGatewayNames"
+            ],
             "response_paths": [
                 "additionalFees[]",
                 "additionalFees[].id",
@@ -3889,6 +3912,7 @@
             },
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "tags",
@@ -3925,6 +3949,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "line_item",
                 "order_id"
@@ -3963,6 +3988,9 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [
+                "tags"
+            ],
             "response_paths": [
                 "amountSpent",
                 "amountSpent.amount",
@@ -4813,6 +4841,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].availablePublicationsCount",
@@ -4899,6 +4928,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].assignedLocation",
@@ -5830,6 +5860,7 @@
             },
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "displayName",
                 "id",
@@ -5861,6 +5892,7 @@
             },
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "tags",
@@ -5892,6 +5924,7 @@
             },
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "name",
@@ -5932,6 +5965,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].amountSpent",
@@ -6712,6 +6746,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].createdAt",
@@ -6743,6 +6778,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "acceptAutomaticDiscounts",
                 "allVariantPricesOverridden",
@@ -8442,6 +8478,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "amountSpent",
                 "amountSpent.amount",
@@ -9307,6 +9344,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "additionalFees[]",
                 "additionalFees[].id",
@@ -10207,6 +10245,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "orderId",
                 "orderName",
@@ -10250,6 +10289,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "availablePublicationsCount",
                 "bundleConsolidatedOptions[]",
@@ -10338,6 +10378,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedId",
                 "userErrors[]",
@@ -10373,6 +10414,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id"
             ]
@@ -10397,6 +10439,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "acceptAutomaticDiscounts",
                 "allVariantPricesOverridden",
@@ -12100,6 +12143,7 @@
             },
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].availableForSale",
@@ -12333,6 +12377,7 @@
             },
             "response_renames": {},
             "response_nest": "metafields",
+            "array_fields": [],
             "response_paths": [
                 "metafields[]",
                 "metafields[].*",
@@ -12359,6 +12404,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].activeOperations",
@@ -12427,6 +12473,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "createdAt",
                 "displayStatus",
@@ -12478,6 +12525,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "activeOperations",
                 "activeOperations.duplicate[]",
@@ -12536,6 +12584,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "metafields[]",
                 "metafields[].description",
@@ -12571,6 +12620,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "assignedLocation",
                 "assignedLocation.address1",
@@ -13600,6 +13650,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "acceptAutomaticDiscounts",
                 "allVariantPricesOverridden",
@@ -15289,6 +15340,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "*"
             ]
@@ -15320,6 +15372,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "displayReason",
                 "handle",
@@ -15350,6 +15403,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "acceptAutomaticDiscounts",
                 "allVariantPricesOverridden",
@@ -17038,6 +17092,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "countryCodeOfOrigin",
                 "createdAt",
@@ -17085,6 +17140,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "assignedLocation",
                 "assignedLocation.address1",
@@ -18086,6 +18142,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "activatable",
                 "address",
@@ -18164,6 +18221,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "alerts[]",
                 "alerts[].action",
@@ -18369,6 +18427,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "alerts[]",
                 "alerts[].action",
@@ -18578,6 +18637,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "balance",
                 "balance.amount",
@@ -20745,6 +20805,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "name",
@@ -20771,6 +20832,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "inventory_item_id",
                 "product_id",
@@ -20799,6 +20861,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "createdAt",
                 "displayStatus",
@@ -20838,6 +20901,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].autoPublish",
@@ -20865,6 +20929,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "balance",
                 "balance.amount",
@@ -23033,6 +23098,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "displayName",
                 "id",
@@ -23072,6 +23138,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "address1",
                 "address2",
@@ -23117,6 +23184,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "assignedLocation",
                 "assignedLocation.address1",
@@ -24129,6 +24197,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "countryCodeOfOrigin",
                 "createdAt",
@@ -24180,6 +24249,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "facts[]",
                 "facts[].description",
@@ -24284,6 +24354,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedProductId",
                 "id",
@@ -24400,6 +24471,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "availableForSale",
                 "barcode",
@@ -24462,6 +24534,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "customer_company_location_currency",
                 "customer_company_location_id",
@@ -24488,6 +24561,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedCustomerId"
             ]
@@ -24510,6 +24584,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].balance",
@@ -26488,6 +26563,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].countryCodeOfOrigin",
@@ -26538,6 +26614,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].activatable",
@@ -26615,6 +26692,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "additionalFees[]",
                 "additionalFees[].id",
@@ -27514,6 +27592,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedId",
                 "userErrors[]",
@@ -27542,6 +27621,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "body",
                 "bodySummary",
@@ -27580,6 +27660,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedMetafields[]",
                 "deletedMetafields[].key",
@@ -27609,6 +27690,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "title",
@@ -27634,6 +27716,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].name"
@@ -27663,6 +27746,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "commentPolicy",
                 "createdAt",
@@ -27697,6 +27781,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedBlogId",
                 "userErrors[]",
@@ -27723,6 +27808,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].commentPolicy",
@@ -27758,6 +27844,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "commentPolicy",
                 "createdAt",
@@ -27799,6 +27886,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "commentPolicy",
                 "createdAt",
@@ -27839,6 +27927,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "active",
                 "callbackUrl",
@@ -27874,6 +27963,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedId",
                 "userErrors[]",
@@ -27900,6 +27990,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].active",
@@ -27936,6 +28027,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "active",
                 "callbackUrl",
@@ -27975,6 +28067,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "active",
                 "callbackUrl",
@@ -28009,6 +28102,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].*"
@@ -28034,6 +28128,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": []
         },
         "comment/approve": {
@@ -28056,6 +28151,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "article",
                 "article.author",
@@ -28123,6 +28219,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].article",
@@ -28193,6 +28290,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "article",
                 "article.author",
@@ -28273,6 +28371,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "address1",
                 "address2",
@@ -28318,6 +28417,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedAddressId",
                 "userErrors[]",
@@ -28345,6 +28445,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedCodeDiscountId",
                 "userErrors[]",
@@ -28382,6 +28483,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "draft_order_id",
                 "line_item_id"
@@ -28414,6 +28516,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].acceptAutomaticDiscounts",
@@ -29970,6 +30073,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "name",
@@ -29994,6 +30098,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "count",
                 "precision"
@@ -30020,6 +30125,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].action",
@@ -30054,6 +30160,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "action",
                 "appTitle",
@@ -30087,6 +30194,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "assignedLocation",
                 "assignedLocation.address1",
@@ -31091,6 +31199,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "assignedLocation",
                 "assignedLocation.address1",
@@ -32094,6 +32203,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "assignedLocation",
                 "assignedLocation.address1",
@@ -33099,6 +33209,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedId",
                 "userErrors[]",
@@ -33124,6 +33235,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].callbackUrl",
@@ -33157,6 +33269,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "callbackUrl",
                 "handle",
@@ -33238,6 +33351,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "callbackUrl",
                 "handle",
@@ -33319,6 +33433,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "balance",
                 "balance.amount",
@@ -35490,6 +35605,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "changes[]",
                 "changes[].delta",
@@ -35515,6 +35631,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "count",
                 "precision"
@@ -35538,6 +35655,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].app",
@@ -35653,6 +35771,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "app",
                 "app.apiKey",
@@ -35770,6 +35889,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "count",
                 "ownerId",
@@ -35797,6 +35917,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "key",
                 "namespace",
@@ -35823,6 +35944,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "id",
                 "key",
@@ -35852,6 +35974,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "additionalFees[]",
                 "additionalFees[].id",
@@ -36752,6 +36875,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "events[]",
                 "events[].happenedAt",
@@ -36784,6 +36908,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "fulfillmentId",
                 "fulfillmentStatus",
@@ -36813,6 +36938,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "assessments[]",
                 "assessments[].riskLevel",
@@ -36847,6 +36973,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "body",
                 "bodySummary",
@@ -36881,6 +37008,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedPageId",
                 "userErrors[]",
@@ -36907,6 +37035,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].body",
@@ -36950,6 +37079,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "body",
                 "bodySummary",
@@ -36982,6 +37112,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].currency",
@@ -37016,6 +37147,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "catalog",
                 "catalog.*",
@@ -37053,6 +37185,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedMetafields[]",
                 "deletedMetafields[].key",
@@ -37080,6 +37213,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "autoPublish",
                 "id",
@@ -37104,6 +37238,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "count",
                 "precision"
@@ -37129,6 +37264,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "cache",
                 "createdAt",
@@ -37159,6 +37295,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedScriptTagId",
                 "userErrors[]",
@@ -37185,6 +37322,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].cache",
@@ -37216,6 +37354,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "cache",
                 "createdAt",
@@ -37249,6 +37388,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "cache",
                 "createdAt",
@@ -37277,6 +37417,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].amount",
@@ -38044,6 +38185,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "createdAt",
                 "id",
@@ -38076,6 +38218,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "deletedThemeId",
                 "userErrors[]",
@@ -38104,6 +38247,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "[]",
                 "[].createdAt",
@@ -38137,6 +38281,7 @@
             "field_rules": null,
             "response_renames": {},
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "createdAt",
                 "id",
@@ -38179,6 +38324,7 @@
                 "shop_owner": "shopOwnerName"
             },
             "response_nest": null,
+            "array_fields": [],
             "response_paths": [
                 "alerts[]",
                 "alerts[].action",
