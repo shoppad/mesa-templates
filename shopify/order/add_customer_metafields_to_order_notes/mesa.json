@@ -13,6 +13,7 @@
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
+                "version": "v2",
                 "key": "shopify",
                 "operation_id": "orders_create",
                 "metadata": [],
@@ -28,13 +29,24 @@
                 "entity": "metafield",
                 "action": "list",
                 "name": "Get List of Metafields",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_metafields",
+                "operation_id": "metafieldList",
                 "metadata": {
-                    "api_endpoint": "get admin/metafields.json",
-                    "parameters": "metafield[owner_id]={{shopify.customer.id}}&metafield[owner_resource]=customer"
+                    "api_endpoint": "post /graphql/metafield/list",
+                    "body": {
+                        "ownerId": "{{shopify.customer.id}}",
+                        "ownerType": "Customer"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "ownerId",
+                    "ownerType",
+                    "body",
+                    "body.ownerId",
+                    "body.ownerType"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -43,19 +55,29 @@
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
-                "action": "note_update",
+                "action": "create",
                 "name": "Update Order Notes",
+                "version": "v2",
                 "key": "shopify_2",
                 "operation_id": "put_mesa_orders_order_id_note",
                 "metadata": {
-                    "api_endpoint": "put mesa/orders/{{order_id}}/note.json",
-                    "order_id": "{{shopify.id}}",
+                    "api_endpoint": "post /graphql/order/noteUpdate",
                     "body": {
-                        "note": "{% for metafield in shopify_1 %} - {{metafield.key | replace: \"_\", \" \"| capitalize}}: {{metafield.value}}\n{% endfor %}",
+                        "id": "{{shopify.id}}",
+                        "note": "{% for metafield in shopify_1.metafields %} - {{metafield.key | replace: \"_\", \" \"| capitalize}}: {{metafield.value}}\n{% endfor %}",
                         "append": true
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "note",
+                    "append",
+                    "body",
+                    "body.id",
+                    "body.note",
+                    "body.append"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
