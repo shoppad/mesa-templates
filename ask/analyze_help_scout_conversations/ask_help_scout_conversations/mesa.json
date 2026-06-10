@@ -2,8 +2,6 @@
     "key": "analyze_help_scout_conversations",
     "name": "Analyze Last Week's Help Scout Conversations",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
@@ -12,18 +10,19 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "schedule",
+                "entity": "schedule",
+                "action": "schedule",
                 "name": "Schedule",
                 "key": "schedule",
-                "operation_id": "schedule",
+                "operation_id": "post-schedule",
                 "metadata": {
-                    "schedule": "@weekly:0 0 * * 0",
+                    "api_endpoint": "post \/schedule",
                     "enqueue_type": "schedule",
+                    "schedule": "@hourly:0 * * * *",
                     "datetime": null
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "schedule"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
@@ -35,42 +34,26 @@
                 "type": "ai",
                 "entity": "agent",
                 "action": "create",
-                "name": "Ask",
-                "key": "ask",
+                "name": "Agent",
+                "version": "v3",
+                "key": "ai",
                 "operation_id": "post-agent",
                 "metadata": {
-                    "api_endpoint": "post /agent",
+                    "api_endpoint": "post \/agent",
                     "body": {
                         "automations": [
                             "mcp/helpscout/retrieve_conversations"
                         ],
-                        "content": "Find interesting trends in my support tickets over the last week. Cite the link from each ticket that matches the trends."
+                        "content": "Each week, review all support conversations from the past 7 days. Include the dates of the tickets you're reviewing at the top of the summary. Summarize the top 2\u20133 issues customers faced or notable trends based on the actual content of customer messages\u2014what users are trying to do, where they're confused, or what they're asking for help with.\n\nFor each trend:\n- Describe the specific issue or user request in plain terms\n- Estimate how many tickets show this trend\n- Be specific (e.g., \"confusion about adding a delay step after order fulfillment\"), not general (e.g., \"workflow questions\").\n- Skip ticket metadata like submission method or timestamps. Focus only on user intent and problem content.\n\nIMPORTANT \u2014 LINKS:\n- Provide Help Scout links to the conversation (not API links).\n- These should look like: https:\/\/secure.helpscout.net\/conversation\/...\n- Avoid links like https:\/\/api.helpscout.net\/v2\/conversations\/... which don't work without an API token.\n\nAlso include 2\u20133 practical tips for the product team based on the trends you've observed.\n\nIMPORTANT \u2014 OUTPUT FORMAT:\nOutput the entire summary as valid HTML for a rich-text email. Do NOT use Markdown syntax (no #, ##, ####, -, or ** characters). Use HTML tags only. Separate every block with proper tags so nothing runs together into one paragraph.\n\nStart the summary with exactly this structure:\n\n<p><strong>Support Weekly Summary<\/strong><\/p>\n<p><strong>Review Dates:<\/strong> [start date] to [end date]<\/p>",
+                        "instructions": "Then include three major sections in this order, using <h2> headings:\n\n<h2>Top Customer Issues and Trends<\/h2>\n<h2>Practical Tips for the Product Team<\/h2>\n\nUse HTML tags throughout. Do NOT use Markdown syntax (no #, ##, ####, -, or **).\n\nIn \"Top Customer Issues and Trends,\" include 2\u20133 main themes. Each theme must have:\n- A short, specific title as an <h4> heading (e.g., <h4>1. Issue Title<\/h4>)\n- A Description in its own <p>, with the word \"Description:\" wrapped in <strong>, explaining the issue or user request\n- A Ticket Estimate in its own <p> using <strong> (including the approximate count), followed by a <ul> with one <li> per ticket\n- Each link formatted as <a href=\"https:\/\/secure.helpscout.net\/conversation\/...\">Descriptive Title<\/a>\n- Every href must start with https:\/\/secure.helpscout.net\/conversation\n- Avoid API URLs (nothing beginning with https:\/\/api.helpscout.net\/...)\n- Skip all ticket metadata (submission source, agent name, etc.)\n- Focus only on user messages and intent \u2014 what users are trying to do, where they're confused, or what they're asking for help with\n\nIn \"Practical Tips for the Product Team,\" include 2\u20133 short, actionable recommendations based on the trends. Each tip is its own <p> with a bolded short title (<strong>) followed by a one-line explanation. Be concise, plainspoken, and specific (e.g., \"Confusion about adding a delay step after order fulfillment\" instead of \"workflow questions\").\n\nMaintain a professional and informative tone throughout."
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "body.instructions"
+                ],
                 "on_error": "default",
-                "weight": 0,
-                "version": "v3"
-            },
-            {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "ai",
-                "entity": "agent",
-                "action": "skill",
-                "name": "Skill",
-                "key": "ask_3",
-                "operation_id": "post-agent-skill",
-                "metadata": {
-                    "api_endpoint": "post /agent/skill",
-                    "trigger_manager_key": "ask",
-                    "trigger_parent_key": "ask"
-                },
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 1,
-                "version": "v3"
+                "weight": 0
             },
             {
                 "schema": 5,
@@ -79,13 +62,13 @@
                 "name": "Send Email",
                 "version": "v2",
                 "key": "email",
-                "operation_id": "/send-email",
+                "operation_id": "\/send-email",
                 "metadata": {
-                    "api_endpoint": "post /send-email",
+                     "api_endpoint": "post \/send-email",
                     "body": {
                         "to": "{{ template | label: 'Email address', description: 'Where should we send the weekly report?' }}",
                         "subject": "Last Week's Help Scout Conversations",
-                        "message": "{{ask.content}}"
+                        "message": "<p>{{ai.content}}<\/p>"
                     }
                 },
                 "local_fields": [],
