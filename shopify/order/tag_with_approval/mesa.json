@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/tag_with_approval",
-    "name": "Tag Shopify Orders if Given Approval",
+    "name": "Tag Shopify Orders On Approval",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
