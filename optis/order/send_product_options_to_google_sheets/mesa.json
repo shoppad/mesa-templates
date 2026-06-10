@@ -56,7 +56,7 @@
                     },
                     {
                         "label": "Zip/Postal Code",
-                        "value": "Zip/Postal Code|{{optis_product_options.order.shipping_address.zip}",
+                        "value": "Zip/Postal Code|{{optis_product_options.order.shipping_address.zip}}",
                         "description": "The zip code of the Shipping Address."
                     },
                     {
