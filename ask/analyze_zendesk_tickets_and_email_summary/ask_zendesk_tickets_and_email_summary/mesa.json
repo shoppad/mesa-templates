@@ -78,6 +78,7 @@
                 "local_fields": [],
                 "selected_fields": [
                     "body",
+                    "body.to",
                     "body.subject",
                     "body.message"
                 ],
