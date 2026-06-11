@@ -13,10 +13,11 @@
                 "entity": "skill",
                 "action": "skill",
                 "name": "Skill",
+                "version": "v3",
                 "key": "skill",
                 "operation_id": "post-skill",
                 "metadata": {
-                    "api_endpoint": "post /skill",
+                    "api_endpoint": "post \/skill",
                     "body": {
                         "parameters": [
                             {
@@ -60,8 +61,7 @@
                     "body.parameters[].required"
                 ],
                 "on_error": "default",
-                "weight": 0,
-                "version": "v3"
+                "weight": 0
             }
         ],
         "outputs": [
@@ -75,12 +75,10 @@
                 "key": "zendesk",
                 "operation_id": "ListTickets",
                 "metadata": {
-                    "api_endpoint": "get /api/v2/tickets",
+                    "api_endpoint": "get \/api\/v2\/tickets",
                     "query": {
-                        "created_at_min": "{{skill.start_date}}",
-                        "created_at_max": "{{skill.end_date}}",
-                        "status": "{{skill.status}}",
-                        "tag": "{{skill.tag}}",
+                        "created_at_min": "{{ \"now\" | subtract_time: 7, \"days\" | date: \"%Y-%m-%dT%H:%M:%SZ\" }}",
+                        "created_at_max": "{{ \"now\" | add_time: 2, \"hours\" | date: \"%Y-%m-%dT%H:%M:%SZ\" }}",
                         "limit": "{{skill.limit}}"
                     }
                 },
@@ -90,7 +88,9 @@
                     "query.created_at_max",
                     "query.created_at_min",
                     "query.status",
-                    "query.tag"
+                    "query.tag",
+                    "query.updated_at_min",
+                    "query.updated_at_max"
                 ],
                 "on_error": "default",
                 "weight": 0
@@ -105,7 +105,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{zendesk.tickets[]}}",
+                    "key": "{{zendesk.tickets.results[]}}",
                     "filter": {
                         "comparison": "equals",
                         "additional": [
@@ -119,10 +119,39 @@
                 },
                 "local_fields": [],
                 "selected_fields": [
+                    "key",
+                    "filter",
+                    "filter.additional",
                     "return"
                 ],
                 "on_error": "default",
                 "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Has ticket id?",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "trigger_parent_key": "loop",
+                    "a": "{{loop.id}}",
+                    "comparison": "is not empty",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison"
+                ],
+                "on_error": "default",
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -134,16 +163,19 @@
                 "key": "zendesk_1",
                 "operation_id": "ListTicketComments",
                 "metadata": {
-                    "api_endpoint": "get /api/v2/tickets/{ticket_id}/comments",
+                    "api_endpoint": "get \/api\/v2\/tickets\/{ticket_id}\/comments",
                     "trigger_parent_key": "loop",
                     "path": {
                         "ticket_id": "{{loop.id}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.ticket_id"
+                ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 3
             },
             {
                 "schema": 2,
@@ -158,9 +190,12 @@
                     "description": "Extract the latest customer comment from a Zendesk ticket."
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "description",
+                    "script"
+                ],
                 "on_error": "default",
-                "weight": 3
+                "weight": 4
             },
             {
                 "schema": 5.1,
@@ -182,7 +217,7 @@
                     "map"
                 ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ]
     }
