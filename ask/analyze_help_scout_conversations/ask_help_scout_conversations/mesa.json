@@ -18,7 +18,7 @@
                 "metadata": {
                     "api_endpoint": "post \/schedule",
                     "enqueue_type": "schedule",
-                    "schedule": "@hourly:0 * * * *",
+                    "schedule": "@weekly:0 0 * * 0",
                     "datetime": null
                 },
                 "local_fields": [],
