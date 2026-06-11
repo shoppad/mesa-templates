@@ -60,26 +60,6 @@
                 "weight": 0
             },
             {
-                "schema": 4,
-                "trigger_type": "output",
-                "type": "ai",
-                "entity": "agent",
-                "action": "skill",
-                "name": "Skill",
-                "key": "ask_1",
-                "operation_id": "post-agent-skill",
-                "metadata": {
-                    "api_endpoint": "post /agent/skill",
-                    "trigger_manager_key": "ask",
-                    "trigger_parent_key": "ask"
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 1,
-                "version": "v3"
-            },
-            {
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "email",
@@ -102,7 +82,7 @@
                     "body.message"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 1
             }
         ]
     }
