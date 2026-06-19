@@ -1,0 +1,164 @@
+{
+  "key": "mesa_analytics_locations",
+  "name": "MESA Analytics: Locations",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "location",
+        "action": "updated",
+        "name": "Shopify Location Updated",
+        "key": "shopify_location",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Location Record",
+        "key": "data_record",
+        "metadata": {
+          "create": "existing",
+          "table": "locations",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{shopify_location.id}}",
+            "a": "location_id"
+          },
+          "columns": [
+            {
+              "key": "location_id",
+              "type": "varchar",
+              "value": "{{shopify_location.id}}",
+              "disabled": true
+            },
+            {
+              "key": "name",
+              "type": "varchar",
+              "value": "{{shopify_location.name}}",
+              "disabled": true
+            },
+            {
+              "key": "address1",
+              "type": "varchar",
+              "value": "{{shopify_location.address1}}",
+              "disabled": true
+            },
+            {
+              "key": "address2",
+              "type": "varchar",
+              "value": "{{shopify_location.address2}}",
+              "disabled": true
+            },
+            {
+              "key": "city",
+              "type": "varchar",
+              "value": "{{shopify_location.city}}",
+              "disabled": true
+            },
+            {
+              "key": "zip",
+              "type": "varchar",
+              "value": "{{shopify_location.zip}}",
+              "disabled": true
+            },
+            {
+              "key": "province",
+              "type": "varchar",
+              "value": "{{shopify_location.province}}",
+              "disabled": true
+            },
+            {
+              "key": "country",
+              "type": "varchar",
+              "value": "{{shopify_location.country}}",
+              "disabled": true
+            },
+            {
+              "key": "phone",
+              "type": "varchar",
+              "value": "{{shopify_location.phone}}",
+              "disabled": true
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{shopify_location.created_at}}",
+              "disabled": true
+            },
+            {
+              "key": "updated_at",
+              "type": "timestamptz",
+              "value": "{{shopify_location.updated_at}}",
+              "disabled": true
+            },
+            {
+              "key": "country_code",
+              "type": "varchar",
+              "value": "{{shopify_location.country_code}}",
+              "disabled": true
+            },
+            {
+              "key": "country_name",
+              "type": "varchar",
+              "value": "{{shopify_location.country_name}}",
+              "disabled": true
+            },
+            {
+              "key": "province_code",
+              "type": "varchar",
+              "value": "{{shopify_location.province_code}}",
+              "disabled": true
+            },
+            {
+              "key": "legacy",
+              "type": "bool",
+              "value": "{{shopify_location.legacy}}",
+              "disabled": true
+            },
+            {
+              "key": "active",
+              "type": "bool",
+              "value": "{{shopify_location.active}}",
+              "disabled": true
+            },
+            {
+              "key": "localized_country_name",
+              "type": "varchar",
+              "value": "{{shopify_location.localized_country_name}}",
+              "disabled": true
+            },
+            {
+              "key": "localized_province_name",
+              "type": "varchar",
+              "value": "{{shopify_location.localized_province_name}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}

@@ -1,0 +1,537 @@
+{
+  "key": "mesa_analytics_refunds",
+  "name": "MESA Analytics: Refunds",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify",
+        "entity": "refund",
+        "action": "created",
+        "name": "Shopify Refund Created",
+        "key": "shopify_refund",
+        "metadata": [],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Refund Record",
+        "key": "data_record",
+        "metadata": {
+          "create": "existing",
+          "table": "refunds",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{shopify_refund.id}}",
+            "a": "refund_id"
+          },
+          "columns": [
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.order_id}}",
+              "disabled": true
+            },
+            {
+              "key": "refund_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.id}}",
+              "disabled": true
+            },
+            {
+              "key": "user_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.user_id}}",
+              "disabled": true
+            },
+            {
+              "key": "restock",
+              "type": "bool",
+              "value": "{{shopify_refund.restock}}",
+              "disabled": true
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{shopify_refund.created_at}}",
+              "disabled": true
+            },
+            {
+              "key": "processed_at",
+              "type": "timestamptz",
+              "value": "{{shopify_refund.processed_at}}",
+              "disabled": true
+            },
+            {
+              "key": "note",
+              "type": "text",
+              "value": "{{shopify_refund.note}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 0
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "transform",
+        "entity": "mapping",
+        "name": "Send to children",
+        "key": "transform_mapping",
+        "metadata": {
+          "mapping": [
+            {
+              "destination": "order_adjustment.id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "order_adjustment.amount",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "order_adjustment.tax_amount",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "order_adjustment.kind",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "order_adjustment.reason",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "refund_line_item.id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "refund_line_item.line_item_id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "refund_line_item.quantity",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "refund_line_item.restock_type",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "refund_line_item.location_id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "refund_line_item.subtotal",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "refund_line_item.total_tax",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.kind",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.gateway",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.status",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.message",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.created_at",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.test",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.authorization",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.location_id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.user_id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.parent_id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.processed_at",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.device_id",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.error_code",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.source_name",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.amount",
+              "source": "SEE_CODE"
+            },
+            {
+              "destination": "transaction.currency",
+              "source": "SEE_CODE"
+            }
+          ],
+          "script": "send-to-children.js"
+        },
+        "local_fields": [
+          {
+            "key": "mapping",
+            "type": "mapping",
+            "tokens": "brackets",
+            "location": "mapping"
+          }
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Refund Line Item Record",
+        "key": "data_record_1",
+        "metadata": {
+          "create": "existing",
+          "table": "refund_line_items",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{transform_mapping.refund_line_item.id}}",
+            "a": "refund_line_item_id"
+          },
+          "columns": [
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.order_id}}",
+              "disabled": true
+            },
+            {
+              "key": "refund_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.id}}",
+              "disabled": true
+            },
+            {
+              "key": "refund_line_item_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.refund_line_item.id}}",
+              "disabled": true
+            },
+            {
+              "key": "line_item_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.refund_line_item.line_item_id}}",
+              "disabled": true
+            },
+            {
+              "key": "quantity",
+              "type": "int8",
+              "value": "{{transform_mapping.refund_line_item.quantity}}",
+              "disabled": true
+            },
+            {
+              "key": "restock_type",
+              "type": "varchar",
+              "value": "{{transform_mapping.refund_line_item.restock_type}}",
+              "disabled": true
+            },
+            {
+              "key": "subtotal",
+              "type": "numeric",
+              "value": "{{transform_mapping.refund_line_item.subtotal}}",
+              "disabled": true
+            },
+            {
+              "key": "total_tax",
+              "type": "numeric",
+              "value": "{{transform_mapping.refund_line_item.total_tax}}",
+              "disabled": true
+            },
+            {
+              "key": "location_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.refund_line_item.location_id}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 2
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Stop execution",
+        "key": "custom",
+        "metadata": {
+          "script": "stop-execution.js"
+        },
+        "local_fields": [],
+        "weight": 3
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Order Adjustment Record",
+        "key": "data_record_2",
+        "metadata": {
+          "create": "existing",
+          "table": "refund_order_adjustments",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{transform_mapping.order_adjustment.id}}",
+            "a": "order_adjustment_id"
+          },
+          "columns": [
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.order_id}}",
+              "disabled": true
+            },
+            {
+              "key": "refund_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.id}}",
+              "disabled": true
+            },
+            {
+              "key": "order_adjustment_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.order_adjustment.id}}",
+              "disabled": true
+            },
+            {
+              "key": "amount",
+              "type": "numeric",
+              "value": "{{transform_mapping.order_adjustment.amount}}",
+              "disabled": true
+            },
+            {
+              "key": "tax_amount",
+              "type": "numeric",
+              "value": "{{transform_mapping.order_adjustment.tax_amount}}",
+              "disabled": true
+            },
+            {
+              "key": "kind",
+              "type": "varchar",
+              "value": "{{transform_mapping.order_adjustment.kind}}",
+              "disabled": true
+            },
+            {
+              "key": "reason",
+              "type": "text",
+              "value": "{{transform_mapping.order_adjustment.reason}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 5
+      },
+      {
+        "schema": 2,
+        "trigger_type": "output",
+        "type": "custom",
+        "name": "Stop execution",
+        "key": "custom_1",
+        "metadata": {
+          "script": "stop-execution-1.js"
+        },
+        "local_fields": [],
+        "weight": 6
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Transaction Record",
+        "key": "data_record_3",
+        "metadata": {
+          "create": "existing",
+          "table": "refund_transactions",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{transform_mapping.transaction.id}}",
+            "a": "transaction_id"
+          },
+          "columns": [
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.order_id}}",
+              "disabled": true
+            },
+            {
+              "key": "refund_id",
+              "type": "varchar",
+              "value": "{{shopify_refund.id}}",
+              "disabled": true
+            },
+            {
+              "key": "transaction_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.id}}",
+              "disabled": true
+            },
+            {
+              "key": "kind",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.kind}}",
+              "disabled": true
+            },
+            {
+              "key": "gateway",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.gateway}}",
+              "disabled": true
+            },
+            {
+              "key": "status",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.status}}",
+              "disabled": true
+            },
+            {
+              "key": "message",
+              "type": "text",
+              "value": "{{transform_mapping.transaction.message}}",
+              "disabled": true
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{transform_mapping.transaction.created_at}}",
+              "disabled": true
+            },
+            {
+              "key": "test",
+              "type": "bool",
+              "value": "{{transform_mapping.transaction.test}}",
+              "disabled": true
+            },
+            {
+              "key": "authorization",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.authorization}}",
+              "disabled": true
+            },
+            {
+              "key": "location_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.location_id}}",
+              "disabled": true
+            },
+            {
+              "key": "user_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.user_id}}",
+              "disabled": true
+            },
+            {
+              "key": "parent_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.parent_id}}",
+              "disabled": true
+            },
+            {
+              "key": "processed_at",
+              "type": "timestamptz",
+              "value": "{{transform_mapping.transaction.processed_at}}",
+              "disabled": true
+            },
+            {
+              "key": "device_id",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.device_id}}",
+              "disabled": true
+            },
+            {
+              "key": "error_code",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.error_code}}",
+              "disabled": true
+            },
+            {
+              "key": "source_name",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.source_name}}",
+              "disabled": true
+            },
+            {
+              "key": "amount",
+              "type": "numeric",
+              "value": "{{transform_mapping.transaction.amount}}",
+              "disabled": true
+            },
+            {
+              "key": "currency",
+              "type": "varchar",
+              "value": "{{transform_mapping.transaction.currency}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 7
+      }
+    ],
+    "storage": []
+  }
+}
