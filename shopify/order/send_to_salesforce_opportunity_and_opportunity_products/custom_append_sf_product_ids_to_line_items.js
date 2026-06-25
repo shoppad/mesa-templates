@@ -1,20 +1,23 @@
 const Mesa = require('vendor/Mesa.js');
 
 /**
- * A Mesa Script exports a class with a script() method.
+ * A MESA Script exports a class with a script() method.
  */
 module.exports = new (class {
   /**
-   * Mesa Script
+   * MESA Script
    *
-   * @param {object} payload The payload data
+   * @param {object} prevResponse The response from the previous step
    * @param {object} context Additional context about this task
    */
-  script = (payload, context) => {
-    const salesforceProducts =
-      context.steps['salesforce-query-multiple-product'];
+  script = (prevResponse, context) => {
+    // Retrieve the Variables Available to this step
+    const vars = context.steps;
 
-    let lineItems = context.steps['shopify-order-created'].line_items;
+    const salesforceProducts =
+      vars.salesforce_query_multiple_product;
+
+    let lineItems = vars.shopify_order_created.line_items;
 
     lineItems.forEach((lineItem, key) => {
       let salesforceProduct = salesforceProducts.filter(
@@ -31,7 +34,8 @@ module.exports = new (class {
 
     newPayload.line_items = lineItems;
 
-    // We're done, call the next step!
+    // Call the next step in this workflow
+    // newPayload will be the Variables Available from this step
     Mesa.output.next(newPayload);
   };
 })();

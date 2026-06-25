@@ -1,164 +1,204 @@
 {
     "key": "shopify/order/send_to_salesforce_opportunity_and_opportunity_products",
-    "name": "Shopify Order Created to Salesforce Opportunity and Opportunity Products",
+    "name": "Sync Shopify Orders to Salesforce Opportunities with Opportunity Products",
     "version": "1.0.0",
-    "description": "Send Order from Shopify to Salesforce Opportunity and Opportunity Products when order is created.",
-    "video": "",
-    "tags": [
-        "Order"
-    ],
-    "source": "shopify",
-    "destination": "salesforce",
     "enabled": false,
-    "logging": false,
-    "readme": "##Dependencies\n\nIn order for this workflow to function properly, there are two workflows which should be installed, fully set up and enabled. Any Shopify Customers or Products used in Shopify Orders processed by this workflow need to have been synchronized by these two workflows:\n\n- [Shopify Product Created or Updated to Salesforce Product and Pricebook Entry](https://www.getmesa.com/connect/shopify/integrate/salesforce/shopify-product-created-or-updated-to-salesforce-product-and-pricebook-entry)\n\n- [Shopify Customer Created or Updated to Salesforce Account](https://www.getmesa.com/connect/shopify/integrate/salesforce/shopify-customer-created-or-updated-to-salesforce-account)\n\n##Price Book ID\n\nYou must enter a valid Price Book ID for \"Pricebook2Id\" under the **Mapping to Salesforce Create Opportunity** action, then save the workflow. \n\n- To get the Salesforce Price Book ID, log in to Salesforce, and go to the **Price Books** page. \n\n- Copy the link for the Price Book you wish to use, then copy the ID in the link, between `r/` and `/view`. \n\n- Example: for `https://ab11.force.com/lightning/r/01s2E000002pddCQAQ/view`, the ID would be `01s2E000002pddCQAQ`",
+    "setup": false,
     "config": {
         "inputs": [
             {
+                "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
-                "key": "shopify-order-created",
+                "key": "shopify_order_created",
+                "operation_id": "orders_create",
                 "metadata": {
-                    "topic": "orders/create"
-                }
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
             }
         ],
         "outputs": [
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "account",
                 "action": "query",
                 "name": "Query Single Account",
-                "key": "salesforce-query-single-account",
+                "key": "salesforce_query_single_account",
+                "operation_id": "account_query",
                 "metadata": {
                     "entity_name": "Account",
                     "method": "QUERY",
-                    "salesforce_query": "SELECT Id,Name FROM Account WHERE Shopify_Customer_ID__c='{{shopify-order-created.customer.id}}'"
-                }
+                    "salesforce_query": "SELECT Id,Name FROM Account WHERE Shopify_Customer_ID__c='{{shopify_order_created.customer.id}}'"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "salesforce_query"
+                ],
+                "on_error": "default",
+                "weight": 0
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom: Get Order Variant Ids",
-                "key": "custom-get-order-variant-ids",
+                "name": "Custom Code: Get Order Variants IDs",
+                "key": "custom_get_order_variant_ids",
+                "operation_id": "custom",
                 "metadata": {
                     "script": "custom_get_order_variant_ids.js"
                 },
-                "source_entity": "account",
-                "destination_entity": "product"
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 1
             },
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "product",
                 "action": "query_multiple",
-                "name": "Query Multiple Product",
-                "key": "salesforce-query-multiple-product",
+                "name": "Query Multiple Products",
+                "key": "salesforce_query_multiple_product",
+                "operation_id": "product_query_multiple",
                 "metadata": {
                     "entity_name": "Product2",
                     "method": "QUERY_MULTIPLE",
-                    "salesforce_query": "SELECT ID,Shopify_Variant_Id__c FROM Product2 WHERE Shopify_Variant_Id__c IN ({{custom-get-order-variant-ids.variant_ids_csv}})"
-                }
+                    "salesforce_query": "SELECT ID,Shopify_Variant_Id__c FROM Product2 WHERE Shopify_Variant_Id__c IN ({{custom_get_order_variant_ids.variant_ids_csv}})"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "salesforce_query"
+                ],
+                "on_error": "default",
+                "weight": 2
             },
             {
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "transform",
                 "entity": "mapping",
                 "name": "Mapping to Salesforce Create Opportunity",
-                "key": "mapping-to-salesforce-create-opportunity",
+                "key": "mapping_to_salesforce_create_opportunity",
+                "operation_id": "mapping",
                 "metadata": {
-                    "script": "mapping_to_salesforce_create_opportunity_transform.js",
                     "mapping": [
                         {
                             "destination": "AccountId",
-                            "source": "{{salesforce-query-single-account.Id}}"
+                            "source": "{{salesforce_query_single_account.Id}}"
                         },
                         {
                             "destination": "Amount",
-                            "source": "{{shopify-order-created.total_price}}"
+                            "source": "{{shopify_order_created.total_price}}"
                         },
                         {
                             "destination": "CloseDate",
-                            "source": "{{shopify-order-created.created_at}}"
+                            "source": "{{shopify_order_created.created_at}}"
                         },
                         {
                             "destination": "Description",
-                            "source": "{{shopify-order-created.notes}}"
+                            "source": "{{shopify_order_created.note}}"
                         },
                         {
                             "destination": "StageName",
                             "source": "Closed Won"
                         },
                         {
-                            "destination": "Pricebook2Id",
-                            "source": ""
+                            "destination": "Pricebook2Id"
                         },
                         {
                             "destination": "Name",
-                            "source": "{{salesforce-query-single-account.Name}} - {{shopify-order-created.name}}"
+                            "source": "{{salesforce_query_single_account.Name}} - {{shopify_order_created.name}}"
                         }
                     ]
                 },
                 "local_fields": [
                     {
                         "key": "mapping",
-                        "type": "mapping"
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
                     }
                 ],
-                "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-                "source_entity": "product",
-                "destination_entity": "opportunity"
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
             },
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "opportunity",
                 "action": "create",
                 "name": "Create Opportunity",
-                "key": "salesforce-create-opportunity",
+                "key": "salesforce_create_opportunity",
+                "operation_id": "opportunity_create",
                 "metadata": {
                     "entity_name": "Opportunity",
                     "method": "POST"
-                }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 4
             },
             {
+                "schema": 2,
                 "trigger_type": "output",
                 "type": "custom",
-                "name": "Custom: Append Salesforce Product ID to line items",
-                "key": "custom-append-sf-product-ids-to-line-items",
+                "name": "Custom Code: Append Salesforce Product ID to line items",
+                "key": "custom_append_sf_product_ids_to_line_items",
+                "operation_id": "custom",
                 "metadata": {
                     "script": "custom_append_sf_product_ids_to_line_items.js"
-                }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 5
             },
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v3",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{custom-append-sf-product-ids-to-line-items.line_items[]}}"
+                    "key": "{{custom_append_sf_product_ids_to_line_items.line_items[]}}",
+                    "return": false
                 },
-                "source_entity": "opportunity"
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 6
             },
             {
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "transform",
+                "entity": "mapping",
                 "name": "Mapping to Salesforce: Create Opportunity Product",
-                "key": "salesforce-create-opportunity-product-transform",
+                "key": "salesforce_create_opportunity_product_transform",
+                "operation_id": "mapping",
                 "metadata": {
-                    "script": "salesforce_create_opportunity_product_transform.js",
+                    "trigger_parent_key": "loop",
                     "mapping": [
                         {
                             "destination": "OpportunityId",
-                            "source": "{{salesforce-create-opportunity.id}}"
+                            "source": "{{salesforce_create_opportunity.id}}"
                         },
                         {
                             "destination": "UnitPrice",
@@ -172,30 +212,59 @@
                             "destination": "Product2Id",
                             "source": "{{loop.salesforce_product_id}}"
                         }
-                    ]
+                    ],
+                    "script": "salesforce_create_opportunity_product_transform.js"
                 },
                 "local_fields": [
                     {
                         "key": "mapping",
-                        "type": "mapping"
+                        "type": "mapping",
+                        "tokens": "brackets",
+                        "location": "required"
                     }
                 ],
-                "description": "Mesa Transforms can manipulate the values received into any format required by the next step. [Read more](https://docs.getmesa.com/article/762-mesa-transform).",
-                "destination_entity": "opportunity_product"
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 7
             },
             {
+                "schema": 3,
                 "trigger_type": "output",
                 "type": "salesforce",
                 "entity": "opportunity_product",
                 "action": "create",
                 "name": "Create Opportunity Product",
-                "key": "salesforce-create-opportunity-product",
+                "key": "salesforce_create_opportunity_product",
+                "operation_id": "opportunity_product_create",
                 "metadata": {
                     "entity_name": "OpportunityLineItem",
-                    "method": "POST"
-                }
+                    "method": "POST",
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": false
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
             }
-        ],
-        "storage": []
+        ]
     }
 }
