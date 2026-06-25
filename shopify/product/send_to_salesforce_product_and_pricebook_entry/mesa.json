@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/send_to_salesforce_product_and_pricebook_entry",
-    "name": "Send an updated or new Shopify Product to a Salesforce Product and Pricebook entry",
+    "name": "Sync Shopify Products to Salesforce Pricebooks",
     "version": "1.0.0",
     "enabled": false,
     "setup": false,
@@ -13,7 +13,7 @@
                 "entity": "product",
                 "action": "updated",
                 "name": "Product Updated",
-                "key": "shopify-product-created-or-updated",
+                "key": "shopify_product_created_or_updated",
                 "operation_id": "products_update",
                 "metadata": {
                     "frequency": "every",
@@ -36,7 +36,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify-product-created-or-updated.variants[]}}",
+                    "key": "{{shopify_product_created_or_updated.variants[]}}",
                     "script": "loop.js"
                 },
                 "local_fields": [],
@@ -95,7 +95,7 @@
                         },
                         {
                             "destination": "Description",
-                            "source": "{{shopify-product-created-or-updated.body_html}}"
+                            "source": "{{shopify_product_created_or_updated.body_html}}"
                         },
                         {
                             "destination": "Shopify_Variant_ID__c",

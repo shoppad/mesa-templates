@@ -17,7 +17,7 @@ module.exports = new class {
     // Adjust `payload` here to alter data before we transform it.
 
     // Set the title for the Salesforce Product
-    context.steps.loop.combined_title = context.steps['shopify-product-created-or-updated'].title;
+    context.steps.loop.combined_title = context.steps['shopify_product_created_or_updated'].title;
 
     // If product variant has a title other than 'Default Title', append to the Salesforce Product Name
     if (context.steps.loop.title !== 'Default Title') {
