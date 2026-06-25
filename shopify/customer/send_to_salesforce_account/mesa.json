@@ -1,9 +1,7 @@
 {
     "key": "shopify/customer/send_to_salesforce_account",
-    "name": "Send an updated or new Shopify Customer to a Salesforce account",
+    "name": "Sync Shopify Customers to Salesforce Accounts",
     "version": "1.0.0",
-    "description": "Copying information from each customer to a third party service is time consuming and staying organized while running a store can be difficult. This template sends a customer from Shopify to Salesforce Accounts whenever a customer is created or updated.",
-    "seconds": 135,
     "enabled": false,
     "setup": false,
     "config": {

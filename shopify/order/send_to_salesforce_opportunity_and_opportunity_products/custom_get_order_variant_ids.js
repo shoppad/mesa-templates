@@ -1,29 +1,36 @@
 const Mesa = require('vendor/Mesa.js');
 
 /**
- * A Mesa Script exports a class with a script() method.
+ * A MESA Script exports a class with a script() method.
  */
-module.exports = new class {
-
+module.exports = new (class {
   /**
-   * Mesa Script
+   * MESA Script
    *
-   * @param {object} payload The payload data
+   * @param {object} prevResponse The response from the previous step
    * @param {object} context Additional context about this task
    */
-  script = (payload, context) => {
-    // Add your custom code here
-    const lineItems = context.steps['shopify-order-created'].line_items;
+  script = (prevResponse, context) => {
+    // Retrieve the Variables Available to this step
+    const vars = context.steps;
 
+    // For storing payload
+    let payload = {};
+
+    // Get line items from Shopify order
+    const lineItems = vars.shopify_order_created.line_items;
+
+    // Create a list of variant IDs
     let variantIds = lineItems.map(lineItem => {
       return `'${lineItem.variant_id}'`;
     });
 
-    
+    // Add to response
     payload.variant_ids = variantIds;
     payload.variant_ids_csv = variantIds.join();
 
-    // We're done, call the next step!
+    // Call the next step in this workflow
+    // payload will be the Variables Available from this step
     Mesa.output.next(payload);
-  }
-}
+  };
+})();
