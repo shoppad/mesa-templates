@@ -17,6 +17,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",

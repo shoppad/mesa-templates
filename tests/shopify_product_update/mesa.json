@@ -13,6 +13,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "product",
                 "action": "created",
                 "name": "Product Created",
@@ -49,6 +50,7 @@
             {
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "product",
                 "action": "update",
                 "name": "Update Product",

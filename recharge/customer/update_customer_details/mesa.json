@@ -34,6 +34,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "customer",
                 "action": "list",
                 "name": "Get customers that were updated within the past 24 hours",

@@ -163,6 +163,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "order",
                 "action": "tag_remove",
                 "name": "Order Remove Tag",

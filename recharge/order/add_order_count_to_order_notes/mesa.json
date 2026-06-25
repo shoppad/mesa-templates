@@ -47,6 +47,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "order",
                 "action": "note_update",
                 "name": "Update Order Notes",

@@ -15,6 +15,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Order Webhook",
                 "key": "in-shopify-order-webhook",
                 "script": "in_shopify_order_webhook.js",
@@ -26,6 +27,7 @@
             {
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Add Weather Forecast",
                 "key": "out-add-weather-forecast",
                 "script": "out_add_weather_forecast.js",

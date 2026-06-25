@@ -41,6 +41,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "product",
                 "action": "metafield_set",
                 "name": "Set Product Metafield",

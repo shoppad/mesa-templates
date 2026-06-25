@@ -12,6 +12,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "customer",
                 "action": "updated",
                 "name": "Customer Created or Updated",

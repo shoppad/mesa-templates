@@ -16,6 +16,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "checkout",
                 "action": "created",
                 "name": "New Abandoned Cart",

@@ -126,6 +126,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "product",
                 "action": "tag_add",
                 "name": "Product Add Tag",

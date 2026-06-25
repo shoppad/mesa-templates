@@ -36,6 +36,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "customer",
                 "action": "create",
                 "name": "Create Customer",

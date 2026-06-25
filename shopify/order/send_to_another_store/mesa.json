@@ -14,6 +14,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Order Create",
                 "key": "in-shopify-order-create",
                 "script": "in_shopify_order_create.js",
@@ -23,6 +24,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Order Update",
                 "key": "in-shopify-order-update",
                 "script": "in_shopify_order_update.js",
@@ -32,6 +34,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Order Delete",
                 "key": "in-shopify-order-delete",
                 "script": "in_shopify_order_delete.js",

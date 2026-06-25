@@ -28,6 +28,7 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "theme",
                 "action": "publish",
                 "name": "Publish Theme",

@@ -15,6 +15,7 @@
             {
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Fulfillment Created",
                 "key": "in-shopify-fulfillment-created",
                 "script": "in_shopify_fulfillment_created.js",
@@ -33,6 +34,7 @@
             {
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Update Shopify Order Notes",
                 "key": "out-update-shopify-order-notes",
                 "script": "out_update_shopify_order_notes.js",
@@ -41,6 +43,7 @@
             {
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "name": "Update Shopify Fulfillment",
                 "key": "out-update-shopify-fulfillment",
                 "script": "out_update_shopify_fulfillment.js",

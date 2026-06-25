@@ -81,6 +81,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",

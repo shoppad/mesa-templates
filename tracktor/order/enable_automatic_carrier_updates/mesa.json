@@ -17,6 +17,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "order",
                 "action": "fulfilled",
                 "name": "Order Fulfilled",

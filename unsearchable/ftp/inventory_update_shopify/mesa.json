@@ -70,6 +70,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "inventory_level",
                 "action": "set",
                 "name": "Set Inventory Level",
