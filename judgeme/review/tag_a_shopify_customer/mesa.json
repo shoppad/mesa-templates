@@ -26,6 +26,7 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "customer",
                 "action": "tag_add",
                 "name": "Customer Add Tag",
