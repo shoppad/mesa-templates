@@ -1,0 +1,472 @@
+{
+    "key": "shopify_product_changelog",
+    "name": "Shopify Product Changelog",
+    "version": "1.0.1",
+    "enabled": false,
+    "setup": {
+        "mode": "custom",
+        "fields": [
+            {
+                "key": "create_spreadsheet_name",
+                "target": "googlesheets_3.path.create_spreadsheet_name",
+                "label": "What do you want to name your spreadsheet?",
+                "tokens": false,
+                "description": "Give your new Google Spreadsheet a name.",
+                "weight": 0
+            },
+            {
+                "key": "fields",
+                "target": "googlesheets_3.setup_fields",
+                "label": "What are your spreadsheet columns?",
+                "description": "This template will automatically create a new row for every product update summarized by AI. De-select the columns you do not want to include in your spreadsheet.",
+                "options": [
+                    {
+                        "label": "Row",
+                        "value": "Row|=ROW()",
+                        "description": "The spreadsheet row number, needed to update the correct row."
+                    },
+                    {
+                        "label": "Product ID",
+                        "value": "Product ID|{{shopify.id}}",
+                        "description": "The unique Shopify identifier for the product, useful for referencing or linking back to the item."
+                    },
+                    {
+                        "label": "Product Variant ID",
+                        "value": "Product Variant ID|{{loop.id}}",
+                        "description": "The unique Shopify identifier for a specific variant (e.g., size or color) of the product."
+                    },
+                    {
+                        "label": "Product Title",
+                        "value": "Product Title|{{shopify.title}}",
+                        "description": "The name/title of the Shopify product that was updated."
+                    },
+                    {
+                        "label": "Product Variant Title",
+                        "value": "Product Variant Title|{{loop.title}}",
+                        "description": "The name of the specific variant. If there is no variant, Shopify defaults to Default Title."
+                    },
+                    {
+                        "label": "Description",
+                        "value": "Description|{{shopify.body_html | strip_html}}",
+                        "description": "The product's description text at the time of the change."
+                    },
+                    {
+                        "label": "Tags",
+                        "value": "Tags|{{shopify.tags}}",
+                        "description": "The product's tags, useful for categorization and filtering."
+                    },
+                    {
+                        "label": "Change Summary",
+                        "value": "Change Summary",
+                        "description": "A plain-English, AI-generated explanation of what changed in the product update."
+                    }
+                ],
+                "check_all": true,
+                "type": "checkboxes",
+                "weight": 1
+            }
+        ]
+    },
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "updated",
+                "name": "Product Updated",
+                "version": "v2",
+                "key": "shopify",
+                "operation_id": "products_update",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": ["frequency"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "loop",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop",
+                "operation_id": "loop_loop",
+                "metadata": {
+                    "key": "{{shopify.variants[]}}",
+                    "return": false
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "filter",
+                    "filter.additional",
+                    "key",
+                    "filter.comparison",
+                    "filter.additional[].operator",
+                    "filter.additional[].comparison"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4.3,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "query",
+                "name": "Query Rows",
+                "version": "v2",
+                "key": "googlesheets_1",
+                "operation_id": "record_query",
+                "metadata": {
+                    "api_endpoint": "get \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "{{ template | copy_value_from: 'googlesheets_1.path.spreadsheet_id' }}",
+                        "sheet": "Sheet1",
+                        "query_type": "where",
+                        "comparison": "=",
+                        "b": "{{loop.id}}",
+                        "a": "C"
+                    },
+                    "columns": [
+                        "Row",
+                        "Product ID",
+                        "Product Variant ID",
+                        "Product Title",
+                        "Product Variant Title",
+                        "Description",
+                        "Tags",
+                        "Change Summary"
+                    ],
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "path.spreadsheet_id",
+                    "path.sheet",
+                    "path.query_type",
+                    "path.comparison",
+                    "columns",
+                    "path.a",
+                    "path.b"
+                ],
+                "on_error": "replay",
+                "weight": 1
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "paths",
+                "name": "Paths",
+                "version": "v2",
+                "key": "paths",
+                "operation_id": "paths_paths",
+                "metadata": {
+                    "trigger_parent_key": "loop"
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 1 Rule",
+                "version": "v2",
+                "key": "paths_1",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop",
+                    "a": "{{googlesheets_1.0.data[\"Product Variant ID\"]}}",
+                    "comparison": "equals",
+                    "b": "{{loop.id}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional",
+                    "additional[].operator",
+                    "additional[].comparison",
+                    "a",
+                    "comparison",
+                    "b"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v3",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You're comparing two versions of a Shopify product to summarize what changed.\n\nPrevious version (from spreadsheet):\nTitle: {{googlesheets_1.0.data[\"Product Title\"]}}\nDescription: {{googlesheets_1.0.data.Description}}\n\nUpdated version (from Shopify Product Updated):\nTitle: {{shopify.title}}\nDescription: {{shopify.body_html}}\n",
+                        "format": "auto",
+                        "web_search": false
+                    },
+                    "trigger_parent_key": "paths_1"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.role",
+                    "body.content",
+                    "body.format"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 4.3,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "update",
+                "name": "Update Row",
+                "version": "v2",
+                "key": "googlesheets",
+                "operation_id": "record_update",
+                "metadata": {
+                    "api_endpoint": "put \/{spreadsheet_id}\/{sheet}\/{row}",
+                    "path": {
+                        "spreadsheet_id": "{{ template | copy_value_from: 'googlesheets_1.path.spreadsheet_id' }}",
+                        "sheet": "Sheet1",
+                        "row": "{{googlesheets_1.0.data.Row}}"
+                    },
+                    "columns": [
+                        "Row",
+                        "Product ID",
+                        "Product Variant ID",
+                        "Product Title",
+                        "Product Variant Title",
+                        "Description",
+                        "Tags",
+                        "Change Summary"
+                    ],
+                    "body": {
+                        "columns": {
+                            "A": "{{googlesheets_1.0.data.Row}}",
+                            "B": "{{shopify.id}}",
+                            "C": "{{loop.id}}",
+                            "D": "{{shopify.title}}",
+                            "E": "{{loop.title}}",
+                            "F": "{{shopify.body_html | strip_html}}",
+                            "G": "{{shopify.tags}}",
+                            "H": "{{ai.response}}"
+                        }
+                    },
+                    "trigger_parent_key": "paths_1"
+                },
+                "local_fields": [
+                    {
+                        "key": "body",
+                        "type": "object",
+                        "fields": [
+                            {
+                                "key": "columns",
+                                "type": "object",
+                                "fields": [
+                                    {
+                                        "key": "A",
+                                        "label": "Row",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "B",
+                                        "label": "Product ID",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "C",
+                                        "label": "Product Variant ID",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "D",
+                                        "label": "Product Title",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "E",
+                                        "label": "Product Variant Title",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "F",
+                                        "label": "Description",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "G",
+                                        "label": "Tags",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "H",
+                                        "label": "Change Summary",
+                                        "type": "text"
+                                    }
+                                ],
+                                "location": "required"
+                            }
+                        ],
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [
+                    "path",
+                    "columns",
+                    "body",
+                    "body.columns",
+                    "body.columns.A",
+                    "body.columns.B",
+                    "body.columns.D",
+                    "path.spreadsheet_id",
+                    "path.sheet",
+                    "path.row",
+                    "body.columns.C",
+                    "body.columns.E",
+                    "body.columns.F",
+                    "body.columns.G"
+                ],
+                "on_error": "replay",
+                "weight": 5
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "path",
+                "name": "Path 2 Rule",
+                "version": "v2",
+                "key": "paths_2",
+                "operation_id": "paths_path",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop",
+                    "a": "{{googlesheets_1.0.data[\"Product Variant ID\"]}}",
+                    "comparison": "does not equal",
+                    "b": "{{loop.id}}",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "comparison": "equals"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "additional",
+                    "additional[].operator",
+                    "additional[].comparison",
+                    "a",
+                    "comparison",
+                    "b"
+                ],
+                "on_error": "default",
+                "weight": 6
+            },
+            {
+                "schema": 4.3,
+                "trigger_type": "output",
+                "type": "googlesheets",
+                "entity": "row",
+                "action": "create",
+                "name": "Add Row",
+                "version": "v2",
+                "key": "googlesheets_3",
+                "operation_id": "record_create",
+                "metadata": {
+                    "api_endpoint": "post \/{spreadsheet_id}\/{sheet}",
+                    "path": {
+                        "spreadsheet_id": "",
+                        "sheet": "Sheet1"
+                    },
+                    "trigger_parent_key": "paths_2",
+                    "columns": [],
+                    "body": {}
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "path",
+                    "columns",
+                    "body",
+                    "body.columns",
+                    "body.columns.A",
+                    "body.columns.B",
+                    "body.columns.C",
+                    "body.columns.D",
+                    "body.columns.E",
+                    "body.columns.F",
+                    "path.spreadsheet_id",
+                    "path.sheet",
+                    "body.columns.G"
+                ],
+                "on_error": "replay",
+                "weight": 7
+            },
+            {
+                "schema": 5,
+                "trigger_type": "output",
+                "type": "paths",
+                "entity": "end",
+                "name": "Paths End",
+                "version": "v2",
+                "key": "paths_3",
+                "operation_id": "paths_end",
+                "metadata": {
+                    "trigger_manager_key": "paths",
+                    "trigger_parent_key": "loop"
+                },
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 8
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": false
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 9
+            }
+        ]
+    }
+}
