@@ -57,7 +57,7 @@
                     },
                     {
                         "label": "Change Summary",
-                        "value": "Change Summary",
+                        "value": "",
                         "description": "A plain-English, AI-generated explanation of what changed in the product update."
                     }
                 ],
@@ -128,7 +128,7 @@
                 "metadata": {
                     "api_endpoint": "get \/{spreadsheet_id}\/{sheet}",
                     "path": {
-                        "spreadsheet_id": "{{ template | copy_value_from: 'googlesheets_1.path.spreadsheet_id' }}",
+                        "spreadsheet_id": "{{ template | copy_value_from: 'googlesheets_3.path.spreadsheet_id' }}",
                         "sheet": "Sheet1",
                         "query_type": "where",
                         "comparison": "=",
@@ -255,7 +255,7 @@
                 "metadata": {
                     "api_endpoint": "put \/{spreadsheet_id}\/{sheet}\/{row}",
                     "path": {
-                        "spreadsheet_id": "{{ template | copy_value_from: 'googlesheets_1.path.spreadsheet_id' }}",
+                        "spreadsheet_id": "{{ template | copy_value_from: 'googlesheets_3.path.spreadsheet_id' }}",
                         "sheet": "Sheet1",
                         "row": "{{googlesheets_1.0.data.Row}}"
                     },
