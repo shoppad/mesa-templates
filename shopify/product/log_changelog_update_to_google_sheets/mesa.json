@@ -57,7 +57,7 @@
                     },
                     {
                         "label": "Change Summary",
-                        "value": "",
+                        "value": "Change Summary",
                         "description": "A plain-English, AI-generated explanation of what changed in the product update."
                     }
                 ],
