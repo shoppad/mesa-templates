@@ -1,0 +1,132 @@
+{
+    "key": "shopify/product/competitor_price_research_with_perplexity",
+    "name": "Competitor Price Intelligence for New Products",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "product",
+                "action": "created",
+                "name": "Product Created",
+                "version": "v2",
+                "key": "shopify",
+                "operation_id": "products_create",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "perplexity",
+                "entity": "chat_completion",
+                "action": "create",
+                "name": "Create Chat Completion",
+                "key": "perplexity",
+                "operation_id": "chat-completion",
+                "metadata": {
+                    "api_endpoint": "post \/chat\/completions",
+                    "body": {
+                        "model": "sonar",
+                        "role": "user",
+                        "content": "You are a pricing research analyst. Research current market pricing for products similar to the one described below, using real, current data from retail and e-commerce sources (not estimates).\n\nProduct to research:\n- Title: {{shopify.title}}\n- Product Type: {{shopify.product_type}}\n- Vendor\/Brand: {{shopify.vendor}}\n- Description: {{shopify.body_html}}\n- Tags: {{shopify.tags}}\n- Our Price: {{shopify.variants[0].price}}\n\nDo this research internally, but do not show your work or reasoning in the output:\n1. Identify 3-5 comparable products currently sold by competitors or major retailers in this category.\n2. Calculate the average and median price across comparables.\n3. Compare that to our price of {{shopify.variants[0].price}}.\n4. Decide on a single recommended price for our product.\n\nOutput rules (strict):\n- Your entire response must be a single plain decimal number, e.g. 24.99\n- No currency symbol, no ranges, no words, no explanation, no citations, no lists, no punctuation other than a decimal point.\n- Do not say \"approximately,\" \"around,\" or give more than one number.\n- If you cannot determine a confident price, respond with exactly: 0\n",
+                        "search_mode": "web",
+                        "temperature": "0.2",
+                        "top_p": "0.9",
+                        "return_images": false,
+                        "return_related_questions": false,
+                        "stream": false,
+                        "disable_search": false,
+                        "enable_search_classifier": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.model",
+                    "body.role",
+                    "body.content",
+                    "body.search_mode",
+                    "body.temperature",
+                    "body.top_p",
+                    "body.return_images",
+                    "body.return_related_questions"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "approval",
+                "name": "Approval",
+                "key": "approval",
+                "operation_id": "approval",
+                "metadata": {
+                    "to_review": "Suggested price: ${{perplexity.response}}",
+                    "continue_on_deny": false,
+                    "label_approve": "Approve",
+                    "label_deny": "Deny",
+                    "after_unit": "minutes",
+                    "message": "Review the AI-suggested price for {{shopify.title}} before it's applied. Current product price is ${{shopify.variants[0].price}}",
+                    "alert_emails": "{{ template | label: 'Who should approve the suggested price?', description: 'Enter the email address of the person who will review Perplexity''s competitive research and approve or deny each suggested price before it goes live. To route approvals to more than one person, separate multiple email addresses with commas.' }}"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "message",
+                    "to_review",
+                    "alert_emails",
+                    "label_approve",
+                    "label_deny",
+                    "after_unit"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "productvariant",
+                "action": "update",
+                "name": "Update Product Variant",
+                "version": "v2",
+                "key": "shopify_1",
+                "operation_id": "productVariantUpdate",
+                "metadata": {
+                    "api_endpoint": "post \/graphql\/productVariant\/update",
+                    "body": {
+                        "productId": "{{shopify.id}}",
+                        "id": "{{shopify.variants[0].id}}",
+                        "price": "{{perplexity.response}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.price",
+                    "body.productId",
+                    "body.id",
+                    "body.metafields",
+                    "body.metafields[]"
+                ],
+                "on_error": "default",
+                "weight": 2
+            }
+        ]
+    }
+}
