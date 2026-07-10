@@ -158,7 +158,7 @@
                         "to": "{{ template | label: 'Who should receive the VIP notification email?', description: 'Enter the email address where you''d like alerts sent whenever a customer qualifies for VIP status. To notify more than one person, separate multiple email addresses with commas.' }}",
                         "subject": "We've got a new VIP customer! ",
                         "message": "<div>   \n<h2>VIP Flag: Order #{{shopify.order_number}}\n<\/h2>   \n<p>{{transform.summary}}<\/p>   \n<p><strong>Action needed:<\/strong> Please add this customer ({{shopify.email}}) to our Email Marketing CRM for future follow-up.<\/p> <\/div>",
-                        "from": "sparks.jen@gmail.com"
+                        "from": "{{ template | label: 'Who is the VIP notification email from?', description: 'The email address that the email is sent from. Input the email address associated with the Gmail credentials set in the Gmail action.' }}"
                     }
                 },
                 "local_fields": [],
