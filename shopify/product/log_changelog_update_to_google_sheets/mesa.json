@@ -1,5 +1,5 @@
 {
-    "key": "shopify_product_changelog",
+    "key": "shopify/product/log_changelog_update_to_google_sheets",
     "name": "Shopify Product Changelog",
     "version": "1.0.1",
     "enabled": false,
