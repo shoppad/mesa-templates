@@ -1,0 +1,177 @@
+{
+    "key": "shopify/order/vip_tag_and_order_analysis_with_ai",
+    "name": "VIP Tag and Order Analysis Automation with AI and Gmail",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 3,
+                "trigger_type": "input",
+                "type": "shopify",
+                "entity": "order",
+                "action": "paid",
+                "name": "Order Paid",
+                "version": "v2",
+                "key": "shopify",
+                "operation_id": "orders_paid",
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v3",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You are an internal ops assistant for a Shopify store. Evaluate this order against three qualifying criteria. If ANY are met, the order should be flagged.\n\nCriteria:\n1. Repeat buyer: \"Order count\" below includes this current order. If it is 2 or more, the customer has at least one prior order and qualifies as a repeat buyer.\n2. High spend: order total is $200 or more\n\nOrder and customer data:\nCustomer name: {{shopify.billing_address.name}}\nCustomer ID: {{shopify.customer.id}}\nPrevious order count: {{shopify.customer.orders_count}}\nOrder #: {{shopify.order_number}}\nOrder total: {{shopify.current_total_price}}\nLine items: {{shopify.line_items}}\n\nRespond with ONLY valid JSON, no other text, no markdown formatting, in this exact shape:\n\nIf it qualifies:\n{\"qualifies\": true, \"tag\": \"vip-repeat\" or \"vip-spend\", \"summary\": \"2-3 line plain-English summary for the ops team explaining who the customer is, why they qualified, and the order total\"}\n\nIf it does not qualify:\n{\"qualifies\": false}",
+                        "format": "auto",
+                        "web_search": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "script",
+                "name": "Transform Script",
+                "key": "transform",
+                "operation_id": "script",
+                "metadata": {
+                    "script": "transform.js",
+                    "description": "Parse AI's JSON response and stop workflow if order doesn't qualify"
+                },
+                "local_fields": [
+                    {
+                        "key": "description",
+                        "type": "textarea",
+                        "label": "Description",
+                        "description": "Add a description of what this script does for non-technical users",
+                        "tokens": false,
+                        "location": "required"
+                    }
+                ],
+                "selected_fields": [
+                    "script"
+                ],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4.1,
+                "trigger_type": "output",
+                "type": "filter",
+                "name": "Filter",
+                "key": "filter",
+                "operation_id": "filter",
+                "metadata": {
+                    "a": "{{transform.qualifies}}",
+                    "comparison": "equals",
+                    "b": "true",
+                    "additional": [
+                        {
+                            "operator": "and",
+                            "a": "false",
+                            "comparison": "equals",
+                            "b": "{{transform.already_tagged}}"
+                        }
+                    ]
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "a",
+                    "comparison",
+                    "b",
+                    "additional",
+                    "additional[].operator",
+                    "additional[].a",
+                    "additional[].comparison",
+                    "additional[].b"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "add",
+                "name": "Add Customer Tags",
+                "version": "v2",
+                "key": "shopify_1",
+                "operation_id": "customerTagsAdd",
+                "metadata": {
+                    "api_endpoint": "post \/graphql\/customerTags\/add",
+                    "body": {
+                        "id": "{{shopify.customer.id}}",
+                        "tags": [
+                            "{{transform.tag}}"
+                        ]
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gmail",
+                "entity": "gmail_v1_user_message_send",
+                "action": "create",
+                "name": "Send Email",
+                "key": "gmail_1",
+                "operation_id": "gmail-users-messages-send",
+                "metadata": {
+                    "api_endpoint": "post \/gmail\/v1\/users\/{userId}\/messages\/send",
+                    "body": {
+                        "to": "{{ template | label: 'Who should receive the VIP notification email?', description: 'Enter the email address where you''d like alerts sent whenever a customer qualifies for VIP status. To notify more than one person, separate multiple email addresses with commas.' }}",
+                        "subject": "We've got a new VIP customer! ",
+                        "message": "<div>   \n<h2>VIP Flag: Order #{{shopify.order_number}}\n<\/h2>   \n<p>{{transform.summary}}<\/p>   \n<p><strong>Action needed:<\/strong> Please add this customer ({{shopify.email}}) to our Email Marketing CRM for future follow-up.<\/p> <\/div>",
+                        "from": "sparks.jen@gmail.com"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.to",
+                    "body.subject",
+                    "body.message",
+                    "body.from"
+                ],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
