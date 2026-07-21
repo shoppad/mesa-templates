@@ -1,0 +1,85 @@
+{
+    "key": "test_personalized_quickbooks_invoice_reminders",
+    "name": "Send Personalized Invoice Emails for New QuickBooks Invoices with AI",
+    "version": "1.0.0",
+    "description": "",
+    "seconds": 135,
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "quickbooks",
+                "entity": "invoice",
+                "action": "created",
+                "name": "Invoice Created",
+                "key": "quickbooks",
+                "operation_id": "invoice_created",
+                "metadata": {
+                    "realmId": "{{ template | label: 'What is your company ID?', description: '' }}"
+                },
+                "local_fields": [],
+                "selected_fields": ["topic"],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Summarize Invoice",
+                "version": "v3",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You are writing a payment reminder email.\n\nCRITICAL RULES (must follow):\n- Use ONLY the invoice details listed below. Do NOT guess, infer, or invent any missing information.\n- If a detail is missing\/blank, omit that detail entirely (do not add placeholders like [Customer Name]).\n- Do not mention tracking numbers, products\/services, dates, or amounts unless they appear below exactly.\n- If the customer name is missing, start the email with \"Hello,\" (no name).\n\nInvoice details (may be blank):\nYou are writing a payment reminder email for {{quickbooks.CustomerRef.name}}\n\nInvoice details:\n- Invoice #: {{quickbooks.DocNumber}} \n- Line Item: {{quickbooks.Line[0].SalesItemLineDetail.ItemRef.name}}\n- Amount due: {{quickbooks.TotalAmt}}\n- Due date: {{quickbooks.DueDate}} \n- Tracking Number: {{quickbooks.TrackingNum}}\n\nWrite a short email (3-4 sentences) that:\n- If Product\/Service is present, reference it; otherwise say \"your invoice\".\n- If Invoice total is present, state it; otherwise do not mention an amount.\n- If Due date is present, state it; otherwise do not mention a due date.\n\nOutput only the email body. No subject line. No signoff.",
+                        "format": "auto",
+                        "web_search": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.format"],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "gmail",
+                "entity": "gmail_v1_user_message_send",
+                "action": "create",
+                "name": "Send Email",
+                "key": "gmail",
+                "operation_id": "gmail-users-messages-send",
+                "metadata": {
+                    "api_endpoint": "post \/gmail\/v1\/users\/{userId}\/messages\/send",
+                    "body": {
+                        "to": "{{quickbooks.BillEmail.Address}}",
+                        "subject": "Invoice {{quickbooks.DocNumber}} from MESA",
+                        "message": "{{ai.response}}",
+                        "from": "{{ template | label: 'Which email address should these messages be sent from?', description: 'Enter the email address connected to your Gmail account. This is the address customers will see as the sender, so make sure it matches the account you authorized above.' }}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.to",
+                    "body.subject",
+                    "body.message",
+                    "body.from"
+                ],
+                "on_error": "default",
+                "weight": 1
+            }
+        ]
+    }
+}
