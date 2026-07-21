@@ -2,8 +2,6 @@
     "key": "quickbooks/invoice/ai_invoice_summary",
     "name": "Send Personalized Invoice Emails for New QuickBooks Invoices with AI",
     "version": "1.0.0",
-    "description": "",
-    "seconds": 135,
     "enabled": false,
     "setup": true,
     "config": {
