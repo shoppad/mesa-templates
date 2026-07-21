@@ -1,0 +1,158 @@
+{
+    "key": "salesforce/product/write_description_with_ai_and_create_shopify_product",
+    "name": "Create Shopify Products from New Salesforce Products with AI",
+    "version": "1.0.0",
+    "enabled": false,
+    "setup": true,
+    "config": {
+        "inputs": [
+            {
+                "schema": 2,
+                "trigger_type": "input",
+                "type": "salesforce",
+                "entity": "product",
+                "action": "list-created",
+                "name": "Product Created",
+                "key": "salesforce",
+                "operation_id": "product_list-created",
+                "metadata": {
+                    "entity_name": "Product2",
+                    "method": "list-created",
+                    "poll": "@hourly:0 * * * *"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "method",
+                    "entity_name",
+                    "poll",
+                    "next_sync_date_time"
+                ],
+                "on_error": "default",
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "salesforce",
+                "entity": "pricebook_entry",
+                "action": "query_multiple",
+                "name": "Query Multiple Pricebook Entries",
+                "key": "salesforce_4",
+                "operation_id": "pricebook_entry_query_multiple",
+                "metadata": {
+                    "entity_name": "PricebookEntry",
+                    "method": "QUERY_MULTIPLE",
+                    "salesforce_query": "SELECT Id, UnitPrice\nFROM PricebookEntry\nWHERE Product2Id = '{{salesforce.Id}}'"
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "method",
+                    "entity_name",
+                    "salesforce_query"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "ai",
+                "entity": "prompt",
+                "action": "create",
+                "name": "Prompt",
+                "version": "v3",
+                "key": "ai",
+                "operation_id": "post-prompt",
+                "metadata": {
+                    "api_endpoint": "post \/prompt",
+                    "body": {
+                        "role": "user",
+                        "content": "You are rewriting an internal product description into ecommerce copy for a Shopify store listing.\n\nInternal Salesforce description: {{salesforce.Description}}\nProduct name: {{salesforce.Name}}\n\nRewrite this as a Shopify product description that:\n- Leads with the primary customer benefit, not internal specs or jargon\n- Uses plain, concrete language a shopper would search for\n- Includes relevant keywords naturally for SEO, without keyword stuffing\n- Is structured as a short intro paragraph followed by a bullet list of key features or benefits\n- Avoids superlatives like \"amazing\" or \"best in class\" unless factually supported\n- Stays between 80 and 150 words for the intro paragraph\n- Does not invent specifications, materials, or claims not present in the source text\n\nFormat the output as HTML using <p> for the intro paragraph and <ul><li> for the bullet points. Do not include <html>, <head>, or <body> tags, just the content markup.\n\nOutput only the rewritten description. Do not include commentary, headers, or explanations.",
+                        "format": "auto",
+                        "web_search": false
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body", "body.format"],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "product",
+                "action": "create",
+                "name": "Create Product",
+                "version": "v2",
+                "key": "shopify",
+                "operation_id": "productCreate",
+                "metadata": {
+                    "api_endpoint": "post \/graphql\/product\/create",
+                    "body": {
+                        "descriptionHtml": "{{ai.response}}",
+                        "title": "{{salesforce.Name}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "body",
+                    "body.metafields",
+                    "body.descriptionHtml",
+                    "body.title",
+                    "body.metafields[]"
+                ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "productvariant",
+                "action": "list",
+                "name": "Get List of Product Variants",
+                "version": "v2",
+                "key": "shopify_3",
+                "operation_id": "productVariants",
+                "metadata": {
+                    "api_endpoint": "get \/graphql\/productVariants",
+                    "body": {
+                        "limit": "50",
+                        "product_id": "{{shopify.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.product_id"],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 4,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "productvariant",
+                "action": "update",
+                "name": "Set Price and SKU",
+                "version": "v2",
+                "key": "shopify_productvariant",
+                "operation_id": "productVariantUpdate",
+                "metadata": {
+                    "api_endpoint": "post \/graphql\/productVariant\/update",
+                    "body": {
+                        "productId": "{{shopify.id}}",
+                        "id": "{{shopify_3.0.id}}",
+                        "price": "{{salesforce_4.0.UnitPrice}}",
+                        "sku": "{{salesforce.StockKeepingUnit}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": ["body.price", "body", "body.sku"],
+                "on_error": "default",
+                "weight": 4
+            }
+        ]
+    }
+}
