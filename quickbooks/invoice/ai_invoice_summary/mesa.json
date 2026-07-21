@@ -17,9 +17,7 @@
                 "name": "Invoice Created",
                 "key": "quickbooks",
                 "operation_id": "invoice_created",
-                "metadata": {
-                    "realmId": "{{ template | label: 'What is your company ID?', description: '' }}"
-                },
+                "metadata": {},
                 "local_fields": [],
                 "selected_fields": ["topic"],
                 "on_error": "default",
