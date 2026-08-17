@@ -18,10 +18,7 @@
                     "schedule": "@daily:0 0 * * *"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "enqueue_type",
-                    "schedule"
-                ],
+                "selected_fields": ["enqueue_type", "schedule"],
                 "on_error": "default",
                 "weight": 0
             }
@@ -57,9 +54,7 @@
                         "location": "required"
                     }
                 ],
-                "selected_fields": [
-                    "script"
-                ],
+                "selected_fields": ["script"],
                 "on_error": "default",
                 "weight": 0
             },
@@ -78,30 +73,29 @@
                     "query": "SELECT \n    ROW_NUMBER() OVER (ORDER BY sum(\"Product Quantity\") DESC) AS \"Best Sellers Index\",\n    \"Product ID\",\n    \"Product Title\",\n    sum(\"Product Quantity\") AS \"Quantity\"\nFROM \"Shopify Orders\" \nWHERE \"Order Created At\" > CURRENT_DATE - INTERVAL '{{transform[\"Days Back\"]}} days' \nGROUP BY \"Product ID\", \"Product Title\"\nORDER BY \"Quantity\" DESC\nLIMIT {{transform[\"Limit\"]}}\n"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["query"],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 3.1,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "collection",
-                "action": "list",
+                "action": "create",
                 "name": "Get List of Products from Best Sellers Collection",
-                "key": "shopify",
-                "operation_id": "get_collection_products",
+                "version": "v2",
+                "key": "shopify_4",
+                "operation_id": "collectionListProducts",
                 "metadata": {
-                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
-                    "query": {
+                    "api_endpoint": "post \/graphql\/collection\/listProducts",
+                    "body": {
+                        "collectionId": "{{transform[\"Collection ID\"]}}",
                         "limit": "100"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "query.limit"
-                ],
+                "selected_fields": ["body.limit"],
                 "on_error": "default",
                 "weight": 2
             },
@@ -115,60 +109,36 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{shopify_4}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter",
-                    "filter.a",
-                    "filter.comparison",
-                    "filter.b",
-                    "filter.additional"
-                ],
+                "selected_fields": ["key"],
                 "on_error": "default",
                 "weight": 3
             },
             {
-                "schema": 3.1,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
-                "action": "metafield_set",
+                "action": "create",
                 "name": "Set Best Sellers Index Product Metafield to 0",
-                "key": "shopify_1",
-                "operation_id": "put_mesa_products_product_id_metafield",
+                "version": "v2",
+                "key": "shopify",
+                "operation_id": "productMetafieldSet",
                 "metadata": {
-                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
-                    "trigger_parent_key": "loop",
-                    "product_id": "{{loop.id}}",
+                    "api_endpoint": "post \/graphql\/product\/metafieldSet",
                     "body": {
+                        "productId": "{{loop.id}}",
                         "namespace": "custom",
                         "key": "best_sellers_index",
                         "type": "number_integer",
-                        "listType": "single_line_text_field",
                         "value": "0"
-                    }
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "product_id",
-                    "body",
-                    "body.namespace",
-                    "body.key",
-                    "body.type",
-                    "body.listType"
-                ],
+                "selected_fields": ["body"],
                 "on_error": "default",
                 "weight": 4
             },
@@ -200,83 +170,58 @@
                 "key": "loop_2",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{data}}",
-                    "filter": {
-                        "comparison": "equals",
-                        "additional": [
-                            {
-                                "operator": "and",
-                                "comparison": "equals"
-                            }
-                        ]
-                    }
+                    "key": "{{data}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter",
-                    "filter.a",
-                    "filter.comparison",
-                    "filter.b",
-                    "filter.additional"
-                ],
+                "selected_fields": ["key"],
                 "on_error": "default",
                 "weight": 6
             },
             {
-                "schema": 3.1,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve Product",
-                "key": "shopify_2",
-                "operation_id": "get_products_product_id",
+                "version": "v2",
+                "key": "shopify_1",
+                "operation_id": "product",
                 "metadata": {
-                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "trigger_parent_key": "loop_2",
-                    "product_id": "{{loop_2[\"Product ID\"]}}"
+                    "api_endpoint": "get \/graphql\/product\/retrieve",
+                    "body": {
+                        "id": "{{loop_2[\"Product ID\"]}}"
+                    },
+                    "trigger_parent_key": "loop_2"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "product_id"
-                ],
+                "selected_fields": ["body"],
                 "on_error": "default",
                 "weight": 7
             },
             {
-                "schema": 3.1,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
-                "action": "metafield_set",
+                "action": "create",
                 "name": "Set Best Sellers Index Product Metafield By Order",
-                "key": "shopify_3",
-                "operation_id": "put_mesa_products_product_id_metafield",
+                "version": "v2",
+                "key": "shopify_2",
+                "operation_id": "productMetafieldSet",
                 "metadata": {
-                    "api_endpoint": "put mesa\/products\/{{product_id}}\/metafield.json",
-                    "product_id": "{{shopify_2.id}}",
-                    "trigger_parent_key": "loop_2",
+                    "api_endpoint": "post \/graphql\/product\/metafieldSet",
                     "body": {
+                        "productId": "{{shopify_1.id}}",
                         "namespace": "custom",
                         "key": "best_sellers_index",
                         "type": "number_integer",
-                        "listType": "single_line_text_field",
                         "value": "{{loop_2[\"Best Sellers Index\"]}}"
-                    }
+                    },
+                    "trigger_parent_key": "loop_2"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "product_id",
-                    "body",
-                    "body.namespace",
-                    "body.key",
-                    "body.type",
-                    "body.listType",
-                    "body.value"
-                ],
+                "selected_fields": ["body"],
                 "on_error": "default",
                 "weight": 8
             },
@@ -292,9 +237,7 @@
                     "script": "custom.js"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "script"
-                ],
+                "selected_fields": ["script"],
                 "on_error": "default",
                 "weight": 9
             },

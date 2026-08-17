@@ -37,7 +37,7 @@ module.exports = new class {
       "id": "gid://shopify/Collection/" + vars["transform"]["Collection ID"],
       "moves": [
         {
-          "id":"gid://shopify/Product/" + vars.shopify_2.id,
+          "id": "gid://shopify/Product/" + vars.shopify_1.legacyResourceId,
           "newPosition": vars["loop_2"]["Best Sellers Index"].toString(),
         }
       ]
