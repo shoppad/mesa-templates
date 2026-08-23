@@ -1,0 +1,146 @@
+{
+    "key": "tracktor_order_automatically_update_status",
+    "name": "Automatically Update Tracktor Order Status",
+    "version": "1.0.0",
+    "description": "Progresses the Tracktor custom order status after one day to the first step in manufacturing, and after a subsequent day to the next step.",
+    "video": "",
+    "readme": "",
+    "tags": [],
+    "source": "tracktor",
+    "destination": "tracktor",
+    "enabled": false,
+    "logging": false,
+    "debug": false,
+    "config": {
+        "inputs": [
+            {
+                "trigger_type": "input",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "order\/all",
+                "name": "Tracktor Order Status Any Update",
+                "key": "tracktor_order",
+                "metadata": [],
+                "local_fields": null,
+                "weight": 0
+            }
+        ],
+        "outputs": [
+            {
+                "trigger_type": "output",
+                "type": "delay",
+                "entity": "",
+                "action": "",
+                "name": "Delay  ",
+                "key": "delay",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "days",
+                    "test_bypass": false
+                },
+                "local_fields": null,
+                "weight": 0
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "mapping",
+                "action": null,
+                "name": "Mapping to Tracktor Status",
+                "key": "transformmapping",
+                "metadata": {
+                    "script": "transform_js.js",
+                    "mapping": [
+                        {
+                            "destination": "status",
+                            "source": "Cutting"
+                        },
+                        {
+                            "destination": "automatic_carrier_updates",
+                            "source": "false"
+                        },
+                        {
+                            "destination": "force",
+                            "source": "true"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets"
+                    }
+                ],
+                "weight": 1
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "update",
+                "name": "Tracktor Update Manual Status Order",
+                "key": "tracktor_order_1",
+                "metadata": {
+                    "order_id": "{{delay.order_id}}"
+                },
+                "local_fields": null,
+                "weight": 2
+            },
+            {
+                "trigger_type": "output",
+                "type": "delay",
+                "entity": "",
+                "action": "",
+                "name": "Delay  ",
+                "key": "delay_1",
+                "metadata": {
+                    "amount": "1",
+                    "unit": "days",
+                    "test_bypass": false
+                },
+                "local_fields": null,
+                "weight": 3
+            },
+            {
+                "trigger_type": "output",
+                "type": "transform",
+                "entity": "",
+                "action": "",
+                "name": "Mapping to Tracktor Status",
+                "key": "tracktor_order_2_transform",
+                "metadata": {
+                    "script": "tracktor_order_2_transform_js.js",
+                    "mapping": [
+                        {
+                            "destination": "status",
+                            "source": "Sewing"
+                        }
+                    ]
+                },
+                "local_fields": [
+                    {
+                        "key": "mapping",
+                        "type": "mapping",
+                        "tokens": "brackets"
+                    }
+                ],
+                "weight": 4
+            },
+            {
+                "trigger_type": "output",
+                "type": "tracktor",
+                "entity": "order",
+                "action": "update",
+                "name": "Tracktor Update Manual Status Order",
+                "key": "tracktor_order_2",
+                "metadata": {
+                    "order_id": "{{delay.order_id}}"
+                },
+                "local_fields": null,
+                "weight": 5
+            }
+        ],
+        "storage": []
+    }
+}
