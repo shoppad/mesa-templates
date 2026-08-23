@@ -1,0 +1,140 @@
+{
+  "key": "mesa_analytics_fulfillments",
+  "name": "MESA Analytics: Fulfillments",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "fulfillment",
+        "action": "updated",
+        "name": "Shopify Fulfillment Updated",
+        "key": "shopify_fulfillment",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Fulfillment Record",
+        "key": "data_record",
+        "metadata": {
+          "create": "existing",
+          "table": "fulfillments",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{shopify_fulfillment.id}}",
+            "a": "fulfillment_id"
+          },
+          "columns": [
+            {
+              "key": "fulfillment_id",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.id}}",
+              "disabled": true
+            },
+            {
+              "key": "order_id",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.order_id}}",
+              "disabled": true
+            },
+            {
+              "key": "status",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.status}}",
+              "disabled": true
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{shopify_fulfillment.created_at}}",
+              "disabled": true
+            },
+            {
+              "key": "service",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.service}}",
+              "disabled": true
+            },
+            {
+              "key": "updated_at",
+              "type": "timestamptz",
+              "value": "{{shopify_fulfillment.updated_at}}",
+              "disabled": true
+            },
+            {
+              "key": "tracking_company",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.tracking_company}}",
+              "disabled": true
+            },
+            {
+              "key": "shipment_status",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.shipment_status}}",
+              "disabled": true
+            },
+            {
+              "key": "location_id",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.location_id}}",
+              "disabled": true
+            },
+            {
+              "key": "line_item_skus",
+              "type": "varchar",
+              "value": "{% if shopify_fulfillment.line_items | count %}{{shopify_fulfillment.line_items | map: 'sku' | join ','}}{% endif %}",
+              "disabled": true
+            },
+            {
+              "key": "tracking_number",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.tracking_number}}",
+              "disabled": true
+            },
+            {
+              "key": "tracking_numbers",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.tracking_numbers | join ','}}",
+              "disabled": true
+            },
+            {
+              "key": "tracking_url",
+              "type": "text",
+              "value": "{{shopify_fulfillment.tracking_url}}",
+              "disabled": true
+            },
+            {
+              "key": "name",
+              "type": "varchar",
+              "value": "{{shopify_fulfillment.name}}",
+              "disabled": true
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}

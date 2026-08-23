@@ -1,0 +1,314 @@
+{
+  "key": "mesa_analytics_customers",
+  "name": "MESA Analytics: Customers v2",
+  "version": "1.0.0",
+  "description": "",
+  "video": "",
+  "readme": "",
+  "tags": [],
+  "source": "",
+  "destination": "",
+  "seconds": 60,
+  "enabled": false,
+  "logging": true,
+  "debug": false,
+  "config": {
+    "inputs": [
+      {
+        "schema": 3,
+        "trigger_type": "input",
+        "type": "shopify_webhook",
+        "entity": "customer",
+        "action": "updated",
+        "name": "Shopify Customer Updated",
+        "key": "shopify_customer",
+        "metadata": [],
+        "local_fields": [],
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "data",
+        "entity": "record",
+        "action": "update_create",
+        "name": "Update or Create Customer Record",
+        "key": "data_record",
+        "metadata": {
+          "create": "existing",
+          "table": "customers",
+          "where_clause": {
+            "comparison": "equals",
+            "b": "{{shopify_customer.id}}",
+            "a": "customer_id"
+          },
+          "columns": [
+            {
+              "key": "customer_id",
+              "type": "varchar",
+              "value": "{{shopify_customer.id}}",
+              "disabled": false
+            },
+            {
+              "key": "email",
+              "type": "varchar",
+              "value": "{{shopify_customer.email}}",
+              "disabled": false
+            },
+            {
+              "key": "first_name",
+              "type": "varchar",
+              "value": "{{shopify_customer.first_name}}",
+              "disabled": false
+            },
+            {
+              "key": "last_name",
+              "type": "varchar",
+              "value": "{{shopify_customer.last_name}}",
+              "disabled": false
+            },
+            {
+              "key": "last_order_id",
+              "type": "varchar",
+              "value": "{{shopify_customer.last_order_id}}",
+              "disabled": false
+            },
+            {
+              "key": "orders_count",
+              "type": "int8",
+              "value": "{{shopify_customer.orders_count}}",
+              "disabled": false
+            },
+            {
+              "key": "total_spent",
+              "type": "numeric",
+              "value": "{{shopify_customer.total_spent}}",
+              "disabled": false
+            },
+            {
+              "key": "phone",
+              "type": "varchar",
+              "value": "{{shopify_customer.phone}}",
+              "disabled": false
+            },
+            {
+              "key": "state",
+              "type": "varchar",
+              "value": "{{shopify_customer.state}}",
+              "disabled": false
+            },
+            {
+              "key": "tags",
+              "type": "text",
+              "value": "{{shopify_customer.tags}}",
+              "disabled": false
+            },
+            {
+              "key": "accepts_marketing",
+              "type": "bool",
+              "value": "{{shopify_customer.accepts_marketing}}",
+              "disabled": false
+            },
+            {
+              "key": "accepts_marketing_updated_at",
+              "type": "timestamptz",
+              "value": "{{shopify_customer.accepts_marketing_updated_at}}",
+              "disabled": false
+            },
+            {
+              "key": "addresses_count",
+              "type": "int8",
+              "value": "{{shopify_customer.addresses | size}}",
+              "disabled": false
+            },
+            {
+              "key": "currency",
+              "type": "varchar",
+              "value": "{{shopify_customer.currency}}",
+              "disabled": false
+            },
+            {
+              "key": "created_at",
+              "type": "timestamptz",
+              "value": "{{shopify_customer.created_at}}",
+              "disabled": false
+            },
+            {
+              "key": "updated_at",
+              "type": "timestamptz",
+              "value": "{{shopify_customer.updated_at}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_id",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.id}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_first_name",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.first_name}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_address1",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.address1}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_phone",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.phone}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_city",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.city}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_zip",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.zip}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_province",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.province}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_country",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.country}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_last_name",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.last_name}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_address2",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.address2}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_company",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.company}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_latitude",
+              "type": "numeric",
+              "value": "{{shopify_customer.default_address.latitude}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_longitude",
+              "type": "numeric",
+              "value": "{{shopify_customer.default_address.longitude}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_name",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.name}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_country_code",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.country_code}}",
+              "disabled": false
+            },
+            {
+              "key": "default_address_province_code",
+              "type": "varchar",
+              "value": "{{shopify_customer.default_address.province_code}}",
+              "disabled": false
+            },
+            {
+              "key": "last_order_name",
+              "type": "varchar",
+              "value": "{{shopify_customer.last_order_name}}",
+              "disabled": false
+            },
+            {
+              "key": "marketing_opt_in_level",
+              "type": "varchar",
+              "value": "{{shopify_customer.marketing_opt_in_level}}",
+              "disabled": false
+            },
+            {
+              "key": "multipass_identifier",
+              "type": "varchar",
+              "value": "{{shopify_customer.multipass_identifier}}",
+              "disabled": false
+            },
+            {
+              "key": "note",
+              "type": "text",
+              "value": "{{shopify_customer.note}}",
+              "disabled": false
+            },
+            {
+              "key": "sms_marketing_consent_state",
+              "type": "varchar",
+              "value": "{{shopify_customer.sms_marketing_consent.state}}",
+              "disabled": false
+            },
+            {
+              "key": "sms_marketing_consent_opt_in_level",
+              "type": "varchar",
+              "value": "{{shopify_customer.sms_marketing_consent.opt_in_level}}",
+              "disabled": false
+            },
+            {
+              "key": "sms_marketing_consent_consent_updated_at",
+              "type": "varchar",
+              "value": "{{shopify_customer.sms_marketing_consent.consent_updated_at}}",
+              "disabled": false
+            },
+            {
+              "key": "sms_marketing_consent_consent_collected_from",
+              "type": "varchar",
+              "value": "{{shopify_customer.sms_marketing_consent.consent_collected_from}}",
+              "disabled": false
+            },
+            {
+              "key": "tax_exempt",
+              "type": "bool",
+              "value": "{{shopify_customer.tax_exempt}}",
+              "disabled": false
+            },
+            {
+              "key": "tax_exemptions",
+              "type": "varchar",
+              "value": "{{shopify_customer.tax_exemptions | join: ','}}",
+              "disabled": false
+            },
+            {
+              "key": "verified_email",
+              "type": "bool",
+              "value": "{{shopify_customer.verified_email}}",
+              "disabled": false
+            }
+          ]
+        },
+        "local_fields": [],
+        "weight": 2
+      }
+    ],
+    "storage": []
+  }
+}
