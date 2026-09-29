@@ -73,24 +73,29 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "list",
                 "name": "Get Unfulfilled Order",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_orders",
+                "operation_id": "orders",
                 "metadata": {
-                    "api_endpoint": "get admin\/orders.json",
-                    "query": {
-                        "limit": "1",
-                        "status": "any"
-                    },
-                    "parameters": "name={{googlesheets.data[\"Order Name (Number)\"]}}&fulfillment_status=unfulfilled"
+                    "api_endpoint": "get /graphql/orders",
+                    "body": {
+                        "name": "{{googlesheets.data[\"Order Name (Number)\"]}}",
+                        "fulfillment_status": "unfulfilled",
+                        "limit": 1
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "query.limit",
-                    "parameters"
+                    "name",
+                    "fulfillment_status",
+                    "limit",
+                    "body",
+                    "body.name",
+                    "body.fulfillment_status",
+                    "body.limit"
                 ],
                 "on_error": "default",
                 "weight": 0
@@ -144,18 +149,24 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_orders_order_id",
+                "operation_id": "order",
                 "metadata": {
-                    "api_endpoint": "get admin\/orders\/{{order_id}}.json",
-                    "order_id": "{{loop.id}}"
+                    "api_endpoint": "get /graphql/order/retrieve",
+                    "body": {
+                        "id": "{{loop.id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -163,28 +174,57 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "order_fulfillment",
-                "action": "custom_create",
-                "name": "Create Order Fulfillment",
+                "entity": "fulfillmentorder",
+                "action": "create",
+                "name": "Get Fulfillment Order List for Order",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "post_mesa_orders_order_id_fulfillments",
+                "operation_id": "orderFulfillmentOrderList",
                 "metadata": {
-                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/fulfillments.json",
-                    "order_id": "{{shopify_1.id}}",
+                    "api_endpoint": "post /graphql/order/fulfillmentOrderList",
                     "body": {
-                        "tracking_company": "{{googlesheets.data[\"Tracking Company\"]}}",
-                        "tracking_number": "{{googlesheets.data[\"Tracking Number\"]}}",
-                        "location_id": "{{ template | label: 'What location would you like to create an order fulfillment with?', description: 'Please make sure your products are available at this location.', tokens: false }}"
+                        "orderId": "{{shopify_1.id}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "body.tracking_company",
-                    "body.tracking_number"
+                    "orderId",
+                    "body",
+                    "body.orderId"
                 ],
                 "on_error": "default",
                 "weight": 4
+            },
+            {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "fulfillment",
+                "action": "create",
+                "name": "Create Fulfillment",
+                "version": "v2",
+                "key": "shopify_3",
+                "operation_id": "fulfillmentCreate",
+                "metadata": {
+                    "api_endpoint": "post /graphql/fulfillment/create",
+                    "body": {
+                        "fulfillmentOrderId": "{{shopify_2.fulfillmentOrders[0].id}}",
+                        "trackingCompany": "{{googlesheets.data[\"Tracking Company\"]}}",
+                        "trackingNumber": "{{googlesheets.data[\"Tracking Number\"]}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "fulfillmentOrderId",
+                    "trackingCompany",
+                    "trackingNumber",
+                    "body",
+                    "body.fulfillmentOrderId",
+                    "body.trackingCompany",
+                    "body.trackingNumber"
+                ],
+                "on_error": "default",
+                "weight": 5
             }
         ]
     }
