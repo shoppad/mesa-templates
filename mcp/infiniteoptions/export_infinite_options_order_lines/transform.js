@@ -41,7 +41,7 @@ module.exports = new (class {
       line_items.forEach((line) => {
         const address = order.shipping_address || order.billing_address || {};
         const lineValues = {
-          'Order URL': `https://admin.shopify.com/store/${context.steps.shopify.myshopify_domain.replace(
+          'Order URL': `https://admin.shopify.com/store/${context.steps.shopify.myshopifyDomain.replace(
             '.myshopify.com',
             ''
           )}/orders/${order.id}`,
