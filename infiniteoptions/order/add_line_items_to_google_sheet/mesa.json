@@ -21,7 +21,7 @@
                 "options": [
                     {
                         "label": "Order URL",
-                        "value": "Order URL|https:\/\/admin.shopify.com\/store\/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{infiniteoptions.order.id}}",
+                        "value": "Order URL|https://admin.shopify.com/store/{{shopify.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/orders/{{infiniteoptions.order.id}}",
                         "description": "The URL to the order in the Shopify admin."
                     },
                     {
@@ -110,14 +110,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
