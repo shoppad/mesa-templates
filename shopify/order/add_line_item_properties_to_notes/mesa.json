@@ -11,11 +11,12 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
@@ -26,21 +27,30 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
-                "action": "note_update",
+                "action": "create",
                 "name": "Order Note Update",
+                "version": "v2",
                 "key": "shopify_order_2",
                 "operation_id": "put_mesa_orders_order_id_note",
                 "metadata": {
-                    "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
-                    "order_id": "{{shopify_order.id}}",
+                    "api_endpoint": "post /graphql/order/noteUpdate",
                     "body": {
+                        "id": "{{shopify_order.id}}",
                         "note": "{% for line_item in shopify_order.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}",
                         "append": true
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "note",
+                    "append",
+                    "body",
+                    "body.id",
+                    "body.note",
+                    "body.append"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
