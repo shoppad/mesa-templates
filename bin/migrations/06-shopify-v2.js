@@ -63,6 +63,7 @@ class Migrator {
         this.dir = dir;
         this.ops = ops;
         this.swapped = {}; // step key -> ops entry, for token rewriting
+        this.metaRenames = {}; // step key -> {v1 metadata path: v2 path}
         this.report = { swaps: [], tokens: [], warnings: [], errors: [] };
     }
 
@@ -112,7 +113,10 @@ class Migrator {
             return false;
         }
         if (write) {
-            const out = JSON.stringify(json, null, 4) + (raw.endsWith('\n') ? '\n' : '');
+            // Keep the template's own indentation so diffs show only real changes.
+            const indent = (raw.match(/^([ \t]+)"/m) || [null, '    '])[1];
+            let out = JSON.stringify(json, null, indent) + (raw.endsWith('\n') ? '\n' : '');
+            out = restoreFormatting(raw, out);
             fs.writeFileSync(file, out);
             console.log(`\nWROTE ${file}`);
         } else {
@@ -156,6 +160,7 @@ class Migrator {
         const consumed = new Set(['api_endpoint']);
         const consumedBody = new Set();
         const body = {};
+        const metaRenames = {}; // v1 metadata path -> v2 metadata path
 
         // Explicit field rules, then default <entity>_id -> id, then body passthrough.
         const rules = { ...(entry.field_rules || {}) };
@@ -163,9 +168,28 @@ class Migrator {
         if (!Object.keys(rules).length && entry.request.fields.includes('id') && meta[idKey] !== undefined) {
             rules.id = `@${idKey}`;
         }
+        const nestedClaims = {}; // metadata key -> sub-keys claimed by rules
         for (const [target, specRaw] of Object.entries(rules)) {
             const [spec, transform] = specRaw.split('|');
             let value;
+            if (spec === '-') {
+                consumedBody.add(target);
+                continue;
+            }
+            if (spec.startsWith('@') && !spec.startsWith('@body.') && !spec.startsWith('@query:') && spec.includes('.')) {
+                const [metaKey, sub] = spec.slice(1).split('.');
+                (nestedClaims[metaKey] = nestedClaims[metaKey] || new Set()).add(sub);
+                const obj = meta[metaKey];
+                if (!obj || typeof obj !== 'object' || obj[sub] === undefined) {
+                    continue;
+                }
+                consumed.add(metaKey);
+                if (transform === 'omit_any' && obj[sub] === 'any') {
+                    continue; // GraphQL search has no status:any; omitting it matches REST "any"
+                }
+                body[target] = obj[sub];
+                continue;
+            }
             if (spec.startsWith('@query:')) {
                 const [, metaKey, param] = spec.split(':');
                 if (meta[metaKey] === undefined) {
@@ -197,6 +221,11 @@ class Migrator {
                 value = titlecase(value);
             }
             body[target] = value;
+            if (spec.startsWith('@body.')) {
+                metaRenames[`body.${spec.slice(6)}`] = `body.${target}`;
+            } else if (spec.startsWith('@') && !spec.startsWith('@query:')) {
+                metaRenames[spec.slice(1)] = `body.${target}`;
+            }
         }
         for (const [k, v] of Object.entries(meta.body || {})) {
             if (!consumedBody.has(k) && body[k] === undefined) {
@@ -205,6 +234,18 @@ class Migrator {
         }
         if (meta.body) {
             consumed.add('body');
+        }
+
+        // A nested metadata object may only migrate when rules claim every key.
+        for (const [metaKey, claimed] of Object.entries(nestedClaims)) {
+            const obj = meta[metaKey];
+            if (obj && typeof obj === 'object') {
+                for (const sub of Object.keys(obj)) {
+                    if (!claimed.has(sub)) {
+                        this.report.errors.push(`${where} ${step.key}: unhandled v1 metadata key "${metaKey}.${sub}" (${v1Key})`);
+                    }
+                }
+            }
         }
 
         // Validate body against the v2 request schema.
@@ -273,6 +314,7 @@ class Migrator {
         }
 
         this.swapped[step.key] = entry;
+        this.metaRenames[step.key] = metaRenames;
         this.report.swaps.push(`action ${step.key}: ${v1Key} -> v2 ${entry.v2.operation_id} (body: ${Object.keys(body).join(', ') || 'none'})`);
         return out;
     }
@@ -329,7 +371,8 @@ class Migrator {
             }
             return node;
         };
-        walk(json.config);
+        // setup options (e.g. Google Sheets column presets) carry tokens too.
+        walk(json);
     }
 
     /**
@@ -343,6 +386,16 @@ class Migrator {
         }
         const loopVars = {}; // liquid loop var -> {entry, prefix}
         let out = str;
+
+        // Setup placeholders that copy another step's v1 metadata value.
+        out = out.replace(/copy_value_from:\s*'([^'.]+)\.([^']+)'/g, (m, stepKey, metaPath) => {
+            const renamed = (this.metaRenames[stepKey] || {})[metaPath];
+            if (!renamed) {
+                return m;
+            }
+            this.report.tokens.push(`copy_value_from: ${stepKey}.${metaPath} -> ${stepKey}.${renamed}`);
+            return `copy_value_from: '${stepKey}.${renamed}'`;
+        });
 
         for (const [key, entry] of Object.entries(this.swapped)) {
             const k = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -490,6 +543,57 @@ class Migrator {
             console.log('  (no shopify steps found)');
         }
     }
+}
+
+/**
+ * Templates come from several exporters (PHP escapes slashes and non-ASCII,
+ * some files keep short arrays on one line). Re-serializing would restyle
+ * every line, so restore the original form of any line whose content did not
+ * change, keeping diffs to real migration edits.
+ * @param {string} raw Original file contents.
+ * @param {string} out Freshly serialized JSON.
+ * @returns {string} Serialized JSON in the original style where unchanged.
+ */
+function restoreFormatting(raw, out) {
+    const rawLines = new Set(raw.split('\n'));
+    const escSlash = (l) => l.replace(/\//g, '\\/');
+    const escUnicode = (l) => l.replace(/[\u0080-\uffff]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`);
+    const lines = out.split('\n').map((line) => {
+        if (rawLines.has(line)) {
+            return line;
+        }
+        for (const candidate of [escSlash(line), escUnicode(line), escUnicode(escSlash(line))]) {
+            if (rawLines.has(candidate)) {
+                return candidate;
+            }
+        }
+        return line;
+    });
+
+    // Collapse scalar arrays that the original kept on one line.
+    const collapsed = [];
+    for (let i = 0; i < lines.length; i++) {
+        const open = lines[i].match(/^(\s*)("[^"]*": )?\[$/);
+        if (open) {
+            let j = i + 1;
+            const items = [];
+            while (j < lines.length && /^\s*("(?:[^"\\]|\\.)*"|-?\d[\d.]*|true|false|null),?$/.test(lines[j])) {
+                items.push(lines[j].trim().replace(/,$/, ''));
+                j++;
+            }
+            const close = j < lines.length && lines[j].match(/^\s*\](,?)$/);
+            if (close && items.length) {
+                const inline = `${open[1]}${open[2] || ''}[${items.join(', ')}]${close[1]}`;
+                if (rawLines.has(inline)) {
+                    collapsed.push(inline);
+                    i = j;
+                    continue;
+                }
+            }
+        }
+        collapsed.push(lines[i]);
+    }
+    return collapsed.join('\n');
 }
 
 /**

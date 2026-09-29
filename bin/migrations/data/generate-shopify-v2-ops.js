@@ -34,6 +34,10 @@ const OUT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'shopif
 const MANUAL_OPS = {
     'shop/list': 'shop',
     'metafield/list': 'metafieldList',
+    'product/metafield_get': 'productMetafieldRetrieve',
+    'product/metafield_set': 'productMetafieldSet',
+    'product_variant/sku_to_product_variant': 'productSkuLookup',
+    'inventory_level/set-by-variant': 'inventoryLevelSetByVariant',
 };
 
 /**
@@ -43,7 +47,10 @@ const MANUAL_OPS = {
  *   "@body.<key>"   copy from v1 metadata.body.<key>
  *   "@query:<metadataKey>:<param>"  parse value of <param> from a querystring
  *                                   stored at v1 metadata.<metadataKey>
+ *   "@<key>.<sub>"  copy from a nested v1 metadata object (metadata.<key>.<sub>);
+ *                   every sub-key of that object must be claimed by a rule
  *   "=<literal>"    constant value
+ *   "-"             drop the v1 body field (UI-only v1 fields such as listType)
  * Any v1 metadata.body key not consumed by a rule is copied through verbatim
  * (validated against the v2 request schema). The default rule for ops not
  * listed here maps metadata.<v1_entity>_id -> body.id when the v2 request
@@ -62,6 +69,24 @@ const FIELD_RULES = {
         ownerType: '@query:parameters:metafield[owner_resource]|titlecase',
     },
     'shop/list': {},
+    'product/update': { id: '@product_id', descriptionHtml: '@body.body_html', productType: '@body.product_type' },
+    'product/metafield_get': { productId: '@product_id' },
+    'product/metafield_set': { productId: '@product_id', listType: '-' },
+    'product_variant/sku_to_product_variant': { sku: '@product_sku' },
+    // v1 took a variant id; v2 takes the variant's inventory item. The
+    // template token must point at the SKU lookup's inventory_item_id.
+    'inventory_level/set-by-variant': {
+        inventoryItemId: '@body.variant_id',
+        locationId: '@body.location_id',
+        quantity: '@body.available',
+    },
+    'order/list': {
+        status: '@query.status|omit_any',
+        created_at_min: '@query.created_at_min',
+        created_at_max: '@query.created_at_max',
+        name: '@query.name',
+        limit: '@query.limit',
+    },
 };
 
 /**
