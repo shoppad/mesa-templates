@@ -28,18 +28,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "theme",
                 "action": "publish",
                 "name": "Publish Theme",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "put_themes_theme_id",
+                "operation_id": "themePublish",
                 "metadata": {
-                    "theme_id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0 }}",
-                    "api_endpoint": "put admin\/themes\/{{theme_id}}.json"
+                    "api_endpoint": "post /graphql/theme/publish",
+                    "body": {
+                        "id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0 }}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
