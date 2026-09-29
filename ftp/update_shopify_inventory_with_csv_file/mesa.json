@@ -59,19 +59,25 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "product_variant",
-                "action": "sku_to_product_variant",
+                "entity": "productvariant",
+                "action": "create",
                 "name": "Retrieve Product Variant Details from SKU",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_mesa_productvariants_product_sku_sku_lookup",
+                "operation_id": "productSkuLookup",
                 "metadata": {
-                    "api_endpoint": "get mesa/productVariants/{{product_sku}}/sku-lookup.json",
-                    "trigger_parent_key": "loop",
-                    "product_sku": "{{loop[\"SKU\"]}}"
+                    "api_endpoint": "post /graphql/productVariant/skuLookup",
+                    "body": {
+                        "sku": "{{loop[\"SKU\"]}}"
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "sku",
+                    "body",
+                    "body.sku"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -79,23 +85,31 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "inventory_level",
-                "action": "set-by-variant",
+                "entity": "inventorylevel",
+                "action": "create",
                 "name": "Set Inventory Level By Variant",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "post_mesa_inventory_levels_set_by_variant",
+                "operation_id": "inventoryLevelSetByVariant",
                 "metadata": {
-                    "api_endpoint": "post mesa/inventory_levels/set-by-variant.json",
-                    "trigger_parent_key": "loop",
+                    "api_endpoint": "post /graphql/inventoryLevel/setByVariant",
                     "body": {
-                        "available": "{{loop.inventory}}",
-                        "location_id": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
-                        "variant_id": "{{shopify.product_variant_id}}"
-                    }
+                        "inventoryItemId": "{{shopify.inventory_item_id}}",
+                        "locationId": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
+                        "quantity": "{{loop.inventory}}"
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "inventoryItemId",
+                    "locationId",
+                    "quantity",
+                    "body",
+                    "body.inventoryItemId",
+                    "body.locationId",
+                    "body.quantity"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
