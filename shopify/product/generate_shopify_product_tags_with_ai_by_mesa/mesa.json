@@ -10,7 +10,7 @@
         "schema": 3,
         "trigger_type": "input",
         "type": "shopify",
-        "version": "v1",
+        "version": "v2",
         "entity": "product",
         "action": "created",
         "name": "Product Created",
@@ -54,20 +54,27 @@
         "schema": 3,
         "trigger_type": "output",
         "type": "shopify",
-        "version": "v1",
         "entity": "product",
-        "action": "tag_add",
+        "action": "add",
         "name": "Product Add Tag",
+        "version": "v2",
         "key": "shopify_1",
-        "operation_id": "post_mesa_products_product_id_tag",
+        "operation_id": "productTagsAdd",
         "metadata": {
-          "api_endpoint": "post mesa/products/{{product_id}}/tag.json",
-          "product_id": "{{shopify.id}}",
+          "api_endpoint": "post /graphql/productTags/add",
           "body": {
-            "tag": "{{ai.response}}"
+            "id": "{{shopify.id}}",
+            "tags": "{{ai.response}}"
           }
         },
         "local_fields": [],
+        "selected_fields": [
+          "id",
+          "tags",
+          "body",
+          "body.id",
+          "body.tags"
+        ],
         "on_error": "default",
         "weight": 1
       }
