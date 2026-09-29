@@ -33,15 +33,24 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
+                "version": "v2",
                 "key": "shopify_order",
+                "operation_id": "order",
                 "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                    "api_endpoint": "get /graphql/order/retrieve",
+                    "body": {
+                        "id": "{{tracktor_fulfillment.order_id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -49,18 +58,27 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Order Add Tag",
+                "version": "v2",
                 "key": "shopify_order_1",
+                "operation_id": "orderTagsAdd",
                 "metadata": {
-                    "order_id": "{{shopify_order.id}}",
+                    "api_endpoint": "post /graphql/orderTags/add",
                     "body": {
-                        "tag": "{{tracktor_fulfillment.latest_status.label}}"
+                        "id": "{{shopify_order.id}}",
+                        "tags": "{{tracktor_fulfillment.latest_status.label}}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 1
             }
