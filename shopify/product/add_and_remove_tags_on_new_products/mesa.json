@@ -41,7 +41,9 @@
                     "api_endpoint": "post /graphql/productTags/add",
                     "body": {
                         "id": "{{shopify.id}}",
-                        "tags": "{{ template | label: 'What tag will be added and removed from the product?', description: 'The tag is set to \"New Arrival\" by default. Change this tag if you prefer something different.', default: 'New Arrival', tokens: false }}"
+                        "tags": [
+                            "{{ template | label: 'What tag will be added and removed from the product?', description: 'The tag is set to \"New Arrival\" by default. Change this tag if you prefer something different.', default: 'New Arrival', type: 'string', tokens: false }}"
+                        ]
                     }
                 },
                 "local_fields": [],
@@ -112,7 +114,9 @@
                     "api_endpoint": "post /graphql/productTags/remove",
                     "body": {
                         "id": "{{shopify_2.id}}",
-                        "tags": "{{ template | copy_value_from: 'shopify_1.body.tags' }}"
+                        "tags": [
+                            "{{ template | copy_value_from: 'shopify_1.body.tags' }}"
+                        ]
                     }
                 },
                 "local_fields": [],
