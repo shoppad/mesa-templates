@@ -31,21 +31,15 @@
                 "entity": "theme",
                 "action": "publish",
                 "name": "Publish Theme",
-                "version": "v2",
+                "version": "v1",
                 "key": "shopify",
-                "operation_id": "themePublish",
+                "operation_id": "put_themes_theme_id",
                 "metadata": {
-                    "api_endpoint": "post /graphql/theme/publish",
-                    "body": {
-                        "id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0 }}"
-                    }
+                    "theme_id": "{{ template | label: 'Select the theme that should be published', description: '', weight: 0 }}",
+                    "api_endpoint": "put admin\/themes\/{{theme_id}}.json"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "id",
-                    "body",
-                    "body.id"
-                ],
+                "selected_fields": ["id"],
                 "on_error": "default",
                 "weight": 0
             }
