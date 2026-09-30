@@ -1,6 +1,6 @@
 {
   "key": "shopify/product/generate_shopify_product_tags_with_ai_by_mesa",
-  "name": "Use AI by MESA to generate Shopify product tags",
+  "name": "Generate Shopify Product Tags with AI",
   "version": "1.0.0",
   "enabled": false,
   "setup": true,

@@ -1,6 +1,6 @@
 {
     "key": "google_sheets/row/create_fulfillment_from_new_row",
-    "name": "Create an order fulfillment from a new row in Google Sheets",
+    "name": "Generate Shopify Order Fulfillments from New Google Sheets Rows",
     "version": "1.0.0",
     "enabled": false,
     "setup": {
