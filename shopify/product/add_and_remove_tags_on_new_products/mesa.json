@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "product",
                 "action": "created",
                 "name": "Product Created",
@@ -31,21 +31,29 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Product Add Tag",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "post_mesa_products_product_id_tag",
+                "operation_id": "productTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
-                    "product_id": "{{shopify.id}}",
+                    "api_endpoint": "post /graphql/productTags/add",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be added and removed from the product?', description: 'The tag is set to \"New Arrival\" by default. Change this tag if you prefer something different.', default: 'New Arrival', tokens: false }}"
+                        "id": "{{shopify.id}}",
+                        "tags": [
+                            "{{ template | label: 'What tag will be added and removed from the product?', description: 'The tag is set to \"New Arrival\" by default. Change this tag if you prefer something different.', default: 'New Arrival', type: 'string', tokens: false }}"
+                        ]
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -53,18 +61,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve Product",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "get_products_product_id",
+                "operation_id": "product",
                 "metadata": {
-                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "product_id": "{{shopify.id}}"
+                    "api_endpoint": "get /graphql/product/retrieve",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -90,21 +104,29 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
-                "action": "tag_remove",
+                "action": "remove",
                 "name": "Product Remove Tag",
+                "version": "v2",
                 "key": "shopify_3",
-                "operation_id": "delete_mesa_products_product_id_tag",
+                "operation_id": "productTagsRemove",
                 "metadata": {
-                    "api_endpoint": "delete mesa\/products\/{{product_id}}\/tag.json",
-                    "product_id": "{{shopify_2.id}}",
+                    "api_endpoint": "post /graphql/productTags/remove",
                     "body": {
-                        "tag": "{{ template | copy_value_from: 'shopify_1.body.tag' }}"
+                        "id": "{{shopify_2.id}}",
+                        "tags": [
+                            "{{ template | copy_value_from: 'shopify_1.body.tags' }}"
+                        ]
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 3
             }

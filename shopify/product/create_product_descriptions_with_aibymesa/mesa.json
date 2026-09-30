@@ -18,7 +18,7 @@
         "schema": 3,
         "trigger_type": "input",
         "type": "shopify",
-        "version": "v1",
+        "version": "v2",
         "entity": "product",
         "action": "created",
         "name": "Product Created",
@@ -62,19 +62,27 @@
         "schema": 3,
         "trigger_type": "output",
         "type": "shopify",
-        "version": "v1",
         "entity": "product",
         "action": "update",
         "name": "Update Product",
+        "version": "v2",
         "key": "shopify_1",
-        "operation_id": "put_products_product_id",
+        "operation_id": "productUpdate",
         "metadata": {
-          "product_id": "{{shopify.id}}",
+          "api_endpoint": "post /graphql/product/update",
           "body": {
-            "body_html": "{{ai.response}}"
+            "id": "{{shopify.id}}",
+            "descriptionHtml": "{{ai.response}}"
           }
         },
         "local_fields": [],
+        "selected_fields": [
+          "id",
+          "descriptionHtml",
+          "body",
+          "body.id",
+          "body.descriptionHtml"
+        ],
         "on_error": "default",
         "weight": 1
       }

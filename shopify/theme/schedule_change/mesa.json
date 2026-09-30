@@ -28,10 +28,10 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "theme",
                 "action": "publish",
                 "name": "Publish Theme",
+                "version": "v1",
                 "key": "shopify",
                 "operation_id": "put_themes_theme_id",
                 "metadata": {
@@ -39,7 +39,7 @@
                     "api_endpoint": "put admin\/themes\/{{theme_id}}.json"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": ["id"],
                 "on_error": "default",
                 "weight": 0
             }
