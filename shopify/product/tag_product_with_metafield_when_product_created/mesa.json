@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/tag_product_with_metafield_when_product_created",
-    "name": "Tag a product with a metafield value",
+    "name": "Tag Shopify Products with Metafield Values",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

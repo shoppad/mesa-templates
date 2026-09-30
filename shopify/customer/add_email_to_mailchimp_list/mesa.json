@@ -1,6 +1,6 @@
 {
     "key": "shopify/customer/add_email_to_mailchimp_list",
-    "name": "Automatically Add New Shopify Customers to Mailchimp List",
+    "name": "Add New Shopify Customers to Mailchimp List",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

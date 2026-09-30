@@ -1,6 +1,6 @@
 {
     "key": "tracktor/fulfillment/add_tag_with_current_delivery_status",
-    "name": "Tag Shopify orders with the fulfillment status",
+    "name": "Tag Shopify Orders with Fulfillment Status Updates",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

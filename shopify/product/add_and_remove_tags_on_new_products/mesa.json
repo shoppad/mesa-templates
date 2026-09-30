@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/add_and_remove_tags_on_new_products",
-    "name": "Add and Remove \"New Arrival\" Tag on Shopify Products After 30 Days",
+    "name": "Automatically Add and Remove a \"New Arrival\" Tag on Shopify Products",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
