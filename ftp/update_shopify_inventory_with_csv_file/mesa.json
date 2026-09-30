@@ -96,7 +96,7 @@
                     "body": {
                         "inventoryItemId": "{{shopify.inventory_item_id}}",
                         "locationId": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
-                        "quantity": "{{loop.inventory}}"
+                        "quantity": "{{loop.Inventory}}"
                     },
                     "trigger_parent_key": "loop"
                 },
