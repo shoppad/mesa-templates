@@ -11,47 +11,53 @@
                 "trigger_type": "input",
                 "type": "tracktor",
                 "entity": "fulfillment",
-                "action": "fulfillment/delivered",
+                "action": "fulfillment\/delivered",
                 "name": "Fulfillment Status is Delivered",
                 "key": "tracktor",
                 "operation_id": "fulfillment_delivered",
                 "metadata": [],
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 3,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_orders_order_id",
+                "operation_id": "order",
                 "metadata": {
-                    "api_endpoint": "get admin/orders/{{order_id}}.json",
-                    "order_id": "{{tracktor.order_id}}"
+                    "api_endpoint": "get \/graphql\/order\/retrieve",
+                    "body": {
+                        "id": "{{tracktor.order_id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
             {
-                "schema": 3.1,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
-                "key": "shopify",
-                "operation_id": "get_shop",
+                "version": "v2",
+                "key": "shopify_1",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get \/graphql\/shop\/retrieve"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -68,31 +74,41 @@
                 "key": "thanks",
                 "operation_id": "4x6Postcard",
                 "metadata": {
-                    "api_endpoint": "post /send/postcard",
+                    "api_endpoint": "post \/send\/postcard",
                     "entity_wrapper": "body",
                     "body": {
-                        "message": "Dear {{shopify.customer.first_name}}, \n\nThank you for your recent purchase on {{shopify.name}}.  Your business means the world to us!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{shopify.name}} Team",
+                        "message": "Dear {{shopify.customer.firstName}}, \n\nThank you for your recent purchase on {{shopify_1.name}}.  Your business means the world to us!\n\nPlease reach out if you have any questions about your order. We look forward to doing business with you again soon.\n\n- The {{shopify_1.name}} Team",
                         "size": "{{ template | label: 'What is the size of the postcard?', description: '', tokens: false }}",
                         "front_image_url": "{{ template | label: 'What is the Image URL for the front of the postcard?', description: 'Enter the full URL to the image to use on the front of your postcard.', type: 'string', tokens: false }}",
                         "handwriting_style": "{{ template | label: 'Select a handwriting style for your postcard.', description: '[Preview](https://help.thanks.io/handwriting-styles-for-message-templates) the current styles available.', tokens: false }}",
-                        "return_name": "{{shopify.name}}",
-                        "return_address": "{{shopify.address1}}",
-                        "return_address2": "{{shopify.address2}}",
-                        "return_city": "{{shopify.city}}",
-                        "return_postal_code": "{{shopify.zip}}",
+                        "return_name": "{{shopify_1.name}}",
+                        "return_address": "{{shopify_1.shopAddress.address1}}",
+                        "return_address2": "{{shopify_1.shopAddress.address2}}",
+                        "return_city": "{{shopify_1.shopAddress.city}}",
+                        "return_postal_code": "{{shopify_1.shopAddress.zip}}",
                         "recipients": [
                             {
-                                "name": "{{shopify.shipping_address.first_name}} {{shopify.shipping_address.last_name}}",
-                                "address": "{{shopify.shipping_address.address1}}",
-                                "city": "{{shopify.shipping_address.city}}",
-                                "province": "{{shopify.shipping_address.province}}",
-                                "postal_code": "{{shopify.shipping_address.zip}}",
-                                "country": "{{shopify.shipping_address.country}}"
+                                "name": "{{shopify.shippingAddress.firstName}} {{shopify.shippingAddress.lastName}}",
+                                "address": "{{shopify.shippingAddress.address1}}",
+                                "city": "{{shopify.shippingAddress.city}}",
+                                "province": "{{shopify.shippingAddress.province}}",
+                                "postal_code": "{{shopify.shippingAddress.zip}}",
+                                "country": "{{shopify.shippingAddress.country}}"
                             }
                         ]
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "entity_wrapper",
+                    "body.recipients",
+                    "body.return_name",
+                    "body.return_address",
+                    "body.return_address2",
+                    "body.return_city",
+                    "body.return_postal_code",
+                    "body"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
