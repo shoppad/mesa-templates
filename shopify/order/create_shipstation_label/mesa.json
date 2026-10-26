@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -38,7 +38,7 @@
                 "key": "shipstation",
                 "operation_id": "CreateUpdateOrder",
                 "metadata": {
-                    "api_endpoint": "post \/orders\/createorder",
+                    "api_endpoint": "post /orders/createorder",
                     "body": {
                         "orderNumber": "{{shopify.order_number}}",
                         "orderKey": "{{shopify.id}}",
@@ -94,7 +94,7 @@
                 "key": "shipstation_1",
                 "operation_id": "post_orders_createlabelfororder",
                 "metadata": {
-                    "api_endpoint": "post \/orders\/createlabelfororder",
+                    "api_endpoint": "post /orders/createlabelfororder",
                     "body": {
                         "orderId": "{{shipstation.orderId}}",
                         "carrierCode": "{{ template | label: 'Select or enter the carrier code for the shipping label.', description: '' }}",
@@ -121,19 +121,19 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "update",
                 "name": "Update Order",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "put_orders_order_id",
+                "operation_id": "orderUpdate",
                 "metadata": {
-                    "api_endpoint": "put admin\/orders\/{{order_id}}.json",
-                    "order_id": "{{shopify.id}}",
+                    "api_endpoint": "post /graphql/order/update",
                     "body": {
-                        "note_attributes": [
+                        "id": "{{shopify.id}}",
+                        "customAttributes": [
                             {
-                                "name": "Shipping Label",
+                                "key": "Shipping Label",
                                 "value": "{{shipstation_1.labelData}}"
                             }
                         ]
@@ -141,8 +141,13 @@
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "body.note_attributes[].name",
-                    "body.note_attributes[].value"
+                    "id",
+                    "customAttributes",
+                    "body",
+                    "body.id",
+                    "body.customAttributes",
+                    "body.customAttributes[].key",
+                    "body.customAttributes[].value"
                 ],
                 "on_error": "default",
                 "weight": 2
@@ -151,26 +156,54 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "order_fulfillment",
-                "action": "custom_create",
-                "name": "Create Order Fulfillment",
-                "key": "shopify_2",
-                "operation_id": "post_mesa_orders_order_id_fulfillments",
+                "entity": "fulfillmentorder",
+                "action": "create",
+                "name": "Get Fulfillment Order List for Order",
+                "version": "v2",
+                "key": "shopify_3",
+                "operation_id": "orderFulfillmentOrderList",
                 "metadata": {
-                    "api_endpoint": "post mesa\/orders\/{{order_id}}\/fulfillments.json",
-                    "order_id": "{{shopify.id}}",
+                    "api_endpoint": "post /graphql/order/fulfillmentOrderList",
                     "body": {
-                        "tracking_number": "{{shipstation_1.trackingNumber}}",
-                        "location_id": "{{ template | label: 'Select or enter the location for the order fulfillment.', description: '' }}"
+                        "orderId": "{{shopify.id}}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "body.tracking_number"
+                    "orderId",
+                    "body",
+                    "body.orderId"
                 ],
                 "on_error": "default",
                 "weight": 3
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "fulfillment",
+                "action": "create",
+                "name": "Create Order Fulfillment",
+                "version": "v2",
+                "key": "shopify_2",
+                "operation_id": "fulfillmentCreate",
+                "metadata": {
+                    "api_endpoint": "post /graphql/fulfillment/create",
+                    "body": {
+                        "fulfillmentOrderId": "{{shopify_3.fulfillmentOrders[0].id}}",
+                        "trackingNumber": "{{shipstation_1.trackingNumber}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "fulfillmentOrderId",
+                    "trackingNumber",
+                    "body",
+                    "body.fulfillmentOrderId",
+                    "body.trackingNumber"
+                ],
+                "on_error": "default",
+                "weight": 4
             }
         ]
     }
