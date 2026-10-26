@@ -12,7 +12,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -124,24 +124,26 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Tag Order",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "post_mesa_orders_order_id_tag",
+                "operation_id": "orderTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
-                    "order_id": "{{shopify.id}}",
+                    "api_endpoint": "post /graphql/orderTags/add",
                     "body": {
-                        "tag": "{{ template | label: 'The tag you want to use?', tokens: false, placeholder: 'e.g. January Birthday' }}"
+                        "id": "{{shopify.id}}",
+                        "tags": "{{ template | label: 'The tag you want to use?', tokens: false, placeholder: 'e.g. January Birthday' }}"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "order_id",
+                    "id",
+                    "tags",
                     "body",
-                    "body.tag"
+                    "body.id",
+                    "body.tags"
                 ],
                 "on_error": "default",
                 "weight": 4
