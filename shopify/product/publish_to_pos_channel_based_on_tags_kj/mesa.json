@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "product",
                 "action": "updated",
                 "name": "Product Tags Updated",
@@ -31,18 +31,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve the Full Product Details",
+                "version": "v2",
                 "key": "shopify_3",
-                "operation_id": "get_products_product_id",
+                "operation_id": "product",
                 "metadata": {
-                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "product_id": "{{shopify.id}}"
+                    "api_endpoint": "get /graphql/product/retrieve",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -50,20 +56,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "publication",
                 "action": "retrieve",
                 "name": "Retrieve the POS Sales Channel",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_graphql_publications_id",
+                "operation_id": "publication",
                 "metadata": {
-                    "api_endpoint": "get graphql\/publications\/id.json",
+                    "api_endpoint": "get /graphql/publication/retrieve",
                     "body": {
                         "id": "{{ template | label: 'Select or enter your Shopify POS Sales Channel ID', description: 'This identifies the Shopify POS sales channel where products will be published or removed.' }}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -112,29 +122,35 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "publishable",
                 "action": "publish",
                 "name": "Publish this Product to Shopify POS",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "post_graphql_publishable_id_publish",
+                "operation_id": "publishablePublish",
                 "metadata": {
-                    "api_endpoint": "post graphql\/publishable\/id.json",
-                    "argument": "$id: ID!, $input: [PublicationInput!]!",
-                    "graphql_name": "publishablePublish",
-                    "trigger_parent_key": "paths_1",
+                    "api_endpoint": "post /graphql/publishable/publish",
                     "body": {
+                        "type": "product",
                         "id": "{{shopify_3.id}}",
-                        "shopify_entity_id": "product",
                         "input": [
                             {
                                 "publicationId": "{{ template | label: 'Which Sales Channel ID should products tagged with \"Publish to POS\" be published to?', description: 'Select or enter the Shopify POS Sales Channel ID where tagged products should be made available.' }}"
                             }
                         ]
-                    }
+                    },
+                    "trigger_parent_key": "paths_1"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "type",
+                    "id",
+                    "input",
+                    "body",
+                    "body.type",
+                    "body.id",
+                    "body.input"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -157,7 +173,7 @@
                         }
                     ],
                     "a": "{{shopify.tags}}",
-                    "b": "Publish to POS"
+                    "b": "Publish To POS"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -168,19 +184,17 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "publishable",
                 "action": "unpublish",
                 "name": "Remove this Product from Shopify POS",
+                "version": "v2",
                 "key": "shopify_4",
-                "operation_id": "post_graphql_publishable_id_unpublish",
+                "operation_id": "publishableUnpublish",
                 "metadata": {
-                    "api_endpoint": "post graphql\/publishable\/id.json",
-                    "argument": "$id: ID!, $input: [PublicationInput!]!",
-                    "graphql_name": "publishableUnpublish",
+                    "api_endpoint": "post /graphql/publishable/unpublish",
                     "body": {
+                        "type": "product",
                         "id": "{{shopify_3.id}}",
-                        "shopify_entity_id": "product",
                         "input": [
                             {
                                 "publicationId": "{{ template | label: 'Which Shopify POS Sales Channel should products without the \"Publish to POS\" tag be removed from?', description: 'Select your Shopify POS sales channel from the dropdown, or enter the Sales Channel ID manually. Products without the specified tag will be unpublished from this channel.' }}"
@@ -190,7 +204,15 @@
                     "trigger_parent_key": "paths_2"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "type",
+                    "id",
+                    "input",
+                    "body",
+                    "body.type",
+                    "body.id",
+                    "body.input"
+                ],
                 "on_error": "default",
                 "weight": 6
             },
