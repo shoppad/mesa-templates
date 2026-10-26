@@ -12,7 +12,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "product",
                 "action": "updated",
                 "name": "Product Updated",
@@ -139,19 +139,23 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "product_variant",
+                "entity": "productvariant",
                 "action": "list",
                 "name": "Get List of Product Variants",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_products_product_id_variants",
+                "operation_id": "productVariants",
                 "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}/variants.json",
-                    "product_id": "{{shopify.id}}"
+                    "api_endpoint": "get /graphql/productVariants",
+                    "body": {
+                        "product_id": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "product_id"
+                    "product_id",
+                    "body",
+                    "body.product_id"
                 ],
                 "on_error": "default",
                 "weight": 3
@@ -166,7 +170,7 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{ shopify_1 }}",
+                    "key": "{{shopify_1}}",
                     "filter": {
                         "comparison": "equals"
                     }
@@ -198,7 +202,7 @@
                         },
                         {
                             "destination": "Variant ID",
-                            "source": "{{loop.id}}"
+                            "source": "{{loop.legacyResourceId}}"
                         },
                         {
                             "destination": "Product",
@@ -210,7 +214,7 @@
                         },
                         {
                             "destination": "Compare At",
-                            "source": "{{loop.compare_at_price}}"
+                            "source": "{{loop.compareAtPrice}}"
                         }
                     ]
                 },
@@ -236,7 +240,7 @@
                     "description": "Use the airtable product id when updating the variant",
                     "script": "airtable_variant_upsert.js",
                     "field_name": "Variant ID",
-                    "field_value": "{{loop.id}}",
+                    "field_value": "{{loop.legacyResourceId}}",
                     "table_name": "Variants"
                 },
                 "local_fields": [
@@ -263,7 +267,7 @@
                         "label": "ID Value",
                         "type": "string",
                         "required": true,
-                        "default": "{{loop.id}}",
+                        "default": "{{loop.legacyResourceId}}",
                         "location": "required"
                     }
                 ],
