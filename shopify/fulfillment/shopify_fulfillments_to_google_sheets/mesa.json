@@ -21,7 +21,7 @@
                 "options": [
                     {
                         "label": "Order ID",
-                        "value": "Order ID|{{shopify_1.id}}",
+                        "value": "Order ID|{{shopify_1.legacyResourceId}}",
                         "description": "The ID of the order."
                     },
                     {
@@ -36,57 +36,57 @@
                     },
                     {
                         "label": "Order Phone",
-                        "value": "Order Phone|{{shopify_1.customer.phone}}",
+                        "value": "Order Phone|{{shopify_1.customer.defaultPhoneNumber.phoneNumber}}",
                         "description": "The phone number of the customer that placed the order."
                     },
                     {
                         "label": "Customer First Name",
-                        "value": "Customer First Name|{{shopify_1.customer.first_name}}",
+                        "value": "Customer First Name|{{shopify_1.customer.firstName}}",
                         "description": "The first name of the customer that placed the order."
                     },
                     {
                         "label": "Customer Last Name",
-                        "value": "Customer Last Name|{{shopify_1.customer.last_name}}",
+                        "value": "Customer Last Name|{{shopify_1.customer.lastName}}",
                         "description": "The last name of the customer that placed the order."
                     },
                     {
                         "label": "Customer Email",
-                        "value": "Customer Email|{{shopify_1.customer.email}}",
+                        "value": "Customer Email|{{shopify_1.customer.defaultEmailAddress.emailAddress}}",
                         "description": "The email address of the customer that placed the order."
                     },
                     {
                         "label": "Total Price",
-                        "value": "Total Price|{{shopify_1.total_price}}",
+                        "value": "Total Price|{{shopify_1.totalPriceSet}}",
                         "description": "The total price of the order."
                     },
                     {
                         "label": "Shipping Address 1",
-                        "value": "Shipping Address 1|{{shopify_1.shipping_address.address1}}",
+                        "value": "Shipping Address 1|{{shopify_1.shippingAddress.address1}}",
                         "description": "The first line of the shipping address."
                     },
                     {
                         "label": "Shipping Address 2",
-                        "value": "Shipping Address 2|{{shopify_1.shipping_address.address2}}",
+                        "value": "Shipping Address 2|{{shopify_1.shippingAddress.address2}}",
                         "description": "The second line of the shipping address."
                     },
                     {
                         "label": "Shipping City",
-                        "value": "Shipping City|{{shopify_1.shipping_address.city}}",
+                        "value": "Shipping City|{{shopify_1.shippingAddress.city}}",
                         "description": "The city of the shipping address."
                     },
                     {
                         "label": "Shipping Province",
-                        "value": "Shipping Province|{{shopify_1.shipping_address.province}}",
+                        "value": "Shipping Province|{{shopify_1.shippingAddress.province}}",
                         "description": "The province of the shipping address."
                     },
                     {
                         "label": "Shipping Country",
-                        "value": "Shipping Country|{{shopify_1.shipping_address.country}}",
+                        "value": "Shipping Country|{{shopify_1.shippingAddress.country}}",
                         "description": "The country of the shipping address."
                     },
                     {
                         "label": "Shipping Zip",
-                        "value": "Shipping Zip|{{shopify_1.shipping_address.zip}}",
+                        "value": "Shipping Zip|{{shopify_1.shippingAddress.zip}}",
                         "description": "The zip code of the shipping address."
                     },
                     {
@@ -101,7 +101,7 @@
                     },
                     {
                         "label": "Days Since Ordered",
-                        "value": "Days Since Ordered|{{shopify_1.created_at | time_between: shopify.created_at, \"days\"}}",
+                        "value": "Days Since Ordered|{{shopify_1.createdAt | time_between: shopify.created_at, \"days\"}}",
                         "description": "The number of days since the order was placed."
                     }
                 ],
@@ -116,7 +116,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "fulfillment",
                 "action": "created",
                 "name": "Fulfillment Created",
@@ -137,18 +137,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_orders_order_id",
+                "operation_id": "order",
                 "metadata": {
-                    "api_endpoint": "get admin/orders/{{order_id}}.json",
-                    "order_id": "{{shopify.order_id}}"
+                    "api_endpoint": "get /graphql/order/retrieve",
+                    "body": {
+                        "id": "{{shopify.order_id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": ["order_id"],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
