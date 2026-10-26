@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "product",
                 "action": "created",
                 "name": "Product Created",
@@ -172,19 +172,25 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve Product",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_products_product_id",
+                "operation_id": "product",
                 "metadata": {
-                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "trigger_parent_key": "loop_2",
-                    "product_id": "{{shopify.id}}"
+                    "api_endpoint": "get /graphql/product/retrieve",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    },
+                    "trigger_parent_key": "loop_2"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 6
             },
@@ -216,22 +222,28 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Product Add Tag",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "post_mesa_products_product_id_tag",
+                "operation_id": "productTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa\/products\/{{product_id}}\/tag.json",
-                    "trigger_parent_key": "loop_2",
-                    "product_id": "{{shopify_1.id}}",
+                    "api_endpoint": "post /graphql/productTags/add",
                     "body": {
-                        "tag": "{{loop_2.tag}}"
-                    }
+                        "id": "{{shopify_1.id}}",
+                        "tags": "{{loop_2.tag}}"
+                    },
+                    "trigger_parent_key": "loop_2"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 8
             },
