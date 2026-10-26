@@ -28,14 +28,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -46,17 +47,24 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_customers_customer_id",
+                "operation_id": "customer",
                 "metadata": {
-                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{infiniteoptions.order.customer.id}}"
+                    "api_endpoint": "get /graphql/customer/retrieve",
+                    "body": {
+                        "id": "{{infiniteoptions.order.customer.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -104,7 +112,7 @@
                 "metadata": {
                     "to": "{{infiniteoptions.order.email}}",
                     "subject": "Welcome to our Discord community! - Discord Invite",
-                    "message": "Hey {{shopify_1.first_name}},\n\nHere is your discord invite: https://discord.gg/{{discord.code}}\n\nThanks!\n-{{shopify.name}}"
+                    "message": "Hey {{shopify_1.firstName}},\n\nHere is your discord invite: https://discord.gg/{{discord.code}}\n\nThanks!\n-{{shopify.name}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -114,20 +122,27 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Customer Add Tag",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "post_mesa_customers_customer_id_tag",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
-                    "customer_id": "{{shopify_1.id}}",
+                    "api_endpoint": "post /graphql/customerTags/add",
                     "body": {
-                        "tag": "discord:invite"
+                        "id": "{{shopify_1.id}}",
+                        "tags": "discord:invite"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 5
             }

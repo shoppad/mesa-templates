@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -31,14 +31,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -143,7 +144,7 @@
                                 "Type": "ACCREC",
                                 "Date": "{{shopify.created_at | date: \"%Y-%m-%d\"}}",
                                 "Reference": "{{shopify.name}}",
-                                "Url": "https:\/\/admin.shopify.com\/store\/{{shopify_1.domain}}\/orders\/{{shopify.id}}",
+                                "Url": "https://admin.shopify.com/store/{{shopify_1.primaryDomain.host}}/orders/{{shopify.id}}",
                                 "HasErrors": "false",
                                 "LineItems": [
                                     {
@@ -272,7 +273,7 @@
                                 "Type": "ACCREC",
                                 "Date": "{{shopify.created_at | date: \"%Y-%m-%d\"}}",
                                 "Reference": "{{shopify.name}}",
-                                "Url": "https:\/\/admin.shopify.com\/store\/{{shopify_1.domain}}\/orders\/{{shopify.id}}",
+                                "Url": "https://admin.shopify.com/store/{{shopify_1.primaryDomain.host}}/orders/{{shopify.id}}",
                                 "HasErrors": "false",
                                 "LineItems": [
                                     {
