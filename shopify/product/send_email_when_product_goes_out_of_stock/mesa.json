@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -31,14 +31,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -75,19 +76,25 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "product_variant",
-                "action": "retrieve_id",
+                "entity": "productvariant",
+                "action": "retrieve",
                 "name": "Retrieve Product Variant",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "get_variants_variant_id",
+                "operation_id": "productVariant",
                 "metadata": {
-                    "api_endpoint": "get admin\/variants\/{{variant_id}}.json",
-                    "trigger_parent_key": "loop",
-                    "variant_id": "{{loop.variant_id}}"
+                    "api_endpoint": "get /graphql/productVariant/retrieve",
+                    "body": {
+                        "id": "{{loop.variant_id}}"
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -100,7 +107,7 @@
                 "operation_id": "filter",
                 "metadata": {
                     "trigger_parent_key": "loop",
-                    "a": "{{shopify_2.inventory_quantity}}",
+                    "a": "{{shopify_2.inventoryQuantity}}",
                     "comparison": "less than equal",
                     "b": "{{ template | label: 'What should be the out of stock threshold?', description: 'When product inventory reaches this level (or below) the notification will trigger.', default: '0', tokens: false }}",
                     "additional": [
@@ -129,7 +136,7 @@
                     "body": {
                         "to": "{{ template | label: 'What email address should receive this notification?' }}",
                         "subject": "Item out of stock: {{shopify_2.sku}}",
-                        "message": "This is an automated message to let you know that SKU {{shopify_2.sku}} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_2.product_id}}"
+                        "message": "This is an automated message to let you know that SKU {{shopify_2.sku}} is now out of stock.\n\nView the product: https://admin.shopify.com/store/{{shopify_1.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.product.legacyResourceId}}"
                     }
                 },
                 "local_fields": [],
