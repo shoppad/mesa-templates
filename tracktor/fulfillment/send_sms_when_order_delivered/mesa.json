@@ -24,15 +24,24 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
+                "version": "v2",
                 "key": "shopify_order",
+                "operation_id": "order",
                 "metadata": {
-                    "order_id": "{{tracktor_fulfillment.order_id}}"
+                    "api_endpoint": "get /graphql/order/retrieve",
+                    "body": {
+                        "id": "{{tracktor_fulfillment.order_id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -44,7 +53,7 @@
                 "key": "filter",
                 "metadata": {
                     "comparison": "is not empty",
-                    "a": "{{shopify_order.customer.phone}}"
+                    "a": "{{shopify_order.customer.defaultPhoneNumber.phoneNumber}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
@@ -59,7 +68,7 @@
                 "name": "SMS Send Message",
                 "key": "sms_message",
                 "metadata": {
-                    "to": "{{shopify_order.customer.phone}}",
+                    "to": "{{shopify_order.customer.defaultPhoneNumber.phoneNumber}}",
                     "message": "{{ template | label: 'What are the contents of the SMS message?', default: 'Your order has arrived! Please be sure to read the enclosed owners manual and don't forget to mail back your product warranty card.' }}"
                 },
                 "local_fields": [],

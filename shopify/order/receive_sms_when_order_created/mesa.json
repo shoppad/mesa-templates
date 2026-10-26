@@ -10,11 +10,12 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "local_fields": [],
                 "on_error": "default",
@@ -26,14 +27,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -49,7 +51,7 @@
                 "name": "Send Message to store owner",
                 "key": "sms",
                 "metadata": {
-                    "message": "A new order was placed: {{shopify.name}}\n\nClick here to view the order: https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify.id}}",
+                    "message": "A new order was placed: {{shopify.name}}\n\nClick here to view the order: https://admin.shopify.com/store/{{shopify_1.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify.id}}",
                     "to": "{{ template | label: 'What phone number should receive this notification?', description: 'SMS by MESA currently only supports phone numbers from the United States or Canada.', type: 'string', tokens: false }}"
                 },
                 "local_fields": [],

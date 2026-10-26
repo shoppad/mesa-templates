@@ -29,24 +29,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
-                "action": "note_update",
+                "action": "create",
                 "name": "Update Order Notes",
+                "version": "v2",
                 "key": "shopify",
                 "operation_id": "put_mesa_orders_order_id_note",
                 "metadata": {
-                    "api_endpoint": "put mesa\/orders\/{{order_id}}\/note.json",
-                    "order_id": "{{infiniteoptions.order.id}}",
+                    "api_endpoint": "post /graphql/order/noteUpdate",
                     "body": {
+                        "id": "{{infiniteoptions.order.id}}",
                         "note": "{% for line_item in infiniteoptions.line_items %}Product Name:   {{ line_item.title }}: {{ line_item.sku }}\n  {% for property in line_item.properties %}  - {{property.name}}: {{property.value}}\n{% endfor %}\n{% endfor %}",
                         "append": true
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "order_id",
+                    "id",
+                    "note",
+                    "append",
                     "body",
+                    "body.id",
                     "body.note",
                     "body.append"
                 ],

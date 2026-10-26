@@ -54,26 +54,29 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "list",
                 "name": "Get List of Orders",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_orders",
+                "operation_id": "orders",
                 "metadata": {
-                    "api_endpoint": "get admin/orders.json",
-                    "query": {
-                        "limit": "250",
-                        "status": "any",
+                    "api_endpoint": "get /graphql/orders",
+                    "body": {
                         "created_at_min": "{{skill.start_date}}",
-                        "created_at_max": "{{skill.end_date}}"
+                        "created_at_max": "{{skill.end_date}}",
+                        "limit": "250"
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "query.created_at_min",
-                    "query.created_at_max",
-                    "query.limit"
+                    "created_at_min",
+                    "created_at_max",
+                    "limit",
+                    "body",
+                    "body.created_at_min",
+                    "body.created_at_max",
+                    "body.limit"
                 ],
                 "on_error": "default",
                 "weight": 0
