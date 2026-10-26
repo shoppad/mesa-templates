@@ -11,7 +11,7 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -28,17 +28,24 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
+                "version": "v2",
                 "key": "shopify_customer_1",
-                "operation_id": "get_customers_customer_id",
+                "operation_id": "customer",
                 "metadata": {
-                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{shopify_order.customer.id}}"
+                    "api_endpoint": "get /graphql/customer/retrieve",
+                    "body": {
+                        "id": "{{shopify_order.customer.id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -49,7 +56,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify_customer_1.total_spent}}",
+                    "a": "{{shopify_customer_1.amountSpent.amount}}",
                     "comparison": "greater than equal",
                     "b": "{{ template | label: 'How much does the customer need to spend?', description: 'The lifetime spending threshold in dollars. Customers who have spent more than this amount will be tagged as VIPs.', default: 500, type: 'number', tokens: false }}"
                 },
@@ -61,20 +68,27 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Customer Add Tag",
+                "version": "v2",
                 "key": "shopify_customer",
-                "operation_id": "post_mesa_customers_customer_id_tag",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
-                    "customer_id": "{{shopify_order.customer.id}}",
+                    "api_endpoint": "post /graphql/customerTags/add",
                     "body": {
-                        "tag": "{{ template | label: 'What tag should we use?', description: '', default: 'VIP', tokens: false }}"
+                        "id": "{{shopify_order.customer.id}}",
+                        "tags": "{{ template | label: 'What tag should we use?', description: '', default: 'VIP', tokens: false }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 2
             }
