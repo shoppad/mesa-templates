@@ -18,11 +18,12 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
@@ -48,15 +49,18 @@
                 "schema": 2,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Get List Shop",
+                "version": "v2",
                 "key": "shopify_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "site": "current"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 1
             },
@@ -71,7 +75,7 @@
                 "metadata": {
                     "to": "{{ template | label: 'Who should receive this email?', description: 'Enter the email address where we should send these notifications.', default: '' }}",
                     "subject": "Order {{shopify_order.name}} created with notes",
-                    "message": "Hello {{shopify_shop.shop_owner}}\n\n{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} placed a new order with your store.\n\nNotes have been included in the order. They are the following:\n\n{{shopify_order.note}}\n\nView Order {{shopify_order.name}}: https://{{shopify_shop.domain}}/admin/orders/{{shopify_order.id}}"
+                    "message": "Hello {{shopify_shop.shopOwnerName}}\n\n{{shopify_order.customer.first_name}} {{shopify_order.customer.last_name}} placed a new order with your store.\n\nNotes have been included in the order. They are the following:\n\n{{shopify_order.note}}\n\nView Order {{shopify_order.name}}: https://{{shopify_shop.primaryDomain.host}}/admin/orders/{{shopify_order.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
