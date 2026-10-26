@@ -46,7 +46,7 @@
                     },
                     {
                         "label": "Tags",
-                        "value": "Tags|{{shopify_1.tags}}",
+                        "value": "Tags|{{shopify_1.tags | join: \", \"}}",
                         "description": "The tags of the customer."
                     },
                     {
@@ -66,7 +66,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "customer",
                 "action": "created",
                 "name": "Customer Created",
@@ -84,23 +84,29 @@
         ],
         "outputs": [
             {
-              "schema": 3.1,
-              "trigger_type": "output",
-              "type": "shopify",
-              "version": "v1",
-              "entity": "customer",
-              "action": "retrieve",
-              "name": "Retrieve Customer",
-              "key": "shopify_1",
-              "operation_id": "get_customers_customer_id",
-              "metadata": {
-                  "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
-                  "customer_id": "{{shopify.id}}"
-              },
-              "local_fields": [],
-              "selected_fields": [],
-              "on_error": "default",
-              "weight": 0
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "retrieve",
+                "name": "Retrieve Customer",
+                "version": "v2",
+                "key": "shopify_1",
+                "operation_id": "customer",
+                "metadata": {
+                    "api_endpoint": "get /graphql/customer/retrieve",
+                    "body": {
+                        "id": "{{shopify.id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
+                "on_error": "default",
+                "weight": 0
             },
             {
                 "schema": 4,

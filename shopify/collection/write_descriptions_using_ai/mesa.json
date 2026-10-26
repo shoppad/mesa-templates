@@ -10,7 +10,7 @@
         "schema": 3,
         "trigger_type": "input",
         "type": "shopify",
-        "version": "v1",
+        "version": "v2",
         "entity": "collection",
         "action": "created",
         "name": "Collection Created",
@@ -31,18 +31,24 @@
         "schema": 3.1,
         "trigger_type": "output",
         "type": "shopify",
-        "version": "v1",
         "entity": "collection",
         "action": "retrieve",
         "name": "Retrieve Collection",
+        "version": "v2",
         "key": "shopify_1",
-        "operation_id": "get_collection",
+        "operation_id": "collection",
         "metadata": {
-          "api_endpoint": "get admin/collections/{{collection_id}}.json",
-          "collection_id": "{{shopify.id}}"
+          "api_endpoint": "get /graphql/collection/retrieve",
+          "body": {
+            "id": "{{shopify.id}}"
+          }
         },
         "local_fields": [],
-        "selected_fields": [],
+        "selected_fields": [
+          "id",
+          "body",
+          "body.id"
+        ],
         "on_error": "default",
         "weight": 0
       },
@@ -70,15 +76,15 @@
         "operation_id": "paths_path",
         "metadata": {
           "trigger_manager_key": "paths",
-          "a": "{{shopify_1.collection_type}}",
-          "comparison": "equals",
+          "a": "{{shopify_1.ruleSet}}",
+          "comparison": "is not empty",
           "additional": [
             {
               "operator": "and",
               "comparison": "equals"
             }
           ],
-          "b": "smart"
+          "b": ""
         },
         "local_fields": [],
         "selected_fields": [],
@@ -113,22 +119,28 @@
         "schema": 3.1,
         "trigger_type": "output",
         "type": "shopify",
-        "version": "v1",
-        "entity": "smart_collection",
+        "entity": "collection",
         "action": "update",
         "name": "Update Smart Collection",
+        "version": "v2",
         "key": "shopify_3",
-        "operation_id": "put_smart_collections_smart_collection_id",
+        "operation_id": "collectionUpdate",
         "metadata": {
-          "api_endpoint": "put admin/smart_collections/{{smart_collection_id}}.json",
-          "trigger_parent_key": "paths_1",
-          "smart_collection_id": "{{shopify.id}}",
+          "api_endpoint": "post /graphql/collection/update",
           "body": {
-            "body_html": "{{ai.response}}"
-          }
+            "id": "{{shopify.id}}",
+            "descriptionHtml": "{{ai.response}}"
+          },
+          "trigger_parent_key": "paths_1"
         },
         "local_fields": [],
-        "selected_fields": ["body.body_html"],
+        "selected_fields": [
+          "id",
+          "descriptionHtml",
+          "body",
+          "body.id",
+          "body.descriptionHtml"
+        ],
         "on_error": "default",
         "weight": 4
       },
@@ -142,15 +154,15 @@
         "operation_id": "paths_path",
         "metadata": {
           "trigger_manager_key": "paths",
-          "comparison": "equals",
+          "comparison": "is empty",
           "additional": [
             {
               "operator": "and",
               "comparison": "equals"
             }
           ],
-          "a": "{{shopify_1.collection_type}}",
-          "b": "custom"
+          "a": "{{shopify_1.ruleSet}}",
+          "b": ""
         },
         "local_fields": [],
         "selected_fields": [],
@@ -185,22 +197,28 @@
         "schema": 3.1,
         "trigger_type": "output",
         "type": "shopify",
-        "version": "v1",
-        "entity": "custom_collection",
+        "entity": "collection",
         "action": "update",
         "name": "Update Custom Collection",
+        "version": "v2",
         "key": "shopify_2",
-        "operation_id": "put_custom_collections_custom_collection_id",
+        "operation_id": "collectionUpdate",
         "metadata": {
-          "api_endpoint": "put admin/custom_collections/{{custom_collection_id}}.json",
-          "trigger_parent_key": "paths_2",
-          "custom_collection_id": "{{shopify.id}}",
+          "api_endpoint": "post /graphql/collection/update",
           "body": {
-            "body_html": "{{ai_1.response}}"
-          }
+            "id": "{{shopify.id}}",
+            "descriptionHtml": "{{ai_1.response}}"
+          },
+          "trigger_parent_key": "paths_2"
         },
         "local_fields": [],
-        "selected_fields": ["body.body_html"],
+        "selected_fields": [
+          "id",
+          "descriptionHtml",
+          "body",
+          "body.id",
+          "body.descriptionHtml"
+        ],
         "on_error": "default",
         "weight": 7
       }

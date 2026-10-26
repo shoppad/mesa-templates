@@ -131,7 +131,7 @@
                     },
                     {
                         "label": "Admin Order URL",
-                        "value": "Admin Order URL|https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify.id}}",
+                        "value": "Admin Order URL|https://admin.shopify.com/store/{{shopify_1.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify.id}}",
                         "description": "The URL to view the order in the Shopify admin"
                     }
                 ],
@@ -146,7 +146,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -167,14 +167,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -245,7 +246,7 @@
                             "Product Quantity": "{{loop.quantity}}",
                             "Line Item ID": "{{loop.id}}",
                             "Created At": "{{shopify_order.created_at}}",
-                            "Admin Order URL": "https:\/\/admin.shopify.com\/store\/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{shopify_order.id}}"
+                            "Admin Order URL": "https://admin.shopify.com/store/{{shopify_1.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/orders/{{shopify_order.id}}"
                         }
                     },
                     "path": {

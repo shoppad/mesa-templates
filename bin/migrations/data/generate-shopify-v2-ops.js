@@ -38,6 +38,12 @@ const MANUAL_OPS = {
     'product/metafield_set': 'productMetafieldSet',
     'product_variant/sku_to_product_variant': 'productSkuLookup',
     'inventory_level/set-by-variant': 'inventoryLevelSetByVariant',
+    'product_variant/retrieve_id': 'productVariant',
+    'product_variant/update_id': 'productVariantUpdate',
+    'customer_search/list': 'customers',
+    'gift_card/list': 'giftCards',
+    'smart_collection/update': 'collectionUpdate',
+    'custom_collection/update': 'collectionUpdate',
 };
 
 /**
@@ -73,12 +79,34 @@ const FIELD_RULES = {
     'product/metafield_get': { productId: '@product_id' },
     'product/metafield_set': { productId: '@product_id', listType: '-' },
     'product_variant/sku_to_product_variant': { sku: '@product_sku' },
+    'product_variant/retrieve_id': { id: '@variant_id' },
+    'product_variant/update_id': { productId: '@product_id', id: '@variant_id' },
+    'smart_collection/update': { id: '@smart_collection_id', descriptionHtml: '@body.body_html' },
+    'custom_collection/update': { id: '@custom_collection_id', descriptionHtml: '@body.body_html' },
+    'gift_card/list': { limit: '@query.limit' },
+    'customer_search/list': { email: '@body.email_address', limit: '@body.limit' },
+    'customer/list': { limit: '@query.limit', updated_at_min: '@query.updated_at_min' },
+    'order/line_item_add': {
+        id: '@order_id',
+        productId: '@body.product_id',
+        variantId: '@body.variant_id',
+        discountType: '@body.discount_type',
+        discountAmount: '@body.discount_amount',
+        allowDuplicates: '@body.allow_duplicates',
+        notifyCustomer: '@body.notify_customer',
+        orderNote: '@body.order_note',
+    },
+    // v1 passed the resource kind and GraphQL plumbing in metadata.
+    'publishable/publish': { type: '@body.shopify_entity_id', argument: '-', graphql_name: '-' },
+    'publishable/unpublish': { type: '@body.shopify_entity_id', argument: '-', graphql_name: '-' },
     // v1 took a variant id; v2 takes the variant's inventory item. The
     // template token must point at the SKU lookup's inventory_item_id.
     'inventory_level/set-by-variant': {
         inventoryItemId: '@body.variant_id',
         locationId: '@body.location_id',
         quantity: '@body.available',
+        // The action sends null when reason is omitted, which Shopify rejects.
+        reason: '=correction',
     },
     'order/list': {
         status: '@query.status|omit_any',
@@ -102,6 +130,20 @@ const RESPONSE_RENAMES = {
         fulfillment_status: 'displayFulfillmentStatus',
         order_number: 'name',
         total_price: 'totalPriceSet',
+        'customer.email': 'customer.defaultEmailAddress.emailAddress',
+        'customer.phone': 'customer.defaultPhoneNumber.phoneNumber',
+    },
+    'product/retrieve': {
+        body_html: 'descriptionHtml',
+        // v2 product has no variants; the lowest variant price is the
+        // closest single value (equal for single-variant products).
+        'variants[0].price': 'priceRangeV2.minVariantPrice.amount',
+    },
+    'customer/retrieve': {
+        email: 'defaultEmailAddress.emailAddress',
+        phone: 'defaultPhoneNumber.phoneNumber',
+        total_spent: 'amountSpent.amount',
+        orders_count: 'numberOfOrders',
     },
     'shop/list': {
         address1: 'shopAddress.address1',
@@ -117,6 +159,28 @@ const RESPONSE_RENAMES = {
         phone: 'shopAddress.phone',
         domain: 'primaryDomain.host',
         shop_owner: 'shopOwnerName',
+    },
+    'customer/list': {
+        email: 'defaultEmailAddress.emailAddress',
+        phone: 'defaultPhoneNumber.phoneNumber',
+        'default_address.country_code': 'defaultAddress.countryCodeV2',
+        'default_address.province_code': 'defaultAddress.provinceCode',
+    },
+    // MoneyV2 fields ({amount, currencyCode}) need .amount to render as text.
+    'gift_card/list': {
+        customer_id: 'customer.id',
+        disabled_at: 'deactivatedAt',
+        balance: 'balance.amount',
+        initial_value: 'initialValue.amount',
+    },
+    // REST ids are numeric; legacyResourceId keeps admin URLs working.
+    'product_variant/retrieve_id': {
+        id: 'legacyResourceId',
+        product_id: 'product.legacyResourceId',
+        option1: 'selectedOptions[0].value',
+        option2: 'selectedOptions[1].value',
+        option3: 'selectedOptions[2].value',
+        inventory_item_id: 'inventoryItem.id',
     },
 };
 
@@ -332,7 +396,10 @@ function main() {
             continue;
         }
         for (const [from, to] of Object.entries(renames)) {
-            if (!entry.response_paths.includes(to)) {
+            // Renames may index arrays ([0]); schema paths use []. List ops
+            // rename item fields, which live under "[].".
+            const target = to.replace(/\[\d+\]/g, '[]');
+            if (!entry.response_paths.includes(target) && !entry.response_paths.includes(`[].${target}`)) {
                 console.error(`BAD RENAME ${v1Key}: ${from} -> ${to} (target not in v2 response)`);
                 renameErrors++;
             }
