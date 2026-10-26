@@ -25,14 +25,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -50,7 +51,7 @@
                 "metadata": {
                     "to": "{{ template | label: 'What email address should receive this notification?', tokens: false, type: 'email' }}",
                     "subject": "New Infinite Options Order {{infiniteoptions_order.order.order_number}}",
-                    "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https:\/\/admin.shopify.com\/store\/{{shopify.myshopify_domain | replace: \".myshopify.com\", \"\"}}\/orders\/{{infiniteoptions_order.order.id}}"
+                    "message": "Order Number: {{infiniteoptions_order.order.order_number}}\nAdmin Order URL: https://admin.shopify.com/store/{{shopify.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/orders/{{infiniteoptions_order.order.id}}"
                 },
                 "local_fields": [],
                 "on_error": "default",
