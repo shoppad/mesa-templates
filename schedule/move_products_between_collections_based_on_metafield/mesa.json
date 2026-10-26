@@ -28,21 +28,26 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "collection",
-                "action": "list",
+                "action": "create",
                 "name": "Get List of Collections' Products (Coming Soon)",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_collection_products",
+                "operation_id": "collectionListProducts",
                 "metadata": {
-                    "api_endpoint": "get admin\/collections\/{{collection_id}}\/products.json",
-                    "query": {
-                        "limit": "100"
+                    "api_endpoint": "post /graphql/collection/listProducts",
+                    "body": {
+                        "collectionId": "",
+                        "limit": 100
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "query.limit"
+                    "collectionId",
+                    "limit",
+                    "body",
+                    "body.collectionId",
+                    "body.limit"
                 ],
                 "on_error": "default",
                 "weight": 0
@@ -99,24 +104,32 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
-                "action": "metafield_get",
+                "action": "create",
                 "name": "Retrieve Product Metafield",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_mesa_products_product_id_metafield",
+                "operation_id": "productMetafieldRetrieve",
                 "metadata": {
-                    "api_endpoint": "get mesa\/products\/{{product_id}}\/metafield.json",
-                    "trigger_parent_key": "loop",
-                    "product_id": "{{loop.id}}",
+                    "api_endpoint": "post /graphql/product/metafieldRetrieve",
                     "body": {
+                        "productId": "{{loop.id}}",
                         "namespace": "custom",
                         "key": "publish_date"
-                    }
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
+                "selected_fields": [
+                    "productId",
+                    "namespace",
+                    "key",
+                    "body",
+                    "body.productId",
+                    "body.namespace",
+                    "body.key"
+                ],
+                "on_error": "ignore",
                 "weight": 3
             },
             {
@@ -163,7 +176,7 @@
                     "mapping": [
                         {
                             "destination": "product_id",
-                            "source": "{{loop.id}}"
+                            "source": "{{loop.id | split: \"/\" | last}}"
                         },
                         {
                             "destination": "key",
@@ -191,24 +204,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "custom_collection",
-                "action": "list",
+                "entity": "graphql",
+                "action": "create",
                 "name": "Get List of Custom Collections",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "get_custom_collections",
+                "operation_id": "graphqlQuery",
                 "metadata": {
-                    "api_endpoint": "get admin\/custom_collections.json",
-                    "trigger_parent_key": "loop",
-                    "query": {
-                        "limit": "1",
-                        "title": "Coming Soon"
-                    }
+                    "api_endpoint": "post /graphql/graphql/query",
+                    "body": {
+                        "query": "query ComingSoonCollection($query: String) {\n  collections(first: 1, query: $query) {\n    nodes {\n      id\n      title\n    }\n  }\n}",
+                        "variables": "{\"query\": \"title:'Coming Soon'\"}"
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "query.title",
-                    "query.limit"
+                    "query",
+                    "variables",
+                    "body",
+                    "body.query",
+                    "body.variables"
                 ],
                 "on_error": "default",
                 "weight": 6
@@ -217,48 +233,30 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "collect",
-                "action": "list",
-                "name": "Get List of Collects",
-                "key": "shopify_3",
-                "operation_id": "get_collects",
+                "entity": "collection",
+                "action": "delete",
+                "name": "Remove Product From Coming Soon",
+                "version": "v2",
+                "key": "shopify_4",
+                "operation_id": "collectDelete",
                 "metadata": {
-                    "api_endpoint": "get admin\/collects.json",
-                    "trigger_parent_key": "loop",
-                    "parameters": "product_id={{loop.id}}&collection_id={{shopify_2.0.id}}",
-                    "query": {
-                        "limit": "1"
-                    }
+                    "api_endpoint": "post /graphql/collect/delete",
+                    "body": {
+                        "collectionId": "{{shopify_2.collections.nodes[0].id}}",
+                        "productIds": [
+                            "{{loop.id}}"
+                        ]
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "parameters",
-                    "query.limit"
+                    "collectionId",
+                    "productIds",
+                    "body",
+                    "body.collectionId",
+                    "body.productIds"
                 ],
-                "on_error": "default",
-                "weight": 7
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "version": "v1",
-                "entity": "collect",
-                "action": "delete",
-                "name": "Remove Product from Custom Collection",
-                "key": "shopify_4",
-                "operation_id": "delete_collects_collect_id",
-                "metadata": {
-                    "api_endpoint": "delete admin\/collects\/{{collect_id}}.json",
-                    "trigger_parent_key": "loop",
-                    "collect_id": "{{shopify_3.0.id}}",
-                    "body": {
-                        "product_id": "{{loop.id}}"
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [],
                 "on_error": "default",
                 "weight": 8
             },
@@ -266,21 +264,30 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "collect",
+                "entity": "collection",
                 "action": "create",
-                "name": "Add Product to Custom Collection (New Arrivals)",
+                "name": "Add Product To Collection",
+                "version": "v2",
                 "key": "shopify_5",
-                "operation_id": "post_collects",
+                "operation_id": "collectCreate",
                 "metadata": {
-                    "api_endpoint": "post admin\/collects.json",
+                    "api_endpoint": "post /graphql/collect/create",
                     "body": {
-                        "product_id": "{{loop.id}}"
+                        "collectionId": "",
+                        "productIds": [
+                            "{{loop.id}}"
+                        ]
                     },
                     "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "collectionId",
+                    "productIds",
+                    "body",
+                    "body.collectionId",
+                    "body.productIds"
+                ],
                 "on_error": "default",
                 "weight": 9
             },
