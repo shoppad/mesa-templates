@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "draft_order",
                 "action": "created",
                 "name": "Draft Order Created",
@@ -33,19 +33,23 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_customers_customer_id",
+                "operation_id": "customer",
                 "metadata": {
-                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
-                    "customer_id": "{{shopify.customer.id}}"
+                    "api_endpoint": "get /graphql/customer/retrieve",
+                    "body": {
+                        "id": "{{shopify.customer.id}}"
+                    }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "customer_id"
+                    "id",
+                    "body",
+                    "body.id"
                 ],
                 "on_error": "default",
                 "weight": 0
