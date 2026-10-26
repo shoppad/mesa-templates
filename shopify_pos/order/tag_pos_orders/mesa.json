@@ -25,20 +25,27 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Order Add Tag",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "post_mesa_orders_order_id_tag",
+                "operation_id": "orderTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa/orders/{{order_id}}/tag.json",
-                    "order_id": "{{shopify-pos.id}}",
+                    "api_endpoint": "post /graphql/orderTags/add",
                     "body": {
-                        "tag": "{{ template | label: 'What tag will be added to POS orders?', default: 'POS', type: 'string', tokens: false }}"
+                        "id": "{{shopify-pos.id}}",
+                        "tags": "{{ template | label: 'What tag will be added to POS orders?', default: 'POS', type: 'string', tokens: false }}"
                     }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
