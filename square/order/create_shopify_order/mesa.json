@@ -17,7 +17,7 @@
                 "key": "square",
                 "operation_id": "order_created",
                 "metadata": {
-                    "api_endpoint": "get \/orders",
+                    "api_endpoint": "get /orders",
                     "poll": "@hourly:0 * * * *"
                 },
                 "local_fields": [],
@@ -31,43 +31,56 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "create",
                 "name": "Create Order",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "post_orders",
+                "operation_id": "orderCreate",
                 "metadata": {
-                    "api_endpoint": "post admin\/orders.json",
+                    "api_endpoint": "post /graphql/order/create",
                     "body": {
-                        "fulfillment_status": "fulfilled",
-                        "inventory_behaviour": "bypass",
-                        "source_name": "Square",
-                        "discount_codes": [
-                            {
-                                "amount": "{{square.total_discount_money.amount}}",
-                                "type": "fixed_amount"
+                        "fulfillmentStatus": "FULFILLED",
+                        "inventoryBehaviour": "BYPASS",
+                        "sourceName": "Square",
+                        "discountCode": {
+                            "itemFixedDiscountCode": {
+                                "code": "Square discount",
+                                "amountSet": {
+                                    "shopMoney": {
+                                        "amount": "{{square.total_discount_money.amount}}",
+                                        "currencyCode": "{{square.total_money.currency}}"
+                                    }
+                                }
                             }
-                        ],
-                        "line_items": [
+                        },
+                        "lineItems": [
                             {
                                 "quantity": "{{square.line_items[].quantity}}",
                                 "title": "{{square.line_items[].name}}",
-                                "price": "{{square.line_items[].base_price_money.amount}}"
+                                "priceSet": {
+                                    "shopMoney": {
+                                        "amount": "{{square.line_items[].base_price_money.amount}}",
+                                        "currencyCode": "{{square.total_money.currency}}"
+                                    }
+                                }
                             }
                         ]
                     }
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "body.fulfillment_status",
-                    "body.inventory_behaviour",
-                    "body.source_name",
-                    "body.line_items[].title",
-                    "body.line_items[].quantity",
-                    "body.line_items[].price",
-                    "body.discount_codes[].amount",
-                    "body.discount_codes[].type"
+                    "fulfillmentStatus",
+                    "inventoryBehaviour",
+                    "sourceName",
+                    "discountCode",
+                    "lineItems",
+                    "body",
+                    "body.fulfillmentStatus",
+                    "body.inventoryBehaviour",
+                    "body.sourceName",
+                    "body.discountCode",
+                    "body.lineItems"
                 ],
                 "on_error": "default",
                 "weight": 0
