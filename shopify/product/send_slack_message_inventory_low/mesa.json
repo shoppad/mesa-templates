@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "inventory_level",
                 "action": "updated",
                 "name": "Inventory Level Updated",
@@ -54,14 +54,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -72,18 +73,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve Product",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "get_products_product_id",
+                "operation_id": "product",
                 "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}.json",
-                    "product_id": "{{shopify.variant.product_id}}"
+                    "api_endpoint": "get /graphql/product/retrieve",
+                    "body": {
+                        "id": "{{shopify.variant.product_id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -101,7 +108,7 @@
                     "api_endpoint": "post /api/chat.postMessage",
                     "body": {
                         "channel": "{{ template | label: 'What Slack channel would you like the message to send to?', description: 'Invite the MESA Slack app by typing @MESA and clicking the Invite button before selecting your channel. Private channels may not appear until you invite the MESA Slack app.' }}",
-                        "markdown_text": "{{shopify_2.title}} {{shopify.variant.title}} is running low on inventory.\n\nCurrent inventory quantity: {{shopify.available}}\n\nView product: https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.id}}"
+                        "markdown_text": "{{shopify_2.title}} {{shopify.variant.title}} is running low on inventory.\n\nCurrent inventory quantity: {{shopify.available}}\n\nView product: https://admin.shopify.com/store/{{shopify_1.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.legacyResourceId}}"
                     }
                 },
                 "local_fields": [],
