@@ -99,6 +99,19 @@ class Migrator {
             this.rewriteTokens(json);
         }
 
+        // Shopify tokens pointing at a step key that does not exist render
+        // blank in v1 and v2 alike, so surface them for a manual fix.
+        const stepKeys = new Set(['inputs', 'outputs'].flatMap((k) => ((json.config && json.config[k]) || []).map((s) => s.key)));
+        const dangling = new Set();
+        for (const m of raw.matchAll(/\{\{\s*(shopify(?:_\d+)?)[.[]/g)) {
+            if (!stepKeys.has(m[1])) {
+                dangling.add(m[1]);
+            }
+        }
+        for (const key of dangling) {
+            this.report.warnings.push(`tokens reference step "${key}", which does not exist in this template`);
+        }
+
         // Final sweep: no v1 shopify step may remain.
         for (const listKey of ['inputs', 'outputs']) {
             for (const step of (json.config && json.config[listKey]) || []) {
@@ -173,7 +186,9 @@ class Migrator {
             const [spec, transform] = specRaw.split('|');
             let value;
             if (spec === '-') {
+                // Drops a v1 body field or top-level metadata key of that name.
                 consumedBody.add(target);
+                consumed.add(target);
                 continue;
             }
             if (spec.startsWith('@') && !spec.startsWith('@body.') && !spec.startsWith('@query:') && spec.includes('.')) {
@@ -234,6 +249,18 @@ class Migrator {
         }
         if (meta.body) {
             consumed.add('body');
+        }
+        // v1 set-by-variant took the variant id; v2 takes the inventory item.
+        // A SKU lookup result carries both, so point at its inventory item.
+        if (typeof body.inventoryItemId === 'string' && /\.product_variant_id\s*\}\}$/.test(body.inventoryItemId)) {
+            body.inventoryItemId = body.inventoryItemId.replace(/\.product_variant_id(\s*\}\})$/, '.inventory_item_id$1');
+            this.report.warnings.push(`${where} ${step.key}: inventoryItemId now reads the SKU lookup inventory_item_id`);
+        }
+        // v1 metafield writes split list types into type "list" + listType;
+        // GraphQL takes the combined name (list.single_line_text_field).
+        if (body.type === 'list' && meta.body && meta.body.listType) {
+            body.type = `list.${meta.body.listType}`;
+            this.report.warnings.push(`${where} ${step.key}: list metafield type is now ${body.type}; the value must be a JSON array`);
         }
 
         // A nested metadata object may only migrate when rules claim every key.
@@ -371,8 +398,54 @@ class Migrator {
             }
             return node;
         };
-        // setup options (e.g. Google Sheets column presets) carry tokens too.
+        // MESA loop steps over a swapped step's array expose each item as
+        // {{<loop key>.field}}, the same as a Liquid for-loop variable.
+        this.stepLoops = {};
+        for (const step of (json.config && json.config.outputs) || []) {
+            const m = step.type === 'loop' && typeof (step.metadata || {}).key === 'string'
+                && step.metadata.key.match(/^\{\{\s*(\w+)((?:\.[\w.]+)?)(?:\[\])?\s*\}\}$/);
+            const entry = m && this.swapped[m[1]];
+            if (entry) {
+                const sub = m[2].replace(/^\./, '') || entry.response_nest || '';
+                this.stepLoops[step.key] = { entry, prefix: sub ? `${sub}[]` : '[]' };
+            }
+        }
+        // Steps of other apps store or send values (sheet columns, records,
+        // messages), so a whole-value id there still needs the numeric form.
+        const control = ['shopify', 'loop', 'filter', 'paths', 'delay', 'approval'];
+        for (const step of (json.config && json.config.outputs) || []) {
+            this.dataStep = !control.includes(step.type);
+            walk(step);
+        }
+        this.dataStep = false;
+        // Everything else, including setup options (e.g. Google Sheets column
+        // presets), which carry tokens too.
+        const outputs = json.config && json.config.outputs;
+        if (outputs) {
+            delete json.config.outputs;
+        }
         walk(json);
+        if (outputs) {
+            json.config.outputs = outputs;
+        }
+    }
+
+    /**
+     * v2 ids are GIDs. A token embedded in a larger string (admin URLs,
+     * messages) needs the numeric id: legacyResourceId when the response has
+     * it, otherwise the last GID segment. A whole-value token feeds another v2
+     * input, which takes the GID as is.
+     * @param {object} entry Ops entry.
+     * @param {string} schemaPrefix Schema path prefix of the token ("" or "[].").
+     * @param {string} path Resolved token path ending in "id".
+     * @returns {{path: string, filter: string}} Path and extra Liquid filter.
+     */
+    numericId(entry, schemaPrefix, path) {
+        const legacy = path.replace(/(^|\.)id$/, '$1legacyResourceId');
+        if (entry.response_paths.includes(schemaPrefix + legacy)) {
+            return { path: legacy, filter: '' };
+        }
+        return { path, filter: ' | split: "/" | last' };
     }
 
     /**
@@ -384,7 +457,7 @@ class Migrator {
         if (!str.includes('{')) {
             return str;
         }
-        const loopVars = {}; // liquid loop var -> {entry, prefix}
+        const loopVars = { ...(this.stepLoops || {}) }; // loop var -> {entry, prefix}
         let out = str;
 
         // Setup placeholders that copy another step's v1 metadata value.
@@ -408,6 +481,16 @@ class Migrator {
                     if (entry.response_nest && !p) {
                         p = entry.response_nest;
                         this.report.tokens.push(`loop: ${key} -> ${key}.${p}`);
+                    } else if (p) {
+                        // Array fields appear in response_paths as "<path>[]".
+                        const camel = p.split('.').map((seg) => camelize(seg)).join('.');
+                        const resolved = entry.response_paths.includes(`${p}[]`) ? p
+                            : entry.response_paths.includes(`${camel}[]`) ? camel
+                                : this.resolveFieldPath(entry, key, p, p);
+                        if (resolved !== p) {
+                            this.report.tokens.push(`loop: ${key}.${p} -> ${key}.${resolved}`);
+                            p = resolved;
+                        }
                     }
                     loopVars[loopVar] = { entry, prefix: p ? `${p}[]` : '[]' };
                     return `{% for ${loopVar} in ${key}${p ? `.${p}` : ''} %}`;
@@ -418,13 +501,20 @@ class Migrator {
             out = out.replace(
                 new RegExp(`\\{\\{\\s*${k}((?:\\[\\])?(?:\\.[^}|]*)?)\\s*(\\|[^}]*)?\\}\\}`, 'g'),
                 (m, rawPath, filters) => {
-                    const rewritten = this.rewritePath(entry, key, rawPath || '');
+                    let rewritten = this.rewritePath(entry, key, rawPath || '');
                     let filterPart = filters ? ` ${filters.trim()}` : '';
+                    if (/\.id$/.test(rewritten) && (out.trim() !== m.trim() || this.dataStep) && !filterPart) {
+                        const prefix = rewritten.startsWith('[].') ? '[].' : '';
+                        const num = this.numericId(entry, prefix, rewritten.replace(/^(\[\])?\./, ''));
+                        this.report.tokens.push(`${key}: ${rewritten} embedded in text -> numeric id`);
+                        rewritten = `${prefix ? '[].' : '.'}${num.path}`;
+                        filterPart = num.filter;
+                    }
                     // Array-at-runtime fields embedded in string context need
                     // an explicit join; a whole-value token passes the raw
                     // array through (correct for list-typed inputs).
                     const plainPath = rewritten.replace(/^[.[\]]+/, '').replace(/\[\]/g, '');
-                    const wholeValue = out.trim() === m.trim();
+                    const wholeValue = out.trim() === m.trim() && !this.dataStep;
                     if (!filterPart && !wholeValue && (entry.array_fields || []).includes(plainPath)) {
                         filterPart = ' | join: ", "';
                         this.report.tokens.push(`${key}: ${plainPath} is an array at runtime, appended | join: ", "`);
@@ -432,6 +522,12 @@ class Migrator {
                     return `{{${key}${rewritten}${filterPart}}}`;
                 },
             );
+
+            // key.path inside {% if/elsif/unless/case/when/assign ... %} tags
+            out = out.replace(/\{%-?\s*(?:if|elsif|unless|case|when|assign)\b[^%]*-?%\}/g, (tag) => tag.replace(
+                new RegExp(`(?<![\\w.])${k}((?:\\.\\w+|\\[\\d+\\])+)`, 'g'),
+                (m, rawPath) => `${key}${this.rewritePath(entry, key, rawPath)}`,
+            ));
         }
 
         // Loop variable members: {{var.field}} validated against item schema.
@@ -440,8 +536,15 @@ class Migrator {
             out = out.replace(
                 new RegExp(`\\{\\{\\s*${v}\\.([^}|\\s]+)\\s*(\\|[^}]*)?\\}\\}`, 'g'),
                 (m, fieldPath, filters) => {
-                    const rewritten = this.resolveFieldPath(ctx.entry, `${loopVar}(loop)`, `${ctx.prefix}.${fieldPath}`, fieldPath);
-                    return `{{${loopVar}.${rewritten}${filters ? ` ${filters.trim()}` : ''}}}`;
+                    let rewritten = this.resolveFieldPath(ctx.entry, `${loopVar}(loop)`, `${ctx.prefix}.${fieldPath}`, fieldPath);
+                    let filterPart = filters ? ` ${filters.trim()}` : '';
+                    if (/(^|\.)id$/.test(rewritten) && (out.trim() !== m.trim() || this.dataStep) && !filterPart) {
+                        const num = this.numericId(ctx.entry, `${ctx.prefix}.`, rewritten);
+                        this.report.tokens.push(`${loopVar}(loop): ${rewritten} embedded in text -> numeric id`);
+                        rewritten = num.path;
+                        filterPart = num.filter;
+                    }
+                    return `{{${loopVar}.${rewritten}${filterPart}}}`;
                 },
             );
         }
@@ -493,7 +596,9 @@ class Migrator {
         const paths = entry.response_paths;
         const prefixLen = schemaPath.length - tokenPath.length;
 
-        const exists = (sp) => paths.includes(sp);
+        // Schema paths mark arrays as []; tokens may index them ([0] or .0).
+        const norm = (sp) => sp.replace(/\[\d+\]/g, '[]').replace(/\.(\d+)(?=\.|$)/g, '[]').replace(/^\d+(?=\.|$)/, '[]');
+        const exists = (sp) => paths.includes(sp) || paths.includes(norm(sp));
         const looseAt = (sp) => {
             const parts = sp.split('.');
             for (let i = parts.length - 1; i > 0; i--) {
@@ -505,6 +610,12 @@ class Migrator {
         };
 
         if (exists(schemaPath)) {
+            // A MoneyV2 object ({amount, currencyCode}) renders as "Array";
+            // MoneyBag (shopMoney) is unwrapped by the connector itself.
+            if (exists(`${schemaPath}.amount`) && exists(`${schemaPath}.currencyCode`) && !exists(`${schemaPath}.shopMoney`)) {
+                this.report.tokens.push(`${key}: ${tokenPath} is a money object, appended .amount`);
+                return `${tokenPath}.amount`;
+            }
             return tokenPath;
         }
         // Curated rename: longest matching prefix of the token path.
