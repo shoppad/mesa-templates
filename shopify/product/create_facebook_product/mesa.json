@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "product",
                 "action": "created",
                 "name": "Product Created",
@@ -53,14 +53,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -85,7 +86,7 @@
                         "image_url": "{{shopify_product.images[0].src}}",
                         "category": "{{shopify_product.product_type}}",
                         "retailer_id": "{{shopify_product.variants[0].sku}}",
-                        "url": "https://{{shopify_1.domain}}/products/{{shopify_product.handle}}",
+                        "url": "https://{{shopify_1.primaryDomain.host}}/products/{{shopify_product.handle}}",
                         "description": "{{shopify_product.body_html}}",
                         "brand": "{{shopify_product.vendor}}"
                     },
