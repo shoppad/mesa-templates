@@ -1,0 +1,63 @@
+{
+  "key": "linear_issue_log_new_private_team_issues",
+  "name": "Linear: log new issues in a private team",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "linear",
+        "entity": "issue",
+        "action": "private_team_issue_created",
+        "name": "Linear - Issue Created",
+        "version": "v1",
+        "key": "linear",
+        "operation_id": "private_team_issue_created",
+        "metadata": {
+          "path": {
+            "team_id": ""
+          }
+        },
+        "selected_fields": [
+          "path.team_id",
+          "path",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "activity",
+        "entity": "log",
+        "action": "create",
+        "name": "Activity - Log Data",
+        "version": "1",
+        "key": "activity",
+        "operation_id": "activity-create-log",
+        "metadata": {
+          "api_endpoint": "post /add-activity",
+          "body": {
+            "message": "New private team issue {{linear.identifier}}: {{linear.title}}",
+            "payload": "{{linear}}"
+          }
+        },
+        "selected_fields": [
+          "body.message",
+          "body.payload",
+          "body",
+          "message",
+          "payload"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ]
+  }
+}

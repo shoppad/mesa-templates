@@ -1,0 +1,179 @@
+{
+  "key": "linear_issue_create_update_list_delete_issue",
+  "name": "Linear: create, update, list and delete an issue",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "schedule",
+        "entity": "schedule",
+        "action": "schedule",
+        "name": "Schedule - Schedule",
+        "version": "1",
+        "key": "schedule",
+        "operation_id": "post-schedule",
+        "metadata": {
+          "api_endpoint": "post /schedule",
+          "enqueue_type": "schedule",
+          "schedule": "@daily:0 9 * * *",
+          "next_sync_date_time": "2026-10-28T09:00:00-04:00"
+        },
+        "selected_fields": [
+          "enqueue_type",
+          "schedule",
+          "next_sync_date_time"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "linear",
+        "entity": "issue",
+        "action": "create",
+        "name": "Linear - Create Issue",
+        "version": "v1",
+        "key": "create",
+        "operation_id": "create_issue",
+        "metadata": {
+          "api_endpoint": "post /tools/LINEAR_CREATE_LINEAR_ISSUE",
+          "body": {
+            "team_id": "",
+            "title": "MESA QA template check (delete me)",
+            "priority": 0
+          }
+        },
+        "selected_fields": [
+          "body.title",
+          "body.team_id",
+          "body.priority",
+          "body",
+          "team_id",
+          "title",
+          "priority",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "linear",
+        "entity": "issue",
+        "action": "update",
+        "name": "Linear - Update Issue",
+        "version": "v1",
+        "key": "update",
+        "operation_id": "update_issue",
+        "metadata": {
+          "api_endpoint": "post /tools/LINEAR_UPDATE_ISSUE",
+          "body": {
+            "issueId": "{{create.id}}",
+            "title": "MESA QA template check (updated, delete me)"
+          }
+        },
+        "selected_fields": [
+          "body.title",
+          "body.issueId",
+          "body",
+          "issueId",
+          "title",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "linear",
+        "entity": "issue",
+        "action": "list_issues_by_team_id",
+        "name": "Linear - List Issues By Team ID",
+        "version": "v1",
+        "key": "list",
+        "operation_id": "list_issues_by_team_id",
+        "metadata": {
+          "api_endpoint": "post /tools/LINEAR_LIST_ISSUES_BY_TEAM_ID",
+          "body": {
+            "team_id": "",
+            "first": "10",
+            "include_archived": false
+          }
+        },
+        "selected_fields": [
+          "body.first",
+          "body.team_id",
+          "body.include_archived",
+          "body",
+          "team_id",
+          "first",
+          "include_archived",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "linear",
+        "entity": "issue",
+        "action": "delete_issue",
+        "name": "Linear - Delete Issue",
+        "version": "v1",
+        "key": "delete",
+        "operation_id": "delete_issue",
+        "metadata": {
+          "api_endpoint": "post /tools/LINEAR_DELETE_LINEAR_ISSUE",
+          "body": {
+            "issue_id": "{{create.id}}"
+          }
+        },
+        "selected_fields": [
+          "body.issue_id",
+          "body",
+          "issue_id",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "activity",
+        "entity": "log",
+        "action": "create",
+        "name": "Activity - Log Data",
+        "version": "1",
+        "key": "activity",
+        "operation_id": "activity-create-log",
+        "metadata": {
+          "api_endpoint": "post /add-activity",
+          "body": {
+            "message": "Created {{create.identifier}}, renamed to {{update.title}}, then deleted it",
+            "payload": "{{list}}"
+          }
+        },
+        "selected_fields": [
+          "body.message",
+          "body.payload",
+          "body",
+          "message",
+          "payload"
+        ],
+        "on_error": "default",
+        "weight": 4
+      }
+    ]
+  }
+}

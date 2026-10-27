@@ -1,0 +1,88 @@
+{
+  "key": "linear_issue_log_new_issues",
+  "name": "Linear: log new issues with their details",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "linear",
+        "entity": "issue",
+        "action": "created",
+        "name": "Linear - Issue Created",
+        "version": "v1",
+        "key": "linear",
+        "operation_id": "issue_created",
+        "metadata": {
+          "path": {
+            "team_id": ""
+          }
+        },
+        "selected_fields": [
+          "path.team_id",
+          "path",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "linear",
+        "entity": "issue",
+        "action": "retrieve",
+        "name": "Linear - Get Issue",
+        "version": "v1",
+        "key": "get_issue",
+        "operation_id": "retrieve_issue",
+        "metadata": {
+          "api_endpoint": "post /tools/LINEAR_GET_LINEAR_ISSUE",
+          "body": {
+            "issue_id": "{{linear.id}}"
+          }
+        },
+        "selected_fields": [
+          "body.issue_id",
+          "body",
+          "issue_id",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "activity",
+        "entity": "log",
+        "action": "create",
+        "name": "Activity - Log Data",
+        "version": "1",
+        "key": "activity",
+        "operation_id": "activity-create-log",
+        "metadata": {
+          "api_endpoint": "post /add-activity",
+          "body": {
+            "message": "New issue {{get_issue.identifier}}: {{get_issue.title}} ({{get_issue.state.name}})",
+            "payload": "{{get_issue}}"
+          }
+        },
+        "selected_fields": [
+          "body.message",
+          "body.payload",
+          "body",
+          "message",
+          "payload"
+        ],
+        "on_error": "default",
+        "weight": 1
+      }
+    ]
+  }
+}

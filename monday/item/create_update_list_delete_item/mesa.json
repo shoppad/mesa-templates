@@ -1,0 +1,185 @@
+{
+  "key": "monday_item_create_update_list_delete_item",
+  "name": "monday.com: create, update, list and delete an item",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 2,
+        "trigger_type": "input",
+        "type": "schedule",
+        "entity": "schedule",
+        "action": "schedule",
+        "name": "Schedule - Schedule",
+        "version": "1",
+        "key": "schedule",
+        "operation_id": "post-schedule",
+        "metadata": {
+          "api_endpoint": "post /schedule",
+          "enqueue_type": "schedule",
+          "schedule": "@daily:0 9 * * *",
+          "next_sync_date_time": "2026-10-28T09:00:00-04:00"
+        },
+        "selected_fields": [
+          "enqueue_type",
+          "schedule",
+          "next_sync_date_time"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "monday",
+        "entity": "item",
+        "action": "create_item",
+        "name": "monday.com - Create Item",
+        "version": "v1",
+        "key": "create",
+        "operation_id": "create_item",
+        "metadata": {
+          "api_endpoint": "post /tools/MONDAY_CREATE_ITEM",
+          "body": {
+            "board_id": "",
+            "item_name": "MESA QA template check (delete me)"
+          }
+        },
+        "selected_fields": [
+          "body.board_id",
+          "body.item_name",
+          "body",
+          "board_id",
+          "item_name",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 0
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "monday",
+        "entity": "item",
+        "action": "update_item",
+        "name": "monday.com - Update Item",
+        "version": "v1",
+        "key": "update",
+        "operation_id": "update_item",
+        "metadata": {
+          "api_endpoint": "post /tools/MONDAY_UPDATE_ITEM",
+          "body": {
+            "board_id": "",
+            "item_id": "{{create.id}}",
+            "column_id": "",
+            "value": "Working on it",
+            "create_labels_if_missing": false
+          }
+        },
+        "selected_fields": [
+          "body.value",
+          "body.item_id",
+          "body.board_id",
+          "body.column_id",
+          "body.create_labels_if_missing",
+          "body",
+          "board_id",
+          "item_id",
+          "column_id",
+          "value",
+          "create_labels_if_missing",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 1
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "monday",
+        "entity": "item",
+        "action": "items_page",
+        "name": "monday.com - List Board Items",
+        "version": "v1",
+        "key": "list",
+        "operation_id": "items_page",
+        "metadata": {
+          "api_endpoint": "post /tools/MONDAY_ITEMS_PAGE",
+          "body": {
+            "board_id": "",
+            "limit": 10
+          }
+        },
+        "selected_fields": [
+          "body.limit",
+          "body.board_id",
+          "body",
+          "board_id",
+          "limit",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 2
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "monday",
+        "entity": "item",
+        "action": "delete_item",
+        "name": "monday.com - Delete Item",
+        "version": "v1",
+        "key": "delete",
+        "operation_id": "delete_item",
+        "metadata": {
+          "api_endpoint": "post /tools/MONDAY_DELETE_ITEM",
+          "body": {
+            "board_id": "",
+            "item_id": "{{create.id}}"
+          }
+        },
+        "selected_fields": [
+          "body.board_id",
+          "body.item_id",
+          "body",
+          "board_id",
+          "item_id",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 3
+      },
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "activity",
+        "entity": "log",
+        "action": "create",
+        "name": "Activity - Log Data",
+        "version": "1",
+        "key": "activity",
+        "operation_id": "activity-create-log",
+        "metadata": {
+          "api_endpoint": "post /add-activity",
+          "body": {
+            "message": "Created {{create.name}}, set it to {{update.state}}, then deleted it",
+            "payload": "{{list}}"
+          }
+        },
+        "selected_fields": [
+          "body.message",
+          "body.payload",
+          "body",
+          "message",
+          "payload"
+        ],
+        "on_error": "default",
+        "weight": 4
+      }
+    ]
+  }
+}

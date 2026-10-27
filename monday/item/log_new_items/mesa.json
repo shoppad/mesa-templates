@@ -1,0 +1,66 @@
+{
+  "key": "monday_item_log_new_items",
+  "name": "monday.com: log new items on a board",
+  "version": "1.0.0",
+  "enabled": false,
+  "setup": true,
+  "config": {
+    "inputs": [
+      {
+        "schema": 4,
+        "trigger_type": "input",
+        "type": "monday",
+        "entity": "item",
+        "action": "item_created",
+        "name": "monday.com - Item Created",
+        "version": "v1",
+        "key": "monday",
+        "operation_id": "item_created",
+        "metadata": {
+          "api_endpoint": "post MONDAY_ITEM_CREATED",
+          "poll": "*/15 * * * *",
+          "path": {
+            "board_id": ""
+          }
+        },
+        "selected_fields": [
+          "path.board_id",
+          "path",
+          "poll",
+          "secret"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ],
+    "outputs": [
+      {
+        "schema": 4,
+        "trigger_type": "output",
+        "type": "activity",
+        "entity": "log",
+        "action": "create",
+        "name": "Activity - Log Data",
+        "version": "1",
+        "key": "activity",
+        "operation_id": "activity-create-log",
+        "metadata": {
+          "api_endpoint": "post /add-activity",
+          "body": {
+            "message": "New item {{monday.pulse_name}} in {{monday.group_name}}",
+            "payload": "{{monday}}"
+          }
+        },
+        "selected_fields": [
+          "body.message",
+          "body.payload",
+          "body",
+          "message",
+          "payload"
+        ],
+        "on_error": "default",
+        "weight": 0
+      }
+    ]
+  }
+}
