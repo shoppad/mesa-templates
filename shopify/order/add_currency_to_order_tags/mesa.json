@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/add_currency_to_order_tags",
-    "name": "Add a currency tag to a Shopify order",
+    "name": "Tag Shopify Orders by Currency",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

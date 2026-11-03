@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/add_fulfillment",
-    "name": "Add fulfillment to line items that don't require shipping",
+    "name": "Fulfill Non-Shipping Line Items in Shopify Orders",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

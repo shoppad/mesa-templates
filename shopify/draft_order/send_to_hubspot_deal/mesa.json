@@ -1,6 +1,6 @@
 {
     "key": "shopify/draft_order/send_to_hubspot_deal",
-    "name": "Automatically Convert Shopify Draft Orders to HubSpot Deals",
+    "name": "Convert Shopify Draft Orders to HubSpot Deals",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

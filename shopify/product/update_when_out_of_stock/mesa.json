@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/update_when_out_of_stock",
-    "name": "Automatically Update Product Status When Variant Goes Out of Stock",
+    "name": "Update Product Status When Variant Goes Out of Stock",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

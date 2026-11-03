@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/scheduled_product_price_change",
-    "name": "Schedule a product price change",
+    "name": "Schedule Shopify Product Price Changes for Sales and Promotions",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

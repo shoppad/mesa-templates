@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/auto_fulfill_line_items_kj",
-    "name": "Automatically Fulfill Shopify Line Items by SKU",
+    "name": "Fulfill Shopify Line Items by SKU",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
