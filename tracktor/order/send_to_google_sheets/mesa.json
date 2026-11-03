@@ -27,18 +27,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "retrieve",
                 "name": "Retrieve Order",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_orders_order_id",
+                "operation_id": "order",
                 "metadata": {
-                    "api_endpoint": "get admin/orders/{{order_id}}.json",
-                    "order_id": "{{tracktor.order_id}}"
+                    "api_endpoint": "get /graphql/order/retrieve",
+                    "body": {
+                        "id": "{{tracktor.order_id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -70,15 +76,15 @@
                     ],
                     "body": {
                         "columns": {
-                            "A": "{{shopify.id}}",
+                            "A": "{{shopify.legacyResourceId}}",
                             "B": "{{shopify.name}}",
                             "C": "{{shopify.email}}",
-                            "D": "{{shopify.customer.phone}}",
+                            "D": "{{shopify.customer.defaultPhoneNumber.phoneNumber}}",
                             "E": "{{tracktor.tracking_number}}",
                             "F": "{{tracktor.carrier.name}}",
-                            "G": "{{shopify.billing_address.country}}",
+                            "G": "{{shopify.billingAddress.country}}",
                             "H": "{{tracktor.shipment_status}}",
-                            "I": "{{shopify.created_at}}",
+                            "I": "{{shopify.createdAt}}",
                             "J": "{{tracktor.latest_status.datetime}}",
                             "K": "{{tracktor.shop_url}}/apps/tracktor/track?order={{tracktor.order_name | url_encode }}&email={{shopify.email}}"
                         }
@@ -212,21 +218,21 @@
                     ],
                     "body": {
                         "columns": {
-                            "A": "{{shopify.id}}",
+                            "A": "{{shopify.legacyResourceId}}",
                             "B": "{{shopify.name}}",
                             "C": "{{shopify.email}}",
-                            "D": "{{shopify.customer.first_name}}",
-                            "E": "{{shopify.customer.last_name}}",
-                            "F": "{{shopify.customer.default_address.name}}",
-                            "G": "{{shopify.customer.email}}",
-                            "H": "{{shopify.total_price}}",
-                            "I": "{{shopify.shipping_address.address1}}",
-                            "J": "{{shopify.shipping_address.address2}}",
-                            "K": "{{shopify.shipping_address.city}}",
-                            "L": "{{shopify.shipping_address.zip}}",
-                            "M": "{{shopify.shipping_address.province}}",
-                            "N": "{{shopify.shipping_address.country}}",
-                            "O": "{{shopify.created_at}}",
+                            "D": "{{shopify.customer.firstName}}",
+                            "E": "{{shopify.customer.lastName}}",
+                            "F": "{{shopify.customer.defaultAddress.name}}",
+                            "G": "{{shopify.customer.defaultEmailAddress.emailAddress}}",
+                            "H": "{{shopify.totalPriceSet}}",
+                            "I": "{{shopify.shippingAddress.address1}}",
+                            "J": "{{shopify.shippingAddress.address2}}",
+                            "K": "{{shopify.shippingAddress.city}}",
+                            "L": "{{shopify.shippingAddress.zip}}",
+                            "M": "{{shopify.shippingAddress.province}}",
+                            "N": "{{shopify.shippingAddress.country}}",
+                            "O": "{{shopify.createdAt}}",
                             "P": "{{tracktor.shop_url}}/apps/tracktor/track?order={{tracktor.order_name | url_encode }}&email={{shopify.email}}"
                         }
                     }

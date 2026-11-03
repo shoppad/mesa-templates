@@ -26,20 +26,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
                 "action": "list",
                 "name": "Get List of Customers updated within the past 24 hours",
+                "version": "v2",
                 "key": "shopify_customer",
+                "operation_id": "customers",
                 "metadata": {
-                    "api_endpoint": "get admin/customers.json",
-                    "query": {
+                    "api_endpoint": "get /graphql/customers",
+                    "body": {
                         "limit": "250",
                         "updated_at_min": "{{\"now\" | date: \"%Y-%m-%dT%H:%M:%S%z\" | subtract_time: 1, \"days\" | date: \"%Y-%m-%dT%H:%M:%S%z\"}}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": ["query.updated_at_min", "query.limit"],
+                "selected_fields": [
+                    "limit",
+                    "updated_at_min",
+                    "body",
+                    "body.limit",
+                    "body.updated_at_min"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -91,7 +98,7 @@
                 "name": "Filter: Check if the customer has an email address",
                 "key": "filter_3",
                 "metadata": {
-                    "a": "{{loop.email}}",
+                    "a": "{{loop.defaultEmailAddress.emailAddress}}",
                     "comparison": "does not equal",
                     "b": "null",
                     "trigger_parent_key": "loop",
@@ -118,7 +125,7 @@
                 "operation_id": "get-customers",
                 "metadata": {
                     "api_endpoint": "get /customers",
-                    "parameters": "email={{loop.email}}",
+                    "parameters": "email={{loop.defaultEmailAddress.emailAddress}}",
                     "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
@@ -180,35 +187,35 @@
                             "operator": "or",
                             "a": "{{recharge_address.0.address2}}",
                             "comparison": "does not equal",
-                            "b": "{{loop.default_address.address2}}"
+                            "b": "{{loop.defaultAddress.address2}}"
                         },
                         {
                             "operator": "or",
                             "a": "{{recharge_address.0.city}}",
                             "comparison": "does not equal",
-                            "b": "{{loop.default_address.city}}"
+                            "b": "{{loop.defaultAddress.city}}"
                         },
                         {
                             "operator": "or",
                             "a": "{{recharge_address.0.province}}",
                             "comparison": "does not equal",
-                            "b": "{{loop.default_address.province}}"
+                            "b": "{{loop.defaultAddress.province}}"
                         },
                         {
                             "operator": "or",
                             "a": "{{recharge_address.0.zip}}",
                             "comparison": "does not equal",
-                            "b": "{{loop.default_address.zip}}"
+                            "b": "{{loop.defaultAddress.zip}}"
                         },
                         {
                             "operator": "or",
                             "a": "{{recharge_address.0.country_code}}",
                             "comparison": "does not equal",
-                            "b": "{{loop.default_address.country_code}}"
+                            "b": "{{loop.defaultAddress.countryCodeV2}}"
                         }
                     ],
                     "a": "{{recharge_address.0.address1}}",
-                    "b": "{{loop.default_address.address1}}",
+                    "b": "{{loop.defaultAddress.address1}}",
                     "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
@@ -240,16 +247,16 @@
                         "address_id": "{{recharge_address.0.id}}"
                     },
                     "body": {
-                        "address1": "{{loop.default_address.address1}}",
-                        "address2": "{{loop.default_address.address2}}",
-                        "city": "{{loop.default_address.city}}",
-                        "country": "{{loop.default_address.country_code}}",
-                        "customer_id": "{{loop.id}}",
-                        "first_name": "{{loop.first_name}}",
-                        "last_name": "{{loop.last_name}}",
-                        "phone": "{% if loop.default_address.phone %}{{loop.default_address.phone}}{% else %}No phone number provided{% endif %}",
-                        "zip": "{{loop.default_address.zip}}",
-                        "province": "{{loop.default_address.province}}"
+                        "address1": "{{loop.defaultAddress.address1}}",
+                        "address2": "{{loop.defaultAddress.address2}}",
+                        "city": "{{loop.defaultAddress.city}}",
+                        "country": "{{loop.defaultAddress.countryCodeV2}}",
+                        "customer_id": "{{loop.legacyResourceId}}",
+                        "first_name": "{{loop.firstName}}",
+                        "last_name": "{{loop.lastName}}",
+                        "phone": "{% if loop.default_address.phone %}{{loop.defaultAddress.phone}}{% else %}No phone number provided{% endif %}",
+                        "zip": "{{loop.defaultAddress.zip}}",
+                        "province": "{{loop.defaultAddress.province}}"
                     },
                     "parameters": "{{recharge_address.addresses.0.id}}",
                     "trigger_parent_key": "loop"

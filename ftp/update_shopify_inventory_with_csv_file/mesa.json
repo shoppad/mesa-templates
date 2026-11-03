@@ -96,7 +96,8 @@
                     "body": {
                         "inventoryItemId": "{{shopify.inventory_item_id}}",
                         "locationId": "{{ template | label: 'What is your store''s location where the inventory will be updated?', description: 'Make sure this is the correct location and it is enabled before continuing.' , tokens: false }}",
-                        "quantity": "{{loop.Inventory}}"
+                        "quantity": "{{loop.Inventory}}",
+                        "reason": "correction"
                     },
                     "trigger_parent_key": "loop"
                 },
@@ -105,10 +106,12 @@
                     "inventoryItemId",
                     "locationId",
                     "quantity",
+                    "reason",
                     "body",
                     "body.inventoryItemId",
                     "body.locationId",
-                    "body.quantity"
+                    "body.quantity",
+                    "body.reason"
                 ],
                 "on_error": "default",
                 "weight": 2

@@ -56,21 +56,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "customer_search",
+                "entity": "customer",
                 "action": "list",
                 "name": "Search Customer",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_customers_search",
+                "operation_id": "customers",
                 "metadata": {
-                    "api_endpoint": "get admin\/customers\/search.json",
+                    "api_endpoint": "get /graphql/customers",
                     "body": {
-                        "email_address": "{{form.email-address}}",
+                        "email": "{{form.email-address}}",
                         "limit": "1"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": ["body.limit"],
+                "selected_fields": [
+                    "email",
+                    "limit",
+                    "body",
+                    "body.email",
+                    "body.limit"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -118,23 +124,31 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
-                "action": "note_update",
+                "action": "create",
                 "name": "Update Customer Notes",
+                "version": "v2",
                 "key": "shopify_1",
                 "operation_id": "put_mesa_customers_customer_id_note",
                 "metadata": {
-                    "api_endpoint": "put mesa\/customers\/{{customer_id}}\/note.json",
-                    "customer_id": "{{shopify.0.id}}",
-                    "trigger_parent_key": "paths_1",
+                    "api_endpoint": "post /graphql/customer/noteUpdate",
                     "body": {
+                        "id": "{{shopify.0.id}}",
                         "note": "Brand Ambassador submission:\n\nEmail: {{form.email-address}}\nInstagram Handle: {{form.instagram-handle}}",
                         "append": true
-                    }
+                    },
+                    "trigger_parent_key": "paths_1"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "note",
+                    "append",
+                    "body",
+                    "body.id",
+                    "body.note",
+                    "body.append"
+                ],
                 "on_error": "default",
                 "weight": 3
             },
@@ -142,22 +156,28 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Customer Add Tag",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "post_mesa_customers_customer_id_tag",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa\/customers\/{{customer_id}}\/tag.json",
-                    "customer_id": "{{shopify.0.id}}",
-                    "trigger_parent_key": "paths_1",
+                    "api_endpoint": "post /graphql/customerTags/add",
                     "body": {
-                        "tag": "Influencer"
-                    }
+                        "id": "{{shopify.0.id}}",
+                        "tags": "Influencer"
+                    },
+                    "trigger_parent_key": "paths_1"
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 4
             },
@@ -190,23 +210,31 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
                 "action": "create",
                 "name": "Create Customer",
+                "version": "v2",
                 "key": "shopify_3",
-                "operation_id": "post_customers",
+                "operation_id": "customerCreate",
                 "metadata": {
-                    "api_endpoint": "post admin\/customers.json",
-                    "trigger_parent_key": "paths_2",
+                    "api_endpoint": "post /graphql/customer/create",
                     "body": {
                         "email": "{{form.email-address}}",
                         "note": "Brand Ambassador submission:\n\nEmail: {{form.email-address}}\nInstagram Handle: {{form.instagram-handle}}",
                         "tags": "Influencer"
-                    }
+                    },
+                    "trigger_parent_key": "paths_2"
                 },
                 "local_fields": [],
-                "selected_fields": ["body.email", "body.note", "body.tags"],
+                "selected_fields": [
+                    "email",
+                    "note",
+                    "tags",
+                    "body",
+                    "body.email",
+                    "body.note",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 6
             },
