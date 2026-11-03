@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -24,6 +24,47 @@
         ],
         "outputs": [
             {
+                "schema": 3,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "graphql",
+                "action": "create",
+                "name": "Get Fulfillment Orders",
+                "version": "v2",
+                "key": "shopify_order_fulfillment_orders",
+                "operation_id": "graphqlQuery",
+                "metadata": {
+                    "api_endpoint": "post /graphql/graphql/query",
+                    "body": {
+                        "query": "query OrderFulfillmentOrders($id: ID!) {\n  order(id: $id) {\n    fulfillmentOrders(first: 20, query: \"status:open OR status:in_progress\") {\n      nodes {\n        id\n        lineItems(first: 100) {\n          nodes {\n            id\n            remainingQuantity\n            requiresShipping\n            sku\n            lineItem {\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}",
+                        "variables": "{\"id\": \"gid://shopify/Order/{{shopify_order.id}}\"}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "query",
+                    "variables",
+                    "body",
+                    "body.query",
+                    "body.variables"
+                ],
+                "on_error": "default",
+                "weight": 0
+            },
+            {
+                "schema": 2,
+                "trigger_type": "output",
+                "type": "custom",
+                "name": "List Fulfillment Order Line Items",
+                "key": "custom",
+                "metadata": {
+                    "script": "custom.js"
+                },
+                "local_fields": [],
+                "on_error": "default",
+                "weight": 1
+            },
+            {
                 "schema": 5,
                 "trigger_type": "output",
                 "type": "loop",
@@ -33,14 +74,14 @@
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify_order.line_items[]}}",
+                    "key": "{{custom.line_items[]}}",
                     "filter": {
                         "comparison": "equals"
                     }
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 0
+                "weight": 2
             },
             {
                 "schema": 4,
@@ -55,56 +96,43 @@
                 },
                 "local_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 3
             },
             {
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "order_fulfillment",
-                "action": "custom_create",
+                "entity": "fulfillment",
+                "action": "create",
                 "name": "Create Order Fulfillment",
+                "version": "v2",
                 "key": "shopify_order_fulfillment",
-                "operation_id": "post_mesa_orders_order_id_fulfillments",
+                "operation_id": "fulfillmentCreate",
                 "metadata": {
-                    "api_endpoint": "post mesa/orders/{{order_id}}/fulfillments.json",
-                    "order_id": "{{shopify_order.id}}",
+                    "api_endpoint": "post /graphql/fulfillment/create",
                     "body": {
-                        "location_id": "{{ template | label: 'To which location should we assign the order fulfillment?', description: '', tokens: false }}",
-                        "line_items": [
+                        "fulfillmentOrderId": "{{loop.fulfillment_order_id}}",
+                        "fulfillmentOrderLineItems": [
                             {
                                 "id": "{{loop.id}}",
-                                "variant_id": "{{loop.variant_id}}",
                                 "quantity": "{{loop.quantity}}"
                             }
                         ],
-                        "notify_customer": "false"
+                        "notifyCustomer": false
                     }
                 },
-                "local_fields": [
-                    {
-                        "key": "body",
-                        "fields": [
-                            {
-                                "key": "line_items",
-                                "fields": [
-                                    {
-                                        "key": "applied_discount",
-                                        "fields": []
-                                    }
-                                ]
-                            },
-                            {
-                                "key": "notify_customer",
-                                "type": "custom",
-                                "allow_custom_fields": false
-                            }
-                        ]
-                    }
+                "local_fields": [],
+                "selected_fields": [
+                    "fulfillmentOrderId",
+                    "fulfillmentOrderLineItems",
+                    "notifyCustomer",
+                    "body",
+                    "body.fulfillmentOrderId",
+                    "body.fulfillmentOrderLineItems",
+                    "body.notifyCustomer"
                 ],
                 "on_error": "default",
-                "weight": 2
+                "weight": 4
             }
         ]
     }
