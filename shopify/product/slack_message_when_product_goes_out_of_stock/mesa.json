@@ -10,7 +10,7 @@
                 "schema": 2,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -27,14 +27,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -64,17 +65,24 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "product_variant",
-                "action": "retrieve_id",
+                "entity": "productvariant",
+                "action": "retrieve",
                 "name": "Retrieve Product Variant",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "get_variants_variant_id",
+                "operation_id": "productVariant",
                 "metadata": {
-                    "api_endpoint": "get admin/variants/{{variant_id}}.json",
-                    "variant_id": "{{loop.variant_id}}"
+                    "api_endpoint": "get /graphql/productVariant/retrieve",
+                    "body": {
+                        "id": "{{loop.variant_id}}"
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 2
             },
@@ -85,7 +93,7 @@
                 "name": "Filter",
                 "key": "filter",
                 "metadata": {
-                    "a": "{{shopify_2.inventory_quantity}}",
+                    "a": "{{shopify_2.inventoryQuantity}}",
                     "comparison": "equals",
                     "b": "0",
                     "script": "filter.js"
@@ -102,7 +110,7 @@
                 "version": "v2",
                 "key": "slack",
                 "metadata": {
-                    "message": "This is an automated message to let you know that {% if shopify_2.sku != \"\" %}SKU *{{shopify_2.sku}}*{% else %}*{{loop.title}}*{% if shopify_2.option1 != \"Default Title\" %} *- {{shopify_2.option1}}*{% endif %}{% endif %} is now out of stock.\n\nView the product: https:\/\/admin.shopify.com\/store\/{{shopify_1.domain | replace: \".myshopify.com\", \"\"}}\/products\/{{shopify_2.product_id}}",
+                    "message": "This is an automated message to let you know that {% if shopify_2.sku != \"\" %}SKU *{{shopify_2.sku}}*{% else %}*{{loop.title}}*{% if shopify_2.selectedOptions[0].value != \"Default Title\" %} *- {{shopify_2.selectedOptions[0].value}}*{% endif %}{% endif %} is now out of stock.\n\nView the product: https://admin.shopify.com/store/{{shopify_1.myshopifyDomain | replace: \".myshopify.com\", \"\"}}/products/{{shopify_2.product.legacyResourceId}}",
                     "channel": "{{ template | label: 'What is your Slack channel?', tokens: false }}"
                 },
                 "local_fields": [],

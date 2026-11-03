@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -31,18 +31,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_customers_customer_id",
+                "operation_id": "customer",
                 "metadata": {
-                    "api_endpoint": "get admin\/customers\/{{customer_id}}.json",
-                    "customer_id": "{{shopify.customer.id}}"
+                    "api_endpoint": "get /graphql/customer/retrieve",
+                    "body": {
+                        "id": "{{shopify.customer.id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -50,14 +56,15 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "shop",
-                "action": "list",
+                "action": "retrieve",
                 "name": "Retrieve Shop",
+                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "get_shop",
+                "operation_id": "shop",
                 "metadata": {
-                    "api_endpoint": "get admin\/shop.json"
+                    "api_endpoint": "get /graphql/shop/retrieve",
+                    "body": {}
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -118,9 +125,9 @@
                 "metadata": {
                     "api_endpoint": "post \/send-email",
                     "body": {
-                        "to": "{{shopify_1.email}}",
+                        "to": "{{shopify_1.defaultEmailAddress.emailAddress}}",
                         "subject": "Welcome to our Discord community! - Discord Invite",
-                        "message": "Hey {{shopify_1.first_name}},\n\nHere is your discord invite: https:\/\/discord.gg\/{{discord.code}}\n\nThanks!\n- {{shopify_2.name}}"
+                        "message": "Hey {{shopify_1.firstName}},\n\nHere is your discord invite: https://discord.gg/{{discord.code}}\n\nThanks!\n- {{shopify_2.name}}"
                     }
                 },
                 "local_fields": [],
@@ -132,21 +139,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Customer Add Tag",
+                "version": "v2",
                 "key": "shopify_3",
-                "operation_id": "post_mesa_customers_customer_id_tag",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa\/customers\/{{customer_id}}\/tag.json",
-                    "customer_id": "{{shopify_1.id}}",
+                    "api_endpoint": "post /graphql/customerTags/add",
                     "body": {
-                        "tag": "discord:invite"
+                        "id": "{{shopify_1.id}}",
+                        "tags": "discord:invite"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 5
             }

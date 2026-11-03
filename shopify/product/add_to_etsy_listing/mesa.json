@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "product",
                 "action": "created",
                 "name": "Product Created",
@@ -27,17 +27,27 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
-                "action": "retrieve",
-                "name": "Retrieve Product",
+                "action": "create",
+                "name": "Retrieve Product Images",
+                "version": "v2",
                 "key": "shopify",
-                "operation_id": "get_products_product_id",
+                "operation_id": "productImageRetrieve",
                 "metadata": {
-                    "api_endpoint": "get admin/products/{{product_id}}.json",
-                    "product_id": "{{shopify_product.id}}"
+                    "api_endpoint": "post /graphql/product/imageRetrieve",
+                    "body": {
+                        "productId": "{{shopify_product.id}}",
+                        "first": 1
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "productId",
+                    "first",
+                    "body",
+                    "body.productId",
+                    "body.first"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
@@ -88,7 +98,7 @@
                         "listing_id": "{{etsy.listing_id}}"
                     },
                     "body": {
-                        "image": "{{shopify.images[0].src}}",
+                        "image": "{{shopify.images[0].url}}",
                         "rank": "1",
                         "overwrite": false,
                         "is_watermarked": false

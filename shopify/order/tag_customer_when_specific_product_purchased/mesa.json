@@ -1,76 +1,111 @@
 {
     "key": "shopify/order/tag_customer_when_specific_product_purchased",
-    "name": "Tag a customer when they purchase a specific product",
+    "name": "Tag Shopify Customers Who Purchase Specific Products",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
-    "config": {
+     "config": {
         "inputs": [
             {
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
+                "version": "v2",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
         ],
         "outputs": [
             {
-                "schema": 5,
+                "schema": 5.1,
                 "trigger_type": "output",
                 "type": "loop",
-                "version": "v2",
                 "entity": "loop",
-                "operation_id": "loop_loop",
                 "name": "Loop",
+                "version": "v3",
                 "key": "loop",
+                "operation_id": "loop_loop",
                 "metadata": {
-                    "key": "{{shopify.line_items[]}}"
+                    "key": "{{shopify.line_items[]}}",
+                    "return": false,
+                    "filter": {
+                        "a": "{{shopify.line_items[].title}}",
+                        "comparison": "equals",
+                        "b": "{{ template | label: 'What product needs to be purchased to qualify for a customer tag?', description: 'Please ensure the title has the correct capitalization.', tokens: false, placeholder: 'Enter the product title' }}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
+                    }
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter"
+                ],
                 "on_error": "default",
                 "weight": 0
             },
             {
                 "schema": 4,
                 "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter",
+                "type": "shopify",
+                "entity": "customer",
+                "action": "add",
+                "name": "Add Customer Tags",
+                "version": "v2",
+                "key": "shopify_1",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "a": "{{loop.title}}",
-                    "comparison": "equals",
-                    "b": "{{ template | label: 'What product needs to be purchased to qualify for a customer tag?', description: 'Please ensure the title has the correct capitalization.', tokens: false, placeholder: 'Enter the product title' }}"
+                    "api_endpoint": "post \/graphql\/customerTags\/add",
+                    "body": {
+                        "id": "{{shopify.customer.id}}",
+                        "tags": [
+                            "{{ template | label: 'What is the tag you would like to add to the customer?', tokens: false }}"
+                        ]
+                    },
+                    "trigger_parent_key": "loop"
                 },
                 "local_fields": [],
+                "selected_fields": [
+                    "body"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 3,
+                "schema": 5.1,
                 "trigger_type": "output",
-                "type": "shopify",
-                "version": "v1",
-                "entity": "customer",
-                "action": "tag_add",
-                "name": "Customer Add Tag",
-                "key": "shopify_1",
-                "operation_id": "post_mesa_customers_customer_id_tag",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
                 "metadata": {
-                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
-                    "customer_id": "{{shopify.customer.id}}",
-                    "body": {
-                        "tag": "{{ template | label: 'What is the tag you would like to add to the customer?', tokens: false }}"
-                    }
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": false
                 },
                 "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             }

@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "variant",
                 "action": "out_of_stock",
                 "name": "Variant Out of Stock",
@@ -31,20 +31,51 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve Product",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_products_product_id",
+                "operation_id": "product",
                 "metadata": {
-                    "api_endpoint": "get admin\/products\/{{product_id}}.json",
-                    "product_id": "{{shopify.product_id}}"
+                    "api_endpoint": "get /graphql/product/retrieve",
+                    "body": {
+                        "id": "{{shopify.product_id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 0
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
+                "entity": "productvariant",
+                "action": "list",
+                "name": "Get List of Product Variants",
+                "version": "v2",
+                "key": "shopify_4",
+                "operation_id": "productVariants",
+                "metadata": {
+                    "api_endpoint": "get /graphql/productVariants",
+                    "body": {
+                        "product_id": "{{shopify.product_id}}"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "product_id",
+                    "body",
+                    "body.product_id"
+                ],
+                "on_error": "default",
+                "weight": 1
             },
             {
                 "schema": 5.1,
@@ -56,9 +87,9 @@
                 "key": "loop",
                 "operation_id": "loop_count",
                 "metadata": {
-                    "key": "{{shopify_1.variants[]}}",
+                    "key": "{{shopify_4}}",
                     "filter": {
-                        "a": "{{shopify_1.variants[].inventory_quantity}}",
+                        "a": "{{shopify_4[].inventoryQuantity}}",
                         "comparison": "greater than",
                         "b": "0",
                         "additional": [
@@ -72,7 +103,7 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 1
+                "weight": 2
             },
             {
                 "schema": 4.1,
@@ -95,47 +126,51 @@
                 "local_fields": [],
                 "selected_fields": [],
                 "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 3.1,
-                "trigger_type": "output",
-                "type": "shopify",
-                "version": "v1",
-                "entity": "product",
-                "action": "update",
-                "name": "Update Product",
-                "key": "shopify_2",
-                "operation_id": "put_products_product_id",
-                "metadata": {
-                    "api_endpoint": "put admin\/products\/{{product_id}}.json",
-                    "product_id": "{{shopify_1.id}}",
-                    "body": {
-                        "body_html": "{{shopify_1.body_html}} This product is currently out of stock, please check back soon!"
-                    }
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "body.body_html"
-                ],
-                "on_error": "default",
                 "weight": 3
             },
             {
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
+                "entity": "product",
+                "action": "update",
+                "name": "Update Product",
+                "version": "v2",
+                "key": "shopify_2",
+                "operation_id": "productUpdate",
+                "metadata": {
+                    "api_endpoint": "post /graphql/product/update",
+                    "body": {
+                        "id": "{{shopify_1.id}}",
+                        "descriptionHtml": "{{shopify_1.descriptionHtml}} This product is currently out of stock, please check back soon!"
+                    }
+                },
+                "local_fields": [],
+                "selected_fields": [
+                    "id",
+                    "descriptionHtml",
+                    "body",
+                    "body.id",
+                    "body.descriptionHtml"
+                ],
+                "on_error": "default",
+                "weight": 4
+            },
+            {
+                "schema": 3.1,
+                "trigger_type": "output",
+                "type": "shopify",
                 "entity": "publishable",
                 "action": "unpublish",
                 "name": "Unpublish Product or Collection",
+                "version": "v2",
                 "key": "shopify_3",
-                "operation_id": "post_graphql_publishable_id_unpublish",
+                "operation_id": "publishableUnpublish",
                 "metadata": {
-                    "api_endpoint": "post graphql\/publishable\/id.json",
+                    "api_endpoint": "post /graphql/publishable/unpublish",
                     "body": {
+                        "type": "product",
                         "id": "{{shopify_1.id}}",
-                        "shopify_entity_id": "product",
                         "input": [
                             {
                                 "publicationId": "{{ template | label: 'What sales channel would you like to unpublish the product from?', placeholder: '', description: '', tokens: false }}"
@@ -144,9 +179,17 @@
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "type",
+                    "id",
+                    "input",
+                    "body",
+                    "body.type",
+                    "body.id",
+                    "body.input"
+                ],
                 "on_error": "default",
-                "weight": 4
+                "weight": 5
             }
         ]
     }
