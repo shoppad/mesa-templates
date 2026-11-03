@@ -45,18 +45,24 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
                 "action": "retrieve",
                 "name": "Retrieve Customer",
+                "version": "v2",
                 "key": "shopify_customer_1",
-                "operation_id": "get_customers_customer_id",
+                "operation_id": "customer",
                 "metadata": {
-                    "api_endpoint": "get admin/customers/{{customer_id}}.json",
-                    "customer_id": "{{recharge_customer.external_customer_id.ecommerce}}"
+                    "api_endpoint": "get /graphql/customer/retrieve",
+                    "body": {
+                        "id": "{{recharge_customer.external_customer_id.ecommerce}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": ["customer_id"],
+                "selected_fields": [
+                    "id",
+                    "body",
+                    "body.id"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -64,21 +70,27 @@
                 "schema": 3,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
                 "entity": "customer",
-                "action": "tag_add",
+                "action": "add",
                 "name": "Customer Add Tag",
+                "version": "v2",
                 "key": "shopify_customer",
-                "operation_id": "post_mesa_customers_customer_id_tag",
+                "operation_id": "customerTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post mesa/customers/{{customer_id}}/tag.json",
-                    "customer_id": "{{shopify_customer_1.id}}",
+                    "api_endpoint": "post /graphql/customerTags/add",
                     "body": {
-                        "tag": "Recharge Tag"
+                        "id": "{{shopify_customer_1.id}}",
+                        "tags": "Recharge Tag"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": ["customer_id", "body", "body.tag"],
+                "selected_fields": [
+                    "id",
+                    "tags",
+                    "body",
+                    "body.id",
+                    "body.tags"
+                ],
                 "on_error": "default",
                 "weight": 2
             }

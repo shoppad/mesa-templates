@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
@@ -54,18 +54,24 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "fulfillment_order",
-                "action": "list",
+                "entity": "fulfillmentorder",
+                "action": "create",
                 "name": "Retrieve Order's Fulfillment Orders",
+                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "get_orders_order_id_fulfillment_orders",
+                "operation_id": "orderFulfillmentOrderList",
                 "metadata": {
-                    "api_endpoint": "get admin\/orders\/{{order_id}}\/fulfillment_orders.json",
-                    "order_id": "{{shopify.id}}"
+                    "api_endpoint": "post /graphql/order/fulfillmentOrderList",
+                    "body": {
+                        "orderId": "{{shopify.id}}"
+                    }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "orderId",
+                    "body",
+                    "body.orderId"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
@@ -73,23 +79,27 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
-                "version": "v1",
-                "entity": "fulfillment_order",
-                "action": "move",
+                "entity": "fulfillmentorder",
+                "action": "create",
                 "name": "Move Fulfillment Order",
+                "version": "v2",
                 "key": "shopify_3",
-                "operation_id": "post_fulfillment_orders_fulfillment_order_id_move",
+                "operation_id": "fulfillmentOrderMoveAll",
                 "metadata": {
-                    "api_endpoint": "post admin\/fulfillment_orders\/{{fulfillment_order_id}}\/move.json",
-                    "fulfillment_order_id": "{{shopify_1.0.id}}",
+                    "api_endpoint": "post /graphql/fulfillmentOrder/moveAll",
                     "body": {
-                        "fulfillment_order": {
-                            "new_location_id": "{{ template | label: 'What is the location ID?', tokens: false }}"
-                        }
+                        "id": "{{shopify_1.fulfillmentOrders[0].id}}",
+                        "newLocationId": "{{ template | label: 'What is the location ID?', tokens: false }}"
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "id",
+                    "newLocationId",
+                    "body",
+                    "body.id",
+                    "body.newLocationId"
+                ],
                 "on_error": "default",
                 "weight": 2
             }

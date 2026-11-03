@@ -10,16 +10,18 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v1",
+                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
                 "key": "shopify_order",
+                "operation_id": "orders_create",
                 "metadata": [],
                 "on_error": "default",
                 "weight": 0
             }
         ],
+        "storage": [],
         "outputs": [
             {
                 "schema": 3,
@@ -48,7 +50,6 @@
                 "on_error": "default",
                 "weight": 0
             }
-        ],
-        "storage": []
+        ]
     }
 }
