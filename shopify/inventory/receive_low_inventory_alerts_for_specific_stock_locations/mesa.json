@@ -10,7 +10,7 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v2",
+                "version": "v1",
                 "entity": "inventory_level",
                 "action": "updated",
                 "name": "Inventory Level Updated",
@@ -54,15 +54,14 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "shop",
-                "action": "retrieve",
+                "action": "list",
                 "name": "Retrieve Shop",
-                "version": "v2",
                 "key": "shopify_1",
-                "operation_id": "shop",
+                "operation_id": "get_shop",
                 "metadata": {
-                    "api_endpoint": "get /graphql/shop/retrieve",
-                    "body": {}
+                    "api_endpoint": "get admin/shop.json"
                 },
                 "local_fields": [],
                 "selected_fields": [],
@@ -73,24 +72,18 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "product",
                 "action": "retrieve",
                 "name": "Retrieve Product",
-                "version": "v2",
                 "key": "shopify_2",
-                "operation_id": "product",
+                "operation_id": "get_products_product_id",
                 "metadata": {
-                    "api_endpoint": "get /graphql/product/retrieve",
-                    "body": {
-                        "id": "{{shopify.variant.product_id}}"
-                    }
+                    "api_endpoint": "get admin/products/{{product_id}}.json",
+                    "product_id": "{{shopify.variant.product_id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "id",
-                    "body",
-                    "body.id"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 2
             },
@@ -98,24 +91,18 @@
                 "schema": 3.1,
                 "trigger_type": "output",
                 "type": "shopify",
+                "version": "v1",
                 "entity": "location",
                 "action": "retrieve",
                 "name": "Retrieve Location",
-                "version": "v2",
                 "key": "shopify_3",
-                "operation_id": "location",
+                "operation_id": "get_locations_location_id",
                 "metadata": {
-                    "api_endpoint": "get /graphql/location/retrieve",
-                    "body": {
-                        "id": "{{shopify.location_id}}"
-                    }
+                    "api_endpoint": "get admin/locations/{{location_id}}.json",
+                    "location_id": "{{shopify.location_id}}"
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "id",
-                    "body",
-                    "body.id"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 3
             },
@@ -132,7 +119,7 @@
                     "body": {
                         "to": "{{ template | label: 'What is the email you would like to send to?', tokens: false }}",
                         "subject": "Product {{shopify_2.title}} stock level is low",
-                        "message": "<p>Product {{shopify_2.title}} {{shopify.variant.title}} stock level is low at {{shopify_3.name}}.</p><p></p><p><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" class=\"text-blue-600 underline\" href=\"https://admin.shopify.com/store/{{shopify_1.myshopifyDomain | replace: &quot;.myshopify.com&quot;, &quot;&quot;}}/products/{{shopify.variant.product_id}}\">View product</a></p>"
+                        "message": "<p>Product {{shopify_2.title}} {{shopify.variant.title}} stock level is low at {{shopify_3.name}}.</p><p></p><p><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" class=\"text-blue-600 underline\" href=\"https://admin.shopify.com/store/{{shopify_1.myshopify_domain | replace: &quot;.myshopify.com&quot;, &quot;&quot;}}/products/{{ shopify_3.id }}\">View product</a></p>"
                     }
                 },
                 "local_fields": [],
