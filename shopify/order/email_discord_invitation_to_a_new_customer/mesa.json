@@ -1,6 +1,6 @@
 {
     "key": "shopify/order/email_discord_invitation_to_a_new_customer",
-    "name": "Send Discord Invitations to New Shopify Customers via Email",
+    "name": "Email Discord Invitation Links to New Shopify Customers",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

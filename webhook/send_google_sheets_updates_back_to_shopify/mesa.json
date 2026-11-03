@@ -1,6 +1,6 @@
 {
     "key": "webhook/send_google_sheets_updates_back_to_shopify",
-    "name": "Update existing Shopify products from Google Sheets",
+    "name": "Update Shopify Products from Google Sheets",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,

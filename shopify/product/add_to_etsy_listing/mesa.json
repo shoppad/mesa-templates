@@ -1,6 +1,6 @@
 {
     "key": "shopify/product/add_to_etsy_listing",
-    "name": "Add a listing on Etsy when a new product is created in Shopify",
+    "name": "Import New Shopify Products to Etsy as Draft Listings",
     "version": "1.0.0",
     "enabled": false,
     "setup": true,
