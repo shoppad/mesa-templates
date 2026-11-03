@@ -1,9 +1,7 @@
 {
     "key": "shopify/order/tag_based_on_line_item_properties_kj",
-    "name": "Tag orders based on specific line item properties",
+    "name": "Tag Shopify Orders by Line Item Properties",
     "version": "1.0.0",
-    "description": "When handling custom orders, tagging them based on line item properties can make things much easier. This is especially true for products that require personalization, such as those with add-ons like engraving. When using this template, you can group these orders together and better manage each step of the fulfillment process. Essentially, it's all about better visibility into your custom inventory, which helps reduce the risk of errors.",
-    "seconds": 300,
     "enabled": false,
     "setup": true,
     "config": {
@@ -12,15 +10,20 @@
                 "schema": 3,
                 "trigger_type": "input",
                 "type": "shopify",
-                "version": "v2",
                 "entity": "order",
                 "action": "created",
                 "name": "Order Created",
+                "version": "v2",
                 "key": "shopify",
                 "operation_id": "orders_create",
-                "metadata": [],
+                "metadata": {
+                    "frequency": "every",
+                    "includeFields": []
+                },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "frequency"
+                ],
                 "on_error": "default",
                 "weight": 0
             }
@@ -31,24 +34,25 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop Over Line Items",
-                "version": "v2",
+                "name": "Loop",
+                "version": "v3",
                 "key": "loop",
                 "operation_id": "loop_loop",
                 "metadata": {
                     "key": "{{shopify.line_items[]}}",
+                    "return": false,
                     "filter": {
-                        "comparison": "equals"
+                        "comparison": "equals",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "comparison": "equals"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [
-                    "key",
-                    "filter",
-                    "filter.a",
-                    "filter.comparison",
-                    "filter.b"
-                ],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 0
             },
@@ -57,94 +61,106 @@
                 "trigger_type": "output",
                 "type": "loop",
                 "entity": "loop",
-                "name": "Loop Over Line Item Properties",
-                "version": "v2",
-                "key": "loop_1",
+                "name": "Loop",
+                "version": "v3",
+                "key": "loop_2",
                 "operation_id": "loop_loop",
                 "metadata": {
+                    "trigger_parent_key": "loop",
                     "key": "{{loop.properties[]}}",
+                    "return": false,
                     "filter": {
-                        "comparison": "equals"
+                        "a": "{{loop.properties[].name}}",
+                        "comparison": "equals",
+                        "b": "{{ template | label: 'The name of the line item variable?', tokens: false }}",
+                        "additional": [
+                            {
+                                "operator": "and",
+                                "a": "{{loop.properties[].value}}",
+                                "comparison": "equals",
+                                "b": "{{ template | label: 'The value for the line item variable?', tokens: false }}"
+                            }
+                        ]
                     }
                 },
                 "local_fields": [],
-                "selected_fields": [],
+                "selected_fields": [
+                    "filter.a",
+                    "filter.comparison",
+                    "filter.b",
+                    "filter.additional[].operator",
+                    "filter.additional[].a",
+                    "filter.additional[].comparison",
+                    "filter.additional[].b",
+                    "filter.additional",
+                    "filter",
+                    "filter.additional[]"
+                ],
                 "on_error": "default",
                 "weight": 1
             },
             {
-                "schema": 4.1,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Filter",
-                "key": "filter_1",
-                "metadata": {
-                    "a": "{{loop_1.name}}",
-                    "comparison": "equals",
-                    "b": "{{ template | label: 'The name of the line item variable?' }}",
-                    "additional": [
-                        {
-                            "operator": "and",
-                            "comparison": "equals"
-                        }
-                    ]
-                },
-                "local_fields": [],
-                "selected_fields": [],
-                "on_error": "default",
-                "weight": 2
-            },
-            {
-                "schema": 4.1,
-                "trigger_type": "output",
-                "type": "filter",
-                "name": "Does Line Item Property Pass Condition?",
-                "key": "filter",
-                "metadata": {
-                    "a": "{{loop_1.value}}",
-                    "comparison": "equals",
-                    "b": "{{ template | label: 'The value for the line item variable?' }}",
-                    "additional": [
-                        {
-                            "operator": "and",
-                            "comparison": "equals"
-                        }
-                    ]
-                },
-                "local_fields": [],
-                "selected_fields": [
-                    "a",
-                    "comparison",
-                    "b"
-                ],
-                "on_error": "default",
-                "weight": 3
-            },
-            {
-                "schema": 3,
+                "schema": 4,
                 "trigger_type": "output",
                 "type": "shopify",
                 "entity": "order",
                 "action": "add",
-                "name": "Tag Order",
+                "name": "Add Order Tags",
                 "version": "v2",
                 "key": "shopify_1",
                 "operation_id": "orderTagsAdd",
                 "metadata": {
-                    "api_endpoint": "post /graphql/orderTags/add",
+                    "api_endpoint": "post \/graphql\/orderTags\/add",
                     "body": {
                         "id": "{{shopify.id}}",
-                        "tags": "{{ template | label: 'The tag you want to use?', tokens: false, placeholder: 'e.g. January Birthday' }}"
-                    }
+                        "tags": [
+                            "{{ template | label: 'The tag you want to use?', tokens: false }}"
+                        ]
+                    },
+                    "trigger_parent_key": "loop_2"
                 },
                 "local_fields": [],
                 "selected_fields": [
-                    "id",
-                    "tags",
-                    "body",
-                    "body.id",
-                    "body.tags"
+                    "body"
                 ],
+                "on_error": "default",
+                "weight": 2
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_3",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop_2",
+                    "trigger_parent_key": "loop_2",
+                    "return": false
+                },
+                "local_fields": [],
+                "selected_fields": [],
+                "on_error": "default",
+                "weight": 3
+            },
+            {
+                "schema": 5.1,
+                "trigger_type": "output",
+                "type": "loop",
+                "entity": "end",
+                "name": "Loop End",
+                "version": "v3",
+                "key": "loop_1",
+                "operation_id": "loop_end",
+                "metadata": {
+                    "trigger_manager_key": "loop",
+                    "trigger_parent_key": "loop",
+                    "return": false
+                },
+                "local_fields": [],
+                "selected_fields": [],
                 "on_error": "default",
                 "weight": 4
             }
